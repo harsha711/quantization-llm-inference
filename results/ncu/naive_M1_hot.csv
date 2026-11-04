@@ -1,0 +1,15 @@
+==WARNING== Note: Running with uncontrolled GPU caches. Profiling results may be inconsistent.
+==PROF== Connected to process 3370350 (/home/hpuvvad/csc548-w4a16/build/w4a16_bench)
+device: NVIDIA GeForce RTX 5060 Ti (sm_120, 36 SMs, L2 32.00 MiB from cudaDeviceProp, 15.52 GiB)
+software: driver API 13030, runtime 13040
+shape: M=1 N=4096 K=4096 group=128 seed=1 flush_l2=0 warmup=20 iters=1 check_rows=64
+footprint: FP16 weights 32.0000 MiB, packed INT4 8.0000 MiB, FP16 scales 0.2500 MiB
+launch: naive grid=((N+255)/256, M)=(16, 1) block=256; dequant grid=(16, 512) block=256
+weight quant: rel_l2(W_hat, W)=1.1722e-01  uniform-step prediction sqrt(mean(s^2/12)/mean(w^2))=1.1767e-01
+  (prediction assumes independent Uniform[-s/2,s/2] error per weight using that group's s)
+cache: intended cold-L2, flush buffer 0.00 MiB (2x L2), store kernel (not memset)
+W_hat GPU vs CPU: skipped (not needed for this kernel list)
+kernel      median_us     min_us     p90_us  TFLOP/s  eff_GB/s  pass    max_abs     rel_l2  rel_l2_fp16
+naive          162.08     162.08     162.08    0.207      53.5   yes  0.000e+00  0.000e+00    0.000e+00
+==PROF== Disconnected from process 3370350
+==PROF== Report: /home/hpuvvad/csc548-w4a16/results/ncu/naive_M1_hot.ncu-repz

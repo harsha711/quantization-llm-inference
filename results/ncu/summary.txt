@@ -1,0 +1,41 @@
+Nsight Compute 2026.3.1 on c7, RTX 5060 Ti, CC 12.0, 36 SMs, 48 warps/SM,
+L2 = device__attribute_l2_cache_size = 33554432 bytes (32 MiB).
+Imported from the .ncu-repz reports. Units as reported (Mbyte unless noted).
+
+dram__bytes_read.sum is n/a on this GPU. Use dram__bytes_op_read / dram__bytes_op_write.
+ncu --cache-control all (default) invalidates caches between passes; that is the
+cold-cache ncu measurement. The naive_M1_hot run used --cache-control none but
+--launch-count 1 on the first warmup, so DRAM and time still look cold; L2 hit
+counts from later replay passes are not a reliable hot-cache comparison.
+Use CUDA-event flush vs --no-flush-l2 for hot/cold latency.
+
+--- naive M=1, N=K=4096, cache-control all ---
+grid (16,1,1) x block 256 = 16 blocks, 128 warps, 0.07 waves/SM
+registers/thread 32; occupancy limit 6 blocks/SM (warp limit), 8 (register limit)
+warps_active 16.58% of peak  (8 warps on each busy SM / 48; 20 SMs idle)
+gpu time 195.97 us
+SM throughput 9.16% of peak; memory throughput 10.02% of peak
+DRAM read 8.66 MB, write 0; L2 bytes 9.00 MB
+L2 sectors hit 9237, miss 270950  (96.7% miss)
+long-scoreboard stall 5.33% of elapsed
+
+--- naive M=128, same shape, cache-control all ---
+grid (16,128,1) x block 256 = 2048 blocks, 9.48 waves/SM
+warps_active 95.79%; SM throughput 85.60%; memory throughput 66.44%
+gpu time 2.698 ms
+DRAM read 9.75 MB, write 0
+L2 bytes 1.124 GB  (weights re-read from L2 for each of 128 rows)
+L2 sectors hit 34802738, miss 324134  (99.1% hit after first fill)
+long-scoreboard stall 15.79% of elapsed
+
+--- dequant K=N=4096, cache-control all ---
+grid (16,512,1) x block 256 = 8192 blocks, 37.93 waves/SM
+warps_active 84.27%; SM throughput 34.17%; memory throughput 77.35%
+gpu time 64.99 us
+DRAM read 8.66 MB, write 13.51 MB; L2 bytes 45.46 MB
+(W_hat is 32 MB; much of the write hits L2 and is not yet written back to DRAM)
+
+Logical vs measured (naive M=1): logical |A|+|C|+|qweight|+|scales| = 8.27 MiB;
+measured DRAM read 8.66 MB, L2 9.00 MB.
+Logical vs measured (naive M=128): logical still ~10.2 MB (count weights once);
+measured L2 1.12 GB because each output row re-reads the packed weights.

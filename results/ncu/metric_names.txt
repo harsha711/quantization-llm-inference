@@ -1,0 +1,60 @@
+dram__bytes                                                                 Counter         byte            # of bytes accessed in DRAM                                           
+dram__bytes_op_read                                                         Counter         byte            # of bytes read from DRAM                                             
+dram__bytes_op_write                                                        Counter         byte            # of bytes written to DRAM                                            
+lts__t_bytes                                                                      Counter         byte            # of bytes requested                                                  
+lts__t_sectors                                                              Counter         sector          # of LTS sectors                                                      
+lts__t_sectors_aperture_device                                              Counter         sector          # of LTS sectors accessing device memory (vidmem)                     
+lts__t_sectors_aperture_device_evict_first                                  Counter         sector          # of LTS sectors accessing device memory (vidmem) marked evict-first  
+lts__t_sectors_aperture_device_evict_first_lookup_hit                       Counter         sector          # of LTS sectors accessing device memory (vidmem) marked evict-first  
+lts__t_sectors_aperture_device_evict_first_lookup_miss                      Counter         sector          # of LTS sectors accessing device memory (vidmem) marked evict-first  
+lts__t_sectors_aperture_device_evict_last                                   Counter         sector          # of LTS sectors accessing device memory (vidmem) marked evict-last   
+lts__t_sectors_aperture_device_evict_last_lookup_hit                        Counter         sector          # of LTS sectors accessing device memory (vidmem) marked evict-last   
+lts__t_sectors_aperture_device_evict_last_lookup_miss                       Counter         sector          # of LTS sectors accessing device memory (vidmem) marked evict-last   
+lts__t_sectors_aperture_device_evict_normal                                 Counter         sector          # of LTS sectors accessing device memory (vidmem) marked evict-normal 
+lts__t_sectors_aperture_device_evict_normal_demote                          Counter         sector          # of LTS sectors accessing device memory (vidmem) marked              
+lts__t_sectors_aperture_device_evict_normal_demote_lookup_hit               Counter         sector          # of LTS sectors accessing device memory (vidmem) marked              
+lts__t_sectors_aperture_device_evict_normal_demote_lookup_miss              Counter         sector          # of LTS sectors accessing device memory (vidmem) marked              
+lts__t_sectors_aperture_device_evict_normal_lookup_hit                      Counter         sector          # of LTS sectors accessing device memory (vidmem) marked evict-normal 
+lts__t_sectors_aperture_device_evict_normal_lookup_miss                     Counter         sector          # of LTS sectors accessing device memory (vidmem) marked evict-normal 
+lts__t_sectors_aperture_device_lookup_hit                                   Counter         sector          # of LTS sectors accessing device memory (vidmem) that hit            
+lts__t_sectors_aperture_device_lookup_miss                                  Counter         sector          # of LTS sectors accessing device memory (vidmem) that missed         
+lts__t_sectors_aperture_device_op_atom                                      Counter         sector          # of LTS sectors accessing device memory (vidmem) for all atomics     
+lts__t_sectors_aperture_device_op_atom_dot_alu                              Counter         sector          # of LTS sectors accessing device memory (vidmem) for atomic ALU      
+lts__t_sectors_aperture_device_op_atom_dot_alu_lookup_hit                   Counter         sector          # of LTS sectors accessing device memory (vidmem) for atomic ALU      
+lts__t_sectors_aperture_device_op_atom_dot_alu_lookup_miss                  Counter         sector          # of LTS sectors accessing device memory (vidmem) for atomic ALU      
+lts__t_sectors_aperture_device_op_atom_dot_cas                              Counter         sector          # of LTS sectors accessing device memory (vidmem) for atomic CAS      
+lts__t_sectors_aperture_device_op_atom_dot_cas_lookup_hit                   Counter         sector          # of LTS sectors accessing device memory (vidmem) for atomic CAS that 
+lts__t_sectors_aperture_device_op_atom_dot_cas_lookup_miss                  Counter         sector          # of LTS sectors accessing device memory (vidmem) for atomic CAS that 
+lts__t_sectors_aperture_device_op_atom_evict_first                          Counter         sector          # of LTS sectors accessing device memory (vidmem) for all atomics     
+lts__t_sectors_aperture_device_op_atom_evict_first_lookup_hit               Counter         sector          # of LTS sectors accessing device memory (vidmem) for all atomics     
+lts__t_sectors_aperture_device_op_atom_evict_first_lookup_miss              Counter         sector          # of LTS sectors accessing device memory (vidmem) for all atomics     
+lts__t_sectors_aperture_device_op_atom_evict_last                           Counter         sector          # of LTS sectors accessing device memory (vidmem) for all atomics     
+lts__t_sectors_aperture_device_op_atom_evict_last_lookup_hit                Counter         sector          # of LTS sectors accessing device memory (vidmem) for all atomics     
+lts__t_sectors_aperture_device_op_atom_evict_last_lookup_miss               Counter         sector          # of LTS sectors accessing device memory (vidmem) for all atomics     
+lts__t_sectors_aperture_device_op_atom_evict_normal                         Counter         sector          # of LTS sectors accessing device memory (vidmem) for all atomics     
+lts__t_sectors_aperture_device_op_atom_evict_normal_demote                  Counter         sector          # of LTS sectors accessing device memory (vidmem) for all atomics     
+lts__t_sectors_aperture_device_op_atom_evict_normal_demote_lookup_hit       Counter         sector          # of LTS sectors accessing device memory (vidmem) for all atomics     
+lts__t_sectors_aperture_device_op_atom_evict_normal_demote_lookup_miss      Counter         sector          # of LTS sectors accessing device memory (vidmem) for all atomics     
+lts__t_sectors_aperture_device_op_atom_evict_normal_lookup_hit              Counter         sector          # of LTS sectors accessing device memory (vidmem) for all atomics     
+lts__t_sectors_aperture_device_op_atom_evict_normal_lookup_miss             Counter         sector          # of LTS sectors accessing device memory (vidmem) for all atomics     
+lts__t_sectors_aperture_device_op_atom_lookup_hit                           Counter         sector          # of LTS sectors accessing device memory (vidmem) for all atomics     
+lts__t_sectors_aperture_device_op_atom_lookup_miss                          Counter         sector          # of LTS sectors accessing device memory (vidmem) for all atomics     
+lts__t_sectors_aperture_device_op_membar                                    Counter         sector          # of LTS sectors accessing device memory (vidmem) for memory barriers 
+lts__t_sectors_aperture_device_op_membar_evict_first                        Counter         sector          # of LTS sectors accessing device memory (vidmem) for memory barriers 
+lts__t_sectors_aperture_device_op_membar_evict_first_lookup_hit             Counter         sector          # of LTS sectors accessing device memory (vidmem) for memory barriers 
+lts__t_sectors_aperture_device_op_membar_evict_first_lookup_miss            Counter         sector          # of LTS sectors accessing device memory (vidmem) for memory barriers 
+lts__t_sectors_aperture_device_op_membar_evict_last                         Counter         sector          # of LTS sectors accessing device memory (vidmem) for memory barriers 
+lts__t_sectors_aperture_device_op_membar_evict_last_lookup_hit              Counter         sector          # of LTS sectors accessing device memory (vidmem) for memory barriers 
+lts__t_sectors_aperture_device_op_membar_evict_last_lookup_miss             Counter         sector          # of LTS sectors accessing device memory (vidmem) for memory barriers 
+lts__t_sectors_aperture_device_op_membar_evict_normal                       Counter         sector          # of LTS sectors accessing device memory (vidmem) for memory barriers 
+lts__t_sectors_aperture_device_op_membar_evict_normal_demote                Counter         sector          # of LTS sectors accessing device memory (vidmem) for memory barriers 
+lts__t_sectors_aperture_device_op_membar_evict_normal_demote_lookup_hit     Counter         sector          # of LTS sectors accessing device memory (vidmem) for memory barriers 
+lts__t_sectors_aperture_device_op_membar_evict_normal_demote_lookup_miss    Counter         sector          # of LTS sectors accessing device memory (vidmem) for memory barriers 
+lts__t_sectors_aperture_device_op_membar_evict_normal_lookup_hit            Counter         sector          # of LTS sectors accessing device memory (vidmem) for memory barriers 
+lts__t_sectors_aperture_device_op_membar_evict_normal_lookup_miss           Counter         sector          # of LTS sectors accessing device memory (vidmem) for memory barriers 
+lts__t_sectors_aperture_device_op_membar_lookup_hit                         Counter         sector          # of LTS sectors accessing device memory (vidmem) for memory barriers 
+lts__t_sectors_aperture_device_op_membar_lookup_miss                        Counter         sector          # of LTS sectors accessing device memory (vidmem) for memory barriers 
+lts__t_sectors_aperture_device_op_read                                      Counter         sector          # of LTS sectors accessing device memory (vidmem) for reads           
+lts__t_sectors_aperture_device_op_read_evict_first                          Counter         sector          # of LTS sectors accessing device memory (vidmem) for reads marked    
+lts__t_sectors_aperture_device_op_read_evict_first_lookup_hit               Counter         sector          # of LTS sectors accessing device memory (vidmem) for reads marked    
+lts__t_sectors_aperture_device_op_read_evict_first_lookup_miss              Counter         sector          # of LTS sectors accessing device memory (vidmem) for reads marked    

@@ -1,0 +1,18 @@
+date=2026-11-04T14:20:24-05:00
+host=c7
+user=hpuvvad
+name, compute_cap, driver_version, memory.total [MiB], clocks.max.sm [MHz], clocks.max.memory [MHz], power.limit [W]
+NVIDIA GeForce RTX 5060 Ti, 12.0, 610.57.04, 16311 MiB, 3090 MHz, 14001 MHz, 180.00 W
+--- cudaDeviceProp L2 is printed by w4a16_bench ---
+Driver Version                                         : 610.57.04 [Deprecated; will be removed in CUDA 14.0. Use KMD Version instead]
+CUDA Version                                           : 13.3 [Deprecated; will be removed in CUDA 14.0. Use CUDA UMD Version instead]
+    Product Name                                       : NVIDIA GeForce RTX 5060 Ti
+nvcc: NVIDIA (R) Cuda compiler driver
+Copyright (c) 2005-2026 NVIDIA Corporation
+Built on Tue_Sep_01_08:45:21_PDT_2026
+Cuda compilation tools, release 13.4, V13.4.92
+Build cuda_13.4.r13.4/compiler.38855100_0
+Version 2026.3.1.0 (build 38829034) (public-release)
+cmake version 3.26.5
+perf_event_paranoid=2
+RmProfilingAdminOnly: 0
