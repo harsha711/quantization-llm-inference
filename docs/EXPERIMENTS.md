@@ -1,0 +1,286 @@
+# Experiment and design decision log
+
+Read the numerical/measurement [contract](CONTRACT.md) before interpreting these records. Preserve raw evidence, failed attempts, and inconclusive outcomes. An alternative that has not been implemented or measured is not a failed optimization. Historical entries below reconstruct only what the repository supports. Missing prior failure numbers or commit IDs remain unknown.
+
+## H001 — Correct FP16 reconstruction before accumulation
+
+Status: accepted historical correction, already present in baseline commit `8a68227`.
+
+**Problem:** Accumulating with FP32 `(q-8)*s` differs from reconstructing FP16 W_hat and then accumulating. Comparing those operations can report numerical disagreement caused by different inputs rather than a reduction defect.
+
+**Hypothesis:** All reconstructed-weight paths agree on their inputs when each product is rounded to FP16 before FP32 accumulation.
+
+**Change and design decision:** Use `FP32(FP16(FP32(q-8)*FP32(s)))` in fused kernels. Preserve FP16 materialization on CPU/GPU and in the pre-dequantized cuBLAS baseline. Direct FP32 reconstruction was the numerical alternative, not an interchangeable implementation of this contract.
+
+**Baseline and candidate:** Correction predates the available initial commit. Exact earlier candidate/failure commits and failure measurements are not recoverable from this repository. Evidence is the reconstruction in `src/quant.cpp`, `src/cuda/dequant.cu`, the v0 naive-kernel comment/implementation, README's original contract, and `results/baseline_c7.csv` already contained in `8a68227`. Do not assign `results/first_run_c7.csv` to the incorrect reconstruction without additional evidence.
+
+**Validation and findings:** Historical baseline rows have `w_hat_mismatches=0` and `pass=1`. Main-shape naive relative L2 errors versus reconstructed FP64 are approximately 2.07e-4. Errors versus original weights are approximately 0.12 and include quantization error. The available data establishes agreement for the corrected implementation, not the magnitude of a missing earlier failure.
+
+**Decision:** Keep FP16 reconstruction in every W_hat path. Never loosen output tolerance to hide a reconstruction mismatch.
+
+**Revisit only if:** A separately requested numerical contract changes weight reconstruction precision and all references/baselines are rebuilt for that operation.
+
+## H002 — Historical naive and comparison baselines
+
+Status: measured historical baseline, preserved for context.
+
+**Problem and hypothesis:** Establish correctness, latency, and the effect of increasing activation rows before choosing an optimization. Low launch parallelism is a candidate explanation for small-M naive latency, not the sole established cause.
+
+**Change:** None in this record. Six comparison roles are now defined in the contract, while historical data contains the original five without inblock.
+
+**Version and environment:** Baseline commit `8a68227` contains these records. Measurements were saved 2026-11-04 on c7, RTX 5060 Ti, CC 12.0, 36 SMs, L2=32 MiB, driver 610.57.04, CUDA toolkit 13.4.92, Nsight Compute 2026.3.1. Exact historical executable hash/build flags were not preserved in `baseline_meta.txt`. Do not manufacture them.
+
+**Commands and raw results:** `scripts/run_baseline.sh` records the original procedure, and `results/baseline_c7.log` records runs. Do not rerun it in place, because it overwrites historical baseline files. Main sweep arguments were:
+
+```bash
+./build/w4a16_bench --M "$M" --N 4096 --K 4096 --group 128 --seed 1 \
+  --warmup 10 --iters 100 --csv results/baseline_c7.csv
+# M=1,8,32,128, application store flush enabled by default.
+./build/w4a16_bench --M 1 --N 4096 --K 4096 --group 128 --seed 1 \
+  --warmup 10 --iters 100 --kernels naive --no-flush-l2 \
+  --csv results/baseline_c7.csv
+```
+
+**Validation:** Historical main rows pass the original FP64 threshold. W_hat mismatches are zero. Up to 64 rows are checked, so the M=128 sweep is sampled. Small tests and group=4096 runs are also in the raw CSV. Historical sanitizer evidence is not present.
+
+**Measurement and findings:** The following are CUDA-event medians in microseconds from `results/baseline_c7.csv`, K=N=4096, group=128, seed=1, 10 warmups, 100 timed iterations, application store flush. Lower is better. Raw min/max/p90 remain in the CSV.
+
+| M | naive | cublas original W | cublas_dq W_hat | dequant | unfused |
+|---|---:|---:|---:|---:|---:|
+| 1 | 204.448 | 94.208 | 94.208 | 120.480 | 178.528 |
+| 8 | 202.752 | 86.016 | 86.016 | 121.184 | 186.016 |
+| 32 | 696.640 | 86.368 | 86.368 | 120.480 | 172.016 |
+| 128 | 2540.896 | 116.704 | 114.688 | 121.184 | 225.312 |
+
+Historical M=1 no-flush naive median is 108.096 us, range 107.072–109.856 us, p90=108.128 us. The store-flush M=1 range is 202.272–206.528 us, p90=205.120 us. The difference demonstrates sensitivity to this application cache policy, not proof of complete eviction.
+
+Nsight evidence in `results/ncu/summary.txt` reports naive M=1 grid=(16,1,1), block=256, 32 registers/thread, achieved active-warps metric 16.58%, SM throughput 9.16%, and DRAM reads 8.66 MB under profiler cache control. At M=128 the grid has 2048 blocks, active warps 95.79%, SM throughput 85.60%, and approximately 1.124 GB L2 traffic despite only 9.75 MB DRAM reads. These profile samples differ from event timing conditions. Low M=1 block count motivates E001. Large-M repeated cache traffic motivates a possible future reuse study but does not establish the next bottleneck.
+
+**Decision:** Preserve these records. Rerun naive and candidate together on the same node/build for E001. Never divide new c58 candidate latency by old c7 latency to claim speedup.
+
+**Revisit only if:** Historical provenance is needed or a controlled rerun changes the measurement method. Record new evidence in a new directory.
+
+## H003 — Cache-flush and profiler warm-run limitations
+
+Status: inconclusive as proof of physical cold/warm cache state. Existing timing policies remain usable when described precisely.
+
+**Problem and hypothesis:** Packed weights/scales occupy 8.25 MiB and fit the observed 32 MiB L2. Repeated launches can use cache. Writing a larger buffer before timing was intended to reduce this reuse.
+
+**Change and alternatives:** The application store kernel writes 64 MiB before the start event. `--no-flush-l2` omits that store. Nsight `--cache-control all` invalidates caches between replay passes and is a separate profiling method. These methods do not define identical measurements.
+
+**Version, commands, and raw results:** Baseline `8a68227`, `scripts/ncu_baseline.sh`, `results/ncu/summary.txt`, `results/ncu/naive_M1_cold*`, and `results/ncu/naive_M1_hot*`. Historical warm-profiler launch used `--cache-control none --launch-count 1` and selected the first warmup.
+
+**Validation and findings:** The application's store flush does not verify eviction of every input line and store traffic may affect subsequent DRAM work. The historical profiler hot run captured an initial launch, so its DRAM/time still looked cold. L2 hits on later replay passes do not repair that warm-run interpretation. `dram__bytes_read.sum` was unavailable on this target. Historical reports used supported `dram__bytes_op_read`/`dram__bytes_op_write` metrics instead.
+
+**Decision:** Do not classify the historical profiler hot sample as a demonstrated steady-state warm comparison. Preserve it as inconclusive. Report application flush/no-flush event latency separately from profiler cache-controlled counters. Label `eff_gbps` as a traffic-model metric.
+
+**Revisit only if:** A new cache experiment validates the actual cache state or profiles a correctly selected steady-state launch with documented replay/cache settings.
+
+## E001 — In-block K splitting
+
+Status: accepted as a separately selectable M=1 experiment. Rejected as a universal naive replacement. Final correctness, sanitizer, latency, and profiler evaluation are complete at code checkpoint `2b7d4fc`. Pilot speedup interpretation remains inconclusive because the tail guard slowed its naive denominator.
+
+**Problem:** For N=4096, M=1 naive launches 16 blocks, one thread per output, each traversing the full K accumulation chain. Historical profiling shows low active-warps/SM throughput in that case. This motivates a parallelism experiment, not a proven attribution of every stall.
+
+**Hypothesis:** Eight threads collaborating on each output, with distinct K slices, will reduce latency enough to offset shared reduction overhead by shortening per-thread accumulation and increasing total blocks.
+
+**Success criterion recorded before timing:** All correctness checks must pass the original tolerance with zero W_hat bit mismatches and no sanitizer errors in the selected cases. The primary performance criterion is M=1 median speedup greater than 1.0 over same-executable naive under both application policies. Report all M={1,8,32,128} results, p90/ranges, and regressions. A borderline or inconsistent advantage requires repeat series and an inconclusive decision. No universal acceptance across shapes is implied.
+
+**Change:** Block=(32,8), grid=(ceil(N/32),M). Each warp owns 32 columns and one of eight contiguous packed-word K intervals. For W=ceil(K/8), slice y consumes `[floor(W*y/8),floor(W*(y+1)/8))`. These intervals cover all words exactly once, even W<8. Each thread preserves FP16 reconstruction and FP32 FMA, writes its partial to `float partial[8][32]`, and reaches the barrier. Invalid N lanes/empty slices contribute zero. Warp zero adds eight partials in slice order and writes FP16 once. Shared storage is 1024 bytes. There are no atomics or global partials. The FP32 reduction order changes.
+
+The shared layout originally truncated K tails and required K divisible by group. Correctness cases required extending host packing, scale counts, quantization, naive, and dequantization bounds to ceiling counts and valid tail elements. These changes preserve aligned data formats. Groups remain multiples of eight.
+
+**Alternatives considered:**
+
+| Design | Decision and reason |
+|---|---|
+| Keep one naive thread per output | Retain as baseline. Small-M block count and full-K chain remain. |
+| Eight contiguous K slices and shared reduction | Implement. Adjacent lanes retain adjacent-column loads and interval coverage is straightforward to audit. Performance is not assumed. |
+| Interleaved K words among warps | Untested alternative. Changes access order without evidence favoring it for the first experiment. |
+| Warp shuffle reduction | Not selected. The eight partials of one output live in different warps. Shared memory directly supports cross-warp communication. |
+| Cross-block split-K, atomics, or global partials | Excluded from this requested in-block experiment. Adds another reduction mechanism. |
+| Tensor Cores, async copies, A/W tiling, new layout | Deferred and untested. Changes additional mechanisms, preventing attribution to E001. |
+| Reject tails | Not selected because required small-K/partial-group checks need correct tail support. |
+| Non-multiple-of-eight groups | Not implemented. Existing one-scale-per-word guarantee remains. |
+
+**Baseline and candidate:** Historical baseline `8a68227`, initial candidate `654b5e2`, gated scripts `597b7bf`, repaired implementation `2b7d4fc`, branch `optimize/inblock-k`. E001's actual denominator is the retained naive in the candidate executable. Pilot build: Release, CUDA sm_120, nvcc 13.4.92. Host flags are `-O3 -DNDEBUG -std=gnu++17 -Wall -Wextra -fopenmp`. CUDA flags are `-O3 -DNDEBUG -std=c++17 --generate-code=arch=compute_120,code=[compute_120,sm_120] -lineinfo`. Full source/executable hashes and flags are in `metadata.txt`, `source-build.sha256`, and `check.sha256` under the pilot result directory. No portable-host-ISA changes or `-march=native` are requested.
+
+**Validation:** Local nvcc is absent. `bash scripts/build.sh`, `ctest --test-dir build --output-on-failure`, `git diff --check`, and `bash -n scripts/check_inblock.sh` passed locally. CPU tests include K={1,3,7,8,9,40,65,129,137,257}, N=33, group=128, scales/codes/reconstruction, zero weights, unused tail nibbles, and packed-word interval coverage for W=1 through 520. CUDA compilation and the complete small-case GPU gate passed on c58. Four Compute Sanitizer runs (memcheck and synccheck, each at K=3 and K=137) reported zero errors. All 48 pilot sweep rows passed, with zero bit mismatches among all 16,777,216 W_hat elements in each main-shape check. The repaired executable also passed the complete GPU gate, including four zero-error memcheck/synccheck invocations. This target evidence is distinct from the local host-only pass.
+
+The GPU gate is `bash scripts/check_inblock.sh`. It runs small cases across all comparison paths, K tails, N={1,31,32,33,63}, zero weights, and every output row. When available, Compute Sanitizer memcheck and synccheck check naive/inblock/dequant at K={3,137}, M=3, N=33. Sanitizer unavailability must be recorded, not counted as a pass.
+
+**Measurement environment:** On 2026-11-06, job 328410 was RUNNING on c58 in `rtx5060ti16g`, one node, 16 allocated CPUs, six-hour limit ending 20:00 America/Detroit (Eastern). The interactive allocation belongs to the user and must remain running. Revalidate rather than reuse these historical values blindly. c58 exposed RTX 5060 Ti 16 GB, driver 615.71.09, CUDA toolkit 13.4.92, Nsight Compute 2026.3.1, and an AMD EPYC 9115 16-Core Processor, one CPU NUMA domain, 16 logical CPUs, GCC 12.4.0, and Open MPI 4.1.6. Full hardware/topology/ISA/affinity/tool metadata is required.
+
+Remote source is `/home/hpuvvad/csc548-w4a16-inblock-20261106`, preserving `/home/hpuvvad/csc548-w4a16`. Pilot remote/local result path is `results/inblock_c58_20261106/`. It contains `allocation.txt`, `build.log`, `check.log`, `check.sha256`, `metadata.txt`, `source-build.sha256`, `gpu_before.csv`, `gpu_after.csv`, `timings.log`, and `timings.csv`. Preserve the pilot. The complete repaired-baseline series uses `results/inblock_c58_20261106_final/`. Pilot controls are preserved as `control_commands.sh`, `control.log`, `control_original.csv`, `control_guard.csv`, and `control.sha256`. The repaired-baseline directory contains repeated `build.log`, `check.log`, `check.sha256`, `allocation.txt`, `naive_original.sass`, `naive_specialized.sass`, `verify_sass.py`, and `sass_comparison.txt`. `results/inblock_c58_20261106_final/prepare_commands.sh` preserves preparation commands. Its `measure_commands.sh` preserves the exact final measurement environment/procedure.
+
+**Reproduction commands:** The supplied route is `ssh -i ~/username hpuvvad@arc-off-network`, then `ssh hpuvvad@c58`. Verify current documentation and `scontrol show job 328410` before applying the historical launcher environment below. These exports describe an existing allocation, not a resource request:
+
+```bash
+set -euo pipefail
+export SLURM_JOB_ID=328410 SLURM_JOB_NODELIST=c58 SLURM_NTASKS=1
+export SLURM_TASKS_PER_NODE=1 SLURM_JOB_CPUS_PER_NODE=16 SLURM_CPUS_PER_TASK=16
+export OMP_NUM_THREADS=16 OMP_PROC_BIND=true
+export OMPI_MCA_rmaps_base_mapping_policy=ppr:1:node
+export OMPI_MCA_hwloc_base_binding_policy=none
+prun /bin/hostname
+# Expected application output: one c58 line, plus launcher diagnostics.
+cd /home/hpuvvad/csc548-w4a16-inblock-20261106
+export RUN_DIR="$PWD/results/inblock_reproduce_$(date -u +%Y%m%dT%H%M%SZ)"
+export SOURCE_COMMIT=2b7d4fc  # only for the verified measured source checkpoint
+mkdir "$RUN_DIR"
+prun bash scripts/build.sh > "$RUN_DIR/build.log" 2>&1
+prun bash scripts/check_inblock.sh > "$RUN_DIR/check.log" 2>&1
+# The successful gate writes check.sha256 automatically. Inspect its complete log.
+prun bash scripts/run_inblock.sh > "$RUN_DIR/timings.log" 2>&1
+prun bash scripts/ncu_inblock.sh > "$RUN_DIR/profile.log" 2>&1
+# Profiling is separate from latency and queries metrics on the target.
+```
+
+Save complete stdout/stderr with pipefail enabled when tee is used. The timing script verifies executable hashes against the successful gate and refuses to overwrite timings.csv. Source/archive integrity, exact remote commands, allocation checks, and raw logs must remain alongside results. A future unattended batch submission must use an absolute exported project path and depend on its successful prerequisite job.
+
+The timing script runs all six kernels, M={1,8,32,128}, K=N=4096, group=128, seed=1, 10 warmups, 100 timed iterations, both application store-flush and no-flush. Each kernel's launch mapping remains fixed across the series. Profile M=1 and M=128 naive/inblock separately after querying target metrics. Capture launch geometry, registers/thread, shared memory/block, occupancy, scheduler eligibility/issue activity, stalls including long scoreboard, SM/memory utilization, and supported DRAM read/write metrics. Nsight `--cache-control all` with application `--no-flush-l2` is its own cache method. Additional blocks are a launch property, not a guaranteed increase in achieved occupancy.
+
+**Operational attempts and failures:**
+
+1. Initial SSH failed locally with `socket: Operation not permitted`. Approved network escalation established gateway-to-c58 access. This was sandbox restriction, not cluster failure.
+2. Branch creation required escalation because `.git` is read-only in the sandbox. Baseline content was preserved.
+3. `/etc/sysconfig/prun` was absent on c58. An exploratory `set -e` command stopped reading it. Installed prun's default configuration subsequently launched one hostname through Open MPI. No launcher-policy change was needed.
+4. An archive exclusion `build*` also excluded `scripts/build.sh`, causing the remote build to stop on a missing script. Explicit source-directory packaging corrected it. This was a packaging failure, not a CUDA compile failure.
+5. SSH returned status 255 after the pilot sweep. Complete 48-row CSV, final log entries, and `gpu_after.csv` showed the sweep had completed. Preserve that diagnostic rather than rerun costly measurements solely because the connection exit was nonzero.
+6. Adding the tail guard inside every naive packed-word loop slowed aligned inputs. The matched control below identified the regression. The pilot is preserved and the complete repaired-baseline series was rerun rather than cherry-picking replacement points.
+7. The first literal SASS comparison failed because cuobjdump alignment whitespace differed with symbol-name length. Comparing normalized display whitespace then matched instructions and encoding/control lines. No kernel change was needed for this display-only mismatch.
+
+**Pilot findings, not final speedups:** The first same-executable series completed all eight shape/policy combinations. Its naive denominator included an inner-loop tail guard even for aligned K=4096. Median event latencies below are in microseconds. They are preserved as evidence of the attempted implementation and must not be promoted to the final baseline comparison.
+
+| M | Pilot store-flush naive | Pilot store-flush inblock | Pilot no-flush naive | Pilot no-flush inblock |
+|---|---:|---:|---:|---:|
+| 1 | 258.048 | 53.600 | 159.296 | 38.448 |
+| 8 | 270.016 | 233.824 | 292.352 | 224.800 |
+| 32 | 934.240 | 871.488 | 931.088 | 868.896 |
+| 128 | 3464.352 | 3452.608 | 3431.680 | 3445.280 |
+
+A same-node control compared the exact original `8a68227` naive source with the guarded implementation, retaining benchmark/host/dequantization objects and build conditions. Original versus guarded medians were 206.496 versus 258.048 us for store-flush M=1, 2606.400 versus 3464.544 us for store-flush M=128, 110.160 versus 159.296 us for no-flush M=1, and 2577.984 versus 3431.680 us for no-flush M=128. This control supports a real guard-related baseline regression. Merely comparing new c58 measurements with historical c7 data would not isolate it because driver/node conditions differ.
+
+The chosen repair compiles `template<bool HasTail>` variants, using `if constexpr` for the final-word guard and dispatching by `K%8`. Full-word K with a partial final quantization group still uses the original aligned path. The `HasTail=false` emitted code matches the original naive code exactly after display-whitespace normalization: all 336 SASS lines, comprising 168 instructions plus continuation/control words, including addresses, opcodes, and scheduling control words. Reproduce with `python3 results/inblock_c58_20261106_final/verify_sass.py`. This repairs baseline preservation, not a new requested optimization. The repaired GPU checks passed. Every M/cache point and profile was rerun with that executable. Control/final hashes distinguish versions. Final evidence follows below.
+
+**Final validation and artifacts:** All 48 final CSV rows pass. Each main-shape reconstruction check found zero bit mismatches among 16,777,216 weights. Small zero-weight cases produce exact zero. At M=128 the fused maximum absolute error is approximately 1.9462e-3 and relative L2 error approximately 2.0750e-4. The absolute maximum alone is not the tolerance test, which includes reference magnitude and RMS. Main M=128 validation checks 64 sampled rows, not every row. The repeated small-case gate and four sanitizer runs pass with zero reported errors.
+
+Final raw evidence is in `results/inblock_c58_20261106_final/`: `timings.csv`, `timings.log`, `check.log`, `metadata.txt`, `source-build.sha256`, `check.sha256`, `gpu_before.csv`, `gpu_after.csv`, allocation/build/SASS records, and `ncu/`. Each final profile has its own log, stderr, `.ncu-repz`, and imported `_metrics.csv`. The target metric query is preserved compressed as `ncu/metric_names.txt.gz`. Profile commands are in `scripts/ncu_inblock.sh` and `profile.log`. Source/executable hashes identify code checkpoint `2b7d4fc`. Evidence was committed as `0d8fec0`. `analyze.py` asserts all 48 rows and matching comparison conditions, then generates `speedups.csv` and normalized `profile_summary.csv`. Both this script and `verify_sass.py` pass.
+
+**Final latency:** The complete repaired-baseline series uses the contract's fixed node, executable, flags, shapes, seed, warmups, iterations, and cache policies. These are CUDA-event medians in microseconds, lower is better. Original-weight cuBLAS and W_hat cuBLAS use distinct references.
+
+| Policy | M | naive | inblock | cublas | cublas_dq | dequant | unfused |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| Store flush | 1 | 206.496 | 53.600 | 94.208 | 94.208 | 121.184 | 178.528 |
+| Store flush | 8 | 206.496 | 233.824 | 86.048 | 86.048 | 120.480 | 186.048 |
+| Store flush | 32 | 705.888 | 869.056 | 86.400 | 86.368 | 121.184 | 172.032 |
+| Store flush | 128 | 2606.432 | 3452.928 | 118.784 | 116.736 | 120.512 | 229.344 |
+| No flush | 1 | 110.192 | 38.176 | 83.520 | 83.520 | 115.680 | 136.768 |
+| No flush | 8 | 222.688 | 224.512 | 52.800 | 52.800 | 116.288 | 142.912 |
+| No flush | 32 | 701.696 | 869.344 | 30.304 | 30.272 | 115.680 | 148.704 |
+| No flush | 128 | 2578.672 | 3445.312 | 106.048 | 106.048 | 116.288 | 193.824 |
+
+M=1 inblock is 3.853 times faster than retained naive with the application store flush and 2.886 times faster without it, satisfying the pre-timing primary criterion. It is also faster than both cuBLAS paths at M=1 in this one series. At M=8 store-flush speedup is 0.883, and no-flush is 0.992. Both M=32 and M=128 regress under both policies. Therefore the benefit is shape-specific, not a replacement recommendation across the measured M range.
+
+Within-run min/max/p90 in microseconds and median speedup quantify variation in the two fused paths. Speedup above 1 favors inblock. These statistics do not establish independent trial-to-trial reproducibility. Min/max/p90 for the other four baselines are also retained in the complete raw CSV.
+
+| Policy | M | naive min–max | naive p90 | inblock min–max | inblock p90 | naive/inblock median |
+|---|---:|---:|---:|---:|---:|---:|
+| Store flush | 1 | 204.448–210.592 | 208.512 | 51.200–55.840 | 55.648 | 3.853 |
+| Store flush | 8 | 205.472–211.392 | 208.576 | 232.768–235.936 | 234.848 | 0.883 |
+| Store flush | 32 | 700.768–713.216 | 711.072 | 862.880–878.624 | 877.568 | 0.812 |
+| Store flush | 128 | 2561.376–2609.600 | 2608.480 | 3451.552–3455.424 | 3454.592 | 0.755 |
+| No flush | 1 | 110.048–113.952 | 112.192 | 37.760–41.344 | 40.192 | 2.886 |
+| No flush | 8 | 220.416–226.688 | 222.784 | 223.776–235.552 | 225.536 | 0.992 |
+| No flush | 32 | 695.520–711.488 | 704.768 | 867.872–870.112 | 869.952 | 0.807 |
+| No flush | 128 | 2540.064–2580.736 | 2579.008 | 3444.256–3451.104 | 3446.336 | 0.748 |
+
+**Final profiler evidence:** These are separate Nsight runs with `--cache-control all`, application `--no-flush-l2`, one selected launch, and queried target metrics. They are not warm/no-flush event measurements. Values below preserve profiler units, with decimal MB/GB distinct from MiB/GiB. Achieved active warps and issue active use their recorded active-cycle percentage denominators. SM throughput and wait stalls use elapsed-cycle percentage denominators.
+
+| Metric | naive M=1 | inblock M=1 | naive M=128 | inblock M=128 |
+|---|---:|---:|---:|---:|
+| Blocks | 16 | 128 | 2048 | 16384 |
+| Registers/thread | 32 | 32 | 32 | 32 |
+| Static shared bytes/block | 0 | 1024 | 0 | 1024 |
+| Dynamic shared bytes/block | 0 | 0 | 0 | 0 |
+| Driver-reserved shared bytes/block | 1024 | 1024 | 1024 | 1024 |
+| Total shared bytes/block | 1024 | 2048 | 1024 | 2048 |
+| Active warps (% of sustained active peak) | 16.565 | 55.511 | 95.769 | 99.193 |
+| Eligible warps/active cycle | 0.251 | 1.126 | 5.435 | 4.969 |
+| Issue active (% of sustained active peak) | 21.075 | 63.679 | 85.784 | 86.391 |
+| SM throughput (% of sustained elapsed peak) | 9.159 | 57.311 | 85.539 | 86.215 |
+| Memory utilization (% of sustained elapsed peak) | 10.026 | 45.009 | 66.394 | 50.305 |
+| DRAM throughput (% of sustained elapsed peak) | 10.026 | 45.009 | 0.814 | 0.616 |
+| Long-scoreboard stall (% of sustained elapsed peak) | 5.335 | 25.574 | 15.987 | 14.204 |
+| Wait stall (% of sustained elapsed peak) | 0.796 | 11.730 | 7.650 | 18.122 |
+| DRAM reads (MB) | 8.663808 | 8.664832 | 9.704192 | 9.705216 |
+| L2 traffic | 9.041024 MB | 9.035968 MB | 1.125170 GB | 1.153074 GB |
+
+M=1's increased eligible warps, issue activity, and active warps are consistent with better utilization from the changed mapping. DRAM read bytes remain nearly equal, so the improvement is not explained by a reduction in those measured bytes. DRAM write counters report zero in these selected profiles even though each kernel writes C. Output data can remain cached, so zero observed DRAM write bytes does not mean no output stores occurred. Long-scoreboard percentage increases while elapsed time falls, illustrating why one normalized stall counter alone does not determine latency.
+
+At M=128 both kernels already have many active warps and similar SM throughput, yet inblock is slower. Its wait-stall metric rises from 7.650% to 18.122%, eligible warps decline, and L2 traffic rises modestly. Additional runtime tail checks, shared reduction, and altered instruction scheduling are candidate explanations. This experiment does not isolate their individual costs. Higher active-warps percentage does not establish better performance.
+
+**Limits:** One RTX 5060 Ti node, one seed, and one complete final timing series were measured. There are 100 per-kernel samples but no independently repeated final series or confidence intervals. Clocks were observed, not locked. Sanitizer evidence covers selected small shapes, main M=128 correctness is sampled, and profiling used invalidated caches rather than a validated steady-state warm profile. The store flush remains an intended policy, and `eff_gbps` remains modeled traffic. SASS parity is verified only for this compiler/architecture. These results do not establish end-to-end inference performance or portability to other GPUs.
+
+**Decision:** Keep inblock separately selectable for the demonstrated M=1 use case. Reject replacing naive across shapes or adding automatic dispatch from this experiment. Preserve all pilot/control/final evidence. No additional optimization is implemented.
+
+**Revisit only if:** Do not reintroduce the guarded aligned naive loop unless compiler/machine-code evidence and a matched control show that its regression is absent. Reconsider a universal inblock replacement only after an isolated change removes measured M>=8 regressions under consistent reruns of every point. A new GPU, compiler, or workload requires a fresh controlled series rather than transferring this result.
+
+**Optional additional validation:** This was not required for E001's sampled-row methodology. To check every M=128 output row on the verified allocation, keeping the original tolerance:
+
+```bash
+prun ./build/w4a16_bench --M 128 --N 4096 --K 4096 --group 128 --seed 1 \
+  --warmup 0 --iters 1 --check-rows 128 --kernels naive,inblock --no-flush-l2
+```
+
+**Optional independent timing replication:** No additional measurements are needed to complete E001. To assess between-series variability later, revalidate the allocation and use a fresh directory. Do not overwrite final evidence or combine new points selectively with this series. Run from the remote project root with the verified launcher environment above:
+
+```bash
+set -euo pipefail
+export RUN_DIR="$PWD/results/inblock_replicate_$(date -u +%Y%m%dT%H%M%SZ)"
+export SOURCE_COMMIT=2b7d4fc  # verify the actual source checkpoint first
+mkdir "$RUN_DIR"
+scontrol show job "$SLURM_JOB_ID" > "$RUN_DIR/allocation.txt"
+prun bash scripts/check_inblock.sh > "$RUN_DIR/check.log" 2>&1
+```
+
+Inspect the complete successful prerequisite log before the expensive sweep. Then run every point using the same executable and methodology:
+
+```bash
+# The successful gate has already created check.sha256.
+prun bash scripts/run_inblock.sh > "$RUN_DIR/timings.log" 2>&1
+```
+
+The script captures fresh metadata/hashes and both cache policies across all four M values. Replication does not imply locked clocks. Record any new clock control or changed conditions as a separate series.
+
+## E002 — Candidate aligned-K specialization (proposal only)
+
+Status: proposed, not implemented or measured. Await a user request before implementing.
+
+**Problem:** E001 retains a runtime final-word guard in the candidate inner loop even at aligned K=4096. The isolated naive control demonstrated that such a guard can change code generation enough to slow a kernel, but this does not establish the effect on inblock.
+
+**Hypothesis:** Compile-time aligned/tail variants in inblock may reduce aligned-case instruction overhead and improve its larger-M latency while preserving the existing layout, numerical contract, and tail correctness. The magnitude and affected shapes are unknown.
+
+**Proposed change and alternatives:** Specialize only the candidate final-word guard, retaining eight slices, shared reduction, grid/block mapping, and baseline code. Keep E001 as the comparison and avoid combining this with tiling or new layouts. Continuing with current E001 is the unchanged alternative.
+
+**Evidence needed before decision:** Inspect aligned candidate SASS, repeat the full correctness/sanitizer gate, and rerun every M/cache point with E001 and candidate under identical conditions. A success criterion must be fixed before implementation after the user requests the experiment. No candidate results or claimed speedup exist.
+
+**Decision:** Proposal only. No implementation is authorized by merely listing it here.
+
+**Revisit only if:** The user requests this isolated experiment, or new profiler/code-generation evidence changes its priority.
+
+## Template for the next requested experiment
+
+```text
+## E00X — Name
+Status: proposed / implemented / measured / accepted / rejected / inconclusive
+Problem:
+Hypothesis and success criterion, recorded before implementation:
+Change and alternatives considered:
+Baseline and candidate: commits, kernel names, build settings
+Validation: shapes, numerical error, sanitizer outcomes
+Measurement: GPU, cache policy, commands, raw paths, variability
+Findings: measured results and profiler evidence, with limits
+Decision: keep / reject / investigate, and why
+Revisit only if: new evidence or changed conditions
+```

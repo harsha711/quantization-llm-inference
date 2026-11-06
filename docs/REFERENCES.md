@@ -1,0 +1,20 @@
+# References and applicability
+
+Documentation checked on 2026-11-06. Live manuals can change. Installed-tool versions, supported metrics, and runtime attributes in each result directory are the authority for what was actually measured. Sources establish mechanisms or API behavior, not project speedups.
+
+| Source | Specific idea supported | Application and limits here |
+|---|---|---|
+| [NCSU ARC: Running Jobs](https://arcm.csc.ncsu.edu/~mueller/cluster/arc/) | ARC uses salloc for interactive allocation, sbatch for batch submission, and prun to launch within allocations. Use scontrol to inspect jobs. | Applies directly to gateway/c58 access. Read current policy and actual allocation each session. A launcher is not a resource request. Historical job 328410 does not establish future resource access. |
+| [CUDA Programming Guide](https://docs.nvidia.com/cuda/cuda-programming-guide/index.html) | CUDA thread/block execution model, shared memory, synchronization, and floating-point behavior. | Supports E001's block-local reduction design. All lanes must reach its barrier, including invalid columns and empty slices. The fixed mapping and 1024-byte shared allocation are code-derived facts. Performance/occupancy must be measured. |
+| [cuBLAS: data layout](https://docs.nvidia.com/cuda/cublas/index.html#data-layout), [cublasGemmEx](https://docs.nvidia.com/cuda/cublas/index.html#cublasgemmex) | cuBLAS uses column-major layout and permits specified input/output/computation types. | `src/cuda/cublas_gemm.cu` computes row-major C through column-major C-transpose with FP16 storage and CUBLAS_COMPUTE_32F. Original W and W_hat are distinct references. Live manual may be newer than installed CUDA. No cuBLAS implementation or speedup is inferred. |
+| [Nsight Compute Profiling Guide: cache control](https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html#cache-control) | Cache flushing between replay passes, replay effects, metric interpretation, and supported-metric queries. | Profiling cache-control all is separate from the application's store flush. Query metrics on RTX 5060 Ti and save unavailable names/results. A cache-control-none first launch is not necessarily steady-state warm. Counter semantics and replay limit timing comparisons. |
+| [Compute Sanitizer](https://docs.nvidia.com/compute-sanitizer/ComputeSanitizer/index.html) | memcheck and synccheck tools identify selected memory-access and synchronization errors. | GPU gate uses both on small tail cases. A passing subset is not proof for every shape. Record installed version, command, logs, error exit code, and any unperformed check. |
+
+## Repository evidence
+
+- [CONTRACT.md](CONTRACT.md), `src/quant.cpp`, and `src/cuda/w4a16_naive.cu` define this project's symmetric offset-coded INT4 quantization and required FP16 reconstruction. This is the project's chosen contract, not a claimed standard packed LLM format.
+- `results/baseline_meta.txt`, `results/baseline_c7.csv`, `results/baseline_c7.log`, and `results/ncu/summary.txt` document historical c7 evidence. Binary provenance and cache interpretation have the limits recorded in H001–H003 of [EXPERIMENTS.md](EXPERIMENTS.md).
+- Final E001 evidence is `results/inblock_c58_20261106_final/`, source checkpoint `2b7d4fc`, evidence checkpoint `0d8fec0`. `analyze.py` checks the 48-row series and generates `speedups.csv`/`profile_summary.csv`. `verify_sass.py` checks exact aligned device-code parity. Raw profiles, commands, metadata, hashes, and control evidence remain alongside these summaries.
+- Runtime `cudaDeviceProp.l2CacheSize` and historical Nsight `device__attribute_l2_cache_size` both reported 32 MiB. Use new runtime/metadata evidence for new GPU claims rather than transferring an unrelated accelerator's specifications.
+
+No external INT4 source implementation has been imported or benchmarked in E001. Tensor Cores, alternative layouts, asynchronous copies, and prepacking remain candidate directions in [OPTIMIZATION_MAP.md](OPTIMIZATION_MAP.md), with no external performance result treated as evidence for this kernel.
