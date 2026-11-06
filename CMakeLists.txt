@@ -37,6 +37,7 @@ if(CMAKE_CUDA_COMPILER)
   add_executable(w4a16_bench
     src/cuda/bench.cu
     src/cuda/w4a16_naive.cu
+    src/cuda/w4a16_inblock.cu
     src/cuda/dequant.cu
     src/cuda/cublas_gemm.cu)
   target_include_directories(w4a16_bench PRIVATE src/cuda)

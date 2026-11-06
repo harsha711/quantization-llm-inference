@@ -22,9 +22,10 @@
 //   then converted back to FP32 for accumulation. Host and device must agree
 //   bit-for-bit on that FP16.
 //
-//   Packing: qweight is (K/8) x N uint32, row-major. Word (k8, n) holds rows
+//   Packing: qweight is ceil(K/8) x N uint32, row-major. Word (k8, n) holds rows
 //   k = 8*k8 + j for j = 0..7, with row j in bits [4j, 4j+4).
-//   scales is (K/group_size) x N FP16, row-major.
+//   scales is ceil(K/group_size) x N FP16, row-major. The last group may be partial.
+//   group_size is a multiple of 8; unused final-word nibbles are zero and never read.
 #include <cstddef>
 #include <cstdint>
 #include <vector>
@@ -35,14 +36,14 @@ struct QuantizedWeights {
   int K = 0;
   int N = 0;
   int group_size = 0;
-  std::vector<uint32_t> qweight;  // (K/8) x N
-  std::vector<uint16_t> scales;   // (K/group_size) x N, FP16 bits
+  std::vector<uint32_t> qweight;  // ceil(K/8) x N
+  std::vector<uint16_t> scales;   // ceil(K/group_size) x N, FP16 bits
 };
 
 inline size_t fp16_bytes(int rows, int cols) { return static_cast<size_t>(rows) * cols * 2; }
-inline size_t qweight_bytes(int K, int N) { return static_cast<size_t>(K / 8) * N * 4; }
+inline size_t qweight_bytes(int K, int N) { return static_cast<size_t>((K + 7) / 8) * N * 4; }
 inline size_t scales_bytes(int K, int N, int group) {
-  return static_cast<size_t>(K / group) * N * 2;
+  return static_cast<size_t>((K + group - 1) / group) * N * 2;
 }
 
 void validate_shape(int K, int N, int group_size);

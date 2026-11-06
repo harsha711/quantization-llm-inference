@@ -1,11 +1,12 @@
 // Correctness check and timing for one GEMM shape.
 //
 //   w4a16_bench --M 16 --N 4096 --K 4096 [--group 128] [--seed 1] [--warmup 10]
-//               [--iters 100] [--kernels naive,cublas,cublas_dq,dequant,unfused]
+//               [--iters 100] [--kernels naive,inblock,cublas,cublas_dq,dequant,unfused]
 //               [--no-flush-l2] [--check-rows 64] [--nocheck] [--csv results/out.csv]
 //
 // Kernels
 //   naive      fused W4A16, dequant in registers
+//   inblock    fused W4A16, eight K slices reduced within each block
 //   cublas     cuBLAS FP16 GEMM on the original FP16 weights
 //   cublas_dq  cuBLAS FP16 GEMM on pre-dequantized FP16 W_hat (already on device)
 //   dequant    GPU unpack+dequant into a K x N FP16 buffer
@@ -57,15 +58,16 @@ struct Options {
   int warmup = 10, iters = 100, check_rows = 64;
   bool flush_l2 = true;
   bool nocheck = false;
-  std::vector<std::string> kernels = {"naive", "cublas", "cublas_dq", "dequant", "unfused"};
+  bool zero_weights = false;
+  std::vector<std::string> kernels = {"naive", "inblock", "cublas", "cublas_dq", "dequant", "unfused"};
   std::string csv;
 };
 
 [[noreturn]] void usage(const char* prog) {
   std::fprintf(stderr,
                "usage: %s [--M m] [--N n] [--K k] [--group g] [--seed s] [--warmup w]\n"
-               "          [--iters i] [--kernels naive,cublas,cublas_dq,dequant,unfused]\n"
-               "          [--no-flush-l2] [--check-rows r] [--nocheck] [--csv path]\n",
+               "          [--iters i] [--kernels naive,inblock,cublas,cublas_dq,dequant,unfused]\n"
+               "          [--no-flush-l2] [--check-rows r] [--nocheck] [--zero-weights] [--csv path]\n",
                prog);
   std::exit(EXIT_FAILURE);
 }
@@ -88,6 +90,7 @@ Options parse(int argc, char** argv) {
     else if (a == "--check-rows") o.check_rows = std::stoi(val());
     else if (a == "--no-flush-l2") o.flush_l2 = false;
     else if (a == "--nocheck") o.nocheck = true;
+    else if (a == "--zero-weights") o.zero_weights = true;
     else if (a == "--csv") o.csv = val();
     else if (a == "--kernels") {
       o.kernels.clear();
@@ -97,6 +100,7 @@ Options parse(int argc, char** argv) {
     } else usage(argv[0]);
   }
   if (o.M <= 0 || o.iters <= 0 || o.warmup < 0 || o.check_rows < 1) usage(argv[0]);
+  validate_shape(o.K, o.N, o.group);
   return o;
 }
 
@@ -153,7 +157,7 @@ double logical_bytes(const std::string& name, int M, int N, int K, int group) {
   const double w16 = static_cast<double>(fp16_bytes(K, N));
   const double qw = static_cast<double>(qweight_bytes(K, N));
   const double sc = static_cast<double>(scales_bytes(K, N, group));
-  if (name == "naive") return a + c + qw + sc;
+  if (name == "naive" || name == "inblock") return a + c + qw + sc;
   if (name == "cublas" || name == "cublas_dq") return a + c + w16;
   if (name == "dequant") return qw + sc + w16;
   if (name == "unfused") return a + c + qw + sc + w16;
@@ -188,9 +192,17 @@ int main(int argc, char** argv) {
   std::printf("footprint: FP16 weights %.4f MiB, packed INT4 %.4f MiB, FP16 scales %.4f MiB\n",
               w16_mib, qw_mib, sc_mib);
   std::printf("launch: naive grid=((N+255)/256, M)=(%d, %d) block=256; dequant grid=(%d, %d) block=256\n",
-              (o.N + 255) / 256, o.M, (o.N + 255) / 256, o.K / 8);
+              (o.N + 255) / 256, o.M, (o.N + 255) / 256, (o.K + 7) / 8);
+
+  std::printf("launch: inblock grid=(%d, %d) block=(32, 8), shared partials=1024 bytes\n",
+              (o.N + 31) / 32, o.M);
 
   Problem p = make_problem(o.M, o.N, o.K, o.group, o.seed);
+  if (o.zero_weights) {
+    std::fill(p.W.begin(), p.W.end(), 0);
+    p.qw = quantize_int4_groupwise(p.W.data(), o.K, o.N, o.group);
+    std::printf("input: zero weights\n");
+  }
   const std::vector<uint16_t> W_hat16 = dequantize_all_fp16(p.qw);
   const std::vector<float> W_hat = dequantize_all(p.qw);
   std::vector<float> W_orig(p.W.size());
@@ -237,8 +249,11 @@ int main(int argc, char** argv) {
     flush_bytes = 2 * static_cast<size_t>(prop.l2CacheSize);
     CUDA_CHECK(cudaMalloc(&flush_buf, flush_bytes));
   }
-  std::printf("cache: intended cold-L2, flush buffer %.2f MiB (2x L2), store kernel (not memset)\n",
-              flush_bytes / 1048576.0);
+  if (o.flush_l2)
+    std::printf("cache: intended cold-L2, flush buffer %.2f MiB (2x L2), store kernel (not memset)\n",
+                flush_bytes / 1048576.0);
+  else
+    std::printf("cache: warm/reused inputs, no flush between launches\n");
 
   cublasHandle_t handle;
   CUBLAS_CHECK(cublasCreate(&handle));
@@ -270,6 +285,8 @@ int main(int argc, char** argv) {
     std::printf("W_hat GPU vs CPU: skipped (not needed for this kernel list)\n");
   }
 
+  if (what_mismatch) return EXIT_FAILURE;
+
   const double rtol = 1e-3, atol_frac = 1e-3;
   const double flops = 2.0 * o.M * o.N * o.K;
 
@@ -300,6 +317,9 @@ int main(int argc, char** argv) {
     bool is_gemm = true;
     if (name == "naive") {
       launch = [&] { launch_w4a16_naive(dA, dQ, dS, dC, o.M, o.N, o.K, o.group, 0); };
+      ref = &ref_quant;
+    } else if (name == "inblock") {
+      launch = [&] { launch_w4a16_inblock(dA, dQ, dS, dC, o.M, o.N, o.K, o.group, 0); };
       ref = &ref_quant;
     } else if (name == "cublas") {
       launch = [&] { launch_cublas_fp16(handle, dA, dW, dC, o.M, o.N, o.K); };
@@ -337,6 +357,14 @@ int main(int argc, char** argv) {
     }
     all_pass = all_pass && pass;
 
+    if (!pass) {
+      std::fprintf(stderr, "%s failed: %zu/%zu bad outputs, max_abs=%.4e rel_l2=%.4e "
+                           "rtol=%.0e atol=%.4e; stopping before timing\n",
+                   name.c_str(), st.num_bad, st.count, st.max_abs, st.rel_l2, rtol, st.atol);
+      if (csv) std::fclose(csv);
+      return EXIT_FAILURE;
+    }
+
     const Timing t = time_kernel(launch, o.warmup, o.iters, flush_buf, flush_bytes);
     const double bytes = logical_bytes(name, o.M, o.N, o.K, o.group);
     const double tflops = is_gemm ? flops / (t.median_us * 1e-6) / 1e12 : 0.0;
@@ -359,8 +387,14 @@ int main(int argc, char** argv) {
   }
   if (!o.nocheck)
     std::printf("checked %zu of %d rows against the FP64 CPU reference (reconstructed W_hat for "
-                "naive/cublas_dq/unfused; original W for cublas)\n",
+                "naive/inblock/cublas_dq/unfused; original W for cublas)\n",
                 rows.size(), o.M);
+
+  if (!o.nocheck) {
+    std::printf("checked row indices:");
+    for (int row : rows) std::printf(" %d", row);
+    std::printf("\n");
+  }
 
   if (csv) std::fclose(csv);
   CUBLAS_CHECK(cublasDestroy(handle));

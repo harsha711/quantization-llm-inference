@@ -14,13 +14,13 @@ void validate_shape(int K, int N, int group_size) {
     throw std::invalid_argument("K, N and group_size must be positive");
   if (group_size % 8 != 0)
     throw std::invalid_argument("group_size must be a multiple of 8 (one packed word never spans groups)");
-  if (K % group_size != 0)
-    throw std::invalid_argument("K=" + std::to_string(K) + " is not a multiple of group_size=" +
-                                std::to_string(group_size));
 }
 
 std::vector<uint32_t> pack_int4(const std::vector<uint8_t>& q, int K, int N) {
-  std::vector<uint32_t> packed(static_cast<size_t>(K / 8) * N, 0u);
+  validate_shape(K, N, 8);
+  if (q.size() != static_cast<size_t>(K) * N)
+    throw std::invalid_argument("pack_int4 requires K*N codes");
+  std::vector<uint32_t> packed(static_cast<size_t>((K + 7) / 8) * N, 0u);
   for (int k = 0; k < K; ++k)
     for (int n = 0; n < N; ++n) {
       uint32_t v = q[static_cast<size_t>(k) * N + n] & 0xFu;
@@ -31,7 +31,7 @@ std::vector<uint32_t> pack_int4(const std::vector<uint8_t>& q, int K, int N) {
 
 QuantizedWeights quantize_int4_groupwise(const uint16_t* W_fp16, int K, int N, int group_size) {
   validate_shape(K, N, group_size);
-  const int groups = K / group_size;
+  const int groups = (K + group_size - 1) / group_size;
   QuantizedWeights qw;
   qw.K = K;
   qw.N = N;
@@ -42,12 +42,12 @@ QuantizedWeights quantize_int4_groupwise(const uint16_t* W_fp16, int K, int N, i
   for (int g = 0; g < groups; ++g)
     for (int n = 0; n < N; ++n) {
       float amax = 0.f;
-      for (int k = g * group_size; k < (g + 1) * group_size; ++k)
+      for (int k = g * group_size; k < std::min(K, (g + 1) * group_size); ++k)
         amax = std::max(amax, std::fabs(half_to_float(W_fp16[static_cast<size_t>(k) * N + n])));
       uint16_t s_bits = float_to_half(amax / 7.f);
       float s = half_to_float(s_bits);
       qw.scales[static_cast<size_t>(g) * N + n] = s_bits;
-      for (int k = g * group_size; k < (g + 1) * group_size; ++k) {
+      for (int k = g * group_size; k < std::min(K, (g + 1) * group_size); ++k) {
         size_t idx = static_cast<size_t>(k) * N + n;
         int v = 0;
         if (s > 0.f) {

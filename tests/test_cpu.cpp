@@ -1,4 +1,5 @@
 #include <cmath>
+#include <algorithm>
 #include <cstdio>
 #include <cstdlib>
 #include <vector>
@@ -106,6 +107,47 @@ static void test_reference_gemm() {
   CHECK(C1[0] == 10 && C1[1] == -1);
 }
 
+static void test_tails() {
+  for (int K : {1, 3, 7, 8, 9, 40, 65, 129, 137, 257}) {
+    const int N = 33, G = 128;
+    Problem p = make_problem(3, N, K, G, 1);
+    CHECK(p.qw.qweight.size() * 4 == qweight_bytes(K, N));
+    CHECK(p.qw.scales.size() * 2 == scales_bytes(K, N, G));
+    for (int g = 0; g < (K + G - 1) / G; ++g)
+      for (int n = 0; n < N; ++n) {
+        float amax = 0.f;
+        for (int k = g * G; k < std::min(K, (g + 1) * G); ++k)
+          amax = std::fmax(amax, std::fabs(half_to_float(p.W[k * N + n])));
+        const uint16_t sb = float_to_half(amax / 7.f);
+        CHECK(p.qw.scales[g * N + n] == sb);
+        const float s = half_to_float(sb);
+        for (int k = g * G; k < std::min(K, (g + 1) * G); ++k) {
+          const int z = s > 0 ? static_cast<int>(std::clamp(
+              std::nearbyint(half_to_float(p.W[k * N + n]) / s), -7.f, 7.f)) : 0;
+          CHECK(unpack_q(p.qw, k, n) == z + 8);
+          CHECK(dequant_fp16(p.qw, k, n) == float_to_half(z * s));
+        }
+      }
+    if (K % 8)
+      for (int n = 0; n < N; ++n)
+        CHECK((p.qw.qweight[(K / 8) * N + n] >> (4 * (K % 8))) == 0);
+    std::vector<uint16_t> zeros(K * N, 0);
+    auto qz = quantize_int4_groupwise(zeros.data(), K, N, G);
+    for (int k = 0; k < K; ++k)
+      for (int n = 0; n < N; ++n)
+        CHECK(unpack_q(qz, k, n) == 8 && dequant_fp16(qz, k, n) == 0);
+  }
+
+  // Exhaustively verify the packed-word partition, including empty slices.
+  for (int words = 1; words <= 520; ++words) {
+    std::vector<int> visits(words, 0);
+    for (int slice = 0; slice < 8; ++slice)
+      for (int k8 = words * slice / 8; k8 < words * (slice + 1) / 8; ++k8)
+        ++visits[k8];
+    for (int count : visits) CHECK(count == 1);
+  }
+}
+
 static void test_compare_and_rows() {
   auto rows = pick_check_rows(1000, 5);
   CHECK(rows.size() == 5 && rows.front() == 0 && rows.back() == 999);
@@ -141,6 +183,7 @@ int main() {
   test_half_rounding();
   test_pack_unpack();
   test_quantization();
+  test_tails();
   test_reference_gemm();
   test_compare_and_rows();
   test_memory_sizes();

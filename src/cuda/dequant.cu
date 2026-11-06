@@ -15,6 +15,7 @@ __global__ void dequant_w4a16_kernel(const uint32_t* __restrict__ qweight,
   const float s = __half2float(scales[static_cast<size_t>(k0 / group_size) * N + n]);
 #pragma unroll
   for (int j = 0; j < 8; ++j) {
+    if (k0 + j >= K) break;
     const int q = static_cast<int>((packed >> (4 * j)) & 0xFu);
     W[static_cast<size_t>(k0 + j) * N + n] = __float2half_rn(static_cast<float>(q - 8) * s);
   }
@@ -35,7 +36,7 @@ void launch_dequant_w4a16(const uint32_t* qweight, const __half* scales, __half*
                           int group_size, cudaStream_t stream) {
   constexpr int kThreads = 256;
   dim3 block(kThreads);
-  dim3 grid((N + kThreads - 1) / kThreads, K / 8);
+  dim3 grid((N + kThreads - 1) / kThreads, (K + 7) / 8);
   dequant_w4a16_kernel<<<grid, block, 0, stream>>>(qweight, scales, W, N, K, group_size);
   CUDA_CHECK(cudaGetLastError());
 }

@@ -24,6 +24,7 @@ __global__ void w4a16_naive_kernel(const __half* __restrict__ A,
     const float s = __half2float(scales[static_cast<size_t>(k0 / group_size) * N + n]);
 #pragma unroll
     for (int j = 0; j < 8; ++j) {
+      if (k0 + j >= K) break;
       const int q = static_cast<int>((packed >> (4 * j)) & 0xFu);
       // Same reconstructed FP16 as host dequant / the unfused dequant kernel.
       const float w = __half2float(__float2half_rn(static_cast<float>(q - 8) * s));

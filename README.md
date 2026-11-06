@@ -46,7 +46,7 @@ path does **not** flush between dequant and GEMM, so W_hat can stay in cache.
 - **TFLOP/s**: `2·M·N·K / median_s / 1e12` for GEMM-like kernels; 0 for `dequant`.
 - **eff_GB/s**: `logical_bytes / median_s / 1e9`. This is **effective
   bandwidth** from a traffic model, not measured DRAM. Formulas:
-  - `naive`: \|A\| + \|C\| + \|qweight\| + \|scales\|
+  - `naive` / `inblock`: \|A\| + \|C\| + \|qweight\| + \|scales\|
   - `cublas` / `cublas_dq`: \|A\| + \|C\| + \|W_fp16\|  (32 MiB weights)
   - `dequant`: \|qweight\| + \|scales\| + \|W_hat\|     (W_hat is a write)
   - `unfused`: \|A\| + \|C\| + \|qweight\| + \|scales\| + \|W_hat\|
@@ -66,6 +66,17 @@ path does **not** flush between dequant and GEMM, so W_hat can stay in cache.
 4. `dequant` + `unfused`: GPU dequant latency, GEMM-on-W_hat latency, and
    combined latency around both operations.
 5. `naive`: fused W4A16, one thread per output, no shared-memory reuse.
+6. `inblock`: fused W4A16, block=(32,8), eight disjoint packed-word K slices,
+   FP32 shared-memory reduction and one FP16 write per output.
+
+Both fused kernels and GPU dequantization handle arbitrary positive K and N,
+including partial final words and groups. Group size remains a multiple of eight.
+Packed/scales storage uses ceiling counts. Select the new version with
+`--kernels inblock` or compare with `--kernels naive,inblock`.
+
+Project continuation rules are in [AGENTS.md](AGENTS.md). See
+[design decisions](docs/design-decisions.md) for considered designs and evidence,
+and the [experiment record](docs/experiment-inblock.md) for validation and results.
 
 ## Build and run
 
@@ -82,3 +93,8 @@ scripts/remote.sh scripts/build.sh
 scripts/remote.sh scripts/run_baseline.sh
 scripts/remote.sh scripts/ncu_baseline.sh
 ```
+
+These legacy remote commands default to c7 and overwrite baseline records.
+For the new experiment, use the verified current allocation and a separate result
+directory as described in the experiment record. Run `bash scripts/check_inblock.sh`
+on the GPU before measuring.
