@@ -24,5 +24,6 @@
     "csrc/quantization/marlin/marlin_int4_fp8_preprocess.cu": "36c7ff17d531ae80233dd98fff4ae20a30e41f5741b79c4c894cf4303e34cafc",
     "csrc/quantization/marlin/marlin_mma.h": "bf863d252bfc468eaff42b2c1bda583c5e6ab97ceacf0ac248c164564ddcce9b",
     "csrc/quantization/marlin/marlin_template.h": "972ffd66fdfb6781dad13daea1167981821a78b86a93d865baa2b3c3ed11cd19"
-  }
+  },
+  "operator_library_sha256": "e634b80e72078e964f8bd2ac541d66f2a900920773cf993544609612190bd9a9"
 }

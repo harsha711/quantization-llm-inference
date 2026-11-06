@@ -85,6 +85,65 @@ def main(root):
             assert r['operand_sha256']==s['operand_sha256']
             comps.append(dict(K=x[0],N=x[1],M=x[2],policy=x[3],kernel=x[4],screen_us=lookup[x]['median_us'],repeat1_us=r['median_us'],repeat2_us=s['median_us'],repeat2_over_repeat1=s['median_us']/r['median_us']))
         write_csv(root/'repeat_comparison.csv',comps)
+    profiles=[]
+    factors={'byte':1,'byte/block':1,'Kbyte':1000,'Kbyte/block':1000,'Mbyte':1000000,'us':1,'inst':1,'register/thread':1,'block':1,'warp':1,'%':1,'pass':1,'SM':1}
+    fields=['gpu__time_duration.sum','launch__grid_size','launch__block_size','launch__registers_per_thread',
+            'launch__registers_per_thread_allocated','launch__shared_mem_per_block_dynamic',
+            'launch__shared_mem_per_block_allocated','launch__occupancy_limit_shared_mem',
+            'launch__occupancy_limit_registers','sm__warps_active.avg.pct_of_peak_sustained_active',
+            'smsp__warps_eligible.avg.per_cycle_active','smsp__issue_active.avg.pct_of_peak_sustained_active',
+            'sm__inst_executed_pipe_tensor.sum','sm__pipe_tensor_cycles_active.avg.pct_of_peak_sustained_elapsed',
+            'smsp__inst_executed.sum','smsp__sass_thread_inst_executed_op_ffma_pred_on.sum',
+            'smsp__sass_thread_inst_executed_op_integer_pred_on.sum',
+            'smsp__warps_issue_stalled_long_scoreboard.avg.pct_of_peak_sustained_elapsed',
+            'smsp__warps_issue_stalled_short_scoreboard.avg.pct_of_peak_sustained_elapsed',
+            'smsp__warps_issue_stalled_barrier.avg.pct_of_peak_sustained_elapsed',
+            'smsp__warps_issue_stalled_wait.avg.pct_of_peak_sustained_elapsed',
+            'smsp__warps_issue_stalled_math_pipe_throttle.avg.pct_of_peak_sustained_elapsed',
+            'dram__throughput.avg.pct_of_peak_sustained_elapsed','dram__bytes_op_read.sum','dram__bytes_op_write.sum','lts__t_bytes.sum','profiler__replayer_passes']
+    for m in [8,16,64]:
+        path=root/'ncu'/f'marlin_M{m}_reused_kernel_replay_metrics.csv'
+        if not path.exists():continue
+        lines=list(csv.reader(path.open()))
+        assert len(lines)==3 and len(lines[0])==len(lines[1])==len(lines[2])
+        unit=dict(zip(lines[0],lines[1]));data=dict(zip(lines[0],lines[2]))
+        assert 'Marlin<' in data['Kernel Name'] and data['CC']=='12.0'
+        assert data['Grid Size']=='(36, 1, 1)' and data['Block Size']=='(256, 1, 1)'
+        row=dict(M=m,K=4096,N=4096,kernel=data['Kernel Name'],cache_control='none',warmup=10,replay='kernel')
+        for field in fields:
+            v=float(data[field].replace(',',''));assert math.isfinite(v)
+            row[field]=v*factors.get(unit[field],1)
+        assert row['launch__shared_mem_per_block_dynamic']==101376
+        assert row['smsp__sass_thread_inst_executed_op_ffma_pred_on.sum']==0
+        assert row['sm__inst_executed_pipe_tensor.sum']==m*8192
+        profiles.append(row)
+    if profiles:
+        assert len(profiles)==3
+        write_csv(root/'profile_summary.csv',profiles)
+        summary['profiles']=len(profiles)
+    # Validate the source subset against its pinned provenance, independent of current build.
+    import tarfile
+    provenance=json.loads((root/'provenance.json').read_text())
+    with tarfile.open(root/'marlin-source.tar.gz') as archive:
+        for file,digest in provenance['files'].items():
+            assert hashlib.sha256(archive.extractfile(file).read()).hexdigest()==digest,file
+    binary_hashes=[]
+    repo=Path(__file__).resolve().parents[2]
+    for manifest in ['screen-source.sha256','repeat-source.sha256']:
+        for line in (root/manifest).read_text().splitlines():
+            digest,file=line.split(None,1)
+            file=file.strip()
+            if file.endswith('/libe004.so'):
+                binary_hashes.append(digest)
+            elif file.startswith(('src/','include/')) or file in ['scripts/e004/bench.py','scripts/e004/bridge.cu','scripts/e004/build_bridge.sh','scripts/e004/run_arc.sh']:
+                assert hashlib.sha256((repo/file).read_bytes()).hexdigest()==digest,file
+    assert len(binary_hashes)==2 and len(set(binary_hashes))==1
+    assert provenance['operator_library_sha256'] in (root/'torch-smoke.log').read_text()
+    summary['bridge_binary_sha256']=binary_hashes[0]
+    summary['operator_library_sha256']=provenance['operator_library_sha256']
+    assert 'ERROR SUMMARY: 0 errors' in (root/'project-check.log').read_text()
+    assert (root/'project-check.log').read_text().count('ERROR SUMMARY: 0 errors')==6
+    summary['source_archive_verified']=True
     (root/'analysis.json').write_text(json.dumps(summary,indent=2)+'\n')
     print(json.dumps(summary,indent=2))
 

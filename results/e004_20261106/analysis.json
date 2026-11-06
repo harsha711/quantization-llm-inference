@@ -7,5 +7,9 @@
   "repeat1_rows": 64,
   "repeat2_rows": 64,
   "eager_diagnostic_rows": 12,
-  "graph_diagnostic_rows": 12
+  "graph_diagnostic_rows": 12,
+  "profiles": 3,
+  "bridge_binary_sha256": "85f332951a8c24b3eb06594977b3e3d62b7954fa01b986da41ffeff851bfbd3f",
+  "operator_library_sha256": "e634b80e72078e964f8bd2ac541d66f2a900920773cf993544609612190bd9a9",
+  "source_archive_verified": true
 }
