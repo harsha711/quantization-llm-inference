@@ -77,4 +77,4 @@ Historical analyzers that assert source hashes require the corresponding recorde
 
 ## Single next task
 
-Await the user's next requested experiment. E003 is fully implemented, validated, measured, and documented. Reuse at M=1 and four-row tails have explicit revisit conditions in E003. Shape-based dispatch, larger row tiles, layout changes, Tensor Cores, and asynchronous transfers are candidates requiring a separate request and new evidence-based criteria. Revalidate allocation 328410 and the GPU before any further use. Leave the user's allocation and all original/E001/E002/E003 directories intact.
+E004 is authorized and in progress: integrate maintained dense INT4 W4A16 Marlin from pinned vLLM source, establish numerical compatibility, then a gated compact comparison and at most three targeted profiles. Read E004's predeclared gates in EXPERIMENTS.md. No external kernel modification, further custom optimization, or E005 implementation. Preserve all existing evidence and the user-owned allocation. A concrete integration blocker or no clear opportunity is a valid documented outcome.

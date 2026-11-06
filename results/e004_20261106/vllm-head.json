@@ -1,0 +1,101 @@
+{
+  "sha": "4d82b56913be009d97c59fb13e471bde14948e1f",
+  "node_id": "C_kwDOI7xeftoAKDRkODJiNTY5MTNiZTAwOWQ5N2M1OWZiMTNlNDcxYmRlMTQ5NDhlMWY",
+  "commit": {
+    "author": {
+      "name": "shustovTE",
+      "email": "151925802+shustovTE@users.noreply.github.com",
+      "date": "2026-11-06T20:12:03Z"
+    },
+    "committer": {
+      "name": "GitHub",
+      "email": "noreply@github.com",
+      "date": "2026-11-06T20:12:03Z"
+    },
+    "message": "[BugFix] Fix/spec decode insert resampled race (#66048)\n\nSigned-off-by: Timofei <msshustova@gmail.com>\nCo-authored-by: Codex <noreply@openai.com>",
+    "tree": {
+      "sha": "bb6cd8734bad655c23d47e5bb8800956f972767c",
+      "url": "https://api.github.com/repos/vllm-project/vllm/git/trees/bb6cd8734bad655c23d47e5bb8800956f972767c"
+    },
+    "url": "https://api.github.com/repos/vllm-project/vllm/git/commits/4d82b56913be009d97c59fb13e471bde14948e1f",
+    "comment_count": 0,
+    "verification": {
+      "verified": true,
+      "reason": "valid",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJq7jSTCRC1aQ7uu5UhlAAAufQQAAznd4XFipC/dODTDJl4dplp\n72iPM9CktDT4fYu7OU1n6yciwCszkZ4yVDWmR+goCHTHhkc+lKfmxro+pOjVR02N\ngYbvdHT+nIgGiK13KD1GRCGx8j1pnQ85zqXJ9sN3ugZys8WO0v2fOJQzcYIotUUX\nGcrpxTS1XEsxztKlxaYOMljupb3KfkF8PLK7tFNBWNs4jgd1An/yKu8lhlXLAcM9\n6xkBr4+vEjB5HBtGabagnQA81mNWsnP1VM3TE76CxvLMOU0JxSf+pqNFlgBQHJfF\nD1wXlJk4g9oL0FnKrs4LHsP+CBnsHpfViG1nst6JPK5BDMdnsCHR5727e97D8sql\nslRJpOsmiEwdnE9Ek5OvPizVBSjx0vchq41JAd7P/kZkE/AswFkYRuWWRoyjzOPw\nOyzG1jvctQC8dhFbKYyPV6N/CFN55hImNsvy8F32HQr9T9WN4jZ0PfvissRToe0u\nl0XVlehv8SRflmg7k6wFsq5wTpDgwuFiVQFsqGEjVwzkOjZkl0DHU8gKtofLpYg5\n/dVAn+oIOos3NO3zmuWIFS5Rf/o7EE1TSaSlUaSr5ldHVBpovB5Bh7gCHj/zs7EC\nFahbKnVF8OJy48WD0qHUoay7xsHlvD6zL0ffnz0gNA+UnKVBj/XxaVpyjwLEEDOq\n1K4ukiAAE/6HK7zWCjhU\n=up0W\n-----END PGP SIGNATURE-----\n",
+      "payload": "tree bb6cd8734bad655c23d47e5bb8800956f972767c\nparent 91630dd0c80fb5188c276ea970d81f33c8aa3fe3\nauthor shustovTE <151925802+shustovTE@users.noreply.github.com> 1793995923 +0300\ncommitter GitHub <noreply@github.com> 1793995923 +0000\n\n[BugFix] Fix/spec decode insert resampled race (#66048)\n\nSigned-off-by: Timofei <msshustova@gmail.com>\nCo-authored-by: Codex <noreply@openai.com>",
+      "verified_at": "2026-11-06T20:12:04Z"
+    }
+  },
+  "url": "https://api.github.com/repos/vllm-project/vllm/commits/4d82b56913be009d97c59fb13e471bde14948e1f",
+  "html_url": "https://github.com/vllm-project/vllm/commit/4d82b56913be009d97c59fb13e471bde14948e1f",
+  "comments_url": "https://api.github.com/repos/vllm-project/vllm/commits/4d82b56913be009d97c59fb13e471bde14948e1f/comments",
+  "author": {
+    "login": "shustovTE",
+    "id": 151925802,
+    "node_id": "U_kgDOCQ40Kg",
+    "avatar_url": "https://avatars.githubusercontent.com/u/151925802?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/shustovTE",
+    "html_url": "https://github.com/shustovTE",
+    "followers_url": "https://api.github.com/users/shustovTE/followers",
+    "following_url": "https://api.github.com/users/shustovTE/following{/other_user}",
+    "gists_url": "https://api.github.com/users/shustovTE/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/shustovTE/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/shustovTE/subscriptions",
+    "organizations_url": "https://api.github.com/users/shustovTE/orgs",
+    "repos_url": "https://api.github.com/users/shustovTE/repos",
+    "events_url": "https://api.github.com/users/shustovTE/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/shustovTE/received_events",
+    "type": "User",
+    "user_view_type": "public",
+    "site_admin": false
+  },
+  "committer": {
+    "login": "web-flow",
+    "id": 19864447,
+    "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+    "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/web-flow",
+    "html_url": "https://github.com/web-flow",
+    "followers_url": "https://api.github.com/users/web-flow/followers",
+    "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+    "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+    "organizations_url": "https://api.github.com/users/web-flow/orgs",
+    "repos_url": "https://api.github.com/users/web-flow/repos",
+    "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/web-flow/received_events",
+    "type": "User",
+    "user_view_type": "public",
+    "site_admin": false
+  },
+  "parents": [
+    {
+      "sha": "91630dd0c80fb5188c276ea970d81f33c8aa3fe3",
+      "url": "https://api.github.com/repos/vllm-project/vllm/commits/91630dd0c80fb5188c276ea970d81f33c8aa3fe3",
+      "html_url": "https://github.com/vllm-project/vllm/commit/91630dd0c80fb5188c276ea970d81f33c8aa3fe3"
+    }
+  ],
+  "stats": {
+    "total": 3,
+    "additions": 3,
+    "deletions": 0
+  },
+  "files": [
+    {
+      "sha": "0b1553bad86f46945a53f08115c2671e178417fb",
+      "filename": "vllm/v1/worker/gpu/spec_decode/rejection_sampler_utils.py",
+      "status": "modified",
+      "additions": 3,
+      "deletions": 0,
+      "changes": 3,
+      "blob_url": "https://github.com/vllm-project/vllm/blob/4d82b56913be009d97c59fb13e471bde14948e1f/vllm%2Fv1%2Fworker%2Fgpu%2Fspec_decode%2Frejection_sampler_utils.py",
+      "raw_url": "https://github.com/vllm-project/vllm/raw/4d82b56913be009d97c59fb13e471bde14948e1f/vllm%2Fv1%2Fworker%2Fgpu%2Fspec_decode%2Frejection_sampler_utils.py",
+      "contents_url": "https://api.github.com/repos/vllm-project/vllm/contents/vllm%2Fv1%2Fworker%2Fgpu%2Fspec_decode%2Frejection_sampler_utils.py?ref=4d82b56913be009d97c59fb13e471bde14948e1f",
+      "patch": "@@ -1458,5 +1458,8 @@ def rejection_sample(\n         expanded_idx_mapping,\n         temperature,\n         PADDED_RESAMPLE_NUM_BLOCKS=padded_resample_num_blocks,\n+        # The kernel reads and updates num_sampled in place. Multiple warps can\n+        # observe the increment before loading the original resampling index.\n+        num_warps=1,\n     )\n     return sampled, num_sampled"
+    }
+  ]
+}
