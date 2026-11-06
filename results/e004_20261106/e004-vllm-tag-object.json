@@ -1,0 +1,24 @@
+{
+  "node_id": "TA_kwDOI7xeftoAKDNhNGQ4MmY1NjlhOWY1NzA1NGJhODE2MzNlOWI2YzczYjM0YjUxZmU",
+  "sha": "3a4d82f569a9f57054ba81633e9b6c73b34b51fe",
+  "url": "https://api.github.com/repos/vllm-project/vllm/git/tags/3a4d82f569a9f57054ba81633e9b6c73b34b51fe",
+  "tagger": {
+    "name": "khluu",
+    "email": "khluu000@gmail.com",
+    "date": "2026-11-01T09:21:10Z"
+  },
+  "object": {
+    "sha": "4ba787ec9959e566d3b587a796dff07673324da5",
+    "type": "commit",
+    "url": "https://api.github.com/repos/vllm-project/vllm/git/commits/4ba787ec9959e566d3b587a796dff07673324da5"
+  },
+  "tag": "v0.33.0",
+  "message": "vLLM v0.33.0\n",
+  "verification": {
+    "verified": false,
+    "reason": "unsigned",
+    "signature": null,
+    "payload": null,
+    "verified_at": null
+  }
+}

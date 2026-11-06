@@ -1,0 +1,10 @@
+{
+  "ref": "refs/tags/v0.33.0",
+  "node_id": "REF_kwDOI7xefrFyZWZzL3RhZ3MvdjAuMzMuMA",
+  "url": "https://api.github.com/repos/vllm-project/vllm/git/refs/tags/v0.33.0",
+  "object": {
+    "sha": "3a4d82f569a9f57054ba81633e9b6c73b34b51fe",
+    "type": "tag",
+    "url": "https://api.github.com/repos/vllm-project/vllm/git/tags/3a4d82f569a9f57054ba81633e9b6c73b34b51fe"
+  }
+}

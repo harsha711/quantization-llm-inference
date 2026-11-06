@@ -1,0 +1,28 @@
+{
+  "source_url": "https://github.com/vllm-project/vllm",
+  "tag": "v0.33.0",
+  "commit": "4ba787ec9959e566d3b587a796dff07673324da5",
+  "wheel_sha256": "4b6bdec4ab269990bf70d45a3c1e94c3760a27064513760193b26d6f0da883aa",
+  "license": "Apache-2.0",
+  "files": {
+    "LICENSE": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+    "CMakeLists.txt": "65c46da5a87a75e2d561a4f511277ad75d656fb5b48c569e1e3e45eec677395a",
+    "pyproject.toml": "7472ebabeb4b8d248c3afd1202808a84573ab7795bb8a1b7ae63e378d3c40df9",
+    "vllm/scalar_type.py": "ec6d100d6604dd7909e60589e8c43b236972f25b81273a1ab9d945cd12ce3e5e",
+    "vllm/model_executor/layers/quantization/utils/marlin_utils.py": "e60713c15080347b01425f90eaf03840ca80a1cd226ec57e526e8f6286eeeb22",
+    "vllm/model_executor/layers/quantization/utils/marlin_utils_test.py": "3013e69e883fc5d936b9bbbe3e3d1dacf2b8555a34135e521901a0711a6959d0",
+    "tests/kernels/quantization/test_marlin_gemm.py": "ce315491a595081a8a5d42a8638387a8723496a985f210c067535c685ed76388",
+    "csrc/quantization/marlin/.gitignore": "700b5908034e14a4e8653022ebf2bba63913668d6eee9a9a24356ff00ad6052d",
+    "csrc/quantization/marlin/awq_marlin_repack.cu": "aaecffbc330beeeba1c06c35055d8cf4afd067f36eb0b9bcd8f4026a403d8756",
+    "csrc/quantization/marlin/dequant.h": "39c4640d2de39374ef5d96e7fa27701a675922113c3f5b05d45369321090e728",
+    "csrc/quantization/marlin/generate_kernels.py": "19ac1b047792e1ba810739fb732f73143c367f76262595607db446f0c951e454",
+    "csrc/quantization/marlin/gptq_marlin_repack.cu": "6d7de122eedea050982ebb3fab042b408cdc003a77e4cb40dac7f32fc1ecf882",
+    "csrc/quantization/marlin/kernel.h": "484cdcce20793d67d3428d64704b0439210b300e03b335bca602c152e2ae1f96",
+    "csrc/quantization/marlin/marlin.cu": "a6e91b6281759b45fd9ca4e781889b072e2566f73612e13a1c0694d49d46bcc2",
+    "csrc/quantization/marlin/marlin.cuh": "edaa19c541dfbe5e06e547c0be5bcdc1b78b4bbc68d596b72c41a932e2366926",
+    "csrc/quantization/marlin/marlin_dtypes.cuh": "15b90a65eadb200a3f7165e2e0d7d899f36d4993b20dbd89093ef2cea274da71",
+    "csrc/quantization/marlin/marlin_int4_fp8_preprocess.cu": "36c7ff17d531ae80233dd98fff4ae20a30e41f5741b79c4c894cf4303e34cafc",
+    "csrc/quantization/marlin/marlin_mma.h": "bf863d252bfc468eaff42b2c1bda583c5e6ab97ceacf0ac248c164564ddcce9b",
+    "csrc/quantization/marlin/marlin_template.h": "972ffd66fdfb6781dad13daea1167981821a78b86a93d865baa2b3c3ed11cd19"
+  }
+}
