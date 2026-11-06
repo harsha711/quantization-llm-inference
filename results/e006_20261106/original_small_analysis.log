@@ -1,0 +1,37 @@
+[prun] Master compute host = c58
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun timeout 300 compute-sanitizer --tool racecheck --racecheck-report analysis --error-exitcode 99 --kernel-name kns=e005_marlin /tmp/e004-hpuvvad-20261106/bin/python scripts/e006/repro.py --source /home/hpuvvad/csc548-w4a16-e005-20261106/external/pinned --local /home/hpuvvad/csc548-w4a16-e005-20261106/results/e005_20261106/libe005.so --wheel /tmp/e004-hpuvvad-20261106/lib/python3.11/site-packages/vllm/_C_stable_libtorch.abi3.so --bridge /home/hpuvvad/csc548-w4a16-e004-20261106/results/e004_20261106/libe004.so --k 256 --n 2048 --out /home/hpuvvad/csc548-w4a16-e006-20261106/results/e006_20261106/original_small_analysis.json (family=openmpi4)
+========= COMPUTE-SANITIZER
+ENV {"torch": "2.14.0+cu130", "cuda": "13.0", "gpu": "NVIDIA GeForce RTX 5060 Ti", "capability": [12, 0], "binary_sha256": "733c7d45777266a758d6426027ef433cc9b4d76f0c7a5e292bbb4871ab095a21", "wheel_sha256": "e634b80e72078e964f8bd2ac541d66f2a900920773cf993544609612190bd9a9"}
+OPERATOR_SCHEMA _C::marlin_gemm(Tensor a, Tensor? c_or_none, Tensor b_q_weight, Tensor? b_bias_or_none, Tensor b_scales, Tensor? a_scales, Tensor? global_scale, Tensor? b_zeros_or_none, Tensor workspace, int b_type_id, SymInt size_m, SymInt size_n, SymInt size_k, bool use_atomic_add, bool use_fp32_reduce, bool is_zp_float) -> Tensor
+========= Error: Race reported between Read access at void e005_marlin::Marlin<(long)1125899906910725, (long)1125899907892224, (long)1125899906910725, (long)1125899906910725, (int)256, (int)1, (int)8, (int)8, (bool)1, (int)4, (int)8, (bool)0>(const int4 *, const int4 *, int4 *, int4 *, const int4 *, const float *, const int4 *, const float *, const int4 *, int, int, int, int, int *, bool, bool, bool, int)::[lambda(int, int) (instance 1)]::operator ()(int, int) const+0x2bc0 in marlin_template.h:843
+=========     and Write access at void e005_marlin::Marlin<(long)1125899906910725, (long)1125899907892224, (long)1125899906910725, (long)1125899906910725, (int)256, (int)1, (int)8, (int)8, (bool)1, (int)4, (int)8, (bool)0>(const int4 *, const int4 *, int4 *, int4 *, const int4 *, const float *, const int4 *, const float *, const int4 *, int, int, int, int, int *, bool, bool, bool, int)::[lambda() (instance 8)]::operator ()() const+0x4a00 in marlin_template.h:1237 [31232 hazards]
+=========     and Write access at void e005_marlin::Marlin<(long)1125899906910725, (long)1125899907892224, (long)1125899906910725, (long)1125899906910725, (int)256, (int)1, (int)8, (int)8, (bool)1, (int)4, (int)8, (bool)0>(const int4 *, const int4 *, int4 *, int4 *, const int4 *, const float *, const int4 *, const float *, const int4 *, int, int, int, int, int *, bool, bool, bool, int)::[lambda() (instance 8)]::operator ()() const+0x4a10 in marlin_template.h:1237 [27648 hazards]
+=========     and Write access at void e005_marlin::Marlin<(long)1125899906910725, (long)1125899907892224, (long)1125899906910725, (long)1125899906910725, (int)256, (int)1, (int)8, (int)8, (bool)1, (int)4, (int)8, (bool)0>(const int4 *, const int4 *, int4 *, int4 *, const int4 *, const float *, const int4 *, const float *, const int4 *, int, int, int, int, int *, bool, bool, bool, int)::[lambda() (instance 8)]::operator ()() const+0x4a20 in marlin_template.h:1237 [32256 hazards]
+========= 
+PASS {"resources": {"grid": 36, "threads": 256, "dynamic_shared": 101376, "registers": 126, "static_shared": 0, "local_bytes": 32, "max_blocks_per_sm": 1, "sms": 36, "candidate": 0, "thread_k": 128, "thread_n": 128, "stages": 4, "m_blocks": 1, "m8": 1, "max_optin": 101376, "two_block_budget": 49664, "max_threads": 512, "binary_version": 120, "ptx_version": 120, "kernel_address": 140273095971232}, "num_bad": 0, "checked": 16384, "max_abs": 0.0016337803099304438, "rms": 1.0033420574361296, "rel_l2": 0.00020884961200339045, "M": 8, "K": 256, "N": 2048, "direct_launches": 1, "operand_sha256": {"A": "1af7521527ebec1b852d09fa0bbaa072755fdd0d7cf61dd83c09780f15014706", "W": "d5d89adfcf9f228736fd8b2a52776c23cca32a91bced1cfedfeebc7a68a57d46", "Q": "a2644fc7f6b430fcabb2c6737f0b3aa14e9c738e677de9e5472f5eeab7de3c9a", "S": "fd091261ae93279fc7873717fef75ad8abfc45f0036593e5b1feb596449fd2e4", "W_hat": "932a5b6bad78b64ce41fc25696b80d59147e4f553245b7069573fd3a4c9a3e0e"}, "codes_match": true, "scales_match": true, "reconstruction_match": true, "workspace_guards": true, "lock_reset": true}
+MAPPED_LIBRARIES 7f93c1200000-7f93c139a000 r--p 00000000 103:05 13238557                  /tmp/e004-hpuvvad-20261106/lib/python3.11/site-packages/vllm/_C_stable_libtorch.abi3.so
+7f93c139a000-7f93c1fb7000 r-xp 0019a000 103:05 13238557                  /tmp/e004-hpuvvad-20261106/lib/python3.11/site-packages/vllm/_C_stable_libtorch.abi3.so
+7f93c1fb7000-7f93c5d9b000 r--p 00db7000 103:05 13238557                  /tmp/e004-hpuvvad-20261106/lib/python3.11/site-packages/vllm/_C_stable_libtorch.abi3.so
+7f93c5d9b000-7f93c5da1000 r--p 04b9b000 103:05 13238557                  /tmp/e004-hpuvvad-20261106/lib/python3.11/site-packages/vllm/_C_stable_libtorch.abi3.so
+7f93c5da1000-7f93c5da7000 rw-p 04ba1000 103:05 13238557                  /tmp/e004-hpuvvad-20261106/lib/python3.11/site-packages/vllm/_C_stable_libtorch.abi3.so
+7f93e00d2000-7f93e05f4000 r-xp 00000000 00:36 159052967241               /home/hpuvvad/csc548-w4a16-e005-20261106/results/e005_20261106/libe005.so
+7f93e05f4000-7f93e07f4000 ---p 00522000 00:36 159052967241               /home/hpuvvad/csc548-w4a16-e005-20261106/results/e005_20261106/libe005.so
+7f93e07f4000-7f93e07f9000 r--p 00522000 00:36 159052967241               /home/hpuvvad/csc548-w4a16-e005-20261106/results/e005_20261106/libe005.so
+7f93e07f9000-7f93e07fa000 rw-p 00527000 00:36 159052967241               /home/hpuvvad/csc548-w4a16-e005-20261106/results/e005_20261106/libe005.so
+7f96044d1000-7f96045f7000 r-xp 00000000 00:36 131285276635               /home/hpuvvad/csc548-w4a16-e004-20261106/results/e004_20261106/libe004.so
+7f96045f7000-7f96047f7000 ---p 00126000 00:36 131285276635               /home/hpuvvad/csc548-w4a16-e004-20261106/results/e004_20261106/libe004.so
+7f96047f7000-7f96047fc000 r--p 00126000 00:36 131285276635               /home/hpuvvad/csc548-w4a16-e004-20261106/results/e004_20261106/libe004.so
+7f96047fc000-7f96047fd000 rw-p 0012b000 00:36 131285276635               /home/hpuvvad/csc548-w4a16-e004-20261106/results/e004_20261106/libe004.so
+========= RACECHECK SUMMARY: 1 hazard displayed (1 error, 0 warnings)
+--------------------------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code. Per user-direction, the job has been aborted.
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+mpirun detected that one or more processes exited with non-zero status, thus causing
+the job to be terminated. The first process to do so was:
+
+  Process name: [[58995,1],0]
+  Exit code:    99
+--------------------------------------------------------------------------

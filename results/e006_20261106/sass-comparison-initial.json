@@ -1,0 +1,17 @@
+{
+  "original": {
+    "instructions": 1960,
+    "block_barrier_instructions": 19,
+    "sass_sha256": "27947b268dd9fb140222977e9f241c1f557748412d46e455260527365fd4d608"
+  },
+  "control": {
+    "instructions": 1960,
+    "block_barrier_instructions": 19,
+    "sass_sha256": "27947b268dd9fb140222977e9f241c1f557748412d46e455260527365fd4d608"
+  },
+  "patched": {
+    "instructions": 1960,
+    "block_barrier_instructions": 20,
+    "sass_sha256": "bec502d5ece89e83decd374c4566ff66276a49c07f668b273a8fd7797ecb2e3e"
+  }
+}

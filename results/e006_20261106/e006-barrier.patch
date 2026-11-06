@@ -1,0 +1,11 @@
+--- a/csrc/quantization/marlin/marlin_template.h
++++ b/csrc/quantization/marlin/marlin_template.h
+@@ -1658,6 +1658,8 @@
+       }
+ 
+       cp_async_wait<0>();
++      // Join all shared readers and drained copy groups before overlay reuse.
++      __syncthreads();
+       bool last = slice_idx == slice_count - 1;
+       // For per-column scales, we only fetch them here in the final step before
+       // write-out

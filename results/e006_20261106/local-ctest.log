@@ -1,0 +1,19 @@
+Start testing: Nov 06 17:02 EST
+----------------------------------------------------------
+1/1 Testing: test_cpu
+1/1 Test: test_cpu
+Command: "/home/harsha/Documents/ncsu/sem 3/548/project/proj/build/test_cpu"
+Directory: /home/harsha/Documents/ncsu/sem 3/548/project/proj/build
+"test_cpu" start time: Nov 06 17:02 EST
+Output:
+----------------------------------------------------------
+test_cpu: all checks passed
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"test_cpu" end time: Nov 06 17:02 EST
+"test_cpu" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Nov 06 17:02 EST

@@ -27,11 +27,15 @@ base=("$E005_PYTHON" scripts/e006/repro.py --source "$E005_CONTROL/external/pinn
  --bridge "$E004_CONTROL/results/e004_20261106/libe004.so")
 # Cheap actual-driver correctness prerequisite before instrumentation.
 prun timeout 300 "${base[@]}" --k 256 --n 2048 --out "$R/prerequisite.json" > "$R/prerequisite.log" 2>&1
-for size in square small; do
+for size in square small_analysis; do
  dims=(--k 4096 --n 4096)
- [[ $size == square ]] || dims=(--k 256 --n 2048)
+ report=all
+ if [[ $size != square ]]; then
+  dims=(--k 256 --n 2048)
+  report=analysis
+ fi
  set +e
- prun timeout 300 compute-sanitizer --tool racecheck --racecheck-report all --error-exitcode 99 \
+ prun timeout 300 compute-sanitizer --tool racecheck --racecheck-report "$report" --error-exitcode 99 \
   --kernel-name kns=e005_marlin \
   "${base[@]}" "${dims[@]}" --out "$R/original_${size}.json" > "$R/original_${size}.log" 2>&1
  rc=$?
