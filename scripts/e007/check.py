@@ -27,7 +27,11 @@ for variant,functions_ in [('control',control),('candidate',candidate)]:
     body=functions_[changed[0]]
     ops=re.findall(r'/\*[0-9a-f]+\*/\s+([^;]+);',body)
     counts[variant]=dict(instructions=len(ops),barriers=body.count('BAR.SYNC'),
-        shared_loads=sum(x.startswith(('LDS','LDSM')) for x in ops),sass_sha256=hashlib.sha256(body.encode()).hexdigest())
+        shared_loads=sum(bool(re.match(r'(?:@\S+\s+)?LDSM?(?:\.|\s)',x)) for x in ops),
+        unpredicated_shared_loads=sum(x.startswith(('LDS','LDSM')) for x in ops),
+        predicated_shared_loads=sum(bool(re.match(r'@\S+\s+LDSM?(?:\.|\s)',x)) for x in ops),
+        always_false_shared_loads=sum(bool(re.match(r'@!PT\s+LDSM?(?:\.|\s)',x)) for x in ops),
+        sass_sha256=hashlib.sha256(body.encode()).hexdigest())
 with tarfile.open(r/'matched-source.tar.gz') as t:
     files={m.name:t.extractfile(m).read() for m in t.getmembers() if m.isfile()}
 for name,content in files.items():

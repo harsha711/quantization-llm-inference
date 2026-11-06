@@ -1,0 +1,66 @@
+{
+  "build": {
+    "control_sass_matches_e006": true,
+    "changed_specializations": [
+      "_ZN11e005_marlin6MarlinILl1125899906910725ELl1125899907892224ELl1125899906910725ELl1125899906910725ELi256ELi1ELi8ELi8ELb1ELi4ELi8ELb0EEEvPK4int4S3_PS1_S4_S3_PKfS3_S6_S3_iiiiPibbbi"
+    ],
+    "counts": {
+      "control": {
+        "instructions": 1960,
+        "barriers": 20,
+        "shared_loads": 121,
+        "unpredicated_shared_loads": 51,
+        "predicated_shared_loads": 70,
+        "always_false_shared_loads": 70,
+        "sass_sha256": "bec502d5ece89e83decd374c4566ff66276a49c07f668b273a8fd7797ecb2e3e"
+      },
+      "candidate": {
+        "instructions": 1976,
+        "barriers": 20,
+        "shared_loads": 121,
+        "unpredicated_shared_loads": 43,
+        "predicated_shared_loads": 78,
+        "always_false_shared_loads": 70,
+        "sass_sha256": "45f2736dc3d0bb2673d8c6fde7356d4b2a7d3d4cbbd2e1a3256522a75c644761"
+      }
+    },
+    "binary_sha256": {
+      "control": "97cbee4b0dea3d96239c94a49aa05809b5dc48f2a13a64b6057bf231f8faff35",
+      "candidate": "4e387599c86a4cca23189f81d8bc13bbe6dce0434d12b8a97f8700a59a036b2b"
+    }
+  },
+  "checks": {
+    "small": {
+      "rows_per_body": 90,
+      "all_output_bits_match": true
+    },
+    "main": {
+      "rows_per_body": 45,
+      "all_output_bits_match": true
+    },
+    "memcheck_small": {
+      "rows": 27,
+      "errors": 0
+    },
+    "memcheck_main": {
+      "rows": 27,
+      "errors": 0
+    },
+    "racecheck_small": {
+      "rows": 27,
+      "errors": 0
+    },
+    "racecheck_main": {
+      "rows": 27,
+      "errors": 0
+    },
+    "synccheck_small": {
+      "rows": 27,
+      "errors": 0
+    },
+    "synccheck_main": {
+      "rows": 27,
+      "errors": 0
+    }
+  }
+}

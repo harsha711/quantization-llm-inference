@@ -1,0 +1,24 @@
+PASS: matched source/SASS, 270 numerical rows with full-output bit identity, 162 clean sanitizer rows
+{
+  "status": "rejected under predeclared performance criterion",
+  "criteria": {
+    "no_flush_5pct_both_M_both_series": false,
+    "store_flush_regression_at_most_5pct": true,
+    "fallback_no_reproducible_5pct_regression": true
+  },
+  "baseline": "fresh matched E006-corrected control, fixed host A",
+  "binary_sha256": {
+    "control": "97cbee4b0dea3d96239c94a49aa05809b5dc48f2a13a64b6057bf231f8faff35",
+    "candidate": "4e387599c86a4cca23189f81d8bc13bbe6dce0434d12b8a97f8700a59a036b2b"
+  },
+  "timing_rows": 56,
+  "timed_samples": 5600,
+  "smoke_rows": 54,
+  "numerical_validation_rows": 270,
+  "sanitizer_rows": 162,
+  "profiles": 2,
+  "full_output_bits_match": true,
+  "max_abs": 0.0018681105011637555,
+  "max_rel_l2": 0.0002088685391376363,
+  "next_task": "stop after the bounded E007 experiment and hand off the measured result"
+}

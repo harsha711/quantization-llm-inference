@@ -7,13 +7,19 @@
     "control": {
       "instructions": 1960,
       "barriers": 20,
-      "shared_loads": 51,
+      "shared_loads": 121,
+      "unpredicated_shared_loads": 51,
+      "predicated_shared_loads": 70,
+      "always_false_shared_loads": 70,
       "sass_sha256": "bec502d5ece89e83decd374c4566ff66276a49c07f668b273a8fd7797ecb2e3e"
     },
     "candidate": {
       "instructions": 1976,
       "barriers": 20,
-      "shared_loads": 43,
+      "shared_loads": 121,
+      "unpredicated_shared_loads": 43,
+      "predicated_shared_loads": 78,
+      "always_false_shared_loads": 70,
       "sass_sha256": "45f2736dc3d0bb2673d8c6fde7356d4b2a7d3d4cbbd2e1a3256522a75c644761"
     }
   },
