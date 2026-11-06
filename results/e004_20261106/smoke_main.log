@@ -1,0 +1,45 @@
+build/w4a16_bench: OK
+[prun] Master compute host = c58
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun /tmp/e004-hpuvvad-20261106/bin/python scripts/e004/bench.py --source /home/hpuvvad/csc548-w4a16-e004-20261106/external/vllm --library /tmp/e004-hpuvvad-20261106/lib/python3.11/site-packages/vllm/_C_stable_libtorch.abi3.so --bridge /home/hpuvvad/csc548-w4a16-e004-20261106/results/e004_20261106/libe004.so --out results/e004_20261106/smoke_main.jsonl --shapes 4096,4096 --ms 1 32 --iters 3 --warmup 2 --trace (family=openmpi4)
+OPERATOR_SCHEMA _C::marlin_gemm(Tensor a, Tensor? c_or_none, Tensor b_q_weight, Tensor? b_bias_or_none, Tensor b_scales, Tensor? a_scales, Tensor? global_scale, Tensor? b_zeros_or_none, Tensor workspace, int b_type_id, SymInt size_m, SymInt size_n, SymInt size_k, bool use_atomic_add, bool use_fp32_reduce, bool is_zp_float) -> Tensor
+{"source_commit": "4ba787ec9959e566d3b587a796dff07673324da5", "torch": "2.14.0+cu130", "cuda": "13.0", "gpu": "NVIDIA GeForce RTX 5060 Ti", "capability": [12, 0], "l2_bytes": 33554432, "stream": 93954893746560, "qtype": 1125899907892224, "graph_events": true, "atomic": false, "fp32_reduce": true}
+REPACK_PASS K=4096 N=4096 elements=16777216 generated_s=1.0748510439880192 repack_s=0.4231507310178131 repack_gpu_us=423057.8918457031
+USDT:2026-11-06 15:29:00 1345034:1345034 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-06 15:29:00 1345034:1345034 SyncActivityProfilerHandler.cpp:46] profiler_stop
+EXECUTED_KERNELS ["void marlin::Marlin<1125899906910725l, 1125899907892224l, 1125899906910725l, 1125899906910725l, 256, 1, 8, 8, true, 4, 8, false>(int4 const*, int4 const*, int4*, int4*, int4 const*, float const*, int4 const*, float const*, int4 const*, int, int, int, int, int*, bool, bool, bool, int)"]
+RESULT marlin M=1 K=4096 N=4096 store_flush median=30.688 p90=30.688 error=0.000207449
+RESULT marlin M=1 K=4096 N=4096 no_flush median=13.888 p90=13.888 error=0.000207449
+RESULT naive M=1 K=4096 N=4096 store_flush median=206.848 p90=206.848 error=0.000207451
+RESULT naive M=1 K=4096 N=4096 no_flush median=112.192 p90=112.192 error=0.000207451
+RESULT inblock_specialized M=1 K=4096 N=4096 store_flush median=51.200 p90=51.200 error=0.000207449
+RESULT inblock_specialized M=1 K=4096 N=4096 no_flush median=31.712 p90=31.712 error=0.000207449
+RESULT inblock_m2 M=1 K=4096 N=4096 store_flush median=53.248 p90=53.248 error=0.000207449
+RESULT inblock_m2 M=1 K=4096 N=4096 no_flush median=37.888 p90=37.888 error=0.000207449
+RESULT inblock_m4 M=1 K=4096 N=4096 store_flush median=63.488 p90=63.488 error=0.000207449
+RESULT inblock_m4 M=1 K=4096 N=4096 no_flush median=58.944 p90=58.944 error=0.000207449
+RESULT cublas M=1 K=4096 N=4096 store_flush median=94.560 p90=94.560 error=0.000212821
+RESULT cublas M=1 K=4096 N=4096 no_flush median=85.568 p90=85.568 error=0.000212821
+RESULT cublas_dq M=1 K=4096 N=4096 store_flush median=94.208 p90=94.208 error=0.000207452
+RESULT cublas_dq M=1 K=4096 N=4096 no_flush median=85.568 p90=85.568 error=0.000207452
+RESULT unfused M=1 K=4096 N=4096 store_flush median=178.528 p90=178.528 error=0.000207452
+RESULT unfused M=1 K=4096 N=4096 no_flush median=134.720 p90=134.720 error=0.000207452
+USDT:2026-11-06 15:29:10 1345034:1345034 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-06 15:29:10 1345034:1345034 SyncActivityProfilerHandler.cpp:46] profiler_stop
+EXECUTED_KERNELS ["void marlin::Marlin<1125899906910725l, 1125899907892224l, 1125899906910725l, 1125899906910725l, 256, 2, 16, 4, false, 4, 8, false>(int4 const*, int4 const*, int4*, int4*, int4 const*, float const*, int4 const*, float const*, int4 const*, int, int, int, int, int*, bool, bool, bool, int)"]
+RESULT marlin M=32 K=4096 N=4096 store_flush median=36.896 p90=36.896 error=0.000207528
+RESULT marlin M=32 K=4096 N=4096 no_flush median=35.712 p90=35.712 error=0.000207528
+RESULT naive M=32 K=4096 N=4096 store_flush median=710.656 p90=710.656 error=0.000207528
+RESULT naive M=32 K=4096 N=4096 no_flush median=705.408 p90=705.408 error=0.000207528
+RESULT inblock_specialized M=32 K=4096 N=4096 store_flush median=665.600 p90=665.600 error=0.000207526
+RESULT inblock_specialized M=32 K=4096 N=4096 no_flush median=642.624 p90=642.624 error=0.000207526
+RESULT inblock_m2 M=32 K=4096 N=4096 store_flush median=432.128 p90=432.128 error=0.000207526
+RESULT inblock_m2 M=32 K=4096 N=4096 no_flush median=414.624 p90=414.624 error=0.000207526
+RESULT inblock_m4 M=32 K=4096 N=4096 store_flush median=385.024 p90=385.024 error=0.000207526
+RESULT inblock_m4 M=32 K=4096 N=4096 no_flush median=380.448 p90=380.448 error=0.000207526
+RESULT cublas M=32 K=4096 N=4096 store_flush median=88.064 p90=88.064 error=0.000207093
+RESULT cublas M=32 K=4096 N=4096 no_flush median=86.848 p90=86.848 error=0.000207093
+RESULT cublas_dq M=32 K=4096 N=4096 store_flush median=88.096 p90=88.096 error=0.000207578
+RESULT cublas_dq M=32 K=4096 N=4096 no_flush median=86.880 p90=86.880 error=0.000207578
+RESULT unfused M=32 K=4096 N=4096 store_flush median=184.320 p90=184.320 error=0.000207578
+RESULT unfused M=32 K=4096 N=4096 no_flush median=150.336 p90=150.336 error=0.000207578

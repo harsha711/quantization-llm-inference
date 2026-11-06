@@ -1,0 +1,64 @@
+build/w4a16_bench: OK
+[prun] Master compute host = c58
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun /tmp/e004-hpuvvad-20261106/bin/python scripts/e004/bench.py --source /home/hpuvvad/csc548-w4a16-e004-20261106/external/vllm --library /tmp/e004-hpuvvad-20261106/lib/python3.11/site-packages/vllm/_C_stable_libtorch.abi3.so --bridge /home/hpuvvad/csc548-w4a16-e004-20261106/results/e004_20261106/libe004.so --out results/e004_20261106/smoke_small.jsonl --shapes 256,128 --ms 1 5 32 --iters 3 --warmup 2 --trace (family=openmpi4)
+OPERATOR_SCHEMA _C::marlin_gemm(Tensor a, Tensor? c_or_none, Tensor b_q_weight, Tensor? b_bias_or_none, Tensor b_scales, Tensor? a_scales, Tensor? global_scale, Tensor? b_zeros_or_none, Tensor workspace, int b_type_id, SymInt size_m, SymInt size_n, SymInt size_k, bool use_atomic_add, bool use_fp32_reduce, bool is_zp_float) -> Tensor
+{"source_commit": "4ba787ec9959e566d3b587a796dff07673324da5", "torch": "2.14.0+cu130", "cuda": "13.0", "gpu": "NVIDIA GeForce RTX 5060 Ti", "capability": [12, 0], "l2_bytes": 33554432, "stream": 94121676015520, "qtype": 1125899907892224, "graph_events": true, "atomic": false, "fp32_reduce": true}
+REPACK_PASS K=256 N=128 elements=32768 generated_s=0.0025258739478886127 repack_s=4.75342323910445 repack_gpu_us=4753353.515625
+USDT:2026-11-06 15:28:26 1344755:1344755 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-06 15:28:26 1344755:1344755 SyncActivityProfilerHandler.cpp:46] profiler_stop
+EXECUTED_KERNELS ["void marlin::Marlin<1125899906910725l, 1125899907892224l, 1125899906910725l, 1125899906910725l, 128, 1, 4, 8, true, 4, 8, false>(int4 const*, int4 const*, int4*, int4*, int4 const*, float const*, int4 const*, float const*, int4 const*, int, int, int, int, int*, bool, bool, bool, int)"]
+RESULT marlin M=1 K=256 N=128 store_flush median=6.144 p90=6.144 error=0.000234726
+RESULT marlin M=1 K=256 N=128 no_flush median=5.152 p90=5.152 error=0.000234726
+RESULT naive M=1 K=256 N=128 store_flush median=16.384 p90=16.384 error=0.000234726
+RESULT naive M=1 K=256 N=128 no_flush median=9.760 p90=9.760 error=0.000234726
+RESULT inblock_specialized M=1 K=256 N=128 store_flush median=6.144 p90=6.144 error=0.000234726
+RESULT inblock_specialized M=1 K=256 N=128 no_flush median=3.648 p90=3.648 error=0.000234726
+RESULT inblock_m2 M=1 K=256 N=128 store_flush median=6.176 p90=6.176 error=0.000234726
+RESULT inblock_m2 M=1 K=256 N=128 no_flush median=3.456 p90=3.456 error=0.000234726
+RESULT inblock_m4 M=1 K=256 N=128 store_flush median=6.144 p90=6.144 error=0.000234726
+RESULT inblock_m4 M=1 K=256 N=128 no_flush median=5.216 p90=5.216 error=0.000234726
+RESULT cublas M=1 K=256 N=128 store_flush median=4.576 p90=4.576 error=0.000183383
+RESULT cublas M=1 K=256 N=128 no_flush median=3.136 p90=3.136 error=0.000183383
+RESULT cublas_dq M=1 K=256 N=128 store_flush median=4.096 p90=4.096 error=0.000234726
+RESULT cublas_dq M=1 K=256 N=128 no_flush median=3.136 p90=3.136 error=0.000234726
+RESULT unfused M=1 K=256 N=128 store_flush median=6.496 p90=6.496 error=0.000234726
+RESULT unfused M=1 K=256 N=128 no_flush median=5.696 p90=5.696 error=0.000234726
+USDT:2026-11-06 15:28:33 1344755:1344755 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-06 15:28:33 1344755:1344755 SyncActivityProfilerHandler.cpp:46] profiler_stop
+EXECUTED_KERNELS ["void marlin::Marlin<1125899906910725l, 1125899907892224l, 1125899906910725l, 1125899906910725l, 128, 1, 4, 8, true, 4, 8, false>(int4 const*, int4 const*, int4*, int4*, int4 const*, float const*, int4 const*, float const*, int4 const*, int, int, int, int, int*, bool, bool, bool, int)"]
+RESULT marlin M=5 K=256 N=128 store_flush median=6.144 p90=6.144 error=0.000224864
+RESULT marlin M=5 K=256 N=128 no_flush median=5.120 p90=5.120 error=0.000224864
+RESULT naive M=5 K=256 N=128 store_flush median=16.384 p90=16.384 error=0.000224864
+RESULT naive M=5 K=256 N=128 no_flush median=9.216 p90=9.216 error=0.000224864
+RESULT inblock_specialized M=5 K=256 N=128 store_flush median=6.144 p90=6.144 error=0.000224864
+RESULT inblock_specialized M=5 K=256 N=128 no_flush median=3.328 p90=3.328 error=0.000224864
+RESULT inblock_m2 M=5 K=256 N=128 store_flush median=6.144 p90=6.144 error=0.000224864
+RESULT inblock_m2 M=5 K=256 N=128 no_flush median=4.704 p90=4.704 error=0.000224864
+RESULT inblock_m4 M=5 K=256 N=128 store_flush median=6.144 p90=6.144 error=0.000224864
+RESULT inblock_m4 M=5 K=256 N=128 no_flush median=5.120 p90=5.120 error=0.000224864
+RESULT cublas M=5 K=256 N=128 store_flush median=6.144 p90=6.144 error=0.000215617
+RESULT cublas M=5 K=256 N=128 no_flush median=5.120 p90=5.120 error=0.000215617
+RESULT cublas_dq M=5 K=256 N=128 store_flush median=8.192 p90=8.192 error=0.000224864
+RESULT cublas_dq M=5 K=256 N=128 no_flush median=5.184 p90=5.184 error=0.000224864
+RESULT unfused M=5 K=256 N=128 store_flush median=8.192 p90=8.192 error=0.000224864
+RESULT unfused M=5 K=256 N=128 no_flush median=5.632 p90=5.632 error=0.000224864
+USDT:2026-11-06 15:28:33 1344755:1344755 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-06 15:28:33 1344755:1344755 SyncActivityProfilerHandler.cpp:46] profiler_stop
+EXECUTED_KERNELS ["void marlin::Marlin<1125899906910725l, 1125899907892224l, 1125899906910725l, 1125899906910725l, 128, 2, 4, 8, false, 4, 8, false>(int4 const*, int4 const*, int4*, int4*, int4 const*, float const*, int4 const*, float const*, int4 const*, int, int, int, int, int*, bool, bool, bool, int)"]
+RESULT marlin M=32 K=256 N=128 store_flush median=6.144 p90=6.144 error=0.000214961
+RESULT marlin M=32 K=256 N=128 no_flush median=5.216 p90=5.216 error=0.000214961
+RESULT naive M=32 K=256 N=128 store_flush median=16.384 p90=16.384 error=0.000214961
+RESULT naive M=32 K=256 N=128 no_flush median=9.504 p90=9.504 error=0.000214961
+RESULT inblock_specialized M=32 K=256 N=128 store_flush median=6.144 p90=6.144 error=0.000214961
+RESULT inblock_specialized M=32 K=256 N=128 no_flush median=5.344 p90=5.344 error=0.000214961
+RESULT inblock_m2 M=32 K=256 N=128 store_flush median=6.144 p90=6.144 error=0.000214961
+RESULT inblock_m2 M=32 K=256 N=128 no_flush median=5.024 p90=5.024 error=0.000214961
+RESULT inblock_m4 M=32 K=256 N=128 store_flush median=6.144 p90=6.144 error=0.000214961
+RESULT inblock_m4 M=32 K=256 N=128 no_flush median=4.832 p90=4.832 error=0.000214961
+RESULT cublas M=32 K=256 N=128 store_flush median=6.144 p90=6.144 error=0.000212948
+RESULT cublas M=32 K=256 N=128 no_flush median=5.184 p90=5.184 error=0.000212948
+RESULT cublas_dq M=32 K=256 N=128 store_flush median=6.176 p90=6.176 error=0.000214961
+RESULT cublas_dq M=32 K=256 N=128 no_flush median=4.960 p90=4.960 error=0.000214961
+RESULT unfused M=32 K=256 N=128 store_flush median=8.192 p90=8.192 error=0.000214961
+RESULT unfused M=32 K=256 N=128 no_flush median=4.992 p90=4.992 error=0.000214961

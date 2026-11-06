@@ -28,4 +28,4 @@ prun bash scripts/e004/build_bridge.sh > "$RUN_DIR/bridge-build.log" 2>&1
 prun bash scripts/check_inblock.sh > "$RUN_DIR/project-check.log" 2>&1
 "$E004_PYTHON" -m pip install --no-deps 'https://files.pythonhosted.org/packages/8b/a8/92e278093df40fde4c4bfd6572704bb8f398d6a2280d8c82cb5efaf12047/vllm-0.33.0-cp38-abi3-manylinux_2_28_x86_64.whl#sha256=4b6bdec4ab269990bf70d45a3c1e94c3760a27064513760193b26d6f0da883aa' > "$RUN_DIR/pip-vllm.log" 2>&1
 "$E004_PYTHON" -m pip freeze > "$RUN_DIR/pip-freeze.txt"
-prun "$E004_PYTHON" -c 'import torch; print(torch.__version__, torch.version.cuda); print(torch.cuda.get_device_name()); print(torch.cuda.get_arch_list()); print(torch.__config__.show()); a=torch.ones((16,16),device="cuda"); print((a@a).sum().item())' > "$RUN_DIR/torch-smoke.log" 2>&1
+prun "$E004_PYTHON" scripts/e004/check_runtime.py > "$RUN_DIR/torch-smoke.log" 2>&1

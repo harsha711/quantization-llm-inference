@@ -126,6 +126,7 @@ def run(args):
     ns = helpers(args.source)
     qtype = load_marlin(args.source, args.library)
     handle = b.e004_handle()
+    print("MAPPED_LIBRARIES", "\n".join(x for x in Path("/proc/self/maps").read_text().splitlines() if any(n in x for n in ["libcublas", "libcudart", "libe004"])), flush=True)
     stream = torch.cuda.Stream()
     l2 = b.e004_l2()
     flush_buf = torch.empty(2*l2, dtype=torch.uint8, device="cuda")
@@ -143,6 +144,7 @@ def run(args):
             setup_start = time.perf_counter()
             assert b.e004_generate(maxm,n,k,1,*[x.ctypes.data for x in cpu]) == 0
             generated_s = time.perf_counter()-setup_start
+            operand_sha256 = {name:hashlib.sha256(x.tobytes()).hexdigest() for name,x in zip(["A","W","Q","S","W_hat"],cpu)}
             a,w,q,s,wh = [torch.from_numpy(x).to("cuda") for x in cpu]
             q = q.view(torch.int32)
             # Both formats use the same offset codes and FP16 scale bits.
@@ -195,7 +197,9 @@ def run(args):
                 for name in args.kernels:
                     launch = marlin if name == "marlin" else retained(name)
                     cv.fill_(float("nan"))
+                    first_call_start=time.perf_counter()
                     launch();torch.cuda.synchronize()
+                    first_call_wall_s=time.perf_counter()-first_call_start
                     if args.trace and name == "marlin":
                         with torch.profiler.profile(activities=[torch.profiler.ProfilerActivity.CPU, torch.profiler.ProfilerActivity.CUDA]) as prof:
                             launch()
@@ -214,7 +218,7 @@ def run(args):
                         row=dict(kernel=name,M=m,K=k,N=n,group=128,seed=1,policy=policy,warmup=args.warmup,iters=args.iters,
                                  method="eager_events" if args.eager else "graph_events",source_commit=PIN,pass_check=True,
                                  repack_codes_match=True,repack_scale_bits_match=True,reconstructed_elements=k*n,
-                                 generated_s=generated_s,repack_wall_s=repack_s,repack_gpu_us=repack_gpu_us,reference_s=reference_s,
+                                 first_call_wall_s=first_call_wall_s,operand_sha256=operand_sha256,generated_s=generated_s,repack_wall_s=repack_s,repack_gpu_us=repack_gpu_us,reference_s=reference_s,
                                  full_control_match=True,**stats,**timing)
                         out.write(json.dumps(row)+"\n");out.flush()
                         print(f"RESULT {name} M={m} K={k} N={n} {policy} median={timing['median_us']:.3f} p90={timing['p90_us']:.3f} error={stats['rel_l2']:.6g}",flush=True)
