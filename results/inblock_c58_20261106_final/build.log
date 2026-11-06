@@ -1,0 +1,9 @@
+Building CUDA targets for sm_120
+-- Configuring done (0.0s)
+-- Generating done (1.8s)
+-- Build files have been written to: /home/hpuvvad/csc548-w4a16-inblock-20261106/build
+[ 33%] Built target w4a16_host
+[ 58%] Building CUDA object CMakeFiles/w4a16_bench.dir/src/cuda/w4a16_naive.cu.o
+[ 58%] Built target test_cpu
+[ 66%] Linking CXX executable w4a16_bench
+[100%] Built target w4a16_bench

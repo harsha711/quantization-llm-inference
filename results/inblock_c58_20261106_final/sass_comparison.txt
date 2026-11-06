@@ -1,0 +1,5 @@
+Original naive source from 8a68227 vs HasTail=false specialization in 2b7d4fc: 336 SASS lines match after whitespace normalization, including 168 instruction/address/opcode lines and 168 continuation lines with scheduling control words, for sm_120.
+Both were built with nvcc 13.4.92, -O3 -DNDEBUG -std=c++17, compute_120/sm_120 and -lineinfo.
+Reproduce: python3 results/inblock_c58_20261106_final/verify_sass.py
+The first comparison failed only because cuobjdump alignment whitespace varied with symbol name length. Normalizing whitespace corrected the comparison, not the kernels.
+This establishes emitted device code parity for this compiler/architecture. It makes no claim for other toolchains or GPUs.
