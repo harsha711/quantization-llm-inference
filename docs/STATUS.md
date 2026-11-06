@@ -1,5 +1,7 @@
 # Current status
 
+E005 is now authorized and in progress. E004 checkpoint `cf8a419` was verified clean. The single active task is the bounded A/B/C launch-resource experiment, with predeclared gates and criteria in E005 of EXPERIMENTS.md. No E005 candidate has been launched yet.
+
 Last updated: 2026-11-06. Branch: `optimize/inblock-k`. E004 measured benchmark source: `209442c`, complete timing evidence: `640e9e5`, profiler/provenance evidence: `528c430`, predeclared gates: `670b32d`. Documentation and analyzer commits may follow. Previous complete E003 handoff: `c1c6423`, E003 implementation/source: `5a7bcaf` / `25b2291`, evidence: `a16cbc5`. Verify actual git state before continuing.
 
 ## E004 outcome

@@ -574,3 +574,20 @@ Use distinct output filenames for the repeated and eager/graph diagnostics, with
 
 
 **Final metadata and prior-work check:** `runtime-affinity.log` verifies exactly one prun rank, Torch CPU thread setting 16 and worker masks 0 through 15 under OMP_PROC_BIND=true. The main thread is bound to CPU 0 after OpenMP initialization. `build-settings.txt` captures actual CMake/cache/compiler/link settings and ELF compiler comments. The user allocation remains RUNNING at final check, runtime 01:48:24 of 06:00:00, scheduled end 20:00:41 Eastern. A late metadata SSH command returned 255 without diagnostic output. Subsequent successful retrieval confirmed complete runtime/allocation records, and a separate affinity check completed successfully. No performance series was resumed from that inspection failure. Main-source inspection at the recorded initial 4d82b569 commit confirms the same one-block resource policy/16-row estimate remains there, despite other Marlin changes. Excerpts and source hash are preserved. That is a bounded upstream check, not an exhaustive novelty search.
+
+
+## E005 — Specialization-aware reservation and one-versus-two-block residency
+
+Status: proposed. Authorized 2026-11-06. E004 checkpoint verified: `cf8a419`, clean tree.
+
+Problem and hypothesis: E004's small-M dense uint4b8/G128 eight-row 128x128 tile appears to reserve substantially more shared memory than its layout needs. Reducing reservation may help independently, and two blocks per SM may improve latency enough to offset changed stripes and FP32 global reductions. These remain hypotheses.
+
+Predeclared configurations: A retains the pinned dispatch and full opt-in allocation. B changes only the verified small-M reservation to the device-derived two-block budget, retaining SM-count grid. C uses the same reservation as B and twice the SM-count grid. On the previously measured device these should be 36/101376 B, 36/49664 B, and 72/49664 B. Query, do not assume, these limits. One compiled device kernel should serve all three. Unsupported selections, M=16 and M=64 keep original dispatch.
+
+Predeclared acceptance: all correctness and selected external memcheck/racecheck/synccheck pass. In each of two independent balanced series, C no-flush median must be at least 5% below same-build A at both M=1 and M=8, square 4096, seed 1. C store-flush regression must be <=5% at both. M=16/M=64 fallback must show no reproducible >5% regression. Profile launch/resources must agree with intended change. Each point has 10 warmups and 100 samples. Report B independently even if C fails. Criteria will not be changed after measurement.
+
+Gates and scope: prove complete shared/workspace/index/reset/progress properties and query compiled resources before modified launches. Preserve untouched source and explicit host-only patch. Build local A/B/C with identical flags/dependencies and common device code. Wheel comparison is provenance only. Preserve E004 operands, lossless packing, FP16 reconstruction and all-row FP64 tolerance. Validate small shapes M=1,2,4,5,8, main square and rectangles, zero/mixed-sign operands, repeated reused workspace and poisoned graph replay. Bound possible hangs. Keep required per-call maintenance within measured operation. Hold out seed 2, M=2/4, all three K/N pairs, both policies without retuning. Profile A/B/C at square M=8, add cases only to answer a specific unresolved question. No tile/body/stage/format changes, automatic performance dispatch or next optimization.
+
+Baseline and candidate: pending matched build. E004 wheel/source remains pinned at vLLM v0.33.0 / `4ba787ec9959e566d3b587a796dff07673324da5`. New scripts/evidence use `scripts/e005/` and `results/e005_20261106/`. Source safety analysis, commands, build/runtime provenance, raw results and final decision follow as gates complete.
+
+Revisit only if: the final evidence identifies a changed prerequisite or a specific unresolved condition. Failure does not authorize a tuning search.
