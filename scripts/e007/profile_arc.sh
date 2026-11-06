@@ -39,4 +39,4 @@ for variant in control candidate; do
  ncu --import "$R/ncu/$tag.ncu-repz" --page raw --csv --print-kernel-base mangled > "$R/ncu/${tag}_metrics.csv"
  clock > "$R/ncu/$tag-clocks-after.csv"
 done
-sha256sum scripts/e007/* scripts/e005/bench.py scripts/e004/bench.py > "$R/profile-tooling.sha256"
+sha256sum scripts/e007/* scripts/e005_r1/env_arc.sh scripts/e005/bench.py scripts/e004/bench.py > "$R/profile-tooling.sha256"

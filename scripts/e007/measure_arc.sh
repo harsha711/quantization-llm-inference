@@ -3,7 +3,7 @@ set -euo pipefail
 source "$PROJECT_ROOT/scripts/e007/env_arc.sh"
 [[ $(cat "$R/validation-check.exit") == 0 && ! -e "$R/measurement-input-check.log" ]]
 sha256sum -c "$R/validated-inputs.sha256" > "$R/measurement-input-check.log"
-sha256sum scripts/e007/* scripts/e005/bench.py scripts/e004/bench.py > "$R/measurement-tooling.sha256"
+sha256sum scripts/e007/* scripts/e005_r1/env_arc.sh scripts/e005/bench.py scripts/e004/bench.py > "$R/measurement-tooling.sha256"
 for series in 1 2; do
  variants=(control candidate)
  [[ $series == 1 ]] || variants=(candidate control)
