@@ -1,0 +1,34 @@
+{
+  "status": "rejected under predeclared performance criteria",
+  "baseline": "corrected A, same E006 library for A/B/C",
+  "body_sha256": "e4eca5e30436c547358a9c8125d69526c6bb3318da034afd54ada6744181e2b7",
+  "criteria": {
+    "B": {
+      "no_flush_5pct_both_M_both_series": false,
+      "store_flush_regression_at_most_5pct": true,
+      "fallback_no_reproducible_5pct_regression": true,
+      "meets_latency_criteria": false
+    },
+    "C": {
+      "no_flush_5pct_both_M_both_series": false,
+      "store_flush_regression_at_most_5pct": true,
+      "fallback_no_reproducible_5pct_regression": true,
+      "meets_latency_criteria": false
+    }
+  },
+  "timing_rows": {
+    "series1": 12,
+    "series2": 12,
+    "fallback1": 12,
+    "fallback2": 12,
+    "heldout": 36
+  },
+  "timed_samples": 8400,
+  "smoke_rows": 27,
+  "profiles": 3,
+  "E006_reused_numerical_rows": 135,
+  "E006_reused_sanitizer_rows": 162,
+  "max_abs": 0.0018681105011637555,
+  "max_rel_l2": 0.0002088685391376363,
+  "next_task": "stop after E005-R1, no new optimization authorized"
+}

@@ -1,0 +1,16 @@
++ prun timeout 900 bash /home/hpuvvad/csc548-w4a16-e005-20261106/scripts/check_inblock.sh
+[prun] Master compute host = c58
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun timeout 900 bash /home/hpuvvad/csc548-w4a16-e005-20261106/scripts/check_inblock.sh (family=openmpi4)
+bash: /home/hpuvvad/csc548-w4a16-e005-20261106/scripts/check_inblock.sh: No such file or directory
+--------------------------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code. Per user-direction, the job has been aborted.
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+mpirun detected that one or more processes exited with non-zero status, thus causing
+the job to be terminated. The first process to do so was:
+
+  Process name: [[32884,1],0]
+  Exit code:    127
+--------------------------------------------------------------------------
