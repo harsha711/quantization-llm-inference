@@ -48,7 +48,7 @@ and keep Nsight `--cache-control all` profiling separate from event timing.
 - **TFLOP/s**: `2·M·N·K / median_s / 1e12` for GEMM-like kernels; 0 for `dequant`.
 - **eff_GB/s**: `logical_bytes / median_s / 1e9`. This is **effective
   bandwidth** from a traffic model, not measured DRAM. Formulas:
-  - `naive` / `inblock` / `inblock_specialized`: \|A\| + \|C\| + \|qweight\| + \|scales\|
+  - `naive` / `inblock` / `inblock_specialized` / `inblock_m2` / `inblock_m4`: \|A\| + \|C\| + \|qweight\| + \|scales\|
   - `cublas` / `cublas_dq`: \|A\| + \|C\| + \|W_fp16\|  (32 MiB weights)
   - `dequant`: \|qweight\| + \|scales\| + \|W_hat\|     (W_hat is a write)
   - `unfused`: \|A\| + \|C\| + \|qweight\| + \|scales\| + \|W_hat\|
@@ -72,13 +72,23 @@ and keep Nsight `--cache-control all` profiling separate from event timing.
    FP32 shared-memory reduction and one FP16 write per output.
 7. `inblock_specialized`: E002 version with compile-time aligned/tail variants.
    The E001 `inblock` source and selector remain unchanged for comparison.
+8. `inblock_m2`: E003, two output rows per thread sharing each reconstructed weight.
+9. `inblock_m4`: E003, four output rows per thread sharing each reconstructed weight.
+   E002's one-row source remains unchanged. Both candidates pass the larger-M
+   criterion, while small-M and row-tail regressions remain documented in
+   [E003](docs/EXPERIMENTS.md#e003--reuse-reconstructed-weights-across-input-rows).
 
 All fused kernels and GPU dequantization handle arbitrary positive K and N,
 including partial final words and groups. Group size remains a multiple of eight.
 Packed/scales storage uses ceiling counts. Select the new version with
 `--kernels inblock_specialized` or compare with
 `--kernels inblock,inblock_specialized`. Dispatch uses K divisibility by eight,
-including aligned K with a partial final quantization group.
+including aligned K with a partial final quantization group. Compare row reuse with
+`--kernels naive,inblock_specialized,inblock_m2,inblock_m4`. Row variants use
+block=(32,8), grid y=ceil(M/Rows), and 2048/4096 bytes of static shared partials.
+They guard incomplete row tiles and retain each row's arithmetic order. Untimed
+validation compares every candidate output bit against E002, including rows
+outside the sampled FP64 reference. No automatic row-count selection is added.
 
 Each new session starts with [AGENTS.md](AGENTS.md), [current status](docs/STATUS.md),
 the [numerical and measurement contract](docs/CONTRACT.md), and relevant
