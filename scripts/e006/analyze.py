@@ -1,17 +1,21 @@
 #!/usr/bin/env python3
 """Assert E006's bounded correction evidence, without releasing E005 timing."""
 import gzip
+import argparse
 import hashlib
 import itertools
 import json
 from pathlib import Path
 import re
-import sys
 import tarfile
 
-root = Path(sys.argv[1])
 repo = Path(__file__).resolve().parents[2]
-e005 = repo/'results/e005_20261106'
+p = argparse.ArgumentParser(description=__doc__)
+p.add_argument('results', type=Path)
+p.add_argument('--e005-results', type=Path, default=repo/'results/e005_20261106')
+a = p.parse_args()
+root = a.results
+e005 = a.e005_results
 
 def read_json(name):
     return json.loads((root/name).read_text())

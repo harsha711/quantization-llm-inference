@@ -1,0 +1,107 @@
+[prun] Master compute host = c58
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun timeout 60 /tmp/e004-hpuvvad-20261106/bin/python scripts/e006/analyze.py results/e006_20261106 --e005-results /home/hpuvvad/csc548-w4a16-e005-20261106/results/e005_20261106 (family=openmpi4)
+PASS: E006 evidence consistent. E005 timing remains disabled.
+{
+  "classification": "source-supported synchronization correction, reported hazard absent in tested cases",
+  "matrix": {
+    "validation_small": {
+      "rows": 90,
+      "all_output_checks": true,
+      "direct_repeats": 5,
+      "poisoned_graph_replays": 5,
+      "max_abs": 0.0019093224545940757,
+      "max_rel_l2": 0.00023472576913646825
+    },
+    "validation_main": {
+      "rows": 45,
+      "all_output_checks": true,
+      "direct_repeats": 5,
+      "poisoned_graph_replays": 5,
+      "max_abs": 0.0019259467462688917,
+      "max_rel_l2": 0.00020994083360038762
+    },
+    "memcheck_small": {
+      "rows": 27,
+      "all_output_checks": true,
+      "direct_repeats": 2,
+      "poisoned_graph_replays": 2,
+      "max_abs": 0.0016337803099304438,
+      "max_rel_l2": 0.0002105004088268395,
+      "sanitizer_summary": "ERROR SUMMARY: 0 errors"
+    },
+    "memcheck_main": {
+      "rows": 27,
+      "all_output_checks": true,
+      "direct_repeats": 1,
+      "poisoned_graph_replays": 1,
+      "max_abs": 0.0019259467462688917,
+      "max_rel_l2": 0.00020811028005673297,
+      "sanitizer_summary": "ERROR SUMMARY: 0 errors"
+    },
+    "racecheck_small": {
+      "rows": 27,
+      "all_output_checks": true,
+      "direct_repeats": 2,
+      "poisoned_graph_replays": 2,
+      "max_abs": 0.0016337803099304438,
+      "max_rel_l2": 0.0002105004088268395,
+      "sanitizer_summary": "RACECHECK SUMMARY: 0 hazards displayed (0 errors, 0 warnings)"
+    },
+    "racecheck_main": {
+      "rows": 27,
+      "all_output_checks": true,
+      "direct_repeats": 1,
+      "poisoned_graph_replays": 1,
+      "max_abs": 0.0019259467462688917,
+      "max_rel_l2": 0.00020811028005673297,
+      "sanitizer_summary": "RACECHECK SUMMARY: 0 hazards displayed (0 errors, 0 warnings)"
+    },
+    "synccheck_small": {
+      "rows": 27,
+      "all_output_checks": true,
+      "direct_repeats": 2,
+      "poisoned_graph_replays": 2,
+      "max_abs": 0.0016337803099304438,
+      "max_rel_l2": 0.0002105004088268395,
+      "sanitizer_summary": "ERROR SUMMARY: 0 errors"
+    },
+    "synccheck_main": {
+      "rows": 27,
+      "all_output_checks": true,
+      "direct_repeats": 1,
+      "poisoned_graph_replays": 1,
+      "max_abs": 0.0019259467462688917,
+      "max_rel_l2": 0.00020811028005673297,
+      "sanitizer_summary": "ERROR SUMMARY: 0 errors"
+    }
+  },
+  "displayed_hazards": {
+    "displayed": 100,
+    "addresses": [
+      "0x2600",
+      "0x2663"
+    ],
+    "blocks": [
+      11
+    ],
+    "reader_threads": [
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38
+    ],
+    "writer_threads": [
+      224,
+      225,
+      226,
+      227,
+      228,
+      229,
+      230
+    ]
+  }
+}
