@@ -113,6 +113,8 @@ The GPU gate is `bash scripts/check_inblock.sh`. It runs small cases across all 
 
 Remote source is `/home/hpuvvad/csc548-w4a16-inblock-20261106`, preserving `/home/hpuvvad/csc548-w4a16`. Pilot remote/local result path is `results/inblock_c58_20261106/`. It contains `allocation.txt`, `build.log`, `check.log`, `check.sha256`, `metadata.txt`, `source-build.sha256`, `gpu_before.csv`, `gpu_after.csv`, `timings.log`, and `timings.csv`. Preserve the pilot. The complete repaired-baseline series uses `results/inblock_c58_20261106_final/`. Pilot controls are preserved as `control_commands.sh`, `control.log`, `control_original.csv`, `control_guard.csv`, and `control.sha256`. The repaired-baseline directory contains repeated `build.log`, `check.log`, `check.sha256`, `allocation.txt`, `naive_original.sass`, `naive_specialized.sass`, `verify_sass.py`, and `sass_comparison.txt`. `results/inblock_c58_20261106_final/prepare_commands.sh` preserves preparation commands. Its `measure_commands.sh` preserves the exact final measurement environment/procedure.
 
+**Historical reproduction scope:** E001 used source checkpoint `2b7d4fc` and its recorded six-kernel/four-sanitizer scripts. Current scripts have expanded for E002 to seven kernels and six sanitizer runs. Reproduce E001 from its recorded source/artifacts. Exporting an old SOURCE_COMMIT on current code does not reproduce that source.
+
 **Reproduction commands:** The supplied route is `ssh -i ~/username hpuvvad@arc-off-network`, then `ssh hpuvvad@c58`. Verify current documentation and `scontrol show job 328410` before applying the historical launcher environment below. These exports describe an existing allocation, not a resource request:
 
 ```bash
@@ -255,7 +257,7 @@ The script captures fresh metadata/hashes and both cache policies across all fou
 
 ## E002 — Candidate aligned-K specialization
 
-Status: authorized and planned on 2026-11-06. The user requested implementation while preserving E001. No E002 code or measurements exist at this pre-implementation checkpoint.
+Status: accepted on 2026-11-06 at code checkpoint `91bd042`. The predeclared criterion is met in the completed series. CUDA build, expanded GPU/sanitizer gate, full timing sweep, output-bit comparisons, and separate profiling are complete. The user authorized E002 while preserving E001. The hypothesis, alternatives, and acceptance criteria below were committed before implementation in `dc37ec6`. Do not interpret the local CPU pass as CUDA validation.
 
 **Problem:** E001 retains a runtime final-word guard in the candidate inner loop even at aligned K=4096. The isolated naive control demonstrated that such a guard can change code generation enough to slow a kernel, but this does not establish the effect on inblock.
 
@@ -267,9 +269,92 @@ Status: authorized and planned on 2026-11-06. The user requested implementation 
 
 **Evidence required:** Inspect aligned and tail candidate SASS, compare retained E001 SASS with its saved version, repeat the full correctness/sanitizer gate, and rerun every M/cache point with E001 and candidate in the same executable. Profile M=1 and M=128 separately with queried metrics. Keep all E001 records. Use a distinct E002 remote directory and result path. Do not change timing events or flushing.
 
-**Decision:** Implement only this authorized specialization, then decide from the recorded validation and measured criterion. No E002 speedup claim yet.
+**Implementation and baseline preservation:** `src/cuda/w4a16_inblock_specialized.cu` contains the separate template kernel. `src/cuda/w4a16_inblock.cu` remains unchanged. The benchmark exposes seven selectors, including `inblock` and `inblock_specialized`. Its untimed specialized validation also launches E001 and compares all M*N FP16 output bits, regardless of the FP64 row-sampling limit. Any mismatch stops measurements. This comparison is additional to the original FP64 threshold and all-weight reconstruction check. Layout, mapping, reduction order, event placement, and flush policy are unchanged.
 
-**Revisit only if:** After evaluation, record the actual decision and the new evidence required to repeat a rejected or inconclusive trial.
+**Versions and build:** Starting repository checkpoint `dc37ec6` follows E001's final documentation checkpoint `84afdbf`. E001 measured source is `2b7d4fc`. E002 implementation checkpoint is `91bd042`, and evidence checkpoint is `c7ea4b4`. No kernel code changed after measurement. Metadata's `baseline_commit=8a68227` field identifies the historical naive origin. The actual E002 comparison baseline is retained E001 inblock from the preserved `2b7d4fc`/`84afdbf` project state, rerun in the same `91bd042` executable. Exact executable/source hashes are recorded with the build/measurement artifacts. Same-executable `inblock` is E002's primary latency denominator. Historical E001 timings are context, not that denominator. The measured build uses Release, CUDA sm_120, nvcc 13.4.92, GCC 12.4.0, Open MPI 4.1.6, and existing portable host flags. One prun-launched process uses 16 OpenMP threads on c58. Exact flags, binding, versions, and hashes are in `results/e002_c58_20261106/metadata.txt` and `source-build.sha256`.
+
+**Validation plan and current evidence:** Local `bash scripts/build.sh`, `ctest --test-dir build --output-on-failure`, and shell syntax checks passed. Independent static review identified no issue. The c58 CUDA build and complete small-case gate passed. Every E002-versus-E001 small-case output-bit comparison reports zero mismatches. All six Compute Sanitizer runs report zero errors. The small GPU gate covers K={1,3,7,8,9,40,65,128,129,136,137,257}, N=33, M=3, group=128, seed=1, plus N={1,31,32,63}, K=137, M=2, seed=7, and a zero-weight case. K=128 and K=136 exercise aligned dispatch, including a partial final quantization group at K=136. K=3 and K=137 exercise tails. Every small output row is checked. Six Compute Sanitizer invocations cover memcheck and synccheck at each K={3,136,137}, checking naive, E001, E002, and dequantization.
+
+**Environment and evidence paths:** ARC job 328410 was revalidated RUNNING on c58, RTX 5060 Ti, driver 615.71.09. This is the existing user-owned allocation, not a new resource request. Revalidate state/remaining time before later reuse and leave it running. Remote source is `/home/hpuvvad/csc548-w4a16-e002-20261106`, isolated from E001. Remote/local result directory is `results/e002_c58_20261106/`. Full allocation, CPU/ISA/topology/NUMA/affinity, compiler/MPI/GPU/tool versions, source/executable hashes, flags, commands, and raw logs must accompany measurements.
+
+**Reproduction procedure:** Use the user-supplied gateway-to-c58 route and the verified launcher environment recorded in E001, after rechecking the live allocation. From the isolated E002 project root, export an absolute RUN_DIR and the actual SOURCE_COMMIT. Run the build, `prun /bin/hostname`, and `prun bash scripts/check_inblock.sh`, saving logs. The successful gate writes `check.sha256`. Inspect it before `prun bash scripts/run_inblock.sh`. The run script verifies the executable marker, refuses to overwrite timings.csv, and sweeps all seven kernels at every M={1,8,32,128}, K=N=4096, group=128, seed=1, 10 warmups, 100 timed iterations under both application policies. Query metrics on the GPU and run `prun bash scripts/ncu_inblock.sh` separately for naive/E001/E002 at M=1 and M=128 with profiler cache invalidation. Exact executed commands are retained as `prepare_commands.sh` and `measure_commands.sh` in the result directory. Build/gate logs are `build.log` and `check.log`, launcher output is `launcher.log`, timing output is `timings.log`, and profiling output is `profile.log`. Both source/build hashes and executable prerequisite markers are preserved.
+
+**Attempts and failures:** No correctness, launcher, CUDA-build, or sanitizer failure was observed in E002. All predeclared conditions passed in this series. The small 4.0% store-flush M=1 gain is not evidence of independent repeatability. Preserve E001's guard-related pilot failure as the motivating control rather than reporting a new E002 failure that did not occur.
+
+**Machine-code findings:** E001 source remains unchanged and its rebuilt device code matches all 480 saved SASS lines, including instruction encodings and scheduling control words, after display-whitespace normalization. E002's tail variant also matches those same 480 E001 lines exactly. `verify_sass.py` reproduces these assertions from `e001_saved.sass`, `e001_rebuilt.sass`, and `e002.sass`, and writes `sass_summary.json`.
+
+| Static emitted-code property | E001 | E002 aligned | E002 tail |
+|---|---:|---:|---:|
+| Instructions including padding | 240 | 216 | 240 |
+| BRA occurrences | 11 | 4 | 11 |
+| ISETP.GE.AND occurrences | 12 | 4 | 12 |
+| FFMA occurrences | 8 | 8 | 8 |
+
+These are static code counts, including padding, not dynamic executed instructions or operation counts. They establish an aligned code-generation difference while retaining the unrolled FFMA count. They do not alone establish a latency benefit. Separate profiling queries `smsp__inst_executed.sum` to measure dynamic executed warp instructions.
+
+**Final validation and artifact checks:** All 56 timing rows pass the original tolerance with zero W_hat mismatches. Each main shape confirmed bit-exact reconstruction of all 16,777,216 FP16 weights. All eight main E001/E002 comparisons found zero mismatches across every M*N output, including all 128 rows at M=128. The original FP64 reference check at M=128 still samples 64 rows. Bitwise agreement with E001 and sampled FP64 validation are distinct checks. The expanded small-case gate and six sanitizer runs pass, including aligned K=136 with a partial group, tail cases, odd N, and exact-zero weights. At M=128, both E001 and E002 have maximum absolute error 1.9462e-3 and relative L2 error 2.0750e-4 under each policy.
+
+`python3 results/e002_c58_20261106/analyze.py` validates the 56-row series, cache/shape/build consistency, main full-output comparisons, selected sanitizers, and declared criteria. It writes `comparisons.csv`, `criteria.json`, and normalized `profile_summary.csv`. Every condition in `criteria.json` is true. `python3 results/e002_c58_20261106/verify_sass.py` validates retained E001 machine-code parity and generates `sass_summary.json`. Exact source/executable hashes, flags, metadata, allocation/launcher logs, pre/post GPU observations, SASS, raw profiles, and complete commands remain in the same result directory. No historical E001 records or source were replaced.
+
+**Final latency:** These event medians are in microseconds, lower is better. All seven kernels were rerun in one executable on c58, with K=N=4096, group=128, seed=1, 10 warmups, and 100 timed iterations under both application policies. The primary E002 denominator is E001 in this executable, not a historical E001 run.
+
+| Policy | M | naive | E001 inblock | E002 specialized | cublas | cublas_dq | dequant | unfused |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| Store flush | 1 | 206.496 | 53.600 | 51.520 | 94.208 | 94.208 | 121.152 | 178.512 |
+| Store flush | 8 | 206.496 | 233.824 | 184.672 | 86.048 | 86.608 | 120.512 | 186.688 |
+| Store flush | 32 | 704.976 | 876.224 | 671.408 | 86.480 | 86.368 | 121.184 | 172.000 |
+| Store flush | 128 | 2606.400 | 3452.928 | 2614.944 | 118.784 | 116.736 | 120.496 | 229.344 |
+| No flush | 1 | 110.144 | 38.432 | 29.952 | 83.520 | 83.392 | 115.696 | 136.768 |
+| No flush | 8 | 221.824 | 224.512 | 169.216 | 53.904 | 52.848 | 116.288 | 142.912 |
+| No flush | 32 | 703.712 | 868.896 | 654.912 | 30.368 | 30.272 | 115.680 | 148.704 |
+| No flush | 128 | 2578.544 | 3445.312 | 2605.632 | 108.096 | 106.048 | 116.288 | 193.824 |
+
+E002 exceeds 1.05 E001/E002 median speedup for both M=32 and M=128 under both policies, and neither M=1 policy regresses. It therefore meets the fixed acceptance criterion. Large-M speedups are approximately 1.305–1.327 in this series. M=1 store-flush speedup is only 1.040, while no-flush speedup is 1.283. Treat the smaller difference as tentative without independent series replication.
+
+The following fused-path ranges/p90 values are in microseconds. Ratios above 1 favor E002. Min/max/p90 for every other baseline remain in the raw CSV.
+
+| Policy | M | E001 min–max | E001 p90 | E002 min–max | E002 p90 | E001/E002 median | naive/E002 median |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| Store flush | 1 | 51.200–55.840 | 55.616 | 49.120–53.600 | 51.584 | 1.040 | 4.008 |
+| Store flush | 8 | 233.472–236.032 | 235.872 | 182.656–186.784 | 184.736 | 1.266 | 1.118 |
+| Store flush | 32 | 862.880–878.592 | 878.240 | 670.368–674.208 | 672.448 | 1.305 | 1.050 |
+| Store flush | 128 | 3451.552–3455.008 | 3453.952 | 2612.896–2623.488 | 2622.464 | 1.320 | 0.997 |
+| No flush | 1 | 38.016–41.184 | 40.192 | 28.000–31.040 | 29.952 | 1.283 | 3.677 |
+| No flush | 8 | 223.808–235.456 | 225.536 | 168.224–177.728 | 169.536 | 1.327 | 1.311 |
+| No flush | 32 | 859.680–874.208 | 869.952 | 653.856–663.424 | 655.936 | 1.327 | 1.075 |
+| No flush | 128 | 3444.096–3451.328 | 3446.336 | 2598.592–2607.296 | 2606.656 | 1.322 | 0.990 |
+
+At M=128, E002 is near naive but slightly slower: 2614.944 versus 2606.400 us with store flushing and 2605.632 versus 2578.544 us without it. Acceptance against E001 is not a claim of universal superiority over naive or cuBLAS. Original-weight and W_hat cuBLAS continue to have distinct reference operands.
+
+**Profiler evidence:** Six separate Nsight runs cover naive/E001/E002 at M=1 and M=128. They use target-queried metrics, `--cache-control all`, and application `--no-flush-l2`. They do not measure the application's steady-state no-flush policy. Dynamic executed-instruction totals below are `smsp__inst_executed.sum` warp-instruction counter values, distinct from the static SASS counts above. Percentage denominators are shown with each metric.
+
+| Metric | E001 M=1 | E002 M=1 | E001 M=128 | E002 M=128 |
+|---|---:|---:|---:|---:|
+| Dynamic executed warp instructions | 9,043,456 | 6,955,520 | 1,157,562,368 | 890,306,560 |
+| Registers/thread | 32 | 34 | 32 | 34 |
+| Static shared bytes/block | 1024 | 1024 | 1024 | 1024 |
+| Dynamic shared bytes/block | 0 | 0 | 0 | 0 |
+| Driver-reserved shared bytes/block | 1024 | 1024 | 1024 | 1024 |
+| Total shared bytes/block | 2048 | 2048 | 2048 | 2048 |
+| Active warps (% of sustained active peak) | 55.515 | 56.020 | 99.195 | 99.064 |
+| Eligible warps/active cycle | 1.122 | 1.221 | 4.969 | 6.056 |
+| Issue active (% of sustained active peak) | 63.333 | 63.455 | 86.392 | 88.138 |
+| Wait stall (% of sustained elapsed peak) | 11.676 | 5.083 | 18.121 | 7.950 |
+| Long-scoreboard stall (% of sustained elapsed peak) | 25.486 | 31.901 | 14.182 | 12.275 |
+| Memory utilization (% of sustained elapsed peak) | 44.895 | 58.630 | 50.301 | 66.722 |
+| DRAM throughput (% of sustained elapsed peak) | 44.895 | 58.630 | 0.616 | 0.814 |
+| DRAM reads (decimal MB) | 8.664832 | 8.664576 | 9.705728 | 9.705216 |
+| L2 traffic | 9.033888 MB | 9.020608 MB | 1.153263 GB | 1.152521 GB |
+
+Dynamic executed warp instructions fall by 23.0878% at both profiled M values. Wait-stall percentages decline, while M=128 active warps remain approximately 99% and registers increase from 32 to 34. Measured DRAM/L2 bytes remain nearly unchanged. These observations support reduced instruction/control overhead as an explanation for the specialization benefit. The isolated source change also changes compiler scheduling and register allocation, so this experiment does not apportion their separate contributions. M=128's memory-utilization metric is much higher than its DRAM-throughput metric, so they must not be conflated with each other or with modeled `eff_gbps`.
+
+Observed DRAM write bytes are zero in these selected profiles even though every kernel writes C. Cached output stores need not reach DRAM during the measured kernel. The zero counter is not proof of absent output writes. Raw reports, imported wide metric CSVs, queried metric names, and normalized summaries remain under the E002 result directory.
+
+**Limits:** One GPU/node, seed, compiler configuration, and complete E002 event series were measured. No independent final repetitions, confidence intervals, locked clocks, or steady-state warm profiler runs were added. Within-run samples/ranges do not measure between-series variability. Sanitizer covers selected small cases. All-row E001/E002 bitwise agreement does not expand the sampled FP64 reference to all rows. Application flushing remains an intended cache policy rather than demonstrated eviction. The result establishes this specialization on the measured setup, not other GPUs or end-to-end LLM inference.
+
+**Decision:** Accept the separately selectable `inblock_specialized` implementation for the declared E002 criterion. Retain `inblock` unchanged as the E001 comparison, preserve naive and other baselines, and add no automatic M-based kernel selection or further optimization. The required K-divisibility dispatch remains. All required E002 work is complete.
+
+**Revisit only if:** Reevaluate on a changed GPU/toolchain/workload or new independent measurements that challenge the observed benefit. Repeating the same accepted configuration without a new question is unnecessary. Any further mechanism, including reuse across M rows, requires a separately requested experiment with its own hypothesis and criterion. High L2 traffic can motivate inspecting row reuse but does not establish it as the isolated bottleneck.
 
 ## Template for the next requested experiment
 
