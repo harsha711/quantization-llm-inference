@@ -2,7 +2,7 @@
 
 Read `AGENTS.md`, the E005/E006 experiment entries and `results/e006_20261106/ACCESS_ANALYSIS.md` first. This harness preserves all earlier source/results. It adds exactly one barrier after the existing stripe-final async drain, and supports the same E005 A/B/C host policies. It has no timing command.
 
-The tested root is `/home/hpuvvad/csc548-w4a16-e006-20261106` on c58. Original E005 library/source and E004 reference bridge remain in their historical roots. The existing Python3.11/Torch2.14 environment is reused without installation. Reverify current ARC documentation, allocation ownership/state/node/remaining time/GPU before any remote execution. These historical paths and allocation328410 do not establish future availability. Leave user allocations intact.
+The tested root is `/home/hpuvvad/csc548-w4a16-e006-20261106` on c58. Original E005 library/source and E004 reference bridge remain in their historical roots. The existing Python 3.11/Torch 2.14 environment is reused without installation. Reverify current ARC documentation, allocation ownership/state/node/remaining time/GPU before any remote execution. These historical paths and allocation 328410 do not establish future availability. Leave user allocations intact.
 
 Use a fresh absolute project root for reproduction. Stage `scripts/e004`, `scripts/e005`, `scripts/e006` and create `results/e006_20261106` there. Export PROJECT_ROOT and the verified SLURM_JOB_ID/SLURM_JOB_NODELIST. `env_arc.sh` sets the recorded one-rank/16-thread prun environment. It uses fixed historical control/environment paths, so verify those first. No `srun` or batch-file-relative project discovery is used.
 

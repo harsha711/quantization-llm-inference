@@ -26,6 +26,12 @@
 - Read E005 and `results/e005_20261106/GATE1.md`. A/B/C share compiled device code and differ only in the gated host policy. Preserve same-build A and untouched upstream source. Occupancy queries predict capacity, not achieved residency.
 - E005 memcheck/synccheck and numerical checks pass, but racecheck reports hazards in A/B/C and isolated official wheel. No primary/held-out timings or Nsight counters were released. Never create VALIDATED manually, suppress these reports, or treat passing outputs as race freedom. Revisit only after a separately authorized resolution, then a new matched build and complete validation/series. No next optimization is authorized.
 
+## E006 synchronization correction
+
+- Read E006 and `results/e006_20261106/ACCESS_ANALYSIS.md` before further Marlin work. One source-supported block barrier after the existing stripe-final async drain removes the reported hazard in the tested A/B/C matrix. The original terminal lookahead is unused in the analyzed small-M specialization. No incorrect original output or applicable sanitizer limitation was established.
+- Preserve E005 unchanged. E006 control/patched sources, patch, matched binaries/hashes and all failed diagnostics remain separate. The unpatched control still fails racecheck. The corrected body passes full numerical/replay/workspace checks and representative memcheck/racecheck/synccheck on c58. This is bounded evidence, not general validation of other formats/hardware or exact wheel source mapping.
+- E006 authorizes no timing. E005's old VALIDATED remains absent. Await a separately requested E005 continuation using the SAME corrected body for A/B/C, with complete validation and all original timing/held-out/profile criteria. Never splice original-body or wheel times into corrected comparisons. No next optimization is authorized.
+
 ## ARC
 
 - Verify current [ARC documentation](https://arcm.csc.ncsu.edu/~mueller/cluster/arc/) and `scontrol show job` each session. Confirm allocation ownership, RUNNING state, nodes, remaining time, and GPU. Saved IDs/nodes are historical. Do no compute on the gateway.

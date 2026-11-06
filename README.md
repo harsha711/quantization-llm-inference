@@ -101,6 +101,14 @@ synccheck pass, but E005 performance and held-out evaluation remain unmeasured.
 See the [E005 record](docs/EXPERIMENTS.md#e005--specialization-aware-reservation-and-one-versus-two-block-residency).
 Existing project kernels and the E004 wheel remain unchanged.
 
+E006 investigates the inherited report and adds one source-supported block barrier
+before shared-memory reuse. The corrected matched A/B/C body passes the recorded
+numerical and sanitizer matrix. The unpatched reproducer remains preserved and
+still reports hazards. Original output corruption was not demonstrated, and no
+performance measurements were resumed. See the [E006 record](docs/EXPERIMENTS.md#e006--bounded-inherited-marlin-racecheck-investigation)
+and [access analysis](results/e006_20261106/ACCESS_ANALYSIS.md). Any corrected-body
+E005 performance continuation is a separate next decision.
+
 Each new session starts with [AGENTS.md](AGENTS.md), [current status](docs/STATUS.md),
 the [numerical and measurement contract](docs/CONTRACT.md), and relevant
 [experiment and design decisions](docs/EXPERIMENTS.md). The
