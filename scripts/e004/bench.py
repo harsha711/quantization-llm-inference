@@ -126,6 +126,11 @@ def run(args):
     ns = helpers(args.source)
     qtype = load_marlin(args.source, args.library)
     handle = b.e004_handle()
+    cublas = ct.CDLL("libcublas.so.13")
+    cublas.cublasSetMathMode.argtypes = [ct.c_void_p,ct.c_int]
+    cublas.cublasSetMathMode.restype = ct.c_int
+    # Match the FP32 partial-reduction contract, including mixed-precision cuBLAS.
+    assert cublas.cublasSetMathMode(handle,16) == 0
     print("MAPPED_LIBRARIES", "\n".join(x for x in Path("/proc/self/maps").read_text().splitlines() if any(n in x for n in ["libcublas", "libcudart", "libe004"])), flush=True)
     stream = torch.cuda.Stream()
     l2 = b.e004_l2()
@@ -133,7 +138,7 @@ def run(args):
     print(json.dumps(dict(source_commit=PIN, torch=torch.__version__, cuda=torch.version.cuda,
                           gpu=torch.cuda.get_device_name(), capability=torch.cuda.get_device_capability(),
                           l2_bytes=l2, stream=int(stream.cuda_stream), qtype=qtype,
-                          graph_events=True, atomic=False, fp32_reduce=True)), flush=True)
+                          graph_events=True, atomic=False, fp32_reduce=True, cublas_math_mode=16)), flush=True)
     with torch.cuda.stream(stream), args.out.open("x") as out:
         for k,n in args.shapes:
             assert k % 128 == 0 and n % 64 == 0 and k >= 256
@@ -216,7 +221,7 @@ def run(args):
                         # Validate final output too, including graph replay.
                         validate(cv,refs[0 if name=="cublas" else 1][:m])
                         row=dict(kernel=name,M=m,K=k,N=n,group=128,seed=1,policy=policy,warmup=args.warmup,iters=args.iters,
-                                 method="eager_events" if args.eager else "graph_events",source_commit=PIN,pass_check=True,
+                                 method="eager_events" if args.eager else "graph_events",source_commit=PIN,pass_check=True,cublas_math_mode=16,
                                  repack_codes_match=True,repack_scale_bits_match=True,reconstructed_elements=k*n,
                                  first_call_wall_s=first_call_wall_s,operand_sha256=operand_sha256,generated_s=generated_s,repack_wall_s=repack_s,repack_gpu_us=repack_gpu_us,reference_s=reference_s,
                                  full_control_match=True,**stats,**timing)

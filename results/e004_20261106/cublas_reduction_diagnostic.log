@@ -1,0 +1,11 @@
+[prun] Master compute host = c58
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun /tmp/e004-hpuvvad-20261106/bin/python scripts/e004/diagnose_cublas.py --bridge results/e004_20261106/libe004.so --out results/e004_20261106/cublas_reduction_diagnostic.json (family=openmpi4)
+{"mode": 0, "kernel": "cublas", "repeat": 0, "M": 128, "K": 4096, "N": 4096, "num_bad": 2, "max_abs": 0.0024154640450433362, "rel_l2": 0.0002950522043633978, "bad_values": [{"row": 5, "column": 789, "got": -0.07757568359375, "reference": -0.07641904956835788, "limit": 0.001076977861719684}, {"row": 91, "column": 677, "got": 0.08282470703125, "reference": 0.0816913788526108, "limit": 0.0010822501910039367}]}
+{"mode": 0, "kernel": "cublas", "repeat": 1, "M": 128, "K": 4096, "N": 4096, "num_bad": 2, "max_abs": 0.0024154640450433362, "rel_l2": 0.0002950522043633978, "bad_values": [{"row": 5, "column": 789, "got": -0.07757568359375, "reference": -0.07641904956835788, "limit": 0.001076977861719684}, {"row": 91, "column": 677, "got": 0.08282470703125, "reference": 0.0816913788526108, "limit": 0.0010822501910039367}]}
+{"mode": 0, "kernel": "cublas_dq", "repeat": 0, "M": 128, "K": 4096, "N": 4096, "num_bad": 0, "max_abs": 0.0023750234686303884, "rel_l2": 0.00029574967566584076, "bad_values": []}
+{"mode": 0, "kernel": "cublas_dq", "repeat": 1, "M": 128, "K": 4096, "N": 4096, "num_bad": 0, "max_abs": 0.0023750234686303884, "rel_l2": 0.00029574967566584076, "bad_values": []}
+{"mode": 16, "kernel": "cublas", "repeat": 0, "M": 128, "K": 4096, "N": 4096, "num_bad": 0, "max_abs": 0.0019701799228641903, "rel_l2": 0.0002070527106147927, "bad_values": []}
+{"mode": 16, "kernel": "cublas", "repeat": 1, "M": 128, "K": 4096, "N": 4096, "num_bad": 0, "max_abs": 0.0019701799228641903, "rel_l2": 0.0002070527106147927, "bad_values": []}
+{"mode": 16, "kernel": "cublas_dq", "repeat": 0, "M": 128, "K": 4096, "N": 4096, "num_bad": 0, "max_abs": 0.0019462205727904802, "rel_l2": 0.00020766261643713764, "bad_values": []}
+{"mode": 16, "kernel": "cublas_dq", "repeat": 1, "M": 128, "K": 4096, "N": 4096, "num_bad": 0, "max_abs": 0.0019462205727904802, "rel_l2": 0.00020766261643713764, "bad_values": []}

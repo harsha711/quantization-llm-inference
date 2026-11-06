@@ -1,0 +1,47 @@
+#!/usr/bin/env python3
+"""Bounded all-row correctness ablation of cuBLAS reduction precision."""
+import argparse
+import ctypes as ct
+import json
+from pathlib import Path
+import numpy as np
+import torch
+from bench import bridge
+
+p=argparse.ArgumentParser()
+p.add_argument('--bridge',type=Path,required=True)
+p.add_argument('--out',type=Path,required=True)
+a=p.parse_args()
+assert not a.out.exists()
+b=bridge(a.bridge)
+h=b.e004_handle()
+lib=ct.CDLL('libcublas.so.13')
+lib.cublasSetMathMode.argtypes=[ct.c_void_p,ct.c_int]
+lib.cublasSetMathMode.restype=ct.c_int
+m,n,k=128,4096,4096
+cpu=[np.empty((m,k),np.float16),np.empty((k,n),np.float16),np.empty((k//8,n),np.uint32),np.empty((k//128,n),np.float16),np.empty((k,n),np.float16)]
+assert b.e004_generate(m,n,k,1,*[x.ctypes.data for x in cpu]) == 0
+refs=[]
+for w in [cpu[1],cpu[4]]:
+ r=np.empty((m,n),np.float64)
+ b.e004_reference(cpu[0].ctypes.data,w.ctypes.data,m,n,k,r.ctypes.data)
+ refs.append(r)
+d=[torch.from_numpy(x).cuda() for x in cpu]
+c=torch.empty((m,n),device='cuda',dtype=torch.float16)
+rows=[]
+for mode in [0,16]:
+ assert lib.cublasSetMathMode(h,mode)==0
+ for selector in [4,5]:
+  for repeat in range(2):
+   c.fill_(float('nan'))
+   b.e004_launch(selector,*[x.data_ptr() for x in d],c.data_ptr(),m,n,k,torch.cuda.current_stream().cuda_stream,h)
+   torch.cuda.synchronize()
+   got=c.float().cpu().numpy().astype(np.float64)
+   ref=refs[selector-4]
+   rms=np.sqrt(np.mean(ref*ref));err=np.abs(got-ref)
+   indices=np.argwhere((~np.isfinite(got)) | (err>1e-3*np.abs(ref)+1e-3*rms))
+   row=dict(mode=mode,kernel=['cublas','cublas_dq'][selector-4],repeat=repeat,M=m,K=k,N=n,num_bad=len(indices),max_abs=float(err.max()),rel_l2=float(np.linalg.norm(got-ref)/np.linalg.norm(ref)),bad_values=[dict(row=int(i),column=int(j),got=float(got[i,j]),reference=float(ref[i,j]),limit=float(1e-3*abs(ref[i,j])+1e-3*rms)) for i,j in indices])
+   rows.append(row);print(json.dumps(row),flush=True)
+   if mode==16: assert not len(indices)
+with a.out.open('x') as f:json.dump(rows,f,indent=2)
+b.e004_destroy(h)
