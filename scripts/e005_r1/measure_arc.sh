@@ -2,6 +2,7 @@
 set -euo pipefail
 source "$PROJECT_ROOT/scripts/e005_r1/env_arc.sh"
 [[ -e "$R/PREREQUISITE_PASSED" ]]
+[[ $(cat "$R/project.exit") == 0 ]]
 sha256sum -c "$R/verified-inputs.sha256" > "$R/measurement-input-check.log"
 sha256sum scripts/e005_r1/* scripts/e005/bench.py scripts/e004/bench.py > "$R/measurement-tooling.sha256"
 for series in 1 2; do

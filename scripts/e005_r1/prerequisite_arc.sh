@@ -30,6 +30,7 @@ run runtime "$E005_PYTHON" scripts/e004/check_runtime.py
 run identity "$E005_PYTHON" scripts/e005_r1/identity.py
 run smoke "${base[@]}" --out "$R/smoke.jsonl" --ms 1 5 8 --shapes 256,2048 --patterns mixed zero_a zero_w \
  --warmup 0 --iters 0 --policies no_flush --repeats 3
+run project bash "$E005_CONTROL/scripts/check_inblock.sh"
 sha256sum "$E005_LOCAL" "$E005_BRIDGE" "$E005_WHEEL" scripts/e005/bench.py scripts/e004/bench.py > "$R/verified-inputs.sha256"
 sha256sum scripts/e005_r1/* scripts/e005/bench.py scripts/e004/bench.py > "$R/prerequisite-tooling.sha256"
 # A separate R1 gate certifies identity and smoke completion, never historical E005.
