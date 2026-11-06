@@ -1,0 +1,2 @@
+timestamp, clocks.current.sm [MHz], clocks.current.memory [MHz], temperature.gpu, power.draw [W], pstate
+2026/11/06 15:37:11.410, 2752 MHz, 14001 MHz, 33, 73.20 W, P0

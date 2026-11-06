@@ -1,0 +1,11 @@
+{
+  "screen_rows": 384,
+  "screen_complete": true,
+  "all_outputs_checked": true,
+  "max_relative_l2": 0.0002128207300365718,
+  "max_absolute_error": 0.0019701799228641903,
+  "repeat1_rows": 64,
+  "repeat2_rows": 64,
+  "eager_diagnostic_rows": 12,
+  "graph_diagnostic_rows": 12
+}
