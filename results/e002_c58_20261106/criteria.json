@@ -1,0 +1,8 @@
+{
+  "all_56_rows_pass": true,
+  "bitwise_all_outputs_match": true,
+  "selected_sanitizers_pass": true,
+  "large_M_speedup_at_least_1_05": true,
+  "M1_latency_no_more_than_1_05_baseline": true,
+  "predeclared_criterion_met_in_this_series": true
+}
