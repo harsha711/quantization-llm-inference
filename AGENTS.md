@@ -32,6 +32,11 @@
 - Preserve E005 unchanged. E006 control/patched sources, patch, matched binaries/hashes and all failed diagnostics remain separate. The unpatched control still fails racecheck. The corrected body passes full numerical/replay/workspace checks and representative memcheck/racecheck/synccheck on c58. This is bounded evidence, not general validation of other formats/hardware or exact wheel source mapping.
 - E006 authorizes no timing. E005's old VALIDATED remains absent. Await a separately requested E005 continuation using the SAME corrected body for A/B/C, with complete validation and all original timing/held-out/profile criteria. Never splice original-body or wheel times into corrected comparisons. No next optimization is authorized.
 
+## E005-R1 corrected-body performance continuation
+
+- The user authorized E005-R1 after E006. Reuse the exact corrected E006 binary and verified validation when source/binary/environment identity holds. Rebuilding or changed conditions require relevant fresh validation. Keep original E005/E006 records immutable and their VALIDATED sentinels absent.
+- Use a separate `scripts/e005_r1/` and `results/e005_r1_20261106/`. Compare corrected A36/101376 B, B36/49664 B and C72/49664 B using the same corrected entrypoint. Only corrected A is a performance denominator. Preserve both cache policies, two balanced primary/fallback series, seed-2 held-outs and targeted M8 A/B/C profiles under the original 5% criteria. No new optimization or automatic dispatch.
+
 ## ARC
 
 - Verify current [ARC documentation](https://arcm.csc.ncsu.edu/~mueller/cluster/arc/) and `scontrol show job` each session. Confirm allocation ownership, RUNNING state, nodes, remaining time, and GPU. Saved IDs/nodes are historical. Do no compute on the gateway.

@@ -1,5 +1,7 @@
 # Current status
 
+E005-R1 is authorized and in progress from clean `b3abd3d`. It resumes only the original A/B/C performance question using the unchanged corrected E006 body. Original E005 remains stopped and immutable. Read the E005-R1 entry before editing. The single next task is to verify identity/prerequisites, complete the original timing/held-out/profile matrix and decide using the predeclared criteria. No further optimization is authorized.
+
 E006 is complete as a **source-supported synchronization correction**, with the reported hazard absent in the tested corrected A/B/C body. Starting state `182d200` was verified clean. Criteria `cfcfab5`, source/reproducer `46d3e8d`, complete raw evidence/tooling `00c665a`. Documentation commits follow. All original E005 and earlier sources/results/binaries remain preserved. No push.
 
 ## E006 outcome
