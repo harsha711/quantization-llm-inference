@@ -40,9 +40,9 @@ set -x
 for policy in cold warm; do
   cache_args=()
   if [[ "$policy" == warm ]]; then cache_args+=(--no-flush-l2); fi
-  for M in 1 8 32 128; do
+  for M in 1 8 32 128 5; do
     ./build/w4a16_bench --M "$M" --N 4096 --K 4096 --group 128 --seed 1 \
-      --warmup 10 --iters 100 --kernels naive,inblock,inblock_specialized,cublas,cublas_dq,dequant,unfused \
+      --warmup 10 --iters 100 --kernels naive,inblock,inblock_specialized,inblock_m2,inblock_m4,cublas,cublas_dq,dequant,unfused \
       "${cache_args[@]}" --csv "$RUN_DIR/timings.csv"
   done
 done

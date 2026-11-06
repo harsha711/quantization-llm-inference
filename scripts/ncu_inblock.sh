@@ -41,10 +41,13 @@ for metric in "${metrics[@]}"; do
 done
 metric_list=$(IFS=,; echo "${metrics[*]}")
 set -x
-for M in 1 128; do
-  for kernel in naive inblock inblock_specialized; do
+for M in 1 8 32 128 5; do
+  for kernel in naive inblock_specialized inblock_m2 inblock_m4; do
     tag="${kernel}_M${M}_ncu_invalidated"
-    ncu --cache-control all --kernel-name "regex:w4a16_${kernel}_kernel" \
+    kernel_regex="w4a16_${kernel}_kernel"
+    if [[ "$kernel" == inblock_m2 ]]; then kernel_regex='w4a16_inblock_rows_kernel<2,'; fi
+    if [[ "$kernel" == inblock_m4 ]]; then kernel_regex='w4a16_inblock_rows_kernel<4,'; fi
+    ncu --cache-control all --kernel-name-base demangled --kernel-name "regex:$kernel_regex" \
       --launch-count 1 --csv --metrics "$metric_list" -o "$RUN_DIR/ncu/$tag" \
       ./build/w4a16_bench --M "$M" --N 4096 --K 4096 --group 128 --seed 1 \
       --warmup 0 --iters 1 --kernels "$kernel" --nocheck --no-flush-l2 \

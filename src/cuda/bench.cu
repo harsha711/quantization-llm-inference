@@ -1,13 +1,14 @@
 // Correctness check and timing for one GEMM shape.
 //
 //   w4a16_bench --M 16 --N 4096 --K 4096 [--group 128] [--seed 1] [--warmup 10]
-//               [--iters 100] [--kernels naive,inblock,inblock_specialized,cublas,cublas_dq,dequant,unfused]
+//               [--iters 100] [--kernels naive,inblock,inblock_specialized,inblock_m2,inblock_m4,cublas,cublas_dq,dequant,unfused]
 //               [--no-flush-l2] [--check-rows 64] [--nocheck] [--csv results/out.csv]
 //
 // Kernels
 //   naive      fused W4A16, dequant in registers
 //   inblock    fused W4A16, eight K slices reduced within each block
 //   inblock_specialized  E002 aligned/tail specialization, E001 mapping preserved
+//   inblock_m2/inblock_m4  E003 two/four rows sharing each reconstructed weight
 //   cublas     cuBLAS FP16 GEMM on the original FP16 weights
 //   cublas_dq  cuBLAS FP16 GEMM on pre-dequantized FP16 W_hat (already on device)
 //   dequant    GPU unpack+dequant into a K x N FP16 buffer
@@ -60,14 +61,14 @@ struct Options {
   bool flush_l2 = true;
   bool nocheck = false;
   bool zero_weights = false;
-  std::vector<std::string> kernels = {"naive", "inblock", "inblock_specialized", "cublas", "cublas_dq", "dequant", "unfused"};
+  std::vector<std::string> kernels = {"naive", "inblock", "inblock_specialized", "inblock_m2", "inblock_m4", "cublas", "cublas_dq", "dequant", "unfused"};
   std::string csv;
 };
 
 [[noreturn]] void usage(const char* prog) {
   std::fprintf(stderr,
                "usage: %s [--M m] [--N n] [--K k] [--group g] [--seed s] [--warmup w]\n"
-               "          [--iters i] [--kernels naive,inblock,inblock_specialized,cublas,cublas_dq,dequant,unfused]\n"
+               "          [--iters i] [--kernels naive,inblock,inblock_specialized,inblock_m2,inblock_m4,cublas,cublas_dq,dequant,unfused]\n"
                "          [--no-flush-l2] [--check-rows r] [--nocheck] [--zero-weights] [--csv path]\n",
                prog);
   std::exit(EXIT_FAILURE);
@@ -158,7 +159,7 @@ double logical_bytes(const std::string& name, int M, int N, int K, int group) {
   const double w16 = static_cast<double>(fp16_bytes(K, N));
   const double qw = static_cast<double>(qweight_bytes(K, N));
   const double sc = static_cast<double>(scales_bytes(K, N, group));
-  if (name == "naive" || name == "inblock" || name == "inblock_specialized") return a + c + qw + sc;
+  if (name == "naive" || name == "inblock" || name == "inblock_specialized" || name == "inblock_m2" || name == "inblock_m4") return a + c + qw + sc;
   if (name == "cublas" || name == "cublas_dq") return a + c + w16;
   if (name == "dequant") return qw + sc + w16;
   if (name == "unfused") return a + c + qw + sc + w16;
@@ -197,6 +198,8 @@ int main(int argc, char** argv) {
 
   std::printf("launch: inblock/inblock_specialized grid=(%d, %d) block=(32, 8), shared partials=1024 bytes\n",
               (o.N + 31) / 32, o.M);
+  std::printf("launch: inblock_m2 grid=(%d, %d), inblock_m4 grid=(%d, %d), block=(32, 8), shared partials=2048/4096 bytes\n",
+              (o.N + 31) / 32, (o.M + 1) / 2, (o.N + 31) / 32, (o.M + 3) / 4);
 
   Problem p = make_problem(o.M, o.N, o.K, o.group, o.seed);
   if (o.zero_weights) {
@@ -325,6 +328,12 @@ int main(int argc, char** argv) {
     } else if (name == "inblock_specialized") {
       launch = [&] { launch_w4a16_inblock_specialized(dA, dQ, dS, dC, o.M, o.N, o.K, o.group, 0); };
       ref = &ref_quant;
+    } else if (name == "inblock_m2") {
+      launch = [&] { launch_w4a16_inblock_m2(dA, dQ, dS, dC, o.M, o.N, o.K, o.group, 0); };
+      ref = &ref_quant;
+    } else if (name == "inblock_m4") {
+      launch = [&] { launch_w4a16_inblock_m4(dA, dQ, dS, dC, o.M, o.N, o.K, o.group, 0); };
+      ref = &ref_quant;
     } else if (name == "cublas") {
       launch = [&] { launch_cublas_fp16(handle, dA, dW, dC, o.M, o.N, o.K); };
       ref = &ref_fp16;
@@ -356,17 +365,21 @@ int main(int argc, char** argv) {
       st = compare_rows(hC.data(), *ref, rows, o.N, rtol, atol_frac);
       vs16 = compare_rows(hC.data(), ref_fp16, rows, o.N, rtol, atol_frac);
       pass = st.pass();
-      if (name == "inblock_specialized") {
-        launch_w4a16_inblock(dA, dQ, dS, dC, o.M, o.N, o.K, o.group, 0);
+      if (name == "inblock_specialized" || name == "inblock_m2" || name == "inblock_m4") {
+        const bool row_reuse = name != "inblock_specialized";
+        if (row_reuse)
+          launch_w4a16_inblock_specialized(dA, dQ, dS, dC, o.M, o.N, o.K, o.group, 0);
+        else
+          launch_w4a16_inblock(dA, dQ, dS, dC, o.M, o.N, o.K, o.group, 0);
         CUDA_CHECK(cudaDeviceSynchronize());
         std::vector<uint16_t> original(c_elems);
         CUDA_CHECK(cudaMemcpy(original.data(), dC, c_elems * sizeof(__half), cudaMemcpyDeviceToHost));
         size_t mismatches = 0;
         for (size_t i = 0; i < c_elems; ++i) mismatches += hC[i] != original[i];
-        std::printf("inblock_specialized vs inblock: %zu / %zu FP16 outputs differ\n",
-                    mismatches, c_elems);
+        std::printf("%s vs %s: %zu / %zu FP16 outputs differ\n", name.c_str(),
+                    row_reuse ? "inblock_specialized" : "inblock", mismatches, c_elems);
         if (mismatches) {
-          std::fprintf(stderr, "E002 bitwise comparison failed; stopping before timing\n");
+          std::fprintf(stderr, "Fused bitwise comparison failed; stopping before timing\n");
           if (csv) std::fclose(csv);
           return EXIT_FAILURE;
         }
@@ -406,7 +419,7 @@ int main(int argc, char** argv) {
   }
   if (!o.nocheck)
     std::printf("checked %zu of %d rows against the FP64 CPU reference (reconstructed W_hat for "
-                "naive/inblock/inblock_specialized/cublas_dq/unfused; original W for cublas)\n",
+                "naive/inblock/inblock_specialized/inblock_m2/inblock_m4/cublas_dq/unfused; original W for cublas)\n",
                 rows.size(), o.M);
 
   if (!o.nocheck) {
