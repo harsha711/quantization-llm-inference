@@ -253,21 +253,23 @@ prun bash scripts/run_inblock.sh > "$RUN_DIR/timings.log" 2>&1
 
 The script captures fresh metadata/hashes and both cache policies across all four M values. Replication does not imply locked clocks. Record any new clock control or changed conditions as a separate series.
 
-## E002 — Candidate aligned-K specialization (proposal only)
+## E002 — Candidate aligned-K specialization
 
-Status: proposed, not implemented or measured. Await a user request before implementing.
+Status: authorized and planned on 2026-11-06. The user requested implementation while preserving E001. No E002 code or measurements exist at this pre-implementation checkpoint.
 
 **Problem:** E001 retains a runtime final-word guard in the candidate inner loop even at aligned K=4096. The isolated naive control demonstrated that such a guard can change code generation enough to slow a kernel, but this does not establish the effect on inblock.
 
 **Hypothesis:** Compile-time aligned/tail variants in inblock may reduce aligned-case instruction overhead and improve its larger-M latency while preserving the existing layout, numerical contract, and tail correctness. The magnitude and affected shapes are unknown.
 
-**Proposed change and alternatives:** Specialize only the candidate final-word guard, retaining eight slices, shared reduction, grid/block mapping, and baseline code. Keep E001 as the comparison and avoid combining this with tiling or new layouts. Continuing with current E001 is the unchanged alternative.
+**Change and alternatives chosen before implementation:** Keep `src/cuda/w4a16_inblock.cu` and its `inblock` selector unchanged. Add `inblock_specialized` in a separate source file with `template<bool HasTail>`. Dispatch `HasTail=false` for K divisible by eight and `true` otherwise. Guard final-word bounds with `if constexpr`. Preserve the mapping, eight packed-word intervals, FP16 reconstruction, FP32 accumulation/reduction, and FP16 output. A shared refactor of E001 was considered but would change its compilation unit and baseline provenance. Copying this small experimental kernel keeps the original source intact. No tiling or layout change is included.
 
-**Evidence needed before decision:** Inspect aligned candidate SASS, repeat the full correctness/sanitizer gate, and rerun every M/cache point with E001 and candidate under identical conditions. A success criterion must be fixed before implementation after the user requests the experiment. No candidate results or claimed speedup exist.
+**Success criterion fixed before implementation:** Pass the unchanged FP64 tolerance, zero reconstructed-weight mismatches, all checked E002 outputs bit-identical to E001, and zero errors in selected sanitizer cases covering both aligned and tail dispatch. Require at least 1.05 median speedup over same-executable E001 for both M=32 and M=128 under both application cache policies, with no more than a 5% M=1 latency regression. The 5% threshold distinguishes a useful improvement from a small timing difference in this experiment. Report every M point and p90, including regressions. A small or inconsistent change remains inconclusive and requires complete independent repeat series before a performance acceptance claim.
 
-**Decision:** Proposal only. No implementation is authorized by merely listing it here.
+**Evidence required:** Inspect aligned and tail candidate SASS, compare retained E001 SASS with its saved version, repeat the full correctness/sanitizer gate, and rerun every M/cache point with E001 and candidate in the same executable. Profile M=1 and M=128 separately with queried metrics. Keep all E001 records. Use a distinct E002 remote directory and result path. Do not change timing events or flushing.
 
-**Revisit only if:** The user requests this isolated experiment, or new profiler/code-generation evidence changes its priority.
+**Decision:** Implement only this authorized specialization, then decide from the recorded validation and measured criterion. No E002 speedup claim yet.
+
+**Revisit only if:** After evaluation, record the actual decision and the new evidence required to repeat a rejected or inconclusive trial.
 
 ## Template for the next requested experiment
 

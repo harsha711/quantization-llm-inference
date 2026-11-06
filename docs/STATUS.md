@@ -34,4 +34,4 @@ Remote source: `/home/hpuvvad/csc548-w4a16-inblock-20261106`. Job 328410 on c58 
 
 ## Single next task
 
-Await the user's request to evaluate [E002](EXPERIMENTS.md#e002--candidate-aligned-k-specialization-proposal-only): specialize the candidate aligned-K loop to remove runtime tail checks, then test its effect separately. This is an untested proposal motivated by the naive control, not an established improvement or authorization to implement.
+Implement and evaluate the user-authorized [E002](EXPERIMENTS.md#e002--candidate-aligned-k-specialization), preserving E001 as a separately selectable comparison. Pre-implementation criteria are recorded in E002. Current repository is clean at 84afdbf before the experiment. Allocation 328410 was revalidated RUNNING on c58 with RTX 5060 Ti, driver 615.71.09, and more than five hours remaining on 2026-11-06. Revalidate before later reuse.
