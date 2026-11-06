@@ -53,4 +53,4 @@ Historical E001 remote source: `/home/hpuvvad/csc548-w4a16-inblock-20261106`. Jo
 
 ## Single next task
 
-Await the user's next requested experiment. Reuse of weights across M rows is a candidate to inspect, motivated by persistent large-M L2 traffic and E002's near tie with naive, but it is not an isolated bottleneck conclusion or authorization to implement. Any new experiment must fix its hypothesis and criterion first. Revalidate allocation 328410 before later reuse and leave the user's allocation running.
+Implement and measure authorized E003 weight reuse across two/four input rows. The pre-implementation hypothesis, design alternatives, and criteria are in [E003](EXPERIMENTS.md#e003--reuse-reconstructed-weights-across-input-rows). Preserve E002 and naive controls, compare all outputs bitwise, and include row tails. Allocation 328410 was revalidated RUNNING on c58 at 14:53 Eastern on 2026-11-06 with about five hours remaining. Revalidate before measurements and leave it running.
