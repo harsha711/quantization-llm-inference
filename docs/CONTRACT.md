@@ -20,13 +20,28 @@ FP16 conversion uses round-to-nearest-even. `nearbyint` follows the host floatin
 
 Packed storage is `qweight[k8*N+n]`, a uint32 word containing eight consecutive K codes in nibble positions `4*j`, increasing with K. Adjacent columns occupy adjacent words. Allocate `ceil(K/8)*N` words. Scales use `scales[g*N+n]`, with `ceil(K/group)*N` FP16 elements. Words never cross group boundaries because group size is a multiple of eight.
 
-Supported logical shapes have positive M, N, K and group, group divisible by eight, subject to available memory and index/launch limits. K may be below eight. Final words/groups may be partial and N may be odd. Unused tail nibbles are zero and must never be consumed. No new packed layout is part of E001. Synthetic inputs are finite FP16 values. NaN/Inf quantization is not a specified interface.
+Supported logical shapes have positive M, N, K and group, group divisible by eight, subject to available memory and index/launch limits. K may be below eight. Final words/groups may be partial and N may be odd. Unused tail nibbles are zero and must never be consumed. E001–E003 preserve the same packed layout and quantization group rules. Synthetic inputs are finite FP16 values. NaN/Inf quantization is not a specified interface.
+
+### Launch mapping and row tiles
+
+The selectors retain fixed mappings. Static shared bytes below are source-declared partial arrays, excluding any driver-reserved storage. Record actual compiled resources separately.
+
+| Selector | Rows per block tile | Block | Grid | Static partial bytes/block |
+|---|---:|---|---|---:|
+| naive | 1 | 256 threads | `(ceil(N/256), M)` | 0 |
+| inblock / inblock_specialized | 1 | `(32,8)` | `(ceil(N/32), M)` | 1024 |
+| inblock_m2 | 2 | `(32,8)` | `(ceil(N/32), ceil(M/2))` | 2048 |
+| inblock_m4 | 4 | `(32,8)` | `(ceil(N/32), ceil(M/4))` | 4096 |
+
+E003's `inblock_m2` and `inblock_m4` reuse each loaded packed word, scale, and FP16-reconstructed weight across two or four independent row accumulators. Column lanes remain contiguous. Each of eight K slices visits packed words `[floor(W*y/8), floor(W*(y+1)/8))`, where `W=ceil(K/8)` and y is threadIdx.y. Per-row K traversal, FP32 FMA order, eight-partial summation order, and FP16 output conversion remain those of E002. Shared partials are `float partial[Rows][8][32]`. Rows never reduce into each other.
+
+The row tile begins at `m=blockIdx.y*Rows`. Compile-time K-tail and M-tail variants are selected by `K%8` and `M%Rows`. When the final row tile is incomplete, invalid rows keep zero accumulators, skip activation reads, and skip output writes. Invalid N lanes and empty K slices also publish zero partials. Every thread reaches the block barrier. Valid rows retain their ordinary arithmetic order. M need not be divisible by two or four, and K may end in a partial word or group. K=136 with group=128 uses an aligned packed-word path despite its partial final group. These bounds specializations do not select between the two-row and four-row kernels automatically.
 
 ## 2. Reference and correctness
 
 | Kernel | Operation and reference |
 |---|---|
-| naive/inblock/inblock_specialized | Fused GEMM on W_hat, reconstructed-weight FP64 CPU GEMM reference |
+| naive/inblock/inblock_specialized/inblock_m2/inblock_m4 | Fused GEMM on W_hat, reconstructed-weight FP64 CPU GEMM reference |
 | cublas | Original FP16 W, `CUBLAS_COMPUTE_32F`, original-weight FP64 reference |
 | cublas_dq | Pre-dequantized W_hat already on device, same cuBLAS call, reconstructed-weight FP64 reference |
 | dequant | Materialize FP16 W_hat, bitwise agreement with every CPU-reconstructed weight |
@@ -34,13 +49,17 @@ Supported logical shapes have positive M, N, K and group, group divisible by eig
 
 For every checked output require `abs(got-ref) <= 1e-3*abs(ref) + 1e-3*rms(ref)`. Got is FP16 output promoted to FP32. Ref is FP64, with RMS over checked reference elements. `rel_l2_err = norm(got-ref)/norm(ref)`. `rel_l2_vs_fp16` compares with the original-weight reference and includes quantization error for W_hat kernels. It is not the pass criterion. Never relax tolerance to accept changed reduction order.
 
-Small cases check every row. Main sweeps use up to 64 deterministically sampled rows, with exact indices printed in the log, and every column of those rows. M=128 main runs therefore do not check every output row. Every W_hat element is checked bitwise when GPU dequantization runs. Do not use `--nocheck` for acceptance measurements. Stop on correctness/launcher errors and preserve diagnostics.
+Small cases check every row. Main sweeps use up to 64 deterministically sampled rows, with exact indices printed in the log, and every column of those rows. M=128 main FP64 comparisons therefore do not check every output row. Every W_hat element is checked bitwise when GPU dequantization runs. Do not use `--nocheck` for acceptance measurements. Stop on correctness/launcher errors and preserve diagnostics.
+
+In addition to FP64 validation, `inblock_specialized` is compared bitwise against E001 `inblock`, and E003 `inblock_m2`/`inblock_m4` are each compared bitwise against E002 `inblock_specialized`. These untimed checks cover every M*N FP16 output, even when the FP64 reference samples rows. They run when the candidate is checked, without requiring its comparison selector in the timed list. Any mismatch stops the run before candidate timing. Full-output agreement with a retained kernel does not expand the sampled FP64 check to all rows.
 
 ## 3. Timing and comparisons
 
-Use M={1,8,32,128}, K=N=4096, group=128, seed=1, 10 warmups, and at least 100 timed iterations. Compare naive/inblock/inblock_specialized in the same executable, build, seed, node, and cache policy. Retain and record each kernel's defined launch mapping. Changing executable, flags, kernel, rank/thread count, placement, or topology requires rerunning every M point in the series.
+Use M={1,8,32,128}, K=N=4096, group=128, seed=1, 10 warmups, and at least 100 timed iterations. Compare naive/inblock/inblock_specialized/inblock_m2/inblock_m4 in the same executable, build, seed, node, and cache policy. Retain and record each kernel's defined launch mapping. Changing executable, flags, kernel, rank/thread count, placement, or topology requires rerunning every M point in the series.
 
-CUDA events surround one launch or the complete unfused pair. Allocations, host quantization, H2D copies, and flushing are outside the interval. Report median, min, max, and p90 in microseconds. Even-count median averages the middle pair. p90 uses sorted index `floor(0.9*(iters-1))`. E001 speedup is `naive median_us / inblock median_us`. E002 speedup is `inblock median_us / inblock_specialized median_us`. Compare the same M and policy. E002 retains the E001 mapping and arithmetic order and requires bitwise output agreement, checked outside timing for every output element, in addition to the FP64 threshold. Within-run ranges do not establish between-run variability.
+E003 adds a separately identified supplemental M=5 point with the same K=N=4096, group=128, seed=1, 10 warmups, at least 100 timed iterations, and both cache policies. It tests incomplete two-row and four-row tiles at the main matrix dimensions. It does not replace or redefine the standard M={1,8,32,128} series. The current event-timing script runs all nine selectors at those four standard points and the supplemental point.
+
+CUDA events surround one launch or the complete unfused pair. Allocations, host quantization, H2D copies, and flushing are outside the interval. Report median, min, max, and p90 in microseconds. Even-count median averages the middle pair. p90 uses sorted index `floor(0.9*(iters-1))`. E001 speedup is `naive median_us / inblock median_us`. E002 speedup is `inblock median_us / inblock_specialized median_us`. E003 evaluates each selector separately with `inblock_specialized median_us / inblock_m2 median_us` or `inblock_specialized median_us / inblock_m4 median_us`. Compare the same M and policy. E002 retains the E001 mapping and arithmetic order. E003 changes rows per tile while retaining each row's arithmetic order. Both experiments require full-output bitwise agreement with their retained comparison, checked outside timing in addition to the unchanged FP64 threshold. Within-run ranges do not establish between-run variability.
 
 Record both application policies:
 
@@ -63,7 +82,7 @@ GEMM-like TFLOP/s is `2*M*N*K / median_seconds / 1e12`, counting multiply and ad
 
 | Path | Existing logical_bytes model |
 |---|---|
-| naive/inblock/inblock_specialized | `|A|+|C|+|Q|+|S|` |
+| naive/inblock/inblock_specialized/inblock_m2/inblock_m4 | `|A|+|C|+|Q|+|S|` |
 | cublas/cublas_dq | `|A|+|C|+|W|` |
 | dequant | `|Q|+|S|+|W_hat|` |
 | unfused | `|A|+|C|+|Q|+|S|+|W_hat|` |
