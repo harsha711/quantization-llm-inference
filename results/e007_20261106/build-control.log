@@ -1,0 +1,85 @@
++ prun timeout 900 nvcc -DUSE_CUDA -O3 -DNDEBUG -std=c++17 -lineinfo -arch=sm_120 --expt-relaxed-constexpr -shared -Xcompiler=-fPIC -Xptxas=-v -Iexternal/control/csrc/quantization/marlin -Iexternal/control/csrc -I/tmp/e004-hpuvvad-20261106/lib64/python3.11/site-packages/torch/include -I/tmp/e004-hpuvvad-20261106/lib64/python3.11/site-packages/torch/include/torch/csrc/api/include scripts/e005/local.cu -L/tmp/e004-hpuvvad-20261106/lib64/python3.11/site-packages/torch/lib -ltorch -ltorch_cpu -ltorch_cuda -lc10 -lc10_cuda -Xlinker=-rpath -Xlinker=/tmp/e004-hpuvvad-20261106/lib64/python3.11/site-packages/torch/lib -o /home/hpuvvad/csc548-w4a16-e007-20261106/results/e007_20261106/control/libe005.so
+[prun] Master compute host = c58
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun timeout 900 nvcc -DUSE_CUDA -O3 -DNDEBUG -std=c++17 -lineinfo -arch=sm_120 --expt-relaxed-constexpr -shared -Xcompiler=-fPIC -Xptxas=-v -Iexternal/control/csrc/quantization/marlin -Iexternal/control/csrc -I/tmp/e004-hpuvvad-20261106/lib64/python3.11/site-packages/torch/include -I/tmp/e004-hpuvvad-20261106/lib64/python3.11/site-packages/torch/include/torch/csrc/api/include scripts/e005/local.cu -L/tmp/e004-hpuvvad-20261106/lib64/python3.11/site-packages/torch/lib -ltorch -ltorch_cpu -ltorch_cuda -lc10 -lc10_cuda -Xlinker=-rpath -Xlinker=/tmp/e004-hpuvvad-20261106/lib64/python3.11/site-packages/torch/lib -o /home/hpuvvad/csc548-w4a16-e007-20261106/results/e007_20261106/control/libe005.so (family=openmpi4)
+ptxas info    : 40 bytes gmem
+ptxas info    : Compiling entry function '_ZN11e005_marlin6MarlinILl1125899906910725ELl1125899907892224ELl1125899906910725ELl1125899906910725ELi128ELi4ELi4ELi8ELb0ELi4ELi8ELb0EEEvPK4int4S3_PS1_S4_S3_PKfS3_S6_S3_iiiiPibbbi' for 'sm_120'
+ptxas info    : Function properties for _ZN11e005_marlin6MarlinILl1125899906910725ELl1125899907892224ELl1125899906910725ELl1125899906910725ELi128ELi4ELi4ELi8ELb0ELi4ELi8ELb0EEEvPK4int4S3_PS1_S4_S3_PKfS3_S6_S3_iiiiPibbbi
+    24 bytes stack frame, 20 bytes spill stores, 20 bytes spill loads
+ptxas info    : Used 255 registers, used 1 barriers, 24 bytes cumulative stack size
+ptxas info    : Compile time = 254.053 ms
+ptxas info    : Compiling entry function '_ZN11e005_marlin6MarlinILl1125899906910725ELl1125899907892224ELl1125899906910725ELl1125899906910725ELi128ELi4ELi8ELi4ELb0ELi4ELi8ELb0EEEvPK4int4S3_PS1_S4_S3_PKfS3_S6_S3_iiiiPibbbi' for 'sm_120'
+ptxas info    : Function properties for _ZN11e005_marlin6MarlinILl1125899906910725ELl1125899907892224ELl1125899906910725ELl1125899906910725ELi128ELi4ELi8ELi4ELb0ELi4ELi8ELb0EEEvPK4int4S3_PS1_S4_S3_PKfS3_S6_S3_iiiiPibbbi
+    32 bytes stack frame, 32 bytes spill stores, 32 bytes spill loads
+ptxas info    : Used 255 registers, used 1 barriers, 32 bytes cumulative stack size
+ptxas info    : Compile time = 207.796 ms
+ptxas info    : Compiling entry function '_ZN11e005_marlin6MarlinILl1125899906910725ELl1125899907892224ELl1125899906910725ELl1125899906910725ELi256ELi4ELi16ELi4ELb0ELi4ELi8ELb0EEEvPK4int4S3_PS1_S4_S3_PKfS3_S6_S3_iiiiPibbbi' for 'sm_120'
+ptxas info    : Function properties for _ZN11e005_marlin6MarlinILl1125899906910725ELl1125899907892224ELl1125899906910725ELl1125899906910725ELi256ELi4ELi16ELi4ELb0ELi4ELi8ELb0EEEvPK4int4S3_PS1_S4_S3_PKfS3_S6_S3_iiiiPibbbi
+    16 bytes stack frame, 12 bytes spill stores, 12 bytes spill loads
+ptxas info    : Used 255 registers, used 1 barriers, 16 bytes cumulative stack size
+ptxas info    : Compile time = 226.745 ms
+ptxas info    : Compiling entry function '_ZN11e005_marlin6MarlinILl1125899906910725ELl1125899907892224ELl1125899906910725ELl1125899906910725ELi128ELi3ELi4ELi8ELb0ELi4ELi8ELb0EEEvPK4int4S3_PS1_S4_S3_PKfS3_S6_S3_iiiiPibbbi' for 'sm_120'
+ptxas info    : Function properties for _ZN11e005_marlin6MarlinILl1125899906910725ELl1125899907892224ELl1125899906910725ELl1125899906910725ELi128ELi3ELi4ELi8ELb0ELi4ELi8ELb0EEEvPK4int4S3_PS1_S4_S3_PKfS3_S6_S3_iiiiPibbbi
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 255 registers, used 1 barriers
+ptxas info    : Compile time = 191.955 ms
+ptxas info    : Compiling entry function '_ZN11e005_marlin6MarlinILl1125899906910725ELl1125899907892224ELl1125899906910725ELl1125899906910725ELi128ELi3ELi8ELi4ELb0ELi4ELi8ELb0EEEvPK4int4S3_PS1_S4_S3_PKfS3_S6_S3_iiiiPibbbi' for 'sm_120'
+ptxas info    : Function properties for _ZN11e005_marlin6MarlinILl1125899906910725ELl1125899907892224ELl1125899906910725ELl1125899906910725ELi128ELi3ELi8ELi4ELb0ELi4ELi8ELb0EEEvPK4int4S3_PS1_S4_S3_PKfS3_S6_S3_iiiiPibbbi
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 254 registers, used 1 barriers
+ptxas info    : Compile time = 179.379 ms
+ptxas info    : Compiling entry function '_ZN11e005_marlin6MarlinILl1125899906910725ELl1125899907892224ELl1125899906910725ELl1125899906910725ELi256ELi3ELi16ELi4ELb0ELi4ELi8ELb0EEEvPK4int4S3_PS1_S4_S3_PKfS3_S6_S3_iiiiPibbbi' for 'sm_120'
+ptxas info    : Function properties for _ZN11e005_marlin6MarlinILl1125899906910725ELl1125899907892224ELl1125899906910725ELl1125899906910725ELi256ELi3ELi16ELi4ELb0ELi4ELi8ELb0EEEvPK4int4S3_PS1_S4_S3_PKfS3_S6_S3_iiiiPibbbi
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 254 registers, used 1 barriers
+ptxas info    : Compile time = 154.314 ms
+ptxas info    : Compiling entry function '_ZN11e005_marlin6MarlinILl1125899906910725ELl1125899907892224ELl1125899906910725ELl1125899906910725ELi128ELi2ELi4ELi8ELb0ELi4ELi8ELb0EEEvPK4int4S3_PS1_S4_S3_PKfS3_S6_S3_iiiiPibbbi' for 'sm_120'
+ptxas info    : Function properties for _ZN11e005_marlin6MarlinILl1125899906910725ELl1125899907892224ELl1125899906910725ELl1125899906910725ELi128ELi2ELi4ELi8ELb0ELi4ELi8ELb0EEEvPK4int4S3_PS1_S4_S3_PKfS3_S6_S3_iiiiPibbbi
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 236 registers, used 1 barriers
+ptxas info    : Compile time = 121.247 ms
+ptxas info    : Compiling entry function '_ZN11e005_marlin6MarlinILl1125899906910725ELl1125899907892224ELl1125899906910725ELl1125899906910725ELi128ELi2ELi8ELi4ELb0ELi4ELi8ELb0EEEvPK4int4S3_PS1_S4_S3_PKfS3_S6_S3_iiiiPibbbi' for 'sm_120'
+ptxas info    : Function properties for _ZN11e005_marlin6MarlinILl1125899906910725ELl1125899907892224ELl1125899906910725ELl1125899906910725ELi128ELi2ELi8ELi4ELb0ELi4ELi8ELb0EEEvPK4int4S3_PS1_S4_S3_PKfS3_S6_S3_iiiiPibbbi
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 168 registers, used 1 barriers
+ptxas info    : Compile time = 119.829 ms
+ptxas info    : Compiling entry function '_ZN11e005_marlin6MarlinILl1125899906910725ELl1125899907892224ELl1125899906910725ELl1125899906910725ELi256ELi2ELi16ELi4ELb0ELi4ELi8ELb0EEEvPK4int4S3_PS1_S4_S3_PKfS3_S6_S3_iiiiPibbbi' for 'sm_120'
+ptxas info    : Function properties for _ZN11e005_marlin6MarlinILl1125899906910725ELl1125899907892224ELl1125899906910725ELl1125899906910725ELi256ELi2ELi16ELi4ELb0ELi4ELi8ELb0EEEvPK4int4S3_PS1_S4_S3_PKfS3_S6_S3_iiiiPibbbi
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 168 registers, used 1 barriers
+ptxas info    : Compile time = 115.715 ms
+ptxas info    : Compiling entry function '_ZN11e005_marlin6MarlinILl1125899906910725ELl1125899907892224ELl1125899906910725ELl1125899906910725ELi128ELi1ELi4ELi8ELb0ELi4ELi8ELb0EEEvPK4int4S3_PS1_S4_S3_PKfS3_S6_S3_iiiiPibbbi' for 'sm_120'
+ptxas info    : Function properties for _ZN11e005_marlin6MarlinILl1125899906910725ELl1125899907892224ELl1125899906910725ELl1125899906910725ELi128ELi1ELi4ELi8ELb0ELi4ELi8ELb0EEEvPK4int4S3_PS1_S4_S3_PKfS3_S6_S3_iiiiPibbbi
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 130 registers, used 1 barriers
+ptxas info    : Compile time = 84.443 ms
+ptxas info    : Compiling entry function '_ZN11e005_marlin6MarlinILl1125899906910725ELl1125899907892224ELl1125899906910725ELl1125899906910725ELi128ELi1ELi8ELi4ELb0ELi4ELi8ELb0EEEvPK4int4S3_PS1_S4_S3_PKfS3_S6_S3_iiiiPibbbi' for 'sm_120'
+ptxas info    : Function properties for _ZN11e005_marlin6MarlinILl1125899906910725ELl1125899907892224ELl1125899906910725ELl1125899906910725ELi128ELi1ELi8ELi4ELb0ELi4ELi8ELb0EEEvPK4int4S3_PS1_S4_S3_PKfS3_S6_S3_iiiiPibbbi
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 130 registers, used 1 barriers
+ptxas info    : Compile time = 80.789 ms
+ptxas info    : Compiling entry function '_ZN11e005_marlin6MarlinILl1125899906910725ELl1125899907892224ELl1125899906910725ELl1125899906910725ELi256ELi1ELi8ELi8ELb0ELi4ELi8ELb0EEEvPK4int4S3_PS1_S4_S3_PKfS3_S6_S3_iiiiPibbbi' for 'sm_120'
+ptxas info    : Function properties for _ZN11e005_marlin6MarlinILl1125899906910725ELl1125899907892224ELl1125899906910725ELl1125899906910725ELi256ELi1ELi8ELi8ELb0ELi4ELi8ELb0EEEvPK4int4S3_PS1_S4_S3_PKfS3_S6_S3_iiiiPibbbi
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 135 registers, used 1 barriers
+ptxas info    : Compile time = 80.160 ms
+ptxas info    : Compiling entry function '_ZN11e005_marlin6MarlinILl1125899906910725ELl1125899907892224ELl1125899906910725ELl1125899906910725ELi128ELi1ELi4ELi8ELb1ELi4ELi8ELb0EEEvPK4int4S3_PS1_S4_S3_PKfS3_S6_S3_iiiiPibbbi' for 'sm_120'
+ptxas info    : Function properties for _ZN11e005_marlin6MarlinILl1125899906910725ELl1125899907892224ELl1125899906910725ELl1125899906910725ELi128ELi1ELi4ELi8ELb1ELi4ELi8ELb0EEEvPK4int4S3_PS1_S4_S3_PKfS3_S6_S3_iiiiPibbbi
+    32 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 124 registers, used 1 barriers, 32 bytes cumulative stack size
+ptxas info    : Compile time = 69.534 ms
+ptxas info    : Compiling entry function '_ZN11e005_marlin6MarlinILl1125899906910725ELl1125899907892224ELl1125899906910725ELl1125899906910725ELi128ELi1ELi8ELi4ELb1ELi4ELi8ELb0EEEvPK4int4S3_PS1_S4_S3_PKfS3_S6_S3_iiiiPibbbi' for 'sm_120'
+ptxas info    : Function properties for _ZN11e005_marlin6MarlinILl1125899906910725ELl1125899907892224ELl1125899906910725ELl1125899906910725ELi128ELi1ELi8ELi4ELb1ELi4ELi8ELb0EEEvPK4int4S3_PS1_S4_S3_PKfS3_S6_S3_iiiiPibbbi
+    32 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 100 registers, used 1 barriers, 32 bytes cumulative stack size
+ptxas info    : Compile time = 72.011 ms
+ptxas info    : Compiling entry function '_ZN11e005_marlin6MarlinILl1125899906910725ELl1125899907892224ELl1125899906910725ELl1125899906910725ELi256ELi1ELi8ELi8ELb1ELi4ELi8ELb0EEEvPK4int4S3_PS1_S4_S3_PKfS3_S6_S3_iiiiPibbbi' for 'sm_120'
+ptxas info    : Function properties for _ZN11e005_marlin6MarlinILl1125899906910725ELl1125899907892224ELl1125899906910725ELl1125899906910725ELi256ELi1ELi8ELi8ELb1ELi4ELi8ELb0EEEvPK4int4S3_PS1_S4_S3_PKfS3_S6_S3_iiiiPibbbi
+    32 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 126 registers, used 1 barriers, 32 bytes cumulative stack size
+ptxas info    : Compile time = 68.839 ms
+ptxas info    : Compiling entry function '_ZN11e005_marlin13MarlinDefaultEPK4int4S2_PS0_S3_S2_PKfS2_S5_S2_iiiiPibbbi' for 'sm_120'
+ptxas info    : Function properties for _ZN11e005_marlin13MarlinDefaultEPK4int4S2_PS0_S3_S2_PKfS2_S5_S2_iiiiPibbbi
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 4 registers, used 0 barriers
+ptxas info    : Compile time = 0.362 ms

@@ -1,0 +1,24 @@
+--- a/marlin_template.h
++++ b/marlin_template.h
+@@ -1579,7 +1579,20 @@
+     for (int pipe = 0; pipe < stages;) {
+   #pragma unroll
+       for (int k = 0; k < b_sh_wr_iters; k++) {
+-        fetch_to_registers(k + 1, pipe % stages);
++        if constexpr (a_type_id == vllm::kFloat16.id() &&
++                      b_type_id == vllm::kU4B8.id() &&
++                      c_type_id == vllm::kFloat16.id() &&
++                      s_type_id == vllm::kFloat16.id() &&
++                      threads == 256 && thread_m_blocks == 1 &&
++                      thread_n_blocks == 8 && thread_k_blocks == 8 &&
++                      m_block_size_8 && stages == 4 && group_blocks == 8 &&
++                      !is_zp_float) {
++          // A new stripe replaces buffer0 before use, so omit its last lookahead.
++          if (k != b_sh_wr_iters - 1 || slice_iters > 1)
++            fetch_to_registers(k + 1, pipe % stages);
++        } else {
++          fetch_to_registers(k + 1, pipe % stages);
++        }
+         fetch_scales_to_registers(k + 1, pipe);
+         fetch_zp_to_registers(k + 1, pipe);
+         if (k == b_sh_wr_iters - 2) {

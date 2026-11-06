@@ -1,0 +1,5 @@
++ prun timeout 900 /tmp/e004-hpuvvad-20261106/bin/python scripts/e007/check.py /home/hpuvvad/csc548-w4a16-e007-20261106/results/e007_20261106 --stage smoke --e006 /home/hpuvvad/csc548-w4a16-e006-20261106/results/e006_20261106
+[prun] Master compute host = c58
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun timeout 900 /tmp/e004-hpuvvad-20261106/bin/python scripts/e007/check.py /home/hpuvvad/csc548-w4a16-e007-20261106/results/e007_20261106 --stage smoke --e006 /home/hpuvvad/csc548-w4a16-e006-20261106/results/e006_20261106 (family=openmpi4)
+PASS: 27 smoke cases per body, exact all-output bit agreement and strict numerical/workspace checks
