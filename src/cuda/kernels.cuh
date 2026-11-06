@@ -34,6 +34,10 @@ void launch_w4a16_naive(const __half* A, const uint32_t* qweight, const __half* 
 void launch_w4a16_inblock(const __half* A, const uint32_t* qweight, const __half* scales, __half* C,
                           int M, int N, int K, int group_size, cudaStream_t stream);
 
+void launch_w4a16_inblock_specialized(const __half* A, const uint32_t* qweight,
+                                      const __half* scales, __half* C, int M, int N, int K,
+                                      int group_size, cudaStream_t stream);
+
 void launch_dequant_w4a16(const uint32_t* qweight, const __half* scales, __half* W, int N, int K,
                           int group_size, cudaStream_t stream);
 

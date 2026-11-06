@@ -19,6 +19,7 @@ metrics=(
   sm__warps_active.avg.pct_of_peak_sustained_active
   smsp__warps_eligible.avg.per_cycle_active
   smsp__issue_active.avg.pct_of_peak_sustained_active
+  smsp__inst_executed.sum
   smsp__warps_issue_stalled_long_scoreboard.avg.pct_of_peak_sustained_elapsed
   smsp__warps_issue_stalled_wait.avg.pct_of_peak_sustained_elapsed
   smsp__warps_issue_stalled_math_pipe_throttle.avg.pct_of_peak_sustained_elapsed
@@ -41,7 +42,7 @@ done
 metric_list=$(IFS=,; echo "${metrics[*]}")
 set -x
 for M in 1 128; do
-  for kernel in naive inblock; do
+  for kernel in naive inblock inblock_specialized; do
     tag="${kernel}_M${M}_ncu_invalidated"
     ncu --cache-control all --kernel-name "regex:w4a16_${kernel}_kernel" \
       --launch-count 1 --csv --metrics "$metric_list" -o "$RUN_DIR/ncu/$tag" \

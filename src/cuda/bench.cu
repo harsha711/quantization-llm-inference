@@ -1,12 +1,13 @@
 // Correctness check and timing for one GEMM shape.
 //
 //   w4a16_bench --M 16 --N 4096 --K 4096 [--group 128] [--seed 1] [--warmup 10]
-//               [--iters 100] [--kernels naive,inblock,cublas,cublas_dq,dequant,unfused]
+//               [--iters 100] [--kernels naive,inblock,inblock_specialized,cublas,cublas_dq,dequant,unfused]
 //               [--no-flush-l2] [--check-rows 64] [--nocheck] [--csv results/out.csv]
 //
 // Kernels
 //   naive      fused W4A16, dequant in registers
 //   inblock    fused W4A16, eight K slices reduced within each block
+//   inblock_specialized  E002 aligned/tail specialization, E001 mapping preserved
 //   cublas     cuBLAS FP16 GEMM on the original FP16 weights
 //   cublas_dq  cuBLAS FP16 GEMM on pre-dequantized FP16 W_hat (already on device)
 //   dequant    GPU unpack+dequant into a K x N FP16 buffer
@@ -59,14 +60,14 @@ struct Options {
   bool flush_l2 = true;
   bool nocheck = false;
   bool zero_weights = false;
-  std::vector<std::string> kernels = {"naive", "inblock", "cublas", "cublas_dq", "dequant", "unfused"};
+  std::vector<std::string> kernels = {"naive", "inblock", "inblock_specialized", "cublas", "cublas_dq", "dequant", "unfused"};
   std::string csv;
 };
 
 [[noreturn]] void usage(const char* prog) {
   std::fprintf(stderr,
                "usage: %s [--M m] [--N n] [--K k] [--group g] [--seed s] [--warmup w]\n"
-               "          [--iters i] [--kernels naive,inblock,cublas,cublas_dq,dequant,unfused]\n"
+               "          [--iters i] [--kernels naive,inblock,inblock_specialized,cublas,cublas_dq,dequant,unfused]\n"
                "          [--no-flush-l2] [--check-rows r] [--nocheck] [--zero-weights] [--csv path]\n",
                prog);
   std::exit(EXIT_FAILURE);
@@ -157,7 +158,7 @@ double logical_bytes(const std::string& name, int M, int N, int K, int group) {
   const double w16 = static_cast<double>(fp16_bytes(K, N));
   const double qw = static_cast<double>(qweight_bytes(K, N));
   const double sc = static_cast<double>(scales_bytes(K, N, group));
-  if (name == "naive" || name == "inblock") return a + c + qw + sc;
+  if (name == "naive" || name == "inblock" || name == "inblock_specialized") return a + c + qw + sc;
   if (name == "cublas" || name == "cublas_dq") return a + c + w16;
   if (name == "dequant") return qw + sc + w16;
   if (name == "unfused") return a + c + qw + sc + w16;
@@ -194,7 +195,7 @@ int main(int argc, char** argv) {
   std::printf("launch: naive grid=((N+255)/256, M)=(%d, %d) block=256; dequant grid=(%d, %d) block=256\n",
               (o.N + 255) / 256, o.M, (o.N + 255) / 256, (o.K + 7) / 8);
 
-  std::printf("launch: inblock grid=(%d, %d) block=(32, 8), shared partials=1024 bytes\n",
+  std::printf("launch: inblock/inblock_specialized grid=(%d, %d) block=(32, 8), shared partials=1024 bytes\n",
               (o.N + 31) / 32, o.M);
 
   Problem p = make_problem(o.M, o.N, o.K, o.group, o.seed);
@@ -309,7 +310,7 @@ int main(int argc, char** argv) {
   }
 
   bool all_pass = what_mismatch == 0;
-  std::printf("%-10s %10s %10s %10s %8s %9s %5s %10s %10s %12s\n", "kernel", "median_us", "min_us",
+  std::printf("%-20s %10s %10s %10s %8s %9s %5s %10s %10s %12s\n", "kernel", "median_us", "min_us",
               "p90_us", "TFLOP/s", "eff_GB/s", "pass", "max_abs", "rel_l2", "rel_l2_fp16");
   for (const std::string& name : o.kernels) {
     std::function<void()> launch;
@@ -320,6 +321,9 @@ int main(int argc, char** argv) {
       ref = &ref_quant;
     } else if (name == "inblock") {
       launch = [&] { launch_w4a16_inblock(dA, dQ, dS, dC, o.M, o.N, o.K, o.group, 0); };
+      ref = &ref_quant;
+    } else if (name == "inblock_specialized") {
+      launch = [&] { launch_w4a16_inblock_specialized(dA, dQ, dS, dC, o.M, o.N, o.K, o.group, 0); };
       ref = &ref_quant;
     } else if (name == "cublas") {
       launch = [&] { launch_cublas_fp16(handle, dA, dW, dC, o.M, o.N, o.K); };
@@ -352,6 +356,21 @@ int main(int argc, char** argv) {
       st = compare_rows(hC.data(), *ref, rows, o.N, rtol, atol_frac);
       vs16 = compare_rows(hC.data(), ref_fp16, rows, o.N, rtol, atol_frac);
       pass = st.pass();
+      if (name == "inblock_specialized") {
+        launch_w4a16_inblock(dA, dQ, dS, dC, o.M, o.N, o.K, o.group, 0);
+        CUDA_CHECK(cudaDeviceSynchronize());
+        std::vector<uint16_t> original(c_elems);
+        CUDA_CHECK(cudaMemcpy(original.data(), dC, c_elems * sizeof(__half), cudaMemcpyDeviceToHost));
+        size_t mismatches = 0;
+        for (size_t i = 0; i < c_elems; ++i) mismatches += hC[i] != original[i];
+        std::printf("inblock_specialized vs inblock: %zu / %zu FP16 outputs differ\n",
+                    mismatches, c_elems);
+        if (mismatches) {
+          std::fprintf(stderr, "E002 bitwise comparison failed; stopping before timing\n");
+          if (csv) std::fclose(csv);
+          return EXIT_FAILURE;
+        }
+      }
     } else if (is_gemm && o.nocheck) {
       pass = true;
     }
@@ -369,7 +388,7 @@ int main(int argc, char** argv) {
     const double bytes = logical_bytes(name, o.M, o.N, o.K, o.group);
     const double tflops = is_gemm ? flops / (t.median_us * 1e-6) / 1e12 : 0.0;
     const double gbps = bytes / (t.median_us * 1e-6) / 1e9;
-    std::printf("%-10s %10.2f %10.2f %10.2f %8.3f %9.1f %5s %10.3e %10.3e %12.3e\n", name.c_str(),
+    std::printf("%-20s %10.2f %10.2f %10.2f %8.3f %9.1f %5s %10.3e %10.3e %12.3e\n", name.c_str(),
                 t.median_us, t.min_us, t.p90_us, tflops, gbps, pass ? "yes" : "NO", st.max_abs,
                 st.rel_l2, vs16.rel_l2);
     if (is_gemm && !o.nocheck && !pass)
@@ -387,7 +406,7 @@ int main(int argc, char** argv) {
   }
   if (!o.nocheck)
     std::printf("checked %zu of %d rows against the FP64 CPU reference (reconstructed W_hat for "
-                "naive/inblock/cublas_dq/unfused; original W for cublas)\n",
+                "naive/inblock/inblock_specialized/cublas_dq/unfused; original W for cublas)\n",
                 rows.size(), o.M);
 
   if (!o.nocheck) {

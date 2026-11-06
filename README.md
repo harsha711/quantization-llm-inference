@@ -48,7 +48,7 @@ and keep Nsight `--cache-control all` profiling separate from event timing.
 - **TFLOP/s**: `2·M·N·K / median_s / 1e12` for GEMM-like kernels; 0 for `dequant`.
 - **eff_GB/s**: `logical_bytes / median_s / 1e9`. This is **effective
   bandwidth** from a traffic model, not measured DRAM. Formulas:
-  - `naive` / `inblock`: \|A\| + \|C\| + \|qweight\| + \|scales\|
+  - `naive` / `inblock` / `inblock_specialized`: \|A\| + \|C\| + \|qweight\| + \|scales\|
   - `cublas` / `cublas_dq`: \|A\| + \|C\| + \|W_fp16\|  (32 MiB weights)
   - `dequant`: \|qweight\| + \|scales\| + \|W_hat\|     (W_hat is a write)
   - `unfused`: \|A\| + \|C\| + \|qweight\| + \|scales\| + \|W_hat\|
@@ -70,11 +70,15 @@ and keep Nsight `--cache-control all` profiling separate from event timing.
 5. `naive`: fused W4A16, one thread per output, no shared-memory reuse.
 6. `inblock`: fused W4A16, block=(32,8), eight disjoint packed-word K slices,
    FP32 shared-memory reduction and one FP16 write per output.
+7. `inblock_specialized`: E002 version with compile-time aligned/tail variants.
+   The E001 `inblock` source and selector remain unchanged for comparison.
 
-Both fused kernels and GPU dequantization handle arbitrary positive K and N,
+All fused kernels and GPU dequantization handle arbitrary positive K and N,
 including partial final words and groups. Group size remains a multiple of eight.
 Packed/scales storage uses ceiling counts. Select the new version with
-`--kernels inblock` or compare with `--kernels naive,inblock`.
+`--kernels inblock_specialized` or compare with
+`--kernels inblock,inblock_specialized`. Dispatch uses K divisibility by eight,
+including aligned K with a partial final quantization group.
 
 Each new session starts with [AGENTS.md](AGENTS.md), [current status](docs/STATUS.md),
 the [numerical and measurement contract](docs/CONTRACT.md), and relevant

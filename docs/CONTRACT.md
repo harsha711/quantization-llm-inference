@@ -26,7 +26,7 @@ Supported logical shapes have positive M, N, K and group, group divisible by eig
 
 | Kernel | Operation and reference |
 |---|---|
-| naive/inblock | Fused GEMM on W_hat, reconstructed-weight FP64 CPU GEMM reference |
+| naive/inblock/inblock_specialized | Fused GEMM on W_hat, reconstructed-weight FP64 CPU GEMM reference |
 | cublas | Original FP16 W, `CUBLAS_COMPUTE_32F`, original-weight FP64 reference |
 | cublas_dq | Pre-dequantized W_hat already on device, same cuBLAS call, reconstructed-weight FP64 reference |
 | dequant | Materialize FP16 W_hat, bitwise agreement with every CPU-reconstructed weight |
@@ -38,9 +38,9 @@ Small cases check every row. Main sweeps use up to 64 deterministically sampled 
 
 ## 3. Timing and comparisons
 
-Use M={1,8,32,128}, K=N=4096, group=128, seed=1, 10 warmups, and at least 100 timed iterations. Compare naive/inblock in the same executable, build, seed, node, and cache policy. Retain and record each kernel's defined launch mapping. Changing executable, flags, kernel, rank/thread count, placement, or topology requires rerunning every M point in the series.
+Use M={1,8,32,128}, K=N=4096, group=128, seed=1, 10 warmups, and at least 100 timed iterations. Compare naive/inblock/inblock_specialized in the same executable, build, seed, node, and cache policy. Retain and record each kernel's defined launch mapping. Changing executable, flags, kernel, rank/thread count, placement, or topology requires rerunning every M point in the series.
 
-CUDA events surround one launch or the complete unfused pair. Allocations, host quantization, H2D copies, and flushing are outside the interval. Report median, min, max, and p90 in microseconds. Even-count median averages the middle pair. p90 uses sorted index `floor(0.9*(iters-1))`. Speedup is `naive median_us / inblock median_us` at the same M and policy. Within-run ranges do not establish between-run variability.
+CUDA events surround one launch or the complete unfused pair. Allocations, host quantization, H2D copies, and flushing are outside the interval. Report median, min, max, and p90 in microseconds. Even-count median averages the middle pair. p90 uses sorted index `floor(0.9*(iters-1))`. E001 speedup is `naive median_us / inblock median_us`. E002 speedup is `inblock median_us / inblock_specialized median_us`. Compare the same M and policy. E002 retains the E001 mapping and arithmetic order and requires bitwise output agreement, checked outside timing for every output element, in addition to the FP64 threshold. Within-run ranges do not establish between-run variability.
 
 Record both application policies:
 
@@ -63,7 +63,7 @@ GEMM-like TFLOP/s is `2*M*N*K / median_seconds / 1e12`, counting multiply and ad
 
 | Path | Existing logical_bytes model |
 |---|---|
-| naive/inblock | `|A|+|C|+|Q|+|S|` |
+| naive/inblock/inblock_specialized | `|A|+|C|+|Q|+|S|` |
 | cublas/cublas_dq | `|A|+|C|+|W|` |
 | dequant | `|Q|+|S|+|W_hat|` |
 | unfused | `|A|+|C|+|Q|+|S|+|W_hat|` |
