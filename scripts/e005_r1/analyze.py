@@ -20,7 +20,7 @@ shapes = ((4096,4096),(4096,11008),(11008,4096))
 
 def write_csv(name, rows):
     with (r/name).open('w',newline='') as f:
-        w = csv.DictWriter(f,fieldnames=list(rows[0]))
+        w = csv.DictWriter(f,fieldnames=list(rows[0]),lineterminator='\n')
         w.writeheader()
         w.writerows(rows)
 
@@ -70,7 +70,10 @@ for name,data in series.items():
             change_vs_B_pct=100*(v['median_us']/b['median_us']-1)))
         sample_stats.append(dict(series=name,M=v['M'],K=v['K'],N=v['N'],policy=v['policy'],config=v['config'],
             median_us=v['median_us'],min_us=v['min_us'],max_us=v['max_us'],p90_us=v['p90_us'],
-            sample_variance_us2=statistics.variance(v['samples_us']),sample_stdev_us=statistics.stdev(v['samples_us'])))
+            # Twelve significant digits keep derived CSVs stable across the
+            # local Python3.10 and ARC Python3.11 statistics implementations.
+            sample_variance_us2=float(format(statistics.variance(v['samples_us']),'.12g')),
+            sample_stdev_us=float(format(statistics.stdev(v['samples_us']),'.12g'))))
 write_csv('comparisons.csv',comparison)
 write_csv('sample_statistics.csv',sample_stats)
 repeat = []
