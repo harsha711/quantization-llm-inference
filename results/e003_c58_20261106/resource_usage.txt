@@ -1,0 +1,38 @@
+
+Fatbin ptx code:
+================
+arch = sm_120
+code version = [9,4]
+host = linux
+compile_size = 64bit
+compressed
+identifier = /home/hpuvvad/csc548-w4a16-e003-20261106/src/cuda/w4a16_inblock_rows.cu
+ptxasOptions =  --generate-line-info 
+
+Fatbin elf code:
+================
+arch = sm_120
+code version = [1,8]
+host = linux
+compile_size = 64bit
+identifier = /home/hpuvvad/csc548-w4a16-e003-20261106/src/cuda/w4a16_inblock_rows.cu
+
+Resource usage:
+ Common:
+  GLOBAL:0
+ Function _ZN54_GLOBAL__N__c86fcecb_21_w4a16_inblock_rows_cu_27df3c5125w4a16_inblock_rows_kernelILi4ELb1ELb1EEEvPK6__halfPKjS3_PS1_iiii:
+  REG:46 STACK:0 SHARED:5120 LOCAL:0 CONSTANT[0]:944 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN54_GLOBAL__N__c86fcecb_21_w4a16_inblock_rows_cu_27df3c5125w4a16_inblock_rows_kernelILi4ELb1ELb0EEEvPK6__halfPKjS3_PS1_iiii:
+  REG:40 STACK:0 SHARED:5120 LOCAL:0 CONSTANT[0]:944 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN54_GLOBAL__N__c86fcecb_21_w4a16_inblock_rows_cu_27df3c5125w4a16_inblock_rows_kernelILi4ELb0ELb1EEEvPK6__halfPKjS3_PS1_iiii:
+  REG:38 STACK:0 SHARED:5120 LOCAL:0 CONSTANT[0]:944 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN54_GLOBAL__N__c86fcecb_21_w4a16_inblock_rows_cu_27df3c5125w4a16_inblock_rows_kernelILi4ELb0ELb0EEEvPK6__halfPKjS3_PS1_iiii:
+  REG:39 STACK:0 SHARED:5120 LOCAL:0 CONSTANT[0]:944 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN54_GLOBAL__N__c86fcecb_21_w4a16_inblock_rows_cu_27df3c5125w4a16_inblock_rows_kernelILi2ELb1ELb1EEEvPK6__halfPKjS3_PS1_iiii:
+  REG:40 STACK:0 SHARED:3072 LOCAL:0 CONSTANT[0]:944 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN54_GLOBAL__N__c86fcecb_21_w4a16_inblock_rows_cu_27df3c5125w4a16_inblock_rows_kernelILi2ELb1ELb0EEEvPK6__halfPKjS3_PS1_iiii:
+  REG:34 STACK:0 SHARED:3072 LOCAL:0 CONSTANT[0]:944 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN54_GLOBAL__N__c86fcecb_21_w4a16_inblock_rows_cu_27df3c5125w4a16_inblock_rows_kernelILi2ELb0ELb1EEEvPK6__halfPKjS3_PS1_iiii:
+  REG:36 STACK:0 SHARED:3072 LOCAL:0 CONSTANT[0]:944 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN54_GLOBAL__N__c86fcecb_21_w4a16_inblock_rows_cu_27df3c5125w4a16_inblock_rows_kernelILi2ELb0ELb0EEEvPK6__halfPKjS3_PS1_iiii:
+  REG:39 STACK:0 SHARED:3072 LOCAL:0 CONSTANT[0]:944 TEXTURE:0 SURFACE:0 SAMPLER:0

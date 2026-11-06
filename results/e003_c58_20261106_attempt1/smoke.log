@@ -1,0 +1,29 @@
+[prun] Master compute host = c58
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun ./build/w4a16_bench --M 5 --N 33 --K 137 --group 128 --seed 1 --warmup 1 --iters 2 (family=openmpi4)
+device: NVIDIA GeForce RTX 5060 Ti (sm_120, 36 SMs, L2 32.00 MiB from cudaDeviceProp, 15.57 GiB)
+software: driver API 13040, runtime 13040
+shape: M=5 N=33 K=137 group=128 seed=1 flush_l2=1 warmup=1 iters=2 check_rows=64
+footprint: FP16 weights 0.0086 MiB, packed INT4 0.0023 MiB, FP16 scales 0.0001 MiB
+launch: naive grid=((N+255)/256, M)=(1, 5) block=256; dequant grid=(1, 18) block=256
+launch: inblock/inblock_specialized grid=(2, 5) block=(32, 8), shared partials=1024 bytes
+launch: inblock_m2 grid=(2, 3), inblock_m4 grid=(2, 2), block=(32, 8), shared partials=2048/4096 bytes
+weight quant: rel_l2(W_hat, W)=1.1591e-01  uniform-step prediction sqrt(mean(s^2/12)/mean(w^2))=1.0063e-01
+  (prediction assumes independent Uniform[-s/2,s/2] error per weight using that group's s)
+cache: intended cold-L2, flush buffer 64.00 MiB (2x L2), store kernel (not memset)
+W_hat GPU vs CPU: 0 / 4521 FP16 bits differ (bit-exact)
+kernel                median_us     min_us     p90_us  TFLOP/s  eff_GB/s  pass    max_abs     rel_l2  rel_l2_fp16
+naive                     12.29      12.29      12.29    0.004       0.3   yes  7.685e-04  2.165e-04    1.317e-01
+inblock                    4.10       4.10       4.10    0.011       1.0   yes  7.685e-04  2.165e-04    1.317e-01
+inblock_specialized vs inblock: 0 / 165 FP16 outputs differ
+inblock_specialized        4.08       4.06       4.06    0.011       1.0   yes  7.685e-04  2.165e-04    1.317e-01
+inblock_m2 vs inblock_specialized: 0 / 165 FP16 outputs differ
+inblock_m2                 5.12       4.10       4.10    0.009       0.8   yes  7.685e-04  2.165e-04    1.317e-01
+inblock_m4 vs inblock_specialized: 0 / 165 FP16 outputs differ
+inblock_m4                 6.14       6.14       6.14    0.007       0.7   yes  7.685e-04  2.165e-04    1.317e-01
+cublas                     7.17       6.14       6.14    0.006       1.5   yes  7.773e-04  1.873e-04    1.873e-04
+cublas_dq                  7.18       6.18       6.18    0.006       1.5   yes  7.685e-04  2.165e-04    1.317e-01
+dequant                    4.10       4.10       4.10    0.000       2.8   yes  0.000e+00  0.000e+00    0.000e+00
+unfused                    6.14       6.14       6.14    0.007       2.2   yes  7.685e-04  2.165e-04    1.317e-01
+checked 5 of 5 rows against the FP64 CPU reference (reconstructed W_hat for naive/inblock/inblock_specialized/inblock_m2/inblock_m4/cublas_dq/unfused; original W for cublas)
+checked row indices: 0 1 2 3 4

@@ -1,0 +1,7 @@
+{
+  "all_90_rows_pass": true,
+  "all_output_bits_match": true,
+  "selected_sanitizers_pass": true,
+  "inblock_m2_large_M_criterion_met": true,
+  "inblock_m4_large_M_criterion_met": true
+}

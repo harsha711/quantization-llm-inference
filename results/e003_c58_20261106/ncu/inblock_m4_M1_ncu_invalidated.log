@@ -1,0 +1,16 @@
+==PROF== Connected to process 1309032 (/home/hpuvvad/csc548-w4a16-e003-20261106/build/w4a16_bench)
+device: NVIDIA GeForce RTX 5060 Ti (sm_120, 36 SMs, L2 32.00 MiB from cudaDeviceProp, 15.57 GiB)
+software: driver API 13040, runtime 13040
+shape: M=1 N=4096 K=4096 group=128 seed=1 flush_l2=0 warmup=0 iters=1 check_rows=64
+footprint: FP16 weights 32.0000 MiB, packed INT4 8.0000 MiB, FP16 scales 0.2500 MiB
+launch: naive grid=((N+255)/256, M)=(16, 1) block=256; dequant grid=(16, 512) block=256
+launch: inblock/inblock_specialized grid=(128, 1) block=(32, 8), shared partials=1024 bytes
+launch: inblock_m2 grid=(128, 1), inblock_m4 grid=(128, 1), block=(32, 8), shared partials=2048/4096 bytes
+weight quant: rel_l2(W_hat, W)=1.1722e-01  uniform-step prediction sqrt(mean(s^2/12)/mean(w^2))=1.1767e-01
+  (prediction assumes independent Uniform[-s/2,s/2] error per weight using that group's s)
+cache: warm/reused inputs, no flush between launches
+W_hat GPU vs CPU: skipped (not needed for this kernel list)
+kernel                median_us     min_us     p90_us  TFLOP/s  eff_GB/s  pass    max_abs     rel_l2  rel_l2_fp16
+inblock_m4            622263.24  622263.24  622263.24    0.000       0.0   yes  0.000e+00  0.000e+00    0.000e+00
+==PROF== Disconnected from process 1309032
+==PROF== Report: /home/hpuvvad/csc548-w4a16-e003-20261106/results/e003_c58_20261106/ncu/inblock_m4_M1_ncu_invalidated.ncu-repz
