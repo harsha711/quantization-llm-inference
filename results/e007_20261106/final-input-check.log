@@ -1,0 +1,5 @@
+/home/hpuvvad/csc548-w4a16-e007-20261106/results/e007_20261106/control/libe005.so: OK
+/home/hpuvvad/csc548-w4a16-e007-20261106/results/e007_20261106/candidate/libe005.so: OK
+scripts/e007/bench.py: OK
+scripts/e005/bench.py: OK
+scripts/e004/bench.py: OK

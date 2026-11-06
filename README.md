@@ -1,6 +1,6 @@
 # W4A16 mixed-precision GEMM (CSC 548)
 
-**Current experiment:** E007 tests a bounded omission of unused terminal shared-to-register A/B loads, under the user's authorization to continue while away. It retains the corrected E006 barrier and the original launch policy. E005-R1 remains complete and rejected under its primary latency criterion. See [STATUS](docs/STATUS.md) and the [experiment log](docs/EXPERIMENTS.md). All earlier implementations and evidence remain preserved.
+**Current experiment:** [E007](docs/EXPERIMENTS.md#e007--elide-unused-terminal-shared-to-register-lookahead) is complete and rejected under its latency criterion. The terminal-fetch guard reduces participating shared loads but adds issued instructions. M8 medians tie and M1 gains do not reproduce. All 270 fresh regular numerical/162 sanitizer rows pass, with matching full-output hashes. The corrected E006 barrier, numerical contract and all earlier evidence remain preserved. See [STATUS](docs/STATUS.md), [raw results](results/e007_20261106/) and [reproduction commands](scripts/e007/README.md).
 
 C = A·B with A an M×K FP16 activation matrix and B a K×N weight matrix stored as
 packed INT4 with group-wise FP16 scales. Fused kernels dequantize in registers,
