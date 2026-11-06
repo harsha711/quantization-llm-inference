@@ -10,7 +10,7 @@ sha256sum -c "$RUN_DIR/check.sha256"
 {
   date -Is
   hostname
-  printf 'baseline_commit=8a68227\nimplementation_commit=654b5e2\n'
+  printf 'baseline_commit=8a68227\nsource_commit=%s\n' "${SOURCE_COMMIT:-see source-build.sha256}"
   env | sort | grep -E '^(SLURM|OMP|OMPI|CUDA|LMOD_FAMILY)' || true
   scontrol show job "${SLURM_JOB_ID:?Run inside the verified allocation}"
   lscpu

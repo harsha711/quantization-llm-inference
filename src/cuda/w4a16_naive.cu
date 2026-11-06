@@ -8,6 +8,7 @@
 
 namespace {
 
+template <bool HasTail>
 __global__ void w4a16_naive_kernel(const __half* __restrict__ A,
                                    const uint32_t* __restrict__ qweight,
                                    const __half* __restrict__ scales, __half* __restrict__ C,
@@ -24,7 +25,9 @@ __global__ void w4a16_naive_kernel(const __half* __restrict__ A,
     const float s = __half2float(scales[static_cast<size_t>(k0 / group_size) * N + n]);
 #pragma unroll
     for (int j = 0; j < 8; ++j) {
-      if (k0 + j >= K) break;
+      if constexpr (HasTail) {
+        if (k0 + j >= K) break;
+      }
       const int q = static_cast<int>((packed >> (4 * j)) & 0xFu);
       // Same reconstructed FP16 as host dequant / the unfused dequant kernel.
       const float w = __half2float(__float2half_rn(static_cast<float>(q - 8) * s));
@@ -41,6 +44,12 @@ void launch_w4a16_naive(const __half* A, const uint32_t* qweight, const __half* 
   constexpr int kThreads = 256;
   dim3 block(kThreads);
   dim3 grid((N + kThreads - 1) / kThreads, M);
-  w4a16_naive_kernel<<<grid, block, 0, stream>>>(A, qweight, scales, C, M, N, K, group_size);
+  // Preserve the original aligned loop's code generation for the timing baseline.
+  if (K % 8 == 0)
+    w4a16_naive_kernel<false><<<grid, block, 0, stream>>>(A, qweight, scales, C, M, N, K,
+                                                       group_size);
+  else
+    w4a16_naive_kernel<true><<<grid, block, 0, stream>>>(A, qweight, scales, C, M, N, K,
+                                                      group_size);
   CUDA_CHECK(cudaGetLastError());
 }
