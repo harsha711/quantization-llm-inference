@@ -775,7 +775,7 @@ Decision: classify as outcome1, a source-supported synchronization correction wi
 Revisit only if a future authorized continuation uses the corrected matched body, or a specific new source/tool/hardware observation challenges this bounded explanation. Do not repeat the old unpatched optimization hoping that the report disappears. Preserve the unpatched body as the diagnostic control. Stop after E006.
 ## E005-R1 — Corrected-body reservation and grid performance ablation
 
-Status: proposed, authorized 2026-11-06 from verified clean `b3abd3d`. E005's original-body stopped run and E006's bounded synchronization evidence remain preserved. The user explicitly authorizes performance with the corrected body and reuse of unchanged validation.
+Status: complete, rejected under the predeclared performance criterion. Authorized 2026-11-06 from verified clean `b3abd3d`. Criteria `2c0c4cd`, initial harness `f36a1bd`, targeted profile harness `5379eb3`, complete raw evidence and checked analyzer `607a7f3`. E005's original-body stopped run and E006's bounded synchronization evidence remain preserved. The user explicitly authorized performance with the corrected body and reuse of unchanged validation.
 
 Problem and hypothesis: reducing unused reservation alone may improve latency, and adding CTAs may improve latency further despite additional K partitioning and FP32 reduction work. A versus B isolates reservation. B versus C changes grid, partitioning and reduction work together. Occupancy capacity is not achieved residency or proof of a bottleneck.
 
@@ -783,8 +783,80 @@ Fixed design: reuse E006 patched library SHA256 `e4eca5e30436c547358a9c8125d6952
 
 Validation prerequisite: verify E006 handoff/raw-evidence hashes, exact generated source/build inputs and binary, E004 bridge and unchanged benchmark helpers. Capture fresh GPU UUID, driver/tool/runtime/CPU/topology/affinity/rank/thread/dependency metadata. Reuse E006's 135 numerical and 162 sanitizer rows only if identity holds. Run the actual launcher, Python runtime and a cheap K256/N2048 A/B/C smoke with M1/5/8, repeated direct launches, poisoned graph replay and unchanged all-output FP64/roundtrip/guard/lock checks. Every timed/held-out/profile invocation also performs numerical checks. If identity changes or validation fails, stop dependent work and reassess relevant validation. No repeat of the entire E006 investigation is planned.
 
-Unchanged acceptance: two independent balanced series, each M1/8 square4096 seed1, A/B/C, both store_flush and no_flush, 10 warmups and 100 samples. C must have >=5% lower no-flush median than corrected A at both M points in each series, with <=5% store-flush regression at either. Two matched M16/64 fallback series must show no reproducible >5% regression. Report B independently even if C fails. Report raw samples, median/min/max/p90, sample variance and between-series variation. Interpret timing-resolution ties and noisy observations explicitly. Keep method and executable fixed across all points.
+Unchanged acceptance: two independent balanced series, each M1/8 square 4096 seed 1, A/B/C, both store_flush and no_flush, 10 warmups and 100 samples. C must have >=5% lower no-flush median than corrected A at both M points in each series, with <=5% store-flush regression at either. Two matched M16/64 fallback series must show no reproducible >5% regression. Report B independently even if C fails. Report raw samples, median/min/max/p90, sample variance and between-series variation. Interpret timing-resolution ties and noisy observations explicitly. Keep method and executable fixed across all points.
 
-Held-out: after fixed primary/fallback runs, M2/4 seed2 at square4096, K4096/N11008 and K11008/N4096, both policies, A/B/C, 10 warmups/100 samples. No retuning or candidate changes after viewing these cases. A/B/C profiles at square M8 after 10 warmups use queried target-supported launch/shared/register/occupancy/active-warps/eligible-warps/Tensor/instruction/stall/L2/DRAM counters, cache-control none, clock-control none and one kernel-replayed target launch. Profiler timing remains distinct from application events. Extra profile cases require a specific unresolved question. No roofline or another optimization is included.
+Held-out: after fixed primary/fallback runs, M2/4 seed 2 at square 4096, K4096/N11008 and K11008/N4096, both policies, A/B/C, 10 warmups/100 samples. No retuning or candidate changes after viewing these cases. A/B/C profiles at square M8 after 10 warmups use queried target-supported launch/shared/register/occupancy/active-warps/eligible-warps/Tensor/instruction/stall/L2/DRAM counters, cache-control none, clock-control none and one kernel-replayed target launch. Profiler timing remains distinct from application events. Extra profile cases require a specific unresolved question. No roofline or another optimization is included.
 
-Decision: pending complete evidence. Preserve A/B/C as experimental selectors and report acceptance/rejection/inconclusive against the fixed criterion. Revisit only if a failed or inconclusive result identifies new evidence or changed conditions. Stop after this experiment.
+Decision: reject B/C as a replacement under the fixed square-case acceptance criterion. C increases concurrent CTA activity and gives a repeatable small M8 gain, but does not reach 5% at either required M point. Held-out rectangular gains do not change the criterion. Preserve A/B/C as experimental selectors without automatic dispatch. Stop after E005-R1. Revisit only if separately requested work brings new bottleneck evidence or changed hardware/compiler/workload/cache conditions, with a freshly matched corrected A series. Do not repeat the same trial or tune the held-outs merely to cross the threshold.
+
+### E005-R1 identity, validation reuse and execution
+
+E006's 113-file handoff and four library hashes match before and after the experiment. All generated corrected source/build inputs match their E006 manifest. The corrected library, unchanged E005 host ABI, E004 bridge, benchmark helpers and official wheel used only for lossless repacking match their recorded hashes. The bridge is `85f332951a8c24b3eb06594977b3e3d62b7954fa01b986da41ffeff851bfbd3f`. The wheel is `e634b80e72078e964f8bd2ac541d66f2a900920773cf993544609612190bd9a9`. No compilation, dependency install, numerical change or device-body change occurs. Historical E005 and E006 VALIDATED sentinels remain absent. E005-R1 has its own identity/smoke prerequisite marker.
+
+The actual environment remains c58, GPU UUID `GPU-51745a0b-32d9-31c9-1ecd-359ac0ac89cc`, RTX 5060 Ti 16 GB / sm_120 / 36 SM / 32 MiB L2, driver 615.71.09, CUDA 13.4.92, Compute Sanitizer 2026.3.0.0 build 38855100, Nsight Compute 2026.3.1.0 and isolated Python 3.11/Torch 2.14.0+cu130. The complete pip freeze is byte-identical to E004. CPU remains AMD EPYC 9115, 16 physical cores, one NUMA node, GCC 12.4/OpenMPI 4.1.6. One prun rank, 16 OpenMP/Torch threads and worker affinity are checked in `runtime.log`. Metadata, source/binary hashes, actual commands and exit codes are preserved. ARC documentation and user allocation 328410 were verified before script design. All GPU work uses prun inside that interactive allocation. No new allocation, unattended job, gateway compute or srun is used. Leave the user's allocation running.
+
+The original E006 evidence is reused: 135 numerical and 162 representative sanitizer rows, including all A/B/C, M tails, fallback, zeros, rectangles, reused locks/scratch, poisoned replay and all three tools. This reuse is justified by unchanged binary/source/runtime/environment identity, not by passing outputs alone. Fresh R1 checks add 27 small A/B/C rows at M1/5/8, K256, N2048, mixed/zero-A/zero-W, three direct calls and three poisoned graph replays each. Retained-project GPU tails and six memcheck/synccheck checks pass. Every one of 84 timed rows also passes strict all-output FP64, exact codes/scales/reconstruction, workspace guards and lock reset, with three direct and three poisoned graph checks before timing. All three profile rows pass the same checks. Maximum error across timed rows is 0.0018681105011637555 and maximum relative L2 is 0.0002088685391376363. No tolerance was relaxed. E006's narrow conclusion remains: the reported hazard is removed in this tested body, and incorrect original output was not demonstrated.
+
+One operational failure is preserved. The first retained-project check used an absent `scripts/check_inblock.sh` under the E005 root and exited 127. The actual E004 root and executable were verified, and `project-retry.log/.exit` record all checks passing with six zero-error sanitizer summaries. No timing began before that retry passed. The final prerequisite helper points to E004. It was validated component by component, while the original fresh-directory helper ran before that path correction. The timing/profile scripts themselves completed on ARC. A provisional local analyzer invocation before profile retrieval stopped on a missing profile file and emitted no final acceptance result. After full retrieval, a parser assertion was adjusted to the observed namespace-stripping raw exporter and byte/block units. Additional mangled-name exports from the same saved reports verify the exact `e005_marlin` symbol for A/B/C. These are analysis corrections, with no new profile, changed counters or altered acceptance criterion. The completed analyzer passes and rejects an intentionally corrupted sample in a temporary evidence copy.
+
+### E005-R1 primary latency and variability
+
+All values below are common graph-event GEMM medians in microseconds. Each cell is series1/series2, 10 warmups and 100 samples per row. A, B and C use the same corrected library. Series1 order is ABC at M1 and BCA at M8. Series2 reverses those orders to CBA and ACB. Store flushing writes exactly 2*runtimeL2 outside the measured event interval. Setup, repacking, CPU checks and capture are excluded. Device-required reductions remain inside the operation. Profiling was run afterward, with no overlap with these timing series.
+
+| M | Application policy | Corrected A us | B us | C us | C latency change versus A |
+|---|---|---:|---:|---:|---:|
+|1|no_flush|13.504 /13.504|13.888 /13.888|13.472 /13.504|−0.237% /0.000%|
+|8|no_flush|13.872 /13.888|13.856 /13.888|13.504 /13.504|−2.653% /−2.765%|
+|1|store_flush|28.640 /28.672|28.672 /28.640|28.640 /28.640|0.000% /−0.112%|
+|8|store_flush|28.704 /28.672|28.672 /28.656|28.672 /28.672|−0.111% /0.000%|
+
+A versus B does not support a reservation-only latency gain. B is 2.844% slower at M1 no-flush in both series, and effectively tied at M8 and under flushing. B versus C improves no-flush by 2.54–3.00% at the required points. Relative to corrected A, however, C gives only 0–0.237% at M1 and 2.653–2.765% at M8. Both fail the required 5% improvement in each series. Neither candidate violates the store-flush constraint.
+
+Raw per-sample values, min/max/p90 and unbiased sample variance are in `series*.jsonl` and `sample_statistics.csv`. Primary no-flush p90 spans 13.856–13.952 us, while individual maxima reach 18.176 us. Sample variance spans 0.0674–0.4052 us². Store-flush p90 spans 28.704–30.720 us and variance 0.0635–0.9496 us², with maxima 31.168 us. The largest absolute matched primary median change between series is 0.238%. Stable medians do not eliminate within-run tails or establish population confidence intervals. Tiny store-flush differences and exact ties are not wins.
+
+All 24 fallback rows pass. Across both M16/64 series, B/C latency changes versus A range from −2.320% to +0.110%, so no reproducible >5% regression is observed. M16 no-flush B appears 1.76–2.32% faster even though the candidate is disabled and device launch/body are identical. This is a useful control showing that small timing differences need not be an optimization effect. Full fallback medians, p90 and variance remain in the compact tables. No baseline is taken from historical wheel or original-body Marlin measurements.
+
+### E005-R1 held-out cases
+
+These 36 rows were run once, after fixing all code and primary/fallback series, at seed 2,M2/4 and both policies. No tuning followed. Each row retains100 samples. The table reports C latency change versus corrected A, calculated as100*(C/A−1). Negative is faster.
+
+| K,N | M2 no_flush | M4 no_flush | M2 store_flush | M4 store_flush |
+|---|---:|---:|---:|---:|
+|4096, 4096|0.000%|−2.765%|0.000%|−0.056%|
+|4096, 11008|−7.878%|−9.081%|+3.079%|+3.054%|
+|11008, 4096|−7.824%|−1.834%|+0.024%|+0.047%|
+
+Some rectangular no-flush cases benefit more, consistent with workload-dependent partitioning tradeoffs. The K4096/N11008 store-flush cases instead regress about 3.1%. This is one held-out series and does not establish a universal configuration or authorize dispatch. B's held-out changes and all raw latencies are in `comparisons.csv`. These findings cannot rescue a failed primary criterion.
+
+### E005-R1 targeted profile and design decision
+
+Three square M8 profiles use the corrected A/B/C body after 10 direct warmups, one selected target launch, Nsight kernel replay with 13 passes, cache-control none and clock-control none. The complete target-supported metric query, commands, reports, raw CSV, units and clock observations are preserved. A second export from each same report retains the mangled kernel name and verifies identical `e005_marlin::Marlin` specialization. The default raw demangler omits its namespace. Per-row resource queries also establish the same A/B/C function address within each timing process.
+
+The table separates launch/resource limits from observed activity. L2 and DRAM are measured counter traffic for replay, not logical byte models or application cache guarantees.
+
+| M8 metric | Corrected A | B | C |
+|---|---:|---:|---:|
+|Grid blocks|36|36|72|
+|Dynamic shared requested B|101376|49664|49664|
+|Shared allocated B|102400|50688|50688|
+|Registers/thread|126|126|126|
+|Shared/register block limits|1/2|2/2|2/2|
+|Active CTAs per SM active cycle, average|1.00014|1.00014|1.75737|
+|Active CTAs per SM elapsed cycle, average|0.82695|0.83661|1.36906|
+|Active warps, % peak active|16.6248|16.6268|28.9537|
+|Eligible warps per scheduler active cycle|0.42657|0.42605|0.64638|
+|Tensor-pipe active, % elapsed|45.0536|45.4797|47.2285|
+|Executed warp instructions|1442222|1442222|1575593|
+|Tensor instructions|65536|65536|65536|
+|L2 traffic B|11231840|11261344|11519552|
+|DRAM read B|2122240|2001920|2068736|
+|DRAM write B|0|512|0|
+|Profiler duration us|13.344|13.920|12.992|
+
+B raises capacity but retains36 grid blocks, and observed active CTA/warp metrics remain close to A. C's average active CTA count exceeds one and active-warps/eligible-warps rise, supporting actual concurrent CTA activity rather than only a theoretical capacity claim. This does not mean every SM maintains exactly two blocks for the whole kernel. Tensor instruction count stays fixed. Warp instructions rise 9.248%, integer thread instructions14.473%, and L2 traffic2.562% versus A. Barrier-stall percentage rises 2.096→4.286 and long-scoreboard0.417→1.265 in these replay profiles. The larger grid improves available work while adding partition/reduction/control and traffic costs. The evidence is consistent with those costs limiting the latency payoff, but does not uniquely attribute the complete timing difference to any one counter.
+
+Profiler durations are not application event medians. Kernel replay can alter cache state and averages, and nonzero DRAM reads remain despite cache-control none. Zero observed DRAM write bytes do not imply no output/scratch stores. The store flush does not prove eviction, and no-flush does not prove residency. Clocks were not locked. The first primary pre-run metadata snapshot reports idle P8/180MHz, while subsequent active snapshots report P0 near2752MHz. Warmups precede timing, but point-level clock traces and a clock-isolated causal experiment were not collected. No roofline was constructed.
+
+The design considered here was intentionally limited to the existing A/B/C host policies with a shared corrected body. Reservation-only B gives no measured primary benefit. C produces actual higher concurrent activity and small square latency gains but fails the acceptance threshold. Rectangular gains remain useful evidence for a future separately requested workload decision, not grounds to retune this experiment or introduce a new optimization. Keep corrected A as the performance control, retain all three selectors and stop. Original E005's stopped record and E006's narrow synchronization conclusion remain unchanged.
+
+Reproduce analysis with `python3 scripts/e005_r1/analyze.py results/e005_r1_20261106`. It asserts84 complete timing rows/8400 raw samples, balanced ordering, unchanged operands/body/launch plans, all-output checks, fallback behavior, held-out coverage, three exact-symbol profiles and validation-reuse manifests, then regenerates comparisons, sample statistics, repeat variability, profile summary and acceptance JSON. `scripts/e005_r1/README.md` records target commands and the prerequisite-path retry. ARC root is `/home/hpuvvad/csc548-w4a16-e005-r1-20261106`. No push or new optimization is performed.

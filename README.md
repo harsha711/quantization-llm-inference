@@ -1,5 +1,7 @@
 # W4A16 mixed-precision GEMM (CSC 548)
 
+**Current experiment:** [E005-R1](docs/EXPERIMENTS.md#e005-r1--corrected-body-reservation-and-grid-performance-ablation) completes the corrected-body A/B/C reservation/grid comparison. C raises observed concurrent CTA activity but misses the predeclared5% square no-flush gain at M1/M8. B gives no consistent primary gain. All84 timing rows/8400 samples and three profiles pass numerical checks. Original E005 and E006 evidence remain preserved. See [STATUS](docs/STATUS.md), [raw results](results/e005_r1_20261106/) and [reproduction commands](scripts/e005_r1/README.md). No new optimization is authorized.
+
 C = A·B with A an M×K FP16 activation matrix and B a K×N weight matrix stored as
 packed INT4 with group-wise FP16 scales. Fused kernels dequantize in registers,
 accumulate in FP32, and write FP16. This is a controlled implementation and

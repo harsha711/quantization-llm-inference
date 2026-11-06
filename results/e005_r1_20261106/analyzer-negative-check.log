@@ -1,0 +1,1 @@
+PASS: corrupted negative timing sample rejected by AssertionError in a temporary evidence copy. Original results unchanged.

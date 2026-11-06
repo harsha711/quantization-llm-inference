@@ -133,6 +133,7 @@ assert (r/'dependency-diff.txt').read_text() == ''
 assert (r/'e006-handoff-check.log').read_text().count(': OK') == 113
 assert (r/'e006-handoff-final-check.log').read_text().count(': OK') == 113
 assert (r/'e006-binaries-check.log').read_text().count(': OK') == 4
+assert (r/'e006-binaries-final-check.log').read_text().count(': OK') == 4
 for name in ('measurement-input-check.log','profile-input-check.log','final-input-check.log'):
     assert (r/name).read_text().count(': OK') == 5
 for name in ('measurement-tooling.sha256','profile-tooling.sha256'):
