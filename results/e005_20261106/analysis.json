@@ -1,0 +1,30 @@
+{
+  "status": "no-go at Gate 3",
+  "performance": "not measured",
+  "criterion": "all selected sanitizer checks pass",
+  "criterion_met": false,
+  "row_counts": {
+    "smoke": 8,
+    "smoke_candidate": 18,
+    "validation_small": 180,
+    "validation_main": 126,
+    "sanitizer_memcheck": 18,
+    "sanitizer_racecheck": 18,
+    "sanitizer_synccheck": 18,
+    "sanitizer_memcheck_rect": 6,
+    "race_diagnostic_A": 1,
+    "race_diagnostic_wheel": 1,
+    "wheel_selection": 2
+  },
+  "max_main_rel_l2": 0.00020994083360038762,
+  "max_main_abs": 0.0019259467462688917,
+  "all_numerical_checks_pass": true,
+  "primary_series_released": false,
+  "heldout_seed2_released": false,
+  "nsight_profiles_released": false,
+  "racecheck_small_errors": 36,
+  "racecheck_main_A_errors": 2,
+  "racecheck_main_wheel_errors": 2,
+  "local_library_sha256": "733c7d45777266a758d6426027ef433cc9b4d76f0c7a5e292bbb4871ab095a21",
+  "source_archive_sha256": "52cd2f7db842b9a72a752100118e0a701a2fc72f5959706f521fc4c9779f627c"
+}

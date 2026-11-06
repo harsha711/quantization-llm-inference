@@ -28,6 +28,5 @@ prun /bin/hostname > "$RUN_DIR/launcher.log"
 tar -xzf "$RUN_DIR/pinned-source.tar.gz" -C external
 "$E005_PYTHON" scripts/e005/prepare_source.py external/pinned external/local
 cmp external/local/e005-host.patch "$RUN_DIR/e005-host.patch"
-"$E005_PYTHON" scripts/e004/check_runtime.py > "$RUN_DIR/runtime.log" 2>&1
 prun "$E005_PYTHON" scripts/e004/check_runtime.py > "$RUN_DIR/runtime-prun.log" 2>&1
 prun /bin/bash scripts/e005/build.sh > "$RUN_DIR/build.log" 2>&1

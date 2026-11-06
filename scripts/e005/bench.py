@@ -5,7 +5,6 @@ import ctypes as ct
 import hashlib
 import importlib.util
 import json
-import sys
 import time
 from pathlib import Path
 
@@ -35,9 +34,10 @@ class Case:
         self.bridge=e004.bridge(args.bridge)
         self.ns=e004.helpers(args.source)
         self.qtype=e004.load_marlin(args.source,args.wheel)
-        self.lib=ct.CDLL(str(args.local.resolve()))
-        self.lib.e005_call.argtypes=[ct.c_int,ct.c_int]+[ct.c_void_p]*6+[ct.c_int]*3+[ct.c_void_p,ct.POINTER(ct.c_int64)]
-        self.lib.e005_call.restype=ct.c_int
+        if args.configs != ['wheel']:
+            self.lib=ct.CDLL(str(args.local.resolve()))
+            self.lib.e005_call.argtypes=[ct.c_int,ct.c_int]+[ct.c_void_p]*6+[ct.c_int]*3+[ct.c_void_p,ct.POINTER(ct.c_int64)]
+            self.lib.e005_call.restype=ct.c_int
         t=time.perf_counter()
         cpu=[np.empty((self.maxm,k),np.float16),np.empty((k,n),np.float16),np.empty((k//8,n),np.uint32),np.empty((k//128,n),np.float16),np.empty((k,n),np.float16)]
         assert self.bridge.e004_generate(self.maxm,n,k,seed,*[x.ctypes.data for x in cpu])==0
@@ -78,6 +78,7 @@ class Case:
         self.info=(ct.c_int64*20)()
         self.flush_buf=torch.empty(2*self.bridge.e004_l2(),dtype=torch.uint8,device='cuda')
         self.pattern=pattern;self.seed=seed
+        self.fallback_controls={}
 
     def call(self,name,m,dry=False):
         if name=='wheel':
@@ -102,6 +103,10 @@ class Case:
             self.call(name,m)
             torch.cuda.synchronize()
             result=stats(self.c[:m],self.ref[:m]);self.check_workspace()
+            if m in (16,64) and name != 'wheel':
+                bits=self.c[:m].view(torch.int16).clone()
+                if m in self.fallback_controls: assert torch.equal(bits,self.fallback_controls[m])
+                else: self.fallback_controls[m]=bits
         if graphs:
             # One-time workspace init is outside capture. The kernel resets locks
             # and first partial writers initialize scratch on every operation.
@@ -136,7 +141,7 @@ def main(a):
                             with torch.profiler.profile(activities=[torch.profiler.ProfilerActivity.CPU,torch.profiler.ProfilerActivity.CUDA]) as prof:
                                 case.call(name,m);torch.cuda.synchronize()
                             gpu=[e.name for e in prof.events() if e.device_type==torch.autograd.DeviceType.CUDA]
-                            assert len(gpu)==1 and ('e005_marlin::Marlin<' if name!='wheel' else 'marlin::Marlin<') in gpu[0],gpu
+                            assert len(gpu)==1 and gpu[0].startswith('void e005_marlin::Marlin<' if name!='wheel' else 'void marlin::Marlin<'),gpu
                             prof.export_chrome_trace(str(a.out.parent/f'{a.out.stem}_{name}_M{m}_K{k}_N{n}_{pattern}.trace.json'))
                             print('KERNEL',name,gpu,flush=True)
                         if a.profile:
@@ -178,4 +183,5 @@ if __name__=='__main__':
     p.add_argument('--profile',action='store_true')
     a=p.parse_args();a.shapes=[tuple(map(int,x.split(','))) for x in a.shapes]
     assert a.warmup>=0 and a.iters>=0 and a.repeats>0
+    assert 'wheel' not in a.configs or a.configs == ['wheel'], 'Use a separate process for wheel provenance'
     main(a)

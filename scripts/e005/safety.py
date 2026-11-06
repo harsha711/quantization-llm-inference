@@ -90,7 +90,7 @@ def check():
                 stages=4,A_stage_bytes=2048,B_stage_bytes=8192,scale_stage_bytes=256,
                 alignment=16,A_max_stage_int4=max(a_reads),block_reduce_max_int4=max(red),
                 output_max_half=max(output_half))
-    shapes=[(256,128),(256,256),(4096,4096),(4096,11008),(11008,4096)]
+    shapes=[(256,128),(256,256),(256,2048),(4096,4096),(4096,11008),(11008,4096)]
     return dict(layout=layout,stripes=[stripe_model(k,n,g) for k,n in shapes for g in (36,72)])
 
 

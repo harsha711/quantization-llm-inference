@@ -1,0 +1,186 @@
+#!/usr/bin/env python3
+"""Bounded E005 matched-build A/B/C validation and common graph-event timing."""
+import argparse
+import ctypes as ct
+import hashlib
+import importlib.util
+import json
+import sys
+import time
+from pathlib import Path
+
+import numpy as np
+import torch
+spec=importlib.util.spec_from_file_location('e004_control',Path(__file__).resolve().parents[1]/'e004/bench.py')
+e004=importlib.util.module_from_spec(spec)
+spec.loader.exec_module(e004)
+
+FIELDS='grid threads dynamic_shared registers static_shared local_bytes max_blocks_per_sm sms candidate thread_k thread_n stages m_blocks m8 max_optin two_block_budget max_threads binary_version ptx_version kernel_address'.split()
+
+
+def stats(c,ref):
+    got=c.float().cpu().numpy().astype(np.float64)
+    err=np.abs(got-ref)
+    rms=float(np.sqrt(np.mean(ref*ref)))
+    bad=int(np.count_nonzero(~np.isfinite(got)|(err>1e-3*np.abs(ref)+1e-3*rms)))
+    result=dict(num_bad=bad,checked=int(got.size),max_abs=float(err.max()),rms=rms,
+                rel_l2=float(np.linalg.norm(got-ref)/np.linalg.norm(ref)) if np.linalg.norm(ref) else 0.)
+    assert not bad,result
+    return result
+
+
+class Case:
+    def __init__(self,args,k,n,ms,seed,pattern):
+        self.args=args; self.k=k;self.n=n;self.maxm=max(ms)
+        self.bridge=e004.bridge(args.bridge)
+        self.ns=e004.helpers(args.source)
+        self.qtype=e004.load_marlin(args.source,args.wheel)
+        self.lib=ct.CDLL(str(args.local.resolve()))
+        self.lib.e005_call.argtypes=[ct.c_int,ct.c_int]+[ct.c_void_p]*6+[ct.c_int]*3+[ct.c_void_p,ct.POINTER(ct.c_int64)]
+        self.lib.e005_call.restype=ct.c_int
+        t=time.perf_counter()
+        cpu=[np.empty((self.maxm,k),np.float16),np.empty((k,n),np.float16),np.empty((k//8,n),np.uint32),np.empty((k//128,n),np.float16),np.empty((k,n),np.float16)]
+        assert self.bridge.e004_generate(self.maxm,n,k,seed,*[x.ctypes.data for x in cpu])==0
+        if pattern=='zero_a':cpu[0].fill(0)
+        if pattern=='zero_w':
+            cpu[1].fill(0);cpu[2].fill(0x88888888);cpu[3].fill(0);cpu[4].fill(0)
+        assert pattern in ('mixed','zero_a','zero_w')
+        self.hashes={name:hashlib.sha256(x.tobytes()).hexdigest() for name,x in zip(['A','W','Q','S','W_hat'],cpu)}
+        self.generated_s=time.perf_counter()-t
+        self.a=torch.from_numpy(cpu[0]).cuda()
+        q=torch.from_numpy(cpu[2]).cuda().view(torch.int32)
+        s=torch.from_numpy(cpu[3]).cuda()
+        torch.cuda.synchronize();t=time.perf_counter()
+        self.packed=torch.ops._C.gptq_marlin_repack(q,k,n,4,False)
+        self.scales=self.ns['marlin_permute_scales'](s,k,n,128)
+        torch.cuda.synchronize();self.repack_s=time.perf_counter()-t
+        recovered=e004.unpack_marlin(self.packed.cpu().numpy(),k,n,self.ns['get_weight_perm'](4).numpy())
+        assert np.array_equal(recovered,e004.unpack_project(cpu[2],k,n))
+        inv=np.argsort(np.array(self.ns['get_scale_perms']()[0]))
+        rs=self.scales.cpu().numpy().reshape(-1,64)[:,inv].reshape(k//128,n)
+        assert np.array_equal(rs.view(np.uint16),cpu[3].view(np.uint16))
+        rw=((recovered.astype(np.float32)-8)*rs.repeat(128,axis=0).astype(np.float32)).astype(np.float16)
+        assert np.array_equal(rw.view(np.uint16),cpu[4].view(np.uint16))
+        self.ref=np.empty((self.maxm,n),np.float64)
+        t=time.perf_counter()
+        self.bridge.e004_reference(cpu[0].ctypes.data,cpu[4].ctypes.data,self.maxm,n,k,self.ref.ctypes.data)
+        self.reference_s=time.perf_counter()-t
+        self.c=torch.empty((self.maxm,n),dtype=torch.float16,device='cuda')
+        self.sms=torch.cuda.get_device_properties(0).multi_processor_count
+        self.locks_storage=torch.full((4*self.sms+32,),0x12345678,dtype=torch.int32,device='cuda')
+        self.locks=self.locks_storage[16:-16];self.locks.zero_()
+        # Original upstream capacity, with guards, reused without per-call reset.
+        count=self.sms*min((self.maxm+15)//16*16,64)*256
+        self.tmp_storage=torch.full((count+32,),123456.,dtype=torch.float32,device='cuda')
+        self.tmp=self.tmp_storage[16:-16];self.tmp.fill_(float('nan'))
+        assert self.locks.numel() >= 2*self.sms
+        assert self.tmp.numel() >= self.sms*min((self.maxm+15)//16*16,64)*256
+        self.info=(ct.c_int64*20)()
+        self.flush_buf=torch.empty(2*self.bridge.e004_l2(),dtype=torch.uint8,device='cuda')
+        self.pattern=pattern;self.seed=seed
+        self.fallback_controls={}
+
+    def call(self,name,m,dry=False):
+        if name=='wheel':
+            assert not dry
+            return torch.ops._C.marlin_gemm(self.a[:m],self.c[:m],self.packed,None,self.scales,None,None,None,self.locks,self.qtype,m,self.n,self.k,False,True,False)
+        stream=torch.cuda.current_stream().cuda_stream
+        rc=self.lib.e005_call('ABC'.index(name),int(dry),self.a.data_ptr(),self.packed.data_ptr(),self.scales.data_ptr(),self.c.data_ptr(),self.tmp.data_ptr(),self.locks.data_ptr(),m,self.n,self.k,stream,self.info)
+        assert rc==0,rc
+        return dict(zip(FIELDS,map(int,self.info)))
+
+    def check_workspace(self):
+        assert torch.all(self.locks==0).item(),'locks did not reset'
+        assert torch.all(self.locks_storage[:16]==0x12345678).item()
+        assert torch.all(self.locks_storage[-16:]==0x12345678).item()
+        assert torch.all(self.tmp_storage[:16]==123456.).item()
+        assert torch.all(self.tmp_storage[-16:]==123456.).item()
+
+    def check(self,name,m,repeats,graphs=False):
+        details=self.call(name,m,True) if name!='wheel' else None
+        for _ in range(repeats):
+            self.c[:m].fill_(float('nan'))
+            self.call(name,m)
+            torch.cuda.synchronize()
+            result=stats(self.c[:m],self.ref[:m]);self.check_workspace()
+            if m in (16,64) and name != 'wheel':
+                bits=self.c[:m].view(torch.int16).clone()
+                if m in self.fallback_controls: assert torch.equal(bits,self.fallback_controls[m])
+                else: self.fallback_controls[m]=bits
+        if graphs:
+            # One-time workspace init is outside capture. The kernel resets locks
+            # and first partial writers initialize scratch on every operation.
+            graph=torch.cuda.CUDAGraph()
+            with torch.cuda.graph(graph,stream=torch.cuda.current_stream()):self.call(name,m)
+            for _ in range(repeats):
+                self.c[:m].fill_(float('nan'))
+                graph.replay();torch.cuda.synchronize()
+                result=stats(self.c[:m],self.ref[:m]);self.check_workspace()
+        return dict(resources=details,**result)
+
+
+def main(a):
+    assert not a.out.exists(),a.out
+    a.out.parent.mkdir(parents=True,exist_ok=True)
+    stream=torch.cuda.Stream()
+    print('ENV',json.dumps(dict(torch=torch.__version__,cuda=torch.version.cuda,gpu=torch.cuda.get_device_name(),capability=torch.cuda.get_device_capability(),stream=int(stream.cuda_stream),local_sha256=hashlib.sha256(a.local.read_bytes()).hexdigest(),wheel_sha256=hashlib.sha256(a.wheel.read_bytes()).hexdigest())),flush=True)
+    with torch.cuda.stream(stream),a.out.open('x') as out:
+        for k,n in a.shapes:
+            for pattern in a.patterns:
+                case=Case(a,k,n,a.ms,a.seed,pattern)
+                for j,m in enumerate(a.ms):
+                    names=list(a.configs)
+                    if a.balance:
+                        shift=j%len(names);names=names[shift:]+names[:shift]
+                        if a.balance==2:names.reverse()
+                    for order,name in enumerate(names):
+                        t=time.perf_counter()
+                        check=case.check(name,m,a.repeats,a.graph_check)
+                        validation_s=time.perf_counter()-t
+                        if a.trace:
+                            with torch.profiler.profile(activities=[torch.profiler.ProfilerActivity.CPU,torch.profiler.ProfilerActivity.CUDA]) as prof:
+                                case.call(name,m);torch.cuda.synchronize()
+                            gpu=[e.name for e in prof.events() if e.device_type==torch.autograd.DeviceType.CUDA]
+                            assert len(gpu)==1 and gpu[0].startswith('void e005_marlin::Marlin<' if name!='wheel' else 'void marlin::Marlin<'),gpu
+                            prof.export_chrome_trace(str(a.out.parent/f'{a.out.stem}_{name}_M{m}_K{k}_N{n}_{pattern}.trace.json'))
+                            print('KERNEL',name,gpu,flush=True)
+                        if a.profile:
+                            for _ in range(a.warmup):case.call(name,m)
+                            torch.cuda.synchronize();torch.cuda.profiler.start()
+                            case.call(name,m);torch.cuda.synchronize();torch.cuda.profiler.stop()
+                            stats(case.c[:m],case.ref[:m]);case.check_workspace()
+                        for policy in a.policies:
+                            row=dict(config=name,M=m,K=k,N=n,group=128,seed=a.seed,pattern=pattern,order=order,
+                                     warmup=a.warmup,iters=a.iters,method='graph_events',policy=policy,
+                                     codes_match=True,scales_match=True,reconstruction_match=True,
+                                     lock_reset=True,workspace_guards=True,repeated_launches=a.repeats,graph_check=a.graph_check,
+                                     generated_s=case.generated_s,repack_wall_s=case.repack_s,reference_s=case.reference_s,
+                                     validation_wall_s=validation_s,operand_sha256=case.hashes,**check)
+                            if a.iters:
+                                flush=(lambda:case.bridge.e004_flush(case.flush_buf.data_ptr(),case.flush_buf.numel(),stream.cuda_stream)) if policy=='store_flush' else None
+                                row.update(e004.timed(lambda:case.call(name,m),flush,a.warmup,a.iters,case.c[:m]))
+                                stats(case.c[:m],case.ref[:m]);case.check_workspace()
+                            out.write(json.dumps(row)+'\n');out.flush()
+                            print('PASS',name,m,k,n,pattern,policy,row.get('median_us'),check,flush=True)
+    print('MAPPED_LIBRARIES','\n'.join(x for x in Path('/proc/self/maps').read_text().splitlines() if any(v in x for v in ('libe005','libe004','libcudart','libtorch'))),flush=True)
+
+
+if __name__=='__main__':
+    p=argparse.ArgumentParser(description=__doc__)
+    for v in ('source','local','wheel','bridge','out'):p.add_argument('--'+v,type=Path,required=True)
+    p.add_argument('--ms',nargs='+',type=int,default=[1,8])
+    p.add_argument('--shapes',nargs='+',default=['4096,4096'])
+    p.add_argument('--configs',nargs='+',choices=['A','B','C','wheel'],default=['A','B','C'])
+    p.add_argument('--patterns',nargs='+',choices=['mixed','zero_a','zero_w'],default=['mixed'])
+    p.add_argument('--seed',type=int,default=1)
+    p.add_argument('--policies',nargs='+',choices=['store_flush','no_flush'],default=['store_flush','no_flush'])
+    p.add_argument('--warmup',type=int,default=10)
+    p.add_argument('--iters',type=int,default=100)
+    p.add_argument('--repeats',type=int,default=3)
+    p.add_argument('--balance',type=int,choices=[0,1,2],default=0)
+    p.add_argument('--graph-check',action='store_true')
+    p.add_argument('--trace',action='store_true')
+    p.add_argument('--profile',action='store_true')
+    a=p.parse_args();a.shapes=[tuple(map(int,x.split(','))) for x in a.shapes]
+    assert a.warmup>=0 and a.iters>=0 and a.repeats>0
+    main(a)

@@ -1,0 +1,24 @@
+[prun] Master compute host = c58
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun /bin/bash scripts/e005/build.sh (family=openmpi4)
++ nvcc -O3 -DNDEBUG -std=c++17 -lineinfo -arch=sm_120 --expt-relaxed-constexpr -shared -Xcompiler=-fPIC -Xptxas=-v -Iexternal/local/csrc/quantization/marlin -Iexternal/local/csrc -I/tmp/e004-hpuvvad-20261106/lib64/python3.11/site-packages/torch/include -I/tmp/e004-hpuvvad-20261106/lib64/python3.11/site-packages/torch/include/torch/csrc/api/include scripts/e005/local.cu -L/tmp/e004-hpuvvad-20261106/lib64/python3.11/site-packages/torch/lib -ltorch -ltorch_cpu -ltorch_cuda -lc10 -lc10_cuda -Xlinker=-rpath -Xlinker=/tmp/e004-hpuvvad-20261106/lib64/python3.11/site-packages/torch/lib -o /home/hpuvvad/csc548-w4a16-e005-20261106/results/e005_20261106/libe005.so
+external/local/csrc/torch_utils.h(78): error: identifier "aoti_torch_get_current_cuda_stream" is undefined
+    if ((aoti_torch_get_current_cuda_stream(device_index, &stream_ptr)) != 0) { torch::headeronly::detail::throw_exception("aoti_torch_get_current_cuda_stream(device_index, &stream_ptr)", "external/local/csrc/torch_utils.h", 78); }
+         ^
+
+external/local/csrc/torch_utils.h(86): error: identifier "torch_get_current_cuda_blas_handle" is undefined
+    if ((torch_get_current_cuda_blas_handle(&blas_handle_ptr)) != 0) { torch::headeronly::detail::throw_exception("torch_get_current_cuda_blas_handle(&blas_handle_ptr)", "external/local/csrc/torch_utils.h", 86); };
+         ^
+
+2 errors detected in the compilation of "scripts/e005/local.cu".
+--------------------------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code. Per user-direction, the job has been aborted.
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+mpirun detected that one or more processes exited with non-zero status, thus causing
+the job to be terminated. The first process to do so was:
+
+  Process name: [[20847,1],0]
+  Exit code:    2
+--------------------------------------------------------------------------
