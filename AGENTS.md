@@ -19,7 +19,12 @@
 ## E004 external comparator
 
 - Read E004 before using Marlin. Keep vLLM v0.33.0/source `4ba787ec9959e566d3b587a796dff07673324da5` and its official binary provenance explicit. Use isolated Python 3.11/Torch 2.14, direct dense uint4b8 operator, lossless codes/scales, FP32 global reduction. No serving/model dependencies or silent fallback. Do not change external kernels without a separately requested experiment.
-- E004 uses fresh common graph-event comparisons and explicit cuBLAS FP32-reduction math mode 16. Preserve both cache policies, raw samples, all-row FP64 checks, full retained controls and failed attempts. Do not use historical medians as E004 denominators. `scripts/e004/analyze.py` validates recorded evidence. The sole E005 recommendation remains unimplemented. Historical stage/resume helpers have fixed evidence paths, so use a distinct output root for reruns and never overwrite records. ARC prun flattens quoted `python -c` commands: use a script file.
+- E004 uses fresh common graph-event comparisons and explicit cuBLAS FP32-reduction math mode 16. Preserve both cache policies, raw samples, all-row FP64 checks, full retained controls and failed attempts. Do not use historical medians as E004 denominators. `scripts/e004/analyze.py` validates recorded evidence. E005 is implemented but stopped at its failed external racecheck gate. Read E005 before any Marlin rerun. Historical stage/resume helpers have fixed evidence paths, so use a distinct output root for reruns and never overwrite records. ARC prun flattens quoted `python -c` commands: use a script file.
+
+## E005 stopped safety gate
+
+- Read E005 and `results/e005_20261106/GATE1.md`. A/B/C share compiled device code and differ only in the gated host policy. Preserve same-build A and untouched upstream source. Occupancy queries predict capacity, not achieved residency.
+- E005 memcheck/synccheck and numerical checks pass, but racecheck reports hazards in A/B/C and isolated official wheel. No primary/held-out timings or Nsight counters were released. Never create VALIDATED manually, suppress these reports, or treat passing outputs as race freedom. Revisit only after a separately authorized resolution, then a new matched build and complete validation/series. No next optimization is authorized.
 
 ## ARC
 

@@ -578,7 +578,7 @@ Use distinct output filenames for the repeated and eager/graph diagnostics, with
 
 ## E005 — Specialization-aware reservation and one-versus-two-block residency
 
-Status: proposed. Authorized 2026-11-06. E004 checkpoint verified: `cf8a419`, clean tree.
+Status: complete, no-go at Gate 3. Performance hypothesis remains inconclusive. Authorized 2026-11-06. E004 checkpoint verified: `cf8a419`, clean tree.
 
 Problem and hypothesis: E004's small-M dense uint4b8/G128 eight-row 128x128 tile appears to reserve substantially more shared memory than its layout needs. Reducing reservation may help independently, and two blocks per SM may improve latency enough to offset changed stripes and FP32 global reductions. These remain hypotheses.
 
@@ -588,7 +588,7 @@ Predeclared acceptance: all correctness and selected external memcheck/racecheck
 
 Gates and scope: prove complete shared/workspace/index/reset/progress properties and query compiled resources before modified launches. Preserve untouched source and explicit host-only patch. Build local A/B/C with identical flags/dependencies and common device code. Wheel comparison is provenance only. Preserve E004 operands, lossless packing, FP16 reconstruction and all-row FP64 tolerance. Validate small shapes M=1,2,4,5,8, main square and rectangles, zero/mixed-sign operands, repeated reused workspace and poisoned graph replay. Bound possible hangs. Keep required per-call maintenance within measured operation. Hold out seed 2, M=2/4, all three K/N pairs, both policies without retuning. Profile A/B/C at square M=8, add cases only to answer a specific unresolved question. No tile/body/stage/format changes, automatic performance dispatch or next optimization.
 
-Baseline and candidate: pending matched build. E004 wheel/source remains pinned at vLLM v0.33.0 / `4ba787ec9959e566d3b587a796dff07673324da5`. New scripts/evidence use `scripts/e005/` and `results/e005_20261106/`. Source safety analysis, commands, build/runtime provenance, raw results and final decision follow as gates complete.
+Baseline and candidate, preimplementation record: matched build was pending at criteria commit `bc94827`. The completed build and source hashes are recorded below. E004 wheel/source remains pinned at vLLM v0.33.0 / `4ba787ec9959e566d3b587a796dff07673324da5`. New scripts/evidence use `scripts/e005/` and `results/e005_20261106/`. Source safety analysis, commands, build/runtime provenance, raw results and final decision follow as gates complete.
 
 Revisit only if: the final evidence identifies a changed prerequisite or a specific unresolved condition. Failure does not authorize a tuning search.
 
@@ -598,3 +598,88 @@ E005 Gate 1 source derivation and executable finite index model are preserved in
 Gate 2 local build: original source archive plus explicit host-only patch, 15 generated FP16/uint4b8/G128 specializations, identical compiler flags and one library/kernel entrypoint for A/B/C. Unmodified dispatcher priorities/checks and Tensor Core body remain. The first compile failed because Torch CUDA declarations require `USE_CUDA`. Added that same declaration for the entire build, preserving failed log/script. Local dry attributes report 126 registers/thread, 32 local bytes, zero static shared for small M. Wheel E004 reported 122 registers. This is a provenance difference, not a candidate advantage. Queries report A (36,101376 B,1 maximum block/SM), B (36,49664 B,2), C (72,49664 B,2). M=16/64 A/B/C plans and entrypoints match. No modified kernel launched before the source/attribute gates.
 
 Operational prerequisites: the first hostname assertion incorrectly included prun banners. The second assumed rg existed on ARC. Both stopped before compilation. Preserved scripts and launcher logs, then used a count of exact hostname lines with available grep. The runtime/one-rank prerequisite passed. No expensive timing series has begun.
+
+
+### E005 outcome and design decision
+
+**Stop at the predeclared sanitizer gate.** The external local Marlin body passes memcheck and synccheck but fails racecheck. The unchanged local A and isolated official E004 wheel also reproduce a racecheck report at M=8,K=N=4096. This is inherited reported behavior, not evidence that the smaller reservation or larger grid introduced the hazard. It still violates the predeclared requirement that all selected checks pass. No performance series, held-out seed-2 evaluation, or Nsight counter profile was released. No speedup/regression or achieved two-block residency is claimed. E005 is a completed bounded no-go, with its performance hypothesis inconclusive.
+
+The selected design uses runtime A/B/C in one local library, keeping every device header/template byte-identical to the pin. A follows the original dispatcher/accounting and grid. B changes the final eligible eight-row accounting/reservation only. C adds twice the SM-count grid. Runtime eligibility requires sm_120, dense FP16 A/C/scales, uint4b8/G128, no optional paths, FP32 reduction, 256 threads, tile 128x128, four stages and M<=8. Device limits derive the budget. CUDA queries require two-block capacity before a candidate launch. Smaller N=128 selects the original 128-thread tile 64 fallback. A K256,N2048 smoke was therefore added to exercise the intended candidates without changing dispatch. M=16 and M=64 preserve original plans, entrypoints and checked output bits. No automatic timing-based dispatch is introduced.
+
+### E005 spatial bounds, lifetime finding and compiled resources
+
+The full derivation and executable finite model are `results/e005_20261106/GATE1.md`, `safety-model.json`, and `scripts/e005/safety.py`. Source offsets refer to the untouched archive. Layout is B/reduction overlay [0,32768), grouped scales [32768,33792), and four A stages [33792,41984), in bytes. Four stages use 8192 B A,32768 B packed B,1024 B scales. No zero-point, activation-scale, bias or global-scale path is enabled. The nominal 4352 B reduction-size expression is not the maximum block-reduction access: enabled indices reach int4 index 959, within the 32768 B overlay. Every base/stage is 16-byte aligned. The original host assumes 16 A rows and estimates 50176 B. The smaller 41984 B footprint is real as a spatial requirement. It does not by itself prove a safe overlay phase transition.
+
+The common caller uses 4*SM int32 locks with guards. The original small-M scratch capacity 36*16*256 floats=589824 B already covers 72 slots of 8192 B. Explicit enabled accesses are lock*512 plus int4 windows[0,64),[128,192),[256,320),[384,448). The most demanding requested rectangle reaches lock 70 and exclusive scratch end 580608 B under C. The source model verifies actual slice indices, exact K coverage, lock bounds and acyclic wait edges for both grids. It also shows why C changes work/reduction partitioning: K4096,N11008 moves from 72 whole part1 tiles plus 14 part2 tiles in A to 86 part2 tiles and 68 split columns in C. This is not a pure occupancy ablation.
+
+Locks are initialized once and reset by last reducers. First partial owners initialize scratch fragments before successors read them. Ordered same-stream calls/graphs reuse this storage without per-call clearing. Repeated checks assert every lock returns to zero, guards remain intact, and poisoned output is rewritten. No maintenance was omitted from a measured operation because no operation was performance-measured. Original C_tmp sizing is used for the maximum M in each validation invocation. M<=8-only invocations use the upstream 589824 B capacity. The combined main validation invocation allocates the original M64 capacity 2359296 B. This is validation storage, not a timing choice.
+
+Actual dry CUDA attributes and occupancy queries are preserved in `attributes.log` and `resources.txt`. These are predicted maxima and launch plans, not achieved concurrent residency. A/B/C share one device entrypoint in-process. Source and SASS are common across these configurations.
+
+| Configuration, square M<=8 | Grid | Threads | Requested dynamic B | Registers/thread | Static B | Local bytes/thread | Maximum blocks/SM |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| A, same-build control |36|256|101376|126|0|32|1|
+| B, reservation only |36|256|49664|126|0|32|2|
+| C, reservation and grid |72|256|49664|126|0|32|2|
+
+The local build's 126 registers differ from the E004 wheel's 122. This is why the primary denominator was specified as local A. No wheel-vs-local latency diagnostic was performed after the gate failure. A separate process confirms actual wheel `marlin::Marlin<...,256,1,8,8,true,4,8,false>` execution, whereas local traces select `e005_marlin::Marlin` with the same template parameters. The initial mixed-library profiler session assigned the local name to its wheel event. Its cause is unresolved, its loose substring assertion was tightened, and it is preserved as unreliable naming evidence. Subsequent wheel diagnostics never load libe005.so.
+
+### E005 correctness and sanitizer evidence
+
+The numerical contract and tolerance are unchanged. All reconstructed codes/scales/FP16 weights invert losslessly. Every checked output row/column passes the FP64 condition, including main M64. Main maximum relative L2 is 0.00020994083360038762 and maximum absolute error 0.0019259467462688917. Distinct JSONL rows count both policy labels even for untimed correctness. They are not timing samples. Each main/small case runs five direct launches and five poisoned graph replays with reused workspace.
+
+| Evidence | Coverage | Result |
+|---|---|---|
+| `validation_small.jsonl` |180 rows: M1,2,4,5,8; K256,N128/2048; mixed-sign,zero-A,zero-W; A/B/C; both labels |All numerical/roundtrip/guard/lock checks pass |
+| `validation_main.jsonl` |126 rows: M1,2,4,5,8,16,64; square and both E004 rectangles; A/B/C; both labels |All numerical/roundtrip/guard/lock checks pass. Fallback bits agree |
+| `project-check.log` |Retained project CPU/GPU tails plus six memcheck/synccheck runs |Pass. These are separate from external checks |
+| `sanitizer_memcheck.log` |External local A/B/C; M1,5,8; K256,N2048; two direct/two graph calls |0 errors |
+| `sanitizer_synccheck.log` |Same external coverage |0 errors |
+| `sanitizer_memcheck_rect.log` |External A/B/C; M5,K4096,N11008; two direct/two graph calls |0 errors, including largest C scratch/lock range |
+| `sanitizer_racecheck.log` |External A/B/C; M1,5,8; K256,N2048; two direct/two graph calls |36 errors,0 warnings. Exit 99 stops gate |
+| `race_diagnostic_A.log` |Unchanged local A; M8,K=N4096; one direct call |2 errors,exit 99 |
+| `race_diagnostic_wheel.log` |Official wheel in isolation; same main shape |2 errors,exit 99 |
+
+External tools filter local `e005_marlin` bodies. They do not sanitize repacking/fill/runtime kernels. The bounded control diagnosis uses `kns=marlin`, which also includes repack naming, and the reported error names explicitly identify the dense GEMM specialization. Racecheck error summaries count reported hazards, not distinct failing output elements or corrupted launches. Do not add them to numerical error counts. All commands use bounded timeouts. No hang occurred. The selected tools do not prove inter-block progress.
+
+Local racecheck identifies a B-fragment shared read at `marlin_template.h:843` against overlay reduction writes at `:1237`. Source `:1659–1674` drains each thread's async groups and enters block reduction without a block-wide entry barrier before the first writes. This is consistent with a temporal overlap not covered by the spatial capacity analysis. The final prefetch can be unused at stripe termination, so a user-visible output error and the exact causal read have not been isolated. Neither a false positive nor harmlessness has been established. The wheel has no matching line metadata, so exact offset-to-source equivalence is unverified. Do not silence the report because control A also fails. A body barrier/fix, compiler workaround, tool suppression or new optimization is outside this experiment and was not attempted.
+
+### E005 matched provenance, failures and reproduction
+
+Criteria commit `bc94827`, host-policy/source-model commit `eb4f88c`, raw evidence/analyzer commit `1fb86e1`. Final raw evidence is `results/e005_20261106/`. Local binary SHA256 `733c7d45777266a758d6426027ef433cc9b4d76f0c7a5e292bbb4871ab095a21`, preserved remotely at `/home/hpuvvad/csc548-w4a16-e005-20261106/results/e005_20261106/libe005.so`. Untouched source archive SHA256 `52cd2f7db842b9a72a752100118e0a701a2fc72f5959706f521fc4c9779f627c`. Explicit patch is `e005-host.patch`. The common build instantiates only 15 FP16/uint4b8/G128 configurations needed by the original selection priorities. It does not support unrelated vLLM formats. The Torch tensor wrapper is compiled but the local C ABI calls upstream marlin_mm directly with preallocated typed operands/workspace.
+
+The official E004 operator remains SHA256 `e634b80e72078e964f8bd2ac541d66f2a900920773cf993544609612190bd9a9`. The existing E004 generation/reference bridge is reused read-only from its isolated root. Local library loading paths and Torch/CUDA mappings are in each log. Pinned core/scalar_type.hpp and torch_utils.h were added for compilation, with exact source hashes and upstream license retained. Device template matches E004's archive byte-for-byte. `build.log` retains the compiler invocation, `build-source.sha256` its inputs, `sass.txt.gz` machine code, `resources.txt` resources, and `ldd.txt` linkage.
+
+Build uses CUDA13.4.92/GCC12.4.0, `-DUSE_CUDA -O3 -DNDEBUG -std=c++17 -lineinfo -arch=sm_120 --expt-relaxed-constexpr -shared -Xcompiler=-fPIC -Xptxas=-v`, same for every configuration, linked against the existing Python3.11/Torch2.14.0+cu130 environment. No march=native. ARC documentation/allocation were revalidated, one prun rank confirmed, and runtime thread/affinity plus full CPU/GPU/tool metadata preserved. User job 328410 remained RUNNING on c58, scheduled end 20:00:41 Eastern. Actual allocation is historical at continuation. Local host build/CTest pass is distinct from ARC CUDA/external checks.
+
+Additional diagnostic corrections are preserved: `build-attempt1.log`/`build_attempt1.sh` show missing USE_CUDA declaration guard before the successful common build. The first finite A-address model erroneously treated all 32 ldmatrix.x2 lanes as address suppliers. Corrected to the 16 supplying lanes before modified launches. The later N2048 candidate smoke was added to the local finite model before launch. Evidence retrieval then restored the older remote model, and the analyzer correctly rejected it. Retained that snapshot as `safety-model-initial.json` and regenerated the extended model. None of these changes alter the device body or excuse racecheck. No completed measurement was discarded or overwritten. The executed preparation helper also made a redundant direct runtime probe on the allocated compute node before its prun runtime check. The final helper removes that direct probe. The executed version is preserved as `prepare_arc_build.sh`. All E005 validation/diagnostic kernel invocations use prun. The final helper was syntax-checked but not rerun against the protected result root.
+
+Reproduction on a newly verified allocation requires the preserved isolated dependencies or a separately recorded equivalent environment. Use a fresh output root and preserve all old records. `prepare_source.py` preserves the original and emits the exact patch/selector. `prepare_arc.sh` runs actual launcher/runtime prerequisites and build. `attributes.py` performs dry resource gates. `run_arc.sh` supplies fixed direct-operator paths and stream/event harness. `validate_arc.sh` stops at the failing racecheck and never creates VALIDATED. `diagnose_gate_arc.sh` explicitly records expected failure codes for the bounded A/wheel diagnosis and runs the remaining independent checks. These helpers have historical absolute E004 bridge/result paths and must be reviewed for a new run. Never rerun against this result directory.
+
+```bash
+python3 scripts/e005/analyze.py results/e005_20261106
+python3 scripts/e005/safety.py
+# Historical validated-node invocation, not a new allocation request:
+# PROJECT_ROOT=/home/hpuvvad/csc548-w4a16-e005-20261106
+# E005_PYTHON=/tmp/e004-hpuvvad-20261106/bin/python
+# bash "$PROJECT_ROOT/scripts/e005/validate_arc.sh"
+```
+
+`measure_arc.sh` is preserved as an **unexecuted gated plan**, not a tested performance script or result. It requires the absent VALIDATED sentinel and matching binary hash. Its predeclared A/B/C order reverses/rotates between the two 10-warmup/100-sample series, includes separate fallback series, and retains E004 common graph/event/cache behavior through the unchanged helper. It would keep allocation, repack, validation, capture and optional store flush outside event intervals. Device-required lock/scratch maintenance stays inside the kernel. The graph stream is explicit. No sample, latency table, clock-variability series, held-out result, achieved-occupancy counter, Tensor/L2/DRAM counter or roofline value exists for E005. Metadata clocks are observations only.
+
+### E005 blocked measurement record
+
+| Requested evaluation | A | B | C | Reason |
+|---|---|---|---|---|
+| M1/M8, both cache policies, two primary latency series |Not run|Not run|Not run|Racecheck gate failed |
+| M16/M64 fallback latency series |Not run|Not run|Not run|Numerical/plan fallback checks passed, timing gate did not |
+| Held-out seed2,M2/M4,all three shapes |Not run|Not run|Not run|Candidate was not released beyond safety gate |
+| M8 Nsight counters/achieved residency |Not run|Not run|Not run|No profiling past the unresolved safety failure |
+
+These cells are unavailable results, not zero latency or evidence of a regression. The actual A/B/C resource-query table and sanitizer evidence above are the completed measurements.
+
+### E005 decision and revisit condition
+
+Do not accept B or C. Excess spatial reservation is established. Whether B helps, whether C adds benefit, and whether either generalizes remain unmeasured. The 5% latency criteria are untested, not failed performance comparisons. Preserve all three selectable configurations only as experimental controls. Existing project dispatch and E004 wheel remain unchanged. Stop after E005.
+
+Revisit only after a separately authorized safety investigation resolves the inherited racecheck report through an applicable documented tool explanation or an independently validated upstream/body/build correction. Such a correction requires a new matched control/candidate build, the full strict correctness/sanitizer prerequisite and every point of the predeclared timing series again. Do not repeat E005 unchanged or start another optimization to avoid the failed gate.

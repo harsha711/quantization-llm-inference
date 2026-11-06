@@ -94,7 +94,12 @@ E004 integrates pinned vLLM Marlin as a direct external comparator, with lossles
 repacking, isolated dependencies, strict all-row numerical checks, and a fresh
 performance map. See the [E004 record](docs/EXPERIMENTS.md#e004--maintained-marlin-integration-and-diagnostic-comparison)
 and [current status](docs/STATUS.md) for results, failed attempts, reproducible
-commands, and the single unimplemented next experiment. Existing kernels remain unchanged.
+commands, and provenance. E005 implements the bounded A/B/C reservation/grid
+ablation in an isolated harness, then stops at a racecheck report reproduced in
+its unchanged control and the official wheel. Numerical checks, memcheck and
+synccheck pass, but E005 performance and held-out evaluation remain unmeasured.
+See the [E005 record](docs/EXPERIMENTS.md#e005--specialization-aware-reservation-and-one-versus-two-block-residency).
+Existing project kernels and the E004 wheel remain unchanged.
 
 Each new session starts with [AGENTS.md](AGENTS.md), [current status](docs/STATUS.md),
 the [numerical and measurement contract](docs/CONTRACT.md), and relevant
