@@ -1,0 +1,16 @@
+1656ad3704 csrc/quantization/gptq_marlin/marlin_template.h            (Jinzhen Lin 2025-11-29 23:19:33 +0800 1659) 
+1d0c9d6b2d csrc/quantization/gptq_marlin/marlin_template.h            (Jinzhen Lin 2025-05-06 00:39:30 +0800 1660)       cp_async_wait<0>();
+1d0c9d6b2d csrc/quantization/gptq_marlin/marlin_template.h            (Jinzhen Lin 2025-05-06 00:39:30 +0800 1661)       bool last = slice_idx == slice_count - 1;
+1d0c9d6b2d csrc/quantization/gptq_marlin/marlin_template.h            (Jinzhen Lin 2025-05-06 00:39:30 +0800 1662)       // For per-column scales, we only fetch them here in the final step before
+1d0c9d6b2d csrc/quantization/gptq_marlin/marlin_template.h            (Jinzhen Lin 2025-05-06 00:39:30 +0800 1663)       // write-out
+2c9d68f80b csrc/libtorch_stable/quantization/marlin/marlin_template.h (Roderick Wu 2026-09-08 15:45:12 -0400 1664)       if constexpr (group_blocks == -1 &&
+d74e5f37bc csrc/quantization/gptq_marlin/marlin_template.h            (Jinzhen Lin 2025-05-11 10:58:49 +0800 1665)                     (has_zp && dequant_skip_flop || !has_zp)) {
+1656ad3704 csrc/quantization/gptq_marlin/marlin_template.h            (Jinzhen Lin 2025-11-29 23:19:33 +0800 1666)         if (b_type.size_bits() == 8 || (last || use_atomic_add) || is_a_8bit) {
+1d0c9d6b2d csrc/quantization/gptq_marlin/marlin_template.h            (Jinzhen Lin 2025-05-06 00:39:30 +0800 1667)           if (s_sh_wr_pred) {
+1d0c9d6b2d csrc/quantization/gptq_marlin/marlin_template.h            (Jinzhen Lin 2025-05-06 00:39:30 +0800 1668)             cp_async4(&sh_s[s_sh_wr], &scales_ptr[s_gl_rd]);
+1d0c9d6b2d csrc/quantization/gptq_marlin/marlin_template.h            (Jinzhen Lin 2025-05-06 00:39:30 +0800 1669)           }
+1d0c9d6b2d csrc/quantization/gptq_marlin/marlin_template.h            (Jinzhen Lin 2025-05-06 00:39:30 +0800 1670)           cp_async_fence();
+1d0c9d6b2d csrc/quantization/gptq_marlin/marlin_template.h            (Jinzhen Lin 2025-05-06 00:39:30 +0800 1671)         }
+1d0c9d6b2d csrc/quantization/gptq_marlin/marlin_template.h            (Jinzhen Lin 2025-05-06 00:39:30 +0800 1672)       }
+1d0c9d6b2d csrc/quantization/gptq_marlin/marlin_template.h            (Jinzhen Lin 2025-05-06 00:39:30 +0800 1673) 
+1d0c9d6b2d csrc/quantization/gptq_marlin/marlin_template.h            (Jinzhen Lin 2025-05-06 00:39:30 +0800 1674)       thread_block_reduce();
