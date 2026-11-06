@@ -1,5 +1,7 @@
 # Current status
 
+E007 is in progress under the user's authorization to continue while away, from clean `fdd0226`. It tests skipping one unused terminal A/B shared-to-register lookahead only in the analyzed eight-row 128x128 specialization. The corrected E006 barrier, quantization and host A/B/C policies remain unchanged. The single next task is to complete this bounded control/candidate experiment and update the handoff. Earlier completed records below remain preserved.
+
 **E005-R1 is complete. B/C are rejected under the predeclared performance criterion.** Starting state `b3abd3d` was verified clean. Criteria `2c0c4cd`, harness `f36a1bd`/`5379eb3`, complete raw evidence/analyzer `607a7f3`. Documentation commits follow. Original E005's stopped run and E006's correction evidence are unchanged. No push.
 
 The same corrected E006 library (`e4eca5e30436c547358a9c8125d69526c6bb3318da034afd54ada6744181e2b7`) serves A36/101376 B, B36/49664 B and C72/49664 B. Source/binary/runtime/environment identity and all 113 E006 handoff hashes were verified before and after measurement. E006's 135 numerical/162 sanitizer rows were reused without rebuilding or repeating the investigation. Fresh runtime/launcher checks, 27 small A/B/C numerical/replay cases and retained-project GPU checks pass. Every timed/profile row also passes unchanged all-output FP64 and operand/workspace checks.

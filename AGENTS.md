@@ -38,6 +38,10 @@
 - Use a separate `scripts/e005_r1/` and `results/e005_r1_20261106/`. Compare corrected A36/101376 B, B36/49664 B and C72/49664 B using the same corrected entrypoint. Only corrected A is a performance denominator. Preserve both cache policies, two balanced primary/fallback series, seed-2 held-outs and targeted M8 A/B/C profiles under the original 5% criteria. No new optimization or automatic dispatch.
 - E005-R1 is complete and rejected under the primary latency criterion. C increases observed concurrent CTA activity but gives only 0–0.237% M1 and 2.653–2.765% M8 no-flush gains. B gives no consistent primary gain. Held-out rectangular benefits do not override that criterion. Run its analyzer before interpreting results. Preserve failures, samples, profiler reports and corrected A. Await a user request before another optimization or a repeat with changed conditions.
 
+## Authorized continuation while user is away
+
+- The user authorized continued project work after E005-R1. E007 is one bounded source-supported terminal-lookahead experiment, predeclared in EXPERIMENTS.md. This overrides the earlier instruction to wait at the completed E005-R1 checkpoint only for this continuation. Keep E005/E006/E005-R1 immutable. Preserve the E006 barrier, fixed format and host launch policy. Do not turn it into a tuning search.
+
 ## ARC
 
 - Verify current [ARC documentation](https://arcm.csc.ncsu.edu/~mueller/cluster/arc/) and `scontrol show job` each session. Confirm allocation ownership, RUNNING state, nodes, remaining time, and GPU. Saved IDs/nodes are historical. Do no compute on the gateway.
