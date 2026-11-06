@@ -29,6 +29,9 @@ bash "$PROJECT_ROOT/scripts/e007/validate_arc.sh" smoke
 # Inspect actual source/SASS, runtime/launcher and full-output smoke evidence.
 bash "$PROJECT_ROOT/scripts/e007/validate_arc.sh" full
 # Inspect all numerical and sanitizer gates before releasing timing.
+# Preserve the exact reporting scripts referenced by the new execution manifests.
+cp "$PROJECT_ROOT/scripts/e007/check.py" "$PROJECT_ROOT/results/e007_20261106/check.py.measured.txt"
+cp "$PROJECT_ROOT/scripts/e007/analyze.py" "$PROJECT_ROOT/results/e007_20261106/analyze.py.measured.txt"
 bash "$PROJECT_ROOT/scripts/e007/measure_arc.sh"
 bash "$PROJECT_ROOT/scripts/e007/profile_arc.sh"
 ```
