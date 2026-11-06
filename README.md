@@ -90,6 +90,12 @@ They guard incomplete row tiles and retain each row's arithmetic order. Untimed
 validation compares every candidate output bit against E002, including rows
 outside the sampled FP64 reference. No automatic row-count selection is added.
 
+E004 integrates pinned vLLM Marlin as a direct external comparator, with lossless
+repacking, isolated dependencies, strict all-row numerical checks, and a fresh
+performance map. See the [E004 record](docs/EXPERIMENTS.md#e004--maintained-marlin-integration-and-diagnostic-comparison)
+and [current status](docs/STATUS.md) for results, failed attempts, reproducible
+commands, and the single unimplemented next experiment. Existing kernels remain unchanged.
+
 Each new session starts with [AGENTS.md](AGENTS.md), [current status](docs/STATUS.md),
 the [numerical and measurement contract](docs/CONTRACT.md), and relevant
 [experiment and design decisions](docs/EXPERIMENTS.md). The

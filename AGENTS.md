@@ -16,6 +16,11 @@
 - Never relax `|error| <= 1e-3*|reference| + 1e-3*rms(reference)`. Fail immediately on correctness/launcher errors and preserve diagnostics. No partial measurement claims. E002 requires all output bits to match retained E001 outside timing. E003 selectors `inblock_m2`/`inblock_m4` require full-output bitwise agreement with E002, including rows not sampled by FP64 checks.
 - Compare naive/inblock/inblock_specialized/inblock_m2/inblock_m4 in the same executable, seed, flags, node, and cache policy, retaining each defined launch mapping. Sweep M={1,8,32,128}, K=N=4096, group=128, seed=1, 10 warmups, at least 100 iterations, both flush and no-flush. E003 additionally measures M=5 with the same conditions as a separate row-tail point. Preserve the fixed two/four-row selectors and incomplete-tile bounds. Store flushing does not prove eviction. Query target metrics and profile separately. `eff_gbps` is modeled, not measured DRAM bandwidth.
 
+## E004 external comparator
+
+- Read E004 before using Marlin. Keep vLLM v0.33.0/source `4ba787ec9959e566d3b587a796dff07673324da5` and its official binary provenance explicit. Use isolated Python 3.11/Torch 2.14, direct dense uint4b8 operator, lossless codes/scales, FP32 global reduction. No serving/model dependencies or silent fallback. Do not change external kernels without a separately requested experiment.
+- E004 uses fresh common graph-event comparisons and explicit cuBLAS FP32-reduction math mode 16. Preserve both cache policies, raw samples, all-row FP64 checks, full retained controls and failed attempts. Do not use historical medians as E004 denominators. `scripts/e004/analyze.py` validates recorded evidence. The sole E005 recommendation remains unimplemented. Historical stage/resume helpers have fixed evidence paths, so use a distinct output root for reruns and never overwrite records. ARC prun flattens quoted `python -c` commands: use a script file.
+
 ## ARC
 
 - Verify current [ARC documentation](https://arcm.csc.ncsu.edu/~mueller/cluster/arc/) and `scontrol show job` each session. Confirm allocation ownership, RUNNING state, nodes, remaining time, and GPU. Saved IDs/nodes are historical. Do no compute on the gateway.
