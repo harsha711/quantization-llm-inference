@@ -24,3 +24,6 @@ if command -v compute-sanitizer >/dev/null 2>&1; then
 else
   echo 'Compute Sanitizer unavailable; memory/synchronization checks not run.' >&2
 fi
+if [[ -n "${RUN_DIR:-}" ]]; then
+  sha256sum build/w4a16_bench > "$RUN_DIR/check.sha256"
+fi
