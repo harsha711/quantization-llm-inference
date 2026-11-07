@@ -38,7 +38,11 @@ def main(r):
         data=[json.loads(x) for x in (r/(stem+'.jsonl')).read_text().splitlines()]
         assert len(data)==len(expected)
         assert {(v['K'],v['N'],v['config'],v['pattern'],v['policy']) for v in data}==expected
-        for v in data:checked(v)
+        for v in data:
+            checked(v)
+            if not stem.startswith('series'):
+                assert v['warmup']==0 and v['iters']==0
+                assert 'samples_us' not in v
         return data
     for stem in ('runtime','identity','identity-final','project-build','project-ctest','project-gpu'):
         assert (r/(stem+'.exit')).read_text().strip()=='0',stem
