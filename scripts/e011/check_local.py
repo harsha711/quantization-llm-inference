@@ -8,6 +8,9 @@ import analyze
 import plan
 
 plan.self_test()
+assert analyze.kernel_identity('void Kernel2<tile_a>(Params)') == analyze.kernel_identity('void cutlass::Kernel2<tile_a>(tile_a::Params)')
+assert analyze.kernel_identity('void reduce<32, float, 0, 1>(Params)') == analyze.kernel_identity('void ns::reduce<32, float, false, true>(Params)')
+assert analyze.kernel_identity('void Kernel2<tile_a>(Params)') != analyze.kernel_identity('void Kernel2<tile_b>(Params)')
 path = Path(__file__).resolve().parents[2] / 'results/e010_c4_20261107/validation.jsonl'
 row = json.loads(path.read_text().splitlines()[0])
 analyze.matched(row, row)

@@ -7,6 +7,7 @@ import hashlib
 import importlib.util
 import json
 import math
+import re
 from pathlib import Path
 import statistics
 
@@ -27,6 +28,16 @@ def number(row, key):
     value = float(row[key].replace(',', ''))
     assert math.isfinite(value), (key, row[key])
     return value
+
+
+def kernel_identity(symbol):
+    # shortcut: these cuBLAS templates have no nested arguments, extend if target traces introduce them.
+    function, arguments = symbol.split('<', 1)
+    arguments = arguments.split('>', 1)[0]
+    assert '<' not in arguments
+    arguments = re.sub(r'\btrue\b', '1', re.sub(r'\bfalse\b', '0', arguments))
+    arguments = re.sub(r'\((?:bool|int|long|unsigned int)\)', '', arguments)
+    return function.rsplit('::', 1)[-1].split()[-1], re.sub(r'\s+', '', arguments)
 
 
 def matched(row, reference):
@@ -142,12 +153,18 @@ def main(root, stage):
         assert len(values) == trace['launch_count'], (tag, len(values))
         kernels = []
         for i, value in enumerate(values):
+            assert value['CC'] == '12.0'
             expected = trace['kernels_by_matrix'][3][i]
             if trace['config'] == 'marlin':
                 assert e010.template_values(value['Kernel Name']) == e010.template_values(expected)
             else:
-                assert value['Kernel Name'].replace(' ', '') == expected.replace(' ', '')
+                assert kernel_identity(value['Kernel Name']) == kernel_identity(expected)
             normalized = {metric: number(value, metric) for metric in metrics}
+            if trace['config'] == 'marlin':
+                for metric, attribute in [('launch__grid_size', 'grid'), ('launch__block_size', 'threads'),
+                                          ('launch__registers_per_thread', 'registers'),
+                                          ('launch__shared_mem_per_block_dynamic', 'dynamic_shared')]:
+                    assert normalized[metric] == trace['resources'][0][attribute]
             assert unit['gpu__time_duration.sum'] == 'ns'
             normalized['duration_us'] = normalized['gpu__time_duration.sum']/1000
             kernels.append(dict(name=value['Kernel Name'], units={metric: unit[metric] for metric in metrics}, metrics=normalized))
