@@ -1,0 +1,12 @@
+scripts/e011/profile.py: OK
+scripts/e011/plan.py: OK
+scripts/e011/calibrate.py: OK
+scripts/e011/metrics.txt: OK
+scripts/e011/measure_arc.sh: OK
+scripts/e010/bench.py: OK
+scripts/e008/bench.py: OK
+scripts/e005/bench.py: OK
+scripts/e004/bench.py: OK
+scripts/e004/bridge.cu: OK
+src/cuda/dequant.cu: OK
+src/cuda/cublas_gemm.cu: OK

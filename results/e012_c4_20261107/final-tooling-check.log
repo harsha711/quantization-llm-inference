@@ -1,0 +1,14 @@
+scripts/e012/measure_arc.sh: OK
+scripts/e012/export_pc.py: OK
+scripts/e012/regions.py: OK
+scripts/e012/instruction-metrics.txt: OK
+scripts/e012/sampling-metrics.txt: OK
+scripts/e011/profile.py: OK
+scripts/e011/plan.py: OK
+scripts/e010/bench.py: OK
+scripts/e008/bench.py: OK
+scripts/e005/bench.py: OK
+scripts/e004/bench.py: OK
+scripts/e004/bridge.cu: OK
+src/cuda/dequant.cu: OK
+src/cuda/cublas_gemm.cu: OK

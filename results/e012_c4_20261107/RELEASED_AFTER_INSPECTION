@@ -1,0 +1,3 @@
+2026-11-07T14:40:30-05:00
+PASS: original source/binary/environment, complete targets and full-output E011 agreement; same-environment safety evidence reused
+Agent inspected validation job 329217 exit 0; release fixed collection 4f4a057, no kernel changes.

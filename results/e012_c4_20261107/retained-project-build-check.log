@@ -1,0 +1,4 @@
+CMakeLists.txt: OK
+scripts/build.sh: OK
+build/w4a16_bench: OK
+build/test_cpu: OK

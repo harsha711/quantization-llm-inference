@@ -1,0 +1,4 @@
+PASS: original source/binary/environment, complete targets and full-output E011 agreement; same-environment safety evidence reused
+PASS: 4 instruction and 8 sampling profiles structurally complete, all replay outputs and exact sources checked
+Quality: 4 /12 cases pass predeclared per-case/series gates
+Instruction hypothesis supported in both orientations: False

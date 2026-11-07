@@ -1,0 +1,4 @@
+K=4096 N=11008 M=4: source HMMA count 176128 exactly matches E011 Tensor instruction count. This does not establish unperturbed timing.
+K=4096 N=11008 M=128: source HMMA count 2818048 exactly matches E011 Tensor instruction count. This does not establish unperturbed timing.
+K=11008 N=4096 M=4: source HMMA count 176128 exactly matches E011 Tensor instruction count. This does not establish unperturbed timing.
+K=11008 N=4096 M=128: source HMMA count 2818048 exactly matches E011 Tensor instruction count. This does not establish unperturbed timing.
