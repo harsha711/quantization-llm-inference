@@ -1,0 +1,12 @@
+scripts/e010/README.md: OK
+scripts/e010/analyze.py: OK
+scripts/e010/bench.py: OK
+scripts/e010/check_analysis.py: OK
+scripts/e010/env_arc.sh: OK
+scripts/e010/measure_arc.sh: OK
+scripts/e010/prepare_arc.sh: OK
+scripts/e010/resume_validation_arc.sh: OK
+scripts/e010/validate_arc.sh: OK
+scripts/e008/bench.py: OK
+scripts/e005/bench.py: OK
+scripts/e004/bench.py: OK

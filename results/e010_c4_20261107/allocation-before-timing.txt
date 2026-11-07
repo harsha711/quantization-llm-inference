@@ -1,0 +1,25 @@
+JobId=328964 JobName=interactive
+   UserId=hpuvvad(473382) GroupId=ncsu(108) MCS_label=N/A
+   Priority=1 Nice=0 Account=(null) QOS=normal
+   JobState=RUNNING Reason=None Dependency=(null)
+   Requeue=1 Restarts=0 BatchFlag=0 Reboot=0 ExitCode=0:0
+   RunTime=01:29:30 TimeLimit=06:00:00 TimeMin=N/A
+   SubmitTime=2026-11-07T09:56:45 EligibleTime=2026-11-07T09:56:45
+   AccrueTime=2026-11-07T09:56:45
+   StartTime=2026-11-07T09:56:45 EndTime=2026-11-07T15:56:45 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2026-11-07T09:56:45 Scheduler=Main
+   Partition=rtx5060ti16g AllocNode:Sid=login2:871267
+   ReqNodeList=(null) ExcNodeList=(null)
+   NodeList=c4
+   BatchHost=c4
+   NumNodes=1 NumCPUs=16 NumTasks=1 CPUs/Task=1 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=1,mem=1M,node=1,billing=1
+   AllocTRES=cpu=16,node=1,billing=16
+   Socks/Node=* NtasksPerN:B:S:C=0:0:*:* CoreSpec=*
+   MinCPUsNode=1 MinMemoryNode=0 MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=NO Contiguous=0 Licenses=(null) LicensesAlloc=(null) Network=(null)
+   Command=/bin/sh
+   WorkDir=/home/hpuvvad
+   
+
