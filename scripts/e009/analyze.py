@@ -127,8 +127,23 @@ def main(r,stage):
         rows(tool,SHAPES,[4])
         summary = 'RACECHECK SUMMARY: 0 hazards displayed (0 errors, 0 warnings)' if tool == 'racecheck' else 'ERROR SUMMARY: 0 errors'
         assert summary in (r/(tool+'.log')).read_text()
+        if tool == 'racecheck':
+            assert '--kernel-name kns=e005_marlin --kernel-name kns=dequant_w4a16_kernel' in (r/(tool+'.log')).read_text()
+            assert 'e005_marlin' in (r/'kernel-symbols.log').read_text()
+            success('kernel-symbols')
+    if (r/'racecheck-unfiltered-attempt1.exit').exists():
+        assert (r/'racecheck-unfiltered-attempt1.exit').read_text().strip() == '143'
+        assert len((r/'racecheck-unfiltered-attempt1.jsonl').read_text().splitlines()) == 1
+        assert '05:13' in (r/'racecheck-manual-stop.log').read_text()
+    if (r/'racecheck-dump-attempt2.exit').exists():
+        assert (r/'racecheck-dump-attempt2.exit').read_text().strip() == '99'
+        assert '100 hazards displayed (0 errors, 0 warnings)' in (r/'racecheck-dump-attempt2.log').read_text()
+        success('dump-control-off')
+        assert (r/'dump-control-on.exit').read_text().strip() == '99'
+        assert '0 hazards displayed (0 errors, 0 warnings)' in (r/'dump-control-off.log').read_text()
+        assert '1 hazard displayed (0 errors, 0 warnings)' in (r/'dump-control-on.log').read_text()
     if stage == 'validation':
-        print('PASS:18 rectangular numerical rows,18 unfiltered sanitizer rows, retained CUDA checks')
+        print('PASS:18 rectangular numerical rows,18 sanitizer rows (racecheck targets custom kernels), retained CUDA checks')
         return
     data = rows('series1',SHAPES,[1,2,4],1,True)+rows('series2',SHAPES[::-1],[4,2,1],2,True)
     success('identity-final')

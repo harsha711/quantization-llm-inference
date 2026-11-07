@@ -1,0 +1,7 @@
++ prun timeout 1200 compute-sanitizer --tool racecheck --error-exitcode 99 /tmp/e005-r2-hpuvvad-20261106/bin/python scripts/e009/check_sanitizer_dump.py
+[prun] Master compute host = c10
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun timeout 1200 compute-sanitizer --tool racecheck --error-exitcode 99 /tmp/e005-r2-hpuvvad-20261106/bin/python scripts/e009/check_sanitizer_dump.py (family=openmpi4)
+========= COMPUTE-SANITIZER
+PASS: one harmless fill kernel
+========= RACECHECK SUMMARY: 0 hazards displayed (0 errors, 0 warnings)
