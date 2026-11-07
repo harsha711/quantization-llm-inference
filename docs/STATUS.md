@@ -1,3 +1,7 @@
+# E011 in progress
+
+E011 is the authorized endpoint profiling continuation from completed E010. Scope and competing hypotheses are predeclared in EXPERIMENTS. No active ARC allocation exists at preflight. Queue only a small c4 prerequisite, inspect installed Nsight replay capabilities and identities before choosing the final method or releasing profiles. Earlier E010 completion follows unchanged.
+
 # Current status
 
 **E010 is complete. No winner crossover is observed through M128 on either rectangle.** Corrected Marlin A has a lower median than pre-materialized FP16 W_hat cuBLAS in both reversed series at every requested point. At K4096/N11008, speedup declines from 4.390–4.428× at M4 to 1.022–1.030× at M128. The latter gains only 2.166%/2.903%, below the 5% practical-gain criterion. K11008/N4096 still gains 15.203%/16.808% at M128. Seven of eight practical-gain gates pass. No sign-change bracket exists, so no midpoint is measured. See the [full table/design record](EXPERIMENTS.md#e010-final-measurements-and-decision) and [raw evidence](../results/e010_c4_20261107/).
