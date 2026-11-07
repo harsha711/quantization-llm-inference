@@ -1,5 +1,13 @@
 # Current status
 
+**The requested pre-E008 [bottleneck assessment](BOTTLENECK_ASSESSMENT.md) is complete, using evidence checkpoint `ab54819`. Keep E006 corrected A as the baseline. E005-R1 and E007 remain negative results and neither becomes the default.** No kernel, launch policy, benchmark condition or raw evidence changed. Both existing analyzers pass on temporary evidence copies, retaining their rejection decisions.
+
+The corrected square M8 profiles support limited ready work with added partition/instruction costs when concurrency rises. They do not isolate a unique memory or compute limit. The strongest unconfirmed lead is rectangular stripe distribution: M4 C gains 9.081% no-flush for K4096/N11008, versus 1.834% for the transpose in one held-out series. There are no matching corrected rectangular counter profiles.
+
+**Single next task: obtain the user's decision on a bounded rectangular confirmation using the preserved A/C binaries.** The assessment proposes two reversed timing series at M4/seed2, both orientations and cache policies, then one targeted profile pair only if the gain reproduces. This is a proposal, not an executed measurement or authorization to implement E008. Do not repeat E007 or change defaults. No current ARC allocation check or GPU run was needed for this saved-data assessment. Historical allocation statements below are not current-state claims.
+
+The remaining sections preserve earlier handoffs.
+
 **E007 is complete and rejected under its predeclared latency criterion.** It ran under the user's authorization to continue while away, from verified clean `fdd0226`. Criteria `34a2cc1`, source `f3ea292`, gates `b351d82`, timing/profiling `d00053f`/`c813edd`, initial evidence `e3dcd69`, complete measurement/corrected accounting `520c4e5`. Documentation commits follow. Earlier E005/E006/E005-R1 source/results/binaries remain unchanged. No push.
 
 The candidate predicates away the unused terminal A/B register fetch only for the analyzed eight-row 128x128 specialization. It preserves E006's barrier, every async operation, scales, arithmetic, format/group size and host policy. All 16 rebuilt corrected-control SASS functions match E006. All 15 candidate fallback functions remain identical. Both bodies pass 270 fresh regular numerical rows with matching full-output hashes, 54 smoke rows and 162 candidate sanitizer rows. Retained project GPU checks also pass. No tolerance or sanitizer criterion changes.

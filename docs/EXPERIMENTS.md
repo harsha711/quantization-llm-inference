@@ -2,6 +2,18 @@
 
 Read the numerical/measurement [contract](CONTRACT.md) before interpreting these records. Preserve raw evidence, failed attempts, and inconclusive outcomes. An alternative that has not been implemented or measured is not a failed optimization. Historical entries below reconstruct only what the repository supports. Missing prior failure numbers or commit IDs remain unknown.
 
+## Pre-E008 — Saved-profile bottleneck assessment
+
+Status: completed assessment, no new experiment implemented or measured. Requested after `ab54819`.
+
+**Question and alternatives:** Determine whether the corrected kernel is constrained by available parallel work, memory service, or partition/reduction overhead before choosing E008. Preserve E006 corrected A, E005-R1 and E007. Do not infer a bottleneck from occupancy alone or treat a small instruction reduction as a runtime fraction.
+
+**Evidence and validation:** Read the retained E005-R1/E007 profiles, application comparisons and finite stripe model. Run `python3 scripts/e005_r1/analyze.py <temporary-copy-of-results/e005_r1_20261106>` and `python3 scripts/e007/analyze.py <temporary-copy-of-results/e007_20261106>`. Both pass, confirming 8400/5600 samples and the original rejection decisions. Temporary copies prevent regenerated derived files from changing historical evidence. Recompute instruction/L2 deltas and rectangular timing changes from CSV values. No numerical, sanitizer or CUDA rerun applies to this documentation-only assessment.
+
+**Findings and decision:** [The short assessment](BOTTLENECK_ASSESSMENT.md) separates observations from competing explanations. Corrected square profiles support limited ready work with added overhead when concurrency increases, without establishing a unique dominant pipeline or memory limit. The strongest lead is the single-series rectangular gain, not E007's terminal guard. Recommend a small independent A/C timing confirmation with the preserved corrected library before collecting rectangular profiles. No new algorithm, default or dispatch is selected.
+
+**Next evidence required:** Two reversed M4/seed2 timing series for both rectangular orientations and both cache policies, with unchanged correctness/methodology, followed only conditionally by one matched profile pair. These measurements are proposed and unperformed. They do not reverse E005-R1's failed primary criterion. Await a user decision before execution or E008 implementation. E007's recorded revisit condition remains unchanged.
+
 ## H001 — Correct FP16 reconstruction before accumulation
 
 Status: accepted historical correction, already present in baseline commit `8a68227`.

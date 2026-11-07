@@ -43,6 +43,11 @@
 - The user authorized continued project work after E005-R1. E007 is one bounded source-supported terminal-lookahead experiment, predeclared in EXPERIMENTS.md. This overrides the earlier instruction to wait at the completed E005-R1 checkpoint only for this continuation. Keep E005/E006/E005-R1 immutable. Preserve the E006 barrier, fixed format and host launch policy. Do not turn it into a tuning search.
 - E007 is complete and rejected under its5% latency criterion. Participating LDS loads fall 1.931% but issued warp instructions rise 1.757%, with M8 median ties and no reproducible M1 gain. Registers126→124 still allocate128. Preserve measured checker snapshots and corrected static counts: 121 total load opcode sites, 70 permanently off, 51 potentially active in each body. Do not repeat this guard unless its recorded revisit condition changes. Hand off before another optimization.
 
+## Pre-E008 assessment
+
+- Read `docs/BOTTLENECK_ASSESSMENT.md`. Keep E006 corrected A as baseline. E005-R1 and E007 remain negative results and neither becomes default.
+- Saved square profiles do not establish a unique bottleneck. Rectangular gains have one timing series and no corrected rectangular profiles. The proposed bounded A/C confirmation requires a user decision. No E008 implementation, repeat measurement or dispatch is authorized by the assessment request.
+
 ## ARC
 
 - Verify current [ARC documentation](https://arcm.csc.ncsu.edu/~mueller/cluster/arc/) and `scontrol show job` each session. Confirm allocation ownership, RUNNING state, nodes, remaining time, and GPU. Saved IDs/nodes are historical. Do no compute on the gateway.
