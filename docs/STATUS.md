@@ -2,7 +2,7 @@
 
 **E005-R2 rectangular confirmation is authorized and predeclared from `925be8a`.** Keep the E006 corrected binary unchanged and compare only preserved A/C at M4/seed2, both rectangles/cache policies, two reversed series, exactly16 timing rows. A rectangle continues only with at least5% lower C no-flush median in each series. Store-flush regressions are reported separately. Profile the strongest passing rectangle only. No automatic dispatch, new partitioning or E008 implementation is authorized.
 
-Current prerequisite: verify c10 allocation328681 and restore the pinned node-local Python runtime. c10's driver differs from c58, so fresh relevant numerical/sanitizer validation precedes timing. Preserve historical evidence, failed attempts and all raw results. See the new [experiment record](EXPERIMENTS.md#e005-r2--independent-rectangular-ac-confirmation).
+c10 allocation328681, the restored exact dependency freeze, all preserved source/binary hashes, one-rank runtime and six small A/C cases are verified. Fresh rectangular numerical/sanitizer validation and retained project GPU checks are in progress. No timing has been released. c10's driver differs from c58. Preserve historical evidence, failed attempts and all raw results. See the new [experiment record](EXPERIMENTS.md#e005-r2--independent-rectangular-ac-confirmation).
 
 The sections below preserve previous handoffs.
 
