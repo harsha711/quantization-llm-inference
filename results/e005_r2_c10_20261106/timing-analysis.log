@@ -1,0 +1,39 @@
+{
+  "status": "continue with one matched profile pair",
+  "gate": "at least 5% lower C no-flush median in each series, per rectangle",
+  "rectangles": [
+    {
+      "K": 4096,
+      "N": 11008,
+      "no_flush_gain_pct": [
+        13.3333346714405,
+        13.283497220759877
+      ],
+      "passes": true,
+      "minimum_gain_pct": 13.283497220759877
+    },
+    {
+      "K": 11008,
+      "N": 4096,
+      "no_flush_gain_pct": [
+        7.823963524717225,
+        6.3354084424244945
+      ],
+      "passes": true,
+      "minimum_gain_pct": 6.3354084424244945
+    }
+  ],
+  "profile_shape": [
+    4096,
+    11008
+  ],
+  "body_sha256": "e4eca5e30436c547358a9c8125d69526c6bb3318da034afd54ada6744181e2b7",
+  "timing_rows": 16,
+  "timed_samples": 1600,
+  "smoke_rows": 6,
+  "fresh_numerical_rows": 12,
+  "fresh_sanitizer_rows": 12,
+  "max_abs": 0.0016377683277823962,
+  "max_rel_l2": 0.0002078045406591234,
+  "automatic_dispatch_authorized": false
+}
