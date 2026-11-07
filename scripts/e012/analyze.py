@@ -151,7 +151,7 @@ def main(root, old, e006):
         for m in MS:
             a, b = [row for row in samples if (row['K'], row['N'], row['M']) == (k, n, m)]
             shifts = {phase: 100 * (b['counts'].get(phase, 0) / b['total'] - a['counts'].get(phase, 0) / a['total'])
-                      for phase in a['counts'].keys() | b['counts'].keys()}
+                      for phase in sorted(a['counts'].keys() | b['counts'].keys())}
             a['series_shift_pp'] = b['series_shift_pp'] = shifts
             if max(abs(value) for value in shifts.values()) > 10:
                 a['quality'].append('region share shifts more than 10 percentage points')

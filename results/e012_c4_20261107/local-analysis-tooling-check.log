@@ -1,0 +1,3 @@
+scripts/e012/analyze.py: OK
+scripts/e012/check_analysis.py: OK
+scripts/e012/check_validation.py: OK

@@ -1,6 +1,6 @@
 # W4A16 mixed-precision GEMM (CSC 548)
 
-**Current experiment:** [E011](docs/EXPERIMENTS.md#e011-final-measurements-and-decision) is complete on c4: eight endpoint profiles and 16 fresh timing rows. Marlin's M4→M128 advantage narrows while its DRAM reads stay nearly constant and instruction/Tensor work grows. The M128 orientation difference largely reflects the changed cuBLAS baseline; aggregate counters do not isolate a single cause. **Keep corrected A unchanged; no kernel change justified yet.** See [STATUS](docs/STATUS.md), the [eight-case table and analysis](docs/EXPERIMENTS.md#e011-final-measurements-and-decision), [reproduction](scripts/e011/README.md) and [raw evidence](results/e011_c4_20261107/).
+**Current experiment:** [E012](docs/EXPERIMENTS.md#e012-final-findings-and-decision) is complete: four instruction profiles and eight PC-sampling captures on c4, with the corrected kernel unchanged. Instruction work grows at M128, but ambiguous caller ownership prevents a firm majority attribution. All eight sampling captures fail their predeclared quality gate. **Keep corrected A unchanged.** See [STATUS](docs/STATUS.md), the [tables/design record](docs/EXPERIMENTS.md#e012-final-findings-and-decision), [reproduction](scripts/e012/README.md) and [raw evidence](results/e012_c4_20261107/).
 
 C = A·B with A an M×K FP16 activation matrix and B a K×N weight matrix stored as
 packed INT4 with group-wise FP16 scales. Fused kernels dequantize in registers,

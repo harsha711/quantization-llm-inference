@@ -31,3 +31,7 @@ Do not promote every row to a bottleneck explanation. If a trial fails, record w
 ## E012 authorized diagnostic
 
 E011 does not isolate M128 main-loop versus reduction/epilogue/lock instruction work or waiting. E012 queries source-PC capability and performs only the predeclared diagnostic if supported. Dynamic instructions and sampled consumer-PC waits answer different questions. Neither alone proves a critical-path speedup opportunity. No partition rewrite or automatic dispatch follows. Keep insufficient samples/unmapped sites explicit and preserve corrected A.
+
+## E012 completed diagnostic
+
+Four source-count captures support increased M128 work, but 31–45% ambiguous caller ownership keeps the robust main-loop majority bound below 50%. Known coordination/epilogue instruction shares do not bound critical-path cost. All eight one-pass/32-cycle sampling captures have dropped bytes and fail quality. M128 also fails source coverage because all-ones PC samples have no source mapping. These data justify no kernel change. A separately requested quality-focused pilot must establish no dropped data and audit the unmapped PC before another fixed series. Caller/CFG evidence must support any finer attribution. Do not infer a partition rewrite, dispatch rule or instruction-cache bottleneck from these records.

@@ -1,15 +1,40 @@
 # E012 source-PC attribution
 
-Predeclared at `83b1e72`. Corrected A and the frozen E011 harness remain unchanged. Read the [design and quality gates](../../docs/EXPERIMENTS.md#e012--bounded-source-pc-attribution-of-corrected-marlin) before releasing measurements.
+Complete, evidence checkpoint `181f6fe`. All four instruction and eight sampling profiles pass structural/numerical checks. All eight sampling captures fail the predeclared quality gate. Instruction caller ambiguity also prevents a firm majority attribution. Keep corrected A unchanged. Read the [tables, decisions and failures](../../docs/EXPERIMENTS.md#e012-final-findings-and-decision) before another experiment.
 
-First inspect `capability_arc.sh` on c4 in one sbatch/prun rank with an exported absolute PROJECT_ROOT. It records allocation/hardware, verifies the complete preserved E011 handoff, queries the source and warp-sampling collections separately, exports existing exact-binary source/SASS correlation, and inspects the installed report API. This metadata/source-import stage does not validate a new GPU workload or authorize real profiles by itself. Inspect its result before runtime restoration, actual-executable correctness prerequisites and any dependent collection.
+## Fixed workload and method
 
-No old source/results are overwritten. An unsupported metric/replay combination is an inconclusive branch, not a reason to substitute an isolated workload or rebuild the kernel.
+Corrected E006 A only, M4/M128, K/N=4096/11008 and 11008/4096. Reuse frozen `scripts/e011/profile.py`, four distinct seed-3–6 matrices, common capacity-128 activation prefixes, G128, mode 16 and the exact numerical contract. The profiling harness repeats all setup/full-output/guard checks, ten direct warmup cycles and the complete 100-cycle event graph on every pass. Application replay selects the fourth operation of the final cycle: skip 399/count 1. Use strict grid/order matching, graph-node mode, cache-control none, clock-control none and dynamic pipeline boost. No new application timing, kernel change or cuBLAS comparison.
 
-The original c52-only prerequisite 329188 remains queued without executing after c52 is allocated elsewhere. A later scheduler check finds c4 idle. Preserve the c52 submission/script and cancel only that agent-created pending job, then submit the identical cheap check on c4. No measurements are moved or combined.
+`instruction-metrics.txt` requests one software-patched counter at four cases. `sampling-metrics.txt` requests total samples, five not-issued indicators and six diagnostics in two reversed case orders. Sampling is fixed at option 0/32 cycles, one pass and 33554432 B buffer. Patched instruction counts are diagnostic. Sampling locates consumers and has no phase-time resolution. Neither yields production phase latency or a uniquely identified producer bottleneck.
 
-`source_inspection_arc.sh` uses one CPU on c54 solely for offline imports of the preserved c4 reports. It performs no GPU workload or metric collection. This lets source/API inspection proceed while hardware prerequisite 329192 waits for c4. Its metadata is separate under `results/e012_source_c54_20261107`.
+`export_pc.py` combines exact report API metric instances with all CLI-exported inline source contexts. The installed CUDA `ncu` wrapper selects `/opt/nvidia/nsight-compute/2026.3.1/extras/python`. The initial parent-directory locator failed and remains preserved. `regions.py` verifies the E006 source archive/hash and representative boundaries. It counts each PC once and keeps conflicting phases or helper-only callers ambiguous. Exact all-ones PC samples remain unmapped and in the denominator.
 
-The c4 capability job actually ran and failed only at the original API locator. Its successful inputs/queries/exports remain preserved. `validate_arc.sh` resumes the fixed API check and gates actual runtime, exact mapped libraries, retained GPU checks and all four full-output target traces against E011. Unchanged same-environment E010 sanitizer evidence is reused. Real profile jobs require this validation to pass and be inspected first.
+## Evidence and gates
 
-Source attribution retains all CLI-exported inline contexts and exact API counter instances. One PC is counted once. Generic helper-only sites and conflicting source phases stay ambiguous. Software-patched instruction counts cannot supply production phase time, and sampled waits identify consumers rather than unique producers.
+- `capability_arc.sh`: c4 hardware, source/warp queries and preserved E011 handoff. Original job 329192 fails only at the API locator after successful earlier steps.
+- `source_inspection_arc.sh`, `inspect_install.py`, `resume_source_inspection_arc.sh`, `query_chip_arc.sh`: CPU-only c54 report/installation queries. The explicit gb206 query is not a query of c54's counters. No sm120 kernel executes on c54. The initial c52 job 329188 is cancelled unstarted after its node becomes occupied.
+- `validate_arc.sh`: corrected API, actual runtime/small correctness, exact libraries, retained GPU checks and all four new full-output traces matching E011. Reuse the unchanged same-environment external-kernel sanitizer evidence. Job 329217 completes in 2m01s.
+- `measure_arc.sh`: fixed twelve captures. Job 329220 has afterok:329217 and is submitted on hold, then released only after inspecting the gate. It completes in 5m56s. No retry/tuning follows failed sampling quality.
+- `analyze.py`, `check_analysis.py`: verify every replay/output/source, exact counter units and aggregate/PC sums, source contexts, full template arguments and quality criteria. Corrupt/missing evidence is rejected. Invalid-quality captures remain inconclusive. `analyze_arc.sh` runs only CPU checks on c54 and hashes raw profiles before/after.
+
+ARC jobs use sbatch/prun, one task and absolute PROJECT_ROOT. GPU jobs use 16 threads on c4. CPU-only c54 jobs request one CPU/task, while Slurm allocates the whole 16-CPU node. Saved job IDs are historical. Use distinct roots for any separately authorized rerun, never the completed output paths. The initial API failures, stale queue-status correction and premature retrieval extraction are documented. Successful raw records are unchanged. The early partial identity log is preserved under `checkpoints/gate-retrieval/`.
+
+## Reproduce the analysis
+
+From the full repository checkout:
+
+```sh
+export PYTHONDONTWRITEBYTECODE=1
+python3 scripts/e012/check_local.py
+python3 scripts/e012/check_validation.py results/e012_c4_20261107 results/e011_c4_20261107
+python3 scripts/e012/analyze.py results/e012_c4_20261107 results/e011_c4_20261107 results/e006_20261106
+python3 scripts/e012/check_analysis.py results/e012_c4_20261107 results/e011_c4_20261107 results/e006_20261106
+sha256sum -c results/e012_c4_20261107/handoff.sha256
+```
+
+The last three positional paths are this experiment, retained E011 references and archived E006 source evidence. `attribution.json` retains counts, quality failures, series shifts and conservative ownership bounds. `attribution-summary.csv` and the two Markdown tables are generated, with deterministic phase-key ordering. Exact PC instances remain in compressed JSON alongside every binary report and raw/source CSV. No phase-time claim is made. The analysis marker records structural completion, not acceptance of sampling quality. Reanalysis can regenerate derived files, so verify the handoff before regenerating them.
+
+## Result and stopping rule
+
+Known main-loop instruction increments are about 70% of the total increments, but caller-ambiguity bounds allow less than 50%. All eight sampling captures report dropped bytes despite zero overflow. M128 also falls below 95% source coverage. Do not use the saved failed-quality shares to choose a kernel optimization, discard all-ones PC samples, reinterpret zero overflow as losslessness or repeat unchanged sampling. A separately requested quality-focused pilot and better caller evidence are prerequisites for further attribution. No dispatch, partition rewrite, inference benchmark or next experiment is implemented.
