@@ -1,0 +1,6 @@
+PASS: every E010 table value agrees with raw-derived CSV at stated precision
+PASS:32 rows/3200 cycles/12800 timed GEMMs, seven meaningful gates and no winner bracket
+PASS: benchmark unchanged since6d066e5 and frozen measured tooling exact
+PASS: all retained project sources unchanged and portable host build flags recorded
+PASS: scope limited to E010 tooling/evidence and current documentation, prior results unchanged
+PASS: final user allocation RUNNING and captured GPU process table empty

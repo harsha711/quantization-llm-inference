@@ -61,9 +61,11 @@
 - Preserve M=4/G128, seeds 3–6, fixed activation, complete cycles, no artificial flush, one reusable unfused temporary and mode 16. All paths compute with W_hat. This measures net compressed execution including kernels/footprints, and the unfused comparison does not isolate fusion alone. No inference/token-throughput, stable-tail or unique-bottleneck claim.
 - Source/binary/dependency/operand identities and fresh c4 validation pass. Measured tooling is frozen by its manifest. The installed launch-dump option caused exit99 from informational records, reproduced by a harmless fill control. Preserve those c10 failures and never repeat that diagnosis without new evidence. Final racecheck has no dump and zero hazards/errors/warnings. Await another request before measurements, tuning, profiles, dispatch or a partition rewrite. Reverify saved allocation 328964/c4 before any future work.
 
-## E010 authorized batch crossover
+## E010 completed batch crossover
 
-- The user authorized E010 after E009. Read its predeclared record. Fix four distinct matrices and both rectangles, compare corrected A against mode-16 pre-materialized W_hat cuBLAS at M4/16/64/128 with two reversed complete-cycle series. Verify actual specialization/resources at every M. Add one midpoint only for an adjacent agreed crossover bracket. Preserve all previous code/results and numerical rules. No kernel change, dispatch, counter sweep or next experiment.
+- E010 is complete. Read its final record and run its analyzers before interpretation. Four matrices/two rectangles/M4,16,64,128 produce 32 timing rows/3200 samples in two reversed series. Marlin has lower medians everywhere, with no sign-change bracket, so no midpoint is run. K4096/N11008 at M128 gains only 2.166%/2.903%, below 5%. The transpose gains 15.203%/16.808%. No dispatch or extrapolation above 128.
+- Actual-call traces and resource queries verify M4 eight-row 128Kx128N, M16 sixteen-row 128Kx128N, M64/M128 sixty-four-row 64Kx256N, with two 64-row tiles inside one M128 call. Keep corrected E006 body and original A dispatcher unchanged. The transition alone is not a bottleneck explanation.
+- Full four-matrix numerical/memcheck/synccheck and representative one-matrix racecheck cover every shape/M. The original composed racecheck is incomplete exit 143/four rows/11m12s and stays preserved. Do not call it a pass or repeat it unchanged. Final representative racecheck reports 0 hazards/errors/warnings. Measured tooling is frozen. Await another request before further measurement, profiling, tuning, dispatch or kernel work. Reverify saved 328964/c4 rather than trusting the handoff.
 
 ## ARC
 

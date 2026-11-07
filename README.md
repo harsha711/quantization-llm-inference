@@ -1,11 +1,12 @@
 # W4A16 mixed-precision GEMM (CSC 548)
 
-**Current experiment:** [E009](docs/EXPERIMENTS.md#e009-final-measurements-and-decision) is complete on c4. Corrected Marlin A is 3.60–4.40× faster than pre-materialized W_hat cuBLAS and 7.96–9.33× faster than unfused execution with two/four distinct matrices cycled. Every shape/count/comparator passes the5% gate in both reversed series. All 36 timing rows, validation/sanitizers and analyzer checks pass. Kernels, format and precision remain unchanged. See [STATUS](docs/STATUS.md), the [absolute-latency table](docs/EXPERIMENTS.md#e009-final-measurements-and-decision) and [raw evidence](results/e009_c4_20261107/). This establishes a net execution advantage in a controlled cyclic-access workload, not full-inference or fusion-only performance. No dispatch or next experiment.
+**Current experiment:** [E010](docs/EXPERIMENTS.md#e010-final-measurements-and-decision) is complete on c4. No winner crossover is observed through M128 with four matrices per cycle on either rectangle. Corrected Marlin retains the lower median in both reversed series at every point. At K4096/N11008, M128 gains only 2.17–2.90%, below the 5% practical-gain gate. The transpose still gains 15.20–16.81%. All 32 timing rows, numerical/sanitizer gates and evidence analyzers pass. Actual specializations are verified at every batch size. No midpoint, kernel change or dispatch. See [STATUS](docs/STATUS.md), the [full table/design record](docs/EXPERIMENTS.md#e010-final-measurements-and-decision) and [raw evidence](results/e010_c4_20261107/).
 
 C = A·B with A an M×K FP16 activation matrix and B a K×N weight matrix stored as
 packed INT4 with group-wise FP16 scales. Fused kernels dequantize in registers,
-accumulate in FP32, and write FP16. This is a controlled implementation and
-measurement study, not a claim of novelty or of a speedup over cuBLAS.
+accumulate in FP32, and write FP16. This is a controlled implementation and measurement study. The retained scalar
+kernels and pinned external Marlin comparator have separate evidence and
+performance conclusions.
 
 ## Numerical contract
 
