@@ -24,6 +24,8 @@ Scheduling checkpoint: c52 is idle at the first metadata query but becomes alloc
 
 Offline inspection refinement: A new job takes c4 before queued prerequisite 329192 starts. Its scheduler estimate is now 16:17:52. c54 remains idle but cannot execute the fixed sm120 kernel. Use one five-minute, one-CPU c54 job solely to import the existing c4 reports and inspect source/SASS/API correlation. No kernel execution, metric collection or performance result comes from c54. This is the predeclared source-import check moved ahead of the still-queued c4 hardware prerequisite, not a changed measurement environment.
 
+Source-import checkpoint: CPU-only c54 job 329200 exports both preserved M4/M128 source/SASS CSVs successfully, then fails after seven seconds because `ncu` is a wrapper rather than an executable directly under the package containing `extras/python`. The API locator's parent-directory assumption raises StopIteration. Preserve both successful exports, the original probe and exact failure. No GPU workload or profile executes. Inspect the wrapper location in a bounded CPU-only follow-up and correct the offline API path discovery. Do not rerun successful exports or change the measurement method.
+
 ## E011 — Endpoint profiles with preserved cyclic weight access
 
 Status: complete, 2026-11-07, starting from clean `dd4505a`; complete measurement/analysis checkpoint `ca574cc`. Eight complete profiles and both timing series pass. Decision: no kernel change justified yet. Only this bounded profiling experiment is authorized. Corrected E006 A and E004 pre-materialized FP16 cuBLAS remain unchanged. No kernel change, C configuration, tuning, dispatch, unfused comparator, additional batch or shape is included.

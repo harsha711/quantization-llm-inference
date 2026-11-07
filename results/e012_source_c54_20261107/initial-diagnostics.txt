@@ -1,0 +1,30 @@
+[prun] Master compute host = c54
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun timeout 120 python3 /home/hpuvvad/csc548-w4a16-e012-c4-20261107/scripts/e012/inspect_report.py /usr/local/cuda/bin/ncu /home/hpuvvad/csc548-w4a16-e011-c4-20261107/results/e011_c4_20261107/ncu/marlin_M128_K4096_N11008.ncu-repz (family=openmpi4)
+Traceback (most recent call last):
+  File "/home/hpuvvad/csc548-w4a16-e012-c4-20261107/scripts/e012/inspect_report.py", line 9, in <module>
+    package = next(p for p in paths if p.is_dir())
+StopIteration
+--------------------------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code. Per user-direction, the job has been aborted.
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+mpirun detected that one or more processes exited with non-zero status, thus causing
+the job to be terminated. The first process to do so was:
+
+  Process name: [[22834,1],0]
+  Exit code:    1
+--------------------------------------------------------------------------
+[prun] Master compute host = c54
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun timeout 120 ncu --import /home/hpuvvad/csc548-w4a16-e011-c4-20261107/results/e011_c4_20261107/ncu/marlin_M128_K4096_N11008.ncu-repz --page source --print-source cuda,sass --csv --metrics gpu__time_duration.sum (family=openmpi4)
+"File Path","/usr/local/cuda/targets/x86_64-linux/include/cuda_fp16.h"
+"Function Name","void e005_marlin::Marlin<(long)1125899906910725, (long)1125899907892224, (long)1125899906910725, (long)1125899906910725, (int)256, (int)4, (int)16, (int)4, (bool)0, (int)4, (int)8, (bool)0>(const int4 *, const int4 *, int4 *, int4 *, const int4 *, const float *, const int4 *, const float *, const int4 *, int, int, int, int, int *, bool, bool, bool, int)"
+"Line No","Source","Address","Source"
+"5192","NV_IF_ELSE_TARGET(NV_IS_DEVICE,","-","-"
+"","","0x7f1cc94b2b50","      LDS R133, [R132]"
+329188       CANCELLED+      0:0   None assigned   00:00:00 
+329200           FAILED      1:0             c54   00:00:07 
+329200.batch     FAILED      1:0             c54   00:00:07 
+329200.exte+  COMPLETED      0:0             c54   00:00:07 
