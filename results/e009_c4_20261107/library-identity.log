@@ -1,0 +1,5 @@
++ prun timeout 1200 /tmp/e005-r2-hpuvvad-20261106/bin/python scripts/e009/libraries.py /home/hpuvvad/csc548-w4a16-e009-c4-20261107/results/e009_c4_20261107
+[prun] Master compute host = c4
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun timeout 1200 /tmp/e005-r2-hpuvvad-20261106/bin/python scripts/e009/libraries.py /home/hpuvvad/csc548-w4a16-e009-c4-20261107/results/e009_c4_20261107 (family=openmpi4)
+PASS: actual mapped library identity recorded 6

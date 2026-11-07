@@ -1,0 +1,4 @@
+[prun] Master compute host = c4
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun /bin/hostname  (family=openmpi4)
+c4
