@@ -1,0 +1,340 @@
+{
+  "K": 4096,
+  "N": 11008,
+  "M": 128,
+  "config": "marlin",
+  "capacity": 128,
+  "matrices": 4,
+  "seeds": [
+    3,
+    4,
+    5,
+    6
+  ],
+  "group": 128,
+  "body_sha256": "e4eca5e30436c547358a9c8125d69526c6bb3318da034afd54ada6744181e2b7",
+  "cublas_math_mode": 16,
+  "allocations": [
+    {
+      "seed": 3,
+      "operand_sha256": {
+        "A": "eb5688e520b5215caa860d616435301b02511bb0c27e9d60fcbdcff890ea2828",
+        "W": "7b6fd78374162dc5c172f05b8f9a929ea63d0e31083190186db8b9719fa4201f",
+        "Q": "3c60a71308489997145a67d95f96bc27e1c1080a1a44ff900af7cbbf10745390",
+        "S": "34484251ded366a086fd21bd18e3546b07d97f46848b1095ce4233fc86550fb9",
+        "W_hat": "e37492f26adda5de541b9592ed2d90e04272b4916849fa6c772cc9957bbd1bc2"
+      },
+      "packed_range": [
+        139981708328960,
+        139981730873344
+      ],
+      "scales_range": [
+        139981731397632,
+        139981732102144
+      ],
+      "wh_range": [
+        139981171458048,
+        139981261635584
+      ],
+      "output_range": [
+        139982211645440,
+        139982214463488
+      ],
+      "locks_range": [
+        139982064500736,
+        139982064501440
+      ],
+      "scratch_range": [
+        139982214463488,
+        139982216822912
+      ],
+      "activation_range": [
+        139982062747648,
+        139982063796224
+      ],
+      "packed_sha256": "315137e497484739b54ddff00159c13b1c1231196ff998d96a6552b912d0c5ba",
+      "scales_sha256": "9fae6c1b4e1626b10ca9e3846e79fa92841174b34c9722fbecde49eaafcb2aff",
+      "wh_sha256": "e37492f26adda5de541b9592ed2d90e04272b4916849fa6c772cc9957bbd1bc2"
+    },
+    {
+      "seed": 4,
+      "operand_sha256": {
+        "A": "eb5688e520b5215caa860d616435301b02511bb0c27e9d60fcbdcff890ea2828",
+        "W": "952dd9f76f3a1a8ab28add952e517b8a2333d0ca6cc984546e2d2d379964cc89",
+        "Q": "67ee8a3f9e75436266b16eaf49c8a9806b00cc4662a26a3f22d1d6d9ec04d756",
+        "S": "f57b7f9ddcddbf1ad5c11584189884560f372421fcca2df5936074e00b6d3c3d",
+        "W_hat": "8725d8fb08743893144516fbd49e6ede650a760323ff0082881f08b5031d37ee"
+      },
+      "packed_range": [
+        139981439893504,
+        139981462437888
+      ],
+      "scales_range": [
+        139981462962176,
+        139981463666688
+      ],
+      "wh_range": [
+        139980399706112,
+        139980489883648
+      ],
+      "output_range": [
+        139982216823296,
+        139982219641344
+      ],
+      "locks_range": [
+        139982064501760,
+        139982064502464
+      ],
+      "scratch_range": [
+        139982219641344,
+        139982222000768
+      ],
+      "activation_range": [
+        139982062747648,
+        139982063796224
+      ],
+      "packed_sha256": "67356cd9d1c468ab5743773ef5f4083cff14f9ac12cdd1415e2854b2a8613537",
+      "scales_sha256": "c47641a6225920594ccb31319d1de36cb0d858c1ed991de119abfc63be01150a",
+      "wh_sha256": "8725d8fb08743893144516fbd49e6ede650a760323ff0082881f08b5031d37ee"
+    },
+    {
+      "seed": 5,
+      "operand_sha256": {
+        "A": "eb5688e520b5215caa860d616435301b02511bb0c27e9d60fcbdcff890ea2828",
+        "W": "15d49961d8e5f76c4cef30f162a808422cf3036cd93d68aedd1945682e1a7d93",
+        "Q": "58d26f85c9d4daee4176a962b5898fa295a6301324a6ee399658057397339458",
+        "S": "b1d261cd5c9180ec734271b1c962f149916995c5a41cc019a14d5be623cc409c",
+        "W_hat": "8705effd032568cf53e2257285b72aa3f4f7caf3e216c5bf671cabfdb8a3e1bd"
+      },
+      "packed_range": [
+        139981406339072,
+        139981428883456
+      ],
+      "scales_range": [
+        139981429407744,
+        139981430112256
+      ],
+      "wh_range": [
+        139980601032704,
+        139980691210240
+      ],
+      "output_range": [
+        139982222001152,
+        139982224819200
+      ],
+      "locks_range": [
+        139982064502784,
+        139982064503488
+      ],
+      "scratch_range": [
+        139982224819200,
+        139982227178624
+      ],
+      "activation_range": [
+        139982062747648,
+        139982063796224
+      ],
+      "packed_sha256": "8db7428c0abe09a8d22de52bfc3860a75027afbd19315a22179012674527770a",
+      "scales_sha256": "2239d27704dc48da2acc3c985b43043232636dabdeb8a18730a0ec7d2428de4d",
+      "wh_sha256": "8705effd032568cf53e2257285b72aa3f4f7caf3e216c5bf671cabfdb8a3e1bd"
+    },
+    {
+      "seed": 6,
+      "operand_sha256": {
+        "A": "eb5688e520b5215caa860d616435301b02511bb0c27e9d60fcbdcff890ea2828",
+        "W": "eb459e394f2c8a64393123dae5c629cd90e9306b1a0b3aad2989481d6e1b5d0b",
+        "Q": "4c8f721735498604ab91b2c02002325c4c258c83127f14662a1d8855697029cc",
+        "S": "7ec99cf5853a68564eb8f3048b39eace4475700b2d470d8bedaa33c4f7a97912",
+        "W_hat": "e161316ed5d9c26ca4276c3bb959cb614ea33f80d6cbe97c581630fb4fbfc886"
+      },
+      "packed_range": [
+        139981372784640,
+        139981395329024
+      ],
+      "scales_range": [
+        139981395853312,
+        139981396557824
+      ],
+      "wh_range": [
+        139980299042816,
+        139980389220352
+      ],
+      "output_range": [
+        139982227179008,
+        139982229997056
+      ],
+      "locks_range": [
+        139982064503808,
+        139982064504512
+      ],
+      "scratch_range": [
+        139982229997056,
+        139982232356480
+      ],
+      "activation_range": [
+        139982062747648,
+        139982063796224
+      ],
+      "packed_sha256": "d43a82e6f6bbe524df8bc935316313d1059b9830ce016ae0b77bf95d957f7b71",
+      "scales_sha256": "44ddedf1ec3e2c5b72b3906334a35abf4a60d6f04871be3e22705073d08e6591",
+      "wh_sha256": "e161316ed5d9c26ca4276c3bb959cb614ea33f80d6cbe97c581630fb4fbfc886"
+    }
+  ],
+  "activation_prefix_sha256": "eb5688e520b5215caa860d616435301b02511bb0c27e9d60fcbdcff890ea2828",
+  "resources": [
+    {
+      "grid": 36,
+      "threads": 256,
+      "dynamic_shared": 101376,
+      "registers": 255,
+      "static_shared": 0,
+      "local_bytes": 16,
+      "max_blocks_per_sm": 1,
+      "sms": 36,
+      "candidate": 0,
+      "thread_k": 64,
+      "thread_n": 256,
+      "stages": 4,
+      "m_blocks": 4,
+      "m8": 0,
+      "max_optin": 101376,
+      "two_block_budget": 49664,
+      "max_threads": 256,
+      "binary_version": 120,
+      "ptx_version": 120,
+      "kernel_address": 139982487203872
+    },
+    {
+      "grid": 36,
+      "threads": 256,
+      "dynamic_shared": 101376,
+      "registers": 255,
+      "static_shared": 0,
+      "local_bytes": 16,
+      "max_blocks_per_sm": 1,
+      "sms": 36,
+      "candidate": 0,
+      "thread_k": 64,
+      "thread_n": 256,
+      "stages": 4,
+      "m_blocks": 4,
+      "m8": 0,
+      "max_optin": 101376,
+      "two_block_budget": 49664,
+      "max_threads": 256,
+      "binary_version": 120,
+      "ptx_version": 120,
+      "kernel_address": 139982487203872
+    },
+    {
+      "grid": 36,
+      "threads": 256,
+      "dynamic_shared": 101376,
+      "registers": 255,
+      "static_shared": 0,
+      "local_bytes": 16,
+      "max_blocks_per_sm": 1,
+      "sms": 36,
+      "candidate": 0,
+      "thread_k": 64,
+      "thread_n": 256,
+      "stages": 4,
+      "m_blocks": 4,
+      "m8": 0,
+      "max_optin": 101376,
+      "two_block_budget": 49664,
+      "max_threads": 256,
+      "binary_version": 120,
+      "ptx_version": 120,
+      "kernel_address": 139982487203872
+    },
+    {
+      "grid": 36,
+      "threads": 256,
+      "dynamic_shared": 101376,
+      "registers": 255,
+      "static_shared": 0,
+      "local_bytes": 16,
+      "max_blocks_per_sm": 1,
+      "sms": 36,
+      "candidate": 0,
+      "thread_k": 64,
+      "thread_n": 256,
+      "stages": 4,
+      "m_blocks": 4,
+      "m8": 0,
+      "max_optin": 101376,
+      "two_block_budget": 49664,
+      "max_threads": 256,
+      "binary_version": 120,
+      "ptx_version": 120,
+      "kernel_address": 139982487203872
+    }
+  ],
+  "direct_cycles": 3,
+  "poisoned_graph_cycles": 3,
+  "validation": [
+    {
+      "num_bad": 0,
+      "checked": 1409024,
+      "max_abs": 0.0019123641541227698,
+      "rms": 1.0082116230252796,
+      "rel_l2": 0.0002077615401634266,
+      "output_sha256": "dc937ddc21ed23e44401954fec3110339a9dbc22a19ccaf0081d5184b3bc287b"
+    },
+    {
+      "num_bad": 0,
+      "checked": 1409024,
+      "max_abs": 0.0018995431355506298,
+      "rms": 1.0074667079046633,
+      "rel_l2": 0.0002077883045371201,
+      "output_sha256": "9f2c097286be2837586e4a5c3034b9702a51378dbe459bc6246d3e6c18481b53"
+    },
+    {
+      "num_bad": 0,
+      "checked": 1409024,
+      "max_abs": 0.0019389245280763134,
+      "rms": 1.006888139526399,
+      "rel_l2": 0.00020749055779768457,
+      "output_sha256": "b3171659fcf973e9f6504feaa4574a15f84a931760eae5cc159e7f101da99749"
+    },
+    {
+      "num_bad": 0,
+      "checked": 1409024,
+      "max_abs": 0.0019574813577492023,
+      "rms": 1.0082350721553246,
+      "rel_l2": 0.00020787845488598233,
+      "output_sha256": "d7c214867768c418af190ebc7ae1cf6a8564b6dc59101553ad71da8e0b9d8196"
+    }
+  ],
+  "warmup": 10,
+  "graph_cycles": 100,
+  "policy": "no_artificial_flush",
+  "replay": "application",
+  "cache_control": "none",
+  "clock_control": "none",
+  "kernels_by_matrix": [
+    [
+      "void e005_marlin::Marlin<1125899906910725l, 1125899907892224l, 1125899906910725l, 1125899906910725l, 256, 4, 16, 4, false, 4, 8, false>(int4 const*, int4 const*, int4*, int4*, int4 const*, float const*, int4 const*, float const*, int4 const*, int, int, int, int, int*, bool, bool, bool, int)"
+    ],
+    [
+      "void e005_marlin::Marlin<1125899906910725l, 1125899907892224l, 1125899906910725l, 1125899906910725l, 256, 4, 16, 4, false, 4, 8, false>(int4 const*, int4 const*, int4*, int4*, int4 const*, float const*, int4 const*, float const*, int4 const*, int, int, int, int, int*, bool, bool, bool, int)"
+    ],
+    [
+      "void e005_marlin::Marlin<1125899906910725l, 1125899907892224l, 1125899906910725l, 1125899906910725l, 256, 4, 16, 4, false, 4, 8, false>(int4 const*, int4 const*, int4*, int4*, int4 const*, float const*, int4 const*, float const*, int4 const*, int, int, int, int, int*, bool, bool, bool, int)"
+    ],
+    [
+      "void e005_marlin::Marlin<1125899906910725l, 1125899907892224l, 1125899906910725l, 1125899906910725l, 256, 4, 16, 4, false, 4, 8, false>(int4 const*, int4 const*, int4*, int4*, int4 const*, float const*, int4 const*, float const*, int4 const*, int, int, int, int, int*, bool, bool, bool, int)"
+    ]
+  ],
+  "cycle_kernels": [
+    "void e005_marlin::Marlin<1125899906910725l, 1125899907892224l, 1125899906910725l, 1125899906910725l, 256, 4, 16, 4, false, 4, 8, false>(int4 const*, int4 const*, int4*, int4*, int4 const*, float const*, int4 const*, float const*, int4 const*, int, int, int, int, int*, bool, bool, bool, int)",
+    "void e005_marlin::Marlin<1125899906910725l, 1125899907892224l, 1125899906910725l, 1125899906910725l, 256, 4, 16, 4, false, 4, 8, false>(int4 const*, int4 const*, int4*, int4*, int4 const*, float const*, int4 const*, float const*, int4 const*, int, int, int, int, int*, bool, bool, bool, int)",
+    "void e005_marlin::Marlin<1125899906910725l, 1125899907892224l, 1125899906910725l, 1125899906910725l, 256, 4, 16, 4, false, 4, 8, false>(int4 const*, int4 const*, int4*, int4*, int4 const*, float const*, int4 const*, float const*, int4 const*, int, int, int, int, int*, bool, bool, bool, int)",
+    "void e005_marlin::Marlin<1125899906910725l, 1125899907892224l, 1125899906910725l, 1125899906910725l, 256, 4, 16, 4, false, 4, 8, false>(int4 const*, int4 const*, int4*, int4*, int4 const*, float const*, int4 const*, float const*, int4 const*, int, int, int, int, int*, bool, bool, bool, int)"
+  ],
+  "launch_skip": 399,
+  "launch_count": 1,
+  "target_cycle": 99,
+  "matrix_position": 3
+}

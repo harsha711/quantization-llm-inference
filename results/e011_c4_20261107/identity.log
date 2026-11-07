@@ -1,0 +1,38 @@
++ prun timeout 1200 /tmp/e005-r2-hpuvvad-20261106/bin/python scripts/e009/identity.py
+[prun] Master compute host = c4
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun timeout 1200 /tmp/e005-r2-hpuvvad-20261106/bin/python scripts/e009/identity.py (family=openmpi4)
+{
+  "status": "preserved source/binaries match, fresh c4 validation required",
+  "python": "/tmp/e005-r2-hpuvvad-20261106/bin/python",
+  "torch": "2.14.0+cu130",
+  "cuda": "13.0",
+  "device": "GPU-f2e08184-f913-0d97-104d-e01716a3c597, 610.57.04",
+  "threads": 16,
+  "affinity": [
+    0
+  ],
+  "checked": {
+    "/home/hpuvvad/csc548-w4a16-e006-20261106/results/e006_20261106/patched/libe005.so": "e4eca5e30436c547358a9c8125d69526c6bb3318da034afd54ada6744181e2b7",
+    "/home/hpuvvad/csc548-w4a16-e006-20261106/scripts/e005/local.cu": "122e8680e98ab66118b5d8ce5f3fc1d43245d44be4c0d8cbe4635600485183b7",
+    "/home/hpuvvad/csc548-w4a16-e006-20261106/external/patched/csrc/quantization/marlin/awq_marlin_repack.cu": "aaecffbc330beeeba1c06c35055d8cf4afd067f36eb0b9bcd8f4026a403d8756",
+    "/home/hpuvvad/csc548-w4a16-e006-20261106/external/patched/csrc/quantization/marlin/dequant.h": "39c4640d2de39374ef5d96e7fa27701a675922113c3f5b05d45369321090e728",
+    "/home/hpuvvad/csc548-w4a16-e006-20261106/external/patched/csrc/quantization/marlin/generate_kernels.py": "19ac1b047792e1ba810739fb732f73143c367f76262595607db446f0c951e454",
+    "/home/hpuvvad/csc548-w4a16-e006-20261106/external/patched/csrc/quantization/marlin/gptq_marlin_repack.cu": "6d7de122eedea050982ebb3fab042b408cdc003a77e4cb40dac7f32fc1ecf882",
+    "/home/hpuvvad/csc548-w4a16-e006-20261106/external/patched/csrc/quantization/marlin/kernel.h": "484cdcce20793d67d3428d64704b0439210b300e03b335bca602c152e2ae1f96",
+    "/home/hpuvvad/csc548-w4a16-e006-20261106/external/patched/csrc/quantization/marlin/kernel_selector.h": "7cbc2ce052284965d529101c6a8e55fb8fcbcd6770d3e86c05d9907f529a9d93",
+    "/home/hpuvvad/csc548-w4a16-e006-20261106/external/patched/csrc/quantization/marlin/marlin.cu": "9b5b16aa3047abf58d845c2aa913b86ad89ab8f08dd140c4d22a3bdc7cf9b7d2",
+    "/home/hpuvvad/csc548-w4a16-e006-20261106/external/patched/csrc/quantization/marlin/marlin.cuh": "edaa19c541dfbe5e06e547c0be5bcdc1b78b4bbc68d596b72c41a932e2366926",
+    "/home/hpuvvad/csc548-w4a16-e006-20261106/external/patched/csrc/quantization/marlin/marlin_dtypes.cuh": "15b90a65eadb200a3f7165e2e0d7d899f36d4993b20dbd89093ef2cea274da71",
+    "/home/hpuvvad/csc548-w4a16-e006-20261106/external/patched/csrc/quantization/marlin/marlin_int4_fp8_preprocess.cu": "36c7ff17d531ae80233dd98fff4ae20a30e41f5741b79c4c894cf4303e34cafc",
+    "/home/hpuvvad/csc548-w4a16-e006-20261106/external/patched/csrc/quantization/marlin/marlin_mma.h": "bf863d252bfc468eaff42b2c1bda583c5e6ab97ceacf0ac248c164564ddcce9b",
+    "/home/hpuvvad/csc548-w4a16-e006-20261106/external/patched/csrc/quantization/marlin/marlin_template.h": "64d8ee386465ead3c757866143d99b40056b0f7698a147c92c09094a4d0f5dec",
+    "/home/hpuvvad/csc548-w4a16-e006-20261106/external/patched/csrc/core/scalar_type.hpp": "8d3671759c43a0219f51e3a1f32c94ef5d70ecc99e264100f4015a781d94bb99",
+    "scripts/e004/bench.py": "72637197a41868b1443643f3ef1ab349981f8a8520a0c52743a66a35605189c3",
+    "scripts/e004/check_runtime.py": "fdfc6520f7ca183240f21f124a9d0b524c1af32ffccc321cb30780c3fad47b56",
+    "scripts/e005/bench.py": "8e34ec121d6d0d9fcaf01470943d5466b53047ec15343feafab63a78d81b11d1",
+    "scripts/e005/local.cu": "122e8680e98ab66118b5d8ce5f3fc1d43245d44be4c0d8cbe4635600485183b7",
+    "/home/hpuvvad/csc548-w4a16-e004-20261106/results/e004_20261106/libe004.so": "85f332951a8c24b3eb06594977b3e3d62b7954fa01b986da41ffeff851bfbd3f",
+    "/tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/vllm/_C_stable_libtorch.abi3.so": "e634b80e72078e964f8bd2ac541d66f2a900920773cf993544609612190bd9a9"
+  }
+}

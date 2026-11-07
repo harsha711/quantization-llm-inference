@@ -1,6 +1,6 @@
 # E011 endpoint profiling
 
-Status: implementation and local checks complete, GPU target validation and measurements pending. Read the E011 experiment/status record and actual scheduler state before resuming. Corrected E006 A and the E004 FP16 bridge are unchanged. No optimization or dispatch is implemented.
+Status: all eight target cases and both endpoint timing series pass. Five profiles are complete. Three profiles remain pending after the preserved allocation timeout. See STATUS for the resume job. Read the E011 experiment/status record and actual scheduler state before resuming. Corrected E006 A and the E004 FP16 bridge are unchanged. No optimization or dispatch is implemented.
 
 ## Scope and method
 
@@ -19,18 +19,22 @@ Use a new shared directory/output root for a fresh experiment. The current isola
 1. `prerequisite_arc.sh` verifies c4 ownership/GPU/driver, full E010 handoff, exact dependencies/binaries and actual mapped libraries. It records installed Nsight help and supported metrics, and runs four small composed correctness rows. Inspect its output.
 2. `release_arc.sh` repeats a cheap identity/library and small correctness check if the inspected completed job is no longer a valid dependency. Submit its dependent `validate_arc.sh` immediately, before Slurm purges its dependency record. Preserve rejected submissions.
 3. `validate_arc.sh` verifies the profiler-window calibration, all eight complete-operation traces and selected outputs against E010. Its analyzer writes `TARGETS_VALIDATED` only after passing. Reuse matching E010 sanitizer evidence without repeating historical investigations.
-4. `measure_arc.sh` requires target validation. It runs exactly16 fresh endpoint timing rows, two independent reversed series with ten warmups/100 complete-cycle samples. Timing is outside Nsight. Then collect exactly eight profiles using the33 queried counters in `metrics.txt`, preserving binary reports, raw CSV exports, logs, clock snapshots and before/after identities. Stop on any error.
+4. `measure_arc.sh` requires target validation. The preserved first run times out after five profiles. `resume_profiles_arc.sh` applies only to that checkpoint, rechecks identical frozen inputs and collects only the remaining three cases without repeating timings. A fresh run can request60 minutes rather than the original30. Its33 counters require13 application passes per kernel on the installed tool.
+
+`measure_arc.sh` runs exactly16 fresh endpoint timing rows, two independent reversed series with ten warmups/100 complete-cycle samples. Timing is outside Nsight. Then collect exactly eight profiles using the33 queried counters in `metrics.txt`, preserving binary reports, raw CSV exports, logs, clock snapshots and before/after identities. Stop on any error.
 
 Local checks:
 
 ```sh
-PYTHONDONTWRITEBYTECODE=1 python3 scripts/e011/check_local.py
+export PYTHONDONTWRITEBYTECODE=1
+python3 scripts/e011/check_local.py
 python3 scripts/e011/analyze.py results/e011_c4_20261107 --stage validation
+python3 scripts/e011/analyze.py results/e011_c4_20261107 --stage timing
 python3 scripts/e011/analyze.py results/e011_c4_20261107
 python3 scripts/e011/check_analysis.py results/e011_c4_20261107
 ```
 
-The last three require real GPU evidence. Never manufacture sentinels. A passing CPU-only build or self-check does not validate CUDA. Recheck all selected identities after queueing, because a successful earlier job does not establish a later environment.
+Validation, timing and complete-analysis commands require the corresponding real GPU evidence. Never manufacture sentinels. A passing CPU-only build or self-check does not validate CUDA. Recheck all selected identities after queueing, because a successful earlier job does not establish a later environment.
 
 ## Metrics and normalization
 
@@ -46,3 +50,5 @@ The last three require real GPU evidence. Never manufacture sentinels. A passing
 | Waits | Long/short scoreboard, barrier, math throttle and wait as percent of peak sustained elapsed warp capacity. These are neither mutually exclusive wall-time fractions nor isolated causes. |
 
 `analyze.py` preserves exact raw units and per-kernel values in `profile-analysis.json`. It sums only additive quantities for a multi-kernel operation. Utilization/resources remain arrays by kernel in `endpoint-summary.csv`, avoiding summed percentages or unjustified averages. `comparisons.csv` contains fresh matched timing denominators. `check_analysis.py` rejects incomplete/corrupt evidence and wrong target positions. A source-PC campaign or kernel change requires a separate request.
+
+`source_analysis.py RESULTS` runs locally in the full evidence checkout. It verifies the archived E006 source hash and models the exact finite stripe topology/FP32 scratch requests from actual target resources. Its results are not measured memory traffic or an isolated reduction-time attribution.

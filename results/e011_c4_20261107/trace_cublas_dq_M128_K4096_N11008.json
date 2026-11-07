@@ -1,0 +1,251 @@
+{
+  "K": 4096,
+  "N": 11008,
+  "M": 128,
+  "config": "cublas_dq",
+  "capacity": 128,
+  "matrices": 4,
+  "seeds": [
+    3,
+    4,
+    5,
+    6
+  ],
+  "group": 128,
+  "body_sha256": "e4eca5e30436c547358a9c8125d69526c6bb3318da034afd54ada6744181e2b7",
+  "cublas_math_mode": 16,
+  "allocations": [
+    {
+      "seed": 3,
+      "operand_sha256": {
+        "A": "eb5688e520b5215caa860d616435301b02511bb0c27e9d60fcbdcff890ea2828",
+        "W": "7b6fd78374162dc5c172f05b8f9a929ea63d0e31083190186db8b9719fa4201f",
+        "Q": "3c60a71308489997145a67d95f96bc27e1c1080a1a44ff900af7cbbf10745390",
+        "S": "34484251ded366a086fd21bd18e3546b07d97f46848b1095ce4233fc86550fb9",
+        "W_hat": "e37492f26adda5de541b9592ed2d90e04272b4916849fa6c772cc9957bbd1bc2"
+      },
+      "packed_range": [
+        140376073568256,
+        140376096112640
+      ],
+      "scales_range": [
+        140376096636928,
+        140376097341440
+      ],
+      "wh_range": [
+        140375536697344,
+        140375626874880
+      ],
+      "output_range": [
+        140376576884736,
+        140376579702784
+      ],
+      "locks_range": [
+        140376429740032,
+        140376429740736
+      ],
+      "scratch_range": [
+        140376579702784,
+        140376582062208
+      ],
+      "activation_range": [
+        140376427986944,
+        140376429035520
+      ],
+      "packed_sha256": "315137e497484739b54ddff00159c13b1c1231196ff998d96a6552b912d0c5ba",
+      "scales_sha256": "9fae6c1b4e1626b10ca9e3846e79fa92841174b34c9722fbecde49eaafcb2aff",
+      "wh_sha256": "e37492f26adda5de541b9592ed2d90e04272b4916849fa6c772cc9957bbd1bc2"
+    },
+    {
+      "seed": 4,
+      "operand_sha256": {
+        "A": "eb5688e520b5215caa860d616435301b02511bb0c27e9d60fcbdcff890ea2828",
+        "W": "952dd9f76f3a1a8ab28add952e517b8a2333d0ca6cc984546e2d2d379964cc89",
+        "Q": "67ee8a3f9e75436266b16eaf49c8a9806b00cc4662a26a3f22d1d6d9ec04d756",
+        "S": "f57b7f9ddcddbf1ad5c11584189884560f372421fcca2df5936074e00b6d3c3d",
+        "W_hat": "8725d8fb08743893144516fbd49e6ede650a760323ff0082881f08b5031d37ee"
+      },
+      "packed_range": [
+        140375805132800,
+        140375827677184
+      ],
+      "scales_range": [
+        140375828201472,
+        140375828905984
+      ],
+      "wh_range": [
+        140374798499840,
+        140374888677376
+      ],
+      "output_range": [
+        140376582062592,
+        140376584880640
+      ],
+      "locks_range": [
+        140376429741056,
+        140376429741760
+      ],
+      "scratch_range": [
+        140376584880640,
+        140376587240064
+      ],
+      "activation_range": [
+        140376427986944,
+        140376429035520
+      ],
+      "packed_sha256": "67356cd9d1c468ab5743773ef5f4083cff14f9ac12cdd1415e2854b2a8613537",
+      "scales_sha256": "c47641a6225920594ccb31319d1de36cb0d858c1ed991de119abfc63be01150a",
+      "wh_sha256": "8725d8fb08743893144516fbd49e6ede650a760323ff0082881f08b5031d37ee"
+    },
+    {
+      "seed": 5,
+      "operand_sha256": {
+        "A": "eb5688e520b5215caa860d616435301b02511bb0c27e9d60fcbdcff890ea2828",
+        "W": "15d49961d8e5f76c4cef30f162a808422cf3036cd93d68aedd1945682e1a7d93",
+        "Q": "58d26f85c9d4daee4176a962b5898fa295a6301324a6ee399658057397339458",
+        "S": "b1d261cd5c9180ec734271b1c962f149916995c5a41cc019a14d5be623cc409c",
+        "W_hat": "8705effd032568cf53e2257285b72aa3f4f7caf3e216c5bf671cabfdb8a3e1bd"
+      },
+      "packed_range": [
+        140375771578368,
+        140375794122752
+      ],
+      "scales_range": [
+        140375794647040,
+        140375795351552
+      ],
+      "wh_range": [
+        140374999826432,
+        140375090003968
+      ],
+      "output_range": [
+        140376587240448,
+        140376590058496
+      ],
+      "locks_range": [
+        140376429742080,
+        140376429742784
+      ],
+      "scratch_range": [
+        140376590058496,
+        140376592417920
+      ],
+      "activation_range": [
+        140376427986944,
+        140376429035520
+      ],
+      "packed_sha256": "8db7428c0abe09a8d22de52bfc3860a75027afbd19315a22179012674527770a",
+      "scales_sha256": "2239d27704dc48da2acc3c985b43043232636dabdeb8a18730a0ec7d2428de4d",
+      "wh_sha256": "8705effd032568cf53e2257285b72aa3f4f7caf3e216c5bf671cabfdb8a3e1bd"
+    },
+    {
+      "seed": 6,
+      "operand_sha256": {
+        "A": "eb5688e520b5215caa860d616435301b02511bb0c27e9d60fcbdcff890ea2828",
+        "W": "eb459e394f2c8a64393123dae5c629cd90e9306b1a0b3aad2989481d6e1b5d0b",
+        "Q": "4c8f721735498604ab91b2c02002325c4c258c83127f14662a1d8855697029cc",
+        "S": "7ec99cf5853a68564eb8f3048b39eace4475700b2d470d8bedaa33c4f7a97912",
+        "W_hat": "e161316ed5d9c26ca4276c3bb959cb614ea33f80d6cbe97c581630fb4fbfc886"
+      },
+      "packed_range": [
+        140375738023936,
+        140375760568320
+      ],
+      "scales_range": [
+        140375761092608,
+        140375761797120
+      ],
+      "wh_range": [
+        140374697836544,
+        140374788014080
+      ],
+      "output_range": [
+        140376592418304,
+        140376595236352
+      ],
+      "locks_range": [
+        140376429743104,
+        140376429743808
+      ],
+      "scratch_range": [
+        140376595236352,
+        140376597595776
+      ],
+      "activation_range": [
+        140376427986944,
+        140376429035520
+      ],
+      "packed_sha256": "d43a82e6f6bbe524df8bc935316313d1059b9830ce016ae0b77bf95d957f7b71",
+      "scales_sha256": "44ddedf1ec3e2c5b72b3906334a35abf4a60d6f04871be3e22705073d08e6591",
+      "wh_sha256": "e161316ed5d9c26ca4276c3bb959cb614ea33f80d6cbe97c581630fb4fbfc886"
+    }
+  ],
+  "activation_prefix_sha256": "eb5688e520b5215caa860d616435301b02511bb0c27e9d60fcbdcff890ea2828",
+  "resources": [],
+  "direct_cycles": 3,
+  "poisoned_graph_cycles": 3,
+  "validation": [
+    {
+      "num_bad": 0,
+      "checked": 1409024,
+      "max_abs": 0.0019123641541227698,
+      "rms": 1.0082116230252796,
+      "rel_l2": 0.0002078044326266004,
+      "output_sha256": "1e968145b809336fddbc536c9073636fa607b7343a8b287c0cae8c83cd655529"
+    },
+    {
+      "num_bad": 0,
+      "checked": 1409024,
+      "max_abs": 0.0018995431355506298,
+      "rms": 1.0074667079046633,
+      "rel_l2": 0.00020783318087982998,
+      "output_sha256": "36812f3bacef4a060c4c93f08a68ac4f9624ed596d5688d097d90a78e4039e30"
+    },
+    {
+      "num_bad": 0,
+      "checked": 1409024,
+      "max_abs": 0.001968023826520948,
+      "rms": 1.006888139526399,
+      "rel_l2": 0.00020753459691284892,
+      "output_sha256": "02aadb551ee893dc9d50f8eb1c89523d7fd98af03f68962db1a20c41d68375ab"
+    },
+    {
+      "num_bad": 0,
+      "checked": 1409024,
+      "max_abs": 0.0019574813577492023,
+      "rms": 1.0082350721553246,
+      "rel_l2": 0.00020792076190913976,
+      "output_sha256": "1d05b3d47b0eac4c8fff9d7838eb663ec944357e38defa3415df3c75da4ce144"
+    }
+  ],
+  "warmup": 10,
+  "graph_cycles": 100,
+  "policy": "no_artificial_flush",
+  "replay": "application",
+  "cache_control": "none",
+  "clock_control": "none",
+  "kernels_by_matrix": [
+    [
+      "void cutlass::Kernel2<cutlass_80_tensorop_f16_s16816gemm_relu_f16_64x64_32x6_nn_align8>(cutlass_80_tensorop_f16_s16816gemm_relu_f16_64x64_32x6_nn_align8::Params)"
+    ],
+    [
+      "void cutlass::Kernel2<cutlass_80_tensorop_f16_s16816gemm_relu_f16_64x64_32x6_nn_align8>(cutlass_80_tensorop_f16_s16816gemm_relu_f16_64x64_32x6_nn_align8::Params)"
+    ],
+    [
+      "void cutlass::Kernel2<cutlass_80_tensorop_f16_s16816gemm_relu_f16_64x64_32x6_nn_align8>(cutlass_80_tensorop_f16_s16816gemm_relu_f16_64x64_32x6_nn_align8::Params)"
+    ],
+    [
+      "void cutlass::Kernel2<cutlass_80_tensorop_f16_s16816gemm_relu_f16_64x64_32x6_nn_align8>(cutlass_80_tensorop_f16_s16816gemm_relu_f16_64x64_32x6_nn_align8::Params)"
+    ]
+  ],
+  "cycle_kernels": [
+    "void cutlass::Kernel2<cutlass_80_tensorop_f16_s16816gemm_relu_f16_64x64_32x6_nn_align8>(cutlass_80_tensorop_f16_s16816gemm_relu_f16_64x64_32x6_nn_align8::Params)",
+    "void cutlass::Kernel2<cutlass_80_tensorop_f16_s16816gemm_relu_f16_64x64_32x6_nn_align8>(cutlass_80_tensorop_f16_s16816gemm_relu_f16_64x64_32x6_nn_align8::Params)",
+    "void cutlass::Kernel2<cutlass_80_tensorop_f16_s16816gemm_relu_f16_64x64_32x6_nn_align8>(cutlass_80_tensorop_f16_s16816gemm_relu_f16_64x64_32x6_nn_align8::Params)",
+    "void cutlass::Kernel2<cutlass_80_tensorop_f16_s16816gemm_relu_f16_64x64_32x6_nn_align8>(cutlass_80_tensorop_f16_s16816gemm_relu_f16_64x64_32x6_nn_align8::Params)"
+  ],
+  "launch_skip": 399,
+  "launch_count": 1,
+  "target_cycle": 99,
+  "matrix_position": 3
+}

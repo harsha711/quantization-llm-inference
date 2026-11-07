@@ -139,18 +139,36 @@ def main(root, stage):
         writer = csv.DictWriter(out, fieldnames=list(comparisons[0]))
         writer.writeheader()
         writer.writerows(comparisons)
+    stats = [dict(K=v['K'], N=v['N'], M=v['M'], config=v['config'], series=v['series'],
+                  median_us=v['median_us'], p90_us=v['p90_us'], min_us=v['min_us'], max_us=v['max_us'],
+                  stdev_us=statistics.stdev(v['samples_us'])) for v in timings]
+    with (root / 'sample-statistics.csv').open('w') as out:
+        writer = csv.DictWriter(out, fieldnames=list(stats[0]))
+        writer.writeheader()
+        writer.writerows(stats)
+    if stage == 'timing':
+        print('PASS: 16 complete fresh endpoint timing rows/1600 cycle samples, profiles not assessed')
+        return
     profiles = []
     for tag, trace in traces.items():
         success('profile_' + tag)
         text = (root / ('profile_' + tag + '.log')).read_text()
         passes = [json.loads(line.split('E011_PASS ', 1)[1]) for line in text.splitlines() if line.startswith('E011_PASS ')]
         assert passes, tag
+        for required in ('--replay-mode application', '--app-replay-mode strict --app-replay-match grid',
+                         '--profile-from-start off --graph-profiling node --cache-control none --clock-control none',
+                         '--pipeline-boost-state dynamic',
+                         f"--launch-skip {trace['launch_skip']} --launch-count {trace['launch_count']}"):
+            assert required in text, (tag, required)
         for row in passes:
             assert tuple(row[key] for key in ('K', 'N', 'M', 'config')) == tuple(trace[key] for key in ('K', 'N', 'M', 'config'))
+            assert (row['warmup'], row['graph_cycles'], row['policy'], row['replay'], row['cache_control'], row['clock_control']) == (10, 100, 'no_artificial_flush', 'application', 'none', 'none')
             matched(row, trace)
             assert row['post_profile_validation'] == row['validation']
         unit, values = raw(root / f'ncu/{tag}.csv')
         assert len(values) == trace['launch_count'], (tag, len(values))
+        pass_counts = [int(number(value, 'profiler__replayer_passes')) for value in values]
+        assert len(passes) == max(pass_counts), (tag, len(passes), pass_counts)
         kernels = []
         for i, value in enumerate(values):
             assert value['CC'] == '12.0'
@@ -170,11 +188,13 @@ def main(root, stage):
             kernels.append(dict(name=value['Kernel Name'], units={metric: unit[metric] for metric in metrics}, metrics=normalized))
         # Keep per-kernel utilization/resources. Sum only sequential, additive work.
         additive = ['duration_us', 'dram__bytes_op_read.sum', 'dram__bytes_op_write.sum', 'lts__t_bytes.sum',
+                    'lts__t_sectors_op_read.sum', 'lts__t_sectors_op_write.sum',
+                    'smsp__inst_executed_pipe_alu.sum', 'smsp__inst_executed_pipe_fma.sum',
                     'smsp__inst_executed.sum', 'sm__inst_executed_pipe_tensor.sum',
                     'l1tex__t_sectors_pipe_lsu_mem_local_op_ld.sum', 'l1tex__t_sectors_pipe_lsu_mem_local_op_st.sum']
         profiles.append(dict(K=trace['K'], N=trace['N'], M=trace['M'], config=trace['config'],
                              kernels=kernels, totals={metric: sum(kernel['metrics'][metric] for kernel in kernels) for metric in additive},
-                             validated_application_executions=len(passes)))
+                             replay_passes_by_kernel=pass_counts, validated_application_executions=len(passes)))
     (root / 'profile-analysis.json').write_text(json.dumps(profiles, indent=2) + '\n')
     compact = []
     for profile in profiles:
@@ -202,6 +222,6 @@ def main(root, stage):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('results', type=Path)
-    parser.add_argument('--stage', choices=['validation', 'complete'], default='complete')
+    parser.add_argument('--stage', choices=['validation', 'timing', 'complete'], default='complete')
     args = parser.parse_args()
     main(args.results, args.stage)

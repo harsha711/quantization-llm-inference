@@ -1,0 +1,6 @@
+PASS: cublas_dq_M128_K4096_N11008 13 validated application passes, complete operation, finite metrics
+PASS: cublas_dq_M4_K4096_N11008 13 validated application passes, complete operation, finite metrics
+PASS: marlin_M128_K4096_N11008 13 validated application passes, complete operation, finite metrics
+PASS: marlin_M4_K11008_N4096 13 validated application passes, complete operation, finite metrics
+PASS: marlin_M4_K4096_N11008 13 validated application passes, complete operation, finite metrics
+Only the five completed profiles are assessed. Three cases remain pending, and E011 is incomplete.
