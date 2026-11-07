@@ -1,6 +1,6 @@
 # W4A16 mixed-precision GEMM (CSC 548)
 
-**Current experiment:** [E007](docs/EXPERIMENTS.md#e007--elide-unused-terminal-shared-to-register-lookahead) is complete and rejected under its latency criterion. The terminal-fetch guard reduces participating shared loads but adds issued instructions. M8 medians tie and M1 gains do not reproduce. All 270 fresh regular numerical/162 sanitizer rows pass, with matching full-output hashes. The corrected E006 barrier, numerical contract and all earlier evidence remain preserved. See [STATUS](docs/STATUS.md), [raw results](results/e007_20261106/) and [reproduction commands](scripts/e007/README.md).
+**Current experiment:** [E005-R2](docs/EXPERIMENTS.md#e005-r2--independent-rectangular-ac-confirmation) is complete. Preserved corrected C improves M=4 no-flush latency by 13.33%/13.28% for K=4096/N=11008 and 7.82%/6.34% for the transpose in two reversed series on c10. The stronger rectangle regresses 5.48%/6.06% under store flushing. Fresh numerical/sanitizer checks and one conditional A/C profile pair pass. Keep corrected E006 A as the default and preserve E005-R1/E007 as negative results. See [STATUS](docs/STATUS.md) and [raw evidence](results/e005_r2_c10_20261106/). No dispatch or new partitioner is implemented.
 
 C = A·B with A an M×K FP16 activation matrix and B a K×N weight matrix stored as
 packed INT4 with group-wise FP16 scales. Fused kernels dequantize in registers,

@@ -1,5 +1,7 @@
 # Corrected-kernel bottleneck assessment
 
+**Follow-up:** [E005-R2](EXPERIMENTS.md#e005-r2--independent-rectangular-ac-confirmation) has completed the bounded confirmation on c10 with the exact corrected E006 library. Both rectangles pass the5% no-flush gate in both reversed series. K=4096/N=11008 improves13.33%/13.28% but regresses 5.48%/6.06% with store flushing. The conditional matched profile pair shows more eligible warps/issue activity with 5.060% more warp instructions,1.132% more L2 bytes and high replay DRAM throughput. This supports a restricted existing-launch opportunity with added coordination and cache-policy costs. It does not identify a concrete improved partitioner or justify dispatch. Corrected A remains default. The assessment below is the saved-data snapshot that motivated this completed test. Its statements about missing rectangular evidence and proposed measurements describe that earlier checkpoint.
+
 2026-11-06. Evidence checkpoint: `ab54819`. **Keep E006 corrected A as the baseline. E005-R1 and E007 remain rejected performance experiments.** This assessment uses saved measurements only and implements no E008 or dispatch policy.
 
 ## 1. What currently limits the kernel?

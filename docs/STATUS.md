@@ -1,8 +1,23 @@
 # Current status
 
-**E005-R2 rectangular confirmation is authorized and predeclared from `925be8a`.** Keep the E006 corrected binary unchanged and compare only preserved A/C at M4/seed2, both rectangles/cache policies, two reversed series, exactly16 timing rows. A rectangle continues only with at least5% lower C no-flush median in each series. Store-flush regressions are reported separately. Profile the strongest passing rectangle only. No automatic dispatch, new partitioning or E008 implementation is authorized.
+**E005-R2 is complete. Both rectangular orientations pass the predeclared investigation gate on c10.** The E006 corrected library is unchanged. E005-R1 and E007 remain negative results, and corrected A remains the default. Starting checkpoint `925be8a`, criteria `192e33a`, harness `5412dbb`, verified prerequisite `f19d83a`, complete timing/profile plan `00b5146`, complete profile evidence/checkers `f86d463`. Documentation and final synchronized handoff commits follow. See [experiment and design record](EXPERIMENTS.md#e005-r2--independent-rectangular-ac-confirmation) and [raw evidence](../results/e005_r2_c10_20261106/).
 
-c10 allocation328681, the restored exact dependency freeze, all preserved source/binary hashes, one-rank runtime and six small A/C cases are verified. Fresh rectangular numerical/sanitizer validation and retained project GPU checks are in progress. No timing has been released. c10's driver differs from c58. Preserve historical evidence, failed attempts and all raw results. See the new [experiment record](EXPERIMENTS.md#e005-r2--independent-rectangular-ac-confirmation).
+The fresh M=4/seed 2 confirmation has exactly 16 timing rows/1600 samples: two independent processes with reversed A/C, rectangle and cache-policy order. The gate requires at least 5% lower C no-flush median in each series. Fresh c10 A is the only denominator.
+
+| K / N | No-flush C gain, series1 / 2 | Store-flush C regression, series1 / 2 |
+|---|---:|---:|
+| 4096 / 11008 | 13.333% / 13.283% | 5.477% / 6.061% |
+| 11008 / 4096 | 7.824% / 6.335% | 0.046% / 1.419% |
+
+The conditional 13-pass A/C profile pair covers the stronger K=4096/N=11008 rectangle. Active CTAs rise 1.00→1.75, eligible warps 0.455→0.695 and issue activity 37.60%→45.59%. C adds 5.060% warp instructions and 1.132% L2 bytes, with equal Tensor instructions and registers 126/allocated 128. Replay DRAM throughput 80.49%→84.39% makes memory service relevant, while the observed ready-work improvement supports additional concurrency. Aggregate counters do not isolate a unique cause or a concrete better partitioner. Replay durations 44.032/40.576 us differ from application medians around 27.832/24.128 us and must remain separate. The store-flush regression has no matched profile explanation.
+
+All six small smoke rows, 12 fresh rectangular numerical rows and 12 fresh sanitizer rows pass, including memcheck/racecheck/synccheck and zero racecheck warnings. Each uses three direct and three poisoned graph calls, full-output FP64, exact repacking/reconstruction and guarded reused workspace. Retained project CUDA build/CTest/GPU checks pass, with six additional clean sanitizer checks. Timing/profile rows also pass unchanged correctness. Exact dependency freeze and preserved library/bridge/wheel hashes match. All 113 E006 handoff hashes match after profiling. Earlier failures and absent historical VALIDATED files are preserved.
+
+c10 has the same RTX 5060 Ti 36-SM model but a different GPU UUID and driver 610.57.04 from c58. Its runtime was restored at `/tmp/e005-r2-hpuvvad-20261106`. Shared root is `/home/hpuvvad/csc548-w4a16-e005-r2-20261106`. Allocation 328681/c10 remains RUNNING at final verification, scheduled end 2026-11-07 02:50:31 cluster time, and is left running. Revalidate live state before reuse. No corrected-kernel rebuild, dependency upgrade or push.
+
+Run `python3 scripts/e005_r2/analyze.py results/e005_r2_c10_20261106`, `python3 scripts/e005_r2/analyze_profiles.py results/e005_r2_c10_20261106` and `python3 scripts/e005_r2/check_analysis.py results/e005_r2_c10_20261106`. Both historical negative-result analyzers also pass on temporary evidence copies. No earlier raw record changes.
+
+**Single next task: review the confirmation and choose a separately bounded next investigation.** A restricted launch choice needs independent workload/input evidence and an explicit cache-policy tradeoff. A new partitioner needs source-PC/phase evidence of a concrete reducible cost. No further measurement, E008 implementation, dispatch or partition change is authorized by this completed confirmation. Clocks were unlocked, only M=4/seed 2 and two rectangles were confirmed, and no store-flush profile or full LLM run was collected.
 
 The sections below preserve previous handoffs.
 

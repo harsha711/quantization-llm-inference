@@ -43,10 +43,11 @@
 - The user authorized continued project work after E005-R1. E007 is one bounded source-supported terminal-lookahead experiment, predeclared in EXPERIMENTS.md. This overrides the earlier instruction to wait at the completed E005-R1 checkpoint only for this continuation. Keep E005/E006/E005-R1 immutable. Preserve the E006 barrier, fixed format and host launch policy. Do not turn it into a tuning search.
 - E007 is complete and rejected under its5% latency criterion. Participating LDS loads fall 1.931% but issued warp instructions rise 1.757%, with M8 median ties and no reproducible M1 gain. Registers126→124 still allocate128. Preserve measured checker snapshots and corrected static counts: 121 total load opcode sites, 70 permanently off, 51 potentially active in each body. Do not repeat this guard unless its recorded revisit condition changes. Hand off before another optimization.
 
-## Rectangular confirmation after assessment
+## E005-R2 rectangular confirmation
 
-- Read `docs/BOTTLENECK_ASSESSMENT.md` and E005-R2. User authorized preserved corrected A/C on c10, M4/seed2, both rectangles/cache policies, exactly16 timing rows in two reversed series. No kernel rebuild/change, E008 implementation or automatic dispatch.
-- Predeclared gate is at least5% lower C no-flush median in each series for a rectangle. Report store-flush regressions separately. Only if this repeats, profile the strongest passing rectangle with A/C. Otherwise stop the lead. Fresh relevant validation is required for c10's changed driver/runtime path. Preserve all earlier results and keep corrected A baseline.
+- E005-R2 is complete. Read its experiment entry and fresh c10 evidence. Both M=4/seed 2 rectangles pass 5% lower C no-flush median in both reversed series,16 rows/1600 samples. Stronger K=4096/N=11008 gain 13.33%/13.28% has store-flush regression5.48%/6.06%. Corrected E006 A remains default and E005-R1/E007 stay negative.
+- One conditional A/C profile pair shows more ready work with higher instruction/L2 overhead and high replay DRAM throughput. Replay duration differs from application timing. No concrete improved partitioner or store-flush cause is established. Run E005-R2 timing/profile analyzers and negative-data check before interpretation. c10's changed driver/runtime received fresh relevant validation. Preserve all old source/binaries/results.
+- Stop after this confirmation. No additional measurements, E008, automatic dispatch or partition change is authorized. Await the user's next bounded investigation request. Revalidate c10 allocation 328681, do not assume saved state remains current.
 
 ## ARC
 

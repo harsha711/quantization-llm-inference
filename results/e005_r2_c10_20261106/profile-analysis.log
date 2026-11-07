@@ -1,0 +1,17 @@
++ prun timeout 1200 /tmp/e005-r2-hpuvvad-20261106/bin/python scripts/e005_r2/analyze_profiles.py /home/hpuvvad/csc548-w4a16-e005-r2-20261106/results/e005_r2_c10_20261106
+[prun] Master compute host = c10
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun timeout 1200 /tmp/e005-r2-hpuvvad-20261106/bin/python scripts/e005_r2/analyze_profiles.py /home/hpuvvad/csc548-w4a16-e005-r2-20261106/results/e005_r2_c10_20261106 (family=openmpi4)
+{
+  "status": "matched conditional profiles verified",
+  "profiles": 2,
+  "shape": [
+    4,
+    4096,
+    11008
+  ],
+  "replay_passes": 13.0,
+  "warp_instruction_change_pct": 5.060223855408386,
+  "L2_byte_change_pct": 1.1315381504448663,
+  "automatic_dispatch_authorized": false
+}
