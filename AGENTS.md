@@ -51,8 +51,9 @@
 
 ## E008 weight reuse distance
 
-- The user authorized one bounded unchanged-kernel A/C experiment after E005-R2. This overrides that completed checkpoint's wait instruction only for E008. Read its predeclared entry. Use M4, both rectangles, fixed G128, fresh seeds3–6, matched operands, independently allocated weights/scales and complete 1/2/4-matrix graph-event cycles, with required workspace handling included.
-- Two reversed independent series, 24 rows/2400 cycle samples. Require at least5% C gain in both series per rectangle/count. Reproduce the single-matrix control before interpreting multi-matrix benefit. No artificial flush, dispatch, partition rewrite or additional optimization. Record mixed results as inconclusive and preserve all earlier evidence.
+- E008 is complete. Read its experiment record and run the timing analyzer/negative-data checks. The unchanged E006 A/C binary, fresh seeds 3–6, fixed M=4 activation and independent weights/scales pass complete-cycle validation and three sanitizers. Exactly24 timing rows/2400 cycle samples use reversed rectangle/count/configuration orders.
+- Only repeated-single-matrix cases pass 5% in both series. Two/four-matrix gains are subthreshold or absent. Four-matrix transpose C regresses0.757%/0.431%. Keep A default and close that workload's lead. Preserve C as reuse-dependent experimental configuration, not a general decoding improvement. Retain outliers, including series 2 transpose single-matrix3.413 ms C/7.667 ms A. Medians do not establish tail stability.
+- No new timing, profiles, dispatch, partition rewrite or next optimization is authorized by completed E008. Await a separately requested investigation. Revalidate current allocation, never trust saved328681/c10 state.
 
 ## ARC
 

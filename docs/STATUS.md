@@ -1,6 +1,29 @@
 # Current status
 
-**E008 is authorized and predeclared from `dd6b9a9`.** Implement only the unchanged-kernel A/C weight-reuse-distance comparison, one/two/four distinct matrices, M4, both rectangles, fresh seeds, two reversed series. See the E008 experiment entry for the fixed 5% per-pattern gate and validation plan. Corrected A remains default. Single next task: validate the cycle harness, then collect the complete E008 series.
+**E008 is complete. Meaningful corrected-C gains are reuse-dependent in the tested setup.** Both repeated single-matrix controls pass 5% in both reversed series. No two/four-matrix case passes that gate. Keep corrected E006 A as the default. No dispatch or partition change. Starting checkpoint `dd6b9a9`, criteria `ec79eca`, harness `2ec17f6`, prerequisite `fa8e485`, timing tooling `c37e115`, fresh validation `379b5d3`, complete evidence `fff3d48`. Final documentation/handoff commit follows. See [experiment/design record](EXPERIMENTS.md#e008--weight-reuse-distance-with-preserved-ac) and [raw evidence](../results/e008_c10_20261106/).
+
+The unchanged corrected binary runs M=4/G128 on both rectangles with fresh weight seeds 3–6 and one fixed seed-3 activation. Four independent weight/scales pairs stay alive, with the first 1/2/4 accessed. Whole-cycle graph events include required scratch/reduction/lock handling. Two independent processes reverse rectangle/count/A-C order, exactly 24 rows/2400 cycle samples/5600 timed GEMMs. A/C and series operands match. Each active weight pair is 22.171875 MiB, so active weight sets are 22.171875/44.34375/88.6875 MiB against device-reported 32 MiB L2. Exceeding L2 does not guarantee eviction.
+
+| K / N | Matrices | C gain, series 1 / series 2 | 5% gate |
+|---|---:|---:|---|
+| 4096 / 11008 | 1 | +13.433% / +13.383% | pass |
+| 4096 / 11008 | 2 | +3.178% / +1.779% | fail |
+| 4096 / 11008 | 4 | +1.260% / +2.391% | fail |
+| 11008 / 4096 | 1 | +6.568% / +6.741% | pass |
+| 11008 / 4096 | 2 | +0.226% / -0.067% | fail |
+| 11008 / 4096 | 4 | -0.757% / -0.431% | fail |
+
+The stronger rectangle retains positive but subthreshold 1–3% multi-matrix gains. The transpose is effectively tied with two matrices and loses 0.757%/0.431% with four, closing that workload's launch-policy lead. No multi-matrix result supports further restricted-policy testing under the fixed gate. Preserve C as a repeated-single-matrix experimental configuration without a general decoding claim. E005-R1 and E007 remain negative under their own criteria.
+
+All six small smoke rows, 12 rectangular numerical rows and 12 four-matrix sanitizer rows pass. Each uses three direct and three poisoned graph cycles, all-output FP64, exact conversion and guarded reused workspace. Racecheck reports 0 errors/0 warnings. Retained project sm120 build/CTest/GPU checks pass, including six clean small sanitizer checks. All timing rows pass pre/post validation. Local and ARC analyzers and real-evidence negative checks pass. All 113 E006 and 148 E005-R2 handoff hashes match before/after, with unchanged dependencies and corrected library/bridge/wheel hashes.
+
+Limits: One M, four weight seeds, one activation per rectangle, two series, one GPU/driver and unlocked clocks. Separate outputs/workspaces also change their active reuse distance. Series 2 transpose one-matrix controls retain isolated 3.413 ms C and 7.667 ms A outliers, so tail latency is not established even though the predeclared medians reproduce. No samples are discarded. No new counters, eviction proof, store-flush rerun or full-inference run. Earlier profiles cannot explain these application timings completely.
+
+Raw root `results/e008_c10_20261106/`, shared ARC root `/home/hpuvvad/csc548-w4a16-e008-20261106`, reused runtime `/tmp/e005-r2-hpuvvad-20261106`. Run `python3 scripts/e008/analyze.py results/e008_c10_20261106`, `python3 scripts/e008/check_analysis.py results/e008_c10_20261106` and `python3 scripts/e008/analyze.py --self-test`. Full methodology is in `scripts/e008/README.md` and CONTRACT section 10. Allocation328681/c10 is left running, scheduled end 2026-11-07 02:50:31 Eastern. Reverify live state before any future compute.
+
+**Single next task: review E008 and choose a separately authorized evidence-backed investigation.** No further measurement, automatic policy or partition rewrite is authorized by this completed experiment. Do not repeat unchanged E008 to improve percentages.
+
+The sections below preserve previous handoffs.
 
 **E005-R2 is complete. Both rectangular orientations pass the predeclared investigation gate on c10.** The E006 corrected library is unchanged. E005-R1 and E007 remain negative results, and corrected A remains the default. Starting checkpoint `925be8a`, criteria `192e33a`, harness `5412dbb`, verified prerequisite `f19d83a`, complete timing/profile plan `00b5146`, complete profile evidence/checkers `f86d463`. Documentation and final synchronized handoff commits follow. See [experiment and design record](EXPERIMENTS.md#e005-r2--independent-rectangular-ac-confirmation) and [raw evidence](../results/e005_r2_c10_20261106/).
 
