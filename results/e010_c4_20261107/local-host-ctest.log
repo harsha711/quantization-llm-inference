@@ -1,0 +1,8 @@
+Internal ctest changing into directory: /home/harsha/Documents/ncsu/sem 3/548/project/proj/build
+Test project /home/harsha/Documents/ncsu/sem 3/548/project/proj/build
+    Start 1: test_cpu
+1/1 Test #1: test_cpu .........................   Passed    0.01 sec
+
+100% tests passed, 0 tests failed out of 1
+
+Total Test time (real) =   0.01 sec

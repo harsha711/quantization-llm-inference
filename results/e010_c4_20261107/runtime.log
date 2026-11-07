@@ -1,0 +1,711 @@
++ prun timeout 1200 /tmp/e005-r2-hpuvvad-20261106/bin/python scripts/e004/check_runtime.py
+[prun] Master compute host = c4
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun timeout 1200 /tmp/e005-r2-hpuvvad-20261106/bin/python scripts/e004/check_runtime.py (family=openmpi4)
+RANK_ENVIRONMENT c4 3961213 [0] {'SLURM_CPUS_PER_TASK': '16', 'OMP_PROC_BIND': 'true', 'SLURM_TASKS_PER_NODE': '1', 'SLURM_JOB_NODELIST': 'c4', 'SLURM_NODELIST': 'c4', 'SLURM_NTASKS': '1', 'SLURM_JOB_CPUS_PER_NODE': '16', 'SLURM_JOB_ID': '328964', 'OMP_NUM_THREADS': '16', 'OMPI_COMM_WORLD_SIZE': '1', 'OMPI_COMM_WORLD_LOCAL_SIZE': '1', 'OMPI_COMM_WORLD_RANK': '0', 'OMPI_COMM_WORLD_LOCAL_RANK': '0', 'OMPI_COMM_WORLD_NODE_RANK': '0'}
+TORCH_THREADS 16 1
+2.14.0+cu130 13.0
+NVIDIA GeForce RTX 5060 Ti (12, 0) ['sm_75', 'sm_80', 'sm_86', 'sm_90', 'sm_100', 'sm_120']
+PyTorch built with:
+  - GCC 13.3
+  - C++ Version: 202002
+  - Intel(R) oneAPI Math Kernel Library Version 2024.2-Product Build 20240605 for Intel(R) 64 architecture applications
+  - Intel(R) MKL-DNN v3.12.0 (Git Hash 80afa71049cd69a3df32adcccb623b12cd7baa22)
+  - OpenMP 201511 (a.k.a. OpenMP 4.5)
+  - LAPACK is enabled (usually provided by MKL)
+  - NNPACK is enabled
+  - CPU capability usage: AVX512
+  - CUDA Runtime 13.0
+  - NVCC architecture flags: -gencode;arch=compute_75,code=sm_75;-gencode;arch=compute_80,code=sm_80;-gencode;arch=compute_86,code=sm_86;-gencode;arch=compute_90,code=sm_90;-gencode;arch=compute_100,code=sm_100;-gencode;arch=compute_120,code=sm_120
+  - CuDNN 92.4  (built against CUDA 13.3)
+  - Magma 2.6.1
+  - Build settings: BLAS_INFO=mkl, BUILD_TYPE=Release, COMMIT_SHA=08187d9e0fba026dc8217405802ab5381dc88d90, CUDA_FLAGS= -DLIBCUDACXX_ENABLE_SIMPLIFIED_COMPLEX_OPERATIONS -Xfatbin -compress-all -DONNX_NAMESPACE=onnx_torch -gencode arch=compute_75,code=sm_75 -gencode arch=compute_80,code=sm_80 -gencode arch=compute_86,code=sm_86 -gencode arch=compute_90,code=sm_90 -gencode arch=compute_100,code=sm_100 -gencode arch=compute_120,code=sm_120 -Xcudafe --diag_suppress=cc_clobber_ignored,--diag_suppress=field_without_dll_interface,--diag_suppress=base_class_has_different_dll_interface,--diag_suppress=dll_interface_conflict_none_assumed,--diag_suppress=dll_interface_conflict_dllexport_assumed,--diag_suppress=bad_friend_decl --expt-relaxed-constexpr --expt-extended-lambda -Xfatbin -compress-all --threads 2 -compress-mode=size -Wno-deprecated-gpu-targets --expt-extended-lambda -DCUB_WRAPPED_NAMESPACE=at_cuda_detail -DDISABLE_CUSPARSE_DEPRECATED -DCUDA_HAS_FP16=1 -D__CUDA_NO_HALF_OPERATORS__ -D__CUDA_NO_HALF_CONVERSIONS__ -D__CUDA_NO_HALF2_OPERATORS__ -D__CUDA_NO_BFLOAT16_CONVERSIONS__ -DC10_NODEPRECATED, CUDA_VERSION=13.0, CUDNN_VERSION=9.24.0, CXX_COMPILER=/opt/rh/gcc-toolset-13/root/usr/bin/c++, CXX_FLAGS= -fvisibility-inlines-hidden -DUSE_PTHREADPOOL -DNDEBUG -DUSE_KINETO -DHAS_CUPTI -DUSE_FBGEMM -DUSE_MSLK -DUSE_PYTORCH_QNNPACK -DSYMBOLICATE_MOBILE_DEBUG_HANDLE -O2 -fPIC -DC10_NODEPRECATED -Wall -Wextra -Werror=return-type -Werror=non-virtual-dtor -Werror=range-loop-construct -Werror=bool-operation -Wnarrowing -Wno-missing-field-initializers -Wno-unknown-pragmas -Wno-unused-parameter -Wno-strict-overflow -Wno-strict-aliasing -Wno-stringop-overflow -Wsuggest-override -Wno-psabi -Wno-error=old-style-cast -faligned-new -Wno-maybe-uninitialized -fno-math-errno -fno-trapping-math -Werror=format -Wno-dangling-reference -Wno-error=dangling-reference -Wno-stringop-overflow, LAPACK_INFO=mkl, PERF_WITH_AVX=1, PERF_WITH_AVX2=1, TORCH_VERSION=2.14.0, USE_CUDA=1, USE_CUDNN=ON, USE_CUSPARSELT=1, USE_GFLAGS=OFF, USE_GLOG=OFF, USE_GLOO=ON, USE_HIPSPARSELT=OFF, USE_MKL=ON, USE_MKLDNN=ON, USE_MPI=OFF, USE_NCCL=ON, USE_NNPACK=ON, USE_OPENMP=ON, USE_ROCM=OFF, USE_ROCM_KERNEL_ASSERT=OFF, USE_XCCL=OFF, USE_XPU=OFF, 
+
+THREAD_AFFINITY 3961213 ['Name:\tpython', 'Cpus_allowed_list:\t0']
+THREAD_AFFINITY 3961215 ['Name:\tcuda00001400006', 'Cpus_allowed_list:\t0']
+THREAD_AFFINITY 3961219 ['Name:\tpython', 'Cpus_allowed_list:\t1']
+THREAD_AFFINITY 3961220 ['Name:\tpython', 'Cpus_allowed_list:\t2']
+THREAD_AFFINITY 3961221 ['Name:\tpython', 'Cpus_allowed_list:\t3']
+THREAD_AFFINITY 3961222 ['Name:\tpython', 'Cpus_allowed_list:\t4']
+THREAD_AFFINITY 3961223 ['Name:\tpython', 'Cpus_allowed_list:\t5']
+THREAD_AFFINITY 3961224 ['Name:\tpython', 'Cpus_allowed_list:\t6']
+THREAD_AFFINITY 3961225 ['Name:\tpython', 'Cpus_allowed_list:\t7']
+THREAD_AFFINITY 3961226 ['Name:\tpython', 'Cpus_allowed_list:\t8']
+THREAD_AFFINITY 3961227 ['Name:\tpython', 'Cpus_allowed_list:\t9']
+THREAD_AFFINITY 3961228 ['Name:\tpython', 'Cpus_allowed_list:\t10']
+THREAD_AFFINITY 3961229 ['Name:\tpython', 'Cpus_allowed_list:\t11']
+THREAD_AFFINITY 3961230 ['Name:\tpython', 'Cpus_allowed_list:\t12']
+THREAD_AFFINITY 3961231 ['Name:\tpython', 'Cpus_allowed_list:\t13']
+THREAD_AFFINITY 3961232 ['Name:\tpython', 'Cpus_allowed_list:\t14']
+THREAD_AFFINITY 3961233 ['Name:\tpython', 'Cpus_allowed_list:\t15']
+LIBRARY /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/vllm/_C_stable_libtorch.abi3.so e634b80e72078e964f8bd2ac541d66f2a900920773cf993544609612190bd9a9
+_C::marlin_gemm(Tensor a, Tensor? c_or_none, Tensor b_q_weight, Tensor? b_bias_or_none, Tensor b_scales, Tensor? a_scales, Tensor? global_scale, Tensor? b_zeros_or_none, Tensor workspace, int b_type_id, SymInt size_m, SymInt size_n, SymInt size_k, bool use_atomic_add, bool use_fp32_reduce, bool is_zp_float) -> Tensor
+_C::gptq_marlin_repack(Tensor b_q_weight, SymInt size_k, SymInt size_n, int num_bits, bool is_a_8bit) -> Tensor
+200000000-200200000 ---p 00000000 00:00 0 
+200200000-200400000 rw-s 00000000 00:05 494                              /dev/nvidia0
+200400000-202c00000 rw-s 00000000 00:05 485                              /dev/nvidiactl
+202c00000-206800000 ---p 00000000 00:00 0 
+206800000-206a00000 rw-s 00000000 00:05 485                              /dev/nvidiactl
+206a00000-206c00000 rw-s 00000000 00:05 485                              /dev/nvidiactl
+206c00000-206e00000 rw-s 206c00000 00:05 538                             /dev/nvidia-uvm
+206e00000-300200000 ---p 00000000 00:00 0 
+10000000000-10004000000 ---p 00000000 00:00 0 
+55d0ffc00000-55d0ffc01000 r-xp 00000000 103:04 56108593                  /usr/bin/python3.11
+55d0ffe00000-55d0ffe01000 r--p 00000000 103:04 56108593                  /usr/bin/python3.11
+55d0ffe01000-55d0ffe02000 rw-p 00001000 103:04 56108593                  /usr/bin/python3.11
+55d100c61000-55d11308f000 rw-p 00000000 00:00 0                          [heap]
+7faacf200000-7faacf39a000 r--p 00000000 103:04 44171275                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/vllm/_C_stable_libtorch.abi3.so
+7faacf39a000-7faacffb7000 r-xp 0019a000 103:04 44171275                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/vllm/_C_stable_libtorch.abi3.so
+7faacffb7000-7faad3d9b000 r--p 00db7000 103:04 44171275                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/vllm/_C_stable_libtorch.abi3.so
+7faad3d9b000-7faad3da1000 r--p 04b9b000 103:04 44171275                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/vllm/_C_stable_libtorch.abi3.so
+7faad3da1000-7faad3da7000 rw-p 04ba1000 103:04 44171275                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/vllm/_C_stable_libtorch.abi3.so
+7faad3da7000-7faad3e32000 rw-p 00000000 00:00 0 
+7faad4000000-7faadac00000 ---p 00000000 00:00 0 
+7faadac00000-7faadae00000 rw-s 00000000 00:01 41091                      /dev/zero (deleted)
+7faadae00000-7faadb800000 ---p 00000000 00:00 0 
+7faadb800000-7faadba00000 rw-s 00000000 00:01 41092                      /dev/zero (deleted)
+7faadba00000-7faadc000000 ---p 00000000 00:00 0 
+7faadc000000-7faadc021000 rw-p 00000000 00:00 0 
+7faadc021000-7faae0000000 ---p 00000000 00:00 0 
+7faae2000000-7faae8000000 ---p 00000000 00:00 0 
+7faae8000000-7faae8021000 rw-p 00000000 00:00 0 
+7faae8021000-7faaec000000 ---p 00000000 00:00 0 
+7faaec000000-7faaec021000 rw-p 00000000 00:00 0 
+7faaec021000-7faaf0000000 ---p 00000000 00:00 0 
+7faaf0000000-7faaf0021000 rw-p 00000000 00:00 0 
+7faaf0021000-7faaf4000000 ---p 00000000 00:00 0 
+7faaf8000000-7faaf8021000 rw-p 00000000 00:00 0 
+7faaf8021000-7faafc000000 ---p 00000000 00:00 0 
+7fab00000000-7fab00021000 rw-p 00000000 00:00 0 
+7fab00021000-7fab04000000 ---p 00000000 00:00 0 
+7fab08000000-7fab08021000 rw-p 00000000 00:00 0 
+7fab08021000-7fab0c000000 ---p 00000000 00:00 0 
+7fab10000000-7fab10021000 rw-p 00000000 00:00 0 
+7fab10021000-7fab14000000 ---p 00000000 00:00 0 
+7fab18000000-7fab18021000 rw-p 00000000 00:00 0 
+7fab18021000-7fab1c000000 ---p 00000000 00:00 0 
+7fab20000000-7fab20021000 rw-p 00000000 00:00 0 
+7fab20021000-7fab24000000 ---p 00000000 00:00 0 
+7fab28000000-7fab28021000 rw-p 00000000 00:00 0 
+7fab28021000-7fab2c000000 ---p 00000000 00:00 0 
+7fab30000000-7fab30021000 rw-p 00000000 00:00 0 
+7fab30021000-7fab34000000 ---p 00000000 00:00 0 
+7fab38000000-7fab38021000 rw-p 00000000 00:00 0 
+7fab38021000-7fab3c000000 ---p 00000000 00:00 0 
+7fab40000000-7fab40021000 rw-p 00000000 00:00 0 
+7fab40021000-7fab44000000 ---p 00000000 00:00 0 
+7fab46000000-7fab48000000 ---p 00000000 00:00 0 
+7fab48000000-7fab48021000 rw-p 00000000 00:00 0 
+7fab48021000-7fab4c000000 ---p 00000000 00:00 0 
+7fab4d3a6000-7fab4e000000 rw-p 00000000 00:00 0 
+7fab4e000000-7fab4e600000 ---p 00000000 00:00 0 
+7fab4e600000-7fab4e800000 rw-s 00000000 00:05 485                        /dev/nvidiactl
+7fab4e800000-7fab4ea00000 rw-s 00000000 00:01 41087                      /dev/zero (deleted)
+7fab4ea00000-7fab4ec00000 rw-s 00000000 00:01 41088                      /dev/zero (deleted)
+7fab4ec00000-7fab4f000000 ---p 00000000 00:00 0 
+7fab4f000000-7fab4f200000 rw-s 00000000 00:05 485                        /dev/nvidiactl
+7fab4f200000-7fab4f800000 ---p 00000000 00:00 0 
+7fab4f800000-7fab4fa00000 rw-s 00000000 00:01 41090                      /dev/zero (deleted)
+7fab4fa00000-7fab4ffec000 rw-s 00000000 00:05 485                        /dev/nvidiactl
+7fab4ffec000-7fab50000000 ---p 00000000 00:00 0 
+7fab50000000-7fab50021000 rw-p 00000000 00:00 0 
+7fab50021000-7fab54000000 ---p 00000000 00:00 0 
+7fab544ff000-7fab55ddd000 rw-p 00000000 00:00 0 
+7fab55ddd000-7fab55dde000 ---p 00000000 00:00 0 
+7fab55dde000-7fab565de000 rw-p 00000000 00:00 0 
+7fab565de000-7fab565df000 rw-s 00000000 00:05 485                        /dev/nvidiactl
+7fab565df000-7fab565e0000 rw-s 00000000 00:05 485                        /dev/nvidiactl
+7fab565e0000-7fab565e1000 rw-s 00000000 00:05 485                        /dev/nvidiactl
+7fab565e1000-7fab565e2000 rw-s 00000000 00:05 485                        /dev/nvidiactl
+7fab565e2000-7fab565e3000 rw-s 00000000 00:05 485                        /dev/nvidiactl
+7fab565e3000-7fab565e4000 rw-s 00000000 00:05 485                        /dev/nvidiactl
+7fab565e4000-7fab565e5000 rw-s 00000000 00:05 485                        /dev/nvidiactl
+7fab565e5000-7fab565e6000 rw-s 00000000 00:05 485                        /dev/nvidiactl
+7fab565e6000-7fab565e7000 rw-s 00000000 00:05 485                        /dev/nvidiactl
+7fab565e7000-7fab565e8000 rw-s 00000000 00:05 485                        /dev/nvidiactl
+7fab565e8000-7fab565e9000 rw-s 00000000 00:05 485                        /dev/nvidiactl
+7fab565e9000-7fab565ea000 rw-s 00000000 00:05 485                        /dev/nvidiactl
+7fab565ea000-7fab565eb000 rw-s 00000000 00:05 485                        /dev/nvidiactl
+7fab565eb000-7fab565ec000 rw-s 00000000 00:05 485                        /dev/nvidiactl
+7fab565ec000-7fab565ed000 rw-s 00000000 00:05 485                        /dev/nvidiactl
+7fab565ed000-7fab565ee000 rw-s 00000000 00:05 485                        /dev/nvidiactl
+7fab565ee000-7fab57800000 ---p 00000000 00:00 0 
+7fab57800000-7fab58000000 rw-p 00000000 00:00 0 
+7fab58000000-7fab58021000 rw-p 00000000 00:00 0 
+7fab58021000-7fab5c000000 ---p 00000000 00:00 0 
+7fab5c5f1000-7fab5c7f1000 rw-s 00000000 00:01 41089                      /dev/zero (deleted)
+7fab5c7f1000-7fab5c7f2000 ---p 00000000 00:00 0 
+7fab5c7f2000-7fab5cff2000 rw-p 00000000 00:00 0 
+7fab5cff2000-7fab5cff3000 ---p 00000000 00:00 0 
+7fab5cff3000-7fab5d7f3000 rw-p 00000000 00:00 0 
+7fab5d7f3000-7fab5d7f4000 ---p 00000000 00:00 0 
+7fab5d7f4000-7fab5dff4000 rw-p 00000000 00:00 0 
+7fab5dff4000-7fab5dff5000 ---p 00000000 00:00 0 
+7fab5dff5000-7fab5e7f5000 rw-p 00000000 00:00 0 
+7fab5e7f5000-7fab5e7f6000 ---p 00000000 00:00 0 
+7fab5e7f6000-7fab5eff6000 rw-p 00000000 00:00 0 
+7fab5eff6000-7fab5eff7000 ---p 00000000 00:00 0 
+7fab5eff7000-7fab5f7f7000 rw-p 00000000 00:00 0 
+7fab5f7f7000-7fab5f7f8000 ---p 00000000 00:00 0 
+7fab5f7f8000-7fab5fff8000 rw-p 00000000 00:00 0 
+7fab5fff8000-7fab5fff9000 ---p 00000000 00:00 0 
+7fab5fff9000-7fab607f9000 rw-p 00000000 00:00 0 
+7fab607f9000-7fab607fa000 ---p 00000000 00:00 0 
+7fab607fa000-7fab60ffa000 rw-p 00000000 00:00 0 
+7fab60ffa000-7fab60ffb000 ---p 00000000 00:00 0 
+7fab60ffb000-7fab617fb000 rw-p 00000000 00:00 0 
+7fab617fb000-7fab617fc000 ---p 00000000 00:00 0 
+7fab617fc000-7fab61ffc000 rw-p 00000000 00:00 0 
+7fab61ffc000-7fab61ffd000 ---p 00000000 00:00 0 
+7fab61ffd000-7fab627fd000 rw-p 00000000 00:00 0 
+7fab627fd000-7fab627fe000 ---p 00000000 00:00 0 
+7fab627fe000-7fab62ffe000 rw-p 00000000 00:00 0 
+7fab62ffe000-7fab62fff000 ---p 00000000 00:00 0 
+7fab62fff000-7fab637ff000 rw-p 00000000 00:00 0 
+7fab637ff000-7fab63800000 ---p 00000000 00:00 0 
+7fab63800000-7fab64000000 rw-p 00000000 00:00 0 
+7fab64000000-7fab6b28d000 r-xp 00000000 103:04 52823668                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cudnn/lib/libcudnn_graph.so.9
+7fab6b28d000-7fab6b48d000 ---p 0728d000 103:04 52823668                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cudnn/lib/libcudnn_graph.so.9
+7fab6b48d000-7fab6b49f000 r--p 0728d000 103:04 52823668                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cudnn/lib/libcudnn_graph.so.9
+7fab6b49f000-7fab6ba46000 rw-p 0729f000 103:04 52823668                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cudnn/lib/libcudnn_graph.so.9
+7fab6ba46000-7fab6bdd7000 rw-p 00000000 00:00 0 
+7fab6bdd7000-7fab6be00000 ---p 07dd7000 103:04 52823668                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cudnn/lib/libcudnn_graph.so.9
+7fab6be00000-7fab6be37000 rw-p 07a00000 103:04 52823668                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cudnn/lib/libcudnn_graph.so.9
+7fab6c000000-7fad70000000 ---p 00000000 00:00 0 
+7fad70000000-7fad70021000 rw-p 00000000 00:00 0 
+7fad70021000-7fad74000000 ---p 00000000 00:00 0 
+7fad741ff000-7fad74200000 ---p 00000000 00:00 0 
+7fad74200000-7fad74a00000 rw-p 00000000 00:00 0 
+7fad74a00000-7fad74a1f000 r--p 00000000 103:04 56100165                  /usr/lib64/libnvidia-ml.so.610.57.04
+7fad74a1f000-7fad74b9e000 r-xp 0001f000 103:04 56100165                  /usr/lib64/libnvidia-ml.so.610.57.04
+7fad74b9e000-7fad74c05000 r--p 0019e000 103:04 56100165                  /usr/lib64/libnvidia-ml.so.610.57.04
+7fad74c05000-7fad74c37000 r--p 00204000 103:04 56100165                  /usr/lib64/libnvidia-ml.so.610.57.04
+7fad74c37000-7fad74c89000 rw-p 00236000 103:04 56100165                  /usr/lib64/libnvidia-ml.so.610.57.04
+7fad74c89000-7fad75ef0000 rw-p 00000000 00:00 0 
+7fad75f4b000-7fad7716c000 ---p 00000000 00:00 0 
+7fad7716c000-7fad773ff000 rw-p 00000000 00:00 0 
+7fad773ff000-7fad77400000 ---p 00000000 00:00 0 
+7fad77400000-7fad77c00000 rw-p 00000000 00:00 0 
+7fad77c00000-7fad77c0d000 r-xp 00000000 103:04 56234027                  /usr/lib64/python3.11/lib-dynload/_asyncio.cpython-311-x86_64-linux-gnu.so
+7fad77c0d000-7fad77e0c000 ---p 0000d000 103:04 56234027                  /usr/lib64/python3.11/lib-dynload/_asyncio.cpython-311-x86_64-linux-gnu.so
+7fad77e0c000-7fad77e0d000 r--p 0000c000 103:04 56234027                  /usr/lib64/python3.11/lib-dynload/_asyncio.cpython-311-x86_64-linux-gnu.so
+7fad77e0d000-7fad77e0f000 rw-p 0000d000 103:04 56234027                  /usr/lib64/python3.11/lib-dynload/_asyncio.cpython-311-x86_64-linux-gnu.so
+7fad78000000-7fad78002000 r-xp 00000000 103:04 56234057                  /usr/lib64/python3.11/lib-dynload/_posixshmem.cpython-311-x86_64-linux-gnu.so
+7fad78002000-7fad78201000 ---p 00002000 103:04 56234057                  /usr/lib64/python3.11/lib-dynload/_posixshmem.cpython-311-x86_64-linux-gnu.so
+7fad78201000-7fad78202000 r--p 00001000 103:04 56234057                  /usr/lib64/python3.11/lib-dynload/_posixshmem.cpython-311-x86_64-linux-gnu.so
+7fad78202000-7fad78203000 rw-p 00002000 103:04 56234057                  /usr/lib64/python3.11/lib-dynload/_posixshmem.cpython-311-x86_64-linux-gnu.so
+7fad78400000-7fad78404000 r-xp 00000000 103:04 56234054                  /usr/lib64/python3.11/lib-dynload/_multiprocessing.cpython-311-x86_64-linux-gnu.so
+7fad78404000-7fad78603000 ---p 00004000 103:04 56234054                  /usr/lib64/python3.11/lib-dynload/_multiprocessing.cpython-311-x86_64-linux-gnu.so
+7fad78603000-7fad78604000 r--p 00003000 103:04 56234054                  /usr/lib64/python3.11/lib-dynload/_multiprocessing.cpython-311-x86_64-linux-gnu.so
+7fad78604000-7fad78605000 rw-p 00004000 103:04 56234054                  /usr/lib64/python3.11/lib-dynload/_multiprocessing.cpython-311-x86_64-linux-gnu.so
+7fad78800000-7fad78829000 r-xp 00000000 103:04 56234063                  /usr/lib64/python3.11/lib-dynload/_ssl.cpython-311-x86_64-linux-gnu.so
+7fad78829000-7fad78a29000 ---p 00029000 103:04 56234063                  /usr/lib64/python3.11/lib-dynload/_ssl.cpython-311-x86_64-linux-gnu.so
+7fad78a29000-7fad78a2a000 r--p 00029000 103:04 56234063                  /usr/lib64/python3.11/lib-dynload/_ssl.cpython-311-x86_64-linux-gnu.so
+7fad78a2a000-7fad78a31000 rw-p 0002a000 103:04 56234063                  /usr/lib64/python3.11/lib-dynload/_ssl.cpython-311-x86_64-linux-gnu.so
+7fad78b00000-7fad78c00000 rw-p 00000000 00:00 0 
+7fad78c00000-7fad78c07000 r-xp 00000000 103:04 56106182                  /usr/lib64/libuuid.so.1.3.0
+7fad78c07000-7fad78e06000 ---p 00007000 103:04 56106182                  /usr/lib64/libuuid.so.1.3.0
+7fad78e06000-7fad78e07000 r--p 00006000 103:04 56106182                  /usr/lib64/libuuid.so.1.3.0
+7fad78e07000-7fad78e08000 rw-p 00000000 00:00 0 
+7fad78f00000-7fad79000000 rw-p 00000000 00:00 0 
+7fad79000000-7fad79001000 r-xp 00000000 103:04 56234067                  /usr/lib64/python3.11/lib-dynload/_uuid.cpython-311-x86_64-linux-gnu.so
+7fad79001000-7fad79200000 ---p 00001000 103:04 56234067                  /usr/lib64/python3.11/lib-dynload/_uuid.cpython-311-x86_64-linux-gnu.so
+7fad79200000-7fad79201000 r--p 00000000 103:04 56234067                  /usr/lib64/python3.11/lib-dynload/_uuid.cpython-311-x86_64-linux-gnu.so
+7fad79201000-7fad79202000 rw-p 00001000 103:04 56234067                  /usr/lib64/python3.11/lib-dynload/_uuid.cpython-311-x86_64-linux-gnu.so
+7fad79300000-7fad79400000 rw-p 00000000 00:00 0 
+7fad79400000-7fad79410000 r-xp 00000000 103:04 56234073                  /usr/lib64/python3.11/lib-dynload/cmath.cpython-311-x86_64-linux-gnu.so
+7fad79410000-7fad7960f000 ---p 00010000 103:04 56234073                  /usr/lib64/python3.11/lib-dynload/cmath.cpython-311-x86_64-linux-gnu.so
+7fad7960f000-7fad79610000 r--p 0000f000 103:04 56234073                  /usr/lib64/python3.11/lib-dynload/cmath.cpython-311-x86_64-linux-gnu.so
+7fad79610000-7fad79611000 rw-p 00010000 103:04 56234073                  /usr/lib64/python3.11/lib-dynload/cmath.cpython-311-x86_64-linux-gnu.so
+7fad79611000-7fad79613000 rw-p 00000000 00:00 0 
+7fad79700000-7fad79800000 rw-p 00000000 00:00 0 
+7fad79800000-7fad79803000 r-xp 00000000 103:04 56234059                  /usr/lib64/python3.11/lib-dynload/_queue.cpython-311-x86_64-linux-gnu.so
+7fad79803000-7fad79a03000 ---p 00003000 103:04 56234059                  /usr/lib64/python3.11/lib-dynload/_queue.cpython-311-x86_64-linux-gnu.so
+7fad79a03000-7fad79a04000 r--p 00003000 103:04 56234059                  /usr/lib64/python3.11/lib-dynload/_queue.cpython-311-x86_64-linux-gnu.so
+7fad79a04000-7fad79a05000 rw-p 00004000 103:04 56234059                  /usr/lib64/python3.11/lib-dynload/_queue.cpython-311-x86_64-linux-gnu.so
+7fad79b00000-7fad79c00000 rw-p 00000000 00:00 0 
+7fad79c00000-7fad79c07000 r-xp 00000000 103:04 56234039                  /usr/lib64/python3.11/lib-dynload/_csv.cpython-311-x86_64-linux-gnu.so
+7fad79c07000-7fad79e07000 ---p 00007000 103:04 56234039                  /usr/lib64/python3.11/lib-dynload/_csv.cpython-311-x86_64-linux-gnu.so
+7fad79e07000-7fad79e08000 r--p 00007000 103:04 56234039                  /usr/lib64/python3.11/lib-dynload/_csv.cpython-311-x86_64-linux-gnu.so
+7fad79e08000-7fad79e09000 rw-p 00008000 103:04 56234039                  /usr/lib64/python3.11/lib-dynload/_csv.cpython-311-x86_64-linux-gnu.so
+7fad79f00000-7fad7a000000 rw-p 00000000 00:00 0 
+7fad7a000000-7fad7a008000 r-xp 00000000 103:04 56234072                  /usr/lib64/python3.11/lib-dynload/binascii.cpython-311-x86_64-linux-gnu.so
+7fad7a008000-7fad7a207000 ---p 00008000 103:04 56234072                  /usr/lib64/python3.11/lib-dynload/binascii.cpython-311-x86_64-linux-gnu.so
+7fad7a207000-7fad7a208000 r--p 00007000 103:04 56234072                  /usr/lib64/python3.11/lib-dynload/binascii.cpython-311-x86_64-linux-gnu.so
+7fad7a208000-7fad7a209000 rw-p 00008000 103:04 56234072                  /usr/lib64/python3.11/lib-dynload/binascii.cpython-311-x86_64-linux-gnu.so
+7fad7a300000-7fad7a400000 rw-p 00000000 00:00 0 
+7fad7a400000-7fad7a432000 r--p 00000000 103:04 52827276                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/cuda/bindings/runtime.cpython-311-x86_64-linux-gnu.so
+7fad7a432000-7fad7a724000 r-xp 00032000 103:04 52827276                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/cuda/bindings/runtime.cpython-311-x86_64-linux-gnu.so
+7fad7a724000-7fad7a84a000 r--p 00324000 103:04 52827276                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/cuda/bindings/runtime.cpython-311-x86_64-linux-gnu.so
+7fad7a84a000-7fad7a84b000 r--p 00449000 103:04 52827276                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/cuda/bindings/runtime.cpython-311-x86_64-linux-gnu.so
+7fad7a84b000-7fad7a878000 rw-p 0044a000 103:04 52827276                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/cuda/bindings/runtime.cpython-311-x86_64-linux-gnu.so
+7fad7a878000-7fad7a888000 rw-p 00000000 00:00 0 
+7fad7a900000-7fad7aa00000 rw-p 00000000 00:00 0 
+7fad7aa00000-7fad7aa48000 r--p 00000000 103:04 52827264                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/cuda/bindings/driver.cpython-311-x86_64-linux-gnu.so
+7fad7aa48000-7fad7ae69000 r-xp 00048000 103:04 52827264                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/cuda/bindings/driver.cpython-311-x86_64-linux-gnu.so
+7fad7ae69000-7fad7b02d000 r--p 00469000 103:04 52827264                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/cuda/bindings/driver.cpython-311-x86_64-linux-gnu.so
+7fad7b02d000-7fad7b02e000 r--p 0062c000 103:04 52827264                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/cuda/bindings/driver.cpython-311-x86_64-linux-gnu.so
+7fad7b02e000-7fad7b079000 rw-p 0062d000 103:04 52827264                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/cuda/bindings/driver.cpython-311-x86_64-linux-gnu.so
+7fad7b079000-7fad7b08e000 rw-p 00000000 00:00 0 
+7fad7b100000-7fad7b200000 rw-p 00000000 00:00 0 
+7fad7b200000-7fad7b206000 r-xp 00000000 103:04 56234077                  /usr/lib64/python3.11/lib-dynload/mmap.cpython-311-x86_64-linux-gnu.so
+7fad7b206000-7fad7b405000 ---p 00006000 103:04 56234077                  /usr/lib64/python3.11/lib-dynload/mmap.cpython-311-x86_64-linux-gnu.so
+7fad7b405000-7fad7b406000 r--p 00005000 103:04 56234077                  /usr/lib64/python3.11/lib-dynload/mmap.cpython-311-x86_64-linux-gnu.so
+7fad7b406000-7fad7b407000 rw-p 00006000 103:04 56234077                  /usr/lib64/python3.11/lib-dynload/mmap.cpython-311-x86_64-linux-gnu.so
+7fad7b500000-7fad7b600000 rw-p 00000000 00:00 0 
+7fad7b600000-7fad7b603000 r-xp 00000000 103:04 56234075                  /usr/lib64/python3.11/lib-dynload/grp.cpython-311-x86_64-linux-gnu.so
+7fad7b603000-7fad7b802000 ---p 00003000 103:04 56234075                  /usr/lib64/python3.11/lib-dynload/grp.cpython-311-x86_64-linux-gnu.so
+7fad7b802000-7fad7b803000 r--p 00002000 103:04 56234075                  /usr/lib64/python3.11/lib-dynload/grp.cpython-311-x86_64-linux-gnu.so
+7fad7b803000-7fad7b804000 rw-p 00003000 103:04 56234075                  /usr/lib64/python3.11/lib-dynload/grp.cpython-311-x86_64-linux-gnu.so
+7fad7b900000-7fad7ba00000 rw-p 00000000 00:00 0 
+7fad7ba00000-7fad7ba06000 r-xp 00000000 103:04 56234049                  /usr/lib64/python3.11/lib-dynload/_heapq.cpython-311-x86_64-linux-gnu.so
+7fad7ba06000-7fad7bc05000 ---p 00006000 103:04 56234049                  /usr/lib64/python3.11/lib-dynload/_heapq.cpython-311-x86_64-linux-gnu.so
+7fad7bc05000-7fad7bc06000 r--p 00005000 103:04 56234049                  /usr/lib64/python3.11/lib-dynload/_heapq.cpython-311-x86_64-linux-gnu.so
+7fad7bc06000-7fad7bc07000 rw-p 00006000 103:04 56234049                  /usr/lib64/python3.11/lib-dynload/_heapq.cpython-311-x86_64-linux-gnu.so
+7fad7bd00000-7fad7be00000 rw-p 00000000 00:00 0 
+7fad7be00000-7fad7be01000 r-xp 00000000 103:04 56234037                  /usr/lib64/python3.11/lib-dynload/_contextvars.cpython-311-x86_64-linux-gnu.so
+7fad7be01000-7fad7c000000 ---p 00001000 103:04 56234037                  /usr/lib64/python3.11/lib-dynload/_contextvars.cpython-311-x86_64-linux-gnu.so
+7fad7c000000-7fad7c001000 r--p 00000000 103:04 56234037                  /usr/lib64/python3.11/lib-dynload/_contextvars.cpython-311-x86_64-linux-gnu.so
+7fad7c001000-7fad7c002000 rw-p 00001000 103:04 56234037                  /usr/lib64/python3.11/lib-dynload/_contextvars.cpython-311-x86_64-linux-gnu.so
+7fad7c100000-7fad7c200000 rw-p 00000000 00:00 0 
+7fad7c200000-7fad7e200000 rw-p 00000000 00:00 0 
+7fad7e200000-7fad7e23b000 r-xp 00000000 103:04 52824984                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/numpy.libs/libquadmath-96973f99-934c22de.so.0.0.0
+7fad7e23b000-7fad7e43a000 ---p 0003b000 103:04 52824984                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/numpy.libs/libquadmath-96973f99-934c22de.so.0.0.0
+7fad7e43a000-7fad7e43b000 r--p 0003a000 103:04 52824984                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/numpy.libs/libquadmath-96973f99-934c22de.so.0.0.0
+7fad7e43b000-7fad7e43e000 rw-p 0003b000 103:04 52824984                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/numpy.libs/libquadmath-96973f99-934c22de.so.0.0.0
+7fad7e500000-7fad7e600000 rw-p 00000000 00:00 0 
+7fad7e600000-7fad7e876000 r-xp 00000000 103:04 52824983                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/numpy.libs/libgfortran-040039e1-0352e75f.so.5.0.0
+7fad7e876000-7fad7ea75000 ---p 00276000 103:04 52824983                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/numpy.libs/libgfortran-040039e1-0352e75f.so.5.0.0
+7fad7ea75000-7fad7ea76000 r--p 00275000 103:04 52824983                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/numpy.libs/libgfortran-040039e1-0352e75f.so.5.0.0
+7fad7ea76000-7fad7ea78000 rw-p 00276000 103:04 52824983                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/numpy.libs/libgfortran-040039e1-0352e75f.so.5.0.0
+7fad7ea78000-7fad7eab1000 rw-p 0027b000 103:04 52824983                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/numpy.libs/libgfortran-040039e1-0352e75f.so.5.0.0
+7fad7eb00000-7fad7ec00000 rw-p 00000000 00:00 0 
+7fad7ec00000-7fad7ee89000 r--p 00000000 103:04 52824985                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/numpy.libs/libscipy_openblas64_-32a4b2a6.so
+7fad7ee89000-7fad801ca000 r-xp 00288000 103:04 52824985                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/numpy.libs/libscipy_openblas64_-32a4b2a6.so
+7fad801ca000-7fad801d2000 r--p 015c8000 103:04 52824985                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/numpy.libs/libscipy_openblas64_-32a4b2a6.so
+7fad801d2000-7fad801e1000 rw-p 015cf000 103:04 52824985                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/numpy.libs/libscipy_openblas64_-32a4b2a6.so
+7fad801e1000-7fad801e8000 rw-p 00000000 00:00 0 
+7fad801e8000-7fad801ed000 ---p 015e8000 103:04 52824985                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/numpy.libs/libscipy_openblas64_-32a4b2a6.so
+7fad801ed000-7fad80357000 rw-p 016d2000 103:04 52824985                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/numpy.libs/libscipy_openblas64_-32a4b2a6.so
+7fad80400000-7fad8042b000 r--p 00000000 103:04 52823919                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/numpy/_core/_multiarray_umath.cpython-311-x86_64-linux-gnu.so
+7fad8042b000-7fad80bb2000 r-xp 0002b000 103:04 52823919                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/numpy/_core/_multiarray_umath.cpython-311-x86_64-linux-gnu.so
+7fad80bb2000-7fad80d42000 r--p 007b2000 103:04 52823919                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/numpy/_core/_multiarray_umath.cpython-311-x86_64-linux-gnu.so
+7fad80d42000-7fad80d45000 r--p 00941000 103:04 52823919                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/numpy/_core/_multiarray_umath.cpython-311-x86_64-linux-gnu.so
+7fad80d45000-7fad80d68000 rw-p 00944000 103:04 52823919                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/numpy/_core/_multiarray_umath.cpython-311-x86_64-linux-gnu.so
+7fad80d68000-7fad80d7f000 rw-p 00000000 00:00 0 
+7fad80d7f000-7fad80d8a000 rw-p 009e2000 103:04 52823919                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/numpy/_core/_multiarray_umath.cpython-311-x86_64-linux-gnu.so
+7fad80e00000-7fad80e14000 r--p 00000000 103:04 52700525                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_nvshmem.so
+7fad80e14000-7fad80e3f000 r-xp 00014000 103:04 52700525                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_nvshmem.so
+7fad80e3f000-7fad811b7000 r--p 0003f000 103:04 52700525                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_nvshmem.so
+7fad811b7000-7fad811b9000 r--p 003b6000 103:04 52700525                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_nvshmem.so
+7fad811b9000-7fad811ba000 rw-p 003b8000 103:04 52700525                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_nvshmem.so
+7fad811ba000-7fad811bd000 rw-p 00000000 00:00 0 
+7fad811bd000-7fad811c9000 rw-p 003d2000 103:04 52700525                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_nvshmem.so
+7fad81200000-7fad8186d000 r--p 00000000 103:04 52700522                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_cuda.so
+7fad8186d000-7fad853f5000 r-xp 0066d000 103:04 52700522                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_cuda.so
+7fad853f5000-7fad9a2fd000 r--p 041f5000 103:04 52700522                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_cuda.so
+7fad9a2fd000-7fad9a35b000 r--p 190fc000 103:04 52700522                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_cuda.so
+7fad9a35b000-7fad9a37c000 rw-p 1915a000 103:04 52700522                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_cuda.so
+7fad9a37c000-7fad9b157000 rw-p 00000000 00:00 0 
+7fad9b157000-7fad9b5cf000 rw-p 1db15000 103:04 52700522                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_cuda.so
+7fad9b600000-7fad9c578000 r--p 00000000 103:04 52700521                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_cpu.so
+7fad9c578000-7fadad5b8000 r-xp 00f78000 103:04 52700521                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_cpu.so
+7fadad5b8000-7fadb007f000 r--p 11fb8000 103:04 52700521                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_cpu.so
+7fadb007f000-7fadb032b000 r--p 14a7e000 103:04 52700521                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_cpu.so
+7fadb032b000-7fadb0397000 rw-p 14d2a000 103:04 52700521                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_cpu.so
+7fadb0397000-7fadb04ab000 rw-p 00000000 00:00 0 
+7fadb04ab000-7fadb0a19000 rw-p 1a436000 103:04 52700521                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_cpu.so
+7fadb0b00000-7fadb0c00000 rw-p 00000000 00:00 0 
+7fadb0c00000-7fadb0dac000 r--p 00000000 103:04 52700526                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_python.so
+7fadb0dac000-7fadb1d15000 r-xp 001ac000 103:04 52700526                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_python.so
+7fadb1d15000-7fadb220c000 r--p 01115000 103:04 52700526                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_python.so
+7fadb220c000-7fadb2235000 r--p 0160c000 103:04 52700526                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_python.so
+7fadb2235000-7fadb229f000 rw-p 01635000 103:04 52700526                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_python.so
+7fadb229f000-7fadb2314000 rw-p 00000000 00:00 0 
+7fadb2314000-7fadb23ad000 rw-p 0202b000 103:04 52700526                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_python.so
+7fadb2400000-7fadb2432000 r--p 00000000 103:04 52823616                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcufile.so.0
+7fadb2432000-7fadb2637000 r-xp 00032000 103:04 52823616                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcufile.so.0
+7fadb2637000-7fadb26d9000 r--p 00237000 103:04 52823616                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcufile.so.0
+7fadb26d9000-7fadb26da000 ---p 002d9000 103:04 52823616                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcufile.so.0
+7fadb26da000-7fadb26df000 r--p 002d9000 103:04 52823616                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcufile.so.0
+7fadb26df000-7fadb26e8000 rw-p 002de000 103:04 52823616                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcufile.so.0
+7fadb26e8000-7fadb26f3000 rw-p 00000000 00:00 0 
+7fadb2700000-7fadb2800000 rw-p 00000000 00:00 0 
+7fadb2800000-7fadb4df9000 r-xp 00000000 103:04 52823449                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/nvshmem/lib/libnvshmem_host.so.3
+7fadb4df9000-7fadb4ff9000 ---p 025f9000 103:04 52823449                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/nvshmem/lib/libnvshmem_host.so.3
+7fadb4ff9000-7fadb4ffe000 r--p 025f9000 103:04 52823449                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/nvshmem/lib/libnvshmem_host.so.3
+7fadb4ffe000-7fadb5005000 rw-p 025fe000 103:04 52823449                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/nvshmem/lib/libnvshmem_host.so.3
+7fadb5005000-7fadb502d000 rw-p 00000000 00:00 0 
+7fadb5100000-7fadb5200000 rw-p 00000000 00:00 0 
+7fadb5200000-7fadc1352000 r-xp 00000000 103:04 52823548                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/nccl/lib/libnccl.so.2
+7fadc1352000-7fadc1552000 ---p 0c152000 103:04 52823548                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/nccl/lib/libnccl.so.2
+7fadc1552000-7fadc155d000 r--p 0c152000 103:04 52823548                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/nccl/lib/libnccl.so.2
+7fadc155d000-7fadc157f000 rw-p 0c15d000 103:04 52823548                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/nccl/lib/libnccl.so.2
+7fadc157f000-7fadc15f7000 rw-p 00000000 00:00 0 
+7fadc1600000-7fadc9c7d000 r-xp 00000000 103:04 52823577                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcusolver.so.12
+7fadc9c7d000-7fadc9e7d000 ---p 0867d000 103:04 52823577                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcusolver.so.12
+7fadc9e7d000-7fadc9e89000 r--p 0867d000 103:04 52823577                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcusolver.so.12
+7fadc9e89000-7fadc9e9d000 rw-p 08689000 103:04 52823577                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcusolver.so.12
+7fadc9e9d000-7fadc9eb9000 rw-p 00000000 00:00 0 
+7fadc9f00000-7fadca000000 rw-p 00000000 00:00 0 
+7fadca000000-7fadca29b000 r--p 00000000 103:04 44040228                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cusparselt/lib/libcusparseLt.so.0
+7fadca29b000-7fadcd749000 r-xp 0029b000 103:04 44040228                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cusparselt/lib/libcusparseLt.so.0
+7fadcd749000-7fadd7e1b000 r--p 03749000 103:04 44040228                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cusparselt/lib/libcusparseLt.so.0
+7fadd7e1b000-7fadd7e1c000 ---p 0de1b000 103:04 44040228                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cusparselt/lib/libcusparseLt.so.0
+7fadd7e1c000-7fadd7f09000 r--p 0de1b000 103:04 44040228                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cusparselt/lib/libcusparseLt.so.0
+7fadd7f09000-7fadd7f12000 rw-p 0df08000 103:04 44040228                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cusparselt/lib/libcusparseLt.so.0
+7fadd7f12000-7fadd8109000 rw-p 00000000 00:00 0 
+7fadd8109000-7fadd810b000 rw-p 0df12000 103:04 44040228                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cusparselt/lib/libcusparseLt.so.0
+7fadd8200000-7fade1cdd000 r-xp 00000000 103:04 52823561                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcusparse.so.12
+7fade1cdd000-7fade1edd000 ---p 09add000 103:04 52823561                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcusparse.so.12
+7fade1edd000-7fade1eec000 r--p 09add000 103:04 52823561                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcusparse.so.12
+7fade1eec000-7fade1f08000 rw-p 09aec000 103:04 52823561                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcusparse.so.12
+7fade1f08000-7fade1f2d000 rw-p 00000000 00:00 0 
+7fade2000000-7fade24b7000 r--p 00000000 103:04 52823471                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libnvJitLink.so.13
+7fade24b7000-7fade7ac0000 r-xp 004b7000 103:04 52823471                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libnvJitLink.so.13
+7fade7ac0000-7fade8a65000 r--p 05ac0000 103:04 52823471                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libnvJitLink.so.13
+7fade8a65000-7fade8c25000 r--p 06a64000 103:04 52823471                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libnvJitLink.so.13
+7fade8c25000-7fade8fd2000 rw-p 06c24000 103:04 52823471                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libnvJitLink.so.13
+7fade8fd2000-7fade90d9000 rw-p 00000000 00:00 0 
+7fade9100000-7fade9200000 rw-p 00000000 00:00 0 
+7fade9200000-7fadefc5b000 r-xp 00000000 103:04 52823605                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcurand.so.10
+7fadefc5b000-7fadefe5b000 ---p 06a5b000 103:04 52823605                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcurand.so.10
+7fadefe5b000-7fadefe61000 r--p 06a5b000 103:04 52823605                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcurand.so.10
+7fadefe61000-7fadf128d000 rw-p 06a61000 103:04 52823605                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcurand.so.10
+7fadf128d000-7fadf18c7000 rw-p 00000000 00:00 0 
+7fadf1900000-7fadf1a00000 rw-p 00000000 00:00 0 
+7fadf1a00000-7fadf1f92000 r-xp 00000000 103:04 52823631                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcufft.so.12
+7fadf1f92000-7fadf2191000 ---p 00592000 103:04 52823631                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcufft.so.12
+7fadf2191000-7fadf219b000 r--p 00591000 103:04 52823631                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcufft.so.12
+7fadf219b000-7fadf219c000 rw-p 0059b000 103:04 52823631                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcufft.so.12
+7fadf219c000-7fadf2514000 rw-p 00000000 00:00 0 
+7fadf2514000-7fadf2713000 ---p 00b14000 103:04 52823631                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcufft.so.12
+7fadf2713000-7fadf281e000 r--p 00713000 103:04 52823631                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcufft.so.12
+7fadf281e000-7fadf2a1d000 ---p 00e1e000 103:04 52823631                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcufft.so.12
+7fadf2a1d000-7fae03344000 rw-p 0081d000 103:04 52823631                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcufft.so.12
+7fae03400000-7fae03449000 r--p 00000000 103:04 52823839                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcupti.so.13
+7fae03449000-7fae036a3000 r-xp 00049000 103:04 52823839                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcupti.so.13
+7fae036a3000-7fae03793000 r--p 002a3000 103:04 52823839                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcupti.so.13
+7fae03793000-7fae037a9000 r--p 00393000 103:04 52823839                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcupti.so.13
+7fae037a9000-7fae037f6000 rw-p 003a9000 103:04 52823839                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcupti.so.13
+7fae037f6000-7fae038fc000 rw-p 00000000 00:00 0 
+7fae03900000-7fae03a00000 rw-p 00000000 00:00 0 
+7fae03a00000-7fae03e2d000 r-xp 00000000 103:04 52823787                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libnvrtc-builtins.so.13.0
+7fae03e2d000-7fae0402c000 ---p 0042d000 103:04 52823787                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libnvrtc-builtins.so.13.0
+7fae0402c000-7fae0402d000 r--p 0042c000 103:04 52823787                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libnvrtc-builtins.so.13.0
+7fae0402d000-7fae0402e000 rw-p 0042d000 103:04 52823787                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libnvrtc-builtins.so.13.0
+7fae04100000-7fae04200000 rw-p 00000000 00:00 0 
+7fae04200000-7fae046a5000 r--p 00000000 103:04 52823789                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libnvrtc.so.13
+7fae046a5000-7fae0916c000 r-xp 004a5000 103:04 52823789                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libnvrtc.so.13
+7fae0916c000-7fae09f38000 r--p 04f6c000 103:04 52823789                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libnvrtc.so.13
+7fae09f38000-7fae09f39000 ---p 05d38000 103:04 52823789                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libnvrtc.so.13
+7fae09f39000-7fae0a80c000 r--p 05d38000 103:04 52823789                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libnvrtc.so.13
+7fae0a80c000-7fae0aa47000 rw-p 0660b000 103:04 52823789                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libnvrtc.so.13
+7fae0aa47000-7fae0adc0000 rw-p 00000000 00:00 0 
+7fae0add8000-7fae0afef000 r-xp 00000000 00:34 738215438                  /opt/ohpc/pub/compiler/gcc/12.4.0/lib64/libstdc++.so.6.0.30
+7fae0afef000-7fae0b1ef000 ---p 00217000 00:34 738215438                  /opt/ohpc/pub/compiler/gcc/12.4.0/lib64/libstdc++.so.6.0.30
+7fae0b1ef000-7fae0b1fa000 r--p 00217000 00:34 738215438                  /opt/ohpc/pub/compiler/gcc/12.4.0/lib64/libstdc++.so.6.0.30
+7fae0b1fa000-7fae0b1fd000 rw-p 00222000 00:34 738215438                  /opt/ohpc/pub/compiler/gcc/12.4.0/lib64/libstdc++.so.6.0.30
+7fae0b1fd000-7fae0b200000 rw-p 00000000 00:00 0 
+7fae0b200000-7fae0b21f000 r-xp 00000000 103:04 52823661                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cudnn/lib/libcudnn.so.9
+7fae0b21f000-7fae0b41e000 ---p 0001f000 103:04 52823661                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cudnn/lib/libcudnn.so.9
+7fae0b41e000-7fae0b41f000 r--p 0001e000 103:04 52823661                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cudnn/lib/libcudnn.so.9
+7fae0b41f000-7fae0b420000 rw-p 0001f000 103:04 52823661                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cudnn/lib/libcudnn.so.9
+7fae0b42a000-7fae0b600000 rw-p 00000000 00:00 0 
+7fae0b600000-7fae0e998000 r-xp 00000000 103:04 52823858                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcublas.so.13
+7fae0e998000-7fae0eb98000 ---p 03398000 103:04 52823858                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcublas.so.13
+7fae0eb98000-7fae0eba4000 r--p 03398000 103:04 52823858                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcublas.so.13
+7fae0eba4000-7fae0ebab000 rw-p 033a4000 103:04 52823858                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcublas.so.13
+7fae0ebab000-7fae0ebcf000 rw-p 00000000 00:00 0 
+7fae0ec00000-7fae0eda8000 r--p 00000000 103:04 56100639                  /usr/lib64/libcuda.so.610.57.04
+7fae0eda8000-7fae10023000 r-xp 001a8000 103:04 56100639                  /usr/lib64/libcuda.so.610.57.04
+7fae10023000-7fae155ea000 r--p 01423000 103:04 56100639                  /usr/lib64/libcuda.so.610.57.04
+7fae155ea000-7fae155eb000 ---p 069ea000 103:04 56100639                  /usr/lib64/libcuda.so.610.57.04
+7fae155eb000-7fae15767000 r--p 069ea000 103:04 56100639                  /usr/lib64/libcuda.so.610.57.04
+7fae15767000-7fae1576c000 rw-p 06b66000 103:04 56100639                  /usr/lib64/libcuda.so.610.57.04
+7fae1576c000-7fae157d4000 rw-p 00000000 00:00 0 
+7fae157e1000-7fae157fe000 r-xp 00000000 00:34 738215571                  /opt/ohpc/pub/compiler/gcc/12.4.0/lib64/libgcc_s.so.1
+7fae157fe000-7fae159fe000 ---p 0001d000 00:34 738215571                  /opt/ohpc/pub/compiler/gcc/12.4.0/lib64/libgcc_s.so.1
+7fae159fe000-7fae159ff000 r--p 0001d000 00:34 738215571                  /opt/ohpc/pub/compiler/gcc/12.4.0/lib64/libgcc_s.so.1
+7fae159ff000-7fae15a00000 rw-p 0001e000 00:34 738215571                  /opt/ohpc/pub/compiler/gcc/12.4.0/lib64/libgcc_s.so.1
+7fae15a00000-7fae2eeea000 r-xp 00000000 103:04 52823859                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcublasLt.so.13
+7fae2eeea000-7fae2f0ea000 ---p 194ea000 103:04 52823859                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcublasLt.so.13
+7fae2f0ea000-7fae2f3d7000 r--p 194ea000 103:04 52823859                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcublasLt.so.13
+7fae2f3d7000-7fae2fa2b000 rw-p 197d7000 103:04 52823859                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcublasLt.so.13
+7fae2fa2b000-7fae34e66000 rw-p 00000000 00:00 0 
+7fae34e66000-7fae35065000 ---p 1f466000 103:04 52823859                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcublasLt.so.13
+7fae35065000-7fae35ab9000 r--p 19e65000 103:04 52823859                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcublasLt.so.13
+7fae35ab9000-7fae35cb8000 ---p 200b9000 103:04 52823859                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcublasLt.so.13
+7fae35cb8000-7fae3b884000 rw-p 1a8b8000 103:04 52823859                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcublasLt.so.13
+7fae3b900000-7fae3ba00000 rw-p 00000000 00:00 0 
+7fae3ba00000-7fae3ba07000 r-xp 00000000 103:04 56106172                  /usr/lib64/librt-2.28.so
+7fae3ba07000-7fae3bc06000 ---p 00007000 103:04 56106172                  /usr/lib64/librt-2.28.so
+7fae3bc06000-7fae3bc07000 r--p 00006000 103:04 56106172                  /usr/lib64/librt-2.28.so
+7fae3bc07000-7fae3bc08000 rw-p 00007000 103:04 56106172                  /usr/lib64/librt-2.28.so
+7fae3bd00000-7fae3be00000 rw-p 00000000 00:00 0 
+7fae3be00000-7fae3be37000 r-xp 00000000 103:04 52700518                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libgomp.so.1
+7fae3be37000-7fae3c036000 ---p 00037000 103:04 52700518                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libgomp.so.1
+7fae3c036000-7fae3c037000 r--p 00036000 103:04 52700518                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libgomp.so.1
+7fae3c037000-7fae3c038000 rw-p 00037000 103:04 52700518                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libgomp.so.1
+7fae3c038000-7fae3c200000 ---p 00238000 103:04 52700518                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libgomp.so.1
+7fae3c200000-7fae3c205000 rw-p 00200000 103:04 52700518                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libgomp.so.1
+7fae3c300000-7fae3c400000 rw-p 00000000 00:00 0 
+7fae3c400000-7fae3c4a6000 r-xp 00000000 103:04 52823774                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcudart.so.13
+7fae3c4a6000-7fae3c6a6000 ---p 000a6000 103:04 52823774                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcudart.so.13
+7fae3c6a6000-7fae3c6ab000 r--p 000a6000 103:04 52823774                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcudart.so.13
+7fae3c6ab000-7fae3c6ac000 rw-p 000ab000 103:04 52823774                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcudart.so.13
+7fae3c6ac000-7fae3c6ae000 rw-p 00000000 00:00 0 
+7fae3c700000-7fae3c800000 rw-p 00000000 00:00 0 
+7fae3c800000-7fae3c81c000 r-xp 00000000 103:04 56234043                  /usr/lib64/python3.11/lib-dynload/_datetime.cpython-311-x86_64-linux-gnu.so
+7fae3c81c000-7fae3ca1b000 ---p 0001c000 103:04 56234043                  /usr/lib64/python3.11/lib-dynload/_datetime.cpython-311-x86_64-linux-gnu.so
+7fae3ca1b000-7fae3ca1c000 r--p 0001b000 103:04 56234043                  /usr/lib64/python3.11/lib-dynload/_datetime.cpython-311-x86_64-linux-gnu.so
+7fae3ca1c000-7fae3ca1e000 rw-p 0001c000 103:04 56234043                  /usr/lib64/python3.11/lib-dynload/_datetime.cpython-311-x86_64-linux-gnu.so
+7fae3cb00000-7fae3cc00000 rw-p 00000000 00:00 0 
+7fae3cc00000-7fae3cc05000 r-xp 00000000 103:04 56234058                  /usr/lib64/python3.11/lib-dynload/_posixsubprocess.cpython-311-x86_64-linux-gnu.so
+7fae3cc05000-7fae3ce04000 ---p 00005000 103:04 56234058                  /usr/lib64/python3.11/lib-dynload/_posixsubprocess.cpython-311-x86_64-linux-gnu.so
+7fae3ce04000-7fae3ce05000 r--p 00004000 103:04 56234058                  /usr/lib64/python3.11/lib-dynload/_posixsubprocess.cpython-311-x86_64-linux-gnu.so
+7fae3ce05000-7fae3ce06000 rw-p 00005000 103:04 56234058                  /usr/lib64/python3.11/lib-dynload/_posixsubprocess.cpython-311-x86_64-linux-gnu.so
+7fae3cf00000-7fae3d000000 rw-p 00000000 00:00 0 
+7fae3d000000-7fae3d004000 r-xp 00000000 103:04 56234074                  /usr/lib64/python3.11/lib-dynload/fcntl.cpython-311-x86_64-linux-gnu.so
+7fae3d004000-7fae3d203000 ---p 00004000 103:04 56234074                  /usr/lib64/python3.11/lib-dynload/fcntl.cpython-311-x86_64-linux-gnu.so
+7fae3d203000-7fae3d204000 r--p 00003000 103:04 56234074                  /usr/lib64/python3.11/lib-dynload/fcntl.cpython-311-x86_64-linux-gnu.so
+7fae3d204000-7fae3d205000 rw-p 00004000 103:04 56234074                  /usr/lib64/python3.11/lib-dynload/fcntl.cpython-311-x86_64-linux-gnu.so
+7fae3d300000-7fae3d400000 rw-p 00000000 00:00 0 
+7fae3d400000-7fae3d415000 r-xp 00000000 103:04 56234050                  /usr/lib64/python3.11/lib-dynload/_json.cpython-311-x86_64-linux-gnu.so
+7fae3d415000-7fae3d614000 ---p 00015000 103:04 56234050                  /usr/lib64/python3.11/lib-dynload/_json.cpython-311-x86_64-linux-gnu.so
+7fae3d614000-7fae3d615000 r--p 00014000 103:04 56234050                  /usr/lib64/python3.11/lib-dynload/_json.cpython-311-x86_64-linux-gnu.so
+7fae3d615000-7fae3d616000 rw-p 00015000 103:04 56234050                  /usr/lib64/python3.11/lib-dynload/_json.cpython-311-x86_64-linux-gnu.so
+7fae3d700000-7fae3d800000 rw-p 00000000 00:00 0 
+7fae3d800000-7fae3d805000 r-xp 00000000 103:04 56234060                  /usr/lib64/python3.11/lib-dynload/_random.cpython-311-x86_64-linux-gnu.so
+7fae3d805000-7fae3da04000 ---p 00005000 103:04 56234060                  /usr/lib64/python3.11/lib-dynload/_random.cpython-311-x86_64-linux-gnu.so
+7fae3da04000-7fae3da05000 r--p 00004000 103:04 56234060                  /usr/lib64/python3.11/lib-dynload/_random.cpython-311-x86_64-linux-gnu.so
+7fae3da05000-7fae3da06000 rw-p 00005000 103:04 56234060                  /usr/lib64/python3.11/lib-dynload/_random.cpython-311-x86_64-linux-gnu.so
+7fae3db00000-7fae3dc00000 rw-p 00000000 00:00 0 
+7fae3dc00000-7fae3dc04000 r-xp 00000000 103:04 56234028                  /usr/lib64/python3.11/lib-dynload/_bisect.cpython-311-x86_64-linux-gnu.so
+7fae3dc04000-7fae3de03000 ---p 00004000 103:04 56234028                  /usr/lib64/python3.11/lib-dynload/_bisect.cpython-311-x86_64-linux-gnu.so
+7fae3de03000-7fae3de04000 r--p 00003000 103:04 56234028                  /usr/lib64/python3.11/lib-dynload/_bisect.cpython-311-x86_64-linux-gnu.so
+7fae3de04000-7fae3de05000 rw-p 00004000 103:04 56234028                  /usr/lib64/python3.11/lib-dynload/_bisect.cpython-311-x86_64-linux-gnu.so
+7fae3df00000-7fae3e000000 rw-p 00000000 00:00 0 
+7fae3e000000-7fae3e025000 r-xp 00000000 103:04 56106100                  /usr/lib64/liblzma.so.5.2.4
+7fae3e025000-7fae3e225000 ---p 00025000 103:04 56106100                  /usr/lib64/liblzma.so.5.2.4
+7fae3e225000-7fae3e226000 r--p 00025000 103:04 56106100                  /usr/lib64/liblzma.so.5.2.4
+7fae3e226000-7fae3e227000 rw-p 00000000 00:00 0 
+7fae3e300000-7fae3e400000 rw-p 00000000 00:00 0 
+7fae3e400000-7fae3e40a000 r-xp 00000000 103:04 56234052                  /usr/lib64/python3.11/lib-dynload/_lzma.cpython-311-x86_64-linux-gnu.so
+7fae3e40a000-7fae3e609000 ---p 0000a000 103:04 56234052                  /usr/lib64/python3.11/lib-dynload/_lzma.cpython-311-x86_64-linux-gnu.so
+7fae3e609000-7fae3e60a000 r--p 00009000 103:04 56234052                  /usr/lib64/python3.11/lib-dynload/_lzma.cpython-311-x86_64-linux-gnu.so
+7fae3e60a000-7fae3e60b000 rw-p 0000a000 103:04 56234052                  /usr/lib64/python3.11/lib-dynload/_lzma.cpython-311-x86_64-linux-gnu.so
+7fae3e700000-7fae3e800000 rw-p 00000000 00:00 0 
+7fae3e800000-7fae3e810000 r-xp 00000000 103:04 56106151                  /usr/lib64/libbz2.so.1.0.6
+7fae3e810000-7fae3ea0f000 ---p 00010000 103:04 56106151                  /usr/lib64/libbz2.so.1.0.6
+7fae3ea0f000-7fae3ea10000 r--p 0000f000 103:04 56106151                  /usr/lib64/libbz2.so.1.0.6
+7fae3ea10000-7fae3ea11000 rw-p 00010000 103:04 56106151                  /usr/lib64/libbz2.so.1.0.6
+7fae3eb00000-7fae3ec00000 rw-p 00000000 00:00 0 
+7fae3ec00000-7fae3ec06000 r-xp 00000000 103:04 56234030                  /usr/lib64/python3.11/lib-dynload/_bz2.cpython-311-x86_64-linux-gnu.so
+7fae3ec06000-7fae3ee05000 ---p 00006000 103:04 56234030                  /usr/lib64/python3.11/lib-dynload/_bz2.cpython-311-x86_64-linux-gnu.so
+7fae3ee05000-7fae3ee06000 r--p 00005000 103:04 56234030                  /usr/lib64/python3.11/lib-dynload/_bz2.cpython-311-x86_64-linux-gnu.so
+7fae3ee06000-7fae3ee07000 rw-p 00006000 103:04 56234030                  /usr/lib64/python3.11/lib-dynload/_bz2.cpython-311-x86_64-linux-gnu.so
+7fae3ef00000-7fae3f000000 rw-p 00000000 00:00 0 
+7fae3f000000-7fae3f008000 r-xp 00000000 103:04 56234090                  /usr/lib64/python3.11/lib-dynload/zlib.cpython-311-x86_64-linux-gnu.so
+7fae3f008000-7fae3f208000 ---p 00008000 103:04 56234090                  /usr/lib64/python3.11/lib-dynload/zlib.cpython-311-x86_64-linux-gnu.so
+7fae3f208000-7fae3f209000 r--p 00008000 103:04 56234090                  /usr/lib64/python3.11/lib-dynload/zlib.cpython-311-x86_64-linux-gnu.so
+7fae3f209000-7fae3f20a000 rw-p 00009000 103:04 56234090                  /usr/lib64/python3.11/lib-dynload/zlib.cpython-311-x86_64-linux-gnu.so
+7fae3f300000-7fae3f400000 rw-p 00000000 00:00 0 
+7fae3f400000-7fae3f420000 r-xp 00000000 103:04 56234056                  /usr/lib64/python3.11/lib-dynload/_pickle.cpython-311-x86_64-linux-gnu.so
+7fae3f420000-7fae3f61f000 ---p 00020000 103:04 56234056                  /usr/lib64/python3.11/lib-dynload/_pickle.cpython-311-x86_64-linux-gnu.so
+7fae3f61f000-7fae3f620000 r--p 0001f000 103:04 56234056                  /usr/lib64/python3.11/lib-dynload/_pickle.cpython-311-x86_64-linux-gnu.so
+7fae3f620000-7fae3f621000 rw-p 00020000 103:04 56234056                  /usr/lib64/python3.11/lib-dynload/_pickle.cpython-311-x86_64-linux-gnu.so
+7fae3f700000-7fae3f800000 rw-p 00000000 00:00 0 
+7fae3f800000-7fae3f801000 r-xp 00000000 103:04 56234066                  /usr/lib64/python3.11/lib-dynload/_typing.cpython-311-x86_64-linux-gnu.so
+7fae3f801000-7fae3fa00000 ---p 00001000 103:04 56234066                  /usr/lib64/python3.11/lib-dynload/_typing.cpython-311-x86_64-linux-gnu.so
+7fae3fa00000-7fae3fa01000 r--p 00000000 103:04 56234066                  /usr/lib64/python3.11/lib-dynload/_typing.cpython-311-x86_64-linux-gnu.so
+7fae3fa01000-7fae3fa02000 rw-p 00001000 103:04 56234066                  /usr/lib64/python3.11/lib-dynload/_typing.cpython-311-x86_64-linux-gnu.so
+7fae3fb00000-7fae3fc00000 rw-p 00000000 00:00 0 
+7fae3fc00000-7fae3fc02000 r-xp 00000000 103:04 56234055                  /usr/lib64/python3.11/lib-dynload/_opcode.cpython-311-x86_64-linux-gnu.so
+7fae3fc02000-7fae3fe01000 ---p 00002000 103:04 56234055                  /usr/lib64/python3.11/lib-dynload/_opcode.cpython-311-x86_64-linux-gnu.so
+7fae3fe01000-7fae3fe02000 r--p 00001000 103:04 56234055                  /usr/lib64/python3.11/lib-dynload/_opcode.cpython-311-x86_64-linux-gnu.so
+7fae3fe02000-7fae3fe03000 rw-p 00002000 103:04 56234055                  /usr/lib64/python3.11/lib-dynload/_opcode.cpython-311-x86_64-linux-gnu.so
+7fae3ff00000-7fae40000000 rw-p 00000000 00:00 0 
+7fae40000000-7fae4000c000 r-xp 00000000 103:04 56234065                  /usr/lib64/python3.11/lib-dynload/_struct.cpython-311-x86_64-linux-gnu.so
+7fae4000c000-7fae4020c000 ---p 0000c000 103:04 56234065                  /usr/lib64/python3.11/lib-dynload/_struct.cpython-311-x86_64-linux-gnu.so
+7fae4020c000-7fae4020d000 r--p 0000c000 103:04 56234065                  /usr/lib64/python3.11/lib-dynload/_struct.cpython-311-x86_64-linux-gnu.so
+7fae4020d000-7fae4020e000 rw-p 0000d000 103:04 56234065                  /usr/lib64/python3.11/lib-dynload/_struct.cpython-311-x86_64-linux-gnu.so
+7fae40300000-7fae40400000 rw-p 00000000 00:00 0 
+7fae40400000-7fae40408000 r-xp 00000000 103:04 56106201                  /usr/lib64/libffi.so.6.0.2
+7fae40408000-7fae40607000 ---p 00008000 103:04 56106201                  /usr/lib64/libffi.so.6.0.2
+7fae40607000-7fae40608000 r--p 00007000 103:04 56106201                  /usr/lib64/libffi.so.6.0.2
+7fae40608000-7fae40609000 rw-p 00008000 103:04 56106201                  /usr/lib64/libffi.so.6.0.2
+7fae40700000-7fae40800000 rw-p 00000000 00:00 0 
+7fae40800000-7fae4081d000 r-xp 00000000 103:04 56234040                  /usr/lib64/python3.11/lib-dynload/_ctypes.cpython-311-x86_64-linux-gnu.so
+7fae4081d000-7fae40a1d000 ---p 0001d000 103:04 56234040                  /usr/lib64/python3.11/lib-dynload/_ctypes.cpython-311-x86_64-linux-gnu.so
+7fae40a1d000-7fae40a1e000 r--p 0001d000 103:04 56234040                  /usr/lib64/python3.11/lib-dynload/_ctypes.cpython-311-x86_64-linux-gnu.so
+7fae40a1e000-7fae40a22000 rw-p 0001e000 103:04 56234040                  /usr/lib64/python3.11/lib-dynload/_ctypes.cpython-311-x86_64-linux-gnu.so
+7fae40b00000-7fae40c00000 rw-p 00000000 00:00 0 
+7fae40c00000-7fae40c10000 r-xp 00000000 103:04 56234070                  /usr/lib64/python3.11/lib-dynload/array.cpython-311-x86_64-linux-gnu.so
+7fae40c10000-7fae40e10000 ---p 00010000 103:04 56234070                  /usr/lib64/python3.11/lib-dynload/array.cpython-311-x86_64-linux-gnu.so
+7fae40e10000-7fae40e11000 r--p 00010000 103:04 56234070                  /usr/lib64/python3.11/lib-dynload/array.cpython-311-x86_64-linux-gnu.so
+7fae40e11000-7fae40e12000 rw-p 00011000 103:04 56234070                  /usr/lib64/python3.11/lib-dynload/array.cpython-311-x86_64-linux-gnu.so
+7fae40f00000-7fae41000000 rw-p 00000000 00:00 0 
+7fae41000000-7fae41007000 r-xp 00000000 103:04 56234083                  /usr/lib64/python3.11/lib-dynload/select.cpython-311-x86_64-linux-gnu.so
+7fae41007000-7fae41206000 ---p 00007000 103:04 56234083                  /usr/lib64/python3.11/lib-dynload/select.cpython-311-x86_64-linux-gnu.so
+7fae41206000-7fae41207000 r--p 00006000 103:04 56234083                  /usr/lib64/python3.11/lib-dynload/select.cpython-311-x86_64-linux-gnu.so
+7fae41207000-7fae41208000 rw-p 00007000 103:04 56234083                  /usr/lib64/python3.11/lib-dynload/select.cpython-311-x86_64-linux-gnu.so
+7fae41300000-7fae41400000 rw-p 00000000 00:00 0 
+7fae41400000-7fae41411000 r-xp 00000000 103:04 56234076                  /usr/lib64/python3.11/lib-dynload/math.cpython-311-x86_64-linux-gnu.so
+7fae41411000-7fae41610000 ---p 00011000 103:04 56234076                  /usr/lib64/python3.11/lib-dynload/math.cpython-311-x86_64-linux-gnu.so
+7fae41610000-7fae41611000 r--p 00010000 103:04 56234076                  /usr/lib64/python3.11/lib-dynload/math.cpython-311-x86_64-linux-gnu.so
+7fae41611000-7fae41612000 rw-p 00011000 103:04 56234076                  /usr/lib64/python3.11/lib-dynload/math.cpython-311-x86_64-linux-gnu.so
+7fae41700000-7fae41800000 rw-p 00000000 00:00 0 
+7fae41800000-7fae41816000 r-xp 00000000 103:04 56234061                  /usr/lib64/python3.11/lib-dynload/_socket.cpython-311-x86_64-linux-gnu.so
+7fae41816000-7fae41a15000 ---p 00016000 103:04 56234061                  /usr/lib64/python3.11/lib-dynload/_socket.cpython-311-x86_64-linux-gnu.so
+7fae41a15000-7fae41a16000 r--p 00015000 103:04 56234061                  /usr/lib64/python3.11/lib-dynload/_socket.cpython-311-x86_64-linux-gnu.so
+7fae41a16000-7fae41a17000 rw-p 00016000 103:04 56234061                  /usr/lib64/python3.11/lib-dynload/_socket.cpython-311-x86_64-linux-gnu.so
+7fae41b00000-7fae41c00000 rw-p 00000000 00:00 0 
+7fae41c00000-7fae41c87000 r-xp 00000000 103:04 56106346                  /usr/lib64/libssl.so.1.1.1k
+7fae41c87000-7fae41e87000 ---p 00087000 103:04 56106346                  /usr/lib64/libssl.so.1.1.1k
+7fae41e87000-7fae41e90000 r--p 00087000 103:04 56106346                  /usr/lib64/libssl.so.1.1.1k
+7fae41e90000-7fae41e94000 rw-p 00090000 103:04 56106346                  /usr/lib64/libssl.so.1.1.1k
+7fae41e94000-7fae41e95000 rw-p 00000000 00:00 0 
+7fae41f00000-7fae42000000 rw-p 00000000 00:00 0 
+7fae42000000-7fae42014000 r-xp 00000000 103:04 56234029                  /usr/lib64/python3.11/lib-dynload/_blake2.cpython-311-x86_64-linux-gnu.so
+7fae42014000-7fae42213000 ---p 00014000 103:04 56234029                  /usr/lib64/python3.11/lib-dynload/_blake2.cpython-311-x86_64-linux-gnu.so
+7fae42213000-7fae42214000 r--p 00013000 103:04 56234029                  /usr/lib64/python3.11/lib-dynload/_blake2.cpython-311-x86_64-linux-gnu.so
+7fae42214000-7fae42215000 rw-p 00014000 103:04 56234029                  /usr/lib64/python3.11/lib-dynload/_blake2.cpython-311-x86_64-linux-gnu.so
+7fae422b4000-7fae422e2000 r--p 00000000 103:04 52700515                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libc10.so
+7fae422e2000-7fae423a2000 r-xp 0002e000 103:04 52700515                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libc10.so
+7fae423a2000-7fae423dc000 r--p 000ee000 103:04 52700515                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libc10.so
+7fae423dc000-7fae423df000 r--p 00128000 103:04 52700515                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libc10.so
+7fae423df000-7fae423e6000 rw-p 0012b000 103:04 52700515                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libc10.so
+7fae423e6000-7fae423e8000 rw-p 00000000 00:00 0 
+7fae423e8000-7fae42400000 rw-p 0017b000 103:04 52700515                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libc10.so
+7fae42400000-7fae42416000 r-xp 00000000 103:04 56105747                  /usr/lib64/libz.so.1.2.11
+7fae42416000-7fae42616000 ---p 00016000 103:04 56105747                  /usr/lib64/libz.so.1.2.11
+7fae42616000-7fae42617000 r--p 00016000 103:04 56105747                  /usr/lib64/libz.so.1.2.11
+7fae42617000-7fae42618000 rw-p 00000000 00:00 0 
+7fae42700000-7fae42800000 rw-p 00000000 00:00 0 
+7fae42800000-7fae42ab6000 r-xp 00000000 103:04 56106344                  /usr/lib64/libcrypto.so.1.1.1k
+7fae42ab6000-7fae42cb6000 ---p 002b6000 103:04 56106344                  /usr/lib64/libcrypto.so.1.1.1k
+7fae42cb6000-7fae42ce2000 r--p 002b6000 103:04 56106344                  /usr/lib64/libcrypto.so.1.1.1k
+7fae42ce2000-7fae42ce6000 rw-p 002e2000 103:04 56106344                  /usr/lib64/libcrypto.so.1.1.1k
+7fae42ce6000-7fae42ceb000 rw-p 00000000 00:00 0 
+7fae42d00000-7fae42e00000 rw-p 00000000 00:00 0 
+7fae42e00000-7fae42e12000 r-xp 00000000 103:04 56234048                  /usr/lib64/python3.11/lib-dynload/_hashlib.cpython-311-x86_64-linux-gnu.so
+7fae42e12000-7fae43012000 ---p 00012000 103:04 56234048                  /usr/lib64/python3.11/lib-dynload/_hashlib.cpython-311-x86_64-linux-gnu.so
+7fae43012000-7fae43013000 r--p 00012000 103:04 56234048                  /usr/lib64/python3.11/lib-dynload/_hashlib.cpython-311-x86_64-linux-gnu.so
+7fae43013000-7fae43014000 rw-p 00013000 103:04 56234048                  /usr/lib64/python3.11/lib-dynload/_hashlib.cpython-311-x86_64-linux-gnu.so
+7fae43035000-7fae43040000 r--p 00000000 103:04 52827299                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/cuda/bindings/_internal/runtime_ptds.cpython-311-x86_64-linux-gnu.so
+7fae43040000-7fae430cf000 r-xp 0000b000 103:04 52827299                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/cuda/bindings/_internal/runtime_ptds.cpython-311-x86_64-linux-gnu.so
+7fae430cf000-7fae430f7000 r--p 0009a000 103:04 52827299                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/cuda/bindings/_internal/runtime_ptds.cpython-311-x86_64-linux-gnu.so
+7fae430f7000-7fae430fc000 r--p 000c2000 103:04 52827299                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/cuda/bindings/_internal/runtime_ptds.cpython-311-x86_64-linux-gnu.so
+7fae430fc000-7fae430fe000 rw-p 000c7000 103:04 52827299                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/cuda/bindings/_internal/runtime_ptds.cpython-311-x86_64-linux-gnu.so
+7fae430fe000-7fae43200000 rw-p 00000000 00:00 0 
+7fae43200000-7fae433cc000 r-xp 00000000 103:04 56106142                  /usr/lib64/libc-2.28.so
+7fae433cc000-7fae435cc000 ---p 001cc000 103:04 56106142                  /usr/lib64/libc-2.28.so
+7fae435cc000-7fae435d0000 r--p 001cc000 103:04 56106142                  /usr/lib64/libc-2.28.so
+7fae435d0000-7fae435d2000 rw-p 001d0000 103:04 56106142                  /usr/lib64/libc-2.28.so
+7fae435d2000-7fae435d6000 rw-p 00000000 00:00 0 
+7fae43600000-7fae43781000 r-xp 00000000 103:04 56106150                  /usr/lib64/libm-2.28.so
+7fae43781000-7fae43980000 ---p 00181000 103:04 56106150                  /usr/lib64/libm-2.28.so
+7fae43980000-7fae43981000 r--p 00180000 103:04 56106150                  /usr/lib64/libm-2.28.so
+7fae43981000-7fae43982000 rw-p 00181000 103:04 56106150                  /usr/lib64/libm-2.28.so
+7fae43a00000-7fae43a02000 r-xp 00000000 103:04 56106180                  /usr/lib64/libutil-2.28.so
+7fae43a02000-7fae43c02000 ---p 00002000 103:04 56106180                  /usr/lib64/libutil-2.28.so
+7fae43c02000-7fae43c03000 r--p 00002000 103:04 56106180                  /usr/lib64/libutil-2.28.so
+7fae43c03000-7fae43c04000 rw-p 00003000 103:04 56106180                  /usr/lib64/libutil-2.28.so
+7fae43c0f000-7fae43c1d000 r--p 00000000 103:04 52827297                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/cuda/bindings/_internal/runtime.cpython-311-x86_64-linux-gnu.so
+7fae43c1d000-7fae43cc3000 r-xp 0000e000 103:04 52827297                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/cuda/bindings/_internal/runtime.cpython-311-x86_64-linux-gnu.so
+7fae43cc3000-7fae43cf6000 r--p 000b4000 103:04 52827297                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/cuda/bindings/_internal/runtime.cpython-311-x86_64-linux-gnu.so
+7fae43cf6000-7fae43cfb000 r--p 000e7000 103:04 52827297                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/cuda/bindings/_internal/runtime.cpython-311-x86_64-linux-gnu.so
+7fae43cfb000-7fae43cfd000 rw-p 000ec000 103:04 52827297                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/cuda/bindings/_internal/runtime.cpython-311-x86_64-linux-gnu.so
+7fae43cfd000-7fae43e00000 rw-p 00000000 00:00 0 
+7fae43e00000-7fae43e03000 r-xp 00000000 103:04 56106146                  /usr/lib64/libdl-2.28.so
+7fae43e03000-7fae44002000 ---p 00003000 103:04 56106146                  /usr/lib64/libdl-2.28.so
+7fae44002000-7fae44003000 r--p 00002000 103:04 56106146                  /usr/lib64/libdl-2.28.so
+7fae44003000-7fae44004000 rw-p 00003000 103:04 56106146                  /usr/lib64/libdl-2.28.so
+7fae44073000-7fae44079000 r--p 00000000 103:04 52827285                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/cuda/bindings/_internal/driver.cpython-311-x86_64-linux-gnu.so
+7fae44079000-7fae440da000 r-xp 00006000 103:04 52827285                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/cuda/bindings/_internal/driver.cpython-311-x86_64-linux-gnu.so
+7fae440da000-7fae440f8000 r--p 00067000 103:04 52827285                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/cuda/bindings/_internal/driver.cpython-311-x86_64-linux-gnu.so
+7fae440f8000-7fae440f9000 r--p 00084000 103:04 52827285                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/cuda/bindings/_internal/driver.cpython-311-x86_64-linux-gnu.so
+7fae440f9000-7fae440fb000 rw-p 00085000 103:04 52827285                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/cuda/bindings/_internal/driver.cpython-311-x86_64-linux-gnu.so
+7fae440fb000-7fae44200000 rw-p 00000000 00:00 0 
+7fae44200000-7fae4421b000 r-xp 00000000 103:04 56106076                  /usr/lib64/libpthread-2.28.so
+7fae4421b000-7fae4441a000 ---p 0001b000 103:04 56106076                  /usr/lib64/libpthread-2.28.so
+7fae4441a000-7fae4441b000 r--p 0001a000 103:04 56106076                  /usr/lib64/libpthread-2.28.so
+7fae4441b000-7fae4441c000 rw-p 0001b000 103:04 56106076                  /usr/lib64/libpthread-2.28.so
+7fae4441c000-7fae44420000 rw-p 00000000 00:00 0 
+7fae44465000-7fae4446b000 r--p 00000000 103:04 52827262                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/cuda/bindings/cyruntime.cpython-311-x86_64-linux-gnu.so
+7fae4446b000-7fae44475000 r-xp 00006000 103:04 52827262                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/cuda/bindings/cyruntime.cpython-311-x86_64-linux-gnu.so
+7fae44475000-7fae44480000 r--p 00010000 103:04 52827262                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/cuda/bindings/cyruntime.cpython-311-x86_64-linux-gnu.so
+7fae44480000-7fae44481000 r--p 0001a000 103:04 52827262                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/cuda/bindings/cyruntime.cpython-311-x86_64-linux-gnu.so
+7fae44481000-7fae44483000 rw-p 0001b000 103:04 52827262                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/cuda/bindings/cyruntime.cpython-311-x86_64-linux-gnu.so
+7fae44483000-7fae44484000 rw-p 00000000 00:00 0 
+7fae44484000-7fae44488000 r--p 00000000 103:04 52827301                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/cuda/bindings/_internal/utils.cpython-311-x86_64-linux-gnu.so
+7fae44488000-7fae4449c000 r-xp 00004000 103:04 52827301                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/cuda/bindings/_internal/utils.cpython-311-x86_64-linux-gnu.so
+7fae4449c000-7fae444a0000 r--p 00018000 103:04 52827301                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/cuda/bindings/_internal/utils.cpython-311-x86_64-linux-gnu.so
+7fae444a0000-7fae444a1000 r--p 0001b000 103:04 52827301                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/cuda/bindings/_internal/utils.cpython-311-x86_64-linux-gnu.so
+7fae444a1000-7fae444a2000 rw-p 0001c000 103:04 52827301                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/cuda/bindings/_internal/utils.cpython-311-x86_64-linux-gnu.so
+7fae444a2000-7fae444aa000 r--p 00000000 103:04 52827250                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/cuda/bindings/cydriver.cpython-311-x86_64-linux-gnu.so
+7fae444aa000-7fae444b8000 r-xp 00008000 103:04 52827250                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/cuda/bindings/cydriver.cpython-311-x86_64-linux-gnu.so
+7fae444b8000-7fae444c9000 r--p 00016000 103:04 52827250                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/cuda/bindings/cydriver.cpython-311-x86_64-linux-gnu.so
+7fae444c9000-7fae444ca000 r--p 00026000 103:04 52827250                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/cuda/bindings/cydriver.cpython-311-x86_64-linux-gnu.so
+7fae444ca000-7fae444cd000 rw-p 00027000 103:04 52827250                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/cuda/bindings/cydriver.cpython-311-x86_64-linux-gnu.so
+7fae444cd000-7fae444ce000 rw-p 00000000 00:00 0 
+7fae444ce000-7fae444d2000 r--p 00000000 103:04 52824639                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/numpy/linalg/_umath_linalg.cpython-311-x86_64-linux-gnu.so
+7fae444d2000-7fae444f6000 r-xp 00004000 103:04 52824639                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/numpy/linalg/_umath_linalg.cpython-311-x86_64-linux-gnu.so
+7fae444f6000-7fae444fb000 r--p 00028000 103:04 52824639                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/numpy/linalg/_umath_linalg.cpython-311-x86_64-linux-gnu.so
+7fae444fb000-7fae444fc000 r--p 0002d000 103:04 52824639                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/numpy/linalg/_umath_linalg.cpython-311-x86_64-linux-gnu.so
+7fae444fc000-7fae444fd000 rw-p 0002e000 103:04 52824639                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/numpy/linalg/_umath_linalg.cpython-311-x86_64-linux-gnu.so
+7fae444fd000-7fae44500000 rw-p 00036000 103:04 52824639                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/numpy/linalg/_umath_linalg.cpython-311-x86_64-linux-gnu.so
+7fae44500000-7fae44600000 rw-p 00000000 00:00 0 
+7fae44600000-7fae44a49000 r-xp 00000000 103:04 56108660                  /usr/lib64/libpython3.11.so.1.0
+7fae44a49000-7fae44c48000 ---p 00449000 103:04 56108660                  /usr/lib64/libpython3.11.so.1.0
+7fae44c48000-7fae44c77000 r--p 00448000 103:04 56108660                  /usr/lib64/libpython3.11.so.1.0
+7fae44c77000-7fae44da9000 rw-p 00477000 103:04 56108660                  /usr/lib64/libpython3.11.so.1.0
+7fae44da9000-7fae44dec000 rw-p 00000000 00:00 0 
+7fae44df0000-7fae44e00000 -w-s 00000000 00:05 494                        /dev/nvidia0
+7fae44e00000-7fae44e2f000 r-xp 00000000 103:04 56109091                  /usr/lib64/ld-2.28.so
+7fae44e36000-7fae44e46000 -w-s 00000000 00:05 494                        /dev/nvidia0
+7fae44e46000-7fae44e50000 r--p 00000000 103:04 52700516                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libc10_cuda.so
+7fae44e50000-7fae44eac000 r-xp 0000a000 103:04 52700516                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libc10_cuda.so
+7fae44eac000-7fae44ec3000 r--p 00066000 103:04 52700516                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libc10_cuda.so
+7fae44ec3000-7fae44ec4000 r--p 0007d000 103:04 52700516                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libc10_cuda.so
+7fae44ec4000-7fae44ec5000 rw-p 0007e000 103:04 52700516                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libc10_cuda.so
+7fae44ec5000-7fae44eeb000 rw-p 00000000 00:00 0 
+7fae44eeb000-7fae44ef0000 rw-p 000a0000 103:04 52700516                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libc10_cuda.so
+7fae44ef0000-7fae44ef6000 r--p 00000000 103:04 52700520                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch.so
+7fae44ef6000-7fae44f04000 r-xp 00006000 103:04 52700520                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch.so
+7fae44f04000-7fae44f08000 r--p 00014000 103:04 52700520                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch.so
+7fae44f08000-7fae44f09000 r--p 00018000 103:04 52700520                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch.so
+7fae44f09000-7fae44f0a000 rw-p 00019000 103:04 52700520                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch.so
+7fae44f0a000-7fae44f0e000 rw-p 00020000 103:04 52700520                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch.so
+7fae44f0e000-7fae4502f000 rw-p 00000000 00:00 0 
+7fae4502f000-7fae45030000 r--p 0002f000 103:04 56109091                  /usr/lib64/ld-2.28.so
+7fae45030000-7fae45032000 rw-p 00030000 103:04 56109091                  /usr/lib64/ld-2.28.so
+7fae45037000-7fae4503a000 r--p 00000000 103:04 52700519                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libshm.so
+7fae4503a000-7fae4503e000 r-xp 00003000 103:04 52700519                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libshm.so
+7fae4503e000-7fae4503f000 r--p 00007000 103:04 52700519                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libshm.so
+7fae4503f000-7fae45040000 r--p 00008000 103:04 52700519                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libshm.so
+7fae45040000-7fae45041000 rw-p 00009000 103:04 52700519                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libshm.so
+7fae45041000-7fae45043000 rw-p 0000d000 103:04 52700519                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libshm.so
+7fae45043000-7fae45044000 r--p 00000000 103:04 46923833                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/_C.cpython-311-x86_64-linux-gnu.so
+7fae45044000-7fae45045000 r-xp 00001000 103:04 46923833                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/_C.cpython-311-x86_64-linux-gnu.so
+7fae45045000-7fae45046000 r--p 00002000 103:04 46923833                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/_C.cpython-311-x86_64-linux-gnu.so
+7fae45046000-7fae45047000 r--p 00002000 103:04 46923833                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/_C.cpython-311-x86_64-linux-gnu.so
+7fae45047000-7fae45049000 rw-p 00003000 103:04 46923833                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/_C.cpython-311-x86_64-linux-gnu.so
+7fae45049000-7fae4508a000 rw-p 00000000 00:00 0 
+7fae4508a000-7fae450dd000 r--p 00000000 103:04 56103862                  /usr/lib/locale/C.utf8/LC_CTYPE
+7fae450dd000-7fae450e2000 rw-p 00000000 00:00 0 
+7fae450e3000-7fae450e4000 r--s 00000000 00:05 485                        /dev/nvidiactl
+7fae450e4000-7fae450e5000 r--p 00000000 103:04 52700524                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_global_deps.so
+7fae450e5000-7fae450e6000 r-xp 00001000 103:04 52700524                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_global_deps.so
+7fae450e6000-7fae450e7000 r--p 00002000 103:04 52700524                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_global_deps.so
+7fae450e7000-7fae450e8000 r--p 00002000 103:04 52700524                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_global_deps.so
+7fae450e8000-7fae450ea000 rw-p 00003000 103:04 52700524                  /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_global_deps.so
+7fae450ea000-7fae450ee000 rw-p 00000000 00:00 0 
+7fae450ee000-7fae450f5000 r--s 00000000 103:04 56494281                  /usr/lib64/gconv/gconv-modules.cache
+7fae450f5000-7fae450f7000 rw-p 00000000 00:00 0 
+7ffd1665f000-7ffd16682000 rw-p 00000000 00:00 0                          [stack]
+7ffd166b9000-7ffd166bd000 r--p 00000000 00:00 0                          [vvar]
+7ffd166bd000-7ffd166bf000 r-xp 00000000 00:00 0                          [vdso]
+ffffffffff600000-ffffffffff601000 --xp 00000000 00:00 0                  [vsyscall]
+

@@ -23,6 +23,7 @@ sha256sum CMakeLists.txt scripts/build.sh build/w4a16_bench build/test_cpu > "$R
 find src include tests -type f -print0 | sort -z | xargs -0 sha256sum > "$R/project-source.sha256"
 (cd /home/hpuvvad/csc548-w4a16-e008-20261106; sha256sum -c results/e008_c10_20261106/handoff.sha256) > "$R/final-e008-check.log"
 sha256sum -c "$R/mapped-libraries.sha256" > "$R/final-library-check.log"
+(cd /home/hpuvvad/csc548-w4a16-e009-c4-20261107; sha256sum -c results/e009_c4_20261107/handoff.sha256) > "$R/final-e009-check.log"
 scontrol show job "$SLURM_JOB_ID" > "$R/allocation-final.txt"
 
 "$E005_PYTHON" scripts/e010/analyze.py "$R" > "$R/complete-check.log"

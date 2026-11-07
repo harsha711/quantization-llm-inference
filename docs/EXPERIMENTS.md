@@ -18,6 +18,8 @@ Validation before measurement: verify E009's 206 handoff hashes and source/binar
 
 Baseline and candidate: identical corrected E006 body SHA256 `e4eca5e30436c547358a9c8125d69526c6bb3318da034afd54ada6744181e2b7`, unchanged E004 bridge `85f332951a8c24b3eb06594977b3e3d62b7954fa01b986da41ffeff851bfbd3f`, official wheel only for lossless repacking. Marlin uses its original A dispatcher at each M, not a forced eight-row tile. Quantization/reconstruction/FP32 reduction and strict tolerance remain unchanged. M128 configuration and composed-path safety require fresh evidence rather than assuming E009 M4 coverage applies.
 
+Prerequisite checkpoint: criteria `025e85f`, harness `6d066e5`. All eight M4/16/64/128 small-shape composed rows pass, with full FP64, three direct/three poisoned graph cycles, inactive-row checks, exact reconstruction, disjoint weights and guarded reused workspace. All staged source hashes match. One prun rank/16 threads, corrected library/bridge/wheel, exact dependencies and 113 E006/148 E005-R2/120 E008/206 E009 handoff hashes pass. Local host-only build/CTest and balance/crossover self-check pass. The retained project rebuild is for validation only, not a replacement for either measured preserved binary. Full rectangular/trace/sanitizer validation is in progress. No timing released.
+
 Decision and revisit conditions: pending validation and fresh measurements. Report the measured advantage boundary or absence of a bracket, specialization transitions and limitations. Do not infer a unique cause from specialization changes. End after this bounded experiment. Revisit only under a separately requested workload/environment or new evidence.
 
 ## E009 — Compressed execution versus cuBLAS under cyclic weights
