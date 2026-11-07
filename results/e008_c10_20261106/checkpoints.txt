@@ -1,0 +1,4 @@
+c37e115a309338dd8f31b246b86c6b3678c98c21 Freeze E008 timing evidence capture and interpretation limits
+fa8e485ad2c59410bf92eabd290401721491bd09 Verify E008 c10 prerequisite and document complete-cycle contract
+2ec17f6fd2a5e594bb4633ada715102fcf59f568 Implement unchanged-kernel complete-cycle reuse distance harness
+ec79ecafc3f75ae63497d2d6b43496f4e08e6e6a Predeclare E008 weight reuse distance experiment
