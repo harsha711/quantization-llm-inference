@@ -1,5 +1,9 @@
 # Current status
 
+E009 is authorized and in progress from clean `a527d7b`. Next task: implement the bounded corrected-A / pre-materialized-W_hat cuBLAS / timed dequantize-then-cuBLAS comparison in the predeclared E009 record. Verify a cheap c10 composed-path prerequisite before rectangular validation, then the fixed36-row two-series measurement. No C tuning, kernel change, profile or dispatch. Current live check: allocation328681 owned by hpuvvad, RUNNING on c10, scheduled end2026-11-07 02:50:31 Eastern. Reverify before launching.
+
+The completed E008 handoff follows.
+
 **E008 is complete. Meaningful corrected-C gains are reuse-dependent in the tested setup.** Both repeated single-matrix controls pass 5% in both reversed series. No two/four-matrix case passes that gate. Keep corrected E006 A as the default. No dispatch or partition change. Starting checkpoint `dd6b9a9`, criteria `ec79eca`, harness `2ec17f6`, prerequisite `fa8e485`, timing tooling `c37e115`, fresh validation `379b5d3`, complete evidence `fff3d48`. Final documentation/handoff commit follows. See [experiment/design record](EXPERIMENTS.md#e008--weight-reuse-distance-with-preserved-ac) and [raw evidence](../results/e008_c10_20261106/).
 
 The unchanged corrected binary runs M=4/G128 on both rectangles with fresh weight seeds 3–6 and one fixed seed-3 activation. Four independent weight/scales pairs stay alive, with the first 1/2/4 accessed. Whole-cycle graph events include required scratch/reduction/lock handling. Two independent processes reverse rectangle/count/A-C order, exactly 24 rows/2400 cycle samples/5600 timed GEMMs. A/C and series operands match. Each active weight pair is 22.171875 MiB, so active weight sets are 22.171875/44.34375/88.6875 MiB against device-reported 32 MiB L2. Exceeding L2 does not guarantee eviction.

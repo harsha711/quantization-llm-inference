@@ -55,6 +55,11 @@
 - Only repeated-single-matrix cases pass 5% in both series. Two/four-matrix gains are subthreshold or absent. Four-matrix transpose C regresses0.757%/0.431%. Keep A default and close that workload's lead. Preserve C as reuse-dependent experimental configuration, not a general decoding improvement. Retain outliers, including series 2 transpose single-matrix3.413 ms C/7.667 ms A. Medians do not establish tail stability.
 - No new timing, profiles, dispatch, partition rewrite or next optimization is authorized by completed E008. Await a separately requested investigation. Revalidate current allocation, never trust saved328681/c10 state.
 
+## E009 authorized compressed execution comparison
+
+- The user separately authorizes E009 after E008. Read its predeclared experiment record. Compare unchanged corrected A with E004 cuBLAS on the same pre-materialized W_hat and timed GPU dequantization plus cuBLAS. Use one reusable guarded reconstruction buffer and explicit cuBLAS math mode16. No C, kernel change, new profile or dispatch.
+- Preserve E008 seeds3–6/fixed activation, rectangles, M4/G128 and complete-cycle no-artificial-flush method. Exactly36 timing rows in two independent reversed/balanced series,10 warmups/100 samples. The meaningful advantage gate is >=5% lower Marlin median in both series per comparator/shape/count. Validate every composed output, exact reconstruction and reused workspace before timing. Record live/accessed representation sizes and retain outliers. Stop after final evidence/documents/commit.
+
 ## ARC
 
 - Verify current [ARC documentation](https://arcm.csc.ncsu.edu/~mueller/cluster/arc/) and `scontrol show job` each session. Confirm allocation ownership, RUNNING state, nodes, remaining time, and GPU. Saved IDs/nodes are historical. Do no compute on the gateway.
