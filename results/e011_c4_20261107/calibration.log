@@ -1,0 +1,12 @@
++ prun timeout 1200 ncu --replay-mode application --app-replay-mode strict --app-replay-match grid --profile-from-start off --graph-profiling node --cache-control none --clock-control none --pipeline-boost-state dynamic --launch-skip 399 --launch-count 1 --metrics gpu__time_duration.sum,launch__grid_size --export /home/hpuvvad/csc548-w4a16-e011-c4-20261107/results/e011_c4_20261107/ncu/calibration /tmp/e005-r2-hpuvvad-20261106/bin/python scripts/e011/calibrate.py
+[prun] Master compute host = c4
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun timeout 1200 ncu --replay-mode application --app-replay-mode strict --app-replay-match grid --profile-from-start off --graph-profiling node --cache-control none --clock-control none --pipeline-boost-state dynamic --launch-skip 399 --launch-count 1 --metrics gpu__time_duration.sum,launch__grid_size --export /home/hpuvvad/csc548-w4a16-e011-c4-20261107/results/e011_c4_20261107/ncu/calibration /tmp/e005-r2-hpuvvad-20261106/bin/python scripts/e011/calibrate.py (family=openmpi4)
+==WARNING== Note: Running with uncontrolled GPU caches. Profiling results may be inconsistent.
+==WARNING== Note: Running with unmodified GPU clocks. If not controlled otherwise, profiling results may be inconsistent.
+==PROF== Connected to process 3983872 (/usr/bin/python3.11)
+==PROF== Profiling "vectorized_elementwise_kernel" - 0 (1/1): Application replay pass 1
+PASS: ten direct warmups, 100 four-operation graph cycles, unique final add_ target
+==PROF== Disconnected from process 3983872
+==PROF== Creating report from application replay data: 0%...100%
+==PROF== Report: /home/hpuvvad/csc548-w4a16-e011-c4-20261107/results/e011_c4_20261107/ncu/calibration.ncu-repz

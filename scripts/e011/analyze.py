@@ -72,7 +72,10 @@ def main(root, stage):
     assert not (root / 'dependency-diff.txt').read_text()
     for label in ('identity', 'identity-validation', 'runtime', 'smoke', 'library-identity'):
         success(label)
-    assert all(json.loads(line)['validation'][i]['num_bad'] == 0 for line in (root / 'smoke.jsonl').read_text().splitlines() for i in range(4))
+    smoke = [json.loads(line) for line in (root / 'smoke.jsonl').read_text().splitlines()]
+    assert len(smoke) == 4
+    for row in smoke:
+        e010.checked(row)
     assert (root / 'validation-library-check.log').read_text().count(': OK') == 6
     assert (root / 'validation-input-check.log').read_text().count(': OK') == 3
     traces = {}
@@ -132,6 +135,7 @@ def main(root, stage):
         passes = [json.loads(line.split('E011_PASS ', 1)[1]) for line in text.splitlines() if line.startswith('E011_PASS ')]
         assert passes, tag
         for row in passes:
+            assert tuple(row[key] for key in ('K', 'N', 'M', 'config')) == tuple(trace[key] for key in ('K', 'N', 'M', 'config'))
             matched(row, trace)
             assert row['post_profile_validation'] == row['validation']
         unit, values = raw(root / f'ncu/{tag}.csv')

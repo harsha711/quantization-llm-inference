@@ -27,7 +27,7 @@ run calibration ncu --replay-mode application --app-replay-mode strict --app-rep
  --pipeline-boost-state dynamic --launch-skip 399 --launch-count 1 \
  --metrics gpu__time_duration.sum,launch__grid_size --export "$R/ncu/calibration" \
  "$E005_PYTHON" scripts/e011/calibrate.py
-ncu --import "$R/ncu/calibration.ncu-rep" --page raw --csv --print-units base > "$R/ncu/calibration.csv"
+ncu --import "$R/ncu/calibration.ncu-repz" --page raw --csv --print-units base > "$R/ncu/calibration.csv"
 for shape in 4096,11008 11008,4096; do
  IFS=, read -r k n <<< "$shape"
  for m in 4 128; do

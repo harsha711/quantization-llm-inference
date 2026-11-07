@@ -51,7 +51,7 @@ PY
     --local "$E005_LOCAL" --wheel "$E005_WHEEL" --bridge "$E005_BRIDGE" \
     --m "$m" --k "$k" --n "$n" --implementation "$implementation"
    clock > "$R/profile_$tag-clocks-after.csv"
-   ncu --import "$R/ncu/$tag.ncu-rep" --page raw --csv --print-units base > "$R/ncu/$tag.csv"
+   ncu --import "$R/ncu/$tag.ncu-repz" --page raw --csv --print-units base > "$R/ncu/$tag.csv"
   done
  done
 done
