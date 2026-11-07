@@ -1,0 +1,2 @@
+timestamp, name, pstate, clocks.current.sm [MHz], clocks.current.memory [MHz], temperature.gpu, power.draw [W]
+2026/11/06 22:54:28.926, NVIDIA GeForce RTX 5060 Ti, P0, 2617 MHz, 14001 MHz, 37, 21.79 W

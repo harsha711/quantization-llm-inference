@@ -1,0 +1,65 @@
+{
+  "timing_rows": 24,
+  "cycle_samples": 2400,
+  "timed_gemms": 5600,
+  "body_sha256": "e4eca5e30436c547358a9c8125d69526c6bb3318da034afd54ada6744181e2b7",
+  "smoke_rows": 6,
+  "numerical_rows": 12,
+  "sanitizer_rows": 12,
+  "rectangles": [
+    {
+      "K": 4096,
+      "N": 11008,
+      "gains_pct": {
+        "1": [
+          13.4328379155215,
+          13.383114870161805
+        ],
+        "2": [
+          3.1784843273457986,
+          1.7790398450765244
+        ],
+        "4": [
+          1.2602836830262976,
+          2.3914438795748616
+        ]
+      },
+      "passes": {
+        "1": true,
+        "2": false,
+        "4": false
+      },
+      "reproducibly_losing_counts": [],
+      "decision": "only single-matrix meaningful gain confirmed, no general decoding claim"
+    },
+    {
+      "K": 11008,
+      "N": 4096,
+      "gains_pct": {
+        "1": [
+          6.567533799754388,
+          6.740879215753804
+        ],
+        "2": [
+          0.2263364350450714,
+          -0.06673836392152577
+        ],
+        "4": [
+          -0.7566602904855779,
+          -0.4309797149789185
+        ]
+      },
+      "passes": {
+        "1": true,
+        "2": false,
+        "4": false
+      },
+      "reproducibly_losing_counts": [
+        4
+      ],
+      "decision": "reuse-dependent gain, retain A and close lead for reproducibly losing cycle lengths"
+    }
+  ],
+  "automatic_dispatch_authorized": false,
+  "max_abs": 0.0018590828112792224
+}
