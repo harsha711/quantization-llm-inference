@@ -1,0 +1,152 @@
+{
+  "timing_rows": 36,
+  "cycle_samples": 3600,
+  "timed_gemms": 8400,
+  "smoke_rows": 9,
+  "validation_rows": 18,
+  "sanitizer_rows": 18,
+  "comparisons": [
+    {
+      "K": 4096,
+      "N": 11008,
+      "matrices": 1,
+      "gains_pct": {
+        "cublas_dq": [
+          89.73951016210763,
+          89.62108703142627
+        ],
+        "unfused": [
+          95.13605650859526,
+          95.07427688573569
+        ]
+      },
+      "meaningful": {
+        "cublas_dq": true,
+        "unfused": true
+      },
+      "direction_agrees": {
+        "cublas_dq": true,
+        "unfused": true
+      }
+    },
+    {
+      "K": 4096,
+      "N": 11008,
+      "matrices": 2,
+      "gains_pct": {
+        "cublas_dq": [
+          76.99790071748431,
+          77.02935132237312
+        ],
+        "unfused": [
+          89.10303094386926,
+          89.15757104507998
+        ]
+      },
+      "meaningful": {
+        "cublas_dq": true,
+        "unfused": true
+      },
+      "direction_agrees": {
+        "cublas_dq": true,
+        "unfused": true
+      }
+    },
+    {
+      "K": 4096,
+      "N": 11008,
+      "matrices": 4,
+      "gains_pct": {
+        "cublas_dq": [
+          77.22648514344053,
+          77.28426616654734
+        ],
+        "unfused": [
+          89.26076595290614,
+          89.27793144181565
+        ]
+      },
+      "meaningful": {
+        "cublas_dq": true,
+        "unfused": true
+      },
+      "direction_agrees": {
+        "cublas_dq": true,
+        "unfused": true
+      }
+    },
+    {
+      "K": 11008,
+      "N": 4096,
+      "matrices": 1,
+      "gains_pct": {
+        "cublas_dq": [
+          88.04468453677914,
+          87.91728187379356
+        ],
+        "unfused": [
+          94.57007497583369,
+          94.5052732143265
+        ]
+      },
+      "meaningful": {
+        "cublas_dq": true,
+        "unfused": true
+      },
+      "direction_agrees": {
+        "cublas_dq": true,
+        "unfused": true
+      }
+    },
+    {
+      "K": 11008,
+      "N": 4096,
+      "matrices": 2,
+      "gains_pct": {
+        "cublas_dq": [
+          72.5450909976716,
+          72.22922376963957
+        ],
+        "unfused": [
+          87.61509358112724,
+          87.43374753704077
+        ]
+      },
+      "meaningful": {
+        "cublas_dq": true,
+        "unfused": true
+      },
+      "direction_agrees": {
+        "cublas_dq": true,
+        "unfused": true
+      }
+    },
+    {
+      "K": 11008,
+      "N": 4096,
+      "matrices": 4,
+      "gains_pct": {
+        "cublas_dq": [
+          72.40255488718972,
+          72.44742213446446
+        ],
+        "unfused": [
+          87.58170495745942,
+          87.594274830846
+        ]
+      },
+      "meaningful": {
+        "cublas_dq": true,
+        "unfused": true
+      },
+      "direction_agrees": {
+        "cublas_dq": true,
+        "unfused": true
+      }
+    }
+  ],
+  "max_abs": 0.0018590828112792224,
+  "max_rel_l2": 0.00020788470978230626,
+  "body_sha256": "e4eca5e30436c547358a9c8125d69526c6bb3318da034afd54ada6744181e2b7",
+  "next_measurement_authorized": false
+}
