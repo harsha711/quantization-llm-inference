@@ -132,6 +132,11 @@ def main(r,stage):
         return
     data = rows('series1',SHAPES,[1,2,4],1,True)+rows('series2',SHAPES[::-1],[4,2,1],2,True)
     success('identity-final')
+    success('library-identity')
+    library_count = len((r/'mapped-libraries.sha256').read_text().splitlines())
+    assert library_count >= 6
+    for name in ('measurement','final'):
+        assert (r/(name+'-library-check.log')).read_text().count(': OK') == library_count
     for name,count in [('e006',113),('e005-r2',148),('e008',120)]:
         assert (r/('final-'+name+'-check.log')).read_text().count(': OK') == count
     for name in ('validation','measurement','final'):

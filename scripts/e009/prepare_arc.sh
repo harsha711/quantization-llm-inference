@@ -37,4 +37,5 @@ sha256sum "$E005_LOCAL" "$E005_BRIDGE" "$E005_WHEEL" scripts/e005/bench.py scrip
 run runtime "$E005_PYTHON" scripts/e004/check_runtime.py
 run identity "$E005_PYTHON" scripts/e005_r2/identity.py
 run smoke "${base[@]}" --out "$R/smoke.jsonl" --shapes 256,2048 --warmup 0 --iters 0
+run library-identity "$E005_PYTHON" scripts/e009/libraries.py "$R"
 touch "$R/SMOKE_PASSED"

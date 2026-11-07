@@ -1,0 +1,17 @@
+nvcc not found: building host-only targets
+-- No CUDA compiler found: building host-only targets (test_cpu).
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/harsha/Documents/ncsu/sem 3/548/project/proj/build
+Consolidate compiler generated dependencies of target w4a16_host
+[ 66%] Built target w4a16_host
+Consolidate compiler generated dependencies of target test_cpu
+[100%] Built target test_cpu
+Internal ctest changing into directory: /home/harsha/Documents/ncsu/sem 3/548/project/proj/build
+Test project /home/harsha/Documents/ncsu/sem 3/548/project/proj/build
+    Start 1: test_cpu
+1/1 Test #1: test_cpu .........................   Passed    0.02 sec
+
+100% tests passed, 0 tests failed out of 1
+
+Total Test time (real) =   0.02 sec

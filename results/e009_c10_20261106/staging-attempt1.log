@@ -1,0 +1,5 @@
+Initial local staging archive command listed a nonexistent optional cmake directory:
+tar -czf /tmp/e009-stage.tar.gz CMakeLists.txt cmake include src tests scripts AGENTS.md README.md docs
+tar: cmake: Cannot stat: No such file or directory
+tar: Exiting with failure status due to previous errors
+CMakeLists.txt has no dependency on a cmake subdirectory. The archive includes all actual required files. The subsequent cheap ARC prerequisite completed successfully. Before larger jobs, actual staged project and harness source hashes are checked against the local files. No measured source or binary is changed by this staging diagnostic.
