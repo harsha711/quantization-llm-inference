@@ -1,0 +1,1 @@
+drwxr-xr-x 2 root root 4096 Oct 16 09:42 /opt/nvidia/nsight-compute/2026.3.1/extras/python

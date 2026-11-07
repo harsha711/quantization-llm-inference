@@ -5,8 +5,9 @@ from pathlib import Path
 import sys
 
 binary, report = (Path(p).resolve() for p in sys.argv[1:])
-paths = [parent / 'extras/python' for parent in binary.parents]
-package = next(p for p in paths if p.is_dir())
+# The inspected CUDA wrapper selects the versioned /opt installation.
+package = Path('/opt/nvidia/nsight-compute/2026.3.1/extras/python')
+assert package.is_dir(), package
 sys.path.insert(0, str(package))
 import ncu_report
 context = ncu_report.load_report(str(report))

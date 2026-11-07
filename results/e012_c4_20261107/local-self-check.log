@@ -1,0 +1,2 @@
+PASS: source hash/region boundaries, ambiguous sites and PC counter trust-boundary checks
+PASS: real source exports retain multiple inline contexts without double-counting PCs

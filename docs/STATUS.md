@@ -2,7 +2,7 @@
 
 The user authorizes continued work while away after `460ecc0`. E012 is one bounded diagnostic of the unresolved E011 main-loop versus reduction/epilogue/lock question. Corrected A and the frozen E011 cyclic workload remain unchanged. Read the [predeclared design and stopping criteria](EXPERIMENTS.md#e012--bounded-source-pc-attribution-of-corrected-marlin).
 
-Single next task: implement and inspect a cheap c4 capability/identity prerequisite before releasing any real source profiles. No user allocation is active. c52 becomes occupied before queued capability job 329188 starts. A later query finds c4 idle, so move only the pending cheap stage to c4, preserving the c52 attempt. Actual allocation/GPU/driver still require verification. Source/warp metric queries and source correlation determine whether the bounded method is supported. No optimization or dispatch is authorized by this diagnostic.
+Single next task: run and inspect the corrected c4 actual-executable validation prerequisite, then release only the bounded source profiles. Capability 329192 ran earlier than its estimate and failed only at the original API-path assumption. Its actual hardware, queries, source exports and 362 E011 hashes pass. CPU-only c54 jobs preserve the failure, locate the actual package, successfully import the report and query explicitly named gb206 metrics. No GEMM profile has run. Correct earlier stale queue updates against terminal accounting. Original c4 UUID/driver match E011.
 
 E011 and earlier records below are historical completed handoffs. Their wait-for-request statements are superseded only by the user's new authorization for this bounded continuation.
 

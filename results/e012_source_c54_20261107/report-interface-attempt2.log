@@ -1,0 +1,87 @@
+[prun] Master compute host = c54
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun timeout 60 python3 /home/hpuvvad/csc548-w4a16-e012-c4-20261107/scripts/e012/inspect_report.py /usr/local/cuda/bin/ncu /home/hpuvvad/csc548-w4a16-e011-c4-20261107/results/e011_c4_20261107/ncu/marlin_M128_K4096_N11008.ncu-repz (family=openmpi4)
+{
+  "package": "/opt/nvidia/nsight-compute/2026.3.1/extras/python",
+  "report": "/home/hpuvvad/csc548-w4a16-e011-c4-20261107/results/e011_c4_20261107/ncu/marlin_M128_K4096_N11008.ncu-repz",
+  "name": "Marlin",
+  "action_api": [
+    "NameBase_DEMANGLED",
+    "NameBase_FUNCTION",
+    "NameBase_MANGLED",
+    "WorkloadType_CMDLIST",
+    "WorkloadType_GRAPH",
+    "WorkloadType_KERNEL",
+    "WorkloadType_RANGE",
+    "WorkloadType_SUBGRID_SCHEDULE",
+    "add_double_metric",
+    "add_integer_metric",
+    "add_metric",
+    "add_string_metric",
+    "metric_by_name",
+    "metric_names",
+    "name",
+    "nvtx_state",
+    "ptx_by_pc",
+    "rule_results",
+    "rule_results_as_dicts",
+    "sass_by_pc",
+    "sections",
+    "source_files",
+    "source_info",
+    "source_markers",
+    "this",
+    "thisown",
+    "timed_warp_samples",
+    "timelines",
+    "workload_type"
+  ]
+}
+source_info 
+
+        Get the source info for a function address within this action.
+
+        Addresses are commonly obtained as correlation IDs of source-correlated
+        metrics.
+
+        Args:
+            address (:class:`int`): The address to get source info for.
+
+        Returns:
+            :class:`ISourceInfo` | :data:`None`: The :class:`ISourceInfo` associated
+            to the given address. If no source info is available, :data:`None` is
+            returned.
+
+        
+sass_by_pc 
+
+        Get the SASS associated with an address.
+
+        Args:
+            address (:class:`int`): The address to get SASS for.
+
+        Returns:
+            :class:`str`: The SASS associated with the given address. If no SASS is
+            available, the empty string will be returned.
+
+        
+metric_names 
+
+        Get the names of all metrics of this :class:`IAction`.
+
+        Returns:
+            :class:`tuple` of :class:`str`: The names of all metrics.
+
+        
+metric_by_name 
+
+        Get a single :class:`IMetric` by name.
+
+        Args:
+            metric_name (:class:`str`): The name of the :class:`IMetric` to retrieve.
+
+        Returns:
+            :class:`IMetric` | :data:`None`: The :class:`IMetric` object or
+            :data:`None` if no such metric exists.
+
+        

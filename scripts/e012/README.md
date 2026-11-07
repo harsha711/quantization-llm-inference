@@ -9,3 +9,7 @@ No old source/results are overwritten. An unsupported metric/replay combination 
 The original c52-only prerequisite 329188 remains queued without executing after c52 is allocated elsewhere. A later scheduler check finds c4 idle. Preserve the c52 submission/script and cancel only that agent-created pending job, then submit the identical cheap check on c4. No measurements are moved or combined.
 
 `source_inspection_arc.sh` uses one CPU on c54 solely for offline imports of the preserved c4 reports. It performs no GPU workload or metric collection. This lets source/API inspection proceed while hardware prerequisite 329192 waits for c4. Its metadata is separate under `results/e012_source_c54_20261107`.
+
+The c4 capability job actually ran and failed only at the original API locator. Its successful inputs/queries/exports remain preserved. `validate_arc.sh` resumes the fixed API check and gates actual runtime, exact mapped libraries, retained GPU checks and all four full-output target traces against E011. Unchanged same-environment E010 sanitizer evidence is reused. Real profile jobs require this validation to pass and be inspected first.
+
+Source attribution retains all CLI-exported inline contexts and exact API counter instances. One PC is counted once. Generic helper-only sites and conflicting source phases stay ambiguous. Software-patched instruction counts cannot supply production phase time, and sampled waits identify consumers rather than unique producers.

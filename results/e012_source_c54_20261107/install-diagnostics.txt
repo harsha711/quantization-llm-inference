@@ -1,0 +1,130 @@
+329202        COMPLETED      0:0             c54   00:00:02 
+329202.batch  COMPLETED      0:0             c54   00:00:02 
+329202.exte+  COMPLETED      0:0             c54   00:00:02 
+[prun] Master compute host = c54
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun python3 /home/hpuvvad/csc548-w4a16-e012-c4-20261107/scripts/e012/inspect_install.py /usr/local/cuda/bin/ncu (family=openmpi4)
+RESOLVED_NCU /usr/local/cuda-13.4/bin/ncu
+#!/bin/sh
+# Considering this script will be in cuda toolkit bin directory.
+CUDA_TOOLKIT_BIN_DIR="$(dirname "$(readlink -f -- "$0")")"
+
+setLatestNsightComputeToolDir()
+{
+    # Split version information <year>.<major_version>.<minor version> by "."
+    year=$(echo "$1" | cut -d'.' -f1)
+    major_version=$(echo "$1" | cut -d'.' -f2)
+    minor_version=$(echo "$1" | cut -d'.' -f3)
+
+    version_value=$(( year * 10000 + major_version * 100 + minor_version ))
+
+    if [ "$version_value" -ge "$latest_version" ]; then
+        latest_version=$version_value
+        LATEST_NSIGHT_COMPUTE_TOOL_DIR=$2
+    fi
+}
+
+# Pick latest Nsight Compute version if user has more than one nsight-compute-<year>.<major_version>.<minor version> or nsight-compute/<version> folder.
+latest_version=0
+# If installed with .deb or .rpm pkg, nsight-compute tools will be under nsight-compute/<tool_version folder> folder. e.g nsight-compute/2019.4.0
+if [ -d "/opt/nvidia/nsight-compute" ]; then
+    for nsight_compute_dir in /opt/nvidia/nsight-compute/*; do
+        if [ ! -e "$nsight_compute_dir" ]; then
+            # Glob didn't match anything. Let's skip this single iteration.
+            continue
+        fi
+        # Get the basename of the nsight-compute directory.
+        basename=$(basename "$nsight_compute_dir")
+        # Check if the basename is a valid version string <year>.<major>.<minor>.
+        if ! echo "$basename" | grep -Eq '^[0-9]{4}\.[0-9]+\.[0-9]+$'; then
+            # Non-versioned directory
+            continue
+        fi
+        setLatestNsightComputeToolDir "$basename" "$nsight_compute_dir"
+    done
+fi
+
+# If installed with .run file, nsight-compute tools will be under nsight-compute-<version> folder. e.g nsight-compute-2019.4.0
+for nsight_compute_tool_dir_path in "$CUDA_TOOLKIT_BIN_DIR"/../nsight-compute-*; do
+    if [ ! -e "$nsight_compute_tool_dir_path" ]; then
+        # Glob didn't match anything. Let's skip this single iteration.
+        continue
+    fi
+    # Split nsight compute tool dir path by "/" to get nsight compute folder name.
+    nsight_compute_tool_dir_name=${nsight_compute_tool_dir_path##*/}
+    # Split nsight compute tool dir name nsight-compute-<year>.<major_version>.<minor version> by "-" to get version information.
+    nsight_compute_tool_version=${nsight_compute_tool_dir_name##*-}
+
+    setLatestNsightComputeToolDir "$nsight_compute_tool_version" "$nsight_compute_tool_dir_path"
+done
+
+if [ -z "$LATEST_NSIGHT_COMPUTE_TOOL_DIR" ]; then
+    echo "ERROR : nsight-compute directory is not found under $CUDA_TOOLKIT_BIN_DIR/../ or /opt/nvidia. Nsight Compute is not installed on your system." 1>&2
+    exit 1
+fi
+
+# find all available targets
+NSIGHT_COMPUTE_TARGETS=$(find "$LATEST_NSIGHT_COMPUTE_TOOL_DIR/target" -maxdepth 1 -name "linux-*")
+NSIGHT_COMPUTE_NUM_TARGETS=$(echo "$NSIGHT_COMPUTE_TARGETS" | wc -l)
+
+# if there is only one, use that, otherwise make the selection dynamically
+if [ "$NSIGHT_COMPUTE_NUM_TARGETS" = 1 ]; then
+    NSIGHT_COMPUTE_CLI="$NSIGHT_COMPUTE_TARGETS/ncu"
+else
+    LINUX_DESKTOP_NSIGHT_COMPUTE_CLI="$LATEST_NSIGHT_COMPUTE_TOOL_DIR/target/linux-desktop-glibc_2_11_3-x64/ncu"
+    POWER_NSIGHT_COMPUTE_CLI="$LATEST_NSIGHT_COMPUTE_TOOL_DIR/target/linux-desktop-glibc_2_19_0-ppc64le/ncu"
+    LINUX_ARMSERVER_NSIGHT_COMPUTE_CLI="$LATEST_NSIGHT_COMPUTE_TOOL_DIR/target/linux-desktop-t210-a64/ncu"
+    LINUX_L4T_NSIGHT_COMPUTE_CLI="$LATEST_NSIGHT_COMPUTE_TOOL_DIR/target/linux-v4l_l4t-t210-a64/ncu"
+
+    ARCH=$(uname -m)
+
+    if   [ "$ARCH" = "x86_64" ]; then
+        NSIGHT_COMPUTE_CLI="$LINUX_DESKTOP_NSIGHT_COMPUTE_CLI"
+    elif [ "$ARCH" = "ppc64le" ]; then
+        NSIGHT_COMPUTE_CLI="$POWER_NSIGHT_COMPUTE_CLI"
+    elif [ "$ARCH" = "aarch64" ]; then
+        case "$(uname -r)" in
+            *tegra*) NSIGHT_COMPUTE_CLI="$LINUX_L4T_NSIGHT_COMPUTE_CLI" ;;
+            *) NSIGHT_COMPUTE_CLI="$LINUX_ARMSERVER_NSIGHT_COMPUTE_CLI" ;;
+        esac
+    else
+        echo "ERROR : Unsupported Architecture: $ARCH" 1>&2
+        exit 1
+    fi
+fi
+
+if [ ! -x "$NSIGHT_COMPUTE_CLI" ]; then
+    echo "ERROR : $NSIGHT_COMPUTE_CLI not found." 1>&2
+    exit 1
+fi
+
+exec "$NSIGHT_COMPUTE_CLI" "$@"
+
+NEARBY /usr/local/cuda-13.4/bin
+/usr/local/cuda-13.4/bin/cuda-gdb-python3.14-tui
+/usr/local/cuda-13.4/bin/cuda-gdbserver
+/usr/local/cuda-13.4/bin/cuda-gdb-python3.11-tui
+/usr/local/cuda-13.4/bin/cuda-gdb-python3.9-tui
+/usr/local/cuda-13.4/bin/cuda-gdb-python3.13-tui
+/usr/local/cuda-13.4/bin/cuda-gdb-python3.8-tui
+/usr/local/cuda-13.4/bin/cudafe++
+/usr/local/cuda-13.4/bin/cuda-gdb-python3.12-tui
+/usr/local/cuda-13.4/bin/nsight-sys
+/usr/local/cuda-13.4/bin/cuda-gdb
+/usr/local/cuda-13.4/bin/cuda-gdb-python3.10-tui
+/usr/local/cuda-13.4/bin/cuda-gdb-minimal
+NEARBY /usr/local/cuda-13.4
+/usr/local/cuda-13.4/CUDA_Toolkit_Release_Notes.txt
+NEARBY /usr/local
+/usr/local/cuda-11.8
+/usr/local/cuda-13.1
+/usr/local/cuda-13.0
+/usr/local/cuda-13.3
+/usr/local/cuda-13.4
+/usr/local/cuda
+/usr/local/cuda-12.9
+/usr/local/cuda-12
+/usr/local/cuda-13.2
+/usr/local/cuda-12.2
+/usr/local/cuda-13
+/usr/local/cuda-12.5

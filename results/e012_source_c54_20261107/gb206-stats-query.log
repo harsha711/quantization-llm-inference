@@ -1,0 +1,42 @@
+[prun] Master compute host = c54
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun timeout 60 ncu --query-metrics --chips gb206 --query-metrics-collection stats (family=openmpi4)
+Chip gb206
+--------------------------------------------------------------------------- --------------- --------------- ----------------------------------------------------------------------
+Metric Name                                                                 Metric Type     Metric Unit     Metric Description                                                    
+--------------------------------------------------------------------------- --------------- --------------- ----------------------------------------------------------------------
+profiler__perfworks_session_reuse                                           Counter                         Indicates if the PerfWorks session was reused between results.        
+profiler__pmsampler_buffer_size_bytes                                       Counter         byte            Buffer size in bytes per pass group used for PM sampling.             
+profiler__pmsampler_ctxsw_*                                                 Counter                         GPU context switch states over time during PM sampling for a specific 
+                                                                                                            pass group.                                                           
+profiler__pmsampler_interval_cycles                                         Counter         cycle           Sampling interval in cycles per pass group used for PM sampling, or   
+                                                                                                            zero if time-based interval was used.                                 
+profiler__pmsampler_interval_time                                           Counter         ns              Sampling interval in nanoseconds per pass group used for PM sampling, 
+                                                                                                            or zero if cycle-based interval was used.                             
+profiler__pmsampler_merged_samples                                          Counter         sample          Number of samples merged per pass group during PM sampling due to HW  
+                                                                                                            back pressure while streaming results.                                
+profiler__pmsampler_pass_groups                                             Counter                         Number of pass groups used for PM sampling.                           
+profiler__replayer_bytes_mem_accessible.avg                                 Counter         byte            Average number of bytes of memory accessible by the workload during   
+                                                                                                            replay.                                                               
+profiler__replayer_bytes_mem_accessible.max                                 Counter         byte            Maximum number of bytes of memory accessible by the workload during   
+                                                                                                            replay.                                                               
+profiler__replayer_bytes_mem_accessible.min                                 Counter         byte            Minimum number of bytes of memory accessible by the workload during   
+                                                                                                            replay.                                                               
+profiler__replayer_bytes_mem_accessible.sum                                 Counter         byte            Total number of bytes of memory accessible by the workload during     
+                                                                                                            replay.                                                               
+profiler__replayer_bytes_mem_backed_up.avg                                  Counter         byte            Average number of bytes of memory backed up during replay.            
+profiler__replayer_bytes_mem_backed_up.max                                  Counter         byte            Maximum number of bytes of memory backed up during replay.            
+profiler__replayer_bytes_mem_backed_up.min                                  Counter         byte            Minimum number of bytes of memory backed up during replay.            
+profiler__replayer_bytes_mem_backed_up.sum                                  Counter         byte            Total number of bytes of memory backed up during replay.              
+profiler__replayer_passes                                                   Counter         pass            Number of passes the result was replayed for profiling across all     
+                                                                                                            experiments.                                                          
+profiler__replayer_passes_type_warmup                                       Counter         pass            Number of passes the result was replayed to warmup the GPU for        
+                                                                                                            profiling.                                                            
+smsp__pcsamp_aggregated_passes                                              Counter         pass            Number of passes required for statistical warp stall sampling.        
+smsp__pcsamp_buffer_overflow                                                Counter                         Buffer overflow during statistical warp stall sampling.               
+smsp__pcsamp_buffer_size_bytes                                              Counter         byte            Buffer size in bytes for statistical warp stall sampling.             
+smsp__pcsamp_dropped_bytes                                                  Counter         byte            Bytes dropped during statistical warp stall sampling due to           
+                                                                                                            backpressure.                                                         
+smsp__pcsamp_interval                                                       Counter                         Interval number for warp stall sampling.                              
+smsp__pcsamp_interval_cycles                                                Counter         cycle           Interval cycles for statistical warp stall sampling.                  
+
