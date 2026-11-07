@@ -44,6 +44,14 @@ def midpoints(decisions):
     return result
 
 
+def template_values(symbol):
+    values = []
+    for token in symbol.split('<',1)[1].split('>',1)[0].split(','):
+        value = re.sub(r'\([^)]*\)','',token).strip()
+        values.append(int(value == 'true') if value in ('true','false') else int(value.rstrip('lLuU')))
+    return values
+
+
 def checked(v):
     k,n,m = v['K'],v['N'],v['M']
     assert (v['capacity'],v['matrices'],v['group'],v['seeds']) == (128,4,128,[3,4,5,6])
@@ -82,7 +90,7 @@ def checked(v):
         assert v['config'] == 'marlin' and len(v['traced_kernels']) == 1
         symbol = v['traced_kernels'][0]
         assert symbol.startswith('void e005_marlin::Marlin<')
-        values = [int(re.sub(r'\([^)]*\)|[lLuU]','',x).strip()) for x in symbol.split('<',1)[1].split('>',1)[0].split(',')]
+        values = template_values(symbol)
         a = v['resources'][0]
         assert values[-8:] == [a['threads'],a['m_blocks'],a['thread_n']//16,a['thread_k']//16,a['m8'],a['stages'],8,0],(values,a)
     for key in ('validation','post_timing_validation'):
@@ -122,6 +130,8 @@ def main(r,stage):
     for name in ('runtime','identity','library-identity','kernel-symbols'):
         success(name)
     assert not (r/'dependency-diff.txt').read_text()
+    identity = json.loads('{'+(r/'identity.log').read_text().split('{',1)[1])
+    assert identity['device'] == 'GPU-f2e08184-f913-0d97-104d-e01716a3c597, 610.57.04'
     for name,count in [('e006',113),('e005-r2',148),('e008',120),('e009',206)]:
         assert (r/(name+'-handoff-check.log')).read_text().count(': OK') == count
     smoke = rows('smoke',[(256,2048)],MS)
@@ -134,6 +144,10 @@ def main(r,stage):
     validation = rows('validation',SHAPES,MS)
     for v in validation:
         assert len(v['traced_kernels']) == (1 if v['config'] == 'marlin' else 0)
+        if v['config'] == 'marlin':
+            trace = json.loads((r/f"validation_M{v['M']}_K{v['K']}_N{v['N']}.trace.json").read_text())
+            actual = [e['name'] for e in trace['traceEvents'] if e.get('cat') == 'kernel']
+            assert actual == v['traced_kernels']
     for tool in ('memcheck','racecheck','synccheck'):
         rows(tool,SHAPES,MS,names=['marlin'])
         text = (r/(tool+'.log')).read_text()
@@ -149,13 +163,20 @@ def main(r,stage):
     for label in ('validation','measurement','final'):
         assert (r/(label+'-input-check.log')).read_text().count(': OK') == 5
     success('identity-final')
+    for name,count in [('e006',113),('e005-r2',148),('e008',120),('e009',206)]:
+        assert (r/('final-'+name+'-check.log')).read_text().count(': OK') == count
     repo = Path(__file__).resolve().parents[2]
     for line in (r/'measurement-tooling.sha256').read_text().splitlines():
         digest,name = line.split(maxsplit=1)
         assert hashlib.sha256((repo/name).read_bytes()).hexdigest() == digest,name
+    old = [json.loads(line) for line in (r/'e008-validation-reference.jsonl').read_text().splitlines()]
     for k,n in SHAPES:
+        oldmeta = next(v['allocations'] for v in old if (v['K'],v['N']) == (k,n))
         peers = [v for v in data+validation if (v['K'],v['N']) == (k,n)]
         for v in peers:
+            for a,b in zip(v['allocations'],oldmeta):
+                assert all(a['operand_sha256'][key] == b['operand_sha256'][key] for key in ('W','Q','S','W_hat'))
+                assert a['packed_sha256'] == b['packed_sha256'] and a['scales_sha256'] == b['scales_sha256']
             for a,b in zip(v['allocations'],peers[0]['allocations']):
                 for key in ('operand_sha256','packed_sha256','scales_sha256','wh_sha256'):
                     assert a[key] == b[key]
@@ -201,6 +222,8 @@ if __name__ == '__main__':
     p.add_argument('--self-test',action='store_true')
     args = p.parse_args()
     if args.self_test:
+        assert template_values('void test<1125899906910725l,256,true,false>(int)') == [1125899906910725,256,1,0]
+        assert template_values('void test<(long)12,(int)4,(bool)1,(bool)0>(int)') == [12,4,1,0]
         a = traversal(SHAPES,MS,1)
         b = traversal(SHAPES[::-1],MS[::-1],2)
         assert [x[:4] for x in a][::-1] == [x[:4] for x in b]
