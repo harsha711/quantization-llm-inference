@@ -54,8 +54,10 @@ def main(r):
     for tool in ('memcheck','racecheck','synccheck'):
         sanitizers+=rows(tool,{(k,n,c,'mixed','no_flush') for (k,n),c in itertools.product(SHAPES,'AC')})
         log=(r/(tool+'.log')).read_text()
-        assert 'ERROR SUMMARY: 0 errors' in log
-        if tool=='racecheck':assert 'RACECHECK SUMMARY: 0 hazards displayed (0 errors, 0 warnings)' in log
+        if tool=='racecheck':
+            assert 'RACECHECK SUMMARY: 0 hazards displayed (0 errors, 0 warnings)' in log
+        else:
+            assert 'ERROR SUMMARY: 0 errors' in log
     expected={(k,n,c,'mixed',p) for (k,n),c,p in itertools.product(SHAPES,'AC',('store_flush','no_flush'))}
     all_rows={};comparison=[];sample_stats=[]
     for series in (1,2):
