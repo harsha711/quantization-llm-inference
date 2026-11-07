@@ -2,6 +2,22 @@
 
 Read the numerical/measurement [contract](CONTRACT.md) before interpreting these records. Preserve raw evidence, failed attempts, and inconclusive outcomes. An alternative that has not been implemented or measured is not a failed optimization. Historical entries below reconstruct only what the repository supports. Missing prior failure numbers or commit IDs remain unknown.
 
+## E005-R2 — Independent rectangular A/C confirmation
+
+Status: predeclared, authorized 2026-11-06 from clean `925be8a`. This is a bounded confirmation of the E005-R1 rectangular lead, not E008 implementation or a changed default.
+
+Problem and hypothesis: One held-out c58 series suggests C helps M4/K4096/N11008 more than its transpose. Existing corrected A/C launch configurations may deliver a reproducible geometry-dependent benefit. Execution order or cache/environment effects could instead explain the observation.
+
+Selected design and alternatives: Reuse the exact E006 corrected library, source and A/C host policies without recompilation. A uses 36 blocks/101376 B and C uses 72 blocks/49664 B on a verified 36-SM RTX 5060 Ti. Keep G128 and all numerical rules. Use M4, seed2, both K/N orientations (4096,11008) and (11008,4096), both `no_flush` and `store_flush`, 10 warmups and 100 samples. Run two independent processes, eight timing rows each, reversing A/C and rectangular traversal order in series2. Reverse cache-policy traversal too. There are exactly 16 timing rows/1600 samples. Preserve raw samples, commands, operand hashes and observed variability. Broader tuning, a new partitioner and automatic dispatch are excluded.
+
+Predeclared continuation gate: For a rectangle, require `100*(1-C_median/A_median) >= 5` under no-flush in **each** independent series. If neither rectangle passes, or the benefit follows execution order, stop this lead without profiling or policy changes. Report store-flush changes separately without folding them into this no-flush investigation gate. If either rectangle passes, profile A and C on the rectangle with the larger minimum no-flush gain across the two series. A tie selects K4096/N11008. Passing warrants investigation only and does not authorize dispatch or partition changes.
+
+Validation and environment: The user reports that c58 expired and the new node is c10. Allocation328681 is owned by hpuvvad, RUNNING, one node/16 CPUs, scheduled end2026-11-07 02:50:31 cluster time. Verify live state again before launches. c10 has RTX5060Ti16GB but driver610.57.04 versus c58's615.71.09. The c58 node-local Python environment is absent. Restore the exact pinned dependency versions in a separate c10 environment and verify operator, bridge, corrected-library and source hashes. Changed node/driver/runtime path require fresh relevant validation, not automatic reuse of E006's entire gate. First test one-rank prun/runtime and small A/C M4 K256/N2048 correctness. Then run fresh A/C M4 checks and memcheck/racecheck/synccheck on both actual rectangles, including repeated direct calls, poisoned graph replay, all-output FP64, exact codes/scales/reconstruction, workspace guards and lock reset. Run retained project build/CTest/GPU gate separately. Any correctness or launcher failure stops timing and preserves diagnostics. No need to repeat the original E006 source investigation.
+
+Conditional profiles: Query supported target metrics first. Preserve the original replay method with no profiler cache/clock control, 10 warmups and one exact corrected local kernel. Collect matched A/C instruction counts, registers/resources, CTA/eligible/issue/Tensor activity, L2/DRAM traffic and throughput, barrier/scoreboard/wait metrics. Record replay passes and avoid treating profiler duration as application latency. Interpret against competing parallel-work, memory-service and coordination-cost explanations. No optimization is implemented after profiling in this task.
+
+Evidence and commands will live in `scripts/e005_r2/` and `results/e005_r2_c10_20261106/`, with a separate shared ARC root. All prior evidence and binaries remain immutable. Current ARC documentation was checked at <https://arcm.csc.ncsu.edu/~mueller/cluster/arc/>. Use prun inside the verified existing interactive allocation and leave it running. Update this entry with failures, exact versions, validation, timings, conditional profiles, decision and revisit conditions before handoff.
+
 ## Pre-E008 — Saved-profile bottleneck assessment
 
 Status: completed assessment, no new experiment implemented or measured. Requested after `ab54819`.

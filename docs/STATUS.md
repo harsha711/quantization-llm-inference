@@ -1,5 +1,11 @@
 # Current status
 
+**E005-R2 rectangular confirmation is authorized and predeclared from `925be8a`.** Keep the E006 corrected binary unchanged and compare only preserved A/C at M4/seed2, both rectangles/cache policies, two reversed series, exactly16 timing rows. A rectangle continues only with at least5% lower C no-flush median in each series. Store-flush regressions are reported separately. Profile the strongest passing rectangle only. No automatic dispatch, new partitioning or E008 implementation is authorized.
+
+Current prerequisite: verify c10 allocation328681 and restore the pinned node-local Python runtime. c10's driver differs from c58, so fresh relevant numerical/sanitizer validation precedes timing. Preserve historical evidence, failed attempts and all raw results. See the new [experiment record](EXPERIMENTS.md#e005-r2--independent-rectangular-ac-confirmation).
+
+The sections below preserve previous handoffs.
+
 **The requested pre-E008 [bottleneck assessment](BOTTLENECK_ASSESSMENT.md) is complete, using evidence checkpoint `ab54819`. Keep E006 corrected A as the baseline. E005-R1 and E007 remain negative results and neither becomes the default.** No kernel, launch policy, benchmark condition or raw evidence changed. Both existing analyzers pass on temporary evidence copies, retaining their rejection decisions.
 
 The corrected square M8 profiles support limited ready work with added partition/instruction costs when concurrency rises. They do not isolate a unique memory or compute limit. The strongest unconfirmed lead is rectangular stripe distribution: M4 C gains 9.081% no-flush for K4096/N11008, versus 1.834% for the transpose in one held-out series. There are no matching corrected rectangular counter profiles.

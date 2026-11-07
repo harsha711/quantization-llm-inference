@@ -43,10 +43,10 @@
 - The user authorized continued project work after E005-R1. E007 is one bounded source-supported terminal-lookahead experiment, predeclared in EXPERIMENTS.md. This overrides the earlier instruction to wait at the completed E005-R1 checkpoint only for this continuation. Keep E005/E006/E005-R1 immutable. Preserve the E006 barrier, fixed format and host launch policy. Do not turn it into a tuning search.
 - E007 is complete and rejected under its5% latency criterion. Participating LDS loads fall 1.931% but issued warp instructions rise 1.757%, with M8 median ties and no reproducible M1 gain. Registers126→124 still allocate128. Preserve measured checker snapshots and corrected static counts: 121 total load opcode sites, 70 permanently off, 51 potentially active in each body. Do not repeat this guard unless its recorded revisit condition changes. Hand off before another optimization.
 
-## Pre-E008 assessment
+## Rectangular confirmation after assessment
 
-- Read `docs/BOTTLENECK_ASSESSMENT.md`. Keep E006 corrected A as baseline. E005-R1 and E007 remain negative results and neither becomes default.
-- Saved square profiles do not establish a unique bottleneck. Rectangular gains have one timing series and no corrected rectangular profiles. The proposed bounded A/C confirmation requires a user decision. No E008 implementation, repeat measurement or dispatch is authorized by the assessment request.
+- Read `docs/BOTTLENECK_ASSESSMENT.md` and E005-R2. User authorized preserved corrected A/C on c10, M4/seed2, both rectangles/cache policies, exactly16 timing rows in two reversed series. No kernel rebuild/change, E008 implementation or automatic dispatch.
+- Predeclared gate is at least5% lower C no-flush median in each series for a rectangle. Report store-flush regressions separately. Only if this repeats, profile the strongest passing rectangle with A/C. Otherwise stop the lead. Fresh relevant validation is required for c10's changed driver/runtime path. Preserve all earlier results and keep corrected A baseline.
 
 ## ARC
 
