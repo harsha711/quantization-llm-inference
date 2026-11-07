@@ -1,4 +1,6 @@
-# E011 in progress
+# E011 measurements complete
+
+All eight profiles and16 timing rows are now complete. Resume329113 finishes in15m28s with exit0. ARC/local complete and negative-data analyzers pass. Final explanation/handoff documentation is being written. No more GPU measurements are authorized by E011. The prior progress checkpoints below are historical until the final handoff replaces them.
 
 E011 endpoint profiling is implemented. Criteria `2a2e44d`, target harness `76b6742`, collection workflow `aac531f`, report-import correction `ac318bb`, timeout/resume `4c0409c`. Corrected E006 A, E004 bridge, quantization and numerical contract remain unchanged. Current complete evidence is16 timing rows/1600 complete-cycle samples and eight validated actual-operation traces. Profiling is incomplete: five cases have completed reports, a sixth was interrupted and two have not run. Do not claim an eight-case profile result yet.
 

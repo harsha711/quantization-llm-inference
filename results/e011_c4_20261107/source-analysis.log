@@ -22,6 +22,8 @@
       "striped_mn_tiles": 14,
       "stripe_k_steps": 13,
       "reduction_links": 33,
+      "max_k_steps_per_cta": 77,
+      "total_valid_k_steps": 2752,
       "fp32_partial_bytes_per_link_direction": 4096,
       "modeled_scratch_read_plus_write_bytes": 270336
     },
@@ -38,6 +40,8 @@
       "striped_mn_tiles": 14,
       "stripe_k_steps": 26,
       "reduction_links": 33,
+      "max_k_steps_per_cta": 154,
+      "total_valid_k_steps": 5504,
       "fp32_partial_bytes_per_link_direction": 65536,
       "modeled_scratch_read_plus_write_bytes": 4325376
     },
@@ -54,6 +58,8 @@
       "striped_mn_tiles": 32,
       "stripe_k_steps": 77,
       "reduction_links": 35,
+      "max_k_steps_per_cta": 77,
+      "total_valid_k_steps": 2752,
       "fp32_partial_bytes_per_link_direction": 4096,
       "modeled_scratch_read_plus_write_bytes": 286720
     },
@@ -70,6 +76,8 @@
       "striped_mn_tiles": 32,
       "stripe_k_steps": 154,
       "reduction_links": 35,
+      "max_k_steps_per_cta": 154,
+      "total_valid_k_steps": 5504,
       "fp32_partial_bytes_per_link_direction": 65536,
       "modeled_scratch_read_plus_write_bytes": 4587520
     }

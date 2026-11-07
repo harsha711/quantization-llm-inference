@@ -1,0 +1,82 @@
+[
+  {
+    "trace": "trace_cublas_dq_M128_K11008_N4096.cycle.trace.json",
+    "streams": [
+      13
+    ],
+    "devices": [
+      0
+    ],
+    "kernels": 4
+  },
+  {
+    "trace": "trace_cublas_dq_M128_K4096_N11008.cycle.trace.json",
+    "streams": [
+      13
+    ],
+    "devices": [
+      0
+    ],
+    "kernels": 4
+  },
+  {
+    "trace": "trace_cublas_dq_M4_K11008_N4096.cycle.trace.json",
+    "streams": [
+      13
+    ],
+    "devices": [
+      0
+    ],
+    "kernels": 4
+  },
+  {
+    "trace": "trace_cublas_dq_M4_K4096_N11008.cycle.trace.json",
+    "streams": [
+      13
+    ],
+    "devices": [
+      0
+    ],
+    "kernels": 8
+  },
+  {
+    "trace": "trace_marlin_M128_K11008_N4096.cycle.trace.json",
+    "streams": [
+      13
+    ],
+    "devices": [
+      0
+    ],
+    "kernels": 4
+  },
+  {
+    "trace": "trace_marlin_M128_K4096_N11008.cycle.trace.json",
+    "streams": [
+      13
+    ],
+    "devices": [
+      0
+    ],
+    "kernels": 4
+  },
+  {
+    "trace": "trace_marlin_M4_K11008_N4096.cycle.trace.json",
+    "streams": [
+      13
+    ],
+    "devices": [
+      0
+    ],
+    "kernels": 4
+  },
+  {
+    "trace": "trace_marlin_M4_K4096_N11008.cycle.trace.json",
+    "streams": [
+      13
+    ],
+    "devices": [
+      0
+    ],
+    "kernels": 4
+  }
+]

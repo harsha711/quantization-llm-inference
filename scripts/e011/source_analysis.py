@@ -58,6 +58,7 @@ for k, n in SHAPES:
         rows.append(dict(K=k, N=n, M=m, tile_m=tile_m, tile_k=a['thread_k'], tile_n=a['thread_n'],
                          parallel_m_tiles=parallel, global_mn_tiles=tiles, full_tiles_per_cta=part1,
                          striped_mn_tiles=part2, stripe_k_steps=stripe, reduction_links=links,
+                         max_k_steps_per_cta=part1 * kt + stripe, total_valid_k_steps=tiles * kt,
                          fp32_partial_bytes_per_link_direction=partial_bytes,
                          modeled_scratch_read_plus_write_bytes=2 * links * partial_bytes))
 for a, b in zip(rows[::2], rows[1::2]):
@@ -65,6 +66,10 @@ for a, b in zip(rows[::2], rows[1::2]):
     assert a['global_mn_tiles'] == b['global_mn_tiles'] and a['reduction_links'] == b['reduction_links']
     assert b['stripe_k_steps'] == 2 * a['stripe_k_steps']
     assert b['modeled_scratch_read_plus_write_bytes'] == 16 * a['modeled_scratch_read_plus_write_bytes']
+for m in MS:
+    peers = [row for row in rows if row['M'] == m]
+    assert len({row['max_k_steps_per_cta'] for row in peers}) == 1
+    assert len({row['total_valid_k_steps'] for row in peers}) == 1
 result = dict(source=relative, source_sha256=expected, source_lines=[326, 378, 1376, 1418],
               interpretation='Finite source request model, includes padded rows. Not measured L2/DRAM traffic or execution time.', rows=rows)
 (root / 'source-partitions.json').write_text(json.dumps(result, indent=2) + '\n')

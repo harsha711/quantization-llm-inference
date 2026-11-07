@@ -1,0 +1,6 @@
+/home/hpuvvad/csc548-w4a16-e004-20261106/results/e004_20261106/libe004.so: OK
+/home/hpuvvad/csc548-w4a16-e006-20261106/results/e006_20261106/patched/libe005.so: OK
+/tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcublas.so.13: OK
+/tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcublasLt.so.13: OK
+/tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcudart.so.13: OK
+/usr/lib64/libcuda.so.610.57.04: OK

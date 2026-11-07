@@ -149,6 +149,25 @@ def main(root, stage):
     if stage == 'timing':
         print('PASS: 16 complete fresh endpoint timing rows/1600 cycle samples, profiles not assessed')
         return
+    for label in ('measurement', 'final'):
+        assert (root / f'{label}-input-check.log').read_text().count(': OK') == 3
+        assert (root / f'{label}-library-check.log').read_text().count(': OK') == 6
+    for label in ('identity-measurement', 'identity-final'):
+        success(label)
+    assert (root / 'final-e010-handoff-check.log').read_text().count(': OK') == 153
+    tooling = (root / 'measurement-tooling.sha256').read_text().splitlines()
+    assert (root / 'final-tooling-check.log').read_text().count(': OK') == len(tooling)
+    repo = Path(__file__).resolve().parents[2]
+    for line in tooling:
+        digest, path = line.split(maxsplit=1)
+        assert hashlib.sha256((repo / path).read_bytes()).hexdigest() == digest, path
+    if (root / 'measurement-timeout-accounting.txt').exists():
+        assert 'TIMEOUT' in (root / 'measurement-timeout-accounting.txt').read_text()
+        success('identity-resume-profile')
+        assert (root / 'resume-profile-library-check.log').read_text().count(': OK') == 6
+        assert (root / 'resume-profile-input-check.log').read_text().count(': OK') == 3
+        assert (root / 'resume-profile-tooling-check.log').read_text().count(': OK') == len(tooling)
+        assert (root / 'profile_cublas_dq_M4_K11008_N4096.attempt1.log').exists()
     profiles = []
     for tag, trace in traces.items():
         success('profile_' + tag)
@@ -178,6 +197,9 @@ def main(root, stage):
             else:
                 assert kernel_identity(value['Kernel Name']) == kernel_identity(expected)
             normalized = {metric: number(value, metric) for metric in metrics}
+            for metric in ('dram__bytes_op_read.sum', 'dram__bytes_op_write.sum', 'lts__t_bytes.sum'):
+                assert unit[metric] == 'byte'
+            assert unit['smsp__inst_executed.sum'] == unit['sm__inst_executed_pipe_tensor.sum'] == 'inst'
             if trace['config'] == 'marlin':
                 for metric, attribute in [('launch__grid_size', 'grid'), ('launch__block_size', 'threads'),
                                           ('launch__registers_per_thread', 'registers'),
@@ -216,6 +238,20 @@ def main(root, stage):
         writer = csv.DictWriter(out, fieldnames=list(compact[0]))
         writer.writeheader()
         writer.writerows(compact)
+    table = [
+        'Application values are cycle median/4 in us, series 1 / series 2. Profiler duration is the sum of selected sequential kernel durations, excluding gaps. Traffic and instructions cover the fixed seed 6 operation, not all four matrices. MiB means 2^20 bytes and instruction millions mean 10^6. Tensor activity and eligible warps remain per kernel, in GEMM/reduction order for the two-kernel operation. Percentages are not peak FLOP utilization.',
+        '',
+        '| K / N | M | Implementation | Application us/GEMM S1 / S2 | Profiler sum us | DRAM read / write MiB | L2 MiB | Warp inst M | Tensor active % | Eligible warps |',
+        '|---|---:|---|---:|---:|---:|---:|---:|---:|---:|',
+    ]
+    for row in compact:
+        tensor = ' / '.join(f'{v:.2f}' for v in json.loads(row['sm__pipe_tensor_cycles_active.avg.pct_of_peak_sustained_elapsed']))
+        eligible = ' / '.join(f'{v:.2f}' for v in json.loads(row['smsp__warps_eligible.avg.per_cycle_active']))
+        table.append(f"| {row['K']} / {row['N']} | {row['M']} | {'Marlin A' if row['config'] == 'marlin' else 'FP16 cuBLAS'} | "
+                     f"{row['application_amortized_us_s1']:.3f} / {row['application_amortized_us_s2']:.3f} | {row['profiler_operation_us']:.3f} | "
+                     f"{row['dram_read_bytes']/2**20:.3f} / {row['dram_write_bytes']/2**20:.3f} | {row['l2_bytes']/2**20:.3f} | "
+                     f"{row['warp_instructions']/1e6:.3f} | {tensor} | {eligible} |")
+    (root / 'endpoint-table.md').write_text('\n'.join(table) + '\n')
     print('PASS: 16 fresh endpoint timing rows/1600 complete-cycle samples and eight context-preserving complete-operation profiles')
 
 
