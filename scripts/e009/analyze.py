@@ -114,7 +114,7 @@ def main(r,stage):
     for name,count in [('e006',113),('e005-r2',148),('e008',120)]:
         assert (r/(name+'-handoff-check.log')).read_text().count(': OK') == count
     identity = json.loads('{'+(r/'identity.log').read_text().split('{',1)[1])
-    assert identity['device'] == 'GPU-38a74fc5-9f81-89d1-4ad5-3f5796d39bf2, 610.57.04'
+    assert identity['device'] == 'GPU-f2e08184-f913-0d97-104d-e01716a3c597, 610.57.04'
     smoke = rows('smoke',[(256,2048)],[1,2,4])
     if stage == 'prerequisite':
         print('PASS: identity, dependencies, preserved evidence, nine composed smoke rows')

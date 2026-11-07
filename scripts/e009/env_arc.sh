@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 source "$PROJECT_ROOT/scripts/e005_r2/env_arc.sh"
-R="$PROJECT_ROOT/results/e009_c10_20261106"
+R="$PROJECT_ROOT/results/e009_c4_20261107"
 cycle_base() {
  bench_base
  base=("$E005_PYTHON" scripts/e009/bench.py --source "$E005_CONTROL/external/pinned"

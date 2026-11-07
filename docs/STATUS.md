@@ -1,6 +1,6 @@
 # Current status
 
-E009 is in progress from clean `a527d7b`. Criteria `667e996`, harness `006dac1`, verified prerequisite/contract `98b3b24`. All nine composed smoke rows and18 rectangular numerical rows pass. Retained CUDA build/CTest/GPU checks pass. The remaining sanitizer gate is running, with racecheck narrowed to the two custom kernels after preserving an incomplete unfiltered attempt, with timing still blocked until all tools pass and the validation-stage analyzer is inspected. Corrected A, E004 bridge, dependencies and all E006/E005-R2/E008 handoff hashes match. Next task: complete this gate, then only the predeclared36-row reversed/balanced measurement and final analysis. No C tuning, kernel change, profile or dispatch. Allocation328681 is owned by hpuvvad and RUNNING on c10, scheduled end2026-11-07 02:50:31 Eastern. Reverify before launching.
+E009 is in progress, migrating to c4 after the user reports c10 allocation expiry. All c10 validation ultimately passed and is preserved in `results/e009_c10_20261106/` with frozen tooling and preservation hashes. No c10 timing ran. Allocation328964/c4 is verified RUNNING, scheduled end2026-11-07 15:56:45 Eastern. Next task: restore exact runtime, inspect fresh prerequisite and relevant validation, then run all36 fixed timing rows entirely on c4 and produce the report. New root `results/e009_c4_20261107/`. Benchmark body, corrected A, operands, cuBLAS mode16, numerical tolerances and5% rule stay fixed. No C tuning, profile, dispatch or kernel change.
 
 The completed E008 handoff follows.
 

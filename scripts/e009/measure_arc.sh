@@ -12,7 +12,7 @@ clock > "$R/series1-clocks-after.csv"
 clock > "$R/series2-clocks-before.csv"
 run series2 "${base[@]}" --out "$R/series2.jsonl" --shapes 11008,4096 4096,11008 --counts 4 2 1 --series 2
 clock > "$R/series2-clocks-after.csv"
-run identity-final "$E005_PYTHON" scripts/e005_r2/identity.py
+run identity-final "$E005_PYTHON" scripts/e009/identity.py
 sha256sum -c "$R/verified-inputs.sha256" > "$R/final-input-check.log"
 (cd "$E006_CONTROL"; sha256sum -c results/e006_20261106/handoff.sha256) > "$R/final-e006-check.log"
 (cd /home/hpuvvad/csc548-w4a16-e005-r2-20261106; sha256sum -c results/e005_r2_c10_20261106/handoff.sha256) > "$R/final-e005-r2-check.log"
