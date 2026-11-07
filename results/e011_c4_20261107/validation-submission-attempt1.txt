@@ -1,0 +1,7 @@
+Submission command (gateway, absolute project root):
+sbatch --parsable --dependency=afterok:329038 --export=ALL,PROJECT_ROOT=/home/hpuvvad/csc548-w4a16-e011-c4-20261107 --output=/home/hpuvvad/csc548-w4a16-e011-c4-20261107/validation-%j.out scripts/e011/validate_arc.sh
+
+stderr:
+sbatch: error: Batch job submission failed: Job dependency problem
+
+No validation job was created. The local tee pipeline returned zero despite sbatch's error, which was inspected rather than treated as success. Subsequent submission pipelines use pipefail and capture stderr. Preserve the completed prerequisite's accounting/result evidence. Submit a fresh cheap release-check job and its dependent validation job in the same gateway command to avoid dependency-record retention between inspected stages.

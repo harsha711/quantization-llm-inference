@@ -2,6 +2,7 @@
 """Validate E011 operation coverage and fresh matched endpoint evidence."""
 import argparse
 import csv
+import gzip
 import hashlib
 import importlib.util
 import json
@@ -60,7 +61,9 @@ def main(root, stage):
     _, calibration = raw(root / 'ncu/calibration.csv')
     assert len(calibration) == 1 and 'add' in calibration[0]['Kernel Name'].lower(), calibration
     assert '--launch-skip 399 --launch-count 1' in (root / 'calibration.log').read_text()
-    query = (root / 'supported-metrics.txt').read_text() + (root / 'launch-metrics.txt').read_text()
+    path = root / 'supported-metrics.txt'
+    query = (path.read_text() if path.exists() else gzip.decompress(path.with_suffix('.txt.gz').read_bytes()).decode())
+    query += (root / 'launch-metrics.txt').read_text()
     available = {line.split()[0] for line in query.splitlines() if line.strip()}
     metrics = Path(__file__).with_name('metrics.txt').read_text().splitlines()
     assert len(metrics) == len(set(metrics)) == 33
@@ -152,6 +155,26 @@ def main(root, stage):
                              kernels=kernels, totals={metric: sum(kernel['metrics'][metric] for kernel in kernels) for metric in additive},
                              validated_application_executions=len(passes)))
     (root / 'profile-analysis.json').write_text(json.dumps(profiles, indent=2) + '\n')
+    compact = []
+    for profile in profiles:
+        kernels, totals = profile['kernels'], profile['totals']
+        pair = [v for v in timings if (v['K'], v['N'], v['M'], v['config']) == (profile['K'], profile['N'], profile['M'], profile['config'])]
+        entry = {key: profile[key] for key in ('K', 'N', 'M', 'config')}
+        entry.update(application_cycle_us_s1=pair[0]['median_us'], application_cycle_us_s2=pair[1]['median_us'],
+                     application_amortized_us_s1=pair[0]['median_us']/4, application_amortized_us_s2=pair[1]['median_us']/4,
+                     profiler_operation_us=totals['duration_us'], dram_read_bytes=totals['dram__bytes_op_read.sum'],
+                     dram_write_bytes=totals['dram__bytes_op_write.sum'], l2_bytes=totals['lts__t_bytes.sum'],
+                     warp_instructions=totals['smsp__inst_executed.sum'], tensor_instructions=totals['sm__inst_executed_pipe_tensor.sum'])
+        for metric in ('sm__pipe_tensor_cycles_active.avg.pct_of_peak_sustained_elapsed',
+                       'smsp__warps_eligible.avg.per_cycle_active', 'smsp__issue_active.avg.pct_of_peak_sustained_active',
+                       'launch__registers_per_thread', 'launch__shared_mem_per_block_dynamic',
+                       'l1tex__t_sectors_pipe_lsu_mem_local_op_ld.sum', 'l1tex__t_sectors_pipe_lsu_mem_local_op_st.sum'):
+            entry[metric] = json.dumps([kernel['metrics'][metric] for kernel in kernels])
+        compact.append(entry)
+    with (root / 'endpoint-summary.csv').open('w') as out:
+        writer = csv.DictWriter(out, fieldnames=list(compact[0]))
+        writer.writeheader()
+        writer.writerows(compact)
     print('PASS: 16 fresh endpoint timing rows/1600 complete-cycle samples and eight context-preserving complete-operation profiles')
 
 

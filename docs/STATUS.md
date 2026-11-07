@@ -1,6 +1,12 @@
 # E011 in progress
 
-E011 is the authorized endpoint profiling continuation from completed E010. Scope and competing hypotheses are predeclared in EXPERIMENTS. No active ARC allocation exists at preflight. Queue only a small c4 prerequisite, inspect installed Nsight replay capabilities and identities before choosing the final method or releasing profiles. Earlier E010 completion follows unchanged.
+E011 is the authorized endpoint profiling continuation from completed E010, criteria `2a2e44d`, target harness `76b6742`. The c4 prerequisite329038 completed successfully. Exact corrected binary, bridge, wheel, dependencies, GPU UUID/driver, six mapped libraries and153 E010 handoff hashes match. Four small endpoint smoke rows pass. Installed Nsight supports the selected application-replay method. Source/kernels remain unchanged. Local build/CTest and E009/E010 evidence checks pass, while the new CUDA target harness still needs validation.
+
+Next task: inspect release329054 and dependent target-validation329055 on c4. The first afterok submission failed because the old completed prerequisite was no longer usable as a dependency. Its failure is preserved. The fresh cheap release job retains a real dependency without bypassing the gate. Only after target validation and replay-window calibration pass, release two reversed endpoint timing series and eight targeted profiles. No counter has yet been collected for a real GEMM. See E011 in EXPERIMENTS for exact scope and the final-cycle selection method.
+
+The user-suggested c54 receives only a nine-second metadata check329042. It has RTX4060Ti/sm89 and a different driver, incompatible with the preserved sm120 binary. No experiment/rebuild is run there. c4's initial queue estimates were stale. Check live allocation/accounting rather than this saved state. Leave user-owned allocations intact.
+
+Earlier E010 completion follows unchanged.
 
 # Current status
 

@@ -67,6 +67,12 @@
 - Actual-call traces and resource queries verify M4 eight-row 128Kx128N, M16 sixteen-row 128Kx128N, M64/M128 sixty-four-row 64Kx256N, with two 64-row tiles inside one M128 call. Keep corrected E006 body and original A dispatcher unchanged. The transition alone is not a bottleneck explanation.
 - Full four-matrix numerical/memcheck/synccheck and representative one-matrix racecheck cover every shape/M. The original composed racecheck is incomplete exit 143/four rows/11m12s and stays preserved. Do not call it a pass or repeat it unchanged. Final representative racecheck reports 0 hazards/errors/warnings. Measured tooling is frozen. Await another request before further measurement, profiling, tuning, dispatch or kernel work. Reverify saved 328964/c4 rather than trusting the handoff.
 
+## E011 authorized endpoint profiling
+
+- E011 is the only authorized continuation from E010. Profile corrected A and pre-materialized W_hat cuBLAS at M4/M128 on both rectangles, eight cases. Keep four matrices, seeds/prefixes, binaries, mode16, numerical contract and sequential cycles unchanged. No C, tuning, sweep, dispatch or kernel change.
+- Use the installed-capability-verified application replay with no profiler flushing/clock locking, dynamic pipeline boost and strict matching. Target every kernel of the fourth GEMM in the final100-cycle graph, after ten direct cycle warmups. Validate actual complete operations and the profiler-window skip/count first. Reuse E010 safety evidence only with matching identities. Never treat isolated replay counters as E010 cache-state measurements.
+- Fresh timing context is16 rows, two reversed endpoint series, ten warmups/100 complete-cycle samples, separate from profiling. Query targeted metrics first. Preserve raw reports/traces/commands and failed submissions. Sum additive multi-kernel work only, keep utilization/resources per kernel. Distinguish observations, interpretations and unresolved questions. Stop after documented/committed E011, with at most one supported future hypothesis.
+
 ## ARC
 
 - Verify current [ARC documentation](https://arcm.csc.ncsu.edu/~mueller/cluster/arc/) and `scontrol show job` each session. Confirm allocation ownership, RUNNING state, nodes, remaining time, and GPU. Saved IDs/nodes are historical. Do no compute on the gateway.

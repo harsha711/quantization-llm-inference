@@ -1,0 +1,98 @@
+{
+  "timing_rows": 32,
+  "cycle_samples": 3200,
+  "timed_gemms": 12800,
+  "decisions": [
+    {
+      "K": 4096,
+      "N": 11008,
+      "M": 4,
+      "gains_pct": [
+        77.22290718684705,
+        77.41753283818524
+      ],
+      "winner": "marlin",
+      "meaningful_marlin": true
+    },
+    {
+      "K": 4096,
+      "N": 11008,
+      "M": 16,
+      "gains_pct": [
+        74.0340325775224,
+        74.10527139382279
+      ],
+      "winner": "marlin",
+      "meaningful_marlin": true
+    },
+    {
+      "K": 4096,
+      "N": 11008,
+      "M": 64,
+      "gains_pct": [
+        46.74538219169311,
+        46.75540094668299
+      ],
+      "winner": "marlin",
+      "meaningful_marlin": true
+    },
+    {
+      "K": 4096,
+      "N": 11008,
+      "M": 128,
+      "gains_pct": [
+        2.1661683353726535,
+        2.9034692591675904
+      ],
+      "winner": "marlin",
+      "meaningful_marlin": false
+    },
+    {
+      "K": 11008,
+      "N": 4096,
+      "M": 4,
+      "gains_pct": [
+        72.4419128456004,
+        72.43626845939744
+      ],
+      "winner": "marlin",
+      "meaningful_marlin": true
+    },
+    {
+      "K": 11008,
+      "N": 4096,
+      "M": 16,
+      "gains_pct": [
+        71.60024609589098,
+        71.61189887692767
+      ],
+      "winner": "marlin",
+      "meaningful_marlin": true
+    },
+    {
+      "K": 11008,
+      "N": 4096,
+      "M": 64,
+      "gains_pct": [
+        42.45645345238911,
+        42.58013911077278
+      ],
+      "winner": "marlin",
+      "meaningful_marlin": true
+    },
+    {
+      "K": 11008,
+      "N": 4096,
+      "M": 128,
+      "gains_pct": [
+        15.202821987256366,
+        16.80819700918901
+      ],
+      "winner": "marlin",
+      "meaningful_marlin": true
+    }
+  ],
+  "crossover_brackets": [],
+  "max_abs": 0.001968023826520948,
+  "max_rel_l2": 0.000208206180746902
+}

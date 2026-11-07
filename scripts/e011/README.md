@@ -1,0 +1,48 @@
+# E011 endpoint profiling
+
+Status: implementation and local checks complete, GPU target validation and measurements pending. Read the E011 experiment/status record and actual scheduler state before resuming. Corrected E006 A and the E004 FP16 bridge are unchanged. No optimization or dispatch is implemented.
+
+## Scope and method
+
+Eight profiles cover `M=4,128`, `K/N=4096/11008,11008/4096`, corrected A and pre-materialized W_hat cuBLAS. Reuse the frozen E010 preparation and complete-cycle timer. Four independently allocated weight pairs, seeds3–6, capacity128 and nested common activations stay fixed. Mode16, FP16 reconstruction, FP32 reduction and the numerical tolerance are unchanged.
+
+`profile.py --trace` validates all outputs through three direct and three poisoned complete graph cycles. It traces every individual operation and the complete four-operation graph, requiring identical per-matrix kernel sequences. It exports the fourth operation and complete-cycle traces. `plan.target` selects every kernel of the fourth GEMM in cycle100, never a subset of a multi-kernel cuBLAS operation.
+
+Nsight application replay reruns setup and validation, ten direct warmup cycles, and the complete100-cycle graph for every collection pass. The graph includes the same external event nodes and first-output poisoning as E010. A CUDA profiler start/stop window encloses its replay. Skip399 times the traced kernels-per-operation, then collect the entire final operation. Use graph-node mode, strict grid/order matching, cache-control none, clock-control none and dynamic pipeline boost. A tiny calibration has399 fill kernels followed by a unique add kernel, verifying that disabled-profile warmups do not shift target selection. No alternative replay campaign is included.
+
+Profiler instrumentation and node serialization can affect cache service, scheduling and duration. The selected seed6 operation is distinct from an amortized four-matrix application median. No identical cache-line state, traffic attribution to weights alone, or equivalence of profiler and application timing is claimed. Required Marlin scratch/lock handling and cuBLAS private workspace behavior remain unchanged.
+
+## Gates and commands
+
+Use a new shared directory/output root for a fresh experiment. The current isolated root is `/home/hpuvvad/csc548-w4a16-e011-c4-20261107`, with results under `results/e011_c4_20261107`. Verify ARC policy and the actual allocation every session. Every GPU command uses one prun rank/16 threads inside sbatch. Export absolute PROJECT_ROOT at submission. Never infer paths from a spooled script.
+
+1. `prerequisite_arc.sh` verifies c4 ownership/GPU/driver, full E010 handoff, exact dependencies/binaries and actual mapped libraries. It records installed Nsight help and supported metrics, and runs four small composed correctness rows. Inspect its output.
+2. `release_arc.sh` repeats a cheap identity/library and small correctness check if the inspected completed job is no longer a valid dependency. Submit its dependent `validate_arc.sh` immediately, before Slurm purges its dependency record. Preserve rejected submissions.
+3. `validate_arc.sh` verifies the profiler-window calibration, all eight complete-operation traces and selected outputs against E010. Its analyzer writes `TARGETS_VALIDATED` only after passing. Reuse matching E010 sanitizer evidence without repeating historical investigations.
+4. `measure_arc.sh` requires target validation. It runs exactly16 fresh endpoint timing rows, two independent reversed series with ten warmups/100 complete-cycle samples. Timing is outside Nsight. Then collect exactly eight profiles using the33 queried counters in `metrics.txt`, preserving binary reports, raw CSV exports, logs, clock snapshots and before/after identities. Stop on any error.
+
+Local checks:
+
+```sh
+PYTHONDONTWRITEBYTECODE=1 python3 scripts/e011/check_local.py
+python3 scripts/e011/analyze.py results/e011_c4_20261107 --stage validation
+python3 scripts/e011/analyze.py results/e011_c4_20261107
+python3 scripts/e011/check_analysis.py results/e011_c4_20261107
+```
+
+The last three require real GPU evidence. Never manufacture sentinels. A passing CPU-only build or self-check does not validate CUDA. Recheck all selected identities after queueing, because a successful earlier job does not establish a later environment.
+
+## Metrics and normalization
+
+`metrics.txt` is the exact33-counter selection. Hardware names are verified against c4's saved query, launch attributes against its separate launch query. No full metric set or SASS patching is requested. Save actual pass counts and unavailable-field failures, rather than silently changing the selection.
+
+| Group | Units and interpretation |
+|---|---|
+| Duration | Exported ns, converted to us. Sum sequential kernel durations for a complete operation, excluding inter-kernel gaps. Keep separate from graph-event cycle/amortized timing. |
+| DRAM/L2 | Exported bytes and sectors, throughput as percent of sustained peak, L2 hit ratio as percent of sector lookups. Aggregate traffic includes activation/output/workspace and other serviced accesses. |
+| Instructions/compute | Executed warp and tensor instructions, ALU/FMA instruction counts and active cycles as percent of sustained elapsed peak. Tensor activity is not useful FLOP utilization. |
+| Ready work | Active CTAs per elapsed cycle, active warps as percent of active-cycle capacity, eligible warps per active scheduler cycle, issue activity as percent of active-cycle peak. Resource limits do not establish achieved residency. |
+| Resources/local traffic | Grid/block sizes, registers/thread, static/dynamic shared bytes, local load/store sectors. Local requests are not necessarily DRAM misses or evidence of spill cost alone. |
+| Waits | Long/short scoreboard, barrier, math throttle and wait as percent of peak sustained elapsed warp capacity. These are neither mutually exclusive wall-time fractions nor isolated causes. |
+
+`analyze.py` preserves exact raw units and per-kernel values in `profile-analysis.json`. It sums only additive quantities for a multi-kernel operation. Utilization/resources remain arrays by kernel in `endpoint-summary.csv`, avoiding summed percentages or unjustified averages. `comparisons.csv` contains fresh matched timing denominators. `check_analysis.py` rejects incomplete/corrupt evidence and wrong target positions. A source-PC campaign or kernel change requires a separate request.
