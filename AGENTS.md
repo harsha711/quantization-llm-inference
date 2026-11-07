@@ -49,6 +49,11 @@
 - One conditional A/C profile pair shows more ready work with higher instruction/L2 overhead and high replay DRAM throughput. Replay duration differs from application timing. No concrete improved partitioner or store-flush cause is established. Run E005-R2 timing/profile analyzers and negative-data check before interpretation. c10's changed driver/runtime received fresh relevant validation. Preserve all old source/binaries/results.
 - Stop after this confirmation. No additional measurements, E008, automatic dispatch or partition change is authorized. Await the user's next bounded investigation request. Revalidate c10 allocation 328681, do not assume saved state remains current.
 
+## E008 weight reuse distance
+
+- The user authorized one bounded unchanged-kernel A/C experiment after E005-R2. This overrides that completed checkpoint's wait instruction only for E008. Read its predeclared entry. Use M4, both rectangles, fixed G128, fresh seeds3–6, matched operands, independently allocated weights/scales and complete 1/2/4-matrix graph-event cycles, with required workspace handling included.
+- Two reversed independent series, 24 rows/2400 cycle samples. Require at least5% C gain in both series per rectangle/count. Reproduce the single-matrix control before interpreting multi-matrix benefit. No artificial flush, dispatch, partition rewrite or additional optimization. Record mixed results as inconclusive and preserve all earlier evidence.
+
 ## ARC
 
 - Verify current [ARC documentation](https://arcm.csc.ncsu.edu/~mueller/cluster/arc/) and `scontrol show job` each session. Confirm allocation ownership, RUNNING state, nodes, remaining time, and GPU. Saved IDs/nodes are historical. Do no compute on the gateway.

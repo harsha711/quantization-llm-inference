@@ -1,5 +1,7 @@
 # Current status
 
+**E008 is authorized and predeclared from `dd6b9a9`.** Implement only the unchanged-kernel A/C weight-reuse-distance comparison, one/two/four distinct matrices, M4, both rectangles, fresh seeds, two reversed series. See the E008 experiment entry for the fixed 5% per-pattern gate and validation plan. Corrected A remains default. Single next task: validate the cycle harness, then collect the complete E008 series.
+
 **E005-R2 is complete. Both rectangular orientations pass the predeclared investigation gate on c10.** The E006 corrected library is unchanged. E005-R1 and E007 remain negative results, and corrected A remains the default. Starting checkpoint `925be8a`, criteria `192e33a`, harness `5412dbb`, verified prerequisite `f19d83a`, complete timing/profile plan `00b5146`, complete profile evidence/checkers `f86d463`. Documentation and final synchronized handoff commits follow. See [experiment and design record](EXPERIMENTS.md#e005-r2--independent-rectangular-ac-confirmation) and [raw evidence](../results/e005_r2_c10_20261106/).
 
 The fresh M=4/seed 2 confirmation has exactly 16 timing rows/1600 samples: two independent processes with reversed A/C, rectangle and cache-policy order. The gate requires at least 5% lower C no-flush median in each series. Fresh c10 A is the only denominator.
