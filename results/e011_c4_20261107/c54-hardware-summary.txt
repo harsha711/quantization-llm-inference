@@ -1,0 +1,45 @@
+JobId=329042 JobName=e011-c54-info
+   UserId=hpuvvad(473382) GroupId=ncsu(108) MCS_label=N/A
+   Priority=1 Nice=0 Account=(null) QOS=normal
+   JobState=RUNNING Reason=None Dependency=(null)
+   Requeue=1 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=0:0
+   RunTime=00:00:02 TimeLimit=00:02:00 TimeMin=N/A
+   SubmitTime=2026-11-07T12:23:50 EligibleTime=2026-11-07T12:23:50
+   AccrueTime=2026-11-07T12:23:50
+   StartTime=2026-11-07T12:23:50 EndTime=2026-11-07T12:25:50 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2026-11-07T12:23:50 Scheduler=Main
+   Partition=normal AllocNode:Sid=login2:1055646
+   ReqNodeList=c54 ExcNodeList=(null)
+   NodeList=c54
+   BatchHost=c54
+   NumNodes=1 NumCPUs=16 NumTasks=1 CPUs/Task=16 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=16,mem=1M,node=1,billing=16
+   AllocTRES=cpu=16,node=1,billing=16
+   Socks/Node=* NtasksPerN:B:S:C=0:0:*:* CoreSpec=*
+   MinCPUsNode=16 MinMemoryNode=0 MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=NO Contiguous=0 Licenses=(null) LicensesAlloc=(null) Network=(null)
+   Command=/home/hpuvvad/csc548-w4a16-e011-c4-20261107/scripts/e011/inspect_node_arc.sh
+   WorkDir=/home/hpuvvad/csc548-w4a16-e011-c4-20261107
+   StdErr=/home/hpuvvad/csc548-w4a16-e011-c4-20261107/c54-inspect-329042.out
+   StdIn=/dev/null
+   StdOut=/home/hpuvvad/csc548-w4a16-e011-c4-20261107/c54-inspect-329042.out
+   TresPerTask=cpu=16
+   
+
+[prun] Master compute host = c54
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun /bin/hostname  (family=openmpi4)
+c54
+[prun] Master compute host = c54
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun nvidia-smi --query-gpu=name,uuid,driver_version,compute_cap --format=csv (family=openmpi4)
+name, uuid, driver_version, compute_cap
+NVIDIA GeForce RTX 4060 Ti, GPU-1b0a32ec-c00b-236f-e852-30449ecf0a76, 615.71.09, 8.9
+NVIDIA (R) Nsight Compute Command Line Profiler
+Copyright (c) 2018-2026 NVIDIA Corporation
+Version 2026.3.1.0 (build 38829034) (public-release)
+[prun] Master compute host = c54
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun ncu --query-metrics --metrics gpu__time_duration --query-metrics-mode all (family=openmpi4)
+Device NVIDIA GeForce RTX 4060 Ti (AD106)
