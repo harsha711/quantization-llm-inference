@@ -1,3 +1,11 @@
+# E012 predeclared — source-PC attribution
+
+The user authorizes continued work while away after `460ecc0`. E012 is one bounded diagnostic of the unresolved E011 main-loop versus reduction/epilogue/lock question. Corrected A and the frozen E011 cyclic workload remain unchanged. Read the [predeclared design and stopping criteria](EXPERIMENTS.md#e012--bounded-source-pc-attribution-of-corrected-marlin).
+
+Single next task: implement and inspect a cheap c52 capability/identity prerequisite before releasing any real source profiles. No user allocation is active. c4 is occupied and c52 was observed idle in the compatible partition, but actual allocation/GPU/driver must be verified. Source/warp metric queries and source correlation determine whether the bounded method is supported. No optimization or dispatch is authorized by this diagnostic.
+
+E011 and earlier records below are historical completed handoffs. Their wait-for-request statements are superseded only by the user's new authorization for this bounded continuation.
+
 # E011 complete — endpoint profiling
 
 **Keep corrected E006 A unchanged. No kernel change is justified yet.** All eight complete-operation profiles and 16 fresh timing rows pass. Marlin's lead narrows from 3.6–4.4× at M4 to 1.027–1.032× for K4096/N11008 and 1.183–1.209× for K11008/N4096 at M128. Read the [eight-case table and five findings](EXPERIMENTS.md#e011-final-measurements-and-decision).

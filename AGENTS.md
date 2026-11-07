@@ -75,6 +75,12 @@
 
 - E011 is complete at evidence checkpoint `ca574cc`: eight full-operation profiles and 16 fresh timing rows, both positive/negative analyzers pass. No kernel change justified yet. Marlin reads nearly constant DRAM bytes with more M128 instruction/Tensor work; differing cuBLAS selection/service accompanies the orientation gap. Do not claim unique causality or infer a rewrite from logical scratch models. Exact main-loop versus reduction/epilogue/lock critical-path attribution remains unresolved. Preserve the timeout, interrupted profile and successful three-case resume. All job/node IDs are historical. Await a user request; no further profiling, tuning, dispatch or kernel change is authorized.
 
+## E012 authorized continuation while away
+
+- The user explicitly requests continued work after E011. E012 is one bounded source-PC attribution experiment, predeclared in EXPERIMENTS. This overrides the prior wait instruction only for E012. Preserve the corrected A body and all frozen E011 harness/operands/binaries. No optimization, dispatch, partition rewrite or cuBLAS tuning.
+- Query installed source/warp-sampling support and verify PC/source correlation first. At most four diagnostic instruction profiles and eight unpatched sampling profiles at the existing four Marlin shape/M cases. Keep full cyclic preceding accesses on every application-replay pass. Do not silently substitute isolated replay, interpret samples as wall time, or use SASS-patched durations as production latency. Record unsupported/insufficient cases as inconclusive and stop that branch.
+- Verify live allocation and actual c52 hardware/environment. A changed node/driver gets relevant fresh numerical/sanitizer coverage. Use an inspected cheap prerequisite before dependent real profiles. Record all attempts, uncertainty and exact quality criteria. Commit/update the handoff and stop after E012 without pushing or starting another experiment.
+
 ## ARC
 
 - Verify current [ARC documentation](https://arcm.csc.ncsu.edu/~mueller/cluster/arc/) and `scontrol show job` each session. Confirm allocation ownership, RUNNING state, nodes, remaining time, and GPU. Saved IDs/nodes are historical. Do no compute on the gateway.

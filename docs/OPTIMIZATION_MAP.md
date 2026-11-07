@@ -27,3 +27,7 @@ The requested [pre-E008 assessment](BOTTLENECK_ASSESSMENT.md) keeps corrected E0
 | One configuration reproducibly performs poorly across shapes. | A few specializations and dispatch | E003 establishes differences at five M points, but stable decisions across additional K/N/seeds and repeats remain untested. Adds maintenance and selection overhead. Avoid tuning solely to reported cases. | Repeated measurements and validation outside tuning cases, dispatch cost, benefit large enough to justify code. Untested. |
 
 Do not promote every row to a bottleneck explanation. If a trial fails, record why and its revisit condition in the experiment log. A changed compiler, GPU, cache policy, numerical contract, or data layout may justify a new trial only after its effect on the baseline is measured consistently.
+
+## E012 authorized diagnostic
+
+E011 does not isolate M128 main-loop versus reduction/epilogue/lock instruction work or waiting. E012 queries source-PC capability and performs only the predeclared diagnostic if supported. Dynamic instructions and sampled consumer-PC waits answer different questions. Neither alone proves a critical-path speedup opportunity. No partition rewrite or automatic dispatch follows. Keep insufficient samples/unmapped sites explicit and preserve corrected A.
