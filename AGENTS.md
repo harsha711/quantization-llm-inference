@@ -79,7 +79,7 @@
 
 - The user explicitly requests continued work after E011. E012 is one bounded source-PC attribution experiment, predeclared in EXPERIMENTS. This overrides the prior wait instruction only for E012. Preserve the corrected A body and all frozen E011 harness/operands/binaries. No optimization, dispatch, partition rewrite or cuBLAS tuning.
 - Query installed source/warp-sampling support and verify PC/source correlation first. At most four diagnostic instruction profiles and eight unpatched sampling profiles at the existing four Marlin shape/M cases. Keep full cyclic preceding accesses on every application-replay pass. Do not silently substitute isolated replay, interpret samples as wall time, or use SASS-patched durations as production latency. Record unsupported/insufficient cases as inconclusive and stop that branch.
-- Verify live allocation and actual c52 hardware/environment. A changed node/driver gets relevant fresh numerical/sanitizer coverage. Use an inspected cheap prerequisite before dependent real profiles. Record all attempts, uncertainty and exact quality criteria. Commit/update the handoff and stop after E012 without pushing or starting another experiment.
+- Verify live allocation and actual selected-node hardware/environment. A changed node/driver gets relevant fresh numerical/sanitizer coverage. Use an inspected cheap prerequisite before dependent real profiles. Record all attempts, uncertainty and exact quality criteria. Commit/update the handoff and stop after E012 without pushing or starting another experiment.
 
 ## ARC
 

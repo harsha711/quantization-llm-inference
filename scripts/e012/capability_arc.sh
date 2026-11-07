@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #SBATCH --job-name=w4a16-e012-cap
 #SBATCH --partition=rtx5060ti16g
-#SBATCH --nodelist=c52
+#SBATCH --nodelist=c4
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=16
@@ -11,15 +11,15 @@ set -euo pipefail
 [[ "$PROJECT_ROOT" == /* && -f "$PROJECT_ROOT/scripts/e011/profile.py" ]]
 source "$PROJECT_ROOT/scripts/e005_r2/env_arc.sh"
 export PYTHONDONTWRITEBYTECODE=1
-R="$PROJECT_ROOT/results/e012_c52_20261107"
+R="$PROJECT_ROOT/results/e012_c4_20261107"
 mkdir -p "$PROJECT_ROOT/results"
 mkdir "$R"
 scontrol show job "$SLURM_JOB_ID" > "$R/capability-allocation.txt"
 grep -q 'UserId=hpuvvad' "$R/capability-allocation.txt"
 grep -q 'JobState=RUNNING' "$R/capability-allocation.txt"
-grep -q 'NodeList=c52' "$R/capability-allocation.txt"
+grep -q 'NodeList=c4' "$R/capability-allocation.txt"
 prun /bin/hostname > "$R/launcher.log" 2>&1
-[[ $(grep -c '^c52$' "$R/launcher.log") == 1 ]]
+[[ $(grep -c '^c4$' "$R/launcher.log") == 1 ]]
 {
  date --iso-8601=seconds
  lscpu

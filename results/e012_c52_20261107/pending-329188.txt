@@ -1,0 +1,28 @@
+JobId=329188 JobName=w4a16-e012-cap
+   UserId=hpuvvad(473382) GroupId=ncsu(108) MCS_label=N/A
+   Priority=1 Nice=0 Account=(null) QOS=normal
+   JobState=PENDING Reason=Resources Dependency=(null)
+   Requeue=1 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=0:0
+   RunTime=00:00:00 TimeLimit=00:05:00 TimeMin=N/A
+   SubmitTime=2026-11-07T14:16:22 EligibleTime=2026-11-07T14:16:22
+   AccrueTime=2026-11-07T14:16:22
+   StartTime=2026-11-07T16:12:48 EndTime=2026-11-07T16:17:48 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2026-11-07T14:17:52 Scheduler=Main
+   Partition=rtx5060ti16g AllocNode:Sid=login2:1284217
+   ReqNodeList=c52 ExcNodeList=(null)
+   NodeList= SchedNodeList=c52
+   NumNodes=1-1 NumCPUs=16 NumTasks=1 CPUs/Task=16 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=16,mem=1M,node=1,billing=16
+   AllocTRES=(null)
+   Socks/Node=* NtasksPerN:B:S:C=0:0:*:* CoreSpec=*
+   MinCPUsNode=16 MinMemoryNode=0 MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=OK Contiguous=0 Licenses=(null) LicensesAlloc=(null) Network=(null)
+   Command=/home/hpuvvad/csc548-w4a16-e012-c52-20261107/scripts/e012/capability_arc.sh
+   WorkDir=/home/hpuvvad/csc548-w4a16-e012-c52-20261107
+   StdErr=/home/hpuvvad/csc548-w4a16-e012-c52-20261107/capability-329188.out
+   StdIn=/dev/null
+   StdOut=/home/hpuvvad/csc548-w4a16-e012-c52-20261107/capability-329188.out
+   TresPerTask=cpu=16
+   
+
