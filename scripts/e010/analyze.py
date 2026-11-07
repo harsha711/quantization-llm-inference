@@ -149,13 +149,32 @@ def main(r,stage):
             actual = [e['name'] for e in trace['traceEvents'] if e.get('cat') == 'kernel']
             assert actual == v['traced_kernels']
     for tool in ('memcheck','racecheck','synccheck'):
-        rows(tool,SHAPES,MS,names=['marlin'])
+        if tool == 'racecheck':
+            success(tool)
+            checks = [json.loads(line) for line in (r/'racecheck.jsonl').read_text().splitlines()]
+            assert [(v['K'],v['N'],v['M']) for v in checks] == [(k,n,m) for k,n in SHAPES for m in MS]
+            for v in checks:
+                assert (v['config'],v['seed'],v['group'],v['pattern'],v['policy']) == ('A',3,128,'mixed','no_flush')
+                assert v['warmup'] == v['iters'] == 0 and 'samples_us' not in v
+                assert v['repeated_launches'] == 3 and v['graph_check']
+                for key in ('codes_match','scales_match','reconstruction_match','lock_reset','workspace_guards'):
+                    assert v[key]
+                assert v['num_bad'] == 0 and v['checked'] == v['M']*v['N']
+                peer = next(x for x in validation if (x['K'],x['N'],x['M'],x['config']) == (v['K'],v['N'],v['M'],'marlin'))
+                assert v['operand_sha256'] == peer['allocations'][0]['operand_sha256']
+                assert all(value == peer['resources'][0][key] for key,value in v['resources'].items() if key != 'kernel_address')
+        else:
+            rows(tool,SHAPES,MS,names=['marlin'])
         text = (r/(tool+'.log')).read_text()
         assert ('RACECHECK SUMMARY: 0 hazards displayed (0 errors, 0 warnings)' if tool == 'racecheck' else 'ERROR SUMMARY: 0 errors') in text
         if tool == 'racecheck':
             assert '--kernel-name kns=e005_marlin' in text and '--dump-kernel-launches' not in text
+    if (r/'racecheck-composed-attempt1.exit').exists():
+        assert (r/'racecheck-composed-attempt1.exit').read_text().strip() == '143'
+        assert not (r/'racecheck-composed-attempt1.log').read_text().count('RACECHECK SUMMARY:')
+        assert 'timeout 1200 compute-sanitizer --tool racecheck' in (r/'racecheck-stop-process.txt').read_text()
     if stage == 'validation':
-        print('PASS:16 numerical /24 custom-kernel sanitizer rows, eight traced actual specializations, retained CUDA checks')
+        print('PASS:16 numerical /16 complete-cycle memcheck/synccheck and eight single-weight racecheck rows, eight traced actual specializations, retained CUDA checks')
         return
     data = rows('series1',SHAPES,MS,1,True)+rows('series2',SHAPES[::-1],MS[::-1],2,True)
     for label in ('measurement','final'):

@@ -9,12 +9,12 @@ run project-ctest ctest --test-dir build --output-on-failure
 run project-gpu bash scripts/check_inblock.sh
 run validation "${base[@]}" --out "$R/validation.jsonl" --trace --warmup 0 --iters 0
 for tool in memcheck racecheck synccheck; do
- filters=()
  if [[ "$tool" == racecheck ]]; then
-  filters=(--kernel-name kns=e005_marlin)
+  representative_racecheck
+ else
+  run "$tool" compute-sanitizer --tool "$tool" --error-exitcode 99 \
+   "${base[@]}" --out "$R/$tool.jsonl" --implementations marlin --warmup 0 --iters 0
  fi
- run "$tool" compute-sanitizer --tool "$tool" --error-exitcode 99 "${filters[@]}" \
-  "${base[@]}" --out "$R/$tool.jsonl" --implementations marlin --warmup 0 --iters 0
 done
 "$E005_PYTHON" scripts/e010/analyze.py "$R" --stage validation > "$R/validation-check.log"
 touch "$R/VALIDATION_PASSED"
