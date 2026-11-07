@@ -1,0 +1,2 @@
+PASS:36 rows,3600 cycle samples,8400 timed GEMMs, all12 two-series gates, unchanged measured tooling/body, 16 project source hashes, portable host flags and sm120 target.
+PASS: complete/negative analyzers passed locally and ARC. Report table matches comparisons.csv. c10 preservation hashes pass. GPU process table is empty, allocation left running.

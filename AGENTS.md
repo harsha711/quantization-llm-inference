@@ -55,10 +55,11 @@
 - Only repeated-single-matrix cases pass 5% in both series. Two/four-matrix gains are subthreshold or absent. Four-matrix transpose C regresses0.757%/0.431%. Keep A default and close that workload's lead. Preserve C as reuse-dependent experimental configuration, not a general decoding improvement. Retain outliers, including series 2 transpose single-matrix3.413 ms C/7.667 ms A. Medians do not establish tail stability.
 - No new timing, profiles, dispatch, partition rewrite or next optimization is authorized by completed E008. Await a separately requested investigation. Revalidate current allocation, never trust saved328681/c10 state.
 
-## E009 authorized compressed execution comparison
+## E009 completed cyclic baseline comparison
 
-- The user separately authorizes E009 after E008. Read its predeclared experiment record. Compare unchanged corrected A with E004 cuBLAS on the same pre-materialized W_hat and timed GPU dequantization plus cuBLAS. Use one reusable guarded reconstruction buffer and explicit cuBLAS math mode16. No C, kernel change, new profile or dispatch.
-- Preserve E008 seeds3–6/fixed activation, rectangles, M4/G128 and complete-cycle no-artificial-flush method. Exactly36 timing rows in two independent reversed/balanced series,10 warmups/100 samples. The meaningful advantage gate is >=5% lower Marlin median in both series per comparator/shape/count. Validate every composed output, exact reconstruction and reused workspace before timing. Record live/accessed representation sizes and retain outliers. Stop after final evidence/documents/commit.
+- E009 is complete on c4. Read its final design/results record and run the complete/negative-data analyzers before interpretation. All 36 timing rows/3600 cycle samples pass the fixed5% gate versus both W_hat cuBLAS and timed GPU dequantization+cuBLAS in both series. Two/four-matrix speedups are 3.60–4.40× and 7.96–9.33×. Keep corrected A unchanged and preserve all raw data. c10 validation/diagnostic attempts remain separate, with no timings there.
+- Preserve M=4/G128, seeds 3–6, fixed activation, complete cycles, no artificial flush, one reusable unfused temporary and mode 16. All paths compute with W_hat. This measures net compressed execution including kernels/footprints, and the unfused comparison does not isolate fusion alone. No inference/token-throughput, stable-tail or unique-bottleneck claim.
+- Source/binary/dependency/operand identities and fresh c4 validation pass. Measured tooling is frozen by its manifest. The installed launch-dump option caused exit99 from informational records, reproduced by a harmless fill control. Preserve those c10 failures and never repeat that diagnosis without new evidence. Final racecheck has no dump and zero hazards/errors/warnings. Await another request before measurements, tuning, profiles, dispatch or a partition rewrite. Reverify saved allocation 328964/c4 before any future work.
 
 ## ARC
 
