@@ -1,0 +1,12 @@
++ prun timeout 1200 ctest --test-dir build --output-on-failure
+[prun] Master compute host = c4
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun timeout 1200 ctest --test-dir build --output-on-failure (family=openmpi4)
+Internal ctest changing into directory: /home/hpuvvad/csc548-w4a16-e009-c4-20261107/build
+Test project /home/hpuvvad/csc548-w4a16-e009-c4-20261107/build
+    Start 1: test_cpu
+1/1 Test #1: test_cpu .........................   Passed    0.03 sec
+
+100% tests passed, 0 tests failed out of 1
+
+Total Test time (real) =   0.20 sec

@@ -1,0 +1,1 @@
+PASS:18 rectangular numerical rows,18 sanitizer rows (racecheck targets custom kernels), retained CUDA checks

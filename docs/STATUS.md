@@ -1,6 +1,6 @@
 # Current status
 
-E009 is in progress, migrating to c4 after the user reports c10 allocation expiry. All c10 validation ultimately passed and is preserved in `results/e009_c10_20261106/` with frozen tooling and preservation hashes. No c10 timing ran. Allocation328964/c4 is verified RUNNING, scheduled end2026-11-07 15:56:45 Eastern. Next task: restore exact runtime, inspect fresh prerequisite and relevant validation, then run all36 fixed timing rows entirely on c4 and produce the report. New root `results/e009_c4_20261107/`. Benchmark body, corrected A, operands, cuBLAS mode16, numerical tolerances and5% rule stay fixed. No C tuning, profile, dispatch or kernel change.
+E009 is in progress on c4 after c10 allocation expiry. c10 validation and tooling are preserved by `f58923e`, with no timing there. Migration `82b234c` and fresh c4 prerequisite `21d2eec` preserve the benchmark body from `006dac1`. Exact dependencies and six mapped binaries match c10. All nine smoke and18 fresh rectangular numerical rows pass, as do c4 build/CTest/GPU checks. The c4 sanitizer gate and ARC/local validation analyzers pass:18 numerical and18 sanitizer rows, with zero errors/warnings. Next task: run all36 fixed timing rows entirely on c4, then analyze, document and stop. Raw root `results/e009_c4_20261107/`, allocation328964/c4 RUNNING, scheduled end2026-11-07 15:56:45 Eastern. Corrected A, operands, mode16, tolerances and5% rule stay fixed. No C tuning, profile, dispatch or kernel change.
 
 The completed E008 handoff follows.
 

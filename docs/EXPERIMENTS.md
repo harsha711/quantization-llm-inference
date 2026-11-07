@@ -32,6 +32,8 @@ Allocation migration,2026-11-07: The user reports c10 expiry while the session w
 
 c4 prerequisite checkpoint: Migration `82b234c` keeps `scripts/e009/bench.py` byte-identical to harness `006dac1`. Exact pinned packages restore successfully with dependency resolution disabled. All nine small composed cases pass and the prerequisite analyzer passes on c4. All six actual mapped CUDA/cuBLAS/adapter library hashes match c10 exactly, including driver library, while GPU UUID changes as recorded. All113 E006/148 E005-R2/120 E008 handoff files match. The independent c4 full validation gate is released only after inspecting this prerequisite. No c10 timing exists and no historical median is used.
 
+c4 full validation checkpoint: All18 fresh rectangular numerical rows and18 fresh sanitizer rows pass. Memcheck/synccheck are unfiltered and report0 errors. Racecheck targets both custom kernels and reports0 hazards/errors/warnings with exit0 and no launch-dump diagnostic. Each row checks all active outputs through three direct and three poisoned graph cycles, exact individual reconstruction, final unfused temporary identity and guarded reused workspace. Retained sm120 build/CTest/GPU checks pass. ARC and local validation-stage analyzers pass before timing. No numerical/launcher failure or diagnostic retry occurs on c4. The complete36-row timing plan is now released without changing its predeclared order, samples, cache policy or criterion.
+
 Revisit only if: A separately authorized new workload or explanation needs a new controlled experiment. Do not repeat unchanged rows to improve percentages.
 
 ## E008 — Weight reuse distance with preserved A/C
