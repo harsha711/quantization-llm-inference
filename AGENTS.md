@@ -67,11 +67,13 @@
 - Actual-call traces and resource queries verify M4 eight-row 128Kx128N, M16 sixteen-row 128Kx128N, M64/M128 sixty-four-row 64Kx256N, with two 64-row tiles inside one M128 call. Keep corrected E006 body and original A dispatcher unchanged. The transition alone is not a bottleneck explanation.
 - Full four-matrix numerical/memcheck/synccheck and representative one-matrix racecheck cover every shape/M. The original composed racecheck is incomplete exit 143/four rows/11m12s and stays preserved. Do not call it a pass or repeat it unchanged. Final representative racecheck reports 0 hazards/errors/warnings. Measured tooling is frozen. Await another request before further measurement, profiling, tuning, dispatch or kernel work. Reverify saved 328964/c4 rather than trusting the handoff.
 
-## E011 authorized endpoint profiling
+## E011 completed endpoint profiling
 
 - E011 is the only authorized continuation from E010. Profile corrected A and pre-materialized W_hat cuBLAS at M4/M128 on both rectangles, eight cases. Keep four matrices, seeds/prefixes, binaries, mode16, numerical contract and sequential cycles unchanged. No C, tuning, sweep, dispatch or kernel change.
 - Use the installed-capability-verified application replay with no profiler flushing/clock locking, dynamic pipeline boost and strict matching. Target every kernel of the fourth GEMM in the final100-cycle graph, after ten direct cycle warmups. Validate actual complete operations and the profiler-window skip/count first. Reuse E010 safety evidence only with matching identities. Never treat isolated replay counters as E010 cache-state measurements.
 - Fresh timing context is16 rows, two reversed endpoint series, ten warmups/100 complete-cycle samples, separate from profiling. Query targeted metrics first. Preserve raw reports/traces/commands and failed submissions. Sum additive multi-kernel work only, keep utilization/resources per kernel. Distinguish observations, interpretations and unresolved questions. Stop after documented/committed E011, with at most one supported future hypothesis.
+
+- E011 is complete at evidence checkpoint `ca574cc`: eight full-operation profiles and 16 fresh timing rows, both positive/negative analyzers pass. No kernel change justified yet. Marlin reads nearly constant DRAM bytes with more M128 instruction/Tensor work; differing cuBLAS selection/service accompanies the orientation gap. Do not claim unique causality or infer a rewrite from logical scratch models. Exact main-loop versus reduction/epilogue/lock critical-path attribution remains unresolved. Preserve the timeout, interrupted profile and successful three-case resume. All job/node IDs are historical. Await a user request; no further profiling, tuning, dispatch or kernel change is authorized.
 
 ## ARC
 
