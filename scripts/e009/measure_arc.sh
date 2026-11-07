@@ -4,7 +4,7 @@ source "$PROJECT_ROOT/scripts/e009/env_arc.sh"
 [[ -e "$R/VALIDATION_PASSED" ]]
 cycle_base
 sha256sum -c "$R/verified-inputs.sha256" > "$R/measurement-input-check.log"
-sha256sum scripts/e009/* scripts/e005/bench.py scripts/e004/bench.py scripts/e005_r2/{env_arc.sh,identity.py} > "$R/measurement-tooling.sha256"
+sha256sum scripts/e009/* scripts/e008/{bench.py,analyze.py} scripts/e005/bench.py scripts/e004/{bench.py,bridge.cu} src/cuda/{dequant.cu,cublas_gemm.cu} scripts/e005_r2/{env_arc.sh,identity.py} > "$R/measurement-tooling.sha256"
 sha256sum -c "$R/mapped-libraries.sha256" > "$R/measurement-library-check.log"
 clock > "$R/series1-clocks-before.csv"
 run series1 "${base[@]}" --out "$R/series1.jsonl"

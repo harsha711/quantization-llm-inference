@@ -1,6 +1,6 @@
 # Current status
 
-E009 is authorized and in progress from clean `a527d7b`. Next task: implement the bounded corrected-A / pre-materialized-W_hat cuBLAS / timed dequantize-then-cuBLAS comparison in the predeclared E009 record. Verify a cheap c10 composed-path prerequisite before rectangular validation, then the fixed36-row two-series measurement. No C tuning, kernel change, profile or dispatch. Current live check: allocation328681 owned by hpuvvad, RUNNING on c10, scheduled end2026-11-07 02:50:31 Eastern. Reverify before launching.
+E009 is in progress from clean `a527d7b`. Criteria `667e996`, harness `006dac1`, verified prerequisite/contract `98b3b24`. All nine composed smoke rows and18 rectangular numerical rows pass. Retained CUDA build/CTest/GPU checks pass. The new unfiltered sanitizer gate is running, with timing still blocked until all tools pass and the validation-stage analyzer is inspected. Corrected A, E004 bridge, dependencies and all E006/E005-R2/E008 handoff hashes match. Next task: complete this gate, then only the predeclared36-row reversed/balanced measurement and final analysis. No C tuning, kernel change, profile or dispatch. Allocation328681 is owned by hpuvvad and RUNNING on c10, scheduled end2026-11-07 02:50:31 Eastern. Reverify before launching.
 
 The completed E008 handoff follows.
 

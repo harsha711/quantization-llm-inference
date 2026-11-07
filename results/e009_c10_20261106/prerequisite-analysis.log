@@ -1,0 +1,5 @@
++ prun timeout 1200 /tmp/e005-r2-hpuvvad-20261106/bin/python scripts/e009/analyze.py /home/hpuvvad/csc548-w4a16-e009-20261106/results/e009_c10_20261106 --stage prerequisite
+[prun] Master compute host = c10
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun timeout 1200 /tmp/e005-r2-hpuvvad-20261106/bin/python scripts/e009/analyze.py /home/hpuvvad/csc548-w4a16-e009-20261106/results/e009_c10_20261106 --stage prerequisite (family=openmpi4)
+PASS: identity, dependencies, preserved evidence, nine composed smoke rows
