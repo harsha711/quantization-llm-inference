@@ -7,3 +7,5 @@ First inspect `capability_arc.sh` on c4 in one sbatch/prun rank with an exported
 No old source/results are overwritten. An unsupported metric/replay combination is an inconclusive branch, not a reason to substitute an isolated workload or rebuild the kernel.
 
 The original c52-only prerequisite 329188 remains queued without executing after c52 is allocated elsewhere. A later scheduler check finds c4 idle. Preserve the c52 submission/script and cancel only that agent-created pending job, then submit the identical cheap check on c4. No measurements are moved or combined.
+
+`source_inspection_arc.sh` uses one CPU on c54 solely for offline imports of the preserved c4 reports. It performs no GPU workload or metric collection. This lets source/API inspection proceed while hardware prerequisite 329192 waits for c4. Its metadata is separate under `results/e012_source_c54_20261107`.

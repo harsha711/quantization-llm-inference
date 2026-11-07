@@ -22,6 +22,8 @@ Decision and stopping rule: Attribute what the supported data allows, explicitly
 
 Scheduling checkpoint: c52 is idle at the first metadata query but becomes allocated before the five-minute capability job 329188 can start. Its estimated start is 16:12:48. A fresh compatible-node check finds c4 idle. Preserve the pending c52 submission and spooled-script source, cancel only agent-created pending 329188, and move the same cheap stage to a distinct c4 root. No c52 workload or profile executes. This returns to E011's physical GPU if its identity checks pass, and avoids changing the measured environment unnecessarily.
 
+Offline inspection refinement: A new job takes c4 before queued prerequisite 329192 starts. Its scheduler estimate is now 16:17:52. c54 remains idle but cannot execute the fixed sm120 kernel. Use one five-minute, one-CPU c54 job solely to import the existing c4 reports and inspect source/SASS/API correlation. No kernel execution, metric collection or performance result comes from c54. This is the predeclared source-import check moved ahead of the still-queued c4 hardware prerequisite, not a changed measurement environment.
+
 ## E011 — Endpoint profiles with preserved cyclic weight access
 
 Status: complete, 2026-11-07, starting from clean `dd4505a`; complete measurement/analysis checkpoint `ca574cc`. Eight complete profiles and both timing series pass. Decision: no kernel change justified yet. Only this bounded profiling experiment is authorized. Corrected E006 A and E004 pre-materialized FP16 cuBLAS remain unchanged. No kernel change, C configuration, tuning, dispatch, unfused comparator, additional batch or shape is included.
