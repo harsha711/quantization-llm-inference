@@ -61,6 +61,10 @@
 - Preserve M=4/G128, seeds 3–6, fixed activation, complete cycles, no artificial flush, one reusable unfused temporary and mode 16. All paths compute with W_hat. This measures net compressed execution including kernels/footprints, and the unfused comparison does not isolate fusion alone. No inference/token-throughput, stable-tail or unique-bottleneck claim.
 - Source/binary/dependency/operand identities and fresh c4 validation pass. Measured tooling is frozen by its manifest. The installed launch-dump option caused exit99 from informational records, reproduced by a harmless fill control. Preserve those c10 failures and never repeat that diagnosis without new evidence. Final racecheck has no dump and zero hazards/errors/warnings. Await another request before measurements, tuning, profiles, dispatch or a partition rewrite. Reverify saved allocation 328964/c4 before any future work.
 
+## E010 authorized batch crossover
+
+- The user authorized E010 after E009. Read its predeclared record. Fix four distinct matrices and both rectangles, compare corrected A against mode-16 pre-materialized W_hat cuBLAS at M4/16/64/128 with two reversed complete-cycle series. Verify actual specialization/resources at every M. Add one midpoint only for an adjacent agreed crossover bracket. Preserve all previous code/results and numerical rules. No kernel change, dispatch, counter sweep or next experiment.
+
 ## ARC
 
 - Verify current [ARC documentation](https://arcm.csc.ncsu.edu/~mueller/cluster/arc/) and `scontrol show job` each session. Confirm allocation ownership, RUNNING state, nodes, remaining time, and GPU. Saved IDs/nodes are historical. Do no compute on the gateway.
