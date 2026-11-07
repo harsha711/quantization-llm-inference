@@ -1,0 +1,13 @@
+{
+  "status": "matched conditional profiles verified",
+  "profiles": 2,
+  "shape": [
+    4,
+    4096,
+    11008
+  ],
+  "replay_passes": 13.0,
+  "warp_instruction_change_pct": 5.060223855408386,
+  "L2_byte_change_pct": 1.1315381504448663,
+  "automatic_dispatch_authorized": false
+}
