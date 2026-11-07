@@ -106,6 +106,8 @@ def main(r, stage):
         print('PASS: 12 rectangular numerical rows, 12 sanitizer rows and retained CUDA checks')
         return
     success('identity-final')
+    assert (r/'final-e006-check.log').read_text().count(': OK') == 113
+    assert (r/'final-e005-r2-check.log').read_text().count(': OK') == 148
     for name in ('validation','measurement','final'):
         assert (r/(name+'-input-check.log')).read_text().count(': OK') == 5
     data = rows('series1',SHAPES,[1,2,4],'AC',True)

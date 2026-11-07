@@ -13,3 +13,10 @@ run series2 "${base[@]}" --out "$R/series2.jsonl" --shapes 11008,4096 4096,11008
 clock > "$R/series2-clocks-after.csv"
 run identity-final "$E005_PYTHON" scripts/e005_r2/identity.py
 sha256sum -c "$R/verified-inputs.sha256" > "$R/final-input-check.log"
+(cd "$E006_CONTROL"; sha256sum -c results/e006_20261106/handoff.sha256) > "$R/final-e006-check.log"
+(cd /home/hpuvvad/csc548-w4a16-e005-r2-20261106; sha256sum -c results/e005_r2_c10_20261106/handoff.sha256) > "$R/final-e005-r2-check.log"
+cp build/CMakeCache.txt "$R/project-CMakeCache.txt"
+cp build/CMakeFiles/w4a16_bench.dir/flags.make "$R/project-flags.make"
+sha256sum CMakeLists.txt scripts/build.sh build/w4a16_bench build/test_cpu > "$R/project-build.sha256"
+find src include tests -type f -print0 | sort -z | xargs -0 sha256sum > "$R/project-source.sha256"
+scontrol show job "$SLURM_JOB_ID" > "$R/allocation-final.txt"
