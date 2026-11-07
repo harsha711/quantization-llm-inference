@@ -7,6 +7,7 @@ from pathlib import Path
 import sys
 
 from regions import RANGES, source_map, resolve_region, verified_sources
+from check_validation import e011
 
 
 def instances(action, names, mapping):
@@ -56,7 +57,7 @@ def main(args):
     names = args.metrics.read_text().splitlines()
     assert names and len(set(names)) == len(names)
     mapping, source_name = source_map(args.source_csv)
-    assert source_name == action.name(action.NameBase_DEMANGLED)
+    assert e011.kernel_identity(source_name) == e011.kernel_identity(action.name(action.NameBase_DEMANGLED))
     metadata, pcs = instances(action, names, mapping)
     assert pcs, 'No PC instances exported. Do not substitute aggregate counters.'
     result = dict(report=str(args.report), name=action.name(action.NameBase_DEMANGLED), metric_metadata=metadata,
