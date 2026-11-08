@@ -1,0 +1,162 @@
+#!/usr/bin/env python3
+"""E013: two existing M128 tiles, corrected body and complete-cycle timing."""
+import argparse
+import hashlib
+import importlib.util
+import json
+import os
+from pathlib import Path
+import socket
+import subprocess
+
+import numpy as np
+import torch
+
+spec = importlib.util.spec_from_file_location('e010', Path(__file__).resolve().parents[1]/'e010/bench.py')
+e010 = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(e010)
+e005, e004, e008 = e010.e005, e010.e004, e010.e008
+sha = e010.sha
+
+
+def prepare(args, k, n, pattern):
+    cases = [e005.Case(args, k, n, [128], seed, pattern)
+             for seed in range(args.seed_start, args.seed_start+args.matrices)]
+    metadata = []
+    for case in cases:
+        case.a = cases[0].a
+        case.hashes['A'] = cases[0].hashes['A']
+        codes = e004.unpack_marlin(case.packed.cpu().numpy(), k, n, case.ns['get_weight_perm'](4).numpy())
+        inv = np.argsort(np.array(case.ns['get_scale_perms']()[0]))
+        scales = case.scales.cpu().numpy().reshape(-1,64)[:,inv].reshape(k//128,n)
+        wh = ((codes.astype(np.float32)-8)*scales.repeat(128,axis=0).astype(np.float32)).astype(np.float16)
+        assert hashlib.sha256(wh.tobytes()).hexdigest() == case.hashes['W_hat']
+        if case is not cases[0]:
+            activation = case.a.cpu().numpy()
+            case.bridge.e004_reference(activation.ctypes.data, wh.ctypes.data, 128, n, k, case.ref.ctypes.data)
+        case.wh = torch.from_numpy(wh).cuda()
+        del case.flush_buf
+        metadata.append(dict(seed=case.seed, operand_sha256=case.hashes,
+            **{key+'_range': e008.allocation(tensor) for key,tensor in
+               [('packed',case.packed),('scales',case.scales),('wh',case.wh),('output',case.c),
+                ('locks',case.locks_storage),('scratch',case.tmp_storage),('activation',case.a)]},
+            **{key+'_sha256': sha(tensor) for key,tensor in
+               [('packed',case.packed),('scales',case.scales),('wh',case.wh)]}))
+    e008.distinct([metadata[0]['activation_range']]+[v[key+'_range'] for v in metadata
+        for key in ('packed','scales','wh','output','locks','scratch')])
+    if pattern == 'mixed':
+        assert len({v['packed_sha256'] for v in metadata}) == args.matrices
+    return cases, metadata
+
+
+def main(args):
+    assert not args.out.exists()
+    assert os.environ.get('OMPI_COMM_WORLD_SIZE') == '1'
+    assert os.environ.get('OMPI_COMM_WORLD_RANK') == '0'
+    assert torch.get_num_threads() == 16 and torch.__version__ == '2.14.0+cu130'
+    assert torch.version.cuda == '13.0'
+    device = torch.cuda.get_device_properties(0)
+    assert device.name == 'NVIDIA GeForce RTX 5060 Ti'
+    assert torch.cuda.get_device_capability() == (12,0) and device.multi_processor_count == 36
+    identities = {key: hashlib.sha256(getattr(args,key).read_bytes()).hexdigest()
+                  for key in ('local','wheel','bridge')}
+    assert identities['bridge'] == '85f332951a8c24b3eb06594977b3e3d62b7954fa01b986da41ffeff851bfbd3f'
+    assert identities['wheel'] == 'e634b80e72078e964f8bd2ac541d66f2a900920773cf993544609612190bd9a9'
+    print('ENV', json.dumps(dict(host=socket.gethostname(), torch=torch.__version__,
+        cuda=torch.version.cuda, threads=torch.get_num_threads(), affinity=sorted(os.sched_getaffinity(0)),
+        identities=identities)), flush=True)
+    runtime = dict(host=socket.gethostname(), python=__import__('sys').version.split()[0],
+        torch=torch.__version__, cuda=torch.version.cuda, threads=torch.get_num_threads(),
+        gpu=subprocess.check_output(['nvidia-smi','--query-gpu=uuid,driver_version',
+             '--format=csv,noheader'],text=True).strip())
+    assert runtime['python'].startswith('3.11.')
+    stream = torch.cuda.Stream()
+    with torch.cuda.stream(stream), args.out.open('x') as out:
+        for k,n in args.shapes:
+            for pattern in args.patterns:
+                cases, metadata = prepare(args,k,n,pattern)
+                names = ['A','B'] if (e010.SHAPES.index((k,n)) if (k,n) in e010.SHAPES else 0)%2 == 0 else ['B','A']
+                if args.series == 2:
+                    names.reverse()
+                for position,name in enumerate(names):
+                    resources = [case.call(name,128,True) for case in cases]
+
+                    def launch():
+                        for case in cases:
+                            case.call(name,128)
+
+                    def poison():
+                        for case in cases:
+                            case.c.fill_(float('nan'))
+
+                    def verify():
+                        checks = []
+                        for case in cases:
+                            case.check_workspace()
+                            checks.append(dict(**e005.stats(case.c,case.ref), output_sha256=sha(case.c)))
+                        return checks
+
+                    for _ in range(3):
+                        poison(); launch(); torch.cuda.synchronize()
+                        checks = verify()
+                    graph = torch.cuda.CUDAGraph()
+                    with torch.cuda.graph(graph,stream=stream):
+                        launch()
+                    for _ in range(3):
+                        poison(); graph.replay(); torch.cuda.synchronize()
+                        checks = verify()
+                    kernels = []
+                    if args.trace:
+                        with torch.profiler.profile(activities=[torch.profiler.ProfilerActivity.CPU,
+                                torch.profiler.ProfilerActivity.CUDA]) as prof:
+                            launch(); torch.cuda.synchronize()
+                        kernels = [e.name for e in prof.events() if e.device_type == torch.autograd.DeviceType.CUDA]
+                        assert len(kernels) == args.matrices and len(set(kernels)) == 1, kernels
+                        prof.export_chrome_trace(str(args.out.parent/f'{args.out.stem}_{name}_K{k}_N{n}_{pattern}.trace.json'))
+                        checks = verify()
+                    row = dict(M=128,K=k,N=n,capacity=128,group=128,config=name,
+                        matrices=args.matrices,seeds=list(range(args.seed_start,args.seed_start+args.matrices)),
+                        pattern=pattern,series=args.series,order=position,warmup=args.warmup,iters=args.iters,
+                        method='complete_cycle_graph_events',policy='no_artificial_flush',identities=identities,runtime=runtime,
+                        resources=resources,traced_kernels=kernels,allocations=metadata,
+                        direct_cycles=3,poisoned_graph_cycles=3,validation=checks,
+                        codes_match=True,scales_match=True,reconstruction_match=True,
+                        lock_reset=True,workspace_guards=True,l2_bytes=cases[0].bridge.e004_l2(),
+                        activation_sha256=sha(cases[0].a),
+                        live_tensor_storage_bytes=sum(b-a for a,b in [metadata[0]['activation_range']]+
+                            [v[key+'_range'] for v in metadata for key in ('packed','scales','wh','output','locks','scratch')]))
+                    if args.iters:
+                        poison()
+                        row.update(e004.timed(launch,None,args.warmup,args.iters,cases[0].c))
+                        row['post_timing_validation'] = verify()
+                        row['median_per_matrix_us'] = row['median_us']/args.matrices
+                    out.write(json.dumps(row)+'\n'); out.flush()
+                    print('PASS',k,n,name,pattern,row.get('median_us'),flush=True)
+                    del graph
+                del case, cases
+    print('MAPPED_LIBRARIES', '\n'.join(x for x in Path('/proc/self/maps').read_text().splitlines()
+        if any(v in x for v in ('libe005','libe004','libcuda','libcublas','libtorch'))),flush=True)
+
+
+if __name__ == '__main__':
+    p = argparse.ArgumentParser(description=__doc__)
+    for key in ('source','local','wheel','bridge','out'):
+        p.add_argument('--'+key,type=Path,required=True)
+    p.add_argument('--shapes',nargs='+',default=['4096,11008','11008,4096'])
+    p.add_argument('--series',type=int,choices=[1,2],default=1)
+    p.add_argument('--seed-start',type=int,choices=[3,7],default=3)
+    p.add_argument('--matrices',type=int,choices=[1,4],default=4)
+    p.add_argument('--patterns',nargs='+',choices=['mixed','zero_a','zero_w'],default=['mixed'])
+    p.add_argument('--warmup',type=int,default=10)
+    p.add_argument('--iters',type=int,default=100)
+    p.add_argument('--trace',action='store_true')
+    args = p.parse_args()
+    args.configs = ['A','B']
+    args.shapes = [tuple(map(int,x.split(','))) for x in args.shapes]
+    assert len(set(args.shapes)) == len(args.shapes)
+    assert all(k >= 256 and k%128 == n%256 == 0 for k,n in args.shapes)
+    assert (args.warmup,args.iters) in ((0,0),(10,100))
+    assert not args.trace or args.iters == 0
+    if args.iters:
+        assert args.matrices == 4 and args.patterns == ['mixed'] and set(args.shapes) == set(e010.SHAPES)
+    main(args)

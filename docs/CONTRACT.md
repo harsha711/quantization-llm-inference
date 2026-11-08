@@ -1,5 +1,7 @@
 # Numerical and measurement contract
 
+E013 addition: the explicitly requested tile comparison preserves every numerical rule below. Only the selected existing M128 K/N tile and associated thread count differ. Both choices share one freshly compiled library with unchanged corrected E006 device source/SASS. Use fresh matched controls, four-matrix complete cycles, seeds3–6, capacity128, live W_hat buffers, no artificial flush, ten warmups/100 samples and two reversed series. Actual launch tracing and fresh numerical/memcheck/synccheck plus representative racecheck gate timing. Conditional held-out confirmation uses seeds7–10 with the same method. Cross-tile output bits may differ through reduction order, but every output must pass the unchanged FP64 elementwise threshold. A5% lower-latency gate is evaluated per shape in both primary and held-out series. No automatic dispatch, cuBLAS performance comparison or inference claim is added. Historical contracts remain intact.
+
 ## 1. Operation, layout, and quantization
 
 Compute row-major `C[M,N] = A[M,K] * B[K,N]`. A and C use FP16 storage. Original W is FP16. Fused kernels accumulate with FP32 FMA and round the final result to FP16. The CPU reference accumulates in FP64. The study measures controlled kernels and baselines for LLM-like GEMM shapes, not end-to-end model inference.

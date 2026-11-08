@@ -1,5 +1,7 @@
 # Optimization decision map
 
+E013 is explicitly authorized and in validation. It compares the existing M128 64K×256N/256-thread choice with one 64K×128N/128-thread choice, preserving the E006 body, grid/reservation and full-cycle method. Exact device-SASS identity and six small smoke rows pass. No performance conclusion is available yet. [Design](EXPERIMENTS.md#e013--bounded-m128-existing-tile-comparison), [tooling](../scripts/e013/README.md).
+
 2026-11-08 analysis update: [Marlin opportunity assessment](MARLIN_OPPORTUNITIES.md) distinguishes batching/reuse opportunities from unproven kernel headroom. E010 yields 3.81–3.87× higher useful-row throughput at M16 versus M4, without a measured scheduling speedup. Ordered first-valid tile selection leaves existing alternatives untested. Neither observation implements or selects a new default. All historical decisions below remain intact.
 
 Reporting checkpoint: [PROJECT_SYNTHESIS.md](PROJECT_SYNTHESIS.md) now consolidates completed evidence through E012. The next priority is the ACM report and explicit course-requirement reconciliation. No additional optimization, profiling or dispatch is justified or authorized by the synthesis. Historical experiment decisions below remain unchanged.
