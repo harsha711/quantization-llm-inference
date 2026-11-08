@@ -1,3 +1,7 @@
+# E014 authorized — diagnose full-model inference overhead
+
+2026-11-08: the user requests one bounded full-model investigation, starting from clean`0f35672`. [E014 scope](EXPERIMENTS.md#e014--single-request-full-model-execution-overhead) selects pinned Qwen2.5-1.5B in FP16, batch1,128/2048 prompt tokens and64 fixed greedy output tokens. Establish an isolated runtime and inspect baseline timelines before releasing any cache/compile comparison. Preserve corrected Marlin A, the E013 negative result, historical evidence and environments. No new inference speedup is established yet.
+
 # E013 complete — smaller M128 tile regresses
 
 2026-11-08: **keep corrected E006 A and its existing tile selection.** The explicitly requested [E013 comparison](EXPERIMENTS.md#e013-final-results-and-decision) is complete on c4. The existing 64K×128N/128-thread alternative is slower than the selected 64K×256N/256-thread control by 8.451%/7.576% at K4096/N11008 and 8.081%/8.739% for the transpose, across two reversed series. Exactly eight rows/800 complete-cycle samples pass all evidence checks. Neither shape passes the 5% improvement criterion, so held-out timing is correctly omitted. This rejects this tile change under the fixed grid/shared reservation, not all possible optimization.
