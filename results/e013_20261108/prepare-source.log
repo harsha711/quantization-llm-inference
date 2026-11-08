@@ -1,0 +1,5 @@
++ prun timeout 1800 /tmp/e005-r2-hpuvvad-20261106/bin/python scripts/e013/prepare_source.py results/e006_20261106/matched-source.tar.gz /home/hpuvvad/csc548-w4a16-e013-c4-20261108/external/e013
+[prun] Master compute host = c4
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun timeout 1800 /tmp/e005-r2-hpuvvad-20261106/bin/python scripts/e013/prepare_source.py results/e006_20261106/matched-source.tar.gz /home/hpuvvad/csc548-w4a16-e013-c4-20261108/external/e013 (family=openmpi4)
+PASS: exact corrected E006 device source, one host-only tile selection

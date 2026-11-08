@@ -85,6 +85,11 @@
 
 - E012 is complete at evidence checkpoint `181f6fe`. Four instruction captures quantify work, but ambiguous callers leave the majority explanation unresolved. All eight sampling captures fail zero-dropped-data quality, and M128 source coverage is below 95%. Zero overflow is not losslessness. Keep all-ones PC samples in the denominator, never treat saved failed-quality shares as accepted stall/phase time, and do not repeat unchanged 32-cycle sampling. Preserve the successful graph/source support evidence and all failed operational probes. No kernel change justified. Await a user-selected investigation rather than retuning, dispatching or rewriting partitioning.
 
+## E013 completed existing-tile comparison
+
+- E013 is complete on c4. The existing M128 64K×128N/128-thread tile regresses 7.576–8.739% versus 64K×256N/256 threads across both rectangles and two reversed series. Eight rows/800 cycle samples pass. Neither shape clears 5%, so held-out timing is omitted by design. Keep corrected A default.
+- Preserve the exact E006 device body/all 16 SASS functions, failed smoke cleanup/successful unchanged-binary resume, complete numerical/memcheck/synccheck and representative racecheck evidence. Both configurations use 255 registers/thread and query one-block capacity under the fixed shared reservation. No unique critical-path cause or global-optimality claim follows. Source/binary/tooling/results are isolated in scripts/e013 and results/e013_20261108. No additional tile, combined grid/reservation change, profiling, batching implementation or dispatch is authorized by completed E013. Verify live allocation rather than trusting historical 330208–330213/c4 state.
+
 ## ARC
 
 - Verify current [ARC documentation](https://arcm.csc.ncsu.edu/~mueller/cluster/arc/) and `scontrol show job` each session. Confirm allocation ownership, RUNNING state, nodes, remaining time, and GPU. Saved IDs/nodes are historical. Do no compute on the gateway.

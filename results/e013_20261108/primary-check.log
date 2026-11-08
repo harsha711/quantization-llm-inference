@@ -1,0 +1,33 @@
++ prun timeout 1800 /tmp/e005-r2-hpuvvad-20261106/bin/python scripts/e013/analyze.py /home/hpuvvad/csc548-w4a16-e013-c4-20261108/results/e013_20261108 --e006 /home/hpuvvad/csc548-w4a16-e006-20261106/results/e006_20261106 --stage primary
+[prun] Master compute host = c4
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun timeout 1800 /tmp/e005-r2-hpuvvad-20261106/bin/python scripts/e013/analyze.py /home/hpuvvad/csc548-w4a16-e013-c4-20261108/results/e013_20261108 --e006 /home/hpuvvad/csc548-w4a16-e006-20261106/results/e006_20261106 --stage primary (family=openmpi4)
+{
+  "stage": "primary",
+  "primary": [
+    {
+      "K": 4096,
+      "N": 11008,
+      "gains_pct": [
+        -8.451156181976383,
+        -7.576103367996123
+      ],
+      "passes": false
+    },
+    {
+      "K": 11008,
+      "N": 4096,
+      "gains_pct": [
+        -8.080614117796237,
+        -8.739392030730176
+      ],
+      "passes": false
+    }
+  ],
+  "heldout": [],
+  "heldout_required": false,
+  "default": "corrected E006 A",
+  "automatic_dispatch": false,
+  "timed_rows": 8,
+  "restricted_improvements": []
+}

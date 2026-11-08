@@ -1,0 +1,20 @@
+--- a/marlin.cu
++++ b/marlin.cu
+@@ -361,6 +361,17 @@
+       }
+     }
+ 
++    if (e005_mode != 0) {
++      STD_TORCH_CHECK(e005_mode == 1 && prob_m == 128 &&
++          prob_m_split == 128 && thread_m_blocks == 4 && !m_block_size_8 &&
++          a_type == vllm::kFloat16 && b_type == vllm::kU4B8 &&
++          c_type == vllm::kFloat16 && s_type == vllm::kFloat16 &&
++          group_size == 128 && stages == 4 && !has_bias && !has_zp &&
++          !is_zp_float && !use_atomic_add && use_fp32_reduce,
++          "E013 supports only the declared M128 FP16/uint4b8/G128 case");
++      // Compare one existing tile, preserving grid, reservation and device code.
++      thread_tfg = {64, 128, 128};
++    }
+     int num_threads = thread_tfg.num_threads;
+     thread_k = thread_tfg.thread_k;
+     thread_n = thread_tfg.thread_n;

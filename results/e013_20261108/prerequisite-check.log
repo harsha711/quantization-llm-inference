@@ -1,0 +1,5 @@
++ prun timeout 1800 /tmp/e005-r2-hpuvvad-20261106/bin/python scripts/e013/analyze.py /home/hpuvvad/csc548-w4a16-e013-c4-20261108/results/e013_20261108 --e006 /home/hpuvvad/csc548-w4a16-e006-20261106/results/e006_20261106 --stage prerequisite
+[prun] Master compute host = c4
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun timeout 1800 /tmp/e005-r2-hpuvvad-20261106/bin/python scripts/e013/analyze.py /home/hpuvvad/csc548-w4a16-e013-c4-20261108/results/e013_20261108 --e006 /home/hpuvvad/csc548-w4a16-e006-20261106/results/e006_20261106 --stage prerequisite (family=openmpi4)
+PASS: actual A/B launches, six small mixed/zero numerical and graph rows

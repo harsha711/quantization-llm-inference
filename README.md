@@ -2,7 +2,9 @@
 
 **Project synthesis complete:** [findings, contributions and completion gaps](docs/PROJECT_SYNTHESIS.md), [four reproducible figures](docs/figures/project_synthesis/), and [offline reproduction](scripts/reporting/README.md). The record supports a bounded course report. The next task is an ACM report draft, with explicit resolution of the course's serial-baseline/worker-scaling wording. This review adds no experiment. Corrected E006 A remains unchanged.
 
-**Current experiment:** [E012](docs/EXPERIMENTS.md#e012-final-findings-and-decision) is complete: four instruction profiles and eight PC-sampling captures on c4, with the corrected kernel unchanged. Instruction work grows at M128, but ambiguous caller ownership prevents a firm majority attribution. All eight sampling captures fail their predeclared quality gate. **Keep corrected A unchanged.** See [STATUS](docs/STATUS.md), the [tables/design record](docs/EXPERIMENTS.md#e012-final-findings-and-decision), [reproduction](scripts/e012/README.md) and [raw evidence](results/e012_c4_20261107/).
+**Current experiment:** [E013](docs/EXPERIMENTS.md#e013-final-results-and-decision) is complete on c4. The existing smaller M128 tile regresses 7.6–8.7% in both rectangular workloads across two reversed series. Numerical and sanitizer gates pass. **Keep corrected A and its default tile.** No held-out timing is needed because neither primary case clears 5%. See [STATUS](docs/STATUS.md), [reproduction](scripts/e013/README.md) and [raw evidence](results/e013_20261108/). This is a bounded tile-selection result, with the corrected device body unchanged.
+
+The preceding [E012 diagnostic](docs/EXPERIMENTS.md#e012-final-findings-and-decision) remains inconclusive: ambiguous instruction callers and failed sampling-quality gates justify no kernel rewrite. Its original records remain unchanged.
 
 C = A·B with A an M×K FP16 activation matrix and B a K×N weight matrix stored as
 packed INT4 with group-wise FP16 scales. Fused kernels dequantize in registers,

@@ -1,6 +1,6 @@
 # References and applicability
 
-E013 applicability: current [ARC policy](https://arcm.csc.ncsu.edu/~mueller/cluster/arc/) is rechecked2026-11-08. The actual selected GPU/runtime and allocation are recorded by capability330208 rather than inferred from saved IDs. The exact E006 corrected archive, SHA256 `e08be8352dfb500f0417bc8e8eedc74fbf3036ed646a2215713018ebac846e6a`, defines both compiled tile bodies. Its host `marlin.cu` ordered configurations supply the sole candidate, and `marlin_template.h` defines workspace/partition behavior. Fresh compiled SASS matches all16 retained device functions. The resource-pressure hypothesis is an inference from E011, not established causality or an asserted speedup. [E013 reproduction](../scripts/e013/README.md).
+E013 applicability: current [ARC policy](https://arcm.csc.ncsu.edu/~mueller/cluster/arc/) is rechecked 2026-11-08. The actual selected GPU/runtime and allocation are recorded by capability330208 rather than inferred from saved IDs. The exact E006 corrected archive, SHA256 `e08be8352dfb500f0417bc8e8eedc74fbf3036ed646a2215713018ebac846e6a`, defines both compiled tile bodies. Its host `marlin.cu` ordered configurations supply the sole candidate, and `marlin_template.h` defines workspace/partition behavior. Fresh compiled SASS matches all 16 retained device functions. The resource-pressure hypothesis is an inference from E011, not established causality or an asserted speedup. [E013 reproduction](../scripts/e013/README.md).
 
 ## Marlin opportunity assessment, 2026-11-08
 
