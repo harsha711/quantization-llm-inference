@@ -1,0 +1,38 @@
+[
+  {
+    "series": 1,
+    "K": 4096,
+    "N": 11008,
+    "M4_cycle_us": 245.05600333213806,
+    "M16_cycle_us": 257.0880055427551,
+    "latency_growth_pct": 4.909898981054317,
+    "useful_row_throughput_ratio": 3.812795588262229
+  },
+  {
+    "series": 1,
+    "K": 11008,
+    "N": 4096,
+    "M4_cycle_us": 236.83199286460876,
+    "M16_cycle_us": 245.02399563789368,
+    "latency_growth_pct": 3.458993303311053,
+    "useful_row_throughput_ratio": 3.866266114027601
+  },
+  {
+    "series": 2,
+    "K": 4096,
+    "N": 11008,
+    "M4_cycle_us": 243.16800385713577,
+    "M16_cycle_us": 255.264014005661,
+    "latency_growth_pct": 4.9743428233394615,
+    "useful_row_throughput_ratio": 3.810454909664517
+  },
+  {
+    "series": 2,
+    "K": 11008,
+    "N": 4096,
+    "M4_cycle_us": 236.83199286460876,
+    "M16_cycle_us": 244.9280023574829,
+    "latency_growth_pct": 3.4184610765414902,
+    "useful_row_throughput_ratio": 3.8677813983709766
+  }
+]

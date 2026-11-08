@@ -1,5 +1,9 @@
 # References and applicability
 
+## Marlin opportunity assessment, 2026-11-08
+
+[Assessment](MARLIN_OPPORTUNITIES.md): [FreeToken's paper](https://arxiv.org/html/2608.16157v1) and [official repository](https://github.com/FlashML-org/FreeToken) describe MoE expert caching, bandwidth-adaptive CPU/GPU execution, overlapped transfers and consumer-GPU support. These support the orchestration explanation, not a measured improvement to this dense W4A16 kernel or verification of the user's particular 12 GB example. [Original Marlin](https://github.com/IST-DASLab/marlin) documents pipelining, offline layouts and hardware requirements. Its original reduction scheme is not this project's FP32 reduction contract. Local implementation claims use `results/e006_20261106/matched-source.tar.gz`, patched `marlin.cu`, `marlin_template.h` and `dequant.h`. Ordered first-valid tile selection establishes an untested comparison opportunity, not a measured suboptimal choice. E010 raw medians establish only batch throughput, not serving latency.
+
 ## Project synthesis and available course sources
 
 The offline [synthesis](PROJECT_SYNTHESIS.md) reviews evidence through `a78c4a4`. Its [reporting reproduction guide](../scripts/reporting/README.md) and [19-input manifest](../results/reporting/project_synthesis/figure-inputs.sha256) identify saved numeric sources. New figures and comparison tables are derived artifacts, never replacements for experimental raw data. Supporting analysis retains E012's failed sampling quality and all historical limitations.

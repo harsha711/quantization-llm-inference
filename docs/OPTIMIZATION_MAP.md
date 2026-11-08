@@ -1,5 +1,7 @@
 # Optimization decision map
 
+2026-11-08 analysis update: [Marlin opportunity assessment](MARLIN_OPPORTUNITIES.md) distinguishes batching/reuse opportunities from unproven kernel headroom. E010 yields 3.81–3.87× higher useful-row throughput at M16 versus M4, without a measured scheduling speedup. Ordered first-valid tile selection leaves existing alternatives untested. Neither observation implements or selects a new default. All historical decisions below remain intact.
+
 Reporting checkpoint: [PROJECT_SYNTHESIS.md](PROJECT_SYNTHESIS.md) now consolidates completed evidence through E012. The next priority is the ACM report and explicit course-requirement reconciliation. No additional optimization, profiling or dispatch is justified or authorized by the synthesis. Historical experiment decisions below remain unchanged.
 
 This is a decision aid, not an implementation queue. Candidate mechanisms are hypotheses until isolated by measurements. Read [EXPERIMENTS.md](EXPERIMENTS.md) before proposing work. Implement only the experiment requested by the user.

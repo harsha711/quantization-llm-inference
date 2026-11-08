@@ -1,0 +1,6 @@
+COMMAND ['python3', '/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e011/analyze.py', '/tmp/marlin-review-1siwh8ta/e011_c4_20261107']
+PASS: 16 fresh endpoint timing rows/1600 complete-cycle samples and eight context-preserving complete-operation profiles
+EXIT 0
+COMMAND ['python3', '/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e011/check_analysis.py', '/tmp/marlin-review-1siwh8ta/e011_c4_20261107']
+PASS: complete evidence accepted. Missing rows/profiles, wrong operands, aliases, mode, statistics and target position rejected
+EXIT 0

@@ -1,3 +1,9 @@
+# Marlin opportunity assessment — analysis only
+
+2026-11-08: the user requested a repository review of potential Marlin optimizations and hardware versus orchestration. [MARLIN_OPPORTUNITIES.md](MARLIN_OPPORTUNITIES.md) separates demonstrated short-reuse launch benefits, failed general launch/body candidates, unresolved kernel headroom and scheduling opportunities. Recomputing E010 yields 3.81–3.87× higher useful-row throughput at M16 versus M4, with only 3.4–5.0% more cycle time. This is batch scaling, not a measured scheduler or inference speedup. Source inspection identifies first-valid tile selection as a bounded untested question, without implementing it.
+
+Offline analyzers and corruption checks pass on temporary evidence copies. Host-only build/CTest pass. No ARC allocation or GPU test was needed for the assessment. Corrected A, all historical evidence/manifests, and the numerical contract remain unchanged. The analysis is complete. Proposed batching or tile-choice experiments require a separately scoped request, and the ACM reporting deliverables below remain outstanding.
+
 # Project synthesis complete — reporting checkpoint
 
 2026-11-08, experimental endpoint `a78c4a4`, reporting scope `ca5a48e`. [PROJECT_SYNTHESIS.md](PROJECT_SYNTHESIS.md) explains the work through E012 by question/finding, attributes upstream Marlin performance, preserves negative/inconclusive decisions, and reviews both proposals plus the saved course deck. [Offline code/reproduction](../scripts/reporting/README.md) generates four PDF/PNG figures and 108 matched comparisons from 19 unchanged saved inputs. All numbers use within-experiment denominators. No GPU, ARC allocation, source/binary change, original analyzer rewrite, tolerance change or E012 retry occurs.
