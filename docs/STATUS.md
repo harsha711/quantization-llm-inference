@@ -1,3 +1,13 @@
+# Project synthesis complete — reporting checkpoint
+
+2026-11-08, experimental endpoint `a78c4a4`, reporting scope `ca5a48e`. [PROJECT_SYNTHESIS.md](PROJECT_SYNTHESIS.md) explains the work through E012 by question/finding, attributes upstream Marlin performance, preserves negative/inconclusive decisions, and reviews both proposals plus the saved course deck. [Offline code/reproduction](../scripts/reporting/README.md) generates four PDF/PNG figures and 108 matched comparisons from 19 unchanged saved inputs. All numbers use within-experiment denominators. No GPU, ARC allocation, source/binary change, original analyzer rewrite, tolerance change or E012 retry occurs.
+
+The synthesis supports a defensible bounded course report, not a submission-ready claim. Required remaining deliverables are the ACM two-column report, presentation and code package, plus honest resolution of the deck's timed-serial-baseline and worker-scaling instructions. Batch scaling is not worker scaling. A team contribution statement must come from the authors. The proposal's roofline/crossover and FP64/FP32 cuBLAS context remain explicit scope gaps, not fabricated completed results. Current evidence does not justify another optimization.
+
+**Single next task: produce the ACM report draft from the synthesis, and resolve serial-baseline/scaling compliance before final submission.** No new experiment or further profiling is authorized by this reporting task. Local host-only build/CTest and figure self-checks pass. Figure data, PDF/PNG outputs and document links are checked. Raw sources/results remain unchanged. Reporting artifacts and the new integrity manifest are under `results/reporting/project_synthesis/`. Do not rewrite old handoff manifests when current documentation changes.
+
+The E012 and earlier sections below remain historical handoffs. Their former next-task wording is superseded by this reporting checkpoint, while experiment decisions and revisit conditions remain intact.
+
 # E012 complete — source-PC attribution is bounded and inconclusive
 
 **Keep corrected E006 A unchanged. No kernel change is justified by E012.** All twelve profiles are structurally complete and pass numerical/identity checks. The four instruction profiles quantify increased work, but ambiguous inline callers prevent a firm majority attribution. All eight sampling captures fail the predeclared loss-free quality gate. M128 also fails 95% source coverage. Read the [final tables and design decision](EXPERIMENTS.md#e012-final-findings-and-decision).

@@ -1,0 +1,3 @@
+PASS: 108 matched comparisons, 19 unchanged inputs, four PDF/PNG figures
+PASS: LF CSV has identical 108 parsed rows to the first staged CRLF artifact
+PASS: new CSV uses LF and preserves every numeric value

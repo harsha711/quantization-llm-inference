@@ -1,0 +1,11 @@
+PASS: 108 matched comparisons, 19 unchanged inputs, four PDF/PNG figures
+docs/figures/project_synthesis/01_kernel_progression.pdf: OK
+docs/figures/project_synthesis/02_reuse_distance.pdf: OK
+docs/figures/project_synthesis/03_cyclic_baselines.pdf: OK
+docs/figures/project_synthesis/04_batch_speedup.pdf: OK
+docs/figures/project_synthesis/01_kernel_progression.png: OK
+docs/figures/project_synthesis/02_reuse_distance.png: OK
+docs/figures/project_synthesis/03_cyclic_baselines.png: OK
+docs/figures/project_synthesis/04_batch_speedup.png: OK
+results/reporting/project_synthesis/matched-comparisons.csv: OK
+results/reporting/project_synthesis/supporting-evidence.json: OK

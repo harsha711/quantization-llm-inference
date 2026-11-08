@@ -1,0 +1,18 @@
+PASS: 64 local paths in docs/PROJECT_SYNTHESIS.md
+PASS: 8 local paths in scripts/reporting/README.md
+PASS: E001 8 matched comparisons
+PASS: E002 8 matched comparisons
+PASS: E003 40 matched comparisons
+PASS: E008 12 matched comparisons
+PASS: E009 24 matched comparisons
+PASS: E010 16 matched comparisons
+PASS: readable one-page vector PDF 04_batch_speedup.pdf
+PASS: readable one-page vector PDF 01_kernel_progression.pdf
+PASS: readable one-page vector PDF 03_cyclic_baselines.pdf
+PASS: readable one-page vector PDF 02_reuse_distance.pdf
+PASS: original course/proposal hashes match
+PASS: original numerical contract, sources, experimental scripts and tracked results unchanged from a78c4a4 (new reporting paths not yet staged)
+PASS: no GPU experiment, ARC connection, sanitizer or historical analyzer rerun in this reporting task
+PASS: final 65 document paths in docs/PROJECT_SYNTHESIS.md
+PASS: final 8 document paths in scripts/reporting/README.md
+PASS: final reporting self-check, frozen-input corruption rejection and byte-reproducible rendering are in adjacent logs

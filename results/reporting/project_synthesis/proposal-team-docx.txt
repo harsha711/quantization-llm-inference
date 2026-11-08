@@ -1,0 +1,42 @@
+Mixed Precision Quantized CUDA GEMM for LLM Inference
+CSC 548 Parallel Systems |  Samarth Shah(sdshah5), Harsha Puvvadi (hpuvvad)
+Problem and Motivation
+Large language model inference repeatedly evaluates linear layers of the form C = AB, where A contains FP16 activations and B contains model weights. During autoregressive token generation, the batch dimension is often small, so reading the large weight matrix can dominate execution time. This project will implement a W4A16 CUDA GEMM: activations remain FP16, while weights are stored as packed INT4 values with group-wise FP16 scales. The kernel will load compressed weights, unpack and dequantize them on the fly, and immediately multiply them without writing a full FP16 weight matrix to global memory. The goal is to determine when lower weight traffic outweighs dequantization overhead.
+Research Questions
+How much can fused INT4 dequantization and quantization-aware memory access reduce the bandwidth bottleneck relative to conventional FP16 GEMM?
+At which matrix and batch sizes does W4A16 outperform FP16, and where does the operation transition from memory-bound to compute-bound?
+Plan and Method
+We will implement group-wise quantization, two-weights-per-byte INT4 packing, and a CPU reference; then build a naive fused CUDA kernel and progressively add shared-memory tiling, coalesced/vectorized loads, register accumulation, and tile-size tuning. If time permits, we will add double buffering with asynchronous copies. Each version will be profiled before the next optimization. Inspired by MARLIN, the project reproduces its core performance ideas without attempting its complete Tensor Core, striped, or sparse implementation.
+Baselines and Correctness
+Implementation
+Purpose
+cuBLAS FP64 and FP32
+High-accuracy reference and precision-performance context.
+cuBLAS FP16
+Primary optimized inference-performance baseline.
+INT4 dequantize then cuBLAS
+Unfused baseline that materializes FP16 weights in global memory.
+Naive and optimized W4A16
+Measures the benefit of fusion and each CUDA optimization.
+Ozaki GEMM will be considered as an optional accuracy-preserving low-precision comparison, not the primary W4A16 baseline. We will distinguish implementation error, measured against a reference using the same dequantized weights, from quantization error against FP64 and FP16 results.
+Machine and Experimental Evaluation
+Development will use an NVIDIA GeForce RTX 3070 Ti Laptop GPU (Ampere); larger runs may use an available NVIDIA GPU node on NC State's ARC/HPC cluster, with its GPU model, CUDA version, memory, and allocation documented in the final report. We will vary batch size M from 1 to 128 across representative LLM dimensions. CUDA events and Nsight Compute will measure warmed-up latency, bandwidth, occupancy, memory efficiency, and compute utilization. We will report speedup over cuBLAS FP16 and the unfused baseline, FLOP/s, numerical error, and a roofline analysis of the memory-to-compute crossover.
+
+Milestones
+Period
+Deliverable
+Sep 17-27
+Set up CUDA/cuBLAS harness; implement FP64, FP32, FP16, CPU, and unfused baselines.
+Sep 28-Oct 11
+Implement INT4 packing, group-wise scales, and a correct naive fused W4A16 kernel.
+Oct 12-25
+Add shared-memory tiling, coalesced/vectorized loads, and register accumulation.
+Oct 26-Nov 8
+Tune tile/block sizes; profile bottlenecks; attempt double buffering if feasible.
+Nov 9-18
+Run local and ARC/HPC sweeps across batch and matrix sizes, collect speedup, scaling & roofline metrics across all runs and experiments.
+Nov 18-Dec 6
+Analyze correctness and performance, reproduce plots, and finalize report, slides, and code.
+Expected Outcome
+We expect a reproducible map of where compressed-weight traffic improves latency, with profiler evidence showing when unpacking, dequantization, memory access, or computation becomes the bottleneck.
+References  E. Frantar et al., “MARLIN: Mixed-Precision Auto-Regressive Parallel Inference on Large Language Models,” ICML 2024. NVIDIA, CUDA C++ Best Practices Guide. NVIDIA, cuBLAS Documentation.

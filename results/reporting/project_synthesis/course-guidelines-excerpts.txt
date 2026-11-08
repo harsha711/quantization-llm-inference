@@ -1,0 +1,269 @@
+--- PDF page 5 ---
+CSC 548 · Final Project Topics                                                    https://fruitﬂy1026.github.io/CSC548/slides/ﬁnal-project.html#/25
+
+
+
+
+          Team Size & Expectations
+
+              SI NG LE�PER SON
+              You scope, build, and analyze the whole project yourself.
+
+              TWO � PER SON TEAM
+              Allowed — at most two students. More work is expected from a team.
+
+              P L A N F OR THE TEAM FACTOR
+              If you pair up, the scope should be visibly larger — e.g. more optimizations, more platforms
+              compared, or a deeper analysis. Split the work so each person owns a clear part.
+
+
+
+
+5 of 26                                                                                                                            9/5/26, 1:52 PM
+
+--- PDF page 6 ---
+CSC 548 · Final Project Topics                                                               https://fruitﬂy1026.github.io/CSC548/slides/ﬁnal-project.html#/25
+
+
+
+
+          Implementation Rules
+
+              L ANG UAGE
+              Restricted to C or C��.
+
+              PA R AL LEL MODEL
+              No restriction — multithreading (OpenMP, Pthreads), GPU �CUDA, OpenCL�, or distributed (MPI, Hadoop, Spark).
+
+              MACHI N ES
+              Not limited to ARC or Hazel — use any suitable machine (ARC, NCSU HPC / Hazel, a GPU box, …). Mind the available
+              resources.
+
+              P I C K THE MODEL THAT FI TS THE PR OB LEM
+              Shared-memory loops → OpenMP / Pthreads.
+              Massively data-parallel kernels → CUDA.
+              Problem too big for one node → MPI.
+              Match the tool to where the parallelism actually lives.
+
+
+
+
+6 of 26                                                                                                                                       9/5/26, 1:52 PM
+
+--- PDF page 10 ---
+CSC 548 · Final Project Topics                                                              https://fruitﬂy1026.github.io/CSC548/slides/ﬁnal-project.html#/25
+
+
+
+
+           Other Acceptable Topics
+
+              PER FO RMA N C E M O DEL IN G
+              Modeling a parallel algorithm's performance is fine on its own.
+
+              PR OFI LIN G / A N A LYS IS
+              OK � but must come with at least one optimization driven by what you found.
+
+              BEN C HM A RK IN G
+              Acceptable — must compare multiple cases, scenarios, or platforms.
+
+              I/ O O PT IM IZAT IO N
+              I/O-focused optimization work is acceptable.
+
+              CO M MO N T H RE A D
+              Even the "analysis-flavored" topics must end in something concrete — an optimization, a
+              comparison, or a model — not just observations.
+
+
+
+
+10 of 26                                                                                                                                     9/5/26, 1:52 PM
+
+--- PDF page 18 ---
+CSC 548 · Final Project Topics                                                       https://fruitﬂy1026.github.io/CSC548/slides/ﬁnal-project.html#/25
+
+
+
+
+           The Three Deliverables
+
+           Deliverable             What it is                                            Due (Fall 2026�                  Weight
+
+            Proposal                1 page — problem, plan, method, machine               Sep 16,                          no
+                                                                                          11�59pm ET                       grade
+
+            Presentation            4 min talk + 30 sec Q&A, in class                     Nov 18 / 23 /                    10%
+                                                                                          30
+
+            Final Report +          4 pages min. (figs/tables incl., refs excl.) +        Dec 7, 11�59pm                   20%
+            Code                    code, ACM 2-column                                    ET
+
+              WHERE TO SUBMIT
+              All artifacts — proposal, slides, final report + code — go through Moodle.
+
+              READ THE TI MELIN E BACKWARD S
+              The report needs results; results need a working parallel version; that needs a baseline. Start the
+              baseline right after the proposal.
+
+
+
+
+18 of 26                                                                                                                              9/5/26, 1:52 PM
+
+--- PDF page 19 ---
+CSC 548 · Final Project Topics                                                               https://fruitﬂy1026.github.io/CSC548/slides/ﬁnal-project.html#/25
+
+
+
+
+           Writing the Final Report
+
+              F O RMAT
+              4 pages minimum (including figures/tables, excluding references), ACM 2-column template —
+              LaTeX �Overleaf) or Word. Submit the code alongside it.
+
+           A typical structure: problem & motivation → baseline & method → parallel design →
+           experimental setup → results (speedup / scaling) → analysis & conclusion.
+              SHOW, DON'T CL AIM
+              Include the things a reader needs to believe you: • machine & thread/GPU/node counts
+              • baseline timing & how you measured
+              • speedup and a scaling plot
+              • what the profiler said you fixed
+
+
+
+
+19 of 26                                                                                                                                      9/5/26, 1:52 PM
+
+--- PDF page 22 ---
+CSC 548 · Final Project Topics                                              https://fruitﬂy1026.github.io/CSC548/slides/ﬁnal-project.html#/25
+
+
+
+
+           Baseline First, Then Profile
+
+              WOR KF LOW
+              1. Correct serial baseline + timing.
+              2. Profile to find the hot spot.
+              3. Parallelize / optimize that spot.
+              4. Re-measure; verify results still correct.
+              5. Sweep threads / cores / problem size.
+
+           Never optimize before you have measured. The profiler, not intuition, tells you where the time
+           goes.
+                    Baseline + time
+
+
+                        Profile
+
+
+                  Parallelize hot spot
+
+
+                  Re-measure + verify
+
+
+                     Scaling study
+
+
+
+
+22 of 26                                                                                                                     9/5/26, 1:52 PM
+
+--- PDF page 23 ---
+CSC 548 · Final Project Topics                                                                       https://fruitﬂy1026.github.io/CSC548/slides/ﬁnal-project.html#/25
+
+
+
+
+           Show Speedup & Scaling                                                                                                  Resume presentation
+
+
+
+                     SP EE D UP
+                      Sp = T1 /Tp      — serial time over parallel time on p workers.
+
+                     STRO NG VS. WEA K SCA LING
+                     Strong: fixed problem, more workers. Weak: grow the problem with the workers.
+
+           Amdahl's law caps strong scaling by the serial fraction — expect curves to bend, and say why.
+                                                 ideal
+           speedup
+
+
+
+
+                                        measured
+
+
+
+
+                           threads / cores (p)
+
+           Plot measured vs. ideal; explain the gap.
+
+
+
+
+23 of 26                                                                                                                                              9/5/26, 1:52 PM
+
+--- PDF page 24 ---
+CSC 548 · Final Project Topics                                                       https://fruitﬂy1026.github.io/CSC548/slides/ﬁnal-project.html#/25
+
+
+
+
+           Common Pitfalls to Avoid
+
+              NO BASELINE
+              Speedup is meaningless without a correct, timed serial reference.
+
+              WR ON G AN SWER S, FAST
+              Always verify the parallel output matches the baseline.
+
+              SI NG LE DATA POIN T
+              One thread count tells you nothing — sweep p and problem size.
+
+              OV ER� SCOPING
+              Too ambitious → no results. Narrow it so you can finish and measure.
+
+              O PTI MI Z ING B LIND
+              Tuning before profiling wastes effort on cold code.
+
+              L ATE START
+              Leaving experiments to the last week leaves no room to debug.
+
+
+
+
+24 of 26                                                                                                                              9/5/26, 1:52 PM
+
+--- PDF page 25 ---
+CSC 548 · Final Project Topics                                                    https://fruitﬂy1026.github.io/CSC548/slides/ﬁnal-project.html#/25
+
+
+
+
+           Final Project — Big Picture
+
+              C HO OSE
+              A real C/C�� workload to accelerate or a paper to reproduce.
+
+              BU I L D
+              Baseline → profile → parallelize with OpenMP / CUDA / MPI on a suitable machine.
+
+              MEAS UR E
+              Speedup & scaling; verify correctness at every step.
+
+              D EL I VER
+              1-pg proposal → 4-min talk + 30 sec Q&A �10%� � 4-pg ACM report + code (20%�, all on Moodle.
+
+              O NE SENTENCE
+              Pick something measurable, baseline it, profile it, parallelize the hot spot, and report honest
+              speedup & scaling.
+
+
+
+
+25 of 26                                                                                                                           9/5/26, 1:52 PM

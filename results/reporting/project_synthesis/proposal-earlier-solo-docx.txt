@@ -1,0 +1,26 @@
+Mixed Precision Quantized CUDA GEMM for LLM Inference
+CSC 548 Parallel Systems Final Project Proposal  |  Harsha Vardhan Puvvadi
+Problem and Motivation
+Large language model inference repeatedly evaluates linear layers of the form C = AB, where A contains FP16 activations and B contains model weights. During autoregressive token generation, the batch dimension is often small, so reading the large weight matrix can dominate execution time. This project will implement a W4A16 CUDA GEMM: activations remain FP16, while weights are stored as packed INT4 values with group-wise FP16 scales. The kernel will load compressed weights, unpack and dequantize them on the fly, and immediately multiply them without writing a full FP16 weight matrix to global memory. The goal is to determine when lower weight traffic outweighs dequantization overhead.
+Research Questions
+1. How much can fused INT4 dequantization and quantization-aware memory access reduce the bandwidth bottleneck relative to conventional FP16 GEMM?
+2. At which matrix and batch sizes does W4A16 outperform FP16, and where does the operation transition from memory-bound to compute-bound?
+Plan and Method
+We will first implement weight quantization, two-weights-per-byte INT4 packing, and a correct CPU reference. We will then build a naive fused CUDA kernel and progressively add shared-memory tiling, coalesced or vectorized loads, register accumulation, improved tile dimensions, and, if time permits, double buffering with asynchronous copies. We will profile each version before applying the next optimization. The project is inspired by MARLIN but will reproduce its major performance principles at a manageable scale rather than its complete Tensor Core, striped-partitioning, or sparse implementation.
+Baselines and Correctness
+Implementation
+Purpose
+cuBLAS FP64 and FP32
+High-accuracy reference and precision-performance context.
+cuBLAS FP16
+Primary optimized inference-performance baseline.
+INT4 dequantize then cuBLAS
+Unfused baseline that materializes FP16 weights in global memory.
+Naive and optimized W4A16
+Measures the benefit of fusion and each CUDA optimization.
+An existing Ozaki GEMM implementation will be examined as an optional accuracy-preserving low-precision comparison, but it is not the primary W4A16 baseline. Kernel correctness will be checked against a reference using the same dequantized weights, while quantization error will be measured separately against FP64 and FP16 results.
+Machine and Experimental Evaluation
+Development and experiments will use an NVIDIA GeForce RTX 3070 Ti Laptop GPU (Ampere) with CUDA C++ and cuBLAS; an NCSU GPU resource may be used for supplementary runs if available. We will sweep batch sizes M = 1, 2, 4, 8, 16, 32, 64, and 128 and representative LLM dimensions for K and N. CUDA events will measure warmed-up repeated execution, and Nsight Compute will report achieved bandwidth, occupancy, memory efficiency, and compute utilization. Results will include latency, speedup over cuBLAS FP16 and the unfused baseline, effective bandwidth, achieved FLOP/s, numerical error, and a roofline-style explanation of the memory-to-compute crossover.
+Expected Outcome
+The expected result is not universal superiority over cuBLAS, but a reproducible characterization of the regimes in which compressed-weight traffic improves latency, together with profiler evidence explaining where unpacking, dequantization, memory access, or compute becomes the limiting factor.
+References  E. Frantar et al., “MARLIN: Mixed-Precision Auto-Regressive Parallel Inference on Large Language Models,” ICML 2024. NVIDIA, CUDA C++ Best Practices Guide. NVIDIA, cuBLAS Documentation.

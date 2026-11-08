@@ -1,0 +1,2 @@
+PASS: changed frozen input rejected before any derived output
+PASS: test used only temporary files, with no historical input mutation

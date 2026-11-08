@@ -1,0 +1,32 @@
+{
+  "E001": {
+    "comparisons": 8,
+    "speedup_min": 0.7484581947875839,
+    "speedup_max": 3.852537313432836
+  },
+  "E002": {
+    "comparisons": 8,
+    "speedup_min": 1.0403726708074534,
+    "speedup_max": 1.3267776096822994
+  },
+  "E003": {
+    "comparisons": 40,
+    "speedup_min": 0.50814332247557,
+    "speedup_max": 1.7454094239945466
+  },
+  "E008": {
+    "comparisons": 12,
+    "speedup_min": 0.9924902206136638,
+    "speedup_max": 1.1551724417442815
+  },
+  "E009": {
+    "comparisons": 24,
+    "speedup_min": 3.600907629318438,
+    "speedup_max": 20.55944938026393
+  },
+  "E010": {
+    "comparisons": 16,
+    "speedup_min": 1.0221413012095677,
+    "speedup_max": 4.428214122197081
+  }
+}

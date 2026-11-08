@@ -1,0 +1,9 @@
+nvcc not found: building host-only targets
+-- No CUDA compiler found: building host-only targets (test_cpu).
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/harsha/Documents/ncsu/sem 3/548/project/proj/build
+Consolidate compiler generated dependencies of target w4a16_host
+[ 66%] Built target w4a16_host
+Consolidate compiler generated dependencies of target test_cpu
+[100%] Built target test_cpu

@@ -2,6 +2,8 @@
 
 ## Every session
 
+- Reporting checkpoint: [PROJECT_SYNTHESIS.md](docs/PROJECT_SYNTHESIS.md) and [offline figures](scripts/reporting/README.md) synthesize completed E001–E012. Read them before preparing the final report. Keep upstream performance separate from our contributions, practical 5% gates separate from winner reversals, and batch scaling separate from worker scaling. Next task is the ACM report draft and resolution of the saved course requirements. This checkpoint authorizes no new GPU run or E012 retry. Historical manifests stay immutable. Reporting inputs/outputs have their own manifest.
+
 - Read `README.md`, `docs/STATUS.md`, `docs/CONTRACT.md`, and relevant `docs/EXPERIMENTS.md` entries before editing. Consult `docs/OPTIMIZATION_MAP.md` and `docs/REFERENCES.md` before selecting/interpreting experiments. Verify the handoff against `git status`, `git log`, code, and raw evidence.
 - Implement only the requested experiment. Choose from measured evidence, state hypothesis and success criterion before implementation, and change one main optimization at a time. Propose other optimizations separately and wait for a request.
 - Preserve baseline implementations and raw records, especially `results/baseline_*` and `results/ncu/`. Never silently change numerical tolerance, layout, or benchmark conditions. Rerun every series point when executable, flags, kernel, ranks/threads, placement, or topology changes.

@@ -1,0 +1,36 @@
+[
+  {
+    "original_path": "/home/harsha/Documents/ncsu/sem 3/548/project/CSC548_Project_Proposal.pdf",
+    "sha256": "dab4b460e219829babab787764899aea1e73dae17db515e6707c72d729638b8e",
+    "extracted_text": "proposal-team-pdf.txt",
+    "pdf_pages": null
+  },
+  {
+    "original_path": "/home/harsha/Documents/ncsu/sem 3/548/project/CSC548_Project_Proposal.docx",
+    "sha256": "325d5d51be1f6a0b3c8141436cd41c61a4890c9db40fc93ba5c3a9843b226cf6",
+    "extracted_text": "proposal-team-docx.txt",
+    "pdf_pages": null
+  },
+  {
+    "original_path": "/home/harsha/Documents/ncsu/sem 3/548/project/CSC548_W4A16_CUDA_GEMM_Proposal.docx",
+    "sha256": "77a93b303fc04ceef0a2f4e0b74698d87a6a651c61d880a73e60b959006b6d2e",
+    "extracted_text": "proposal-earlier-solo-docx.txt",
+    "pdf_pages": null
+  },
+  {
+    "original_path": "/home/harsha/Documents/ncsu/sem 3/548/project guidelines/CSC 548 \u00b7 Final Project Topics.pdf",
+    "sha256": "10a4ba1b8be18a180d73dabd2ed837a0daff9b568804081af69e49924369a839",
+    "extracted_text": "course-guidelines-excerpts.txt",
+    "pdf_pages": [
+      5,
+      6,
+      10,
+      18,
+      19,
+      22,
+      23,
+      24,
+      25
+    ]
+  }
+]

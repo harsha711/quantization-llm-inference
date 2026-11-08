@@ -1,5 +1,7 @@
 # Optimization decision map
 
+Reporting checkpoint: [PROJECT_SYNTHESIS.md](PROJECT_SYNTHESIS.md) now consolidates completed evidence through E012. The next priority is the ACM report and explicit course-requirement reconciliation. No additional optimization, profiling or dispatch is justified or authorized by the synthesis. Historical experiment decisions below remain unchanged.
+
 This is a decision aid, not an implementation queue. Candidate mechanisms are hypotheses until isolated by measurements. Read [EXPERIMENTS.md](EXPERIMENTS.md) before proposing work. Implement only the experiment requested by the user.
 
 E001–E004 are complete. Original E005 remains stopped at its failed external racecheck gate. E006 supplies a bounded synchronization correction. E005-R1 rejects B/C under its predeclared square-case criterion. The user then authorized continued work while away. **E007 is complete and rejected under its primary latency criterion.** Both higher concurrency and terminal-fetch predication have now failed their bounded square-case targets. Preserve these negative results and choose any future task from new evidence, rather than repeating either approach unchanged.

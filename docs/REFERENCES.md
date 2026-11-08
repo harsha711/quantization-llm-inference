@@ -1,5 +1,11 @@
 # References and applicability
 
+## Project synthesis and available course sources
+
+The offline [synthesis](PROJECT_SYNTHESIS.md) reviews evidence through `a78c4a4`. Its [reporting reproduction guide](../scripts/reporting/README.md) and [19-input manifest](../results/reporting/project_synthesis/figure-inputs.sha256) identify saved numeric sources. New figures and comparison tables are derived artifacts, never replacements for experimental raw data. Supporting analysis retains E012's failed sampling quality and all historical limitations.
+
+The available team proposal PDF/DOCX, earlier solo proposal DOCX, and Fall 2026 CSC 548 final-project deck are recorded with original paths and SHA256 values in [requirements-sources.json](../results/reporting/project_synthesis/requirements-sources.json). Portable [course-page extracts](../results/reporting/project_synthesis/course-guidelines-excerpts.txt) establish the ACM report/code, presentation, C/C++ implementation, baseline, speedup/scaling and team-ownership expectations. They do not establish current Moodle state, submitted proposal identity, or acceptance of batch scaling as worker scaling. Proposed roofline/FP64-FP32 context are scope commitments distinguished from generic course requirements. No new hardware assumption or live external documentation claim is introduced by this reporting review.
+
 Documentation checked on 2026-11-06. Live manuals can change. Installed-tool versions, supported metrics, and runtime attributes in each result directory are the authority for what was actually measured. Sources establish mechanisms or API behavior, not project speedups.
 
 | Source | Specific idea supported | Application and limits here |
