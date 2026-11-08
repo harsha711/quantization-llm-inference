@@ -1,0 +1,6 @@
+JobIDRaw|State|ExitCode|SubmitLine
+330278|COMPLETED|0:0|sbatch --parsable --export=ALL,PROJECT_ROOT=/home/hpuvvad/csc548-w4a16-e014-c4-20261108 --output=setup-slurm-%j.log scripts/e014/setup_arc.sh
+330280|COMPLETED|0:0|sbatch --parsable --dependency=afterok:330278 --export=ALL,PROJECT_ROOT=/home/hpuvvad/csc548-w4a16-e014-c4-20261108 --output=diagnose-slurm-%j.log scripts/e014/diagnose_arc.sh
+330282|FAILED|1:0|sbatch --parsable --dependency=afterok:330280 --export=ALL,PROJECT_ROOT=/home/hpuvvad/csc548-w4a16-e014-c4-20261108 --output=validation-slurm-%j.log scripts/e014/validate_arc.sh
+330286|FAILED|1:0|sbatch --parsable --export=ALL,PROJECT_ROOT=/home/hpuvvad/csc548-w4a16-e014-c4-20261108 --output=seal-slurm-%j.log scripts/e014/seal_arc.sh
+             JOBID     STATE      PARTITION            NAME     NODELIST(REASON)

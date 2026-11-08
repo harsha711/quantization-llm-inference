@@ -90,6 +90,11 @@
 - E013 is complete on c4. The existing M128 64K×128N/128-thread tile regresses 7.576–8.739% versus 64K×256N/256 threads across both rectangles and two reversed series. Eight rows/800 cycle samples pass. Neither shape clears 5%, so held-out timing is omitted by design. Keep corrected A default.
 - Preserve the exact E006 device body/all 16 SASS functions, failed smoke cleanup/successful unchanged-binary resume, complete numerical/memcheck/synccheck and representative racecheck evidence. Both configurations use 255 registers/thread and query one-block capacity under the fixed shared reservation. No unique critical-path cause or global-optimality claim follows. Source/binary/tooling/results are isolated in scripts/e013 and results/e013_20261108. No additional tile, combined grid/reservation change, profiling, batching implementation or dispatch is authorized by completed E013. Verify live allocation rather than trusting historical 330208–330213/c4 state.
 
+## E014 completed full-model investigation
+
+- E014 is complete at its predeclared numerical gate. Read [INFERENCE_OVERHEAD.md](docs/INFERENCE_OVERHEAD.md) and run the stopped/negative analyzers before interpreting results. Static eager caching passes both contexts; compiled static decode has actual graph replay at 128 but fails the elementwise logit bound at 2048 (415 values), despite exact tokens and passing relative L2. No primary/held-out timing or accepted inference speedup exists. Preserve failed diagnostics, frozen inputs and the unchanged GEMM contract/corrected Marlin A.
+- The failed tensor itself was not retained by the original validator; do not invent error indices or claim post-failure checks. Keep the preservation-job negative-check failure distinct from the corrected offline pass. Stop after E014. No tolerance relaxation, passing-subset timing, unchanged retry, compiler-mode search, quantization/speculation or kernel tuning is authorized. Any new investigation needs a separately requested bounded question.
+
 ## ARC
 
 - Verify current [ARC documentation](https://arcm.csc.ncsu.edu/~mueller/cluster/arc/) and `scontrol show job` each session. Confirm allocation ownership, RUNNING state, nodes, remaining time, and GPU. Saved IDs/nodes are historical. Do no compute on the gateway.

@@ -105,6 +105,9 @@ class Runner:
         torch.cuda.synchronize()
         self.setup_s = time.perf_counter()-start
         self.decode = self.eager_decode
+        if variant == 'C':
+            torch._dynamo.config.suppress_errors = False
+            self.decode = torch.compile(self.eager_decode,mode='reduce-overhead',fullgraph=True,dynamic=False)
 
     def bias(self, positions, kv_len):
         padded = (kv_len+7)//8*8
@@ -152,6 +155,8 @@ class Runner:
                 self.position.fill_(self.length+i-1)
                 kv_len = self.length+i if self.variant == 'A' else self.capacity
                 bias = self.bias(self.position,kv_len)
+                if self.variant == 'C':
+                    torch.compiler.cudagraph_mark_step_begin()
                 step_logits,next_token = self.decode(self.input_token,self.position,bias)
                 tokens[i].copy_(next_token[0,0])
                 self.input_token.copy_(next_token)
@@ -164,6 +169,8 @@ class Runner:
             output_text = self.workload.tokenizer.decode(output_ids,skip_special_tokens=False)
         end = time.perf_counter()
         assert output_ids[0] == first and len(output_ids) == generated
+        cache_length = int(self.cache.get_seq_length())
+        assert cache_length == self.length+generated-1
         return dict(prompt=prompt_name,context=self.length,generated=generated,decode_forwards=generated-1,
             input_ids=ids,input_sha256=hashlib.sha256(json.dumps(ids).encode()).hexdigest(),
             output_ids=output_ids,output_text=output_text,eos_positions=[i for i,x in enumerate(output_ids) if x in self.workload.eos],
@@ -174,4 +181,5 @@ class Runner:
             peak_allocated=torch.cuda.max_memory_allocated(),peak_reserved=torch.cuda.max_memory_reserved(),
             device_total=torch.cuda.get_device_properties(0).total_memory,
             cache_class=type(self.cache).__name__,static_capacity=self.capacity if self.variant != 'A' else None,
+            cache_length=cache_length,
             logits=torch.stack(saved) if capture_logits else None)

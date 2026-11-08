@@ -1,0 +1,16 @@
+{
+  "status": "stopped at full-model numerical gate, no timing campaign released",
+  "failed_variant": "C",
+  "failed_context": 2048,
+  "bad_logits": 415,
+  "logits_checked": 9723904,
+  "failing_fraction": 4.267833166596462e-05,
+  "relative_l2": 0.0019485872260154944,
+  "max_abs": 0.0625,
+  "greedy_token_assertion_preceded_failure": true,
+  "comparison_timing_samples": 0,
+  "heldout_timing_samples": 0,
+  "accepted_speedup": null,
+  "unchanged_precision": "FP16 parameters and KV across all variants",
+  "limitation": "Failed C2048 tensor values were not saved by the original fail-fast validator. Counts/norm/max and compiler diagnostics survive. No post-failure weight rehash or C2048 timeline is claimed."
+}

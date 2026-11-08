@@ -1,0 +1,12 @@
++ prun timeout 1800 /tmp/e014-hpuvvad-20261108/bin/python scripts/e014/validate.py /home/hpuvvad/csc548-w4a16-e014-c4-20261108/results/e014_20261108 --variant B --context 2048
+[prun] Master compute host = c4
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun timeout 1800 /tmp/e014-hpuvvad-20261108/bin/python scripts/e014/validate.py /home/hpuvvad/csc548-w4a16-e014-c4-20261108/results/e014_20261108 --variant B --context 2048 (family=openmpi4)
+WARMUP 0 1.5070833300706 {}
+WARMUP 1 1.0892603900283575 {}
+WARMUP 2 1.0885321740061045 {}
+PASS numerical/output B 2048 primary 0.0
+PASS numerical/output B 2048 heldout 0.0
+USDT:2026-11-08 18:06:28 65567:65567 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-08 18:06:28 65567:65567 SyncActivityProfilerHandler.cpp:46] profiler_stop
+PASS validation_B_2048 {}

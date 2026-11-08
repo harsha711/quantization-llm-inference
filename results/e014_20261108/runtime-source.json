@@ -1,0 +1,42 @@
+{
+  "transformers.cache_utils": {
+    "path": "/tmp/e014-hpuvvad-20261108/lib64/python3.11/site-packages/transformers/cache_utils.py",
+    "sha256": "f4e11caf14c75bdefa5e3003b93ef0e8b97fb6103375705ad944b0b344d7da8a"
+  },
+  "transformers.masking_utils": {
+    "path": "/tmp/e014-hpuvvad-20261108/lib64/python3.11/site-packages/transformers/masking_utils.py",
+    "sha256": "7a963feed8173b8265298dd24350c166222ce6b4719442fce48ab414d0478a6a"
+  },
+  "transformers.models.qwen2.modeling_qwen2": {
+    "path": "/tmp/e014-hpuvvad-20261108/lib64/python3.11/site-packages/transformers/models/qwen2/modeling_qwen2.py",
+    "sha256": "a59fa06524227361fb401baf4d177124a27aec146bc01ec931235a9abbab17cb"
+  },
+  "transformers.integrations.sdpa_attention": {
+    "path": "/tmp/e014-hpuvvad-20261108/lib64/python3.11/site-packages/transformers/integrations/sdpa_attention.py",
+    "sha256": "dc5abe49a98dec3b9026739dfbf2e9a8f3e5272b2916b3c2d404727ac931a013"
+  },
+  "torch/_dynamo/convert_frame.py": {
+    "path": "/tmp/e014-hpuvvad-20261108/lib64/python3.11/site-packages/torch/_dynamo/convert_frame.py",
+    "sha256": "b453c9d88aae46cf94198d4a87acc1c58d3e115949879bd4a32f1b516778024f"
+  },
+  "torch/_dynamo/eval_frame.py": {
+    "path": "/tmp/e014-hpuvvad-20261108/lib64/python3.11/site-packages/torch/_dynamo/eval_frame.py",
+    "sha256": "b4cfb1113a1681586470222b5dd71d7c6e3e06e1bda2e129c2abcadf75487e74"
+  },
+  "torch/_inductor/compile_fx.py": {
+    "path": "/tmp/e014-hpuvvad-20261108/lib64/python3.11/site-packages/torch/_inductor/compile_fx.py",
+    "sha256": "4e5b593e018c6bd6f69062483d524b64820ab272351fbf073b7ec118a66598f8"
+  },
+  "torch/_inductor/cudagraph_trees.py": {
+    "path": "/tmp/e014-hpuvvad-20261108/lib64/python3.11/site-packages/torch/_inductor/cudagraph_trees.py",
+    "sha256": "7cab9ba4338305b10c792ffc7389898b46623a8e87052928158581b33e413e76"
+  },
+  "torch/_inductor/config.py": {
+    "path": "/tmp/e014-hpuvvad-20261108/lib64/python3.11/site-packages/torch/_inductor/config.py",
+    "sha256": "9171c2ed249e13a19a2ae22dba0db14f3c4fe11762108f87c8a4e85f96945b0a"
+  },
+  "torch/_inductor/scheduler.py": {
+    "path": "/tmp/e014-hpuvvad-20261108/lib64/python3.11/site-packages/torch/_inductor/scheduler.py",
+    "sha256": "8e3ca0c3717a4f8973c7bfe41cab52cd0dd7154a5401fd8d60e83b935893178c"
+  }
+}

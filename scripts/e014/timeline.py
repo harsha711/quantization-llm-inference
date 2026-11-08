@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Summarize observed timeline intervals without treating gaps as a speedup bound."""
 from collections import Counter
+import gzip
 import json
 from pathlib import Path
 import sys
@@ -59,6 +60,10 @@ def summarize(events, marker):
 
 if __name__ == '__main__':
     path = Path(sys.argv[1])
-    events = json.loads(path.read_text())['traceEvents']
+    if path.exists() and path.suffix != '.gz':
+        events = json.loads(path.read_text())['traceEvents']
+    else:
+        with gzip.open(path if path.suffix == '.gz' else str(path)+'.gz','rt') as f:
+            events = json.load(f)['traceEvents']
     result = [summarize(events,marker) for marker in ('E014/prefill','E014/decode')]
     print(json.dumps(result,indent=2))

@@ -1,0 +1,11 @@
++ prun timeout 1800 /tmp/e014-hpuvvad-20261108/bin/python scripts/e014/diagnose.py /home/hpuvvad/csc548-w4a16-e014-c4-20261108/results/e014_20261108
+[prun] Master compute host = c4
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun timeout 1800 /tmp/e014-hpuvvad-20261108/bin/python scripts/e014/diagnose.py /home/hpuvvad/csc548-w4a16-e014-c4-20261108/results/e014_20261108 (family=openmpi4)
+USDT:2026-11-08 18:00:35 58955:58955 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-08 18:00:35 58955:58955 SyncActivityProfilerHandler.cpp:46] profiler_stop
+PASS dynamic smoke/trace 128 [389, 279, 53596, 11, 6500, 1584, 11, 323]
+USDT:2026-11-08 18:00:40 58955:58955 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-08 18:00:40 58955:58955 SyncActivityProfilerHandler.cpp:46] profiler_stop
+PASS dynamic smoke/trace 2048 [1265, 21129, 279, 4024, 23722, 323, 9429, 13578]
+PASS baseline repeated logits/tokens, memory margin, fixed weights

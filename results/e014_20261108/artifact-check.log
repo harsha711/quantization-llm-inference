@@ -1,0 +1,32 @@
+PASS exact compressed/original trace timeline_A_128.json
+PASS exact compressed/original trace timeline_A_128_validated.json
+PASS exact compressed/original trace timeline_A_2048.json
+PASS exact compressed/original trace timeline_A_2048_validated.json
+PASS exact compressed/original trace timeline_B_128_validated.json
+PASS exact compressed/original trace timeline_B_2048_validated.json
+PASS exact compressed/original trace timeline_C_128_validated.json
+PASS pinned model/tokenizer metadata LICENSE
+PASS pinned model/tokenizer metadata README.md
+PASS pinned model/tokenizer metadata config.json
+PASS pinned model/tokenizer metadata generation_config.json
+PASS pinned model/tokenizer metadata tokenizer_config.json
+PASS pinned model/tokenizer metadata tokenizer.json
+PASS pinned model/tokenizer metadata vocab.json
+PASS pinned model/tokenizer metadata merges.txt
+PASS runtime source transformers.cache_utils
+PASS runtime source transformers.masking_utils
+PASS runtime source transformers.models.qwen2.modeling_qwen2
+PASS runtime source transformers.integrations.sdpa_attention
+PASS runtime source torch/_dynamo/convert_frame.py
+PASS runtime source torch/_dynamo/eval_frame.py
+PASS runtime source torch/_inductor/compile_fx.py
+PASS runtime source torch/_inductor/cudagraph_trees.py
+PASS runtime source torch/_inductor/config.py
+PASS runtime source torch/_inductor/scheduler.py
+PASS executed candidate/validation/timing source unchanged model.py
+PASS executed candidate/validation/timing source unchanged validate.py
+PASS executed candidate/validation/timing source unchanged validate_arc.sh
+PASS executed candidate/validation/timing source unchanged env_arc.sh
+PASS executed candidate/validation/timing source unchanged measure.py
+PASS executed candidate/validation/timing source unchanged measure_arc.sh
+PASS dependency lock/unchanged environment
