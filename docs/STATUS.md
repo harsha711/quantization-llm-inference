@@ -1,3 +1,7 @@
+# E013 authorized — bounded M128 tile comparison
+
+2026-11-08: the user requests implementation/execution of the previously proposed comparison. The predeclared [E013 design](EXPERIMENTS.md#e013--bounded-m128-existing-tile-comparison) compares only existing 64K×256N/256-thread and 64K×128N/128-thread choices at M128. Preserve corrected E006 device source and all historical records. Local preparation is in progress. ARC access currently fails routing/DNS, so there is no verified live allocation or GPU result. Continue independent local work and resume GPU gates when access is restored. No performance outcome is claimed.
+
 # Marlin opportunity assessment — analysis only
 
 2026-11-08: the user requested a repository review of potential Marlin optimizations and hardware versus orchestration. [MARLIN_OPPORTUNITIES.md](MARLIN_OPPORTUNITIES.md) separates demonstrated short-reuse launch benefits, failed general launch/body candidates, unresolved kernel headroom and scheduling opportunities. Recomputing E010 yields 3.81–3.87× higher useful-row throughput at M16 versus M4, with only 3.4–5.0% more cycle time. This is batch scaling, not a measured scheduler or inference speedup. Source inspection identifies first-valid tile selection as a bounded untested question, without implementing it.
