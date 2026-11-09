@@ -1,0 +1,10 @@
+{
+  "finite": true,
+  "bad_logits": 0,
+  "logits_checked": 9723904,
+  "max_abs": 0.0,
+  "relative_l2": 0.0,
+  "candidate_sha256": "c4fc6b0e07703ec995c01622de8e48d8745636c589fb198e567a23aef7835533",
+  "reference_sha256": "c4fc6b0e07703ec995c01622de8e48d8745636c589fb198e567a23aef7835533",
+  "bitwise_equal": true
+}

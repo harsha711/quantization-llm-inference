@@ -1,0 +1,2 @@
+PASS 232 retrieved files and all executed sources match hashes.
+PASS 35 full-row FP64 cases, 249 kernel rows, six zero-error retained memcheck/synccheck reports and bitwise row variants.
