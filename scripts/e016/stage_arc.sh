@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 #SBATCH --job-name=w4a16-e016
 #SBATCH --partition=rtx5060ti16g
-#SBATCH --nodelist=c9
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=16
@@ -23,7 +22,11 @@ if [[ "$MODE" == setup ]]; then
   env | grep -E '^(SLURM_|OMP_|OMPI_|PATH=|PROJECT_ROOT=)' | sort
   findmnt -T "$PROJECT_ROOT"; df -h "$PROJECT_ROOT"
  } > "$R/metadata.txt" 2>&1
- [[ -x "$E016_PYTHON" ]]
+ export PIP_CACHE_DIR="$PROJECT_ROOT/cache/pip"
+ if [[ ! -x "$E016_PYTHON" ]]; then
+  run venv python3.11 -m venv /tmp/e015-hpuvvad-20261109
+  run install "$E016_PYTHON" -m pip install -r scripts/e014/requirements.lock
+ fi
  "$E016_PYTHON" -m pip freeze > "$R/pip-freeze.txt"
  diff -u scripts/e014/requirements.lock "$R/pip-freeze.txt" > "$R/dependency-diff.txt"
  [[ $(df --output=avail -B1 "$PROJECT_ROOT" | tail -1) -gt 4294967296 ]]

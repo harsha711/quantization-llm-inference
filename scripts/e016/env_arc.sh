@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 : "${PROJECT_ROOT:?Absolute E016 root}" "${SLURM_JOB_ID:?Live allocation}"
-[[ "$PROJECT_ROOT" == /mnt/beegfs/hpuvvad/csc548-w4a16-e016-c9-20261109 ]]
+[[ "$PROJECT_ROOT" == /mnt/beegfs/hpuvvad/csc548-w4a16-e016-final-20261109 ]]
 [[ -f "$PROJECT_ROOT/scripts/e016/run.py" ]]
 cd "$PROJECT_ROOT"
 export PATH=/usr/local/cuda/bin:$PATH PYTHONDONTWRITEBYTECODE=1

@@ -101,6 +101,12 @@
 - All 160 primary requests show 1.803%/1.866% short-context and 1.085%/1.296% long-context lower decode medians, below 5%. Keep eager E default. Held-out job331874 is cancelled unstarted. Preserve every sample, cold/memory cost, c7 quota interruption/corrupt tensor member and subsequent fresh c9 validation. The final root is on compute-node-only BeeGFS because home is full. Do not splice old c7/E014 timings into this comparison.
 - Read docs/INFERENCE_DIRECT_GRAPH.md and run E015 primary/negative checks before interpretation. Source snapshots and tensor integrity pass. Jobs331861/331864/331865 and c9 are historical. Stop after E015. No larger capture, fusion, profiling, compiler retry, tolerance relaxation or next optimization is authorized without a new request.
 
+## E016 authorized full-decode capture comparison
+
+- The user explicitly authorizes one bounded follow-up to E015: unchanged per-token graph G versus one graph H over63 decode steps. This overrides E015's larger-capture stop only for E016. Preserve all earlier evidence and default policies. Read the E016 predeclaration before work. No fusion/compiler/attention/quantization/custom-kernel pivot.
+- Both variants retain full logits and device feedback/position history on GPU in the exact timed path. H must restore post-prefill state after warmup/capture before replay. Require both contexts/passages and repeated resets, unchanged numerical bounds and weights, stable storage, complete cache equality and actual graph launches. Stop on unsupported capture, excessive memory or uncertain state.
+- Fresh3-warmup/20-sample matched cells/two reversed series use G as denominator. Require>=5% in both primary series per context before the identical held-out campaign. Finish evidence checks/docs/commit without pushing and stop after this comparison. Current jobs/nodes must be verified, not inherited from historical IDs.
+
 ## ARC
 
 - Verify current [ARC documentation](https://arcm.csc.ncsu.edu/~mueller/cluster/arc/) and `scontrol show job` each session. Confirm allocation ownership, RUNNING state, nodes, remaining time, and GPU. Saved IDs/nodes are historical. Do no compute on the gateway.

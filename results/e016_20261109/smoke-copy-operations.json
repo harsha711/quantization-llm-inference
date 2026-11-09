@@ -1,0 +1,9 @@
+{
+  "G": {
+    "gpu_memcpy:Memcpy DtoD (Device -> Device)": 49,
+    "gpu_memset:Memset (Device)": 7
+  },
+  "H": {
+    "gpu_memset:Memset (Device)": 7
+  }
+}

@@ -1,3 +1,5 @@
+2026-11-09 authorized E016: test one graph over the entire63-step decode phase against fresh E015 per-token replay. The prerequisite passes exact logits, feedback, cache restoration/equivalence and actual7-versus1 launches. H's49 extra `memcpy32_post` kernel events correspond to49 G DtoD copy events in the short trace. This is an observed copy representation difference, not permission to infer numerical equivalence or change kernels. Full validation/timing remain gated. [Design](EXPERIMENTS.md#e016--complete-fixed-length-decode-cuda-graph).
+
 # Optimization decision map
 
 E015 is complete: [direct replay](INFERENCE_DIRECT_GRAPH.md) passes bitwise full-logit/token validation at 128/2048 with actual graph replay and the same observed decode kernel multiset. Fresh reversed timings give 1.80–1.87% and 1.08–1.30% lower decode medians, below 5%. Keep eager static E, preserve all 160 samples and cancel held-out timing by design. More reserved allocator memory and graph setup costs remain explicit. This bounds direct replay of forward+argmax under common mask staging, without establishing no broader headroom. No new optimization or compiler retry is authorized.

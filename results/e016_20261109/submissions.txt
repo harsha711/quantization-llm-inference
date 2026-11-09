@@ -1,1 +1,8 @@
 Setup: ssh arc-off-network sbatch --parsable --export=ALL,PROJECT_ROOT=/mnt/beegfs/hpuvvad/csc548-w4a16-e016-c9-20261109 --output=/tmp/e016-setup-%j.log < /tmp/e016-bootstrap.sh
+331919 initial cheap setup FAILED 1 before model execution (source directory glob).
+331920 corrected cheap setup COMPLETED 0, inspected and retrieved.
+331923 full c9 validation COMPLETED 0, 00:12:07 including retrieval window. No timing released.
+ARC read-only status escalation timed out in automatic approval review. Its single allowed retry succeeded. c9 allocation ended and node was then occupied.
+331968 fresh c10 setup: ssh arc-off-network sbatch --parsable --export=ALL,PROJECT_ROOT=/mnt/beegfs/hpuvvad/csc548-w4a16-e016-c10-20261109 --output=/tmp/e016-c10-setup-%j.log < /tmp/e016-c10-bootstrap.sh
+331968 c10 setup CANCELLED while verified PENDING, no compute. Another user's allocation took c10 before submission ran.
+331973 scheduler-selected fresh setup: ssh arc-off-network sbatch --parsable --export=ALL,PROJECT_ROOT=/mnt/beegfs/hpuvvad/csc548-w4a16-e016-final-20261109 --output=/tmp/e016-final-setup-%j.log < /tmp/e016-final-bootstrap.sh
