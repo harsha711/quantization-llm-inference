@@ -15,7 +15,17 @@ indices. Full validation alternates primary/held-out/primary requests, checks
 cache resets/progression and stable pointers, and traces actual replay at each
 context. These numerical checks are distinct from the unchanged GEMM contract.
 
-Current isolated ARC root: `/home/hpuvvad/csc548-w4a16-e015-c7-20261109`.
+Initial ARC root: `/home/hpuvvad/csc548-w4a16-e015-c7-20261109`.
+The home-quota-interrupted attempt is preserved there and in `attempt1/` under
+the fresh root `/mnt/beegfs/hpuvvad/csc548-w4a16-e015-c9-20261109`.
+BeeGFS is available only on compute nodes. Submit `continue_arc.sh` via stdin
+from home, exporting the absolute BeeGFS PROJECT_ROOT and MODE=storage,
+validation, primary or heldout. Each stage writes its CAPTURED marker, then
+waits up to ten minutes for inspected retrieval through the active allocation
+and a matching RETRIEVED marker. Subsequent expensive stages depend on the
+preceding successfully completed job. The storage prerequisite repeats only
+small E/G path/capture checks. Fresh c9 validation repeats the retained-project build/CTest/sanitizer checks
+before its full-model cases. No c7 measurements become timing denominators.
 Use the absolute exported PROJECT_ROOT and sbatch/prun. Verify current ARC policy,
 job ownership/state and actual selected GPU every session. Saved node/job IDs are
 historical. The exact E014 checkpoint cache is reused read-only after file hashes;

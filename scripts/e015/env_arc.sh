@@ -14,8 +14,8 @@ allocation() {
  scontrol show job "$SLURM_JOB_ID" > "$R/$1-allocation.txt"
  grep -q 'UserId=hpuvvad' "$R/$1-allocation.txt"
  grep -q 'JobState=RUNNING' "$R/$1-allocation.txt"
- grep -q 'NodeList=c7' "$R/$1-allocation.txt"
- [[ $(hostname) == c7 ]]
+ grep -q "NodeList=$SLURM_JOB_NODELIST" "$R/$1-allocation.txt"
+ [[ $(hostname) == "$SLURM_JOB_NODELIST" ]]
  [[ $(nvidia-smi --query-gpu=name --format=csv,noheader) == 'NVIDIA GeForce RTX 5060 Ti' ]]
  [[ $(nvidia-smi --query-gpu=compute_cap --format=csv,noheader) == '12.0' ]]
 }
