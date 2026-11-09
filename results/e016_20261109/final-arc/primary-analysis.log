@@ -1,0 +1,53 @@
++ prun timeout 1800 /tmp/e015-hpuvvad-20261109/bin/python scripts/e016/analyze.py /mnt/beegfs/hpuvvad/csc548-w4a16-e016-final-20261109/results/e016_20261109 --stage primary
+[prun] Master compute host = c52
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun timeout 1800 /tmp/e015-hpuvvad-20261109/bin/python scripts/e016/analyze.py /mnt/beegfs/hpuvvad/csc548-w4a16-e016-final-20261109/results/e016_20261109 --stage primary (family=openmpi4)
+{
+  "stage": "primary",
+  "primary": [
+    {
+      "context": 128,
+      "decode_gain_pct": [
+        -0.19666552699726392,
+        -0.09111599569713302
+      ],
+      "passes": false,
+      "other_changes_pct": [
+        {
+          "ttft_s": 0.1421052289571456,
+          "e2e_s": 0.19835209852183677,
+          "peak_reserved": 0.6108735491753281
+        },
+        {
+          "ttft_s": 0.04526759397671665,
+          "e2e_s": 0.08920583136944327,
+          "peak_reserved": 0.6108735491753281
+        }
+      ]
+    },
+    {
+      "context": 2048,
+      "decode_gain_pct": [
+        -0.13362292791878616,
+        0.04805268358829551
+      ],
+      "passes": false,
+      "other_changes_pct": [
+        {
+          "ttft_s": 0.2010393761570306,
+          "e2e_s": 0.14393172893329975,
+          "peak_reserved": 0.0
+        },
+        {
+          "ttft_s": -0.16269727250743937,
+          "e2e_s": -0.06025135126616066,
+          "peak_reserved": 0.0
+        }
+      ]
+    }
+  ],
+  "heldout": [],
+  "heldout_required": false,
+  "request_samples": 160,
+  "confirmed_contexts": []
+}

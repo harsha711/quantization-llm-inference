@@ -42,6 +42,29 @@ Final c52 numerical checkpoint: all four corrected-preservation64-output cells p
 
 The user authorizes delegation. A read-only independent agent review finds no capture/state/numerical/timing/gate blocker and performs no edits or ARC runs. Its reporting caveat is retained: `static_setup_s` times inherited cache/input setup, excluding E016's additional persistent buffer initialization. `graph_setup_s` includes graph warmup, snapshots/restoration and checks, while first-request E2E includes construction. Do not describe these fields as complete process/runner startup. After these independent checks, record legitimate VALIDATION_INSPECTED/RETRIEVED and release fresh primary ONLY within the same332017 allocation. No script or environment change follows this checkpoint.
 
+### E016 final results and decision
+
+Final read-only report review independently matches the raw latency/cost/memory numbers and scope limits. Local state checks, tensor-audit parser/damaged-hash self-check, Python/shell syntax, documentation links and historical E014/E015 identity checks pass. A new E016 `handoff.sha256` seals final inputs, outputs and documentation; its own file and verification log are excluded. Historical manifests are unchanged.
+
+The complete c52 comparison332017 finishes0 in18m37s. All160 primary requests pass the fixed output/cache/replay/memory/weight/compiler checks. Independent complete-primary analysis, eleven real-data corruptions (nine numerical/state/identity cases plus missing/nonfinite timing samples), source hashes and independent raw-JSONL recomputation pass. The clock files independently verify exact reversed cell order. All eighteen final full-tensor comparisons and232 validation retrieval hashes pass. Final primary retrieval verifies85 sealed files. The first primary hash manifest accidentally includes itself. Preserve that initial self-referencing manifest, exclude only the new manifest output from `find`, and verify the corrected file. This bookkeeping correction changes no source, tensor or timing sample. Final queue is empty, with no user-created allocation cancelled.
+
+Gain is100*(1−H/G), positive meaning lower H latency. Each median below uses20 synchronized wall-clock requests after3 warmups, fresh process/cell, one c52 rank/16 host threads, pinned FP16 model/runtime/attention and fixed64-output requests. No historical E015 timing is a denominator.
+
+| Context | Series | G decode ms | H decode ms | H gain |
+|---|---:|---:|---:|---:|
+| 128 | 1 | 606.395 | 607.588 | −0.197% |
+| 128 | 2 | 607.687 | 608.241 | −0.091% |
+| 2048 | 1 | 882.669 | 883.848 | −0.134% |
+| 2048 | 2 | 884.400 | 883.975 | +0.048% |
+
+Neither context reaches>=5% in both series. No held-out timing is released or run. Held-out NUMERICAL validation did pass. Complete-request changes are+0.198%/+0.089% at128 and+0.144%/−0.060% at2048. TTFT changes range−0.163% to+0.201%. H construction/warmup/restoration setup takes2.465–3.306s versus G41.7–55.3ms. First-request E2E is10.107–11.352s for H versus7.660–8.114s for G, after model load and persistent-buffer construction. Do not call these complete process startup, isolated pure capture or amortization results. Inherited `static_setup_s` excludes E016's additional persistent buffer allocations.
+
+Warmed allocator reserved peaks are3274→3294MiB at128 and3458MiB for both at2048. Warm allocated peaks differ by<0.3MiB. H cold allocated peaks rise31.93MiB/54.80MiB at128/2048, with cold reserved deltas40MiB/0MiB. These are PyTorch allocator statistics over request/audit windows, not whole-device or host graph storage. Every request remains below the declared75% reserved threshold. No clock locking or continuous clock measurement is claimed. Raw clocks/temperature and every sample remain retained, with no outlier deletion or stable-tail claim.
+
+Full outputs/cache/state demonstrate successful broader capture, including changing positions and feedback, under the preserved numerical gates. Actual traces show63-versus1 launches and441 additional H copy-shader kernel events corresponding to G DtoD events. No novel kernel/fusion/compiler transformation is introduced. The result rejects this capture expansion's meaningful-gain criterion, not every inference optimization. GPU compute/bandwidth attribution and whether hidden CPU work or graph/copy costs limit improvement remain unresolved. Preserve existing defaults and stop. No follow-up optimization, tuning, profiling or performance rerun is authorized.
+
+[Full findings](INFERENCE_FULL_DECODE_GRAPH.md), [final c52 evidence](../results/e016_20261109/final-arc/), [primary decision](../results/e016_20261109/final-arc/primary-analysis.json), [all medians/costs](../results/e016_20261109/final-arc/primary-summary.csv), [independent calculations](../results/e016_20261109/final-arc/independent-primary-calculations.json) and [accounting](../results/e016_20261109/final-accounting.txt) provide the handoff. E014/E015 raw data, historical manifests and corrected Marlin A stay unchanged. The new handoff manifest seals E016 data/code/report inputs and outputs separately. No push.
+
 ## E015 — Direct CUDA graph replay of static-cache decoding
 
 Predeclared 2026-11-09 from clean `514e45b`, explicitly authorized by the user's request to implement direct graph replay. This supersedes the E014 stop instruction only for this new mechanism. Preserve all E014 evidence/scripts, its failed C2048 numerical gate and absent timing sentinels. No compiler retry, tolerance change, quantization, speculation, attention/backend change, Marlin modification or tuning search.

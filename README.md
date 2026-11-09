@@ -2,7 +2,9 @@
 
 **Project synthesis complete:** [findings, contributions and completion gaps](docs/PROJECT_SYNTHESIS.md), [four reproducible figures](docs/figures/project_synthesis/), and [offline reproduction](scripts/reporting/README.md). The record supports a bounded course report. The next task is an ACM report draft, with explicit resolution of the course's serial-baseline/worker-scaling wording. This review adds no experiment. Corrected E006 A remains unchanged.
 
-**Current investigation:** [E015 direct CUDA graph replay](docs/INFERENCE_DIRECT_GRAPH.md) is complete. Eager/replay logits are bitwise equal at 128/2048 tokens. Fresh matched timings show 1.80–1.87% and 1.08–1.30% lower decode medians, below the declared 5% target. Keep the eager static-cache default. All 160 primary requests are retained; held-out timing is omitted by design. [Reproduction](scripts/e015/README.md), [evidence](results/e015_20261109/) and [STATUS](docs/STATUS.md).
+**Current investigation:** [E016 complete-decode CUDA graph](docs/INFERENCE_FULL_DECODE_GRAPH.md) is complete. One graph covers all 63 decode steps and preserves every checked logit/token/cache state. Fresh matched decode gains versus per-token replay range from −0.197% to +0.048%, below 5% at both contexts. Graph setup rises from 42–55 ms to 2.46–3.31 s. Retain existing defaults. All 160 primary requests are preserved, with no held-out timing. [Tooling](scripts/e016/README.md), [final evidence](results/e016_20261109/final-arc/) and [STATUS](docs/STATUS.md).
+
+[E015 per-token graph replay](docs/INFERENCE_DIRECT_GRAPH.md) remains complete with subthreshold 1.08–1.87% gains versus its fresh eager control. E016 uses new G denominators and does not change that historical result.
 
 [E014 compiled inference](docs/INFERENCE_OVERHEAD.md) remains stopped at its numerical gate, with no accepted timing. Its failed2048-token logit check and original evidence remain unchanged.
 

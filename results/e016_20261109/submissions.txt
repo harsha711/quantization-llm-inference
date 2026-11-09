@@ -16,3 +16,8 @@ A combined-continuation submission using old afterok:331973 is rejected with Job
 332006 and332008 cancelled after both verified PENDING. c58 start estimate was16:41:14, about80minutes away, with no new compute performed.
 332015 scheduler-selected updated prerequisite submitted via release-any-batch-submitted.sh. It starts on c52. Fresh full CPU/GPU/runtime metadata, locked environment if absent, launcher and corrected small state/replay test are required before continuation.
 332017 held complete continuation: sbatch --hold --nodelist=c52 --dependency=afterok:332015 --export=ALL,PROJECT_ROOT=/mnt/beegfs/hpuvvad/csc548-w4a16-e016-final-20261109 --output=<R>/continuation-slurm-%j.log < continuation-batch-submitted.sh
+332015 c52 prerequisite COMPLETED 0, 4m39; actual corrected-preservation smoke inspected and retrieved before release.
+332017 released after the inspected prerequisite; full c52 validation completed and retrieved, then primary released within the same allocation after inspection.
+332017 primary: all160 samples and both reversed series complete; neither context passes5%, so no held-out timing released. Final inspection/retrieval gates recorded only after evidence checks.
+Initial primary-retrieval manifest includes its own output; retained as primary-retrieval-self-reference.sha256. Corrected find excludes only primary-retrieval.sha256;85 sealed files independently verify. Equivalent correction documented in c52-primary-seal-correction.sh.
+332017 COMPLETED 0,18m37. Final accounting/empty queue retained in final-accounting.txt. No new GPU work follows.
