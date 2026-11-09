@@ -13,3 +13,6 @@ A combined-continuation submission using old afterok:331973 is rejected with Job
 331992 and331993 cancelled only after both verified PENDING. No full c58 validation or timing ran.
 332006 fresh c58 release prerequisite, incorporating checker-only preservation correction and an isolated eight-token recheck. Queued behind another user's c58 allocation.
 332008 full continuation on hold, afterok:332006, retains one allocation through separately inspected full validation/primary/conditional heldout. All existing stage gates remain required. No timing released yet.
+332006 and332008 cancelled after both verified PENDING. c58 start estimate was16:41:14, about80minutes away, with no new compute performed.
+332015 scheduler-selected updated prerequisite submitted via release-any-batch-submitted.sh. It starts on c52. Fresh full CPU/GPU/runtime metadata, locked environment if absent, launcher and corrected small state/replay test are required before continuation.
+332017 held complete continuation: sbatch --hold --nodelist=c52 --dependency=afterok:332015 --export=ALL,PROJECT_ROOT=/mnt/beegfs/hpuvvad/csc548-w4a16-e016-final-20261109 --output=<R>/continuation-slurm-%j.log < continuation-batch-submitted.sh
