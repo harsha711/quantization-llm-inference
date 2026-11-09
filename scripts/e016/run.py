@@ -22,9 +22,11 @@ def main(a):
     work = Workload(a.results)
     runner = Runner(work, a.variant, a.context)
     warmups = []
-    for _ in range(3):
+    for index in range(3):
         row = runner.request('primary', generated=generated)
         row.pop('logits')
+        save(a.results/f'{tag}-warmup-{index}.json', row)
+        checked(row, row, a.context, generated)
         warmups.append(row)
     before = compiler_counters()
     assert not before.get('stats', {}).get('unique_graphs', 0) and not before.get('graph_break')
@@ -81,12 +83,12 @@ def main(a):
             for index in range(20):
                 row = runner.request(prompt)
                 row.pop('logits')
-                checked(row, ref, a.context)
-                assert compiler_counters() == before
                 row.update(sample=index, series=a.series, weights_sha256=work.weights_sha256,
                     gpu=work.identity['gpu'], backend=work.identity['attention'])
                 f.write(json.dumps(row)+'\n')
                 f.flush()
+                checked(row, ref, a.context)
+                assert compiler_counters() == before
                 print('PASS', tag, index, row['decode_s'], row['e2e_s'], flush=True)
     work.weights_unchanged()
     output.update(compiler_before=before, compiler_after=compiler_counters())
