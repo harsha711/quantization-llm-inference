@@ -1,5 +1,7 @@
 # Numerical and measurement contract
 
+E015 addition: the separately authorized direct-graph comparison retains E014's model/FP16 weights, full-logit bound, relative-L2 requirement and exact greedy tokens. Compare only fresh eager static versus direct replay with matched persistent-mask staging. Both contexts/passages and repeated cache resets must pass before any primary timing. Candidate/reference tensors and diagnostics are saved before numerical assertions. E014 remains immutable. No GEMM numerical rule changes.
+
 E013 addition: the explicitly requested tile comparison preserves every numerical rule below. Only the selected existing M128 K/N tile and associated thread count differ. Both choices share one freshly compiled library with unchanged corrected E006 device source/SASS. Use fresh matched controls, four-matrix complete cycles, seeds 3–6, capacity128, live W_hat buffers, no artificial flush, ten warmups/100 samples and two reversed series. Actual launch tracing and fresh numerical/memcheck/synccheck plus representative racecheck gate timing. Conditional held-out confirmation uses seeds 7–10 with the same method. Cross-tile output bits may differ through reduction order, but every output must pass the unchanged FP64 elementwise threshold. A 5% lower-latency gate is evaluated per shape in both primary and held-out series. No automatic dispatch, cuBLAS performance comparison or inference claim is added. Historical contracts remain intact.
 
 ## 1. Operation, layout, and quantization
