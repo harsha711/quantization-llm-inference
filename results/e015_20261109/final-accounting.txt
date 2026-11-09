@@ -1,0 +1,11 @@
+JobID                             JobName      State ExitCode    Elapsed        NodeList 
+------------ ---------------------------- ---------- -------- ---------- --------------- 
+331844                   w4a16-e015-setup  COMPLETED      0:0   00:02:10              c7 
+331846                w4a16-e015-validate     FAILED      1:0   00:00:02              c7 
+331849                w4a16-e015-validate     FAILED      1:0   00:01:39              c7 
+331860                w4a16-e015-continue CANCELLED+      0:0   00:00:00   None assigned 
+331861                w4a16-e015-continue  COMPLETED      0:0   00:04:45              c9 
+331864                w4a16-e015-continue  COMPLETED      0:0   00:10:37              c9 
+331865                w4a16-e015-continue  COMPLETED      0:0   00:12:47              c9 
+331874                w4a16-e015-continue CANCELLED+      0:0   00:00:00   None assigned 
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)

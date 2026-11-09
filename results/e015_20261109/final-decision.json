@@ -1,0 +1,18 @@
+{
+  "status": "complete; numerically validated, below predeclared5% performance criterion",
+  "primary_requests": 160,
+  "heldout_requests": 0,
+  "default": "eager static E",
+  "candidate": "explicit direct graph G",
+  "bitwise_logits": true,
+  "contexts": [
+    128,
+    2048
+  ],
+  "kernel_multiset_equal": true,
+  "graph_launches_per_seven_steps": 7,
+  "project_sanitizer_checks": 6,
+  "full_model_sanitizer_campaign": false,
+  "historical_e014_unchanged": true,
+  "active_allocations_after_completion": 0
+}

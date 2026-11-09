@@ -2,7 +2,9 @@
 
 **Project synthesis complete:** [findings, contributions and completion gaps](docs/PROJECT_SYNTHESIS.md), [four reproducible figures](docs/figures/project_synthesis/), and [offline reproduction](scripts/reporting/README.md). The record supports a bounded course report. The next task is an ACM report draft, with explicit resolution of the course's serial-baseline/worker-scaling wording. This review adds no experiment. Corrected E006 A remains unchanged.
 
-**Current investigation:** [E014 full-model inference overhead](docs/INFERENCE_OVERHEAD.md) is complete at its numerical stopping gate. Static eager caching passes both contexts; compiled static decoding uses actual graph replay at 128 tokens but fails the declared all-logit bound at 2048. No primary/held-out timing or inference speedup is accepted. [Reproduction](scripts/e014/README.md), [evidence](results/e014_20261108/) and [STATUS](docs/STATUS.md) preserve this outcome and its limits. Stop without relaxing checks or expanding the campaign.
+**Current investigation:** [E015 direct CUDA graph replay](docs/INFERENCE_DIRECT_GRAPH.md) is complete. Eager/replay logits are bitwise equal at 128/2048 tokens. Fresh matched timings show 1.80–1.87% and 1.08–1.30% lower decode medians, below the declared 5% target. Keep the eager static-cache default. All 160 primary requests are retained; held-out timing is omitted by design. [Reproduction](scripts/e015/README.md), [evidence](results/e015_20261109/) and [STATUS](docs/STATUS.md).
+
+[E014 compiled inference](docs/INFERENCE_OVERHEAD.md) remains stopped at its numerical gate, with no accepted timing. Its failed2048-token logit check and original evidence remain unchanged.
 
 [E013](docs/EXPERIMENTS.md#e013-final-results-and-decision) remains rejected: the smaller M128 tile regresses 7.6–8.7% across both rectangles/two reversed series. **Keep corrected Marlin A and its default tile.** Historical evidence and environments remain unchanged.
 

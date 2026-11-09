@@ -1,0 +1,8 @@
+{
+  "job": 331844,
+  "stage": "setup",
+  "node": "c7",
+  "root": "/home/hpuvvad/csc548-w4a16-e015-c7-20261109",
+  "criteria": "92364bf",
+  "implementation": "e1d40bd"
+}

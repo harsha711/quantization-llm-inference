@@ -1,0 +1,5 @@
++ prun timeout 1800 /tmp/e015-hpuvvad-20261109/bin/python scripts/e015/check_local.py
+[prun] Master compute host = c7
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun timeout 1800 /tmp/e015-hpuvvad-20261109/bin/python scripts/e015/check_local.py (family=openmpi4)
+PASS replay count, cache progression, pointers, timing, tokens, fixed work, reversed order and 5% gate

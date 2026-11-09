@@ -1,0 +1,23 @@
+[
+  {
+    "job": 331844,
+    "stage": "setup",
+    "state": "COMPLETED",
+    "elapsed": "00:02:10",
+    "exit": "0:0"
+  },
+  {
+    "job": 331846,
+    "stage": "validation-before-inspection-upload",
+    "state": "FAILED",
+    "elapsed": "00:00:02",
+    "exit": "1:0",
+    "compute_executed": false
+  },
+  {
+    "job": 331849,
+    "stage": "validation",
+    "dependency": "afterok:331844",
+    "state": "RUNNING"
+  }
+]

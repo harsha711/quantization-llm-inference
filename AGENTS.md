@@ -95,6 +95,12 @@
 - E014 is complete at its predeclared numerical gate. Read [INFERENCE_OVERHEAD.md](docs/INFERENCE_OVERHEAD.md) and run the stopped/negative analyzers before interpreting results. Static eager caching passes both contexts; compiled static decode has actual graph replay at 128 but fails the elementwise logit bound at 2048 (415 values), despite exact tokens and passing relative L2. No primary/held-out timing or accepted inference speedup exists. Preserve failed diagnostics, frozen inputs and the unchanged GEMM contract/corrected Marlin A.
 - The failed tensor itself was not retained by the original validator; do not invent error indices or claim post-failure checks. Keep the preservation-job negative-check failure distinct from the corrected offline pass. Stop after E014. No tolerance relaxation, passing-subset timing, unchanged retry, compiler-mode search, quantization/speculation or kernel tuning is authorized. Any new investigation needs a separately requested bounded question.
 
+## E015 completed direct graph comparison
+
+- E015 is complete on c9. Direct replay of static-cache forward+argmax passes bitwise full-logit and exact-token checks at 128/2048 across both passages and repeated resets. Actual replay, stable pointers/cache progression, unchanged weights and kernel-name multiset agreement pass. No Inductor/compiler transformation or local Marlin change is involved.
+- All 160 primary requests show 1.803%/1.866% short-context and 1.085%/1.296% long-context lower decode medians, below 5%. Keep eager E default. Held-out job331874 is cancelled unstarted. Preserve every sample, cold/memory cost, c7 quota interruption/corrupt tensor member and subsequent fresh c9 validation. The final root is on compute-node-only BeeGFS because home is full. Do not splice old c7/E014 timings into this comparison.
+- Read docs/INFERENCE_DIRECT_GRAPH.md and run E015 primary/negative checks before interpretation. Source snapshots and tensor integrity pass. Jobs331861/331864/331865 and c9 are historical. Stop after E015. No larger capture, fusion, profiling, compiler retry, tolerance relaxation or next optimization is authorized without a new request.
+
 ## ARC
 
 - Verify current [ARC documentation](https://arcm.csc.ncsu.edu/~mueller/cluster/arc/) and `scontrol show job` each session. Confirm allocation ownership, RUNNING state, nodes, remaining time, and GPU. Saved IDs/nodes are historical. Do no compute on the gateway.

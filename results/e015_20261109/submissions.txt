@@ -1,0 +1,9 @@
+Recorded submissions (all executed from home via arc-off-network; stdin scripts are local scripts/e015/continue_arc.sh).
+331844: sbatch --parsable --export=ALL,PROJECT_ROOT=/home/hpuvvad/csc548-w4a16-e015-c7-20261109 --output=setup-slurm-%j.log scripts/e015/setup_arc.sh
+331846/331849: sbatch --parsable --dependency=afterok:331844 --export=ALL,PROJECT_ROOT=/home/hpuvvad/csc548-w4a16-e015-c7-20261109 --output=validation-slurm-%j.log scripts/e015/validate_arc.sh
+Rejected: sbatch --parsable --dependency=afterok:331844 --export=ALL,PROJECT_ROOT=/mnt/beegfs/hpuvvad/csc548-w4a16-e015-c7-20261109,MODE=storage --output=/tmp/e015-storage-slurm-%j.log [stdin]; Slurm job dependency problem after old setup was purged.
+331860: same c7 storage submission without the purged dependency; cancelled unstarted.
+331861: sbatch --parsable --export=ALL,PROJECT_ROOT=/mnt/beegfs/hpuvvad/csc548-w4a16-e015-c9-20261109,MODE=storage --output=/tmp/e015-storage-slurm-%j.log [stdin]
+331864: sbatch --parsable --dependency=afterok:331861 --export=ALL,PROJECT_ROOT=/mnt/beegfs/hpuvvad/csc548-w4a16-e015-c9-20261109,MODE=validation --output=/tmp/e015-validation-slurm-%j.log [stdin]
+331865: sbatch --parsable --hold --dependency=afterok:331864 --export=ALL,PROJECT_ROOT=/mnt/beegfs/hpuvvad/csc548-w4a16-e015-c9-20261109,MODE=primary --output=/tmp/e015-primary-slurm-%j.log [stdin]; released only after inspected validation.
+331874: sbatch --parsable --hold --dependency=afterok:331865 --export=ALL,PROJECT_ROOT=/mnt/beegfs/hpuvvad/csc548-w4a16-e015-c9-20261109,MODE=heldout --output=/tmp/e015-heldout-slurm-%j.log [stdin]; cancelled unstarted because neither context passed5%.

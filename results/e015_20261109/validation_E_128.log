@@ -1,0 +1,9 @@
++ prun timeout 1800 /tmp/e015-hpuvvad-20261109/bin/python scripts/e015/run.py /mnt/beegfs/hpuvvad/csc548-w4a16-e015-c9-20261109/results/e015_20261109 --stage validation --variant E --context 128
+[prun] Master compute host = c9
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun timeout 1800 /tmp/e015-hpuvvad-20261109/bin/python scripts/e015/run.py /mnt/beegfs/hpuvvad/csc548-w4a16-e015-c9-20261109/results/e015_20261109 --stage validation --variant E --context 128 (family=openmpi4)
+PASS validation_E_128 primary {'finite': True, 'bad_logits': 0, 'logits_checked': 9723904, 'max_abs': 0.0, 'relative_l2': 0.0, 'candidate_sha256': 'c4fc6b0e07703ec995c01622de8e48d8745636c589fb198e567a23aef7835533', 'reference_sha256': 'c4fc6b0e07703ec995c01622de8e48d8745636c589fb198e567a23aef7835533', 'bitwise_equal': True}
+PASS validation_E_128 heldout {'finite': True, 'bad_logits': 0, 'logits_checked': 9723904, 'max_abs': 0.0, 'relative_l2': 0.0, 'candidate_sha256': 'c2288d4c97051183832e4ce4695dd3a87313a5ef356a78e9308b98aaa072c638', 'reference_sha256': 'c2288d4c97051183832e4ce4695dd3a87313a5ef356a78e9308b98aaa072c638', 'bitwise_equal': True}
+PASS validation_E_128 primary {'finite': True, 'bad_logits': 0, 'logits_checked': 9723904, 'max_abs': 0.0, 'relative_l2': 0.0, 'candidate_sha256': 'c4fc6b0e07703ec995c01622de8e48d8745636c589fb198e567a23aef7835533', 'reference_sha256': 'c4fc6b0e07703ec995c01622de8e48d8745636c589fb198e567a23aef7835533', 'bitwise_equal': True}
+USDT:2026-11-09 13:19:52 3907754:3907754 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-09 13:19:52 3907754:3907754 SyncActivityProfilerHandler.cpp:46] profiler_stop

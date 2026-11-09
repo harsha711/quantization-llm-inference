@@ -1,0 +1,6 @@
++ prun timeout 1800 /tmp/e015-hpuvvad-20261109/bin/python scripts/e015/analyze.py /mnt/beegfs/hpuvvad/csc548-w4a16-e015-c9-20261109/results/e015_20261109 --stage validation
+[prun] Master compute host = c9
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun timeout 1800 /tmp/e015-hpuvvad-20261109/bin/python scripts/e015/analyze.py /mnt/beegfs/hpuvvad/csc548-w4a16-e015-c9-20261109/results/e015_20261109 --stage validation (family=openmpi4)
+PASS four full numerical/replay cases, twelve reset/alternating-prompt requests
+Kernel parity: [{'context': 128, 'same_kernel_multiset': True}, {'context': 2048, 'same_kernel_multiset': True}]
