@@ -17,6 +17,7 @@ if [[ "$PHASE" == heldout ]]; then
  grep -q '"heldout_required": true' "$R/primary-analysis.json"
 fi
 allocation "$PHASE"
+sha256sum -c "$R/validation-tooling.sha256" > "$R/$PHASE-validation-tooling-check.log"
 "$E015_PYTHON" -m pip freeze > "$R/$PHASE-pip-freeze.txt"
 diff -u "$R/pip-freeze.txt" "$R/$PHASE-pip-freeze.txt" > "$R/$PHASE-dependency-diff.txt"
 sha256sum scripts/e014/{model.py,fetch.py,prompts.json,validate.py,timeline.py} scripts/e015/*.* > "$R/$PHASE-tooling.sha256"

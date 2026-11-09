@@ -11,6 +11,7 @@ set -euo pipefail
 source "$PROJECT_ROOT/scripts/e015/env_arc.sh"
 [[ -e "$R/SMOKE_INSPECTED" ]]
 allocation validation
+sha256sum scripts/e014/{model.py,fetch.py,prompts.json,validate.py,timeline.py} scripts/e015/*.* > "$R/validation-tooling.sha256"
 run project-build bash scripts/build.sh
 run project-ctest ctest --test-dir build --output-on-failure
 run project-gpu-check bash scripts/check_inblock.sh

@@ -1,6 +1,6 @@
 # E015 authorized — direct CUDA graph comparison
 
-2026-11-09: implement the separately requested direct CUDA graph replay experiment. [Predeclared scope](EXPERIMENTS.md#e015--direct-cuda-graph-replay-of-static-cache-decoding) compares eager static decoding with direct replay, retaining E014's full numerical gate and inputs. E014 stays stopped and immutable. No accepted E015 result yet. ARC is reachable, no user allocation is active, and c7 is observed idle before submission. Verify actual allocation/hardware in the cheap prerequisite. Stop on capture/correctness failure, otherwise complete matched reversed primary and conditional held-out timings. No compiler tuning or other optimization.
+2026-11-09: implement the separately requested direct CUDA graph replay experiment. [Predeclared scope](EXPERIMENTS.md#e015--direct-cuda-graph-replay-of-static-cache-decoding) compares eager static decoding with direct replay, retaining E014's full numerical gate and inputs. E014 stays stopped and immutable. Setup331844 completes on verified c7 with an exact pinned runtime and bitwise-identical E/G smoke logits on both passages. Full validation is pending; no E015 performance result exists. Preserve the local launcher-inspection mistake and guarded unstarted validation331846 failure. Stop on capture/correctness failure, otherwise complete matched reversed primary and conditional held-out timings. No compiler tuning or other optimization.
 
 # E014 complete — numerical gate stops inference timing
 
