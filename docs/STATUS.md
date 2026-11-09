@@ -1,3 +1,7 @@
+# E015 authorized — direct CUDA graph comparison
+
+2026-11-09: implement the separately requested direct CUDA graph replay experiment. [Predeclared scope](EXPERIMENTS.md#e015--direct-cuda-graph-replay-of-static-cache-decoding) compares eager static decoding with direct replay, retaining E014's full numerical gate and inputs. E014 stays stopped and immutable. No accepted E015 result yet. ARC is reachable, no user allocation is active, and c7 is observed idle before submission. Verify actual allocation/hardware in the cheap prerequisite. Stop on capture/correctness failure, otherwise complete matched reversed primary and conditional held-out timings. No compiler tuning or other optimization.
+
 # E014 complete — numerical gate stops inference timing
 
 2026-11-08: **no inference speedup is accepted.** The authorized [E014 investigation](INFERENCE_OVERHEAD.md) runs pinned Qwen2.5-1.5B in FP16 on c4's RTX 5060 Ti 16 GB, batch size 1, 128/2048 prompt tokens and 64 fixed greedy output tokens. Baseline timelines support a short-context execution-overhead opportunity. Eager static caching passes exact tokens and all-logit checks at both contexts. Compiled static decoding passes at 128, with one graph/no reported graph breaks or recompilation and actual CUDA graph replay. At 2048, 415 of 9,723,904 primary logits exceed the predeclared elementwise bound, despite exact greedy tokens and passing aggregate relative L2. Validation stops immediately. Neither primary nor held-out timing is released; no 5% result, TTFT/E2E comparison or general optimality claim follows.
