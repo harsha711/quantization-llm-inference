@@ -1,3 +1,7 @@
+# E016 authorized — full decode capture prerequisite pending
+
+2026-11-09: the user authorizes one comparison of E015 per-token replay G with a single graph over all 63 decode steps H. The [predeclared design](EXPERIMENTS.md#e016--complete-fixed-length-decode-cuda-graph) fixes state restoration, common GPU logit capture, numerical checks, fresh timings and the 5%/held-out gates. No implementation or GPU validation exists yet. Preserve E014/E015 and corrected Marlin A. Stop if capture/state/memory validation fails.
+
 # E015 complete — direct replay is correct with subthreshold gains
 
 2026-11-09: [E015](INFERENCE_DIRECT_GRAPH.md) is complete on c9. Direct CUDA graph replay preserves every checked FP16 logit and all greedy tokens at 128/2048 tokens across both fixed passages and repeated resets. Actual replay and kernel-name multiset agreement pass, with unchanged weights and no compilation. All 160 primary requests are retained. Decode medians fall 1.803%/1.866% at 128 and 1.085%/1.296% at 2048 across two reversed series. Both miss the predeclared 5% criterion. Keep eager static E default and explicit G for reproducibility. Held job 331874 is cancelled unstarted, with no held-out timing.
