@@ -1,0 +1,1 @@
+Setup: ssh arc-off-network sbatch --parsable --export=ALL,PROJECT_ROOT=/mnt/beegfs/hpuvvad/csc548-w4a16-e016-c9-20261109 --output=/tmp/e016-setup-%j.log < /tmp/e016-bootstrap.sh

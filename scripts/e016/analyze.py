@@ -28,6 +28,9 @@ def successful(root, tag):
 def validate(root):
     assert not (root/'dependency-diff.txt').read_text()
     eager = successful(root, 'validation_G_128')['identity']
+    historical = read(root/'e015-identity.json')['identity']
+    for key in ('weights_sha256', 'model_revision', 'source', 'torch', 'transformers', 'attention'):
+        assert eager[key] == historical[key], key
     summaries = []
     for length, variant in traversal(1):
         tag = f'validation_{variant}_{length}'
@@ -73,12 +76,18 @@ def validate(root):
         checked(cell['trace_record'], ref, length)
         marker = next(e for e in events if e.get('name') == 'E016/decode' and e.get('cat') == 'user_annotation')
         counts = Counter(e['name'] for e in kernels if marker['ts'] <= e['ts'] < marker['ts']+marker['dur'])
+        operations = Counter((e.get('cat'), e['name']) for e in events
+            if e.get('cat') in ('kernel', 'gpu_memcpy', 'gpu_memset')
+            and marker['ts'] <= e['ts'] < marker['ts']+marker['dur'])
         summaries.append(dict(context=length, variant=variant, decode=summary, kernel_counts=dict(counts),
+                              gpu_operations={cat+':'+name:count for (cat,name),count in operations.items()},
                               validation=[v['errors'] for v in cell['validation']]))
     parity = []
     for length in (128, 2048):
         pair = {v['variant']:v for v in summaries if v['context'] == length}
-        parity.append(dict(context=length, same_kernel_multiset=pair['G']['kernel_counts'] == pair['H']['kernel_counts']))
+        parity.append(dict(context=length, same_kernel_multiset=pair['G']['kernel_counts'] == pair['H']['kernel_counts'],
+            extra_H=dict(Counter(pair['H']['kernel_counts'])-Counter(pair['G']['kernel_counts'])),
+            extra_G=dict(Counter(pair['G']['kernel_counts'])-Counter(pair['H']['kernel_counts']))))
     output = dict(status='full numerical and replay validation passed', cases=4, requests=12,
                   identity=eager, summaries=summaries, kernel_parity=parity)
     (root/'validation-analysis.json').write_text(json.dumps(output, indent=2)+'\n')
