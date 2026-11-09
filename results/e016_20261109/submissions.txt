@@ -6,3 +6,5 @@ ARC read-only status escalation timed out in automatic approval review. Its sing
 331968 fresh c10 setup: ssh arc-off-network sbatch --parsable --export=ALL,PROJECT_ROOT=/mnt/beegfs/hpuvvad/csc548-w4a16-e016-c10-20261109 --output=/tmp/e016-c10-setup-%j.log < /tmp/e016-c10-bootstrap.sh
 331968 c10 setup CANCELLED while verified PENDING, no compute. Another user's allocation took c10 before submission ran.
 331973 scheduler-selected fresh setup: ssh arc-off-network sbatch --parsable --export=ALL,PROJECT_ROOT=/mnt/beegfs/hpuvvad/csc548-w4a16-e016-final-20261109 --output=/tmp/e016-final-setup-%j.log < /tmp/e016-final-bootstrap.sh
+331973 c58 setup inspected locally: exact runtime lock/source identity, six bitwise small requests, independent full tensors and genuine seven-versus-one replay. SETUP_RETRIEVED/SMOKE_INSPECTED recorded.
+331992 c58 full validation: sbatch --nodelist=c58 --dependency=afterok:331973 --export=ALL,PROJECT_ROOT=/mnt/beegfs/hpuvvad/csc548-w4a16-e016-final-20261109,MODE=validation --output=<R>/validation-slurm-%j.log < scripts/e016/stage_arc.sh

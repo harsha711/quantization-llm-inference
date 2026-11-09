@@ -1,0 +1,5 @@
++ prun timeout 1800 /tmp/e015-hpuvvad-20261109/bin/python scripts/e016/check_analysis.py /mnt/beegfs/hpuvvad/csc548-w4a16-e016-c9-20261109/results/e016_20261109 validation
+[prun] Master compute host = c9
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun timeout 1800 /tmp/e015-hpuvvad-20261109/bin/python scripts/e016/check_analysis.py /mnt/beegfs/hpuvvad/csc548-w4a16-e016-c9-20261109/results/e016_20261109 validation (family=openmpi4)
+PASS real evidence accepted and numerical/token/replay/identity/compiler/position/feedback/restoration/cache corruptions rejected

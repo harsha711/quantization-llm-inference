@@ -1,0 +1,2 @@
+PASS four full numerical/replay cases, twelve reset/alternating-prompt requests
+Kernel parity: [{'context': 128, 'same_kernel_multiset': False, 'extra_H': {'memcpy32_post': 441}, 'extra_G': {}}, {'context': 2048, 'same_kernel_multiset': False, 'extra_H': {'memcpy32_post': 441}, 'extra_G': {}}]

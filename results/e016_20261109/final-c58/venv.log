@@ -1,0 +1,4 @@
++ prun timeout 1800 python3.11 -m venv /tmp/e015-hpuvvad-20261109
+[prun] Master compute host = c58
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun timeout 1800 python3.11 -m venv /tmp/e015-hpuvvad-20261109 (family=openmpi4)
