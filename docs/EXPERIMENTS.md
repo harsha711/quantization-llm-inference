@@ -17,6 +17,8 @@ Expected size (calculation from E030 and the E025 Marlin cost per weight, not a 
 
 Contexts 128 and 2048 × primary/held-out × two reversed series, 3 warmups + 20 requests, one process per cell, all four variants on one node. Also reported: GQAH versus V and VH. Smoke (context128 validation, one cell of GQAH, V, VH) inspected before the dependent full job. Limits fixed now: one model, batch 1, 64 tokens, two passages; the Marlin operator and its workspace have never been validated at 151,936 output columns, so the gate and workspace guards at that width are part of what the smoke tests; prefill also runs the head over every prompt position in our path.
 
+Execution notes: smoke `head-smoke-c9-334243-hs` (inside kept job 334243, c9) COMPLETED exit 0 on the first attempt and was inspected. Head weight quantization error 0.1219 relative L2. Both context128 cases ACCEPTED under the gate at 151,936 output columns (GQAH versus its FP64 control: relative L2 0.00209 / 0.00192, tokens identical, bitwise equal to eager and on repeat, workspace guards intact). Head effect, reported only: the head-quantized control keeps 64/64 leading tokens of the FP16-head control on the primary passage and 47/64 on the held-out passage; logit relative L2 between the two controls 0.170 / 0.123 at the first step. vLLM accepted the quantized head (model memory 1.23 GiB against 1.12 GiB) and its tokens equal GQAH's in all 64 positions. One held-out cell each, smoke only, not the result: GQAH 271.5 ms, V 238.9 ms, VH 180.8 ms. Because c9 had under an hour left, the complete predeclared run (contexts 128 and 2048) is queued inside kept job 334245 on c10 behind the ORT long-context run; c9's remaining time runs the same cells at context128 only, as a second-node replication decided before any full result.
+
 ## E030 — Where the per-step gap to vLLM lies (diagnostic)
 
 Predeclared 2026-11-10 after the E027 result, with the user's agreement ("alright") to the proposed next step. Question: on identical weights vLLM spends 3.8–3.9 ms per decode step and our GQA path 5.2–6.0 ms; which GPU kernels account for the difference? No path is changed and no speedup is claimed.
@@ -150,6 +152,15 @@ Predeclared outcome: **"slower" at all three contexts**; the hypothesis (GQA ≥
 Limits: vLLM decode is a difference of two wall times, ours a synchronized phase timer; vLLM's Marlin lacks the E006 barrier; its engine runs in a child process; batch 1 only, which is not vLLM's design point and still favours it here; one node; `RequestOutput.metrics` was empty in offline mode. vLLM FP16 was not run.
 
 Extension, as predeclared under E028: vLLM at contexts 4096 and 8192 in the remaining time of the kept c9 allocation (16384 does not fit its time limit there).
+
+Long-context extension result (`full-c9-334243-long`, inside kept job 334243, exit 0, 32 cells; our variants validated through `long.py`, vLLM tokens 64/64 equal to ours in every request):
+
+| Context | GR ms | GQ ms | GQA ms | vLLM ms | GQA versus vLLM | vLLM 1-token request ms | End-to-end GQA / vLLM ms |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| 4096 | 1219.5–1219.8 | 953.4–953.6 | 429.5–429.6 | 266.3–266.5 | 61.2–61.3% slower | 302.6–304.4 | 928–929 / 569–571 |
+| 8192 | 1891.2–1891.5 | 1617.4–1617.9 | 544.5–544.7 | 284.1–284.8 | 91.2–91.7% slower | 682.7–683.3 | 1942–1944 / 967 |
+
+Outcome "slower" at both contexts, and the deficit widens with context: our step grows from 6.8 to 8.6 ms while vLLM's grows from 4.2 to 4.5 ms. Our prefill is also about 500 ms at 4096 and 1400 ms at 8192 against vLLM's 303 and 683 ms for a whole 1-token request. Context 16384 was not run for vLLM (time limit of that allocation).
 
 ## E026 — Single-query grouped decode attention under graph replay
 

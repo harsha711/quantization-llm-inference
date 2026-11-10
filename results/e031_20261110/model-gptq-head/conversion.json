@@ -1,0 +1,11 @@
+{
+ "base": "/mnt/beegfs/hpuvvad/csc548-w4a16-e027-20261110/model-gptq",
+ "head_quantization_rel_l2": 0.12192042171955109,
+ "hashes": {
+  "weight": "9c4556addfff4b075adbdb2dfe88c9795b2cc2073f19cb9c0f935139135b686b",
+  "codes": "0b9750b731841ffd2938394727175546848f3fff24d2e697942c36b309166c7e",
+  "packed": "2c25c22ca234c460caaae81b78c88a9f786f5ab002bd4c70e8b6f568fd874c39",
+  "scales": "94f4365f901f09b8697aa6139a087df768293b3906910179d464999852b1a7e2",
+  "reconstructed": "b3481cea6dd697b8b741ec35d375975d4c48c85d456c884fd314fe6860a7128d"
+ }
+}
