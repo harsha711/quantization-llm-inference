@@ -2,6 +2,31 @@
 
 Read the numerical/measurement [contract](CONTRACT.md) before interpreting these records. Preserve raw evidence, failed attempts, and inconclusive outcomes. An alternative that has not been implemented or measured is not a failed optimization. Historical entries below reconstruct only what the repository supports. Missing prior failure numbers or commit IDs remain unknown.
 
+## E029 — Our decode paths at contexts beyond 2048
+
+Predeclared 2026-11-10 at the user's request to test context lengths beyond 2048. No code change: E026's tooling and variants (GR, GQ, GRA, GQA) at contexts 4096, 8192 and 16384, both passages, two reversed series, 3 warmups + 20 requests per cell. The passages are the same two texts repeated to the required token count, as at every earlier context. Each case is validated first by E026's `att.py validate` under E021's gate (third-gate disclosure applies); a context whose validation is rejected or cannot run (memory, time) is reported as such and not timed, with no gate edit.
+
+Hypotheses, from the E026 measurements (calculations, not results): (a) GQA stays ≥5% below GRA in every cell at each context, with the percentage shrinking as attention grows — linear extrapolation gives roughly 38%, 34% and 27% at 4096, 8192 and 16384; (b) GQA's decode step grows about 0.41 ms per 1,000 context tokens. Reported: decode medians and per-step times for all four variants, GQA versus GRA/GR/GQ, end-to-end and prefill share, peak allocated memory, and the departure from the linear projection. Prefill is unchanged eager code and is expected to dominate end-to-end time at these contexts; that is reported, not optimized.
+
+Limits fixed now: one model (trained limit 32,768 positions), batch 1, 64 generated tokens, repeated-passage prompts, one node; no sanitizer coverage at these prefill sizes. `scripts/e028/submit.sh long`. Smoke (context4096 validation + one GQA cell) inspected before the dependent full job.
+
+## E028 — Our decode path versus llama.cpp and ONNX Runtime GenAI
+
+Predeclared 2026-11-10 at the user's request to queue separate jobs for other state-of-the-art inference stacks, alongside E027 (vLLM). Nothing in our paths changes. Two independent comparators, each in its own job and node-local venv, each built from the same pinned base model files:
+
+- llama.cpp via llama-cpp-python built from its PyPI sdist with CUDA, all layers on the GPU. LF = FP16 GGUF from the sdist's own `convert_hf_to_gguf.py`; LQ = llama.cpp's own Q4_K_M quantization of it.
+- ONNX Runtime GenAI (CUDA provider) from PyPI. OF = its model builder's FP16 export; OQ = the builder's own INT4 export.
+
+Unlike E027, these stacks cannot load the project's G128 codes: their 4-bit formats and quantizers are their own, so the 4-bit comparison is between complete stacks (format + kernel + runtime), not between runtimes on identical weights. Versions are whatever PyPI serves on the day, recorded by `pip freeze` and the hashed sdist; a rebuilt venv is constrained to the first freeze.
+
+Conditions as E027: batch 1, greedy, 64 tokens, the exact input ids of our validated runs, contexts 128, 512, 2048 × two passages × two reversed series, 3 warmups + 20 requests, one process per cell, GR and GQA re-validated and re-timed in the same job on the same node. External decode time = 63 single-token steps including the stack's sampling call (argmax over raw logits for llama.cpp; `generate_next_token` for ORT), prefill excluded; end-to-end also reported.
+
+Checks: the FP16 variant of each stack must produce our FP16 path's first token in every request or the cell fails; leading-token agreement (of 64) is reported for FP16 and 4-bit variants and not gated, since the 4-bit weights differ. ORT GenAI stops at EOS with no ignore option; a request ending before 64 tokens fails its cell. No output-quality comparison of the three quantizers is made or implied.
+
+Outcome per stack and context, fixed now, GQA versus the stack's 4-bit variant with E027's rule: "faster" (GQA ≥5% below in all four cells), "slower", "comparable" (all within ±5%), otherwise "mixed". Also reported: our GR versus the stack's FP16, and the stack's own 4-bit gain over its FP16.
+
+Not covered: TensorRT-LLM and ExLlamaV2 (engine build / calibration toolchains not attempted), batch sizes above 1, tuning of either stack. `scripts/e028/`. A failed install or build is recorded as a failed attempt of that comparator only. Smokes inspected before dependent full jobs.
+
 ## E027 — Our decode path versus vLLM on the same quantized weights
 
 Predeclared 2026-11-10 at the user's request ("go") after the question whether the result is faster than or comparable to a state-of-the-art inference stack. Every earlier full-model comparison used Hugging Face Transformers FP16 as the baseline. This experiment adds one external comparator and changes nothing in our paths.
