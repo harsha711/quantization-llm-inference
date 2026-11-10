@@ -2,6 +2,18 @@
 
 Read the numerical/measurement [contract](CONTRACT.md) before interpreting these records. Preserve raw evidence, failed attempts, and inconclusive outcomes. An alternative that has not been implemented or measured is not a failed optimization. Historical entries below reconstruct only what the repository supports. Missing prior failure numbers or commit IDs remain unknown.
 
+## E023 — CUDA-graph replay of the Marlin decode step
+
+Predeclared 2026-11-10 from `6f01dc2`, requested by the user ("get a new node and test this out") as the one hypothesis E022 supports. One main change: the per-token decode step of the Marlin model (forward + argmax) is captured once with `torch.cuda.CUDAGraph` and replayed per token, exactly E015's procedure (three side-stream warmups, capture at the first decode position, stable token/position/mask/cache addresses). No kernel, dispatch, tile, model, quantization or tolerance change; corrected E006 A library `e4eca5e3…` and E017 integration unchanged; prefill stays eager. Whether Marlin's external ctypes launches can be captured is unknown and is the first thing the smoke tests; a capture failure is recorded as a concrete negative result.
+
+Hypothesis: graph-replayed Marlin (GQ) lowers the 63-step decode median by ≥5% versus eager Marlin (Q) in both reversed series for a context. Reported without a gate: GQ versus eager FP16 (R) and versus graph-replayed FP16 (GR, the stronger FP16 baseline), TTFT, end-to-end, peak memory, graph setup is inside the untimed first request.
+
+Validation before timing, `scripts/e023/run.py validate`, one dual-module process, contexts 128/2048 × primary/held-out, 64 tokens. GQ must pass E021's gate against the FP64-projection control (tokens, relative L2 ≤ 0.003, finite, workspace, state invariants; same disclosure as E021: third gate, post hoc), and additionally GQ logits must be bitwise equal to eager Q and bitwise repeatable across requests reusing the graph. Per-call operator FP64 probing is not repeated: bitwise equality to the eager path that E021 probed is the link. GR-versus-R bitwise equality is reported.
+
+Timing only after inspected acceptance: separate process per cell, variants R, GR, Q, GQ, primary passage, 3 warmups + 20 requests, series 1 order 128 then 2048 with R,GR,Q,GQ, series 2 fully reversed, 320 timed requests. Each process first reproduces the validated logits for its variant bitwise, and every request passes the unchanged `infer.checked` token/state checks against the E019 R reference. No held-out timing (context128 held-out tokens differ from R at an exact tie). `scripts/e023/analyze.py`.
+
+Not covered: sanitizers under graph replay, complete-model trace, prefill, other models/batch/hardware, tails. ARC: c7 (node-local runtime), sbatch+prun, one rank; 8-token context128 smoke → inspected → validation → inspected → timing.
+
 ## E022 — Decode-step projection time breakdown (diagnostic)
 
 Predeclared 2026-11-10 from `a928561`, requested by the user ("test first") before the report. Diagnostic only: no optimization, kernel, dispatch or model-path change, no end-to-end claim.
