@@ -1,11 +1,16 @@
 # Current state, 2026-11-10
 
-- **End-to-end result:** corrected Marlin on all 196 block projections of Qwen2.5-1.5B decodes 28.9%/29.0% faster than reconstructed FP16 at context2048 and 3.6%/4.6% faster at context128 (below the 5% bar); peak allocated GPU memory about 60% lower; long-context prefill about 3% slower (E020).
+- **Best end-to-end result (E023):** corrected Marlin with the decode step replayed as a CUDA graph decodes 45.3% faster than eager reconstructed FP16 at context128 (342 vs 626 ms) and 30.5% faster at context2048 (633 vs 910 ms); against graph-replayed FP16 the gains are 44.2% and 29.6%. End-to-end 44.3% and 24.7%. Peak allocated memory about 58% lower. Graph logits are bitwise equal to eager Marlin.
+- **Eager Marlin result (E020):** corrected Marlin on all 196 block projections of Qwen2.5-1.5B decodes 28.9%/29.0% faster than reconstructed FP16 at context2048 and 3.6%/4.6% faster at context128 (below the 5% bar); peak allocated GPU memory about 60% lower; long-context prefill about 3% slower (E020).
 - **Validation status:** accepted only under E021's gate (agreement with an FP64-projection control, ten requests). E017 and E019, which compared against the FP16 reference, remain failed. Every statement of the speedup must carry that disclosure.
-- **Current bottleneck:** the Marlin decode step is host-bound; its 196 projections take 2.95 ms of which 99% is Python/launch time, versus 6.96 ms device-bound for FP16 (E022, [assessment](BOTTLENECK_ASSESSMENT.md)).
+- **Current bottleneck:** eager Marlin decode is host-bound (E022); graph replay removes that at context128 (E023). At context2048 graph replay adds only 2% over eager Marlin, so the remaining limit there is device work outside the projections, not yet profiled ([assessment](BOTTLENECK_ASSESSMENT.md)).
 - **Defaults unchanged:** corrected E006 A kernel, tiles and dispatch; no kernel edits since E006.
-- **Open, not run:** CUDA-graph replay of the Marlin decode step (one supported hypothesis); ACM report draft.
+- **Open, not run:** profile of the long-context decode step; held-out timing; sanitizers under graph replay; ACM report draft.
 - **Repository:** branch `optimize/inblock-k`, commits local and unpushed; no ARC jobs running; logit archives for E019/E021 remain on BeeGFS with hashes recorded.
+
+# E023 complete — graph-replayed Marlin decode passes at context128, subthreshold at 2048
+
+2026-11-10: [E023](EXPERIMENTS.md#e023--cuda-graph-replay-of-the-marlin-decode-step) captures the Marlin decode step in a CUDA graph. Capture works and is bitwise equal to eager Marlin. Versus eager Marlin, decode is 42.6%/42.2% lower at context128 (criterion passed) and 2.1%/2.3% lower at context2048 (not passed). 320 timed requests, jobs 334103 (failed import), 334104–334106, historical. Accepted only under E021's gate.
 
 # E022 complete — Marlin projections are host-bound in decode
 

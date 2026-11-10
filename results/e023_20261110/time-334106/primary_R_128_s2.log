@@ -1,0 +1,5 @@
++ prun timeout 3000 /tmp/e017-hpuvvad-20261109/bin/python /mnt/beegfs/hpuvvad/csc548-w4a16-e023-20261110/time-334106/run.py time /mnt/beegfs/hpuvvad/csc548-w4a16-e019-20261109/results-333424 /mnt/beegfs/hpuvvad/csc548-w4a16-e023-20261110/time-334106/out R 128 2 /mnt/beegfs/hpuvvad/csc548-w4a16-e023-20261110/validate-334105/out
+[prun] Master compute host = c7
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun timeout 3000 /tmp/e017-hpuvvad-20261109/bin/python /mnt/beegfs/hpuvvad/csc548-w4a16-e023-20261110/time-334106/run.py time /mnt/beegfs/hpuvvad/csc548-w4a16-e019-20261109/results-333424 /mnt/beegfs/hpuvvad/csc548-w4a16-e023-20261110/time-334106/out R 128 2 /mnt/beegfs/hpuvvad/csc548-w4a16-e023-20261110/validate-334105/out (family=openmpi4)
+DONE primary_R_128_s2 {"decode_s": 0.6268193750875071, "ttft_s": 0.015816354542039335, "e2e_s": 0.6426931550959125, "decode_min": 0.6267619288992137, "decode_max": 0.6268606598023325, "peak_allocated": 3155429376, "peak_reserved": 3405774848, "workspace": null, "gpu": "GPU-29e9569a-8a7a-cd23-5443-bd0b72ca241a, 610.57.04"}

@@ -1,6 +1,22 @@
 # Bottleneck assessment
 
-## Full-model decode, 2026-11-10 (current)
+## Full-model decode after graph replay, 2026-11-10 (current)
+
+E023 tested the hypothesis below and it holds at short context only.
+
+| Decode step, ms (E023 median / 63) | FP16 eager | FP16 graph | Marlin eager | Marlin graph |
+|---|---:|---:|---:|---:|
+| context128 | 9.94 | 9.75 | 9.46 | 5.43 |
+| context2048 | 14.44 | 14.26 | 10.26 | 10.04 |
+
+- Context128: removing host time exposes the Marlin device saving; the step falls 43%. FP16 gains under 2% from the same technique because it was already device-bound.
+- Context2048: Marlin gains only about 2% from graph replay, so it is device-bound there. Both paths cost about 4.6 ms more per step than at context128.
+
+**Current bottleneck: at long context, device work outside the 196 projections** (attention over the 2112-entry static cache, norms, masking, output head are the candidates). This is an inference from the step-time differences; no profile attributes it. At short context the graph-replayed Marlin step is 5.4 ms, of which E022 bounds the projections at no more than 2.5 ms; the rest is likewise unattributed.
+
+Cheapest discriminating measurement (not run): one profiler trace of a replayed decode step at each context, summing kernel time by category.
+
+## Full-model decode before graph replay, 2026-11-10 (E022 snapshot)
 
 Evidence checkpoint: E020–E022 on c7, RTX 5060 Ti 16 GB, Qwen2.5-1.5B, batch 1, 196 block projections, corrected E006 A unchanged. The kernel-level sections further down are historical and unchanged.
 

@@ -14,6 +14,32 @@ Timing only after inspected acceptance: separate process per cell, variants R, G
 
 Not covered: sanitizers under graph replay, complete-model trace, prefill, other models/batch/hardware, tails. ARC: c7 (node-local runtime), sbatch+prun, one rank; 8-token context128 smoke → inspected → validation → inspected → timing.
 
+### E023 result — passes at context128, subthreshold at context2048 (2026-11-10, c7, UUID GPU-29e9569a-8a7a-cd23-5443-bd0b72ca241a, driver 610.57.04)
+
+Attempts: smoke 334103 FAILED exit 1 at import, before GPU work (`validate` resolved to E014's module of the same name); fixed by loading the E021 helpers by path, committed. Smoke 334104, validation 334105 and timing 334106 COMPLETED exit 0, each inspected before the next. Identity checks pass in every job. 147 files hash-verified, `results/e023_20261110/`.
+
+Capture: Marlin's ctypes launches are captured by `torch.cuda.CUDAGraph` without error. Validation, 64 tokens, contexts 128/2048 × both passages: GQ logits are bitwise equal to eager Q and bitwise repeatable in all four cases; E021's gate against the FP64-projection control passes with E021's values (relative L2 0.00198/0.00192/0.00239/0.00213, tokens identical); workspace guards and state invariants hold; GR is bitwise equal to R. Accepted under E021's gate, with E021's disclosure (third gate, post hoc; E017/E019 remain failed).
+
+Timing, 320 timed requests, medians of 20, series 1 / series 2. Every timing process first reproduced its validated logits bitwise; every request passed the unchanged token/state checks.
+
+| Decode ms | R eager FP16 | GR graph FP16 | Q eager Marlin | GQ graph Marlin |
+|---|---:|---:|---:|---:|
+| context128 | 626.2 / 626.8 | 614.3 / 615.0 | 596.1 / 593.3 | 342.4 / 343.0 |
+| context2048 | 909.8 / 911.4 | 898.6 / 900.0 | 646.1 / 647.7 | 632.6 / 633.0 |
+
+| GQ decode lower than | Q (criterion) | R | GR |
+|---|---:|---:|---:|
+| context128 | 42.57% / 42.18% | 45.33% / 45.27% | 44.27% / 44.22% |
+| context2048 | 2.09% / 2.27% | 30.47% / 30.54% | 29.60% / 29.66% |
+
+End-to-end, GQ versus R: 44.35%/44.30% lower at 128 (357 versus 642 ms), 24.67%/24.79% at 2048 (829 versus 1100 ms). TTFT is unchanged by the graph (prefill stays eager): 14.8 versus 15.8 ms at 128, 196 versus 190 ms at 2048, the same 3% Marlin prefill cost as E020. Peak allocated memory: GQ 1261/1448 MiB versus R 3009/3236 MiB; the graph adds about 65 MiB to either path. GQ decode min–max spread is ≤0.6 ms at 128 and ≤1.7 ms at 2048. Graph capture cost falls in the untimed first request and was not measured.
+
+Decision against the predeclared criterion (GQ ≥5% below eager Q in both series): **passes at context128, does not pass at context2048** (2.1%/2.3%). Graph replay is therefore a supported improvement for short context only; at long context it is neutral-to-slightly-positive and the gain there remains the E020 Marlin-versus-FP16 gain.
+
+Observations and interpretation: the E022 hypothesis is supported at context128, where removing host time cuts the Marlin step from about 9.5 to 5.4 ms while FP16 gains only 1.9% from the same technique. At context2048 the Marlin step stays near 10.0 ms with or without the graph, so it is no longer host-bound there; both paths carry roughly 4.6 ms more per step than at context128, which points at non-projection device work over the long cache (hypothesis; not profiled).
+
+Limits: one model, one GPU, batch 1, primary passage only, no held-out timing, no sanitizer or trace under graph replay, no tail claim. Upstream Marlin and PyTorch graph replay are not ours; the contribution is the corrected kernel's integration, the diagnosis that located the host limit, and the controlled measurement. No default is changed in the repository's kernel code.
+
 ## E022 — Decode-step projection time breakdown (diagnostic)
 
 Predeclared 2026-11-10 from `a928561`, requested by the user ("test first") before the report. Diagnostic only: no optimization, kernel, dispatch or model-path change, no end-to-end claim.

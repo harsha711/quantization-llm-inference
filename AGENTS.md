@@ -149,6 +149,11 @@
 - E022 is complete: the 196 Marlin M=1 projections are 99% host time (2.95 ms), FP16 is device-bound (6.96 ms). Read the top section of docs/BOTTLENECK_ASSESSMENT.md. The host-bound whole-step explanation is a hypothesis, not a measurement.
 - No optimization is implemented or authorized. The one supported next experiment is graph replay of the Marlin decode step, on user request, validated under E021's gate with fresh timing.
 
+## E023 completed Marlin graph replay
+
+- E023 is complete. Graph-replayed Marlin decode (GQ) is bitwise equal to eager Marlin and passes its 5% criterion versus eager Marlin at context128 (42%) but not at context2048 (2%). Versus eager/graph FP16: 45%/44% at 128, 30.5%/29.6% at 2048. Report both the pass and the miss, with E021's gate disclosure.
+- No sanitizer, trace or held-out timing exists under graph replay. The long-context limit is unprofiled; do not attribute it. No further experiment is authorized without a user request. Jobs 334103–334106/c7 are historical.
+
 ## Rooflines, if requested
 
 - Recompute all ceilings, ridge points, arithmetic intensities, and performance coordinates from specifications/data. Keep the primary full-machine roof distinct from core-count, ISA, NUMA, and memory-domain sensitivity roofs.

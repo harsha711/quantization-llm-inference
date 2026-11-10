@@ -1,0 +1,20 @@
++ prun timeout 3000 /tmp/e017-hpuvvad-20261109/bin/python /mnt/beegfs/hpuvvad/csc548-w4a16-e023-20261110/smoke-334103/run.py validate /mnt/beegfs/hpuvvad/csc548-w4a16-e023-20261110/smoke-334103/out 8 128
+[prun] Master compute host = c7
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun timeout 3000 /tmp/e017-hpuvvad-20261109/bin/python /mnt/beegfs/hpuvvad/csc548-w4a16-e023-20261110/smoke-334103/run.py validate /mnt/beegfs/hpuvvad/csc548-w4a16-e023-20261110/smoke-334103/out 8 128 (family=openmpi4)
+Traceback (most recent call last):
+  File "/mnt/beegfs/hpuvvad/csc548-w4a16-e023-20261110/smoke-334103/run.py", line 17, in <module>
+    from validate import prefix, rel  # noqa: E402  (E021 gate helpers)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ImportError: cannot import name 'prefix' from 'validate' (/mnt/beegfs/hpuvvad/csc548-w4a16-e017-r2-20261109/scripts/e014/validate.py)
+--------------------------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code. Per user-direction, the job has been aborted.
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+mpirun detected that one or more processes exited with non-zero status, thus causing
+the job to be terminated. The first process to do so was:
+
+  Process name: [[47288,1],0]
+  Exit code:    1
+--------------------------------------------------------------------------

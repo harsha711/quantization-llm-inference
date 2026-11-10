@@ -1,0 +1,15 @@
+{
+  "decode_s": 0.6460694440174848,
+  "ttft_s": 0.19601143489126116,
+  "e2e_s": 0.8421465989667922,
+  "decode_min": 0.6458944568876177,
+  "decode_max": 0.6466836638282984,
+  "peak_allocated": 1450401792,
+  "peak_reserved": 2636120064,
+  "workspace": {
+    "locks_zero": true,
+    "lock_guards": true,
+    "scratch_guards": true
+  },
+  "gpu": "GPU-29e9569a-8a7a-cd23-5443-bd0b72ca241a, 610.57.04"
+}
