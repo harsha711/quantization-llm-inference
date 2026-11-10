@@ -10,6 +10,8 @@ Hypotheses, from the E026 measurements (calculations, not results): (a) GQA stay
 
 Limits fixed now: one model (trained limit 32,768 positions), batch 1, 64 generated tokens, repeated-passage prompts, one node; no sanitizer coverage at these prefill sizes. `scripts/e028/submit.sh long`. Smoke (context4096 validation + one GQA cell) inspected before the dependent full job.
 
+Execution notes: smoke 334241 on c7 FAILED exit 1 in validation at context4096 before any timing: the E017 operator wrapper asserts at most 2048 activation rows per call, and a 4096-token prefill exceeds it. Deviation from "no code change", recorded before any result: `scripts/e028/long.py` runs E026's `att.py` with that assertion bound raised to 16384 (the wrapper's workspace size does not depend on the bound above 64 rows; decode is one row and unaffected). Whether Marlin's existing dispatch is correct at these prefill sizes is exactly what the unchanged E021 gate then tests per context. At the user's instruction not to release GPUs, the finished job's allocation is kept (`scripts/e028/inalloc.sh`, batch shell paused) and later stages run inside it as tagged directories.
+
 ## E028 — Our decode path versus llama.cpp and ONNX Runtime GenAI
 
 Predeclared 2026-11-10 at the user's request to queue separate jobs for other state-of-the-art inference stacks, alongside E027 (vLLM). Nothing in our paths changes. Two independent comparators, each in its own job and node-local venv, each built from the same pinned base model files:

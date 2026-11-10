@@ -20,7 +20,7 @@ export E017_ROOT=/mnt/beegfs/hpuvvad/csc548-w4a16-e017-r2-20261109
 OUT=/mnt/beegfs/hpuvvad/csc548-w4a16-e027-20261110
 VENV=/tmp/e017-hpuvvad-20261109
 VV=/tmp/e027-vllm-hpuvvad-20261110
-mkdir -p "\$OUT"; S="\$OUT/$stage-\$(hostname)-\$SLURM_JOB_ID"; mkdir "\$S"
+mkdir -p "\$OUT"; S="\$OUT/$stage-\$(hostname)-\$SLURM_JOB_ID\${E_TAG:-}"; mkdir "\$S"
 exec > "\$S/driver.log" 2>&1
 trap 'rc=\$?;echo "\$rc" > "\$S/driver.exit";touch "\$S/FINISHED";for ((i=0;i<450;i++));do [[ -e "\$S/RETRIEVED" ]] && break;sleep 2;done;exit "\$rc"' EXIT
 EOF

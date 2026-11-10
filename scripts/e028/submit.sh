@@ -22,7 +22,7 @@ export E017_ROOT=/mnt/beegfs/hpuvvad/csc548-w4a16-e017-r2-20261109
 OUT=/mnt/beegfs/hpuvvad/csc548-w4a16-$exp-20261110
 VENV=/tmp/e017-hpuvvad-20261109
 XV=/tmp/e028-$kind-hpuvvad-20261110
-mkdir -p "\$OUT"; S="\$OUT/$kind-$stage-\$(hostname)-\$SLURM_JOB_ID"; mkdir "\$S"
+mkdir -p "\$OUT"; S="\$OUT/$kind-$stage-\$(hostname)-\$SLURM_JOB_ID\${E_TAG:-}"; mkdir "\$S"
 exec > "\$S/driver.log" 2>&1
 trap 'rc=\$?;echo "\$rc" > "\$S/driver.exit";touch "\$S/FINISHED";for ((i=0;i<450;i++));do [[ -e "\$S/RETRIEVED" ]] && break;sleep 2;done;exit "\$rc"' EXIT
 EOF
@@ -35,7 +35,7 @@ embed "$here/../e018/diagnose.py"; embed "$here/../e021/validate.py"; embed "$he
 case $kind in
 llama) embed "$here/lbench.py"; embed "$here/lquant.py"; embed "$here/analyze.py";;
 ort) embed "$here/obench.py"; embed "$here/analyze.py";;
-long) embed "$here/../e026/analyze.py";;
+long) embed "$here/long.py"; embed "$here/../e026/analyze.py";;
 esac
 cat <<'EOF'
 export PROJECT_ROOT=$E017_ROOT
@@ -51,8 +51,9 @@ sha256sum -c "$R/binaries.sha256" > "$S/binary-check.log"
 diff -u "$R/pip-freeze.txt" "$S/pip-freeze.txt"
 (cd "$E017_ROOT" && sha256sum -c "$R/source-validation.sha256") > "$S/source-check.log"
 export PIP_CACHE_DIR=/mnt/beegfs/hpuvvad/csc548-w4a16-e016-final-20261109/cache/pip
+ATT=att.py
 MODEL=$(python3 -c 'import json,sys;print(json.load(open(sys.argv[1]))["path"])' "$R/model.json")
-go() { local label=$1; shift; (set -x; prun timeout 6000 "$E017_PYTHON" "$S/att.py" "$@") > "$S/$label.log" 2>&1; }
+go() { local label=$1; shift; (set -x; prun timeout 6000 "$E017_PYTHON" "$S/$ATT" "$@") > "$S/$label.log" 2>&1; }
 freeze() { "$XV/bin/python" -m pip freeze > "$S/ext-freeze.txt"; [[ -e "$OUT/$1-freeze.txt" ]] || cp "$S/ext-freeze.txt" "$OUT/$1-freeze.txt"; diff -u "$OUT/$1-freeze.txt" "$S/ext-freeze.txt"; }
 constraint() { [[ -e "$OUT/$1-freeze.txt" ]] && echo "-c $OUT/$1-freeze.txt" || true; }
 EOF
@@ -100,7 +101,7 @@ gox() { local label=$1 v=$2; shift 2; local m=$OUT/ort/fp16; [[ $v == OQ ]] && m
 EXT=(OF OQ)
 EOF
 ;;
-long) echo 'EXT=()';;
+long) echo 'EXT=(); ATT=long.py';;
 *) exit 2;;
 esac
 cat <<EOF
