@@ -2,6 +2,16 @@
 
 Read the numerical/measurement [contract](CONTRACT.md) before interpreting these records. Preserve raw evidence, failed attempts, and inconclusive outcomes. An alternative that has not been implemented or measured is not a failed optimization. Historical entries below reconstruct only what the repository supports. Missing prior failure numbers or commit IDs remain unknown.
 
+## E020 — Descriptive primary timing of the numerically unaccepted Marlin path
+
+Predeclared 2026-11-10 01:20 EST from `5dcd85c`, before any timing sample exists. After E019's rejection the user was offered stop / descriptive timing / a third gate and delegated the choice ("please figure out the best approach"). Chosen: measure, without changing or adding any acceptance gate. Reason: whether the bridge has any latency benefit is unknown after E017–E019, the node is held, and a measurement labelled as unaccepted misleads nobody, whereas a third post hoc gate would.
+
+Status of the measured path: Q FAILED E017's gate and E019's gate. E020 does not validate it. Any report must present E020 numbers as "latency of a path that is not numerically accepted against the FP16 reference", never as an accepted speedup, and must cite E017/E018/E019 alongside.
+
+Question: on primary requests, is Q's 63-step decode median ≥5% lower than fresh R in both reversed series for a context? Layout is E017's unchanged primary plan: unchanged `infer.py`, separate processes, 3 warmups + 20 requests per cell, series 1 128 R,Q then 2048 R,Q, series 2 reversed, 160 requests, every timed request token/state-checked against R by the unchanged code (primary tokens matched R at both contexts in E019). TTFT, end-to-end and allocator peaks reported ungated. No held-out timing whatever the outcome: the context128 held-out request does not match R's tokens. Any failed per-request check stops the run and is recorded.
+
+Mechanics: `scripts/e019/submit.sh e020 333424` via `inalloc.sh` inside allocation 333424 on c7; own results root `e020-results-333424` with symlinks to E019's passed O/R validation records; `infer.py`'s required `FULL_VALIDATION_INSPECTED` file is created only there and its content states it is not a validation claim. E019's root gets no sentinel.
+
 ## E019 — Corrected Marlin end-to-end with a control-calibrated model gate
 
 Predeclared 2026-11-09 from `4a4b8a6`, explicitly requested by the user ("go") after E018. E017 remains failed under its own gate and immutable. This is a new comparison whose model gate was chosen AFTER seeing the E017 failure and the E018 controls; every report of E019 must say so. No kernel, dispatch, tile, model, compiler or graph change. Unchanged E017 `integration.py`/`infer.py`, artifacts, runtime and corrected library `e4eca5e3…` are used from the preserved E017 BeeGFS root; E019 writes only to its own root.

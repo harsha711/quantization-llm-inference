@@ -57,10 +57,17 @@ done
 exit \$rc
 EOF
 ;;
-primary|heldout) cat <<EOF
+primary|heldout|e020) if [[ $stage == e020 ]]; then cat <<EOF
+# E020: descriptive primary timing after E019's REJECTED gate. Own results root; E019's root gets no sentinel.
+ls "\$OUT/validate-$prior/RETRIEVED"
+V="\$OUT/e020-results-$prior"; stage=primary; mkdir "\$V"; ln -s "\$OUT/results-$prior"/* "\$V/"
+echo "E020 descriptive timing only. E019 validation was REJECTED; this file exists because unchanged infer.py requires it and is not a validation claim." > "\$V/FULL_VALIDATION_INSPECTED"
+EOF
+else cat <<EOF
 ls "\$OUT/validate-$prior/INSPECTED"
 V="\$OUT/results-$prior"; stage=$stage
 EOF
+fi
 cat <<'EOF'
 touch "$V/FULL_VALIDATION_INSPECTED"
 if [[ $stage == heldout ]]; then grep -q '"heldout_required": true' "$OUT"/primary-*/primary-analysis.json; touch "$V/HELDOUT_RELEASED"; fi
