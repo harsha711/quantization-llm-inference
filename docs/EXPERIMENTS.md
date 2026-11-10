@@ -2,6 +2,18 @@
 
 Read the numerical/measurement [contract](CONTRACT.md) before interpreting these records. Preserve raw evidence, failed attempts, and inconclusive outcomes. An alternative that has not been implemented or measured is not a failed optimization. Historical entries below reconstruct only what the repository supports. Missing prior failure numbers or commit IDs remain unknown.
 
+## E026 — Single-query grouped decode attention under graph replay
+
+Predeclared 2026-11-10 from the E025 result, under the user's standing instruction to continue toward robust optimizations while away. One main change: for decode steps only (one query token), attention is computed as `softmax(scale·q·Kᵀ + mask)·V` directly on the 2 stored key/value heads with FP32 scores and one final rounding to FP16, instead of Transformers' SDPA call after expanding keys/values to 12 heads. Prefill and every multi-token call keep the stock path. Static shapes and addresses are unchanged, so E023's graph capture applies. No kernel, quantization, Marlin, tolerance or cache change. This is an inference-side change common to FP16 and Marlin; it is not a W4A16 kernel result, and its gain must be reported against an FP16 path using the same attention.
+
+Hypothesis: graph-Marlin with the new attention (GQA) lowers the decode median by ≥5% versus graph-Marlin with stock attention (GQ) in every (passage, series) cell of a context. Expected from E025 (calculation, not a result): a gain at long context and a possible regression at context128, where the stock kernel is already cheap and the new path adds several small kernels; a regression is reported as such, and any context-dependent selection would be a separate experiment.
+
+Variants: GR, GQ (stock attention), GRA, GQA (new attention), all graph-replayed. Contexts 128, 512, 2048 × primary/held-out, c-node chosen by availability with the hashed runtime archive.
+
+Validation before timing, `scripts/e026/att.py validate`: dual-module process, each case at 64 tokens. The reference stays E021's FP64-projection control with STOCK attention. GQA must pass E021's gate against it unchanged (tokens with the near-tie rule, relative L2 ≤ 0.003, finite, workspace, state), must equal the eager new-attention Marlin run bitwise, and must repeat bitwise. Because the new attention rounds differently from the stock kernel, this gate now also absorbs attention rounding; failing it is a rejection with no gate edit and no timing. The function itself is checked against PyTorch's attention definition in FP32 at install. E021's disclosure (third gate, post hoc) applies.
+
+Timing after inspected acceptance: one process per cell, 3 warmups + 20 requests, two fully reversed series, each variant checked against its own validated tokens and bitwise logits. Reported: GQA versus GQ (criterion), GRA versus GR, GQA versus GRA (the Marlin gain with attention equalized), end-to-end, spreads. `scripts/e026/`. Smoke (context128 validation + one timed cell) inspected before the dependent full job.
+
 ## E025 — Decode-step device time by operation (diagnostic)
 
 Predeclared 2026-11-10 from `fe36faf`, under the user's standing instruction to continue toward robust optimizations while away. Diagnostic only: no optimization, kernel or model-path change, no timing claim.
@@ -11,6 +23,27 @@ Motivation (E024 calculation): graph-Marlin's decode step is 5.44 ms at context1
 Method, `scripts/e025/opprofile.py`, c7, one Q process, unchanged eager E017 runner: per context 128 and 2048, one warm 8-token request, then one 8-token request under `torch.profiler` (CPU+CUDA activities, E017 markers). Device kernel time for kernels starting inside the decode span is attributed to the launching operator and reported per decode step, with the 2048−128 difference per operator. Only device time is used; profiler overhead makes host times invalid. Profiled-request tokens must equal the unprofiled request's.
 
 Reading: the operator family with the largest 2048−128 device-time difference is the candidate for one next predeclared optimization; if no family carries at least half of the difference, the result is recorded as diffuse and no optimization is proposed from it. Kernel durations under an eager profiler are not graph-replay latencies; sums are compared with E024's step times as a consistency check only. Smoke: context128 alone, inspected before the dependent full job.
+
+### E025 result — attention carries the context-proportional time; the FP16 output head is the largest fixed non-Marlin item (2026-11-10, c9, UUID GPU-02862ae3-8b7f-fb81-413c-791b5874af21, driver 610.57.04)
+
+Attempts: smoke 334140 cancelled unstarted (c7 was taken by another user; job moved to idle c9 with the hashed E024 runtime archive unpacked to the identical path). Smokes 334142 (my path edit broke the E017 root), 334143 (script named `profile.py` shadowed the standard library) and 334144 (decode span counted twice because the profiler mirrors annotations on the device timeline) FAILED exit 1 before producing any result; each fixed and committed. Smoke 334145 COMPLETED and inspected; full 334147 COMPLETED exit 0. 60 files hash-verified, `results/e025_20261110/`. Profiled-request tokens equal the unprofiled request's; identity checks pass.
+
+| Device time per eager Marlin decode step, µs | context128 | context2048 | difference |
+|---|---:|---:|---:|
+| Marlin kernels (196 projections) | 2443 | 2490 | 47 |
+| FP16 output head GEMV (`aten::mm`, 151936×1536, not quantized) | 1169 | 1175 | 6 |
+| Attention kernel (`fmha_cutlassF`, memory-efficient SDPA) | 469 | 3996 | 3527 |
+| `aten::copy_` (includes key/value head expansion) | 366 | 1420 | 1055 |
+| All other kernels (norms, RoPE, residuals, activation, cache update, argmax) | 1084 | 1100 | 16 |
+| Total | 5530 | 10181 | 4651 |
+
+Consistency: the totals, 5.53 and 10.18 ms, agree with E024's graph-replayed Marlin step times of 5.44 and 10.06 ms on c7, so under graph replay the step is essentially its device time.
+
+Predeclared reading: the attention operator carries 78% of the 2048−128 difference (≥ half), and the key/value expansion copy another 23%; everything else is context-independent within 0.1 ms. The candidate for one next optimization is therefore the single-query decode attention path. Interpretation (not measured further): the memory-efficient SDPA kernel serves one query token against 2112 cached keys at about 143 µs per layer, far above the arithmetic involved, and the explicit mask forces Transformers to materialize 12 key/value heads from 2.
+
+Also observed, not acted on: the unquantized tied output head costs about 1.17 ms per step at both contexts (21% of the short-context step), close to its 467 MB weight traffic at device bandwidth; quantizing it would be a quantization-scope change with model-output consequences and is a separate question. Marlin's 196 projections take about 2.45 ms. The roughly 1.3 ms of small elementwise kernels is spread over many launches.
+
+Limits: one profiled request per context, seven decode steps, eager execution under profiler instrumentation, one node. Kernel durations are not replay latencies.
 
 ## E024 — Robustness of the E020/E023 decode gains
 

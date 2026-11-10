@@ -1,0 +1,24 @@
++ prun timeout 3000 /tmp/e017-hpuvvad-20261109/bin/python /mnt/beegfs/hpuvvad/csc548-w4a16-e025-20261110/smoke-334144/opprofile.py /mnt/beegfs/hpuvvad/csc548-w4a16-e025-20261110/smoke-334144/out 128
+[prun] Master compute host = c9
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun timeout 3000 /tmp/e017-hpuvvad-20261109/bin/python /mnt/beegfs/hpuvvad/csc548-w4a16-e025-20261110/smoke-334144/opprofile.py /mnt/beegfs/hpuvvad/csc548-w4a16-e025-20261110/smoke-334144/out 128 (family=openmpi4)
+USDT:2026-11-10 11:46:11 8696:8696 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-10 11:46:11 8696:8696 SyncActivityProfilerHandler.cpp:46] profiler_stop
+Traceback (most recent call last):
+  File "/mnt/beegfs/hpuvvad/csc548-w4a16-e025-20261110/smoke-334144/opprofile.py", line 64, in <module>
+    main()
+  File "/mnt/beegfs/hpuvvad/csc548-w4a16-e025-20261110/smoke-334144/opprofile.py", line 37, in main
+    assert len(span) == 1
+           ^^^^^^^^^^^^^^
+AssertionError
+--------------------------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code. Per user-direction, the job has been aborted.
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+mpirun detected that one or more processes exited with non-zero status, thus causing
+the job to be terminated. The first process to do so was:
+
+  Process name: [[52175,1],0]
+  Exit code:    1
+--------------------------------------------------------------------------

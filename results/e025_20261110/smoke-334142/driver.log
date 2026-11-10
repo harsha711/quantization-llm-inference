@@ -1,0 +1,4 @@
+/mnt/beegfs/hpuvvad/csc548-w4a16-e025-20261110/smoke-334142/diagnose.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e025-20261110/smoke-334142/profile.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e024-20261110/runtime.tar: OK
+/var/spool/slurmd/job334142/slurm_script: line 239: /mnt/beegfs/hpuvvad/csc548-w4a16-e017-r2-20261110/scripts/e017/env_arc.sh: No such file or directory
