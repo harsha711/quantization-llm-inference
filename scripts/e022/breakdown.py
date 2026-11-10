@@ -36,8 +36,7 @@ def main():
     assert len(mods) == 196
     for r, q, x, flat, o in mods:  # the raw call must be the module's own computation
         q.operator.call(flat, q.qweight, q.scales, o)
-        want = q(x).reshape(1, -1) - (0 if q.bias is None else q.bias)
-        assert torch.equal(o, want.to(o.dtype)) or torch.allclose(o.float(), want.float(), atol=2e-3, rtol=2e-3)
+        assert torch.equal(o if q.bias is None else o + q.bias, q(x).reshape(1, -1))
     paths = {
         'R_module': lambda r, q, x, flat, o: r(x),
         'Q_module': lambda r, q, x, flat, o: q(x),
