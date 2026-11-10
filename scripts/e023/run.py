@@ -14,7 +14,10 @@ import torch
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import diagnose as D  # noqa: E402  (adds the E017 paths)
-from validate import prefix, rel  # noqa: E402  (E021 gate helpers)
+import importlib.util  # noqa: E402
+_spec = importlib.util.spec_from_file_location('e021_gate', Path(__file__).resolve().parent / 'validate.py')  # e014 also has a validate.py
+_gate = importlib.util.module_from_spec(_spec); _spec.loader.exec_module(_gate)
+prefix, rel = _gate.prefix, _gate.rel  # E021 gate helpers
 from infer import Runner, checked  # noqa: E402
 
 I = D.I
