@@ -87,6 +87,22 @@ Smoke 334243 on c9 (after cancelled-unstarted 334242, resubmitted with an instal
 
 Rerun `smoke-c9-334243-s2` (inside kept job 334243) COMPLETED exit 0 and was inspected: vLLM starts, reports CUDA-graph capture and a compiled backbone, and returns all 64 tokens identical to our Marlin path. One context128 held-out cell, smoke only: GQA 326.3 ms, V 237.9 ms. Full job started inside the kept allocation.
 
+### E027 result — on identical weights, vLLM decodes faster than our path at every context (2026-11-10, c9)
+
+Full run `full-c9-334243-full` inside kept job 334243, exit 0, 48 cells, 960 timed requests; `results/e027_20261110/` (logit archives and the converted checkpoint stay on BeeGFS, hashes in `e027-all.sha256` and `model-gptq.sha256`). GR/GQ/GQA validation accepted in all six cases. vLLM returned all 64 tokens identical to our Marlin path in every request of every cell. Decode medians, ranges over two passages and two reversed series:
+
+| Context | GR ms | GQ ms | GQA ms | vLLM ms | GQA versus vLLM | vLLM below GR | vLLM 1-token request ms | End-to-end GQA / vLLM ms |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| 128 | 616.0–616.1 | 344.1–344.2 | 326.8–327.0 | 238.1–238.8 | 36.9–37.3% slower | 61.2–61.3% | 12.3 | 342 / 250–251 |
+| 512 | 672.6–673.4 | 402.0–402.2 | 335.8–336.0 | 240.8–241.1 | 39.4–39.5% slower | 64.2% | 36.3–36.4 | 379 / 277 |
+| 2048 | 903.3–905.0 | 638.3–640.1 | 375.5–376.0 | 248.1–248.9 | 50.9–51.4% slower | 72.4–72.6% | 143.2 | 574 / 391–392 |
+
+Predeclared outcome: **"slower" at all three contexts**; the hypothesis (GQA ≥5% below vLLM) is rejected. vLLM takes 3.8–3.9 ms per decode step against our 5.2–6.0 ms, with the same codes, scales and upstream Marlin kernel family, so the difference lies outside the quantized weights; where exactly (its compiled backbone, FlashAttention, CUDA graphs, sampler, or its kernel build) was not profiled and must not be attributed. Its prompt processing is also shorter (1-token request 143 ms at context2048 against our roughly 197 ms prefill). Without our direct attention (GQ) the deficit is 44% at context128 and 157% at 2048.
+
+Limits: vLLM decode is a difference of two wall times, ours a synchronized phase timer; vLLM's Marlin lacks the E006 barrier; its engine runs in a child process; batch 1 only, which is not vLLM's design point and still favours it here; one node; `RequestOutput.metrics` was empty in offline mode. vLLM FP16 was not run.
+
+Extension, as predeclared under E028: vLLM at contexts 4096 and 8192 in the remaining time of the kept c9 allocation (16384 does not fit its time limit there).
+
 ## E026 — Single-query grouped decode attention under graph replay
 
 Predeclared 2026-11-10 from the E025 result, under the user's standing instruction to continue toward robust optimizations while away. One main change: for decode steps only (one query token), attention is computed as `softmax(scale·q·Kᵀ + mask)·V` directly on the 2 stored key/value heads with FP32 scores and one final rounding to FP16, instead of Transformers' SDPA call after expanding keys/values to 12 heads. Prefill and every multi-token call keep the stock path. Static shapes and addresses are unchanged, so E023's graph capture applies. No kernel, quantization, Marlin, tolerance or cache change. This is an inference-side change common to FP16 and Marlin; it is not a W4A16 kernel result, and its gain must be reported against an FP16 path using the same attention.

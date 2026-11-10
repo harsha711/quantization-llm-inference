@@ -3,7 +3,7 @@
 #   scripts/e027/submit.sh smoke | ssh arc-off-network sbatch --parsable
 #   scripts/e027/submit.sh full SMOKEDIR "128 512 2048" | ssh arc-off-network sbatch --parsable --nodelist=<smoke node>
 set -euo pipefail
-stage=$1 prior=${2:-none} contexts=${3:-128}
+stage=$1 prior=${2:-none} contexts=${3:-128} att=${4:-att.py}  # att: long.py for contexts above 2048
 here=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 embed() { printf 'cat > "$S/%s" <<'"'"'PYEOF'"'"'\n' "$(basename "$1")"; cat "$1"; printf 'PYEOF\necho "%s  $S/%s" | sha256sum -c\n' "$(sha256sum < "$1" | cut -d' ' -f1)" "$(basename "$1")"; }
 cat <<EOF
@@ -30,7 +30,7 @@ T=/mnt/beegfs/hpuvvad/csc548-w4a16-e024-20261110/runtime.tar
 if [[ ! -e "$VENV/bin/python" ]]; then sha256sum -c "$T.sha256"; tar xf "$T" -C /tmp; fi
 EOF
 embed "$here/../e018/diagnose.py"; embed "$here/../e021/validate.py"; embed "$here/../e023/run.py"; embed "$here/../e026/att.py"
-embed "$here/convert.py"; embed "$here/vbench.py"; embed "$here/analyze.py"
+embed "$here/../e028/long.py"; embed "$here/convert.py"; embed "$here/vbench.py"; embed "$here/analyze.py"
 cat <<'EOF'
 export PROJECT_ROOT=$E017_ROOT
 set +u; source "$E017_ROOT/scripts/e017/env_arc.sh"; set -u
@@ -58,7 +58,7 @@ fi
 "$VV/bin/python" -m pip freeze > "$S/vllm-freeze.txt"
 [[ -e "$OUT/vllm-freeze.txt" ]] || cp "$S/vllm-freeze.txt" "$OUT/vllm-freeze.txt"
 diff -u "$OUT/vllm-freeze.txt" "$S/vllm-freeze.txt"
-go() { local label=$1; shift; (set -x; prun timeout 3000 "$E017_PYTHON" "$S/att.py" "$@") > "$S/$label.log" 2>&1; }
+go() { local label=$1; shift; (set -x; prun timeout 6000 "$E017_PYTHON" "$S/$ATT" "$@") > "$S/$label.log" 2>&1; }
 gov() { local label=$1; shift; (set -x; prun timeout 3000 "$VV/bin/python" "$S/vbench.py" "$OUT/model-gptq" "$S/ref" "$S/out" "$@") > "$S/$label.log" 2>&1; }
 if [[ ! -e "$OUT/model-gptq.sha256" ]]; then
  (set -x; prun timeout 3000 "$E017_PYTHON" "$S/convert.py" "$OUT/model-gptq") > "$S/convert.log" 2>&1
@@ -68,6 +68,7 @@ fi
 EOF
 case $stage in
 smoke) cat <<'EOF'
+ATT=att.py
 go validate validate "$S/ref" 128
 mkdir "$S/out"; go time-GQA time "$S/out" GQA 128 heldout 1 "$S/ref"
 gov time-V 128 heldout 1
@@ -76,6 +77,7 @@ EOF
 full) cat <<EOF
 ls "\$OUT"/$prior/INSPECTED
 contexts=($contexts)
+ATT=$att
 EOF
 cat <<'EOF'
 go validate validate "$S/ref" "${contexts[@]}"

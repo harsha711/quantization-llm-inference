@@ -1,0 +1,5 @@
++ prun timeout 3000 /tmp/e017-hpuvvad-20261109/bin/python /mnt/beegfs/hpuvvad/csc548-w4a16-e027-20261110/smoke-c9-334243-s2/att.py time /mnt/beegfs/hpuvvad/csc548-w4a16-e027-20261110/smoke-c9-334243-s2/out GQA 128 heldout 1 /mnt/beegfs/hpuvvad/csc548-w4a16-e027-20261110/smoke-c9-334243-s2/ref
+[prun] Master compute host = c9
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun timeout 3000 /tmp/e017-hpuvvad-20261109/bin/python /mnt/beegfs/hpuvvad/csc548-w4a16-e027-20261110/smoke-c9-334243-s2/att.py time /mnt/beegfs/hpuvvad/csc548-w4a16-e027-20261110/smoke-c9-334243-s2/out GQA 128 heldout 1 /mnt/beegfs/hpuvvad/csc548-w4a16-e027-20261110/smoke-c9-334243-s2/ref (family=openmpi4)
+DONE heldout GQA 128 1 0.32631487399339676

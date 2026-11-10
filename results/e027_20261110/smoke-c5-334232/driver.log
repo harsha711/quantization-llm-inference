@@ -1,0 +1,9 @@
+/mnt/beegfs/hpuvvad/csc548-w4a16-e024-20261110/runtime.tar: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e027-20261110/smoke-c5-334232/diagnose.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e027-20261110/smoke-c5-334232/validate.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e027-20261110/smoke-c5-334232/run.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e027-20261110/smoke-c5-334232/att.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e027-20261110/smoke-c5-334232/convert.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e027-20261110/smoke-c5-334232/vbench.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e027-20261110/smoke-c5-334232/analyze.py: OK
+ls: cannot access '/mnt/beegfs/hpuvvad/csc548-w4a16-e017-r2-20261109/external/vllm-0.33.0-*.whl': No such file or directory
