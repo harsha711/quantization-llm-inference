@@ -1,4 +1,8 @@
-# E019 rejected at its model gate — still no end-to-end timing
+# E020 measured — Marlin path decodes 29% faster at context 2048, numerically unaccepted
+
+2026-11-10: [E020](EXPERIMENTS.md#e020--descriptive-primary-timing-of-the-numerically-unaccepted-marlin-path) times the corrected-Marlin full model against reconstructed FP16 on c7 (job 334094, 160 requests, unchanged E017 plan). Decode median is 28.9%/29.0% lower at context2048 and 3.6%/4.6% lower at context128 (below 5%); end-to-end 23.4%/23.5% and 3.7%/4.6%; peak allocated memory about 60% lower; long-context prefill about 3% slower. This path failed the E017 and E019 numerical gates, so these are descriptive measurements, not an accepted speedup. Why FP16 decode slows by 283 ms at long context while Marlin slows by 45 ms is unexplained. Evidence: `results/e020_20261110/`. Next step needs a user decision: an acceptance experiment not based on R's greedy tokens, or the report draft.
+
+# E019 rejected at its model gate — no accepted end-to-end timing
 
 2026-11-10: [E019](EXPERIMENTS.md#e019--corrected-marlin-end-to-end-with-a-control-calibrated-model-gate) used a gate chosen after E017/E018 and it rejects both contexts at 64 tokens, so no timing ran. Context128 primary and context2048 held-out pass every criterion. Context128 held-out fails token agreement: R has an exact FP16 logit tie at generated index 47 that Q and both Marlin-free controls resolve the other way. Context2048 primary fails the distance-to-FP64 criterion by 0.000003 relative L2. All 50,176 same-input Marlin operator calls pass the unchanged GEMM rule. No speedup is established and the gate is not edited. Evidence: `results/e019_20261109/`. Next step needs a user decision: a new experiment with an acceptance rule that does not treat R's greedy tokens as truth, or the report draft.
 

@@ -12,6 +12,27 @@ Question: on primary requests, is Q's 63-step decode median ≥5% lower than fre
 
 Mechanics: `scripts/e019/submit.sh e020 333424` via `inalloc.sh` inside allocation 333424 on c7; own results root `e020-results-333424` with symlinks to E019's passed O/R validation records; `infer.py`'s required `FULL_VALIDATION_INSPECTED` file is created only there and its content states it is not a validation claim. E019's root gets no sentinel.
 
+### E020 result — measured, NOT an accepted speedup (2026-11-10, c7, UUID GPU-29e9569a-8a7a-cd23-5443-bd0b72ca241a, driver 610.57.04, P0)
+
+Attempts: the in-allocation launch at about 08:45 EST failed before any compute because held allocation 333424 had ended at its 4:00 limit at 04:56 while the user's answer was pending (Slurm state TIMEOUT; its recorded smoke `driver.exit` stays 1). c7 was idle, so the identical emitted script was submitted as ordinary batch job 334094 (`sbatch --nodelist=c7`), COMPLETED exit 0. Allocation, one-rank prun, binary/source/pip identity checks pass. All 160 timed requests pass the unchanged per-request token/state checks against R. 103 files hash-verified, `results/e020_20261110/`.
+
+| Context | Series | R decode ms | Q decode ms | Q lower | TTFT Q lower | E2E Q lower | Peak allocated R → Q MiB |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| 128 | 1 | 625.716 | 603.211 | 3.597% | 6.176% | 3.660% | 3009 → 1196 |
+| 128 | 2 | 626.325 | 597.637 | 4.580% | 5.843% | 4.609% | 3009 → 1196 |
+| 2048 | 1 | 908.618 | 645.647 | 28.942% | −3.104% | 23.411% | 3236 → 1383 |
+| 2048 | 2 | 909.785 | 645.723 | 29.025% | −2.744% | 23.528% | 3236 → 1383 |
+
+Medians of 20; decode min–max spreads are ≤0.3 ms for R and ≤7.2 ms for Q. Context2048 clears the 5% decode criterion in both series; context128 does not (3.6%/4.6%). Prefill is about 3% slower with Q at 2048. Peak reserved memory is 3248 → 2402 MiB at 128 and 3364 → 2514 MiB at 2048.
+
+Cross-check (observation): R's denominators agree with the independent original-FP16 eager medians from E015 on c9 (622.9/624.1 ms and 907.6/909.7 ms), so the gain is not from a degraded reference.
+
+Unresolved: FP16 decode is about 283 ms slower at context2048 than at 128 although every projection GEMM is M=1 in both; Q is only about 45 ms slower. E020 does not explain this. Weight-memory traffic after the long prefill is a hypothesis, not a finding; no profile was taken.
+
+Limits: Q failed the E017 and E019 numerical gates, so this is the latency of an unaccepted path on two primary requests whose 64 greedy tokens equal R's. One model, one GPU, batch 1, no held-out timing (by design), no tail claim, no whole-model sanitizer or trace. Upstream Marlin supplies the kernel; ours is the synchronization fix, integration, diagnosis and measurement.
+
+Decision: stop. Turning this into an accepted claim needs a user-requested acceptance experiment that does not treat R's greedy tokens as truth, declared before use and disclosed as following E017/E019/E020.
+
 ## E019 — Corrected Marlin end-to-end with a control-calibrated model gate
 
 Predeclared 2026-11-09 from `4a4b8a6`, explicitly requested by the user ("go") after E018. E017 remains failed under its own gate and immutable. This is a new comparison whose model gate was chosen AFTER seeing the E017 failure and the E018 controls; every report of E019 must say so. No kernel, dispatch, tile, model, compiler or graph change. Unchanged E017 `integration.py`/`infer.py`, artifacts, runtime and corrected library `e4eca5e3…` are used from the preserved E017 BeeGFS root; E019 writes only to its own root.
