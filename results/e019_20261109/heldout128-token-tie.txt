@@ -1,0 +1,11 @@
+['R', 'Q', 'F32', 'F64']
+R equal R: True equal F64: False
+Q equal R: False equal F64: True
+F32 equal R: False equal F64: True
+F64 equal R: False equal F64: True
+first divergence index 47
+R top1 279 margin top1-top2 0.0 logit of R-token 23.984375 logit of Q-token 23.984375
+Q top1 323 margin top1-top2 0.015625 logit of R-token 23.984375 logit of Q-token 24.0
+F32 top1 323 margin top1-top2 0.015625 logit of R-token 23.984375 logit of Q-token 24.0
+F64 top1 323 margin top1-top2 0.015625 logit of R-token 23.984375 logit of Q-token 24.0
+Q vs R rel L2 up to divergence 0.0018862935932556142

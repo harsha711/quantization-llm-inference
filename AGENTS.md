@@ -129,6 +129,11 @@
 - Capture per-node CPU model, ISA, topology, NUMA, affinity, compiler/MPI/GPU/tool versions, source/executable hashes, build flags, commands, and logs. Multi-node CPU generations may differ. Use a portable host ISA. Never distribute `-march=native` without verifying every node's required ISA.
 - `scripts/remote.sh` defaults to c7, uses `rsync --delete`, and lacks the allocation environment. Use isolated experiment directories and verified live allocations. Never claim ARC validation or guaranteed script operation from local checks alone.
 
+## E019 rejected control-calibrated comparison
+
+- E019 is stopped at its predeclared model gate; read its EXPERIMENTS entry. Both contexts are rejected at 64 tokens (128 held-out: R loses an exact FP16 tie at index 47 that Q/F32/F64 resolve identically; 2048 primary: criterion 5 by 0.000003). No timing exists. All same-input operator calls pass.
+- Do not edit the E019 gate, time a passing subset, or call E017/E019 passed. A further attempt is a new user-requested experiment with its acceptance rule fixed before timing and disclosed as a third gate. Job 333424/c7 is historical; `scripts/e019/inalloc.sh` ran later stages inside that one allocation.
+
 ## Rooflines, if requested
 
 - Recompute all ceilings, ridge points, arithmetic intensities, and performance coordinates from specifications/data. Keep the primary full-machine roof distinct from core-count, ISA, NUMA, and memory-domain sensitivity roofs.

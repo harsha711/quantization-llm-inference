@@ -1,0 +1,8 @@
++ prun timeout 3000 /tmp/e017-hpuvvad-20261109/bin/python /mnt/beegfs/hpuvvad/csc548-w4a16-e017-r2-20261109/scripts/e017/infer.py /mnt/beegfs/hpuvvad/csc548-w4a16-e019-20261109/results-333424 --variant R --context 2048 --stage validation
+[prun] Master compute host = c7
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun timeout 3000 /tmp/e017-hpuvvad-20261109/bin/python /mnt/beegfs/hpuvvad/csc548-w4a16-e017-r2-20261109/scripts/e017/infer.py /mnt/beegfs/hpuvvad/csc548-w4a16-e019-20261109/results-333424 --variant R --context 2048 --stage validation (family=openmpi4)
+PASS validation_R_2048_primary_0
+PASS validation_R_2048_heldout_1
+PASS validation_R_2048_primary_2
+PASS validation_R_2048_heldout_3

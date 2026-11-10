@@ -25,6 +25,25 @@ ARC: c7 preferred (node-local runtime), sbatch+prun, one rank. Inspected 8-token
 
 Execution change recorded 2026-11-09 23:25 EST, before any E019 compute: the partition queue is FIFO and about 25 jobs from another user were submitted behind pending smoke 333424, so a released c7 would not return for hours. At the user's instruction the node is kept: 333424's time limit is raised from 1:30 to 4:00 while pending (queue position unchanged), and after the smoke finishes its exit-wait shell is paused (the E017 retrieval precedent) so the validation and timing stages run inside that same owned allocation via `scripts/e019/inalloc.sh`, using the unchanged `submit.sh` stage scripts, the batch shell's Slurm environment and `prun`. Stage directories therefore all carry job ID 333424. Inspection markers, gates, timing plan and criteria are unchanged; the allocation is released as soon as the last stage is retrieved.
 
+### E019 result — REJECTED at the model gate, no timing (2026-11-10, c7, UUID GPU-29e9569a-8a7a-cd23-5443-bd0b72ca241a, driver 610.57.04)
+
+The gate below was chosen after the E017 failure and E018 controls. It rejects both contexts, so by the predeclared rule no timing ran and E019 establishes no speedup.
+
+Attempts, all inside allocation 333424 (started 00:55 EST): the 8-token smoke exits 1 because `validate.py` applies the full gate at any length and criterion 5 fails at context2048 primary (Q-to-F64 relative L2 0.002757 versus R 0.002619 and F32 0.001950); context128 and all identity/launcher/hash checks pass. Since the gate is defined at 64 tokens and the smoke's purpose is plumbing, it was marked inspected and the 64-token validation ran once via `inalloc.sh` (exit 1). Unchanged `infer.py` O and R validation pass at both contexts first; dual-mode R is bitwise equal to that separate-process R in all four cases.
+
+| 64 tokens | Q vs R rel L2 | to F64: R / Q / F32 | Tokens Q,F32,F64 = R | Failed criterion |
+|---|---:|---:|---|---|
+| 128 primary | 0.002237 | 0.002257 / 0.001984 / 0.002073 | yes | none (bitwise the E017/E018 tensors' statistics) |
+| 128 held-out | 0.374 | 0.376 / 0.001915 / 0.001880 | **no** | 1 tokens, 4, 6 state |
+| 2048 primary | 0.002140 | 0.002282 / 0.002386 / 0.002384 | yes | 5, by 0.000003 |
+| 2048 held-out | 0.002253 | 0.002188 / 0.002133 / 0.002402 | yes | none |
+
+Observations. All 4×12,544 same-input Q operator calls (about 2.97 billion outputs) pass the unchanged GEMM rule, as do R's; Q repeats bitwise; workspace guards hold; GPU and CPU FP64 references agree exactly. At 128 held-out, R's logits for tokens 279 and 323 are an exact FP16 tie (23.984375) at generated index 47 and argmax takes the lower index; Q, F32 and F64 all give 323 a one-ulp lead (24.0) and stay token-identical to each other for all 64 tokens. Up to that index Q-versus-R relative L2 is 0.00189; afterwards the trajectories differ. E017 recorded O/R held-out tokens also first differing at position 47. Calculation: `results/e019_20261109/heldout128-token-tie.txt`.
+
+Interpretation (not an accepted result): the two rejections come from the gate treating R as ground truth. One is R losing an exact tie that every higher-precision path resolves the other way; the other is a 0.1% margin between equally valid roundings, the coin-flip criterion 5 was meant to avoid. Neither indicates a Marlin operator error, and neither is evidence the gate should pass; it failed as declared.
+
+Decision: stop. No timing, no held-out campaign, no gate edit. Revisit only as a new user-requested experiment whose acceptance does not use R's greedy tokens as truth (for example agreement with the F64-projection control, or a task-quality metric against O), declared before any timing is seen and disclosed as the third gate. Evidence: `results/e019_20261109/` (145 files hash-verified against BeeGFS, `retrieved.sha256`; the 1.2 GB `infer.py` O/R tensors stay on BeeGFS under `csc548-w4a16-e019-20261109/results-333424`, their JSON records are retrieved).
+
 ## E018 — Locate the E017 Q/R logit divergence (diagnostic)
 
 Predeclared 2026-11-09 from clean `35cae94`, requested by the user after E017 ("identify ... and bridge the gap", ARC use permitted). Diagnostic only. E017 stays failed and immutable. No timing, no tolerance change, no kernel/dispatch/model change, no passing-subset release.

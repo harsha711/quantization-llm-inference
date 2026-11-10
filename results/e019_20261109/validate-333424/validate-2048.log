@@ -1,0 +1,37 @@
++ prun timeout 3000 /tmp/e017-hpuvvad-20261109/bin/python /mnt/beegfs/hpuvvad/csc548-w4a16-e019-20261109/validate-333424/validate.py /mnt/beegfs/hpuvvad/csc548-w4a16-e019-20261109/validate-333424/out-2048 2048 64 /mnt/beegfs/hpuvvad/csc548-w4a16-e019-20261109/results-333424
+[prun] Master compute host = c7
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun timeout 3000 /tmp/e017-hpuvvad-20261109/bin/python /mnt/beegfs/hpuvvad/csc548-w4a16-e019-20261109/validate-333424/validate.py /mnt/beegfs/hpuvvad/csc548-w4a16-e019-20261109/validate-333424/out-2048 2048 64 /mnt/beegfs/hpuvvad/csc548-w4a16-e019-20261109/results-333424 (family=openmpi4)
+RAN 2048 primary R
+RAN 2048 primary Q
+RAN 2048 primary Q2
+RAN 2048 primary F32
+RAN 2048 primary F64
+RAN 2048 primary P
+RAN 2048 heldout R
+RAN 2048 heldout Q
+RAN 2048 heldout Q2
+RAN 2048 heldout F32
+RAN 2048 heldout F64
+RAN 2048 heldout P
+primary {"criteria": {"finite": true, "tokens": true, "deterministic": true, "operators": true, "workspace": true, "rel_l2_vs_R": true, "not_farther_from_F64_than_marlin_free": false, "state": true, "anchor": true}, "Q_vs_R": {"bad": 788, "max_abs": 0.0703125, "rel_l2": 0.0021404981064358365, "centered_bad": 37}, "F32_vs_R": {"bad": 303, "max_abs": 0.0625, "rel_l2": 0.0020691736812595576, "centered_bad": 19}, "F64_vs_R": {"bad": 1967, "max_abs": 0.0703125, "rel_l2": 0.002281499750286658, "centered_bad": 229}, "R_vs_F64": {"bad": 1964, "max_abs": 0.0703125, "rel_l2": 0.0022818541994339514, "centered_bad": 228}, "Q_vs_F64": {"bad": 1350, "max_abs": 0.0859375, "rel_l2": 0.002386439157340605, "centered_bad": 500}, "F32_vs_F64": {"bad": 5366, "max_abs": 0.080078125, "rel_l2": 0.002383537055266586, "centered_bad": 1336}, "probe": {"calls": 12544, "checked": 1361848320, "Q_bad_calls": 0, "R_bad_calls": 0, "Q_median_rel_l2": 0.00020683334021191985, "R_median_rel_l2": 0.00020683657061193917, "Q_max_rel_l2": 0.00037240364101987736, "R_max_rel_l2": 0.0003724034479104462, "max_gpu_vs_cpu_fp64_rel": 0.0}}
+heldout {"criteria": {"finite": true, "tokens": true, "deterministic": true, "operators": true, "workspace": true, "rel_l2_vs_R": true, "not_farther_from_F64_than_marlin_free": true, "state": true, "anchor": true}, "Q_vs_R": {"bad": 1010, "max_abs": 0.0625, "rel_l2": 0.002252615783178844, "centered_bad": 121}, "F32_vs_R": {"bad": 1148, "max_abs": 0.0625, "rel_l2": 0.002427827982622407, "centered_bad": 54}, "F64_vs_R": {"bad": 173, "max_abs": 0.0546875, "rel_l2": 0.002188457270226285, "centered_bad": 28}, "R_vs_F64": {"bad": 174, "max_abs": 0.0546875, "rel_l2": 0.0021878280618261945, "centered_bad": 26}, "Q_vs_F64": {"bad": 420, "max_abs": 0.05859375, "rel_l2": 0.0021334075703822023, "centered_bad": 169}, "F32_vs_F64": {"bad": 1380, "max_abs": 0.0703125, "rel_l2": 0.0024019945053479043, "centered_bad": 44}, "probe": {"calls": 12544, "checked": 1361848320, "Q_bad_calls": 0, "R_bad_calls": 0, "Q_median_rel_l2": 0.00020696326750527965, "R_median_rel_l2": 0.00020696392531227348, "Q_max_rel_l2": 0.0003680159123882379, "R_max_rel_l2": 0.00036801591556146716, "max_gpu_vs_cpu_fp64_rel": 0.0}}
+REJECTED 2048
+Traceback (most recent call last):
+  File "/mnt/beegfs/hpuvvad/csc548-w4a16-e019-20261109/validate-333424/validate.py", line 94, in <module>
+    main()
+  File "/mnt/beegfs/hpuvvad/csc548-w4a16-e019-20261109/validate-333424/validate.py", line 89, in main
+    assert verdict['accepted']
+           ~~~~~~~^^^^^^^^^^^^
+AssertionError
+--------------------------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code. Per user-direction, the job has been aborted.
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+mpirun detected that one or more processes exited with non-zero status, thus causing
+the job to be terminated. The first process to do so was:
+
+  Process name: [[39498,1],0]
+  Exit code:    1
+--------------------------------------------------------------------------
