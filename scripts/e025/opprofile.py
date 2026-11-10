@@ -33,15 +33,18 @@ def main():
             row, _ = runner.request('primary', generated=8, markers=True)
         assert row['output_ids'] == reference['output_ids']
         events = prof.events()
-        span = [e for e in events if e.name == 'E017/decode']
-        assert len(span) == 1
+        cuda = lambda e: str(e.device_type).endswith('CUDA')
+        span = [e for e in events if e.name == 'E017/decode' and not cuda(e)]  # the annotation is mirrored on the device timeline
+        assert span, sorted({e.name for e in events if e.name.startswith('E017')})[:10]
         start, end = span[0].time_range.start, span[0].time_range.end
         device = lambda e: getattr(e, 'self_device_time_total', None) or getattr(e, 'self_cuda_time_total', 0)
         by_op, kernels = collections.Counter(), collections.Counter()
         for e in events:
             if not start <= e.time_range.start <= end:
                 continue
-            if str(e.device_type).endswith('CUDA'):
+            if cuda(e):
+                if e.name.startswith('E017/'):
+                    continue
                 kernels[e.name[:90]] += e.time_range.end - e.time_range.start
             elif device(e):
                 name = re.sub(r'^E017/linear/model\.layers\.\d+\.(\w+)\.(\w+)/M1$', r'marlin/\2', e.name)
