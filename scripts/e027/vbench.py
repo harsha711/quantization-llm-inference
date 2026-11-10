@@ -17,7 +17,8 @@ def main():
     from vllm import LLM, SamplingParams
     model, refdir, out = sys.argv[1], Path(sys.argv[2]), Path(sys.argv[3])
     context, prompt, series = int(sys.argv[4]), sys.argv[5], int(sys.argv[6])
-    ref = json.loads((refdir / f'reference-{context}-{prompt}.json').read_text())['GQ']
+    label = sys.argv[7] if len(sys.argv) > 7 else 'V'  # E031: V against our GQA tokens, VH (4-bit head checkpoint) against GQAH
+    ref = json.loads((refdir / f'reference-{context}-{prompt}.json').read_text())[sys.argv[8] if len(sys.argv) > 8 else 'GQ']
     assert len(ref['input_ids']) == context and len(ref['output_ids']) == 64
     llm = LLM(model=model, dtype='float16', max_model_len=context + 64, gpu_memory_utilization=0.6,
               enable_prefix_caching=False, generation_config='vllm', seed=0)
@@ -41,7 +42,7 @@ def main():
     summary.update(decode_min=min(r['decode_s'] for r in kept), decode_max=max(r['decode_s'] for r in kept), rows=rows,
                    tokens_agree_min=min(r['tokens_agree'] for r in rows), output_ids=ids, metrics=repr(getattr(result, 'metrics', None)),
                    vllm=vllm.__version__, torch=torch.__version__)
-    (out / f'{prompt}_V_{context}_s{series}.json').write_text(json.dumps(summary, indent=1))
+    (out / f'{prompt}_{label}_{context}_s{series}.json').write_text(json.dumps(summary, indent=1))
     print('DONE', prompt, 'V', context, series, summary['decode_s'], summary['tokens_agree_min'], flush=True)
 
 

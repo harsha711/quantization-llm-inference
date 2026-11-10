@@ -30,7 +30,7 @@ T=/mnt/beegfs/hpuvvad/csc548-w4a16-e024-20261110/runtime.tar
 if [[ ! -e "$VENV/bin/python" ]]; then sha256sum -c "$T.sha256"; tar xf "$T" -C /tmp; fi
 EOF
 embed "$here/../e018/diagnose.py"; embed "$here/../e021/validate.py"; embed "$here/../e023/run.py"; embed "$here/../e026/att.py"
-embed "$here/../e028/long.py"; embed "$here/../e030/gprofile.py"; embed "$here/../e030/vprofile.py"; embed "$here/convert.py"; embed "$here/vbench.py"; embed "$here/analyze.py"
+embed "$here/../e028/long.py"; embed "$here/../e030/gprofile.py"; embed "$here/../e030/vprofile.py"; embed "$here/../e031/head.py"; embed "$here/../e031/headconv.py"; embed "$here/../e031/headanalyze.py"; embed "$here/convert.py"; embed "$here/vbench.py"; embed "$here/analyze.py"
 cat <<'EOF'
 export PROJECT_ROOT=$E017_ROOT
 set +u; source "$E017_ROOT/scripts/e017/env_arc.sh"; set -u
@@ -100,6 +100,49 @@ profile) cat <<'EOF'
 (set -x; prun timeout 3000 "$E017_PYTHON" "$S/gprofile.py" "$S/prof" 128 2048) > "$S/profile-ours.log" 2>&1
 (set -x; prun timeout 3000 "$VV/bin/python" "$S/vprofile.py" "$OUT/model-gptq" "$S/prof" 128 2048) > "$S/profile-vllm.log" 2>&1
 EOF
+;;
+head-smoke|head-full) cat <<'EOF'
+# E031: 4-bit output head. Checkpoint for vLLM = the E027 checkpoint plus the quantized head.
+if [[ ! -e "$OUT/model-gptq-head.sha256" ]]; then
+ rm -rf "$OUT/model-gptq-head"
+ (set -x; prun timeout 3000 "$E017_PYTHON" "$S/headconv.py" "$OUT/model-gptq" "$OUT/model-gptq-head") > "$S/headconv.log" 2>&1
+ (cd "$OUT" && sha256sum model-gptq-head/* > model-gptq-head.sha256)
+fi
+(cd "$OUT" && sha256sum -c model-gptq-head.sha256) > "$S/head-model-check.log"
+goh() { local label=$1; shift; (set -x; prun timeout 6000 "$E017_PYTHON" "$S/head.py" "$@") > "$S/$label.log" 2>&1; }
+govh() { local label=$1 dir=$2; shift 2; (set -x; prun timeout 6000 "$VV/bin/python" "$S/vbench.py" "$OUT/$dir" "$S/ref" "$S/out" "$@") > "$S/$label.log" 2>&1; }
+cell() { local label=$1 v=$2 c=$3 p=$4 series=$5
+ case $v in
+ V) govh "$label" model-gptq "$c" "$p" "$series" V GQA;;
+ VH) govh "$label" model-gptq-head "$c" "$p" "$series" VH GQAH;;
+ *) goh "$label" time "$S/out" "$v" "$c" "$p" "$series" "$S/ref";;
+ esac; }
+EOF
+if [[ $stage == head-smoke ]]; then cat <<'EOF'
+goh validate validate "$S/ref" 128
+mkdir "$S/out"
+for v in GQAH V VH; do cell "time-$v" "$v" 128 heldout 1; done
+EOF
+else cat <<EOF
+ls "\$OUT"/$prior/INSPECTED
+contexts=($contexts)
+EOF
+cat <<'EOF'
+goh validate validate "$S/ref" "${contexts[@]}"
+mkdir "$S/out"
+for series in 1 2; do
+ cs=("${contexts[@]}"); ps=(primary heldout); vs=(GQA GQAH V VH)
+ if [[ $series == 2 ]]; then cs=($(printf '%s\n' "${contexts[@]}" | tac)); ps=(heldout primary); vs=(VH V GQAH GQA); fi
+ for c in "${cs[@]}"; do for p in "${ps[@]}"; do for v in "${vs[@]}"; do
+  label="${p}_${v}_${c}_s${series}"
+  clock > "$S/$label-clocks-before.csv"
+  cell "$label" "$v" "$c" "$p" "$series"
+  printf '{"label":"%s","finished_utc_ns":%s}\n' "$label" "$(date +%s%N)" >> "$S/order.jsonl"
+ done; done; done
+done
+python3 "$S/headanalyze.py" "$S/out" "${contexts[@]}" > "$S/analysis.json"
+EOF
+fi
 ;;
 *) exit 2;;
 esac

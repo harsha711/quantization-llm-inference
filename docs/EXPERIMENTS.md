@@ -2,6 +2,21 @@
 
 Read the numerical/measurement [contract](CONTRACT.md) before interpreting these records. Preserve raw evidence, failed attempts, and inconclusive outcomes. An alternative that has not been implemented or measured is not a failed optimization. Historical entries below reconstruct only what the repository supports. Missing prior failure numbers or commit IDs remain unknown.
 
+## E031 — 4-bit output head through Marlin, in our path and in vLLM
+
+Predeclared 2026-11-10 from the E030 result. The user agreed beforehand to the experiment the profile would select and asked that follow-ups be queued on the kept nodes; E030 selects this one because the FP16 output head (1169 µs per step) is the largest single kernel in both stacks and the one cost vLLM has not removed. One main change: the output projection (the tied 151,936 × 1536 embedding matrix, cast to FP16 as both runtimes load it) is quantized with the unchanged project G128 quantizer and executed by Marlin. The FP16 embedding lookup, the 196 block projections and everything else are unchanged. No kernel change.
+
+**This changes the model's outputs**, unlike every earlier full-model experiment, because the head was FP16 in the reference model. Two questions are therefore kept separate:
+1. Does the runtime compute the head-quantized model correctly? Gate, fixed now: E021's rule unchanged, applied to graph-Marlin with direct attention and Marlin head (GQAH) against an FP64 control that uses the same reconstructed head weights (and FP64 block projections), per case at 64 tokens; plus bitwise equality with eager, bitwise repeat, workspace guards, state. Third-gate disclosure applies as before.
+2. How much does quantizing the head change what the model produces? Reported, not gated, and NOT a quality evaluation: number of leading tokens (of 64) the head-quantized control shares with the FP16-head control, logit relative L2 between the two controls at the first step and over the shared steps, and the head's weight quantization error. No perplexity or task metric is measured; no claim that the change is acceptable follows from this experiment.
+
+Arms and hypotheses, each with the usual criterion (≥5% lower decode median in every passage × series cell of a context):
+- Ours: GQAH versus GQA (`scripts/e031/head.py`).
+- vLLM: VH versus V, where VH is vLLM v0.33.0 loading the E027 checkpoint plus the same head codes/scales marked `lm_head: true` (`scripts/e031/headconv.py`); whether vLLM accepts a quantized head for this model is unknown and a refusal is recorded as a failed arm. VH's first token must equal GQAH's in every request; leading-token agreement is reported.
+Expected size (calculation from E030 and the E025 Marlin cost per weight, not a result): roughly 0.6–0.8 ms per step saved, about 12–15% of our step and 16–21% of vLLM's.
+
+Contexts 128 and 2048 × primary/held-out × two reversed series, 3 warmups + 20 requests, one process per cell, all four variants on one node. Also reported: GQAH versus V and VH. Smoke (context128 validation, one cell of GQAH, V, VH) inspected before the dependent full job. Limits fixed now: one model, batch 1, 64 tokens, two passages; the Marlin operator and its workspace have never been validated at 151,936 output columns, so the gate and workspace guards at that width are part of what the smoke tests; prefill also runs the head over every prompt position in our path.
+
 ## E030 — Where the per-step gap to vLLM lies (diagnostic)
 
 Predeclared 2026-11-10 after the E027 result, with the user's agreement ("alright") to the proposed next step. Question: on identical weights vLLM spends 3.8–3.9 ms per decode step and our GQA path 5.2–6.0 ms; which GPU kernels account for the difference? No path is changed and no speedup is claimed.
