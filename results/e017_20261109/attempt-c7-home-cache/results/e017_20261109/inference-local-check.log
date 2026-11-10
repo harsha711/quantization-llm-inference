@@ -1,0 +1,5 @@
++ prun timeout 1800 /tmp/e017-hpuvvad-20261109/bin/python scripts/e017/check_infer.py
+[prun] Master compute host = c7
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun timeout 1800 /tmp/e017-hpuvvad-20261109/bin/python scripts/e017/check_infer.py (family=openmpi4)
+PASS: E017 fixed-work/cache/reset/timing gates and 21 corrupted-row/numerical cases rejected

@@ -1,0 +1,2 @@
+Initial isolated AST fixture omitted REPRESENTATIVE and failed before parse. Corrected fixture supplies the source constant.
+PASS actual argparse block accepts all three equals-form sanitizer suffixes with no trace

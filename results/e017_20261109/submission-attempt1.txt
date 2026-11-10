@@ -1,0 +1,2 @@
+sbatch: error: Batch job submission failed: Pathname of a file, directory or other parameter too long
+Follow-up squeue: no owned job. No allocation or model execution.

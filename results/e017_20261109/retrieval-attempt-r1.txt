@@ -1,0 +1,1 @@
+Initial local tar extraction was attempted before the asynchronous SSH archive transfer completed and reported unexpected EOF. No remote file changed. Waited for transfer exit0, verified gzip integrity and re-extracted the complete archive, then independently audited all9 GEMM payloads successfully. No partial extraction is accepted as evidence.

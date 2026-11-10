@@ -1,6 +1,6 @@
 # E017 authorized — corrected Marlin/full-model integration
 
-2026-11-09: predeclared in [EXPERIMENTS](EXPERIMENTS.md#e017--corrected-marlin-in-the-pinned-full-model). Inspect actual layer inventory/runtime and pass one-layer FP64/packing/repeated-call/sanitizer prerequisites before full-model validation. No inference performance result exists yet. Historical E016 and all earlier records remain unchanged.
+2026-11-09: [E017 predeclaration](EXPERIMENTS.md#e017--corrected-marlin-in-the-pinned-full-model) authorizes the corrected-Marlin model bridge. Actual-layer prerequisite332886 passes33 FP64 payload comparisons, repeated module/packing/trace checks and eight representative sanitizer cases on verified c7. Local complete/corruption/tensor/provenance checks pass before release of afterok-dependent332899 for distinct-shape and complete-model validation. Quota and argument-parser failures remain preserved separately. No full-model numerical or performance result exists yet. Historical E016 and all earlier records remain unchanged.
 
 # E016 complete — full decode capture gives no meaningful latency reduction
 

@@ -1,0 +1,1 @@
+The first local negative-check invocation used --stage prerequisite, but check_analysis.py accepts positional stage. It rejected the invocation before evaluating evidence. The corrected positional invocation passes and rejects all6 real prerequisite corruptions. README invocation corrected before dependent model-stage source freeze. Numerical criteria/checker code unchanged.

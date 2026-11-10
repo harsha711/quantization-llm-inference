@@ -1,3 +1,5 @@
+E017 authorized: test the missing bridge between corrected Marlin GEMM and full-model inference using matched quantized/reconstructed-FP16 block weights. Actual-layer and complete-model gates must pass before fresh timing. No inference gain or memory result exists yet. This is integration and controlled measurement, with no kernel or graph optimization.
+
 2026-11-09 completed E016: a single graph over all 63 decode steps passes complete numerical/state/replay validation but gives −0.197% to +0.048% decode gains versus fresh per-token replay. Neither context passes 5%. H setup costs 2.46–3.31 s versus 42–55 ms, with +20 MiB warmed reserved memory at 128 and no reserved increase at 2048. All 160 requests are retained, with no held-out timing. This rejects this full-capture policy under the fixed workload. It does not identify a unique bottleneck or establish global optimality. No next optimization is authorized. [Report](INFERENCE_FULL_DECODE_GRAPH.md), [decision](EXPERIMENTS.md#e016-final-results-and-decision).
 
 # Optimization decision map

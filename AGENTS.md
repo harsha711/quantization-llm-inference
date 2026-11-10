@@ -107,6 +107,12 @@
 - All160 fresh c52 primary requests pass. Gains are −0.197%/−0.091% at128 and −0.134%/+0.048% at2048, below5%. Held-out timing is omitted by design, despite passing held-out numerical validation. Existing defaults remain unchanged. H setup is2.46–3.31s versus42–55ms for G, and warm reserved memory increases20MiB at128. First-use/memory records remain separate from warmed timing and complete process startup.
 - Preserve c9 full validation, c58 initial prerequisites, corrected preservation ordering, every failed metadata/submission attempt, all raw c52 samples/tensors/traces and source snapshots. Final timings are entirely c52/driver615.71.09 within332017. Job IDs/nodes are historical. No whole-model sanitizer, stable-tail, unique-bottleneck or global-optimality claim. Stop after this comparison without another optimization, retry, profile or measurement unless separately requested.
 
+## E017 authorized corrected-Marlin model bridge
+
+- The user explicitly requests one bounded integration after E016. E017 supersedes the prior stop only for this task. Read its predeclaration before execution. Use all196 supported block projections, with original tied embedding/head and other model operations common. Preserve exact corrected E006 A and all historical sources/results/manifests.
+- Compare Q compressed corrected Marlin against R FP16 reconstructed from identical deterministic project G128 codes/scales. O original FP16 is a separate quantization-change reference, with the same explicit bias boundary. Require inspected actual-layer FP64/packing/repeated-call/sanitizer gate, then all distinct shapes and full-model numerical/token/state validation before timing. Do not loosen gates or fall back. M2048/N8960 splits across two existing launches and N256 uses existing dispatch fallbacks.
+- Separate processes and actual resident tensor inventories must exclude unused selected FP16 GPU weights from Q. Fresh wall timing uses3 warmups/20 requests/two reversed series and5% in both series per context before held-out timing. Preserve all cold/setup/memory costs and exact execution evidence. Use isolated ARC storage, verified sbatch/prun prerequisites/dependencies. Stop after documented/committed comparison or concrete integration failure, without pushing or another mechanism.
+
 ## ARC
 
 - Verify current [ARC documentation](https://arcm.csc.ncsu.edu/~mueller/cluster/arc/) and `scontrol show job` each session. Confirm allocation ownership, RUNNING state, nodes, remaining time, and GPU. Saved IDs/nodes are historical. Do no compute on the gateway.
