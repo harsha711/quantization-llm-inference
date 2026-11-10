@@ -30,7 +30,7 @@ T=/mnt/beegfs/hpuvvad/csc548-w4a16-e024-20261110/runtime.tar
 if [[ ! -e "$VENV/bin/python" ]]; then sha256sum -c "$T.sha256"; tar xf "$T" -C /tmp; fi
 EOF
 embed "$here/../e018/diagnose.py"; embed "$here/../e021/validate.py"; embed "$here/../e023/run.py"; embed "$here/../e026/att.py"
-embed "$here/../e028/long.py"; embed "$here/convert.py"; embed "$here/vbench.py"; embed "$here/analyze.py"
+embed "$here/../e028/long.py"; embed "$here/../e030/gprofile.py"; embed "$here/../e030/vprofile.py"; embed "$here/convert.py"; embed "$here/vbench.py"; embed "$here/analyze.py"
 cat <<'EOF'
 export PROJECT_ROOT=$E017_ROOT
 set +u; source "$E017_ROOT/scripts/e017/env_arc.sh"; set -u
@@ -93,6 +93,12 @@ for series in 1 2; do
  done; done; done
 done
 python3 "$S/analyze.py" "$S/out" "${contexts[@]}" > "$S/analysis.json"
+EOF
+;;
+profile) cat <<'EOF'
+# E030 diagnostic: per-kernel device time per decode step, ours then vLLM, same node and weights
+(set -x; prun timeout 3000 "$E017_PYTHON" "$S/gprofile.py" "$S/prof" 128 2048) > "$S/profile-ours.log" 2>&1
+(set -x; prun timeout 3000 "$VV/bin/python" "$S/vprofile.py" "$OUT/model-gptq" "$S/prof" 128 2048) > "$S/profile-vllm.log" 2>&1
 EOF
 ;;
 *) exit 2;;

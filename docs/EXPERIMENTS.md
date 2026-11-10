@@ -2,6 +2,14 @@
 
 Read the numerical/measurement [contract](CONTRACT.md) before interpreting these records. Preserve raw evidence, failed attempts, and inconclusive outcomes. An alternative that has not been implemented or measured is not a failed optimization. Historical entries below reconstruct only what the repository supports. Missing prior failure numbers or commit IDs remain unknown.
 
+## E030 — Where the per-step gap to vLLM lies (diagnostic)
+
+Predeclared 2026-11-10 after the E027 result, with the user's agreement ("alright") to the proposed next step. Question: on identical weights vLLM spends 3.8–3.9 ms per decode step and our GQA path 5.2–6.0 ms; which GPU kernels account for the difference? No path is changed and no speedup is claimed.
+
+Method: PyTorch profiler (CUPTI kernel records), same node, contexts 128 and 2048, primary passage. For each stack, after warm requests, one profiled 2-token request and one profiled 34-token request; per-kernel device time and launch count per decode step = (34-token − 2-token) / 32, which removes prefill. Ours: GQA with graph replay (`scripts/e030/gprofile.py`). vLLM: same checkpoint as E027 with its engine run in-process (`VLLM_ENABLE_V1_MULTIPROCESSING=0`) so the profiler sees its kernels; its tokens must equal ours (`vprofile.py`). Reported: total device time per step and the per-kernel table for both, grouped afterwards by inspection of kernel names into Marlin, output head, attention, and the rest.
+
+Limits fixed now: profiler overhead perturbs wall time, so only device kernel durations are used and they need not sum to the E027 wall-clock steps; device time excludes host and idle gaps, so a gap that is host-side will show up as "unexplained" rather than be located; in-process vLLM is not the configuration timed in E027; kernel names may not identify every operation; one passage, one node. The outcome selects at most one next experiment and is not itself an optimization.
+
 ## E029 — Our decode paths at contexts beyond 2048
 
 Predeclared 2026-11-10 at the user's request to test context lengths beyond 2048. No code change: E026's tooling and variants (GR, GQ, GRA, GQA) at contexts 4096, 8192 and 16384, both passages, two reversed series, 3 warmups + 20 requests per cell. The passages are the same two texts repeated to the required token count, as at every earlier context. Each case is validated first by E026's `att.py validate` under E021's gate (third-gate disclosure applies); a context whose validation is rejected or cannot run (memory, time) is reported as such and not timed, with no gate edit.
