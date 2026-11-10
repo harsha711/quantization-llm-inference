@@ -2,6 +2,22 @@
 
 Read the numerical/measurement [contract](CONTRACT.md) before interpreting these records. Preserve raw evidence, failed attempts, and inconclusive outcomes. An alternative that has not been implemented or measured is not a failed optimization. Historical entries below reconstruct only what the repository supports. Missing prior failure numbers or commit IDs remain unknown.
 
+## E027 — Our decode path versus vLLM on the same quantized weights
+
+Predeclared 2026-11-10 at the user's request ("go") after the question whether the result is faster than or comparable to a state-of-the-art inference stack. Every earlier full-model comparison used Hugging Face Transformers FP16 as the baseline. This experiment adds one external comparator and changes nothing in our paths.
+
+Comparator V: vLLM v0.33.0 (the pinned, hashed wheel that is also the source of our Marlin build) installed with its PyPI dependencies in a separate node-local venv, offline `LLM.generate`, its own Qwen2 implementation, scheduler and unmodified Marlin kernel (without the E006 barrier). It loads the SAME project G128 codes and FP16 scales, written by `scripts/e027/convert.py` as an AutoGPTQ-format checkpoint (the project packing is already that layout; no requantization; embedding/head and biases copied). Settings: FP16, batch 1, greedy, exactly 64 tokens with EOS ignored, the exact input ids of our validated runs, prefix caching disabled, model generation defaults ignored, no detokenization.
+
+Our variants, unchanged from E026: GR (graph FP16), GQ (graph Marlin), GQA (graph Marlin + direct decode attention), each validated in the same job by E026's `att.py validate` under E021's gate (third-gate disclosure applies).
+
+Metric: vLLM exposes no synchronized per-phase timer equal to ours, so each V sample is a 1-token request followed by a 64-token request; V decode = their wall-time difference (63 decode steps including vLLM's per-step engine work), median of 20 after 3 warmups. Ours is the usual 63-forward decode median. End-to-end 64-token wall time is reported for both. This difference in measurement method is a stated limit.
+
+Checks on V before its timing is used: the converter decodes every checkpoint tensor the AutoGPTQ way and requires relative L2 < 0.5 against the original weight for all 196 layers (a wrong axis or nibble order gives > 1); V's first generated token must equal our Marlin path's in every request or the cell fails; the number of leading tokens that agree (of 64) is reported, not gated, because vLLM's attention and kernel build round differently.
+
+Hypothesis: GQA's decode median is at least 5% below V's in every (passage, series) cell at each context. Outcome per context, fixed now: "faster" if GQA is ≥5% below V in all four cells; "slower" if V is ≥5% below GQA in all four; "comparable" if all four are within ±5%; otherwise "mixed". All outcomes are reported. Contexts 128, 512, 2048 × primary/held-out × two reversed series, one process per cell, one node for the whole comparison.
+
+Not covered and not to be claimed: vLLM's throughput under concurrent requests (its design point), other stacks (llama.cpp, TensorRT-LLM), vLLM with FP16 weights, any tuning of vLLM. vLLM runs its engine in a child process; the launcher still starts one rank. `scripts/e027/`. Smoke (venv build, conversion, context128 validation, one GQA cell, one V cell) inspected before the dependent full job.
+
 ## E026 — Single-query grouped decode attention under graph replay
 
 Predeclared 2026-11-10 from the E025 result, under the user's standing instruction to continue toward robust optimizations while away. One main change: for decode steps only (one query token), attention is computed as `softmax(scale·q·Kᵀ + mask)·V` directly on the 2 stored key/value heads with FP32 scores and one final rounding to FP16, instead of Transformers' SDPA call after expanding keys/values to 12 heads. Prefill and every multi-token call keep the stock path. Static shapes and addresses are unchanged, so E023's graph capture applies. No kernel, quantization, Marlin, tolerance or cache change. This is an inference-side change common to FP16 and Marlin; it is not a W4A16 kernel result, and its gain must be reported against an FP16 path using the same attention.
