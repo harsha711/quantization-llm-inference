@@ -23,6 +23,8 @@ Not covered: complete-model trace (E017's trace stage embeds the old gate), whol
 
 ARC: c7 preferred (node-local runtime), sbatch+prun, one rank. Inspected 8-token smoke at both contexts → validation job → timing job, each gated on an inspection marker for the previous one.
 
+Execution change recorded 2026-11-09 23:25 EST, before any E019 compute: the partition queue is FIFO and about 25 jobs from another user were submitted behind pending smoke 333424, so a released c7 would not return for hours. At the user's instruction the node is kept: 333424's time limit is raised from 1:30 to 4:00 while pending (queue position unchanged), and after the smoke finishes its exit-wait shell is paused (the E017 retrieval precedent) so the validation and timing stages run inside that same owned allocation via `scripts/e019/inalloc.sh`, using the unchanged `submit.sh` stage scripts, the batch shell's Slurm environment and `prun`. Stage directories therefore all carry job ID 333424. Inspection markers, gates, timing plan and criteria are unchanged; the allocation is released as soon as the last stage is retrieved.
+
 ## E018 — Locate the E017 Q/R logit divergence (diagnostic)
 
 Predeclared 2026-11-09 from clean `35cae94`, requested by the user after E017 ("identify ... and bridge the gap", ARC use permitted). Diagnostic only. E017 stays failed and immutable. No timing, no tolerance change, no kernel/dispatch/model change, no passing-subset release.
