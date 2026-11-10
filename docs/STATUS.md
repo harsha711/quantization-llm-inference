@@ -1,3 +1,7 @@
+# E017 authorized — corrected Marlin/full-model integration
+
+2026-11-09: predeclared in [EXPERIMENTS](EXPERIMENTS.md#e017--corrected-marlin-in-the-pinned-full-model). Inspect actual layer inventory/runtime and pass one-layer FP64/packing/repeated-call/sanitizer prerequisites before full-model validation. No inference performance result exists yet. Historical E016 and all earlier records remain unchanged.
+
 # E016 complete — full decode capture gives no meaningful latency reduction
 
 2026-11-09: [E016](INFERENCE_FULL_DECODE_GRAPH.md) compares fresh E015 per-token replay G with one graph H over all 63 decode steps on c52's RTX 5060 Ti 16 GB/driver 615.71.09. Both contexts and both passages/repeated resets pass bitwise full logits, exact tokens, complete cache equality, unchanged weights, stable storage/restoration and actual 63-versus-1 launches. No compiler, attention, arithmetic or Marlin change occurs.
