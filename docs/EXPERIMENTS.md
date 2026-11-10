@@ -33,6 +33,8 @@ Execution notes: llama.cpp smoke 334239 on c7 FAILED exit 1 during the CUDA buil
 
 ONNX Runtime smoke 334245 on c10 FAILED exit 1 at the FP16 model build, before any measurement: the model builder imports `onnx_ir`, which the PyPI packages did not pull in. `onnx-ir` is now installed explicitly; the environment and its freeze were discarded and rebuilt inside the kept allocation.
 
+ONNX Runtime rerun `ort-smoke-c10-334245-s2` (inside kept job 334245) COMPLETED exit 0 and was inspected: onnxruntime-genai-cuda 0.19.0 / onnxruntime-gpu 1.31.1; FP16 export 3.0 GB, INT4 export 872 MB (smaller than the block projections plus an FP16 embedding would be, so the builder evidently also quantizes the tied embedding/output head — to be confirmed from the model files). One context128 held-out cell each, smoke only, not the result: GQA 326.4 ms, OF 531.1 ms, OQ 185.0 ms; leading tokens agreeing with ours 46/64 (FP16) and 29/64 (INT4). Before the full job, and before any full result, the token read-back in `obench.py` was moved inside the timed region so that work still queued on the GPU cannot be left out of the decode time; the smoke numbers above were taken without that and are not used.
+
 ## E027 — Our decode path versus vLLM on the same quantized weights
 
 Predeclared 2026-11-10 at the user's request ("go") after the question whether the result is faster than or comparable to a state-of-the-art inference stack. Every earlier full-model comparison used Hugging Face Transformers FP16 as the baseline. This experiment adds one external comparator and changes nothing in our paths.

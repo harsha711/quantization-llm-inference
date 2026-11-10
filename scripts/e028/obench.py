@@ -32,8 +32,8 @@ for index in range(23):  # 3 warmups + 20 samples
     for _ in range(63):
         assert not generator.is_done(), 'stopped before 64 tokens'
         generator.generate_next_token()
+    ids = [int(t) for t in generator.get_sequence(0)[context:]]  # read inside the timed region: forces any queued GPU work to finish
     end = time.perf_counter()
-    ids = [int(t) for t in generator.get_sequence(0)[context:]]
     assert len(ids) == 64
     agree = next((i for i, (a, b) in enumerate(zip(ids, ref['output_ids'])) if a != b), 64)
     assert agree > 0 or variant == 'OQ', 'FP16 ONNX Runtime disagrees with FP16 Transformers on the first token'
