@@ -44,12 +44,13 @@ def install(model):
         return grouped(query, key, value, attention_mask, scaling), None
 
     M.ALL_ATTENTION_FUNCTIONS = {'sdpa': attention}
-    # self-check against the stock definition with expanded heads, FP32
+    # self-check against the attention definition with expanded heads, FP32
     g = torch.Generator().manual_seed(0)
     q, k, v = torch.randn(1, 12, 1, 16, generator=g), torch.randn(1, 2, 40, 16, generator=g), torch.randn(1, 2, 40, 16, generator=g)
     mask = torch.zeros(1, 1, 1, 40)
     mask[..., 30:] = torch.finfo(torch.float16).min
-    want = torch.nn.functional.scaled_dot_product_attention(q, k.repeat_interleave(6, 1), v.repeat_interleave(6, 1), attn_mask=mask, scale=.25)
+    kk, vv = k.repeat_interleave(6, 1), v.repeat_interleave(6, 1)  # the stock head expansion, written out (SDPA's math backend is disabled here)
+    want = torch.softmax(q @ kk.transpose(-1, -2) * .25 + mask, -1) @ vv
     assert torch.allclose(grouped(q, k, v, mask, .25), want.transpose(1, 2), atol=1e-5, rtol=1e-5)
 
 
