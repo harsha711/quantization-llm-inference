@@ -1,8 +1,12 @@
-# W4A16 CUDA GEMM: project synthesis through E012
+# W4A16 CUDA GEMM: project synthesis (kernel study through E012, full-model inference through E025)
+
+**Report-draft update, 2026-11-10:** §6 adds the full-model inference results (E013–E025) and revises the findings and limits in §5.4; §1–§5.3 are the 2026-11-08 kernel-level review and are otherwise unchanged. Figures 1–4 cover the kernel study only; the §6 tables have no figure yet.
 
 Evidence review, 2026-11-08. Experimental endpoint: `a78c4a4`. This document uses saved results only. It introduces no GPU allocation, measurement, kernel change, dispatch policy, or E012 retry. [Figure reproduction](../scripts/reporting/README.md), [recomputed comparisons](../results/reporting/project_synthesis/matched-comparisons.csv), and [source applicability](REFERENCES.md) accompany the report.
 
 **Central finding.** Compressed execution can substantially reduce small-batch GEMM latency in the tested setup, but the benefit depends on the implementation, weight reuse, batch size, and FP16 comparator. Our scalar CUDA changes produce useful, shape-specific improvements and clear regressions. The strongest compressed-versus-FP16 results come from maintained Marlin, whose Tensor Core implementation is upstream work. Our contribution is the retained kernel progression, lossless integration, validation and bounded synchronization correction, and controlled characterization of where benefits survive. The existing evidence supports a defensible course report. It does not establish a universal decoding speedup, an exact memory/compute crossover, or a new fast GEMM algorithm.
+
+**Full-model finding (added 2026-11-10, §6).** Placing the corrected Marlin kernel under all 196 block projections of Qwen2.5-1.5B and replaying the decode step as a CUDA graph lowers 63-step decode latency by 45% at a 128-token context and 30% at 2048 tokens against FP16 on the same reconstructed weights, with about 58% lower peak allocated GPU memory, reproduced over five contexts, two passages and two GPUs of the same model. The kernel alone was not enough: in eager execution its saving was hidden behind host time at short context. The path is numerically accepted only against a higher-precision control, under a gate chosen after two earlier gates against the FP16 reference rejected it; that history is part of the result.
 
 ## 1. What problem did we implement, and what changed in scope?
 
@@ -182,9 +186,107 @@ The deck also explicitly asks for a timed serial baseline and worker-count scali
 
 ### 5.4 Findings and limits to carry into the final report
 
+*Kernel study (E001–E012):*
+
 1. Our own kernels demonstrate shape-specific gains from within-block K parallelism, aligned specialization and row reuse, with preserved regressions and matched controls.
 2. Lossless Marlin integration and a source-supported synchronization correction enable a better validated comparator. Its core high performance remains upstream work.
 3. Weight reuse distance removes C's substantial launch-policy advantage, while corrected A retains a strong M4 advantage against the established FP16 cyclic baselines.
 4. Larger M narrows the relative advantage without a measured winner reversal through M128. Counts and aggregate profiles support bounded explanations, while exact critical-path attribution remains open.
 
-Limits are synthetic inputs, few shapes and one principal GPU model, unlocked clocks, limited repeated series, benchmark-specific cuBLAS settings, excluded setup/repacking costs, incomplete historical provenance and selected sanitizer/reference coverage. There is no full inference or model-quality evaluation, no established stable tail latency, no applicable validated roofline/crossover classification, and no accepted E012 stall attribution. Historical failed, stopped and inconclusive results remain part of the evidence.
+*Full-model inference (E013–E025, §6):*
+
+5. The corrected Marlin kernel passes every same-input operator check inside the model, yet the model's logits differ from the FP16 reference at the level of propagated FP16 rounding; Marlin-free higher-precision controls differ from that reference just as much. An elementwise logit gate against the FP16 path cannot separate the two.
+6. Eager Marlin decode is host-bound. Its gain over FP16 is 4–6% at a 128-token context and 29% at 2048, and graph replay turns that into 45% and 30%; FP16 gains under 2% from the same replay.
+7. The graph-replayed gain is a near-constant 4.4–4.5 ms per decode step and is reproduced in all 28 tested cells across contexts, passages, run order and a second GPU.
+8. After these changes the long-context step is dominated by single-query attention and the short-context step by Marlin projections plus the unquantized output head.
+
+Limits of the kernel study are synthetic inputs, few shapes and one principal GPU model, unlocked clocks, limited repeated series, benchmark-specific cuBLAS settings, excluded setup/repacking costs, incomplete historical provenance and selected sanitizer/reference coverage, with no applicable validated roofline/crossover classification and no accepted E012 stall attribution. Limits of the full-model results are one model, batch size 1, 64 generated tokens, two passages, one GPU model, a post hoc acceptance gate, no model-quality evaluation of the quantized weights, no sanitizer or trace coverage under graph replay, and no stable-tail claim. Historical failed, stopped and inconclusive results remain part of the evidence.
+
+## 6. Does the compressed kernel speed up full-model inference? (E013–E025)
+
+### 6.1 Workload and compared paths
+
+The model is `Qwen/Qwen2.5-1.5B` (revision `8faed761…`), FP16, PyTorch 2.14.0+cu130, Transformers 4.57.1, batch size 1. A request is a fixed prompt of 128–2048 tokens, an eager prefill that yields token 1, and 63 cached decode forwards with a static key/value cache; greedy tokens, no early stop. Two fixed text passages ("primary", "held-out") are truncated to each context length. All seven projections in each of the 28 blocks, 196 linear layers, are quantized once under the G128 contract. Embedding, the tied output head, norms, attention and caching stay FP16 and common.
+
+| Path | Projection weights | Projection GEMM |
+|---|---|---|
+| O | original FP16 | PyTorch FP16 |
+| R | FP16 reconstructed from the INT4 codes and scales (W_hat) | PyTorch FP16 |
+| Q | the same codes and scales, packed | corrected E006 Marlin A, unchanged |
+
+R versus Q isolates the execution path on identical quantized weights; O versus R is the quantization change and is descriptive only. A leading G (GR, GQ) means the decode step is captured once and replayed per token with `torch.cuda.CUDAGraph`. Decode time is the synchronized wall time of the 63 cached forwards; gains are `100(1 − candidate/baseline)` on medians of 20 requests after 3 warmups, one process per cell, two reversed series. Timing nodes are c7 and c52 (RTX 5060 Ti, drivers 610.57.04 and 615.71.09).
+
+### 6.2 What did not help the FP16 model
+
+| Experiment | Change | Result |
+|---|---|---|
+| E013 | smaller existing Marlin tile at M128 | 7.6–8.7% slower in both rectangles and series; rejected |
+| E014 | `torch.compile` static decode | exact tokens, but 415 logits outside the elementwise bound at context 2048; stopped, no timing |
+| E015 | per-token CUDA-graph replay of the FP16 decode step | bitwise-equal logits; 1.8–1.9% lower decode at 128, 1.1–1.3% at 2048; below 5% |
+| E016 | one graph covering all 63 steps | −0.2% to +0.05% versus per-token replay; setup 2.5–3.3 s; no gain |
+
+These bound what host-overhead removal alone buys an FP16 model on this GPU: under 2%, because its decode step is limited by reading about 2.6 GB of projection weights per token.
+
+### 6.3 Numerical acceptance: two rejections, a diagnosis, and a disclosed third gate
+
+**E017 (rejected).** The first Marlin request passes every operator check and produces the same 64 tokens as R, but 591 of 9,723,904 logits exceed the predeclared elementwise bound `|Q−R| ≤ 0.03 + 0.01|R|` (relative L2 0.00224 against a 0.003 limit). No timing was released.
+
+**E018 (diagnosis).** One process holding both paths reproduces the E017 tensors bitwise. Feeding R's activations to Marlin at every one of 12,544 projection calls gives zero violations of the unchanged GEMM tolerance for either path, with equal error against FP64 (median relative L2 2.07×10⁻⁴). Replacing the projection GEMM by an FP32- or FP64-accumulated product on the same weights, with no Marlin involved, moves the logits just as far from R (relative L2 0.00224 and 0.00226) and violates the same bound at 667 and 102 values. The divergence is the propagation of ordinary FP16 rounding differences through 28 blocks, not a kernel or integration defect.
+
+**E019 (rejected).** A second gate, declared after E018, required agreement with R's tokens and that Marlin be no farther from the FP64 control than the Marlin-free paths. It rejected both contexts: at context 128 on the held-out passage R's own top two logits are an exact FP16 tie at one step, which Marlin and both higher-precision controls resolve the other way; at context 2048 Marlin missed the distance comparison by 3×10⁻⁶. No timing was released under it.
+
+**E021 (accepted, post hoc).** The third gate judges Marlin against the FP64-projection control instead of R: identical greedy tokens (or a first difference only where the control's own logits differ by less than the E017 bound), relative L2 ≤ 0.003, every same-input operator call within the GEMM tolerance, bitwise repeatability, intact workspace guards and state invariants. All ten cases pass (contexts 128–2048, two passages), with identical tokens and relative L2 0.0019–0.0026; R sits at the same distance from the control (0.0021–0.0024). Six of the ten cases used contexts never run before. **This gate was written after seeing the earlier failures, and four of its cases were known to satisfy it; E017 and E019 remain failed under their own rules.** Every speed number below depends on it.
+
+### 6.4 Timing
+
+**Eager Marlin (E020).** Against eager R, decode is 3.6%/4.6% lower at context 128 and 28.9%/29.0% lower at context 2048; later repeats put the short-context gain at 4.7–5.8%, so it sits at the 5% threshold and is not claimed. Peak allocated memory falls from about 3.0–3.2 GiB to 1.2–1.4 GiB. Prefill at 2048 is about 3% slower.
+
+**Why short context showed so little (E022).** The 196 projections of one decode step take 6.96 ms for FP16, 28% of it host time, and 2.95 ms for Marlin, 99% of it host time. Marlin saves about 4 ms of device work per step, but an eager step carries roughly 9.5 ms of Python and launch time, which hides it until the FP16 device work grows past that at long context.
+
+**Graph replay (E023).** Marlin's external launches can be captured; replayed logits are bitwise equal to eager Marlin. Decode medians, series 1 / series 2, c7:
+
+| Context | R eager | GR | Q eager | GQ | GQ below R | GQ below GR |
+|---|---:|---:|---:|---:|---:|---:|
+| 128 | 626.2 / 626.8 ms | 614.3 / 615.0 | 596.1 / 593.3 | 342.4 / 343.0 | 45.3% / 45.3% | 44.3% / 44.2% |
+| 2048 | 909.8 / 911.4 ms | 898.6 / 900.0 | 646.1 / 647.7 | 632.6 / 633.0 | 30.5% / 30.5% | 29.6% / 29.7% |
+
+Replay passes its own criterion (≥5% below eager Marlin) at context 128 (42%) and misses it at context 2048 (2.1–2.3%): at long context the Marlin step is already device-bound.
+
+**Robustness (E024).** The same four variants over contexts 128, 256, 512, 1024, 2048, both passages and two reversed series on c7 (80 cells), and at 128/2048 on c52 with a different driver (32 cells). All three predeclared criteria hold: GQ is ≥5% below both FP16 variants in all 28 (context, passage, series) cells; GQ's slowest request beats FP16's fastest in every cell; repeated cells are within 0.7% of E023.
+
+| Context | 128 | 256 | 512 | 1024 | 2048 |
+|---|---:|---:|---:|---:|---:|
+| GQ decode, ms (c7) | 342.5–343.0 | 362.9–363.5 | 399.9–400.6 | 477.1–477.2 | 633.9–634.0 |
+| GQ below R | 45.3% | 43.6–43.8% | 41.3–41.4% | 37.3–37.4% | 30.4–30.5% |
+| GQ below GR | 44.2–44.3% | 42.6–42.7% | 40.3–40.4% | 36.4% | 29.6% |
+| second GPU (c52), GQ below R | 45.7% | — | — | — | 30.8–30.9% |
+
+Passage and run order change the medians by under 0.2%. The gain is a near-constant 4.4–4.5 ms per step; the percentage falls with context only because both paths share a cost proportional to context length.
+
+### 6.5 Where the remaining time goes (E025)
+
+Device time per eager Marlin decode step, one profiled request per context on c9:
+
+| Component | context 128 | context 2048 |
+|---|---:|---:|
+| Marlin kernels, 196 projections | 2.44 ms | 2.49 ms |
+| FP16 output head (151936×1536 GEMV, not quantized) | 1.17 ms | 1.17 ms |
+| Attention kernel | 0.47 ms | 4.00 ms |
+| Copies, including key/value head expansion | 0.37 ms | 1.42 ms |
+| Everything else | 1.08 ms | 1.10 ms |
+| Total | 5.53 ms | 10.18 ms |
+
+The totals match the replayed step times (5.44 and 10.06 ms), so under replay the step is essentially its device time. Attention and the head-expansion copy account for all of the context-proportional cost. These are kernel durations under an eager profiler, not replay latencies, from seven decode steps each.
+
+### 6.6 Contributions and attribution for the full-model part
+
+| Claim and ownership | Evidence | Limitation |
+|---|---|---|
+| Our integration runs corrected Marlin under all 196 projections on identical quantized weights, with a matched FP16 path | [E017 tooling](../scripts/e017/README.md), [bridge record](INFERENCE_MARLIN_BRIDGE.md) | Upstream Marlin supplies the kernel; our part is the E006 barrier, packing, wrapper and checks |
+| Our diagnosis attributes the model-level divergence to propagated rounding | [E018 summary](../results/e018_20261109/full-333413/out/summary.json) | One request for the per-call probe in E018; extended to ten requests in E021 |
+| Our acceptance against an FP64-projection control | [E021 verdict](../results/e021_20261110/full-334098/out/verdict.json), failed gates in [E017](../results/e017_20261109/) and [E019](../results/e019_20261109/) | Third gate, post hoc; not a model-quality result |
+| Our measurement that eager Marlin decode is host-bound, and that replay exposes the kernel's saving | [E022](../results/e022_20261110/), [E023](../results/e023_20261110/) | PyTorch supplies graph capture; random inputs in E022 |
+| Our robustness evidence | [E024](../results/e024_20261110/) | One model, batch 1, 64 tokens, one GPU model on two nodes |
+| Our device-time breakdown | [E025](../results/e025_20261110/) | One profiled request per context, eager, instrumented |
+
+For the course requirements in §5.2–§5.3, the full-model study adds an inference claim that the kernel study did not make, so the statement there that no inference measurement is needed no longer applies; the serial-baseline and worker-scaling question is unchanged and still open.
