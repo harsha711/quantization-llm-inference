@@ -103,7 +103,7 @@ def main():
     runner = Runner(work, 'R', 128)
     runs = {}
     for label in ('R', 'Q', 'Q2', 'F32', 'F64', 'P', 'R2'):
-        MODE = label.rstrip('2')
+        MODE = {'Q2': 'Q', 'R2': 'R'}.get(label, label)
         HID.clear()
         for d in duals:
             d.calls = 0
