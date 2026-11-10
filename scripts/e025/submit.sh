@@ -24,6 +24,9 @@ exec > "\$S/driver.log" 2>&1
 trap 'rc=\$?;echo "\$rc" > "\$S/driver.exit";touch "\$S/FINISHED";for ((i=0;i<450;i++));do [[ -e "\$S/RETRIEVED" ]] && break;sleep 2;done;exit "\$rc"' EXIT
 [[ $stage == smoke ]] || ls "\$OUT"/smoke-*/INSPECTED
 $(for f in "$here/../e018/diagnose.py" "$here/profile.py"; do b=$(basename "$f"); printf 'cat > "$S/%s" <<'"'"'PYEOF'"'"'\n' "$b"; cat "$f"; printf 'PYEOF\necho "%s  $S/%s" | sha256sum -c\n' "$(sha256sum < "$f" | cut -d' ' -f1)" "$b"; done)
+# Nodes other than c7 get the hashed c7 runtime archive (E024) unpacked to the identical node-local path.
+V=/tmp/e017-hpuvvad-20261109; T=/mnt/beegfs/hpuvvad/csc548-w4a16-e024-20261110/runtime.tar
+if [[ ! -e "\$V/bin/python" ]]; then sha256sum -c "\$T.sha256"; tar xf "\$T" -C /tmp; fi
 export PROJECT_ROOT=\$E017_ROOT
 set +u; source "\$E017_ROOT/scripts/e017/env_arc.sh"; set -u
 scontrol show job "\$SLURM_JOB_ID" > "\$S/allocation.txt"
