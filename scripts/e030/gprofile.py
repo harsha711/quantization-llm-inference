@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """E030 diagnostic: GPU kernel time per decode step of our graph-replayed Marlin path with direct attention (GQA).
 
-gprofile.py OUT CONTEXT...  — per context: warm requests, then a profiled 2-token and a profiled 34-token request.
-Per-kernel device time per decode step = (34-token total − 2-token total) / 32, which removes prefill.
+gprofile.py OUT CONTEXT...  — per context: warm requests, then a profiled 8-token and a profiled 64-token request.
+Per-kernel device time per decode step = (64-token total − 8-token total) / 56, which removes prefill.
 """
 import collections
 import importlib.util
@@ -27,7 +27,7 @@ def kernels(prof):
     return total
 
 
-def per_step(short, long, steps=32):
+def per_step(short, long, steps=56):
     rows = {k: [(long[k][0] - short[k][0]) / steps, (long[k][1] - short[k][1]) / steps] for k in set(short) | set(long)}
     return dict(sorted(rows.items(), key=lambda x: -x[1][0]))
 
@@ -43,14 +43,14 @@ if __name__ == '__main__':
         for context in [int(c) for c in sys.argv[2:]]:
             runner = att.E.GraphRunner(work, 'Q', context)
             for _ in range(3):
-                row, _ = runner.run('primary', True, generated=34)
+                row, _ = runner.run('primary', True, generated=64)
             prof = {}
-            for n in (2, 34):
+            for n in (8, 64):
                 with profile(activities=[ProfilerActivity.CPU, ProfilerActivity.CUDA]) as p:
                     r, _ = runner.run('primary', True, generated=n)
                 assert r['output_ids'] == row['output_ids'][:n]
                 prof[n] = kernels(p)
-            table = per_step(prof[2], prof[34])
+            table = per_step(prof[8], prof[64])
             summary[context] = dict(input_ids=row['input_ids'], output_ids=row['output_ids'], device_us_per_step=sum(v[0] for v in table.values()),
                                     kernel_us_and_calls_per_step=table)
             print('PROFILED', context, summary[context]['device_us_per_step'], flush=True)

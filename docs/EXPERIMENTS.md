@@ -10,6 +10,8 @@ Method: PyTorch profiler (CUPTI kernel records), same node, contexts 128 and 204
 
 Limits fixed now: profiler overhead perturbs wall time, so only device kernel durations are used and they need not sum to the E027 wall-clock steps; device time excludes host and idle gaps, so a gap that is host-side will show up as "unexplained" rather than be located; in-process vLLM is not the configuration timed in E027; kernel names may not identify every operation; one passage, one node. The outcome selects at most one next experiment and is not itself an optimization.
 
+Execution notes: backup job 334252 on c51 FAILED exit 1 in our side of the profile before any profiling: the E017 request function only accepts 8 or 64 generated tokens, and the scripts asked for 2 and 34. Changed before any profile existed: both stacks now use an 8-token and a 64-token request and divide the difference by 56 steps. The copy queued behind the vLLM run on c9 was removed unstarted; the allocation on c51 is kept and the profile rerun inside it.
+
 ## E029 — Our decode paths at contexts beyond 2048
 
 Predeclared 2026-11-10 at the user's request to test context lengths beyond 2048. No code change: E026's tooling and variants (GR, GQ, GRA, GQA) at contexts 4096, 8192 and 16384, both passages, two reversed series, 3 warmups + 20 requests per cell. The passages are the same two texts repeated to the required token count, as at every earlier context. Each case is validated first by E026's `att.py validate` under E021's gate (third-gate disclosure applies); a context whose validation is rejected or cannot run (memory, time) is reported as such and not timed, with no gate edit.

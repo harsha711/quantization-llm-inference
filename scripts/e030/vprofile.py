@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """E030 diagnostic: GPU kernel time per decode step of vLLM on the same weights, engine run in-process.
 
-vprofile.py MODELDIR OUT CONTEXT...  — reads OUT/ours.json for the input ids and our tokens; same 2-token / 34-token
+vprofile.py MODELDIR OUT CONTEXT...  — reads OUT/ours.json for the input ids and our tokens; same 8-token / 64-token
 difference as gprofile.py. Requires identical tokens.
 """
 import collections
@@ -22,7 +22,7 @@ def kernels(prof):
     return total
 
 
-def per_step(short, long, steps=32):
+def per_step(short, long, steps=56):
     rows = {k: [(long[k][0] - short[k][0]) / steps, (long[k][1] - short[k][1]) / steps] for k in set(short) | set(long)}
     return dict(sorted(rows.items(), key=lambda x: -x[1][0]))
 
@@ -43,13 +43,13 @@ def main():
     for context in contexts:
         ref = ours[str(context)]
         for _ in range(3):
-            assert run(ref['input_ids'], 34) == ref['output_ids']
+            assert run(ref['input_ids'], 64) == ref['output_ids']
         prof = {}
-        for n in (2, 34):
+        for n in (8, 64):
             with profile(activities=[ProfilerActivity.CPU, ProfilerActivity.CUDA]) as p:
                 assert run(ref['input_ids'], n) == ref['output_ids'][:n]
             prof[n] = kernels(p)
-        table = per_step(prof[2], prof[34])
+        table = per_step(prof[8], prof[64])
         summary[context] = dict(device_us_per_step=sum(v[0] for v in table.values()), kernel_us_and_calls_per_step=table)
         print('PROFILED', context, summary[context]['device_us_per_step'], flush=True)
     (out / 'vllm.json').write_text(json.dumps(summary, indent=1))
