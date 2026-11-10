@@ -43,6 +43,8 @@ Hypothesis: GQA's decode median is at least 5% below V's in every (passage, seri
 
 Not covered and not to be claimed: vLLM's throughput under concurrent requests (its design point), other stacks (llama.cpp, TensorRT-LLM), vLLM with FP16 weights, any tuning of vLLM. vLLM runs its engine in a child process; the launcher still starts one rank. `scripts/e027/`. Smoke (venv build, conversion, context128 validation, one GQA cell, one V cell) inspected before the dependent full job.
 
+Execution notes: smoke 334232 on c5 FAILED exit 2 after 43 s, before any install or measurement: the pinned wheel is under the first E017 root (`csc548-w4a16-e017-20261109/external/`), not the r2 root the script named. The script now uses that path and checks the wheel's recorded SHA256.
+
 ## E026 — Single-query grouped decode attention under graph replay
 
 Predeclared 2026-11-10 from the E025 result, under the user's standing instruction to continue toward robust optimizations while away. One main change: for decode steps only (one query token), attention is computed as `softmax(scale·q·Kᵀ + mask)·V` directly on the 2 stored key/value heads with FP32 scores and one final rounding to FP16, instead of Transformers' SDPA call after expanding keys/values to 12 heads. Prefill and every multi-token call keep the stock path. Static shapes and addresses are unchanged, so E023's graph capture applies. No kernel, quantization, Marlin, tolerance or cache change. This is an inference-side change common to FP16 and Marlin; it is not a W4A16 kernel result, and its gain must be reported against an FP16 path using the same attention.

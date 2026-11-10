@@ -47,7 +47,8 @@ diff -u "$R/pip-freeze.txt" "$S/pip-freeze.txt"
 # vLLM in its own venv: the pinned, hashed v0.33.0 wheel already used for the Marlin source, plus its PyPI dependencies.
 export PIP_CACHE_DIR=/mnt/beegfs/hpuvvad/csc548-w4a16-e016-final-20261109/cache/pip
 export VLLM_NO_USAGE_STATS=1 DO_NOT_TRACK=1 VLLM_CONFIG_ROOT="$S/vllm-config" VLLM_CACHE_ROOT="$S/vllm-cache"
-WHEEL=$(ls "$E017_ROOT"/external/vllm-0.33.0-*.whl)
+WHEEL=/mnt/beegfs/hpuvvad/csc548-w4a16-e017-20261109/external/vllm-0.33.0-cp38-abi3-manylinux_2_28_x86_64.whl
+echo "4b6bdec4ab269990bf70d45a3c1e94c3760a27064513760193b26d6f0da883aa  $WHEEL" | sha256sum -c
 if [[ ! -e "$VV/bin/python" ]]; then
  python3.11 -m venv "$VV"
  if [[ -e "$OUT/vllm-freeze.txt" ]]; then "$VV/bin/python" -m pip install "$WHEEL" -c "$OUT/vllm-freeze.txt" > "$S/vllm-install.log" 2>&1
