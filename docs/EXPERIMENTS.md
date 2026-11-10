@@ -19,6 +19,27 @@ If accepted, the permitted statement is: "Q agrees with a higher-precision evalu
 
 ARC: c7, sbatch+prun, one rank, `scripts/e021/submit.sh`. Smoke is plumbing only: context128 (already seen), 8 tokens; its verdict is not binding. Full job depends on the inspected smoke.
 
+### E021 result — ACCEPTED under the third gate, all ten cases (2026-11-10, c7, UUID GPU-29e9569a-8a7a-cd23-5443-bd0b72ca241a, driver 610.57.04)
+
+Attempts: smoke 334097 COMPLETED exit 0 (context128, 8 tokens; values equal E019's 8-token run), inspected; dependent full 334098 COMPLETED exit 0. No failed attempt. Allocation, one-rank prun, binary/source/pip identities pass in both.
+
+| Case | Q to control rel L2 (≤0.003) | R to control | F32 to control | Q tokens = control | R tokens = control |
+|---|---:|---:|---:|---|---|
+| 128 primary (seen) | 0.001984 | 0.002257 | 0.002073 | yes | yes |
+| 128 held-out (seen) | 0.001915 | diverges at step 47 | 0.001880 | yes | no (exact tie) |
+| 256 primary | 0.002022 | 0.002071 | 0.002001 | yes | yes |
+| 256 held-out | 0.002190 | 0.002119 | 0.002154 | yes | yes |
+| 512 primary | 0.002124 | 0.002256 | 0.002160 | yes | yes |
+| 512 held-out | 0.002591 | 0.002322 | 0.002475 | yes | yes |
+| 1024 primary | 0.002175 | 0.002379 | 0.002421 | yes | yes |
+| 1024 held-out | 0.002359 | 0.002230 | 0.002236 | yes | yes |
+| 2048 primary (seen) | 0.002386 | 0.002282 | 0.002384 | yes | yes |
+| 2048 held-out (seen) | 0.002133 | 0.002188 | 0.002402 | yes | yes |
+
+Every criterion passes in every case. Q's 64 tokens equal the control's in all ten, so the near-tie allowance in criterion 2 was never used by Q. All 125,440 same-input Q operator calls (5,526,097,920 outputs) pass the unchanged GEMM rule; Q repeats bitwise; P equals R bitwise; workspace guards and state invariants hold; GPU and CPU FP64 references agree exactly. Q is closer to the control than R in 5 of the 9 comparable cases, i.e. indistinguishable from the FP16 path's own rounding distance. The old E017 elementwise rule would still reject Q against R in every 64-token case (31–1927 values).
+
+Decision: accepted under this gate only. E017 and E019 stay failed under theirs. Permitted statement, verbatim from the predeclaration, together with E020: decode median 28.9%/29.0% lower at context2048 and 3.6%/4.6% at 128. Any report must state that this is the third gate, chosen after the first two rejected, that four of the ten cases were known to satisfy it beforehand, and the listed non-coverage. Evidence: `results/e021_20261110/` (non-tensor files hash-verified; `beegfs-all.sha256` also lists the 12 logit archives, about 0.7 GB, left on BeeGFS under `csc548-w4a16-e021-20261109`).
+
 ## E020 — Descriptive primary timing of the numerically unaccepted Marlin path
 
 Predeclared 2026-11-10 01:20 EST from `5dcd85c`, before any timing sample exists. After E019's rejection the user was offered stop / descriptive timing / a third gate and delegated the choice ("please figure out the best approach"). Chosen: measure, without changing or adding any acceptance gate. Reason: whether the bridge has any latency benefit is unknown after E017–E019, the node is held, and a measurement labelled as unaccepted misleads nobody, whereas a third post hoc gate would.

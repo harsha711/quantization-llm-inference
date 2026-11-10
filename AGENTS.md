@@ -139,6 +139,11 @@
 - E020 is complete (job 334094/c7, historical). Q decode median is 28.9%/29.0% lower than R at context2048 and 3.6%/4.6% at 128; peak allocated memory about 60% lower; 2048 prefill about 3% slower. Always report these as measurements of a path that FAILED the E017 and E019 numerical gates, with those results alongside. Never call it an accepted or validated speedup.
 - The long-context FP16 decode penalty is unexplained; do not attribute it without a requested profile. No held-out timing exists by design. Acceptance needs a new user-requested experiment.
 
+## E021 completed acceptance against the FP64 control
+
+- E021 is complete and accepted in all ten cases; read its EXPERIMENTS entry. It supersedes the "unaccepted" status of E020 only under its own gate. Every statement of the E020 speedup must say: third gate, chosen after E017/E019 rejected the path against FP16 R; four of ten cases known beforehand; six fresh contexts 256/512/1024; no sanitizer coverage at those prefill sizes; one model/GPU/batch 1.
+- E017 and E019 remain failed. Do not rerun, retune or extend without a user request. Logit archives stay on BeeGFS; hashes are in `results/e021_20261110/beegfs-all.sha256`.
+
 ## Rooflines, if requested
 
 - Recompute all ceilings, ridge points, arithmetic intensities, and performance coordinates from specifications/data. Keep the primary full-machine roof distinct from core-count, ISA, NUMA, and memory-domain sensitivity roofs.

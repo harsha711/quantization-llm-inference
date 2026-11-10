@@ -1,4 +1,8 @@
-# E020 measured — Marlin path decodes 29% faster at context 2048, numerically unaccepted
+# E021 accepted — Marlin path matches the FP64-projection control on ten requests
+
+2026-11-10: [E021](EXPERIMENTS.md#e021--acceptance-of-the-marlin-path-against-the-fp64-projection-control) judges the corrected-Marlin model against the same quantized model with FP64-accumulated projections. All ten cases pass (contexts 128–2048, two passages; six never run before): identical 64 greedy tokens, relative L2 0.0019–0.0026 against a 0.003 bound, zero failures in 125,440 same-input operator calls. This is the third gate, chosen after E017 and E019 rejected the path against the FP16 reference; both stay failed. With that disclosure, E020's timing applies: decode 28.9%/29.0% lower at context2048, 3.6%/4.6% at 128. Evidence: `results/e021_20261110/` (jobs 334097/334098, historical). Next: report draft, or a user-selected optimization.
+
+# E020 measured — Marlin path decodes 29% faster at context 2048 (accepted only under E021)
 
 2026-11-10: [E020](EXPERIMENTS.md#e020--descriptive-primary-timing-of-the-numerically-unaccepted-marlin-path) times the corrected-Marlin full model against reconstructed FP16 on c7 (job 334094, 160 requests, unchanged E017 plan). Decode median is 28.9%/29.0% lower at context2048 and 3.6%/4.6% lower at context128 (below 5%); end-to-end 23.4%/23.5% and 3.7%/4.6%; peak allocated memory about 60% lower; long-context prefill about 3% slower. This path failed the E017 and E019 numerical gates, so these are descriptive measurements, not an accepted speedup. Why FP16 decode slows by 283 ms at long context while Marlin slows by 45 ms is unexplained. Evidence: `results/e020_20261110/`. Next step needs a user decision: an acceptance experiment not based on R's greedy tokens, or the report draft.
 
