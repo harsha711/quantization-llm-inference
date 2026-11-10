@@ -14,6 +14,8 @@ Validation before timing, `scripts/e026/att.py validate`: dual-module process, e
 
 Timing after inspected acceptance: one process per cell, 3 warmups + 20 requests, two fully reversed series, each variant checked against its own validated tokens and bitwise logits. Reported: GQA versus GQ (criterion), GRA versus GR, GQA versus GRA (the Marlin gain with attention equalized), end-to-end, spreads. `scripts/e026/`. Smoke (context128 validation + one timed cell) inspected before the dependent full job.
 
+Execution notes recorded 2026-11-10 before any full-job result was read: smoke 334148 FAILED exit 1 at install because the self-check called PyTorch's SDPA on CPU, whose math backend this runtime disables; the check now writes the attention definition out explicitly (committed). Smoke 334149 on c7 COMPLETED and inspected (both context128 cases accepted). Full job 334151 (contexts 128, 512, 2048) is running. Because the submitting laptop's VPN is about to drop, a second full job 334160 for contexts 256 and 1024 is queued behind it with `afterok`, extending coverage to E024's five contexts under the same inspected smoke and the same criteria; both jobs run unattended and their results stay on BeeGFS until retrieved under a later holding job.
+
 ## E025 — Decode-step device time by operation (diagnostic)
 
 Predeclared 2026-11-10 from `fe36faf`, under the user's standing instruction to continue toward robust optimizations while away. Diagnostic only: no optimization, kernel or model-path change, no timing claim.
