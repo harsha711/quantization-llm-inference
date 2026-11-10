@@ -1,0 +1,7 @@
++ prun timeout 3000 /tmp/e017-hpuvvad-20261109/bin/python /mnt/beegfs/hpuvvad/csc548-w4a16-e024-20261110/smoke-c7-334110/robust.py validate /mnt/beegfs/hpuvvad/csc548-w4a16-e024-20261110/smoke-c7-334110/ref 128
+[prun] Master compute host = c7
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun timeout 3000 /tmp/e017-hpuvvad-20261109/bin/python /mnt/beegfs/hpuvvad/csc548-w4a16-e024-20261110/smoke-c7-334110/robust.py validate /mnt/beegfs/hpuvvad/csc548-w4a16-e024-20261110/smoke-c7-334110/ref 128 (family=openmpi4)
+128 primary ACCEPTED {"compared_steps": 64, "flip": null, "gq_vs_f64_rel_l2": 0.0019837728704231385, "workspace": {"locks_zero": true, "lock_guards": true, "scratch_guards": true}, "reported": {"gr_bitwise_r": true, "r_tokens_equal_q": true}, "criteria": {"finite": true, "tokens": true, "rel_l2_vs_F64": true, "graph_bitwise_eager": true, "repeat_bitwise": true, "workspace": true, "state": true}, "accepted": true}
+128 heldout ACCEPTED {"compared_steps": 64, "flip": null, "gq_vs_f64_rel_l2": 0.0019154411384924316, "workspace": {"locks_zero": true, "lock_guards": true, "scratch_guards": true}, "reported": {"gr_bitwise_r": true, "r_tokens_equal_q": false}, "criteria": {"finite": true, "tokens": true, "rel_l2_vs_F64": true, "graph_bitwise_eager": true, "repeat_bitwise": true, "workspace": true, "state": true}, "accepted": true}
+ALL ACCEPTED

@@ -21,6 +21,44 @@ Predeclared robustness criteria, evaluated per node over every (context, passage
 
 Not covered: other models, batch sizes, GPU models, generated lengths, system load from other users, sanitizers under graph replay, model quality. ARC: sbatch+prun, one rank per node; per node an inspected smoke (context128 validation plus one timed cell) before the dependent full job; `scripts/e024/`.
 
+### E024 result — robust under all predeclared criteria (2026-11-10)
+
+Attempts: c7 smoke 334110, runtime pack 334111, c7 full 334112, c52 smoke 334113, c52 full 334114, all COMPLETED exit 0, each smoke inspected before its full job. No failed job. A VPN drop on the submitting laptop interrupted retrieval of 334112 after it finished; its results were unaffected on BeeGFS and were copied out under a 20-minute no-compute holding job 334138. c7: UUID GPU-29e9569a-8a7a-cd23-5443-bd0b72ca241a, driver 610.57.04. c52: UUID GPU-f265b6be-2f35-5a5f-50b8-22bf81ec80b8, driver 615.71.09, runtime unpacked from the hashed c7 archive; binary, source and pip identities pass on both.
+
+Validation: all 10 c7 cases and all 4 c52 cases accepted at 64 tokens; graph-Marlin bitwise equal to eager Marlin and repeatable; relative L2 to the FP64-projection control 0.00192–0.00259, identical values on both nodes; tokens equal the control's everywhere. E021's disclosure applies.
+
+c7, 80 cells, 1600 timed requests. Ranges are over both passages and both series (four cells per context), decode medians of 20:
+
+| Context | R ms | GR ms | Q ms | GQ ms | GQ below R | GQ below GR | Q below R |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| 128 | 626.3–626.9 | 614.4–615.0 | 589.7–592.1 | 342.5–343.0 | 45.3–45.3% | 44.2–44.3% | 5.5–5.8% |
+| 256 | 644.7–645.1 | 633.4–633.5 | 593.5–596.0 | 362.9–363.5 | 43.6–43.8% | 42.6–42.7% | 7.6–7.9% |
+| 512 | 682.3–682.4 | 671.3–671.4 | 589.1–593.1 | 399.9–400.6 | 41.3–41.4% | 40.3–40.4% | 13.1–13.7% |
+| 1024 | 761.5–761.6 | 750.2–750.3 | 594.1–600.0 | 477.1–477.2 | 37.3–37.4% | 36.4–36.4% | 21.2–22.0% |
+| 2048 | 911.4–911.5 | 900.1–900.1 | 647.8–647.9 | 633.9–634.0 | 30.4–30.5% | 29.6–29.6% | 28.9–28.9% |
+
+c52, 32 cells, 640 timed requests:
+
+| Context | R ms | GR ms | Q ms | GQ ms | GQ below R | GQ below GR | Q below R |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| 128 | 622.0–622.7 | 610.8–611.0 | 588.5–593.6 | 337.5–338.2 | 45.7–45.7% | 44.6–44.7% | 4.7–5.4% |
+| 2048 | 899.9–901.3 | 889.2–890.4 | 636.3–636.6 | 622.9–623.1 | 30.8–30.9% | 29.9–30.0% | 29.3–29.4% |
+
+Criteria:
+- (a) GQ ≥5% below both R and GR in every cell: **passes**, 20/20 cells on c7 (minimum 29.56%) and 8/8 on c52 (minimum 29.95%).
+- (b) slowest GQ request faster than fastest R/GR request in every cell: **passes**, 28/28.
+- (c) c7 context128/2048 primary medians within 2% of E023: **passes**; largest deviation 0.70% (eager Q), graph variants within 0.21%.
+
+Observations:
+- Passage has no measurable effect: primary and held-out medians differ by under 0.1% for R, GR and GQ at every context, including context128 held-out where R and Marlin emit different tokens.
+- Series order has no measurable effect on R, GR, GQ (≤0.2%); eager Q varies up to about 1% between cells.
+- c52 medians are 0.6–1.3% lower than c7 for R and GR and 1.4–1.7% lower for GQ; eager Q ranges from 0.3% higher to 1.8% lower. Gains agree within 0.5 percentage points.
+- GQ's largest min–max spread over 20 requests is 0.89 ms; eager Q's is 8.25 ms.
+- The gain falls smoothly with context: 45.3% → 43.7% → 41.4% → 37.3% → 30.4% versus R on c7. In absolute terms GQ is 282–285 ms faster than R at contexts 128–1024 and 278 ms faster at 2048, i.e. about 4.4–4.5 ms per step; both paths carry the same context-proportional cost, about 2.4 µs per context token per step (calculation from the medians). That common cost is unattributed.
+- Eager Marlin's gain over R rises from 5.5% to 28.9% with context, crossing 5% already at context128 in these cells (E020/E023 measured 3.6–5.4% there): at short context it sits at the threshold and should not be claimed as passing.
+
+Decision: the graph-replayed Marlin decode gain is robust across five contexts, two passages, reversed order, repetition and a second GPU/driver of the same model. Not established: other GPU models, other models, batch sizes, generated lengths, shared-node load, sanitizer coverage under replay. Evidence: `results/e024_20261110/` (non-tensor files hash-verified; `e024-c7-all.sha256`/`e024-c52-all.sha256` also list the anchor logit archives left on BeeGFS under `csc548-w4a16-e024-20261110`).
+
 ## E023 — CUDA-graph replay of the Marlin decode step
 
 Predeclared 2026-11-10 from `6f01dc2`, requested by the user ("get a new node and test this out") as the one hypothesis E022 supports. One main change: the per-token decode step of the Marlin model (forward + argmax) is captured once with `torch.cuda.CUDAGraph` and replayed per token, exactly E015's procedure (three side-stream warmups, capture at the first decode position, stable token/position/mask/cache addresses). No kernel, dispatch, tile, model, quantization or tolerance change; corrected E006 A library `e4eca5e3…` and E017 integration unchanged; prefill stays eager. Whether Marlin's external ctypes launches can be captured is unknown and is the first thing the smoke tests; a capture failure is recorded as a concrete negative result.

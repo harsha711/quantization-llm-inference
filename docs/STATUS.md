@@ -1,12 +1,17 @@
 # Current state, 2026-11-10
 
 - **Best end-to-end result (E023):** corrected Marlin with the decode step replayed as a CUDA graph decodes 45.3% faster than eager reconstructed FP16 at context128 (342 vs 626 ms) and 30.5% faster at context2048 (633 vs 910 ms); against graph-replayed FP16 the gains are 44.2% and 29.6%. End-to-end 44.3% and 24.7%. Peak allocated memory about 58% lower. Graph logits are bitwise equal to eager Marlin.
+- **Robustness (E024):** that gain holds in all 28 tested cells: five contexts (45.3% → 30.4% versus eager FP16 from context128 to 2048), both passages, reversed orders, repetition within 0.7% of E023, and a second RTX 5060 Ti with a different driver (45.7%/30.8%). The slowest graph-Marlin request beats the fastest FP16 request in every cell.
 - **Eager Marlin result (E020):** corrected Marlin on all 196 block projections of Qwen2.5-1.5B decodes 28.9%/29.0% faster than reconstructed FP16 at context2048 and 3.6%/4.6% faster at context128 (below the 5% bar); peak allocated GPU memory about 60% lower; long-context prefill about 3% slower (E020).
 - **Validation status:** accepted only under E021's gate (agreement with an FP64-projection control, ten requests). E017 and E019, which compared against the FP16 reference, remain failed. Every statement of the speedup must carry that disclosure.
 - **Current bottleneck:** eager Marlin decode is host-bound (E022); graph replay removes that at context128 (E023). At context2048 graph replay adds only 2% over eager Marlin, so the remaining limit there is device work outside the projections, not yet profiled ([assessment](BOTTLENECK_ASSESSMENT.md)).
 - **Defaults unchanged:** corrected E006 A kernel, tiles and dispatch; no kernel edits since E006.
 - **Open, not run:** profile of the long-context decode step; held-out timing; sanitizers under graph replay; ACM report draft.
 - **Repository:** branch `optimize/inblock-k`, commits local and unpushed; no ARC jobs running; logit archives for E019/E021 remain on BeeGFS with hashes recorded.
+
+# E024 complete — the graph-Marlin decode gain is robust on the tested conditions
+
+2026-11-10: [E024](EXPERIMENTS.md#e024--robustness-of-the-e020e023-decode-gains) repeats the four variants over contexts 128–2048, both passages and two reversed series on c7 (80 cells) and at contexts 128/2048 on c52 with a different driver (32 cells). All three predeclared criteria pass. The gain is a near-constant 4.4–4.5 ms per decode step; both paths share a context-proportional cost that is not yet attributed. Jobs 334110–334114 and holding job 334138 are historical.
 
 # E023 complete — graph-replayed Marlin decode passes at context128, subthreshold at 2048
 

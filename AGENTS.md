@@ -154,6 +154,11 @@
 - E023 is complete. Graph-replayed Marlin decode (GQ) is bitwise equal to eager Marlin and passes its 5% criterion versus eager Marlin at context128 (42%) but not at context2048 (2%). Versus eager/graph FP16: 45%/44% at 128, 30.5%/29.6% at 2048. Report both the pass and the miss, with E021's gate disclosure.
 - No sanitizer, trace or held-out timing exists under graph replay. The long-context limit is unprofiled; do not attribute it. No further experiment is authorized without a user request. Jobs 334103–334106/c7 are historical.
 
+## E024 completed robustness check
+
+- E024 is complete: graph-Marlin's decode gain over eager and graph FP16 passes all predeclared robustness criteria in 28 cells (c7 five contexts × two passages × two series; c52 contexts 128/2048). Quote gains with their context: 45% at 128 falling to 30% at 2048. Eager Marlin at context128 sits at the 5% threshold (3.6–5.8% across experiments); do not claim it passes.
+- Scope is one model, batch 1, 64 tokens, two RTX 5060 Ti nodes. The c7 runtime archive on BeeGFS (`csc548-w4a16-e024-20261110/runtime.tar`, hash recorded) lets other partition nodes reproduce the node-local venv at the identical /tmp path.
+
 ## Rooflines, if requested
 
 - Recompute all ceilings, ridge points, arithmetic intensities, and performance coordinates from specifications/data. Keep the primary full-machine roof distinct from core-count, ISA, NUMA, and memory-domain sensitivity roofs.
