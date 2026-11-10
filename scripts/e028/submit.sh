@@ -4,7 +4,7 @@
 #   scripts/e028/submit.sh llama full SMOKEDIR "128 512 2048" | ssh arc-off-network sbatch --parsable --nodelist=<smoke node>
 #   scripts/e028/submit.sh long smoke none 4096 | ...       scripts/e028/submit.sh long full SMOKEDIR "4096 8192 16384" | ...
 set -euo pipefail
-kind=$1 stage=$2 prior=${3:-none} contexts=${4:-128}
+kind=$1 stage=$2 prior=${3:-none} contexts=${4:-128} att=${5:-att.py}  # att: long.py for contexts above 2048
 exp=e028; [[ $kind == long ]] && exp=e029
 here=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 embed() { printf 'cat > "$S/%s" <<'"'"'PYEOF'"'"'\n' "$(basename "$1")"; cat "$1"; printf 'PYEOF\necho "%s  $S/%s" | sha256sum -c\n' "$(sha256sum < "$1" | cut -d' ' -f1)" "$(basename "$1")"; }
@@ -33,8 +33,8 @@ if [[ ! -e "$VENV/bin/python" ]]; then sha256sum -c "$T.sha256"; tar xf "$T" -C 
 EOF
 embed "$here/../e018/diagnose.py"; embed "$here/../e021/validate.py"; embed "$here/../e023/run.py"; embed "$here/../e026/att.py"
 case $kind in
-llama) embed "$here/lbench.py"; embed "$here/lquant.py"; embed "$here/analyze.py";;
-ort) embed "$here/obench.py"; embed "$here/analyze.py";;
+llama) embed "$here/long.py"; embed "$here/lbench.py"; embed "$here/lquant.py"; embed "$here/analyze.py";;
+ort) embed "$here/long.py"; embed "$here/obench.py"; embed "$here/analyze.py";;
 long) embed "$here/long.py"; embed "$here/../e026/analyze.py";;
 esac
 cat <<'EOF'
@@ -106,6 +106,7 @@ long) echo 'EXT=(); ATT=long.py';;
 esac
 cat <<EOF
 contexts=($contexts)
+[[ $kind == long ]] || ATT=$att
 EOF
 case $stage in
 smoke) cat <<'EOF'

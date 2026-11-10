@@ -37,6 +37,22 @@ ONNX Runtime rerun `ort-smoke-c10-334245-s2` (inside kept job 334245) COMPLETED 
 
 llama.cpp smoke 334244 on c5 COMPLETED exit 0 and was inspected: llama-cpp-python 0.3.36 built with CUDA; Q4_K_M file 934.7 MiB at 5.08 bits per weight over all tensors, i.e. llama.cpp also quantizes the embedding/output matrix. One context128 held-out cell each, smoke only: GQA 326.1 ms, LF 528.0 ms, LQ 208.3 ms; leading tokens agreeing with ours 46/64 (FP16) and 28/64 (Q4_K_M). Allocation kept; full job started inside it.
 
+### E028 result, ONNX Runtime GenAI — our path is slower at every context (2026-11-10, c10)
+
+Full run `ort-full-c10-334245-full` inside kept job 334245, exit 0, 48 cells, 960 timed requests; `results/e028_20261110/` (logit archives stay on BeeGFS, hashes in `ort-all.sha256`). GR/GQA validation accepted in all six cases. Decode medians, ranges over two passages and two reversed series:
+
+| Context | GR ms | GQA ms | ORT FP16 ms | ORT INT4 ms | GQA versus ORT INT4 | GR versus ORT FP16 | ORT INT4 below its FP16 |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| 128 | 616.0–616.7 | 326.8–327.6 | 531.0–531.7 | 185.2–185.4 | 76.5–76.7% slower | 15.9–16.1% slower | 65.1–65.2% |
+| 512 | 673.5–673.6 | 336.1–336.7 | 532.5–532.7 | 185.1–185.3 | 81.4–81.9% slower | 26.4–26.5% slower | 65.2–65.3% |
+| 2048 | 905.2–905.3 | 376.1–376.2 | 539.3–540.1 | 191.6–192.2 | 95.8–96.3% slower | 67.6–67.8% slower | 64.4–64.5% |
+
+Predeclared outcome: **"slower" at all three contexts.** ORT's INT4 path decodes in 2.9–3.0 ms per step and is nearly flat in context; ours takes 5.2–6.0 ms. ORT's FP16 path also beats our graph FP16 and is flat in context, so its attention path does not have the cost ours had. Our 4-bit path remains faster than ORT's FP16 (38–30%). End-to-end (64 tokens): GQA 342/379/574 ms versus ORT INT4 205/235/372 ms. Token agreement with ours: primary 64/64 for both ORT variants at every context; held-out 46/64 (FP16) and 29/64 (INT4) at context128 and 64/64 at 512 and 2048; the FP16 first-token check passed in every request. The timed token read-back did not change the smoke value (185 ms).
+
+Limits: ORT's INT4 weights come from its own quantizer and include a quantized embedding/output matrix, so this is stack against stack, not kernel against kernel; no output-quality comparison; batch 1; one node; versions as recorded in `ort-freeze.txt`. Why ORT's step is this short (kernel, fused graph, quantized head) was not profiled and must not be attributed.
+
+Extension predeclared 2026-11-10 after the ORT result above and before any long-context external measurement: with nodes kept at the user's instruction, each external stack is also run at contexts 4096, 8192 and 16384 with the same cells and rule, our variants validated through `long.py` as in E029. A stack that cannot run a context (memory, limits) is recorded as such.
+
 ## E027 — Our decode path versus vLLM on the same quantized weights
 
 Predeclared 2026-11-10 at the user's request ("go") after the question whether the result is faster than or comparable to a state-of-the-art inference stack. Every earlier full-model comparison used Hugging Face Transformers FP16 as the baseline. This experiment adds one external comparator and changes nothing in our paths.

@@ -1,0 +1,138 @@
+Collecting onnxruntime-genai-cuda
+  Using cached onnxruntime_genai_cuda-0.19.0-cp311-cp311-manylinux_2_28_x86_64.whl (17.3 MB)
+Collecting onnxruntime-gpu
+  Using cached onnxruntime_gpu-1.31.1-cp311-cp311-manylinux_2_28_x86_64.whl (255.6 MB)
+Collecting onnx
+  Using cached onnx-1.23.2-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (8.9 MB)
+Collecting onnx-ir
+  Downloading onnx_ir-1.1.0-py3-none-any.whl (192 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 192.2/192.2 kB 1.2 MB/s eta 0:00:00
+Collecting torch
+  Using cached torch-2.15.0-cp311-cp311-manylinux_2_28_x86_64.whl (539.1 MB)
+Collecting transformers
+  Using cached transformers-5.22.2-py3-none-any.whl (13.1 MB)
+Collecting safetensors
+  Using cached safetensors-0.8.0-cp310-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (516 kB)
+Collecting numpy>=1.21.6
+  Using cached numpy-2.4.6-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (16.9 MB)
+Collecting flatbuffers
+  Using cached flatbuffers-25.12.19-py2.py3-none-any.whl (26 kB)
+Collecting packaging
+  Using cached packaging-26.3-py3-none-any.whl (129 kB)
+Collecting protobuf>=4.25.8
+  Using cached protobuf-7.36.2-cp310-abi3-manylinux2014_x86_64.whl (343 kB)
+Collecting typing_extensions>=4.7.1
+  Using cached typing_extensions-4.16.0-py3-none-any.whl (45 kB)
+Collecting ml_dtypes>=0.5.4
+  Using cached ml_dtypes-0.6.0-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (412 kB)
+Collecting sympy>=1.13
+  Using cached sympy-1.14.0-py3-none-any.whl (6.3 MB)
+Collecting filelock
+  Using cached filelock-4.2.10-py3-none-any.whl (218 kB)
+Collecting setuptools>=77.0.3
+  Using cached setuptools-84.2.1-py3-none-any.whl (876 kB)
+Collecting networkx>=2.5.1
+  Using cached networkx-3.6.1-py3-none-any.whl (2.1 MB)
+Collecting jinja2
+  Using cached jinja2-3.1.6-py3-none-any.whl (134 kB)
+Collecting fsspec>=0.8.5
+  Using cached fsspec-2026.9.0-py3-none-any.whl (221 kB)
+Collecting cuda-toolkit[cublas,cudart,cufft,cufile,cupti,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.2.2
+  Using cached cuda_toolkit-13.2.2-py2.py3-none-any.whl (2.6 kB)
+Collecting cuda-bindings<14,>=13.0.3
+  Using cached cuda_bindings-13.5.0-cp311-cp311-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl (8.4 MB)
+Collecting nvidia-cudnn-cu13==9.26.0.51
+  Using cached nvidia_cudnn_cu13-9.26.0.51-py3-none-manylinux_2_27_x86_64.whl (519.2 MB)
+Collecting nvidia-cusparselt-cu13==0.8.1
+  Using cached nvidia_cusparselt_cu13-0.8.1-py3-none-manylinux2014_x86_64.whl (170.1 MB)
+Collecting nvidia-nccl-cu13==2.30.7
+  Using cached nvidia_nccl_cu13-2.30.7-py3-none-manylinux_2_18_x86_64.whl (216.0 MB)
+Collecting nvidia-nvshmem-cu13==3.7.2
+  Using cached nvidia_nvshmem_cu13-3.7.2-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (135.4 MB)
+Collecting triton~=3.9.0
+  Using cached triton-3.9.0-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (285.8 MB)
+Collecting nvidia-cublas==13.4.1.3.*
+  Using cached nvidia_cublas-13.4.1.3-py3-none-manylinux_2_27_x86_64.whl (404.9 MB)
+Collecting nvidia-cuda-nvrtc==13.2.86.*
+  Using cached nvidia_cuda_nvrtc-13.2.86-py3-none-manylinux2010_x86_64.manylinux_2_12_x86_64.whl (47.0 MB)
+Collecting nvidia-cuda-runtime==13.2.86.*
+  Using cached nvidia_cuda_runtime-13.2.86-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (2.3 MB)
+Collecting nvidia-cufft==12.2.0.57.*
+  Using cached nvidia_cufft-12.2.0.57-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (218.3 MB)
+Collecting nvidia-nvjitlink<14,>=13.2.86
+  Using cached nvidia_nvjitlink-13.5.37-py3-none-manylinux2010_x86_64.manylinux_2_12_x86_64.whl (46.6 MB)
+Collecting nvidia-cufile==1.17.1.22.*
+  Using cached nvidia_cufile-1.17.1.22-py3-none-manylinux_2_27_x86_64.whl (1.4 MB)
+Collecting nvidia-cuda-cupti==13.2.86.*
+  Using cached nvidia_cuda_cupti-13.2.86-py3-none-manylinux_2_25_x86_64.whl (12.0 MB)
+Collecting nvidia-cusolver==12.2.0.11.*
+  Using cached nvidia_cusolver-12.2.0.11-py3-none-manylinux_2_27_x86_64.whl (227.9 MB)
+Collecting nvidia-cusparse==12.7.10.12.*
+  Using cached nvidia_cusparse-12.7.10.12-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (151.0 MB)
+Collecting nvidia-nvtx==13.2.86.*
+  Using cached nvidia_nvtx-13.2.86-py3-none-manylinux1_x86_64.manylinux_2_5_x86_64.whl (153 kB)
+Collecting nvidia-cuda-cccl
+  Using cached nvidia_cuda_cccl-13.3.5.0.6-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (4.1 MB)
+Collecting huggingface-hub<3.0,>=1.31.0
+  Using cached huggingface_hub-2.4.0-py3-none-any.whl (857 kB)
+Collecting pyyaml>=5.1
+  Using cached pyyaml-6.0.3-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (806 kB)
+Collecting regex>=2025.10.22
+  Using cached regex-2026.11.9-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (805 kB)
+Collecting tokenizers<0.24.0,>=0.23.1
+  Using cached tokenizers-0.23.3-cp310-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (3.4 MB)
+Collecting typer
+  Using cached typer-0.29.0-py3-none-any.whl (121 kB)
+Collecting tqdm>=4.60
+  Using cached tqdm-4.70.1-py3-none-any.whl (80 kB)
+Collecting cuda-pathfinder>=1.4.2
+  Using cached cuda_pathfinder-1.8.6-py3-none-any.whl (62 kB)
+Collecting click<9.0.0,>=8.4.2
+  Using cached click-8.5.1-py3-none-any.whl (126 kB)
+Collecting hf-xet<2.0.0,>=1.6.0
+  Using cached hf_xet-1.8.0-cp38-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (4.3 MB)
+Collecting httpx2<3,>=2.0.0
+  Using cached httpx2-2.16.0-py3-none-any.whl (97 kB)
+Collecting mpmath<1.4,>=1.1.0
+  Using cached mpmath-1.3.0-py3-none-any.whl (536 kB)
+Collecting MarkupSafe>=2.0
+  Using cached markupsafe-3.0.4-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (22 kB)
+Collecting pydantic>=2.5.3
+  Using cached pydantic-2.14.3-py3-none-any.whl (494 kB)
+Collecting shellingham>=1.3.0
+  Using cached shellingham-1.5.4-py2.py3-none-any.whl (9.8 kB)
+Collecting rich>=13.8.0
+  Using cached rich-15.0.0-py3-none-any.whl (310 kB)
+Collecting annotated-doc>=0.0.2
+  Using cached annotated_doc-0.0.6-py3-none-any.whl (5.3 kB)
+Collecting anyio>=4.10
+  Using cached anyio-4.16.0-py3-none-any.whl (134 kB)
+Collecting httpcore2==2.16.0
+  Using cached httpcore2-2.16.0-py3-none-any.whl (85 kB)
+Collecting idna>=3.18
+  Using cached idna-3.20-py3-none-any.whl (69 kB)
+Collecting truststore>=0.10
+  Using cached truststore-0.10.5-py3-none-any.whl (19 kB)
+Collecting h11>=0.16
+  Using cached h11-0.16.0-py3-none-any.whl (37 kB)
+Collecting annotated-types>=0.6.0
+  Using cached annotated_types-0.8.0-py3-none-any.whl (13 kB)
+Collecting pydantic-core==2.50.4
+  Using cached pydantic_core-2.50.4-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (2.3 MB)
+Collecting typing-inspection>=0.4.4
+  Using cached typing_inspection-0.4.5-py3-none-any.whl (14 kB)
+Collecting markdown-it-py>=2.2.0
+  Using cached markdown_it_py-4.3.0-py3-none-any.whl (96 kB)
+Collecting pygments<3.0.0,>=2.13.0
+  Using cached pygments-2.21.0-py3-none-any.whl (1.3 MB)
+Collecting mdurl~=0.1
+  Using cached mdurl-0.1.2-py3-none-any.whl (10.0 kB)
+Installing collected packages: nvidia-cusparselt-cu13, mpmath, flatbuffers, cuda-toolkit, typing_extensions, truststore, triton, tqdm, sympy, shellingham, setuptools, safetensors, regex, pyyaml, pygments, protobuf, packaging, nvidia-nvtx, nvidia-nvjitlink, nvidia-nccl-cu13, nvidia-cufile, nvidia-cuda-runtime, nvidia-cuda-nvrtc, nvidia-cuda-cupti, nvidia-cuda-cccl, numpy, networkx, mdurl, MarkupSafe, idna, hf-xet, h11, fsspec, filelock, cuda-pathfinder, click, annotated-types, annotated-doc, typing-inspection, pydantic-core, onnxruntime-gpu, nvidia-nvshmem-cu13, nvidia-cusparse, nvidia-cufft, nvidia-cublas, ml_dtypes, markdown-it-py, jinja2, httpcore2, cuda-bindings, anyio, rich, pydantic, onnxruntime-genai-cuda, onnx, nvidia-cusolver, nvidia-cudnn-cu13, httpx2, typer, onnx-ir, huggingface-hub, torch, tokenizers, transformers
+  Attempting uninstall: setuptools
+    Found existing installation: setuptools 65.5.1
+    Uninstalling setuptools-65.5.1:
+      Successfully uninstalled setuptools-65.5.1
+Successfully installed MarkupSafe-3.0.4 annotated-doc-0.0.6 annotated-types-0.8.0 anyio-4.16.0 click-8.5.1 cuda-bindings-13.5.0 cuda-pathfinder-1.8.6 cuda-toolkit-13.2.2 filelock-4.2.10 flatbuffers-25.12.19 fsspec-2026.9.0 h11-0.16.0 hf-xet-1.8.0 httpcore2-2.16.0 httpx2-2.16.0 huggingface-hub-2.4.0 idna-3.20 jinja2-3.1.6 markdown-it-py-4.3.0 mdurl-0.1.2 ml_dtypes-0.6.0 mpmath-1.3.0 networkx-3.6.1 numpy-2.4.6 nvidia-cublas-13.4.1.3 nvidia-cuda-cccl-13.3.5.0.6 nvidia-cuda-cupti-13.2.86 nvidia-cuda-nvrtc-13.2.86 nvidia-cuda-runtime-13.2.86 nvidia-cudnn-cu13-9.26.0.51 nvidia-cufft-12.2.0.57 nvidia-cufile-1.17.1.22 nvidia-cusolver-12.2.0.11 nvidia-cusparse-12.7.10.12 nvidia-cusparselt-cu13-0.8.1 nvidia-nccl-cu13-2.30.7 nvidia-nvjitlink-13.5.37 nvidia-nvshmem-cu13-3.7.2 nvidia-nvtx-13.2.86 onnx-1.23.2 onnx-ir-1.1.0 onnxruntime-genai-cuda-0.19.0 onnxruntime-gpu-1.31.1 packaging-26.3 protobuf-7.36.2 pydantic-2.14.3 pydantic-core-2.50.4 pygments-2.21.0 pyyaml-6.0.3 regex-2026.11.9 rich-15.0.0 safetensors-0.8.0 setuptools-84.2.1 shellingham-1.5.4 sympy-1.14.0 tokenizers-0.23.3 torch-2.15.0 tqdm-4.70.1 transformers-5.22.2 triton-3.9.0 truststore-0.10.5 typer-0.29.0 typing-inspection-0.4.5 typing_extensions-4.16.0
+
+[notice] A new release of pip available: 22.3.1 -> 26.3
+[notice] To update, run: /tmp/e028-ort-hpuvvad-20261110/bin/python -m pip install --upgrade pip
