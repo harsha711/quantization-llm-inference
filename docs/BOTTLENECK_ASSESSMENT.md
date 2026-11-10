@@ -1,4 +1,33 @@
-# Corrected-kernel bottleneck assessment
+# Bottleneck assessment
+
+## Full-model decode, 2026-11-10 (current)
+
+Evidence checkpoint: E020–E022 on c7, RTX 5060 Ti 16 GB, Qwen2.5-1.5B, batch 1, 196 block projections, corrected E006 A unchanged. The kernel-level sections further down are historical and unchanged.
+
+**Current bottleneck: with Marlin, a decode step is limited by host-side Python/launch time, not by the GPU.** With reconstructed FP16 it is limited by device weight traffic.
+
+| Per decode step | FP16 (R) | Marlin (Q) | Source |
+|---|---:|---:|---|
+| 196 projections, host time until last call returns | 1.93 ms | 2.89–2.93 ms | E022, measured |
+| 196 projections, total after synchronize | 6.96 ms | 2.93–2.97 ms | E022, measured |
+| Host share of projection total | 28% | 99% | calculation |
+| Raw Marlin calls without the module wrapper, total | — | 2.50 ms (host 1.70 ms) | E022, measured |
+| Selected weight bytes read per step | 2.62 GB | 0.68 GB | E022 inventory |
+| Whole decode step, context128 | 9.93 ms | 9.57 ms | E020 median / 63 |
+| Whole decode step, context2048 | 14.42 ms | 10.25 ms | E020 median / 63 |
+
+Observations:
+- FP16 projections wait on the device: 2.62 GB in 6.96 ms is about 376 GB/s of modeled weight traffic (not a measured DRAM counter).
+- Marlin projections finish essentially when Python returns. The module wrapper (reshape, output allocation, bias add) costs about 0.45 ms of the 2.95 ms; ctypes plus launch is the rest.
+- Marlin saves about 4.0 ms of projection time per step, but the context128 step improves by only 0.36 ms.
+
+Interpretation (hypothesis, consistent with E015/E016/E020 but not directly measured): the eager decode step has roughly 9.5 ms of host work. At context128 FP16's device work finishes about when the host does, so removing 4 ms of device work shows little. At context2048 FP16's device work exceeds the host time and Marlin's does not, giving the measured 29%. This would also account for E020's "unexplained" long-context FP16 penalty and for graph replay gaining only 1–2% on FP16 (E015/E016): FP16 was device-bound once the host was removed.
+
+What this does not establish: the host/device split of the non-projection work (attention, norms, cache, sampling) with Marlin; whether Marlin's external ctypes launches can be captured in a CUDA graph; any gain from doing so.
+
+Supported next hypothesis (one, not run): replaying the Marlin decode step as a CUDA graph removes the host limit and exposes the device saving at both contexts. An upper bound on its scope is the roughly 9.5 ms host step versus Marlin's unknown device-only step; a cheap discriminating check is whether capture of one Marlin projection replays bitwise. It needs its own predeclared validation (E021's gate) and fresh timing.
+
+# Corrected-kernel bottleneck assessment (historical, kernel level)
 
 E008 follow-up: The unchanged-kernel complete-cycle experiment reproduces both single-matrix controls on fresh inputs, but neither two nor four matrices passes the5% meaningful-gain gate in both series. The transpose with four matrices loses 0.757%/0.431%. This bounds the earlier reused-input opportunity. Keep corrected A default, retain C as reuse-dependent experimental configuration, and do not infer a general decoding gain or a new partition algorithm. See the E008 experiment record for full timings, outliers and limits. The original assessment below remains historical.
 

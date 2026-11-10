@@ -1,3 +1,16 @@
+# Current state, 2026-11-10
+
+- **End-to-end result:** corrected Marlin on all 196 block projections of Qwen2.5-1.5B decodes 28.9%/29.0% faster than reconstructed FP16 at context2048 and 3.6%/4.6% faster at context128 (below the 5% bar); peak allocated GPU memory about 60% lower; long-context prefill about 3% slower (E020).
+- **Validation status:** accepted only under E021's gate (agreement with an FP64-projection control, ten requests). E017 and E019, which compared against the FP16 reference, remain failed. Every statement of the speedup must carry that disclosure.
+- **Current bottleneck:** the Marlin decode step is host-bound; its 196 projections take 2.95 ms of which 99% is Python/launch time, versus 6.96 ms device-bound for FP16 (E022, [assessment](BOTTLENECK_ASSESSMENT.md)).
+- **Defaults unchanged:** corrected E006 A kernel, tiles and dispatch; no kernel edits since E006.
+- **Open, not run:** CUDA-graph replay of the Marlin decode step (one supported hypothesis); ACM report draft.
+- **Repository:** branch `optimize/inblock-k`, commits local and unpushed; no ARC jobs running; logit archives for E019/E021 remain on BeeGFS with hashes recorded.
+
+# E022 complete — Marlin projections are host-bound in decode
+
+2026-11-10: [E022](EXPERIMENTS.md#e022--decode-step-projection-time-breakdown-diagnostic) times the 196 M=1 projections of one decode step in isolation. Marlin: 2.93–2.97 ms total with 99% host time. FP16: 6.96 ms total with 28% host time. Diagnostic only; no optimization implemented. Jobs 334100 (failed self-check), 334101, 334102 are historical.
+
 # E021 accepted — Marlin path matches the FP64-projection control on ten requests
 
 2026-11-10: [E021](EXPERIMENTS.md#e021--acceptance-of-the-marlin-path-against-the-fp64-projection-control) judges the corrected-Marlin model against the same quantized model with FP64-accumulated projections. All ten cases pass (contexts 128–2048, two passages; six never run before): identical 64 greedy tokens, relative L2 0.0019–0.0026 against a 0.003 bound, zero failures in 125,440 same-input operator calls. This is the third gate, chosen after E017 and E019 rejected the path against the FP16 reference; both stay failed. With that disclosure, E020's timing applies: decode 28.9%/29.0% lower at context2048, 3.6%/4.6% at 128. Evidence: `results/e021_20261110/` (jobs 334097/334098, historical). Next: report draft, or a user-selected optimization.

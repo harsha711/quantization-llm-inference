@@ -12,6 +12,24 @@ Method, `scripts/e022/breakdown.py`, c7, one process: all 196 actual modules wit
 
 Predeclared reading: if Q's host-return time is ≥70% of its synchronized total in both orders, the step is launch/host-bound and reducing per-call launch cost (for example graph replay of the decode step) is the one supported next hypothesis. If ≤40%, it is device-bound and that hypothesis is not supported. Between: inconclusive. No attention/norm/cache work is included, so the sum is not a decode-step time. Smoke: 5 repetitions, inspected before the dependent full job.
 
+### E022 result — Marlin projections are host-bound (2026-11-10, c7, UUID GPU-29e9569a-8a7a-cd23-5443-bd0b72ca241a)
+
+Attempts: smoke 334100 FAILED exit 1 before any timing, from my self-check (it compared raw output with module output minus bias, which is not bitwise in FP16); replaced with the bitwise `raw + bias == module` check and committed. Smoke 334101 COMPLETED and inspected. Full 334102 COMPLETED exit 0; it sat pending for several minutes because I had not released the smoke's retrieval hold, no effect on results. 43 files hash-verified, `results/e022_20261110/`. Identity checks pass in each job; workspace guards intact; raw calls bitwise equal the module computation for all 196 projections.
+
+| 196 M=1 projections, medians of 200, order 1 / order 2 | Host return ms | Total after sync ms | Host share |
+|---|---:|---:|---:|
+| R module (FP16 linear) | 1.932 / 1.933 | 6.959 / 6.960 | 28% |
+| Q module (Marlin) | 2.926 / 2.892 | 2.965 / 2.931 | 99% |
+| Q raw operator call | 1.708 / 1.697 | 2.497 / 2.497 | 68% |
+| Q raw call, synchronize after each | 4.747 / 4.751 | 4.750 / 4.754 | — |
+| Empty Python loop | 0.005 | 0.008 | — |
+
+Min–max spread of totals is ≤0.05 ms in every row. Selected weight bytes: R 2,620,391,424, Q 675,569,664.
+
+Predeclared reading: Q module host share is 99% in both orders (≥70%), so the Marlin projection sequence is launch/host-bound; R is device-bound. The supported next hypothesis is reducing per-call host cost, for example graph replay of the Marlin decode step. Not established: any end-to-end gain, capturability of the external launches, or the host/device split of non-projection work. Inputs are random, not model activations; timing of these kernels is treated as data-independent, which is an assumption. Assessment: [BOTTLENECK_ASSESSMENT.md](BOTTLENECK_ASSESSMENT.md).
+
+Decision: diagnostic complete; no optimization implemented. Await a user request for the graph-replay experiment.
+
 ## E021 — Acceptance of the Marlin path against the FP64-projection control
 
 Predeclared 2026-11-10 from `1b0cb87`, requested by the user ("go ahead") after E020. This is the THIRD model gate for the same path, written after seeing E017, E018, E019 and E020. The four context128/2048 cases are already known to satisfy it from E019 data, so they are confirmation only. The predictive test is six cases never run in any form: contexts 256, 512 and 1024 × primary/held-out passages. E017 and E019 remain failed under their gates. No timing, kernel, model or tolerance change; E020's timing is not rerun.

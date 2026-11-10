@@ -1,0 +1,22 @@
++ prun timeout 3000 /tmp/e017-hpuvvad-20261109/bin/python /mnt/beegfs/hpuvvad/csc548-w4a16-e022-20261109/smoke-334100/breakdown.py /mnt/beegfs/hpuvvad/csc548-w4a16-e022-20261109/smoke-334100/out 5
+[prun] Master compute host = c7
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun timeout 3000 /tmp/e017-hpuvvad-20261109/bin/python /mnt/beegfs/hpuvvad/csc548-w4a16-e022-20261109/smoke-334100/breakdown.py /mnt/beegfs/hpuvvad/csc548-w4a16-e022-20261109/smoke-334100/out 5 (family=openmpi4)
+Traceback (most recent call last):
+  File "/mnt/beegfs/hpuvvad/csc548-w4a16-e022-20261109/smoke-334100/breakdown.py", line 77, in <module>
+    main()
+  File "/mnt/beegfs/hpuvvad/csc548-w4a16-e022-20261109/smoke-334100/breakdown.py", line 40, in main
+    assert torch.equal(o, want.to(o.dtype)) or torch.allclose(o.float(), want.float(), atol=2e-3, rtol=2e-3)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+--------------------------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code. Per user-direction, the job has been aborted.
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+mpirun detected that one or more processes exited with non-zero status, thus causing
+the job to be terminated. The first process to do so was:
+
+  Process name: [[43979,1],0]
+  Exit code:    1
+--------------------------------------------------------------------------

@@ -1,0 +1,87 @@
++ prun timeout 3000 /tmp/e017-hpuvvad-20261109/bin/python /mnt/beegfs/hpuvvad/csc548-w4a16-e022-20261109/smoke-334101/breakdown.py /mnt/beegfs/hpuvvad/csc548-w4a16-e022-20261109/smoke-334101/out 5
+[prun] Master compute host = c7
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun timeout 3000 /tmp/e017-hpuvvad-20261109/bin/python /mnt/beegfs/hpuvvad/csc548-w4a16-e022-20261109/smoke-334101/breakdown.py /mnt/beegfs/hpuvvad/csc548-w4a16-e022-20261109/smoke-334101/out 5 (family=openmpi4)
+{
+ "reps": 5,
+ "gpu": "GPU-29e9569a-8a7a-cd23-5443-bd0b72ca241a, 610.57.04",
+ "weight_bytes": {
+  "R": 2620391424,
+  "Q": 675569664
+ },
+ "R_module": [
+  {
+   "host_ms": 1.9388850778341293,
+   "total_ms": 6.962373852729797,
+   "total_min_ms": 6.959124002605677,
+   "total_max_ms": 6.966104032471776
+  },
+  {
+   "host_ms": 1.9370049703866243,
+   "total_ms": 6.957154022529721,
+   "total_min_ms": 6.955533986911178,
+   "total_max_ms": 6.96158385835588
+  }
+ ],
+ "Q_module": [
+  {
+   "host_ms": 2.910122973844409,
+   "total_ms": 2.9486529529094696,
+   "total_min_ms": 2.9402130749076605,
+   "total_max_ms": 2.95804301276803
+  },
+  {
+   "host_ms": 2.918782876804471,
+   "total_ms": 2.9573028441518545,
+   "total_min_ms": 2.956232987344265,
+   "total_max_ms": 2.9588330071419477
+  }
+ ],
+ "Q_raw_call": [
+  {
+   "host_ms": 1.7105529550462961,
+   "total_ms": 2.498460002243519,
+   "total_min_ms": 2.4936688132584095,
+   "total_max_ms": 2.500319154933095
+  },
+  {
+   "host_ms": 1.7164840828627348,
+   "total_ms": 2.498710062354803,
+   "total_min_ms": 2.4961691815406084,
+   "total_max_ms": 2.5011298712342978
+  }
+ ],
+ "Q_raw_call_sync_each": [
+  {
+   "host_ms": 4.7434670850634575,
+   "total_ms": 4.746207036077976,
+   "total_min_ms": 4.740716889500618,
+   "total_max_ms": 4.763356875628233
+  },
+  {
+   "host_ms": 4.7548068687319756,
+   "total_ms": 4.757656948640943,
+   "total_min_ms": 4.752706969156861,
+   "total_max_ms": 4.761297022923827
+  }
+ ],
+ "python_loop_only": [
+  {
+   "host_ms": 0.00519980676472187,
+   "total_ms": 0.007979804649949074,
+   "total_min_ms": 0.0079302117228508,
+   "total_max_ms": 0.008039874956011772
+  },
+  {
+   "host_ms": 0.005170004442334175,
+   "total_ms": 0.007929978892207146,
+   "total_min_ms": 0.007859896868467331,
+   "total_max_ms": 0.015300000086426735
+  }
+ ],
+ "workspace": {
+  "locks_zero": true,
+  "lock_guards": true,
+  "scratch_guards": true
+ }
+}
