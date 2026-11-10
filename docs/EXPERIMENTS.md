@@ -2,6 +2,27 @@
 
 Read the numerical/measurement [contract](CONTRACT.md) before interpreting these records. Preserve raw evidence, failed attempts, and inconclusive outcomes. An alternative that has not been implemented or measured is not a failed optimization. Historical entries below reconstruct only what the repository supports. Missing prior failure numbers or commit IDs remain unknown.
 
+## E019 — Corrected Marlin end-to-end with a control-calibrated model gate
+
+Predeclared 2026-11-09 from `4a4b8a6`, explicitly requested by the user ("go") after E018. E017 remains failed under its own gate and immutable. This is a new comparison whose model gate was chosen AFTER seeing the E017 failure and the E018 controls; every report of E019 must say so. No kernel, dispatch, tile, model, compiler or graph change. Unchanged E017 `integration.py`/`infer.py`, artifacts, runtime and corrected library `e4eca5e3…` are used from the preserved E017 BeeGFS root; E019 writes only to its own root.
+
+Hypothesis (E017's, unchanged): Q lowers the 63-step decode median by ≥5% versus fresh R in both reversed primary series for a context.
+
+Model gate replacing only E017's elementwise `0.03+0.01|R|` rule, per context128/2048 and per primary/held-out passage, 64 tokens, `scripts/e019/validate.py`:
+1. finite Q logits and exact 64-token agreement of Q, F32 and F64 with R (if a control's tokens diverge the case is not accepted);
+2. Q bitwise repeatable, P pass-through bitwise equal to R, workspace guards intact;
+3. all 196×64 same-input Q operator calls pass the unchanged GEMM rule against FP64 (GPU FP64, CPU cross-check at prefill);
+4. Q-versus-R relative L2 ≤ 0.003 (unchanged from E017);
+5. relative L2 of Q to the F64-projection control ≤ the larger of R's and F32's, i.e. Q is no farther from the higher-precision evaluation than a Marlin-free FP16-output path. The user was told "no farther than R"; using the worse of the two Marlin-free paths is my refinement to avoid a coin-flip between equally valid roundings, and the strict Q≤R comparison is reported;
+6. unchanged E017 state checks (`checked`: positions, feedback, cache lengths/reset/tail/finite, storage) on the Q request, and the dual-mode R bitwise equal to the separate-process unchanged `infer.py` R validation, which itself must pass its unchanged O/R validation stage.
+Old-gate violation counts are reported for every pair, not used. Any failed criterion at any context/passage stops all timing.
+
+Timing, only after inspected acceptance: unchanged `infer.py` timed stage, separate R and Q processes, 3 warmups + 20 requests per cell, series 1 order 128 R,Q then 2048 R,Q, series 2 reversed, every timed request token/state-checked against R. `scripts/e019/analyze.py`: a context passes iff Q decode median is ≥5% lower in both series. Held-out campaign (identical layout, held-out passage) runs only if some context passes. TTFT, end-to-end and allocator peaks are reported without a gate.
+
+Not covered: complete-model trace (E017's trace stage embeds the old gate), whole-model sanitizers, other models/batch sizes, model quality.
+
+ARC: c7 preferred (node-local runtime), sbatch+prun, one rank. Inspected 8-token smoke at both contexts → validation job → timing job, each gated on an inspection marker for the previous one.
+
 ## E018 — Locate the E017 Q/R logit divergence (diagnostic)
 
 Predeclared 2026-11-09 from clean `35cae94`, requested by the user after E017 ("identify ... and bridge the gap", ARC use permitted). Diagnostic only. E017 stays failed and immutable. No timing, no tolerance change, no kernel/dispatch/model change, no passing-subset release.
