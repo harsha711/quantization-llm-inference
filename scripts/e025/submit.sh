@@ -16,7 +16,7 @@ cat <<EOF
 #SBATCH --time=01:00:00
 #SBATCH --output=/tmp/e025-$stage-%j.log
 set -euo pipefail
-export E017_ROOT=/mnt/beegfs/hpuvvad/csc548-w4a16-e017-r2-20261110
+export E017_ROOT=/mnt/beegfs/hpuvvad/csc548-w4a16-e017-r2-20261109
 OUT=/mnt/beegfs/hpuvvad/csc548-w4a16-e025-20261110
 mkdir -p "\$OUT"; S="\$OUT/$stage-\$SLURM_JOB_ID"; mkdir "\$S"
 exec > "\$S/driver.log" 2>&1
