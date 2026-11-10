@@ -35,6 +35,8 @@ ONNX Runtime smoke 334245 on c10 FAILED exit 1 at the FP16 model build, before a
 
 ONNX Runtime rerun `ort-smoke-c10-334245-s2` (inside kept job 334245) COMPLETED exit 0 and was inspected: onnxruntime-genai-cuda 0.19.0 / onnxruntime-gpu 1.31.1; FP16 export 3.0 GB, INT4 export 872 MB (smaller than the block projections plus an FP16 embedding would be, so the builder evidently also quantizes the tied embedding/output head — to be confirmed from the model files). One context128 held-out cell each, smoke only, not the result: GQA 326.4 ms, OF 531.1 ms, OQ 185.0 ms; leading tokens agreeing with ours 46/64 (FP16) and 29/64 (INT4). Before the full job, and before any full result, the token read-back in `obench.py` was moved inside the timed region so that work still queued on the GPU cannot be left out of the decode time; the smoke numbers above were taken without that and are not used.
 
+llama.cpp smoke 334244 on c5 COMPLETED exit 0 and was inspected: llama-cpp-python 0.3.36 built with CUDA; Q4_K_M file 934.7 MiB at 5.08 bits per weight over all tensors, i.e. llama.cpp also quantizes the embedding/output matrix. One context128 held-out cell each, smoke only: GQA 326.1 ms, LF 528.0 ms, LQ 208.3 ms; leading tokens agreeing with ours 46/64 (FP16) and 28/64 (Q4_K_M). Allocation kept; full job started inside it.
+
 ## E027 — Our decode path versus vLLM on the same quantized weights
 
 Predeclared 2026-11-10 at the user's request ("go") after the question whether the result is faster than or comparable to a state-of-the-art inference stack. Every earlier full-model comparison used Hugging Face Transformers FP16 as the baseline. This experiment adds one external comparator and changes nothing in our paths.
@@ -54,6 +56,8 @@ Not covered and not to be claimed: vLLM's throughput under concurrent requests (
 Execution notes: smoke 334232 on c5 FAILED exit 2 after 43 s, before any install or measurement: the pinned wheel is under the first E017 root (`csc548-w4a16-e017-20261109/external/`), not the r2 root the script named. The script now uses that path and checks the wheel's recorded SHA256.
 
 Smoke 334243 on c9 (after cancelled-unstarted 334242, resubmitted with an install marker): install, conversion (196 layers, quantization relative L2 0.118–0.181 against the original weights), context128 validation and the GQA cell (326.3 ms) completed; the V cell FAILED at engine start, before any request. vLLM loaded the checkpoint with its Marlin kernel and FlashAttention 2 and compiled its backbone, then its start-up sampler check tried to JIT-build FlashInfer's top-k/top-p sampling kernel, which needs `ninja` (absent on the node). Greedy decoding does not use that sampler; it is now disabled with vLLM's own switch `VLLM_USE_FLASHINFER_SAMPLER=0` (vLLM then samples with PyTorch). Observed from the log and added to the comparator description: vLLM 0.33.0 runs its model under `torch.compile`. The original checkpoint stores BF16; vLLM casts the unquantized tensors to FP16 as our Transformers path does. The allocation is kept and the smoke rerun inside it.
+
+Rerun `smoke-c9-334243-s2` (inside kept job 334243) COMPLETED exit 0 and was inspected: vLLM starts, reports CUDA-graph capture and a compiled backbone, and returns all 64 tokens identical to our Marlin path. One context128 held-out cell, smoke only: GQA 326.3 ms, V 237.9 ms. Full job started inside the kept allocation.
 
 ## E026 — Single-query grouped decode attention under graph replay
 
