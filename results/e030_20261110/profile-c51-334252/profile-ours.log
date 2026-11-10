@@ -1,0 +1,29 @@
++ prun timeout 3000 /tmp/e017-hpuvvad-20261109/bin/python /mnt/beegfs/hpuvvad/csc548-w4a16-e027-20261110/profile-c51-334252/gprofile.py /mnt/beegfs/hpuvvad/csc548-w4a16-e027-20261110/profile-c51-334252/prof 128 2048
+[prun] Master compute host = c51
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun timeout 3000 /tmp/e017-hpuvvad-20261109/bin/python /mnt/beegfs/hpuvvad/csc548-w4a16-e027-20261110/profile-c51-334252/gprofile.py /mnt/beegfs/hpuvvad/csc548-w4a16-e027-20261110/profile-c51-334252/prof 128 2048 (family=openmpi4)
+Traceback (most recent call last):
+  File "/mnt/beegfs/hpuvvad/csc548-w4a16-e027-20261110/profile-c51-334252/gprofile.py", line 46, in <module>
+    row, _ = runner.run('primary', True, generated=34)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/beegfs/hpuvvad/csc548-w4a16-e027-20261110/profile-c51-334252/run.py", line 57, in run
+    row, logits = self.request(prompt, **kw)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/e017-hpuvvad-20261109/lib64/python3.11/site-packages/torch/utils/_contextlib.py", line 124, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/beegfs/hpuvvad/csc548-w4a16-e017-r2-20261109/scripts/e017/infer.py", line 74, in request
+    assert generated in (8, 64)
+           ^^^^^^^^^^^^^^^^^^^^
+AssertionError
+--------------------------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code. Per user-direction, the job has been aborted.
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+mpirun detected that one or more processes exited with non-zero status, thus causing
+the job to be terminated. The first process to do so was:
+
+  Process name: [[25464,1],0]
+  Exit code:    1
+--------------------------------------------------------------------------

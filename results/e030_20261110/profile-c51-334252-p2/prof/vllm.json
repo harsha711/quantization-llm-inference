@@ -1,0 +1,284 @@
+{
+ "128": {
+  "device_us_per_step": 3732.99764285713,
+  "kernel_us_and_calls_per_step": {
+   "void marlin::Marlin<1125899906910725l, 1125899907892224l, 1125899906910725l, 1125899906910725l, 256, 1, 8, 8, true, 4, 8": [
+    2019.4862500000047,
+    112.0
+   ],
+   "std::enable_if<!(false), void>::type internal::gemvx::kernel<int, int, __half, __half, __half, float, false, true, true,": [
+    1168.5988571428563,
+    1.0
+   ],
+   "void flash::flash_fwd_splitkv_kernel<Flash_fwd_kernel_traits<128, 64, 128, 4, false, false, cutlass::half_t, Flash_kerne": [
+    162.55666071427962,
+    28.0
+   ],
+   "void flash::flash_fwd_splitkv_combine_kernel<Flash_fwd_kernel_traits<128, 64, 128, 4, false, false, cutlass::half_t, Fla": [
+    130.06226785713608,
+    28.0
+   ],
+   "triton_red_fused_fused_add_rms_norm_2": [
+    43.91473214285613,
+    28.0
+   ],
+   "void vllm::reshape_and_cache_flash_kernel<unsigned short, unsigned short, (vllm::Fp8KVCacheDataType)0>(unsigned short co": [
+    38.22953571428112,
+    28.0
+   ],
+   "triton_red_fused_fused_add_rms_norm_0": [
+    33.86958928572077,
+    28.0
+   ],
+   "triton_poi_fused_add_cat_index_select_mul_split_split_with_sizes_sub_unsqueeze_view_4": [
+    25.624053571421605,
+    27.0
+   ],
+   "triton_poi_fused_add_cat_index_select_mul_split_split_with_sizes_sub_unsqueeze_view_3": [
+    25.509428571436956,
+    27.0
+   ],
+   "triton_poi_fused_mul_silu_slice_1": [
+    21.97160714285214,
+    28.0
+   ],
+   "memcpy32_post": [
+    18.838250000004564,
+    29.0
+   ],
+   "void at::native::index_elementwise_kernel<128, 4, at::native::gpu_index_kernel<at::native::index_kernel_impl<at::native:": [
+    8.560624999999488,
+    3.0
+   ],
+   "_gumbel_sample_kernel": [
+    4.878321428571878,
+    1.0
+   ],
+   "_bias_kernel": [
+    3.510321428573239,
+    1.0
+   ],
+   "void at::native::reduce_kernel<512, 1, at::native::ReduceOp<float, at::native::ArgMaxOps<float>, unsigned int, long, 4, ": [
+    2.6611785714266523,
+    1.0
+   ],
+   "_post_update_kernel": [
+    2.4828214285717616,
+    1.0
+   ],
+   "_gather_block_tables_kernel": [
+    2.3862499999984306,
+    1.0
+   ],
+   "triton_red_fused__to_copy_embedding_rms_norm_0": [
+    2.254285714282438,
+    1.0
+   ],
+   "void at::native::unrolled_elementwise_kernel<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}:": [
+    2.096517857141667,
+    1.0
+   ],
+   "_combine_sampled_and_draft_tokens_kernel": [
+    1.9262142857134197,
+    1.0
+   ],
+   "_compute_slot_mappings_kernel": [
+    1.9040714285729823,
+    1.0
+   ],
+   "_get_num_sampled_and_rejected_kernel": [
+    1.7348571428560067,
+    1.0
+   ],
+   "void at::native::vectorized_elementwise_kernel<4, at::native::FillFunctor<int>, std::array<char*, 1ul>, false>(int, at::": [
+    1.4508928571430115,
+    2.0
+   ],
+   "Memcpy HtoD (Pinned -> Device)": [
+    1.4108214285717062,
+    2.0535714285714284
+   ],
+   "void at::native::_scatter_gather_elementwise_kernel<128, 8, at::native::_cuda_scatter_gather_internal_kernel<false, at::": [
+    1.4051249999999658,
+    1.0
+   ],
+   "triton_poi_fused_add_cat_index_select_mul_split_split_with_sizes_sub_unsqueeze_view_1": [
+    1.2423035714289685,
+    1.0
+   ],
+   "Memcpy DtoH (Device -> Pinned)": [
+    1.0673749999977449,
+    2.0
+   ],
+   "triton_poi_fused_add_cat_index_select_mul_split_split_with_sizes_sub_unsqueeze_view_2": [
+    0.9954642857142346,
+    1.0
+   ],
+   "_prepare_pos_seq_lens_kernel": [
+    0.9326071428559511,
+    1.0
+   ],
+   "void at::native::vectorized_elementwise_kernel<4, at::native::FillFunctor<bool>, std::array<char*, 1ul>, false>(int, at:": [
+    0.7422321428587273,
+    1.0
+   ],
+   "void (anonymous namespace)::elementwise_kernel_with_index<int, at::native::arange_cuda_out(c10::Scalar const&, c10::Scal": [
+    0.6942857142864755,
+    1.0
+   ],
+   "_apply_write_kernel": [
+    0.09139285714323162,
+    0.05357142857142857
+   ],
+   "_prepare_prefill_inputs_kernel": [
+    -0.0022857142857170792,
+    0.0
+   ],
+   "void marlin::Marlin<1125899906910725l, 1125899907892224l, 1125899906910725l, 1125899906910725l, 256, 4, 16, 4, false, 4,": [
+    -0.08926785714262613,
+    0.0
+   ]
+  }
+ },
+ "2048": {
+  "device_us_per_step": 3819.8695892856313,
+  "kernel_us_and_calls_per_step": {
+   "void marlin::Marlin<1125899906910725l, 1125899907892224l, 1125899906910725l, 1125899906910725l, 256, 1, 8, 8, true, 4, 8": [
+    2021.8503035713948,
+    112.0
+   ],
+   "std::enable_if<!(false), void>::type internal::gemvx::kernel<int, int, __half, __half, __half, float, false, true, true,": [
+    1168.9309999999964,
+    1.0
+   ],
+   "void flash::flash_fwd_splitkv_kernel<Flash_fwd_kernel_traits<128, 64, 128, 4, false, false, cutlass::half_t, Flash_kerne": [
+    249.6299821428594,
+    28.0
+   ],
+   "void flash::flash_fwd_splitkv_combine_kernel<Flash_fwd_kernel_traits<128, 64, 128, 4, false, false, cutlass::half_t, Fla": [
+    129.87349999998955,
+    28.0
+   ],
+   "triton_red_fused_fused_add_rms_norm_2": [
+    44.15364285712518,
+    28.0
+   ],
+   "void vllm::reshape_and_cache_flash_kernel<unsigned short, unsigned short, (vllm::Fp8KVCacheDataType)0>(unsigned short co": [
+    38.275142857148055,
+    28.0
+   ],
+   "triton_red_fused_fused_add_rms_norm_0": [
+    33.924803571417826,
+    28.0
+   ],
+   "triton_poi_fused_add_cat_index_select_mul_split_split_with_sizes_sub_unsqueeze_view_4": [
+    25.80844642857822,
+    27.0
+   ],
+   "triton_poi_fused_add_cat_index_select_mul_split_split_with_sizes_sub_unsqueeze_view_3": [
+    25.76869642857051,
+    27.0
+   ],
+   "triton_poi_fused_mul_silu_slice_1": [
+    22.226464285721914,
+    28.0
+   ],
+   "memcpy32_post": [
+    18.913821428526717,
+    29.0
+   ],
+   "void at::native::index_elementwise_kernel<128, 4, at::native::gpu_index_kernel<at::native::index_kernel_impl<at::native:": [
+    8.570178571431045,
+    3.0
+   ],
+   "_gumbel_sample_kernel": [
+    4.892535714284999,
+    1.0
+   ],
+   "_bias_kernel": [
+    3.5166071428507815,
+    1.0
+   ],
+   "void at::native::reduce_kernel<512, 1, at::native::ReduceOp<float, at::native::ArgMaxOps<float>, unsigned int, long, 4, ": [
+    2.6753750000035716,
+    1.0
+   ],
+   "_post_update_kernel": [
+    2.466803571426031,
+    1.0
+   ],
+   "_gather_block_tables_kernel": [
+    2.4228392857173486,
+    1.0
+   ],
+   "triton_red_fused__to_copy_embedding_rms_norm_0": [
+    2.2588571428569173,
+    1.0
+   ],
+   "void at::native::unrolled_elementwise_kernel<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}:": [
+    2.1056964285734074,
+    1.0
+   ],
+   "_compute_slot_mappings_kernel": [
+    1.9188749999969121,
+    1.0
+   ],
+   "_combine_sampled_and_draft_tokens_kernel": [
+    1.904571428570579,
+    1.0
+   ],
+   "_get_num_sampled_and_rejected_kernel": [
+    1.7514285714273032,
+    1.0
+   ],
+   "void at::native::vectorized_elementwise_kernel<4, at::native::FillFunctor<int>, std::array<char*, 1ul>, false>(int, at::": [
+    1.466928571436126,
+    2.0
+   ],
+   "Memcpy HtoD (Pinned -> Device)": [
+    1.4389642857145313,
+    2.0535714285714284
+   ],
+   "void at::native::_scatter_gather_elementwise_kernel<128, 8, at::native::_cuda_scatter_gather_internal_kernel<false, at::": [
+    1.4337499999965075,
+    1.0
+   ],
+   "triton_poi_fused_add_cat_index_select_mul_split_split_with_sizes_sub_unsqueeze_view_1": [
+    1.2280535714269993,
+    1.0
+   ],
+   "Memcpy DtoH (Device -> Pinned)": [
+    1.0850892857207717,
+    2.0
+   ],
+   "triton_poi_fused_add_cat_index_select_mul_split_split_with_sizes_sub_unsqueeze_view_2": [
+    0.9891071428599746,
+    1.0
+   ],
+   "_prepare_pos_seq_lens_kernel": [
+    0.9309464285766508,
+    1.0
+   ],
+   "void at::native::vectorized_elementwise_kernel<4, at::native::FillFunctor<bool>, std::array<char*, 1ul>, false>(int, at:": [
+    0.7496428571440836,
+    1.0
+   ],
+   "void (anonymous namespace)::elementwise_kernel_with_index<int, at::native::arange_cuda_out(c10::Scalar const&, c10::Scal": [
+    0.6937678571462941,
+    1.0
+   ],
+   "_apply_write_kernel": [
+    0.094285714285862,
+    0.05357142857142857
+   ],
+   "_prepare_prefill_inputs_kernel": [
+    -0.00173214285714656,
+    0.0
+   ],
+   "void marlin::Marlin<1125899906910725l, 1125899907892224l, 1125899906910725l, 1125899906910725l, 256, 4, 16, 4, false, 4,": [
+    -4.078785714286174,
+    0.0
+   ]
+  }
+ }
+}

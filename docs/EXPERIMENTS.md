@@ -12,6 +12,29 @@ Limits fixed now: profiler overhead perturbs wall time, so only device kernel du
 
 Execution notes: backup job 334252 on c51 FAILED exit 1 in our side of the profile before any profiling: the E017 request function only accepts 8 or 64 generated tokens, and the scripts asked for 2 and 34. Changed before any profile existed: both stacks now use an 8-token and a 64-token request and divide the difference by 56 steps. The copy queued behind the vLLM run on c9 was removed unstarted; the allocation on c51 is kept and the profile rerun inside it.
 
+### E030 result — the gap is located: merged projections and fused small operations; the FP16 output head is the largest remaining item in both stacks (2026-11-10, c51)
+
+Rerun `profile-c51-334252-p2` inside kept job 334252, exit 0; vLLM ran in-process and returned our tokens. `results/e030_20261110/` (`prof/ours.json`, `prof/vllm.json`). Device kernel time per decode step, (64-token − 8-token)/56, primary passage; grouping by kernel name (Marlin template, the FP16 `gemvx` output-head kernel, everything else):
+
+| Per decode step | Ours 128 | vLLM 128 | Ours 2048 | vLLM 2048 |
+|---|---:|---:|---:|---:|
+| Total device time | 5109 µs | 3733 µs | 5846 µs | 3820 µs |
+| Kernel launches | 1461 | 389 | 1461 | 389 |
+| Marlin projections | 2405 µs, 196 calls | 2019 µs, 112 calls | 2396 µs, 196 calls | 2018 µs, 112 calls |
+| FP16 output head (one GEMV) | 1169 µs | 1169 µs | 1169 µs | 1169 µs |
+| Everything else | 1535 µs, 1264 launches | 545 µs, 276 launches | 2281 µs, 1264 launches | 633 µs, 276 launches |
+
+Observations:
+- Device totals agree with the E027 wall-clock steps (ours 5.2/6.0 ms, vLLM 3.8/3.9 ms), so in both stacks the decode step is device-bound and the gap is on the device, not in host overhead.
+- Gap at context128: 1376 µs = 386 µs in Marlin + 990 µs in everything else. At context2048: 2026 µs = 378 µs + 1648 µs.
+- Marlin: vLLM makes 112 calls per step against our 196. Its model definition merges the query/key/value projections into one matrix and the two MLP input projections into one, so each block issues 4 calls instead of 7 (documented vLLM structure, consistent with the count; the per-call cause of the 0.38 ms was not isolated further).
+- Everything else: we launch 1264 small PyTorch kernels per step (elementwise add/mul, copies, normalization pieces, concatenation, index copies, our attention's two GEMV calls and softmax); vLLM launches 276, mostly fused Triton kernels from its compiled backbone (fused add+RMS-norm, fused rotary/positional arithmetic, fused SiLU·mul) plus two FlashAttention kernels and one cache-write kernel per block. At context2048 our attention path (two GEMV kernels 585 µs plus 558 µs of copies) costs more than FlashAttention's two kernels (380 µs).
+- The FP16 output head costs the same 1169 µs in both stacks. It is 31% of vLLM's step and 23% of ours at context128, and the largest single kernel in either.
+
+Interpretation (hypotheses, not measurements): (a) reaching vLLM's speed in our path would need merged projections and fused elementwise/normalization kernels, i.e. reimplementing what vLLM's model code and compiler already provide; (b) the output head is the one large cost vLLM has not removed. llama.cpp and ONNX Runtime evidently quantize that matrix and are 0.5–0.9 ms per step faster than vLLM (E028 versus E027, different nodes); whether quantizing the head with Marlin recovers a similar amount, and what it does to outputs, is untested.
+
+Limits: one passage, one node, profiler attached, in-process vLLM (not the timed configuration), grouping by kernel-name inspection, no host-side attribution needed since totals match. The first attempt's failure is recorded above. Decision: no optimization follows automatically; the supported next experiment is a Marlin-quantized output head, which changes model outputs and therefore needs its own numerical reference and an output-agreement report.
+
 ## E029 — Our decode paths at contexts beyond 2048
 
 Predeclared 2026-11-10 at the user's request to test context lengths beyond 2048. No code change: E026's tooling and variants (GR, GQ, GRA, GQA) at contexts 4096, 8192 and 16384, both passages, two reversed series, 3 warmups + 20 requests per cell. The passages are the same two texts repeated to the required token count, as at every earlier context. Each case is validated first by E026's `att.py validate` under E021's gate (third-gate disclosure applies); a context whose validation is rejected or cannot run (memory, time) is reported as such and not timed, with no gate edit.
