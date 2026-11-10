@@ -51,6 +51,18 @@ Predeclared outcome: **"slower" at all three contexts.** ORT's INT4 path decodes
 
 Limits: ORT's INT4 weights come from its own quantizer and include a quantized embedding/output matrix, so this is stack against stack, not kernel against kernel; no output-quality comparison; batch 1; one node; versions as recorded in `ort-freeze.txt`. Why ORT's step is this short (kernel, fused graph, quantized head) was not profiled and must not be attributed.
 
+### E028 result, llama.cpp — our path is slower at every context (2026-11-10, c5)
+
+Full run `llama-full-c5-334244-full` inside kept job 334244, exit 0, 48 cells, 960 timed requests; all 28 layers assigned to CUDA0; GR/GQA validation accepted in all six cases. Decode medians, ranges over two passages and two reversed series:
+
+| Context | GR ms | GQA ms | llama.cpp FP16 ms | llama.cpp Q4_K_M ms | GQA versus Q4_K_M | GR versus llama FP16 | Q4_K_M below its FP16 |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| 128 | 615.6–616.4 | 326.4–327.1 | 528.0–528.2 | 208.5–208.6 | 56.5–56.9% slower | 16.6–16.7% slower | 60.5% |
+| 512 | 672.1–673.0 | 335.5–336.2 | 531.1–531.3 | 210.9–211.2 | 59.0–59.3% slower | 26.5–26.7% slower | 60.2–60.3% |
+| 2048 | 903.7–903.8 | 375.7 | 547.9–548.0 | 227.5 | 65.2% slower | 64.9% slower | 58.5% |
+
+Predeclared outcome: **"slower" at all three contexts.** llama.cpp Q4_K_M decodes in 3.3–3.6 ms per step. Our 4-bit path remains faster than llama.cpp's FP16 (38–31%). End-to-end: GQA 341/379/573 ms versus Q4_K_M 220/248/412 ms. Token agreement with ours is the same pattern as ORT: 64/64 except the context128 held-out passage (46/64 FP16, 28/64 Q4_K_M). Same limits as the ORT result: own quantizer at 5.08 bits per weight including the embedding/output matrix, stack against stack, cause not profiled, batch 1, one node.
+
 Extension predeclared 2026-11-10 after the ORT result above and before any long-context external measurement: with nodes kept at the user's instruction, each external stack is also run at contexts 4096, 8192 and 16384 with the same cells and rule, our variants validated through `long.py` as in E029. A stack that cannot run a context (memory, limits) is recorded as such.
 
 ## E027 — Our decode path versus vLLM on the same quantized weights

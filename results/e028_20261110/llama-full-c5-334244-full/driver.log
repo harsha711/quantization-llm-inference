@@ -1,0 +1,9 @@
+/mnt/beegfs/hpuvvad/csc548-w4a16-e028-20261110/llama-full-c5-334244-full/diagnose.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e028-20261110/llama-full-c5-334244-full/validate.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e028-20261110/llama-full-c5-334244-full/run.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e028-20261110/llama-full-c5-334244-full/att.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e028-20261110/llama-full-c5-334244-full/lbench.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e028-20261110/llama-full-c5-334244-full/lquant.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e028-20261110/llama-full-c5-334244-full/analyze.py: OK
+llama-sdist/llama_cpp_python-0.3.36.tar.gz: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e028-20261110/llama-smoke-c5-334244/INSPECTED

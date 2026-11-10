@@ -1,0 +1,8 @@
+/mnt/beegfs/hpuvvad/csc548-w4a16-e028-20261110/llama-smoke-c7-334239/diagnose.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e028-20261110/llama-smoke-c7-334239/validate.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e028-20261110/llama-smoke-c7-334239/run.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e028-20261110/llama-smoke-c7-334239/att.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e028-20261110/llama-smoke-c7-334239/lbench.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e028-20261110/llama-smoke-c7-334239/lquant.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e028-20261110/llama-smoke-c7-334239/analyze.py: OK
+llama-sdist/llama_cpp_python-0.3.36.tar.gz: OK

@@ -1,0 +1,789 @@
+Using pip 22.3.1 from /tmp/e028-llama-hpuvvad-20261110/lib64/python3.11/site-packages/pip (python 3.11)
+Processing /mnt/beegfs/hpuvvad/csc548-w4a16-e028-20261110/llama-sdist/llama_cpp_python-0.3.36.tar.gz
+  Installing build dependencies: started
+  Running command pip subprocess to install build dependencies
+  Collecting scikit-build-core[pyproject]>=0.9.2
+    Downloading scikit_build_core-1.1.2-py3-none-any.whl (295 kB)
+       ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 295.5/295.5 kB 1.7 MB/s eta 0:00:00
+  WARNING: scikit-build-core 1.1.2 does not provide the extra 'pyproject'
+  Collecting packaging>=23.2
+    Using cached packaging-26.3-py3-none-any.whl (129 kB)
+  Collecting pathspec>=0.12.0
+    Downloading pathspec-1.1.1-py3-none-any.whl (57 kB)
+       ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 57.3/57.3 kB 899.6 kB/s eta 0:00:00
+  Installing collected packages: pathspec, packaging, scikit-build-core
+  Successfully installed packaging-26.3 pathspec-1.1.1 scikit-build-core-1.1.2
+
+  [notice] A new release of pip available: 22.3.1 -> 26.3
+  [notice] To update, run: /tmp/e028-llama-hpuvvad-20261110/bin/python -m pip install --upgrade pip
+  Installing build dependencies: finished with status 'done'
+  Getting requirements to build wheel: started
+  Running command Getting requirements to build wheel
+  Getting requirements to build wheel: finished with status 'done'
+  Installing backend dependencies: started
+  Running command pip subprocess to install backend dependencies
+  Collecting ninja>=1.5
+    Downloading ninja-1.13.2-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (183 kB)
+       ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 183.4/183.4 kB 1.4 MB/s eta 0:00:00
+  Installing collected packages: ninja
+  Successfully installed ninja-1.13.2
+
+  [notice] A new release of pip available: 22.3.1 -> 26.3
+  [notice] To update, run: /tmp/e028-llama-hpuvvad-20261110/bin/python -m pip install --upgrade pip
+  Installing backend dependencies: finished with status 'done'
+  Preparing metadata (pyproject.toml): started
+  Running command Preparing metadata (pyproject.toml)
+  *** scikit-build-core 1.1.2 using CMake 3.26.5 (metadata_wheel)
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Collecting torch
+  Downloading torch-2.15.0-cp311-cp311-manylinux_2_28_x86_64.whl (539.1 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 539.1/539.1 MB 5.2 MB/s eta 0:00:00
+Collecting transformers
+  Downloading transformers-5.22.2-py3-none-any.whl (13.1 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 13.1/13.1 MB 13.8 MB/s eta 0:00:00
+Collecting sentencepiece
+  Downloading sentencepiece-0.2.3-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (1.7 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.7/1.7 MB 11.2 MB/s eta 0:00:00
+Collecting safetensors
+  Downloading safetensors-0.8.0-cp310-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (516 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 516.0/516.0 kB 7.0 MB/s eta 0:00:00
+Collecting protobuf
+  Downloading protobuf-7.36.2-cp310-abi3-manylinux2014_x86_64.whl (343 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 343.2/343.2 kB 5.5 MB/s eta 0:00:00
+Collecting typing-extensions>=4.5.0
+  Using cached typing_extensions-4.16.0-py3-none-any.whl (45 kB)
+  Link requires a different Python (3.11.13 not in: '>=3.7,<3.11'): https://files.pythonhosted.org/packages/3a/be/650f9c091ef71cb01d735775d554e068752d3ff63d7943b26316dc401749/numpy-1.21.2.zip (from https://pypi.org/simple/numpy/) (requires-python:>=3.7,<3.11)
+  Link requires a different Python (3.11.13 not in: '>=3.7,<3.11'): https://files.pythonhosted.org/packages/5f/d6/ad58ded26556eaeaa8c971e08b6466f17c4ac4d786cd3d800e26ce59cc01/numpy-1.21.3.zip (from https://pypi.org/simple/numpy/) (requires-python:>=3.7,<3.11)
+  Link requires a different Python (3.11.13 not in: '>=3.7,<3.11'): https://files.pythonhosted.org/packages/fb/48/b0708ebd7718a8933f0d3937513ef8ef2f4f04529f1f66ca86d873043921/numpy-1.21.4.zip (from https://pypi.org/simple/numpy/) (requires-python:>=3.7,<3.11)
+  Link requires a different Python (3.11.13 not in: '>=3.7,<3.11'): https://files.pythonhosted.org/packages/c2/a8/a924a09492bdfee8c2ec3094d0a13f2799800b4fdc9c890738aeeb12c72e/numpy-1.21.5.zip (from https://pypi.org/simple/numpy/) (requires-python:>=3.7,<3.11)
+  Link requires a different Python (3.11.13 not in: '>=3.7,<3.11'): https://files.pythonhosted.org/packages/45/b7/de7b8e67f2232c26af57c205aaad29fe17754f793404f59c8a730c7a191a/numpy-1.21.6.zip (from https://pypi.org/simple/numpy/) (requires-python:>=3.7,<3.11)
+  Link requires a different Python (3.11.13 not in: '>=3.12'): https://files.pythonhosted.org/packages/d3/e1/f2fe8f6113a657a1da83b358b16755e528a602c6976a43724a88f42b482a/numpy-2.5.0rc1.tar.gz (from https://pypi.org/simple/numpy/) (requires-python:>=3.12)
+  Link requires a different Python (3.11.13 not in: '>=3.12'): https://files.pythonhosted.org/packages/e7/05/3d27272d30698dc0ecb7fdfaa41ad70303b444f81722bb99bce1d818638a/numpy-2.5.0.tar.gz (from https://pypi.org/simple/numpy/) (requires-python:>=3.12)
+  Link requires a different Python (3.11.13 not in: '>=3.12'): https://files.pythonhosted.org/packages/22/fd/89965aa4ac08c74998539fcbf24fa3540f3e15237fbeb6bcf9c908f4aade/numpy-2.5.1.tar.gz (from https://pypi.org/simple/numpy/) (requires-python:>=3.12)
+  Link requires a different Python (3.11.13 not in: '>=3.12'): https://files.pythonhosted.org/packages/9a/80/db0b4559e57ec36362bedbb05530a87fafbcb6067708c946967a41d449e7/numpy-2.5.2.tar.gz (from https://pypi.org/simple/numpy/) (requires-python:>=3.12)
+  Link requires a different Python (3.11.13 not in: '>=3.12'): https://files.pythonhosted.org/packages/13/01/11703282db468b85f6f7b8c7f22d058de5970d5c7e60a3a8aaa313c3de36/numpy-2.5.3.tar.gz (from https://pypi.org/simple/numpy/) (requires-python:>=3.12)
+  Link requires a different Python (3.11.13 not in: '>=3.12'): https://files.pythonhosted.org/packages/95/b0/c7453d0b6e2073c3264468b106ee1563750cecc910965e67357e3698c83e/numpy-2.5.4.tar.gz (from https://pypi.org/simple/numpy/) (requires-python:>=3.12)
+Collecting numpy>=1.20.0
+  Using cached numpy-2.4.6-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (16.9 MB)
+Collecting diskcache>=5.6.1
+  Downloading diskcache-5.6.3-py3-none-any.whl (45 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 45.5/45.5 kB 677.9 kB/s eta 0:00:00
+Collecting jinja2>=2.11.3
+  Using cached jinja2-3.1.6-py3-none-any.whl (134 kB)
+Collecting filelock
+  Downloading filelock-4.2.10-py3-none-any.whl (218 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 218.0/218.0 kB 3.5 MB/s eta 0:00:00
+Collecting setuptools>=77.0.3
+  Using cached setuptools-84.2.1-py3-none-any.whl (876 kB)
+Collecting sympy>=1.13.3
+  Using cached sympy-1.14.0-py3-none-any.whl (6.3 MB)
+  Link requires a different Python (3.11.13 not in: '!=3.14.1,>=3.12'): https://files.pythonhosted.org/packages/a6/8d/23468da87cf46643036e599687c3c8347d403be4674771706010306d77b7/networkx-3.7rc0-py3-none-any.whl (from https://pypi.org/simple/networkx/) (requires-python:!=3.14.1,>=3.12)
+  Link requires a different Python (3.11.13 not in: '!=3.14.1,>=3.12'): https://files.pythonhosted.org/packages/16/7d/85640abc5a9f525efd07360275c4ce6be5d9a05eba07a8bac6db638549b4/networkx-3.7rc0.tar.gz (from https://pypi.org/simple/networkx/) (requires-python:!=3.14.1,>=3.12)
+  Link requires a different Python (3.11.13 not in: '!=3.14.1,>=3.12'): https://files.pythonhosted.org/packages/7e/cd/fe58041e9011f307c490e3e17dd48cc516448f7c698a3f2d9d9d65d7e6a8/networkx-3.7-py3-none-any.whl (from https://pypi.org/simple/networkx/) (requires-python:!=3.14.1,>=3.12)
+  Link requires a different Python (3.11.13 not in: '!=3.14.1,>=3.12'): https://files.pythonhosted.org/packages/dc/76/3af777226b63a5e64a6b36b1ec5855c14e2b94a37096d4760e595fc43511/networkx-3.7.tar.gz (from https://pypi.org/simple/networkx/) (requires-python:!=3.14.1,>=3.12)
+Collecting networkx>=2.5.1
+  Using cached networkx-3.6.1-py3-none-any.whl (2.1 MB)
+Collecting fsspec>=0.8.5
+  Using cached fsspec-2026.9.0-py3-none-any.whl (221 kB)
+Collecting cuda-toolkit[cublas,cudart,cufft,cufile,cupti,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.2.2
+  Downloading cuda_toolkit-13.2.2-py2.py3-none-any.whl (2.6 kB)
+Collecting cuda-bindings<14,>=13.0.3
+  Using cached cuda_bindings-13.5.0-cp311-cp311-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl (8.4 MB)
+Collecting nvidia-cudnn-cu13==9.26.0.51
+  Downloading nvidia_cudnn_cu13-9.26.0.51-py3-none-manylinux_2_27_x86_64.whl (519.2 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 519.2/519.2 MB 4.3 MB/s eta 0:00:00
+Collecting nvidia-cusparselt-cu13==0.8.1
+  Using cached nvidia_cusparselt_cu13-0.8.1-py3-none-manylinux2014_x86_64.whl (170.1 MB)
+Collecting nvidia-nccl-cu13==2.30.7
+  Using cached nvidia_nccl_cu13-2.30.7-py3-none-manylinux_2_18_x86_64.whl (216.0 MB)
+Collecting nvidia-nvshmem-cu13==3.7.2
+  Downloading nvidia_nvshmem_cu13-3.7.2-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (135.4 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 135.4/135.4 MB 13.4 MB/s eta 0:00:00
+Collecting triton~=3.9.0
+  Downloading triton-3.9.0-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (285.8 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 285.8/285.8 MB 9.9 MB/s eta 0:00:00
+Collecting nvidia-cublas==13.4.1.3.*
+  Downloading nvidia_cublas-13.4.1.3-py3-none-manylinux_2_27_x86_64.whl (404.9 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 404.9/404.9 MB 5.2 MB/s eta 0:00:00
+Collecting nvidia-cuda-nvrtc==13.2.86.*
+  Downloading nvidia_cuda_nvrtc-13.2.86-py3-none-manylinux2010_x86_64.manylinux_2_12_x86_64.whl (47.0 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 47.0/47.0 MB 10.7 MB/s eta 0:00:00
+Collecting nvidia-cuda-runtime==13.2.86.*
+  Downloading nvidia_cuda_runtime-13.2.86-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (2.3 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.3/2.3 MB 10.4 MB/s eta 0:00:00
+Collecting nvidia-cufft==12.2.0.57.*
+  Downloading nvidia_cufft-12.2.0.57-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (218.3 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 218.3/218.3 MB 7.0 MB/s eta 0:00:00
+Collecting nvidia-nvjitlink<14,>=13.2.86
+  Using cached nvidia_nvjitlink-13.5.37-py3-none-manylinux2010_x86_64.manylinux_2_12_x86_64.whl (46.6 MB)
+Collecting nvidia-cufile==1.17.1.22.*
+  Downloading nvidia_cufile-1.17.1.22-py3-none-manylinux_2_27_x86_64.whl (1.4 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.4/1.4 MB 8.4 MB/s eta 0:00:00
+Collecting nvidia-cuda-cupti==13.2.86.*
+  Downloading nvidia_cuda_cupti-13.2.86-py3-none-manylinux_2_25_x86_64.whl (12.0 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 12.0/12.0 MB 12.3 MB/s eta 0:00:00
+Collecting nvidia-cusolver==12.2.0.11.*
+  Downloading nvidia_cusolver-12.2.0.11-py3-none-manylinux_2_27_x86_64.whl (227.9 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 227.9/227.9 MB 9.6 MB/s eta 0:00:00
+Collecting nvidia-cusparse==12.7.10.12.*
+  Downloading nvidia_cusparse-12.7.10.12-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (151.0 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 151.0/151.0 MB 13.8 MB/s eta 0:00:00
+Collecting nvidia-nvtx==13.2.86.*
+  Downloading nvidia_nvtx-13.2.86-py3-none-manylinux1_x86_64.manylinux_2_5_x86_64.whl (153 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 153.5/153.5 kB 2.8 MB/s eta 0:00:00
+Collecting nvidia-cuda-cccl
+  Downloading nvidia_cuda_cccl-13.3.5.0.6-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (4.1 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.1/4.1 MB 17.4 MB/s eta 0:00:00
+Collecting huggingface-hub<3.0,>=1.31.0
+  Downloading huggingface_hub-2.4.0-py3-none-any.whl (857 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 857.0/857.0 kB 9.2 MB/s eta 0:00:00
+Collecting packaging>=20.0
+  Using cached packaging-26.3-py3-none-any.whl (129 kB)
+Collecting pyyaml>=5.1
+  Using cached pyyaml-6.0.3-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (806 kB)
+Collecting regex>=2025.10.22
+  Downloading regex-2026.11.9-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (805 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 806.0/806.0 kB 9.2 MB/s eta 0:00:00
+Collecting tokenizers<0.24.0,>=0.23.1
+  Downloading tokenizers-0.23.3-cp310-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (3.4 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.4/3.4 MB 11.6 MB/s eta 0:00:00
+Collecting typer
+  Downloading typer-0.29.0-py3-none-any.whl (121 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 121.1/121.1 kB 2.0 MB/s eta 0:00:00
+Collecting tqdm>=4.60
+  Using cached tqdm-4.70.1-py3-none-any.whl (80 kB)
+Collecting cuda-pathfinder>=1.4.2
+  Using cached cuda_pathfinder-1.8.6-py3-none-any.whl (62 kB)
+Collecting click<9.0.0,>=8.4.2
+  Downloading click-8.5.1-py3-none-any.whl (126 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 126.2/126.2 kB 2.5 MB/s eta 0:00:00
+Collecting hf-xet<2.0.0,>=1.6.0
+  Using cached hf_xet-1.8.0-cp38-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (4.3 MB)
+  Link requires a different Python (3.11.13 not in: '>=3.14'): https://files.pythonhosted.org/packages/ce/dc/40ffaafdf37b39340638544ee8a2e350455ea02c156aa1619d5864e27287/httpx2-0.0.0-py3-none-any.whl (from https://pypi.org/simple/httpx2/) (requires-python:>=3.14)
+  Link requires a different Python (3.11.13 not in: '>=3.14'): https://files.pythonhosted.org/packages/82/b5/9b932b5ce50177baf052bc006259b88ee0cb312aa02f8bbabd790fc0bb4c/httpx2-0.0.0.tar.gz (from https://pypi.org/simple/httpx2/) (requires-python:>=3.14)
+Collecting httpx2<3,>=2.0.0
+  Downloading httpx2-2.16.0-py3-none-any.whl (97 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 97.9/97.9 kB 2.1 MB/s eta 0:00:00
+Collecting MarkupSafe>=2.0
+  Using cached markupsafe-3.0.4-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (22 kB)
+Collecting mpmath<1.4,>=1.1.0
+  Using cached mpmath-1.3.0-py3-none-any.whl (536 kB)
+Collecting pydantic>=2.5.3
+  Downloading pydantic-2.14.3-py3-none-any.whl (494 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 494.1/494.1 kB 5.7 MB/s eta 0:00:00
+Collecting shellingham>=1.3.0
+  Downloading shellingham-1.5.4-py2.py3-none-any.whl (9.8 kB)
+Collecting rich>=13.8.0
+  Downloading rich-15.0.0-py3-none-any.whl (310 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 310.7/310.7 kB 4.9 MB/s eta 0:00:00
+Collecting annotated-doc>=0.0.2
+  Downloading annotated_doc-0.0.6-py3-none-any.whl (5.3 kB)
+Collecting anyio>=4.10
+  Downloading anyio-4.16.0-py3-none-any.whl (134 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 134.5/134.5 kB 2.7 MB/s eta 0:00:00
+  Link requires a different Python (3.11.13 not in: '>=3.14'): https://files.pythonhosted.org/packages/79/40/0f06088ac6f598713f2f80de5495be78349d742c93d3811207da9069f3f6/httpcore2-0.0.0-py3-none-any.whl (from https://pypi.org/simple/httpcore2/) (requires-python:>=3.14)
+  Link requires a different Python (3.11.13 not in: '>=3.14'): https://files.pythonhosted.org/packages/42/14/3afda397c436e70ed989f40ee6bf1ed453756f9f7611aaed77b167dadf09/httpcore2-0.0.0.tar.gz (from https://pypi.org/simple/httpcore2/) (requires-python:>=3.14)
+Collecting httpcore2==2.16.0
+  Downloading httpcore2-2.16.0-py3-none-any.whl (85 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 85.1/85.1 kB 1.6 MB/s eta 0:00:00
+Collecting idna>=3.18
+  Using cached idna-3.20-py3-none-any.whl (69 kB)
+Collecting truststore>=0.10
+  Downloading truststore-0.10.5-py3-none-any.whl (19 kB)
+Collecting h11>=0.16
+  Downloading h11-0.16.0-py3-none-any.whl (37 kB)
+Collecting annotated-types>=0.6.0
+  Downloading annotated_types-0.8.0-py3-none-any.whl (13 kB)
+Collecting pydantic-core==2.50.4
+  Downloading pydantic_core-2.50.4-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (2.3 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.3/2.3 MB 9.4 MB/s eta 0:00:00
+Collecting typing-inspection>=0.4.4
+  Downloading typing_inspection-0.4.5-py3-none-any.whl (14 kB)
+Collecting markdown-it-py>=2.2.0
+  Downloading markdown_it_py-4.3.0-py3-none-any.whl (96 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 97.0/97.0 kB 2.4 MB/s eta 0:00:00
+Collecting pygments<3.0.0,>=2.13.0
+  Downloading pygments-2.21.0-py3-none-any.whl (1.3 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.3/1.3 MB 8.7 MB/s eta 0:00:00
+Collecting mdurl~=0.1
+  Downloading mdurl-0.1.2-py3-none-any.whl (10.0 kB)
+Building wheels for collected packages: llama_cpp_python
+  Building wheel for llama_cpp_python (pyproject.toml): started
+  Running command Building wheel for llama_cpp_python (pyproject.toml)
+  *** scikit-build-core 1.1.2 using CMake 3.26.5 (wheel)
+  *** Configuring CMake...
+  loading initial cache file /tmp/tmpli05ygwl/build/CMakeInit.txt
+  -- The C compiler identification is GNU 12.4.0
+  -- The CXX compiler identification is GNU 12.4.0
+  -- Detecting C compiler ABI info
+  -- Detecting C compiler ABI info - done
+  -- Check for working C compiler: /opt/ohpc/pub/compiler/gcc/12.4.0/bin/gcc - skipped
+  -- Detecting C compile features
+  -- Detecting C compile features - done
+  -- Detecting CXX compiler ABI info
+  -- Detecting CXX compiler ABI info - done
+  -- Check for working CXX compiler: /opt/ohpc/pub/compiler/gcc/12.4.0/bin/g++ - skipped
+  -- Detecting CXX compile features
+  -- Detecting CXX compile features - done
+  -- llama.cpp version: 0.5.0-dev
+  CMAKE_BUILD_TYPE=Release
+  -- Found Git: /usr/bin/git (found version "2.43.7")
+  -- The ASM compiler identification is GNU
+  -- Found assembler: /opt/ohpc/pub/compiler/gcc/12.4.0/bin/gcc
+  -- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+  -- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Failed
+  -- Check if compiler accepts -pthread
+  -- Check if compiler accepts -pthread - yes
+  -- Found Threads: TRUE
+  -- Warning: ccache not found - consider installing it for faster compilation or disable this warning with GGML_CCACHE=OFF
+  -- CMAKE_SYSTEM_PROCESSOR: x86_64
+  -- GGML_SYSTEM_ARCH: x86
+  -- Found OpenMP_C: -fopenmp (found version "4.5")
+  -- Found OpenMP_CXX: -fopenmp (found version "4.5")
+  -- Found OpenMP: TRUE (found version "4.5")
+  -- Including CPU backend
+  -- x86 detected
+  -- Adding CPU backend variant ggml-cpu: -march=native
+  -- Found CUDAToolkit: /usr/local/cuda/include (found version "13.4.92")
+  -- CUDA Toolkit found
+  -- The CUDA compiler identification is NVIDIA 13.4.92
+  -- Detecting CUDA compiler ABI info
+  -- Detecting CUDA compiler ABI info - done
+  -- Check for working CUDA compiler: /usr/local/cuda/bin/nvcc - skipped
+  -- Detecting CUDA compile features
+  -- Detecting CUDA compile features - done
+  -- Replacing 120-real in CMAKE_CUDA_ARCHITECTURES_NATIVE with 120a-real
+  -- Using CMAKE_CUDA_ARCHITECTURES=120a-real CMAKE_CUDA_ARCHITECTURES_NATIVE=120a-real
+  -- FlashAttention K-V type combinations: f16-f16;q4_0-q4_0;q8_0-q8_0;bf16-bf16
+  -- Could NOT find NCCL (missing: NCCL_LIBRARY NCCL_INCLUDE_DIR)
+  -- Warning: NCCL not found, performance for multiple CUDA GPUs will be suboptimal
+  -- CUDA host compiler is GNU 12.4.0
+  -- Including CUDA backend
+  -- ggml version: 0.25.3
+  -- ggml commit:  0c1e570-dirty
+  -- Looking for pthread_create in pthreads
+  -- Looking for pthread_create in pthreads - not found
+  -- Looking for pthread_create in pthread
+  -- Looking for pthread_create in pthread - found
+  -- Found OpenSSL: /usr/lib64/libcrypto.so (found version "1.1.1k")
+  -- Performing Test OPENSSL_VERSION_SUPPORTED
+  -- Performing Test OPENSSL_VERSION_SUPPORTED - Failed
+  CMake Warning (dev) at CMakeLists.txt:20 (install):
+    Target llama has PUBLIC_HEADER files but no PUBLIC_HEADER DESTINATION.
+  Call Stack (most recent call first):
+    CMakeLists.txt:142 (llama_cpp_python_install_target)
+  This warning is for project developers.  Use -Wno-dev to suppress it.
+
+  CMake Warning (dev) at CMakeLists.txt:29 (install):
+    Target llama has PUBLIC_HEADER files but no PUBLIC_HEADER DESTINATION.
+  Call Stack (most recent call first):
+    CMakeLists.txt:142 (llama_cpp_python_install_target)
+  This warning is for project developers.  Use -Wno-dev to suppress it.
+
+  CMake Warning (dev) at CMakeLists.txt:20 (install):
+    Target ggml has PUBLIC_HEADER files but no PUBLIC_HEADER DESTINATION.
+  Call Stack (most recent call first):
+    CMakeLists.txt:143 (llama_cpp_python_install_target)
+  This warning is for project developers.  Use -Wno-dev to suppress it.
+
+  CMake Warning (dev) at CMakeLists.txt:29 (install):
+    Target ggml has PUBLIC_HEADER files but no PUBLIC_HEADER DESTINATION.
+  Call Stack (most recent call first):
+    CMakeLists.txt:143 (llama_cpp_python_install_target)
+  This warning is for project developers.  Use -Wno-dev to suppress it.
+
+  CMake Warning (dev) at CMakeLists.txt:20 (install):
+    Target mtmd has PRIVATE_HEADER files but no PRIVATE_HEADER DESTINATION.
+  Call Stack (most recent call first):
+    CMakeLists.txt:210 (llama_cpp_python_install_target)
+  This warning is for project developers.  Use -Wno-dev to suppress it.
+
+  CMake Warning (dev) at CMakeLists.txt:20 (install):
+    Target mtmd has PUBLIC_HEADER files but no PUBLIC_HEADER DESTINATION.
+  Call Stack (most recent call first):
+    CMakeLists.txt:210 (llama_cpp_python_install_target)
+  This warning is for project developers.  Use -Wno-dev to suppress it.
+
+  CMake Warning (dev) at CMakeLists.txt:29 (install):
+    Target mtmd has PRIVATE_HEADER files but no PRIVATE_HEADER DESTINATION.
+  Call Stack (most recent call first):
+    CMakeLists.txt:210 (llama_cpp_python_install_target)
+  This warning is for project developers.  Use -Wno-dev to suppress it.
+
+  CMake Warning (dev) at CMakeLists.txt:29 (install):
+    Target mtmd has PUBLIC_HEADER files but no PUBLIC_HEADER DESTINATION.
+  Call Stack (most recent call first):
+    CMakeLists.txt:210 (llama_cpp_python_install_target)
+  This warning is for project developers.  Use -Wno-dev to suppress it.
+
+  -- Configuring done (3.5s)
+  -- Generating done (0.0s)
+  -- Build files have been written to: /tmp/tmpli05ygwl/build
+  *** Building project with Ninja...
+  [1/339] /opt/ohpc/pub/compiler/gcc/12.4.0/bin/g++ -DGGML_BACKEND_BUILD -DGGML_BACKEND_SHARED -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -DGGML_USE_CPU_REPACK -DGGML_USE_LLAMAFILE -DGGML_USE_OPENMP -D_GNU_SOURCE -D_XOPEN_SOURCE=600 -Dggml_cpu_EXPORTS -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/.. -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/. -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/ggml-cpu -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/../include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wmissing-declarations -Wmissing-noreturn -Wall -Wextra -Wpedantic -Wcast-qual -Wno-unused-function -Wno-array-bounds -Wextra-semi -march=native -fopenmp -MD -MT vendor/llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/hbm.cpp.o -MF vendor/llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/hbm.cpp.o.d -o vendor/llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/hbm.cpp.o -c /tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/ggml-cpu/hbm.cpp
+  [2/339] /opt/ohpc/pub/compiler/gcc/12.4.0/bin/g++ -DGGML_BUILD -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -DGGML_USE_OPENMP -D_GNU_SOURCE -D_XOPEN_SOURCE=600 -Dggml_base_EXPORTS -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/. -I/tmp/tmpli05ygwl/build/vendor/llama.cpp/ggml/src -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/../include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wmissing-declarations -Wmissing-noreturn -Wall -Wextra -Wpedantic -Wcast-qual -Wno-unused-function -Wno-array-bounds -Wextra-semi -fopenmp -pthread -MD -MT vendor/llama.cpp/ggml/src/CMakeFiles/ggml-base.dir/ggml.cpp.o -MF vendor/llama.cpp/ggml/src/CMakeFiles/ggml-base.dir/ggml.cpp.o.d -o vendor/llama.cpp/ggml/src/CMakeFiles/ggml-base.dir/ggml.cpp.o -c /tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/ggml.cpp
+  [3/339] /opt/ohpc/pub/compiler/gcc/12.4.0/bin/g++ -DGGML_BUILD -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -DGGML_USE_OPENMP -D_GNU_SOURCE -D_XOPEN_SOURCE=600 -Dggml_base_EXPORTS -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/. -I/tmp/tmpli05ygwl/build/vendor/llama.cpp/ggml/src -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/../include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wmissing-declarations -Wmissing-noreturn -Wall -Wextra -Wpedantic -Wcast-qual -Wno-unused-function -Wno-array-bounds -Wextra-semi -fopenmp -pthread -MD -MT vendor/llama.cpp/ggml/src/CMakeFiles/ggml-base.dir/ggml-threading.cpp.o -MF vendor/llama.cpp/ggml/src/CMakeFiles/ggml-base.dir/ggml-threading.cpp.o.d -o vendor/llama.cpp/ggml/src/CMakeFiles/ggml-base.dir/ggml-threading.cpp.o -c /tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/ggml-threading.cpp
+  [4/339] /opt/ohpc/pub/compiler/gcc/12.4.0/bin/gcc -DGGML_BUILD -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -DGGML_USE_OPENMP -D_GNU_SOURCE -D_XOPEN_SOURCE=600 -Dggml_base_EXPORTS -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/. -I/tmp/tmpli05ygwl/build/vendor/llama.cpp/ggml/src -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/../include -O3 -DNDEBUG -std=gnu11 -fPIC -Wshadow -Wstrict-prototypes -Wpointer-arith -Wmissing-prototypes -Werror=implicit-int -Werror=implicit-function-declaration -Wall -Wextra -Wpedantic -Wcast-qual -Wno-unused-function -Wdouble-promotion -fopenmp -pthread -MD -MT vendor/llama.cpp/ggml/src/CMakeFiles/ggml-base.dir/ggml-alloc.c.o -MF vendor/llama.cpp/ggml/src/CMakeFiles/ggml-base.dir/ggml-alloc.c.o.d -o vendor/llama.cpp/ggml/src/CMakeFiles/ggml-base.dir/ggml-alloc.c.o -c /tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/ggml-alloc.c
+  [5/339] /opt/ohpc/pub/compiler/gcc/12.4.0/bin/g++ -DGGML_BACKEND_BUILD -DGGML_BACKEND_SHARED -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -DGGML_USE_CPU_REPACK -DGGML_USE_LLAMAFILE -DGGML_USE_OPENMP -D_GNU_SOURCE -D_XOPEN_SOURCE=600 -Dggml_cpu_EXPORTS -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/.. -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/. -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/ggml-cpu -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/../include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wmissing-declarations -Wmissing-noreturn -Wall -Wextra -Wpedantic -Wcast-qual -Wno-unused-function -Wno-array-bounds -Wextra-semi -march=native -fopenmp -MD -MT vendor/llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/traits.cpp.o -MF vendor/llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/traits.cpp.o.d -o vendor/llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/traits.cpp.o -c /tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/ggml-cpu/traits.cpp
+  [6/339] /opt/ohpc/pub/compiler/gcc/12.4.0/bin/g++ -DGGML_BACKEND_BUILD -DGGML_BACKEND_SHARED -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -DGGML_USE_CPU_REPACK -DGGML_USE_LLAMAFILE -DGGML_USE_OPENMP -D_GNU_SOURCE -D_XOPEN_SOURCE=600 -Dggml_cpu_EXPORTS -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/.. -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/. -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/ggml-cpu -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/../include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wmissing-declarations -Wmissing-noreturn -Wall -Wextra -Wpedantic -Wcast-qual -Wno-unused-function -Wno-array-bounds -Wextra-semi -march=native -fopenmp -MD -MT vendor/llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/amx/mmq.cpp.o -MF vendor/llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/amx/mmq.cpp.o.d -o vendor/llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/amx/mmq.cpp.o -c /tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/ggml-cpu/amx/mmq.cpp
+  [7/339] /opt/ohpc/pub/compiler/gcc/12.4.0/bin/g++ -DGGML_BACKEND_BUILD -DGGML_BACKEND_SHARED -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -DGGML_USE_CPU_REPACK -DGGML_USE_LLAMAFILE -DGGML_USE_OPENMP -D_GNU_SOURCE -D_XOPEN_SOURCE=600 -Dggml_cpu_EXPORTS -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/.. -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/. -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/ggml-cpu -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/../include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wmissing-declarations -Wmissing-noreturn -Wall -Wextra -Wpedantic -Wcast-qual -Wno-unused-function -Wno-array-bounds -Wextra-semi -march=native -fopenmp -MD -MT vendor/llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/amx/amx.cpp.o -MF vendor/llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/amx/amx.cpp.o.d -o vendor/llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/amx/amx.cpp.o -c /tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/ggml-cpu/amx/amx.cpp
+  [8/339] /opt/ohpc/pub/compiler/gcc/12.4.0/bin/g++ -DGGML_BACKEND_BUILD -DGGML_BACKEND_SHARED -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -DGGML_USE_CPU_REPACK -DGGML_USE_LLAMAFILE -DGGML_USE_OPENMP -D_GNU_SOURCE -D_XOPEN_SOURCE=600 -Dggml_cpu_EXPORTS -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/.. -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/. -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/ggml-cpu -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/../include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wmissing-declarations -Wmissing-noreturn -Wall -Wextra -Wpedantic -Wcast-qual -Wno-unused-function -Wno-array-bounds -Wextra-semi -march=native -fopenmp -MD -MT vendor/llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/ggml-cpu.cpp.o -MF vendor/llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/ggml-cpu.cpp.o.d -o vendor/llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/ggml-cpu.cpp.o -c /tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/ggml-cpu/ggml-cpu.cpp
+  [9/339] /opt/ohpc/pub/compiler/gcc/12.4.0/bin/gcc -DGGML_BACKEND_BUILD -DGGML_BACKEND_SHARED -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -DGGML_USE_CPU_REPACK -DGGML_USE_LLAMAFILE -DGGML_USE_OPENMP -D_GNU_SOURCE -D_XOPEN_SOURCE=600 -Dggml_cpu_EXPORTS -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/.. -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/. -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/ggml-cpu -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/../include -O3 -DNDEBUG -std=gnu11 -fPIC -Wshadow -Wstrict-prototypes -Wpointer-arith -Wmissing-prototypes -Werror=implicit-int -Werror=implicit-function-declaration -Wall -Wextra -Wpedantic -Wcast-qual -Wno-unused-function -Wdouble-promotion -march=native -fopenmp -MD -MT vendor/llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/ggml-cpu.c.o -MF vendor/llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/ggml-cpu.c.o.d -o vendor/llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/ggml-cpu.c.o -c /tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/ggml-cpu/ggml-cpu.c
+  [10/339] /opt/ohpc/pub/compiler/gcc/12.4.0/bin/g++ -DGGML_BUILD -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -DGGML_USE_OPENMP -D_GNU_SOURCE -D_XOPEN_SOURCE=600 -Dggml_base_EXPORTS -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/. -I/tmp/tmpli05ygwl/build/vendor/llama.cpp/ggml/src -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/../include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wmissing-declarations -Wmissing-noreturn -Wall -Wextra -Wpedantic -Wcast-qual -Wno-unused-function -Wno-array-bounds -Wextra-semi -fopenmp -pthread -MD -MT vendor/llama.cpp/ggml/src/CMakeFiles/ggml-base.dir/ggml-opt.cpp.o -MF vendor/llama.cpp/ggml/src/CMakeFiles/ggml-base.dir/ggml-opt.cpp.o.d -o vendor/llama.cpp/ggml/src/CMakeFiles/ggml-base.dir/ggml-opt.cpp.o -c /tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/ggml-opt.cpp
+  [11/339] /opt/ohpc/pub/compiler/gcc/12.4.0/bin/g++ -DGGML_BACKEND_BUILD -DGGML_BACKEND_SHARED -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -DGGML_USE_CPU_REPACK -DGGML_USE_LLAMAFILE -DGGML_USE_OPENMP -D_GNU_SOURCE -D_XOPEN_SOURCE=600 -Dggml_cpu_EXPORTS -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/.. -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/. -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/ggml-cpu -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/../include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wmissing-declarations -Wmissing-noreturn -Wall -Wextra -Wpedantic -Wcast-qual -Wno-unused-function -Wno-array-bounds -Wextra-semi -march=native -fopenmp -MD -MT vendor/llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/vec.cpp.o -MF vendor/llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/vec.cpp.o.d -o vendor/llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/vec.cpp.o -c /tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/ggml-cpu/vec.cpp
+  FAILED: [code=1] vendor/llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/vec.cpp.o
+  /opt/ohpc/pub/compiler/gcc/12.4.0/bin/g++ -DGGML_BACKEND_BUILD -DGGML_BACKEND_SHARED -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -DGGML_USE_CPU_REPACK -DGGML_USE_LLAMAFILE -DGGML_USE_OPENMP -D_GNU_SOURCE -D_XOPEN_SOURCE=600 -Dggml_cpu_EXPORTS -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/.. -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/. -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/ggml-cpu -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/../include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wmissing-declarations -Wmissing-noreturn -Wall -Wextra -Wpedantic -Wcast-qual -Wno-unused-function -Wno-array-bounds -Wextra-semi -march=native -fopenmp -MD -MT vendor/llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/vec.cpp.o -MF vendor/llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/vec.cpp.o.d -o vendor/llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/vec.cpp.o -c /tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/ggml-cpu/vec.cpp
+  /tmp/ccgci94b.s: Assembler messages:
+  /tmp/ccgci94b.s:233: Error: no such instruction: `vdpbf16ps %zmm4,%zmm3,%zmm1'
+  /tmp/ccgci94b.s:234: Error: no such instruction: `vdpbf16ps %zmm6,%zmm5,%zmm0'
+  [12/339] /opt/ohpc/pub/compiler/gcc/12.4.0/bin/gcc -DGGML_BACKEND_BUILD -DGGML_BACKEND_SHARED -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -DGGML_USE_CPU_REPACK -DGGML_USE_LLAMAFILE -DGGML_USE_OPENMP -D_GNU_SOURCE -D_XOPEN_SOURCE=600 -Dggml_cpu_EXPORTS -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/.. -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/. -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/ggml-cpu -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/../include -O3 -DNDEBUG -std=gnu11 -fPIC -Wshadow -Wstrict-prototypes -Wpointer-arith -Wmissing-prototypes -Werror=implicit-int -Werror=implicit-function-declaration -Wall -Wextra -Wpedantic -Wcast-qual -Wno-unused-function -Wdouble-promotion -march=native -fopenmp -MD -MT vendor/llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/quants.c.o -MF vendor/llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/quants.c.o.d -o vendor/llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/quants.c.o -c /tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/ggml-cpu/quants.c
+  [13/339] /opt/ohpc/pub/compiler/gcc/12.4.0/bin/g++ -DGGML_BUILD -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -DGGML_USE_OPENMP -D_GNU_SOURCE -D_XOPEN_SOURCE=600 -Dggml_base_EXPORTS -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/. -I/tmp/tmpli05ygwl/build/vendor/llama.cpp/ggml/src -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/../include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wmissing-declarations -Wmissing-noreturn -Wall -Wextra -Wpedantic -Wcast-qual -Wno-unused-function -Wno-array-bounds -Wextra-semi -fopenmp -pthread -MD -MT vendor/llama.cpp/ggml/src/CMakeFiles/ggml-base.dir/ggml-backend.cpp.o -MF vendor/llama.cpp/ggml/src/CMakeFiles/ggml-base.dir/ggml-backend.cpp.o.d -o vendor/llama.cpp/ggml/src/CMakeFiles/ggml-base.dir/ggml-backend.cpp.o -c /tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/ggml-backend.cpp
+  [14/339] /opt/ohpc/pub/compiler/gcc/12.4.0/bin/g++ -DGGML_BACKEND_BUILD -DGGML_BACKEND_SHARED -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -DGGML_USE_CPU_REPACK -DGGML_USE_LLAMAFILE -DGGML_USE_OPENMP -D_GNU_SOURCE -D_XOPEN_SOURCE=600 -Dggml_cpu_EXPORTS -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/.. -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/. -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/ggml-cpu -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/../include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wmissing-declarations -Wmissing-noreturn -Wall -Wextra -Wpedantic -Wcast-qual -Wno-unused-function -Wno-array-bounds -Wextra-semi -march=native -fopenmp -MD -MT vendor/llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/tiled/tiled-kernel.cpp.o -MF vendor/llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/tiled/tiled-kernel.cpp.o.d -o vendor/llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/tiled/tiled-kernel.cpp.o -c /tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/ggml-cpu/tiled/tiled-kernel.cpp
+  [15/339] /opt/ohpc/pub/compiler/gcc/12.4.0/bin/gcc -DGGML_BACKEND_BUILD -DGGML_BACKEND_SHARED -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -DGGML_USE_CPU_REPACK -DGGML_USE_LLAMAFILE -DGGML_USE_OPENMP -D_GNU_SOURCE -D_XOPEN_SOURCE=600 -Dggml_cpu_EXPORTS -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/.. -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/. -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/ggml-cpu -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/../include -O3 -DNDEBUG -std=gnu11 -fPIC -Wshadow -Wstrict-prototypes -Wpointer-arith -Wmissing-prototypes -Werror=implicit-int -Werror=implicit-function-declaration -Wall -Wextra -Wpedantic -Wcast-qual -Wno-unused-function -Wdouble-promotion -march=native -fopenmp -MD -MT vendor/llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/arch/x86/quants.c.o -MF vendor/llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/arch/x86/quants.c.o.d -o vendor/llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/arch/x86/quants.c.o -c /tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/ggml-cpu/arch/x86/quants.c
+  FAILED: [code=1] vendor/llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/arch/x86/quants.c.o
+  /opt/ohpc/pub/compiler/gcc/12.4.0/bin/gcc -DGGML_BACKEND_BUILD -DGGML_BACKEND_SHARED -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -DGGML_USE_CPU_REPACK -DGGML_USE_LLAMAFILE -DGGML_USE_OPENMP -D_GNU_SOURCE -D_XOPEN_SOURCE=600 -Dggml_cpu_EXPORTS -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/.. -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/. -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/ggml-cpu -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/../include -O3 -DNDEBUG -std=gnu11 -fPIC -Wshadow -Wstrict-prototypes -Wpointer-arith -Wmissing-prototypes -Werror=implicit-int -Werror=implicit-function-declaration -Wall -Wextra -Wpedantic -Wcast-qual -Wno-unused-function -Wdouble-promotion -march=native -fopenmp -MD -MT vendor/llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/arch/x86/quants.c.o -MF vendor/llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/arch/x86/quants.c.o.d -o vendor/llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/arch/x86/quants.c.o -c /tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/ggml-cpu/arch/x86/quants.c
+  /tmp/cc0VFdBx.s: Assembler messages:
+  /tmp/cc0VFdBx.s:418: Error: no such instruction: `{vex} vpdpbusd %ymm0,%ymm4,%ymm2'
+  /tmp/cc0VFdBx.s:475: Error: no such instruction: `{vex} vpdpbusd -32(%r9),%ymm0,%ymm2'
+  /tmp/cc0VFdBx.s:996: Error: no such instruction: `{vex} vpdpbusd %ymm1,%ymm4,%ymm0'
+  /tmp/cc0VFdBx.s:1063: Error: no such instruction: `{vex} vpdpbusd -32(%r9),%ymm0,%ymm1'
+  /tmp/cc0VFdBx.s:1116: Error: no such instruction: `{vex} vpdpbusd %ymm2,%ymm4,%ymm1'
+  [16/339] /opt/ohpc/pub/compiler/gcc/12.4.0/bin/gcc -DGGML_BUILD -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -DGGML_USE_OPENMP -D_GNU_SOURCE -D_XOPEN_SOURCE=600 -Dggml_base_EXPORTS -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/. -I/tmp/tmpli05ygwl/build/vendor/llama.cpp/ggml/src -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/../include -O3 -DNDEBUG -std=gnu11 -fPIC -Wshadow -Wstrict-prototypes -Wpointer-arith -Wmissing-prototypes -Werror=implicit-int -Werror=implicit-function-declaration -Wall -Wextra -Wpedantic -Wcast-qual -Wno-unused-function -Wdouble-promotion -fopenmp -pthread -MD -MT vendor/llama.cpp/ggml/src/CMakeFiles/ggml-base.dir/ggml.c.o -MF vendor/llama.cpp/ggml/src/CMakeFiles/ggml-base.dir/ggml.c.o.d -o vendor/llama.cpp/ggml/src/CMakeFiles/ggml-base.dir/ggml.c.o -c /tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/ggml.c
+  [17/339] /opt/ohpc/pub/compiler/gcc/12.4.0/bin/g++ -DGGML_BACKEND_BUILD -DGGML_BACKEND_SHARED -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -DGGML_USE_CPU_REPACK -DGGML_USE_LLAMAFILE -DGGML_USE_OPENMP -D_GNU_SOURCE -D_XOPEN_SOURCE=600 -Dggml_cpu_EXPORTS -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/.. -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/. -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/ggml-cpu -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/../include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wmissing-declarations -Wmissing-noreturn -Wall -Wextra -Wpedantic -Wcast-qual -Wno-unused-function -Wno-array-bounds -Wextra-semi -march=native -fopenmp -MD -MT vendor/llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/binary-ops.cpp.o -MF vendor/llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/binary-ops.cpp.o.d -o vendor/llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/binary-ops.cpp.o -c /tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/ggml-cpu/binary-ops.cpp
+  [18/339] /opt/ohpc/pub/compiler/gcc/12.4.0/bin/g++ -DGGML_BACKEND_BUILD -DGGML_BACKEND_SHARED -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -DGGML_USE_CPU_REPACK -DGGML_USE_LLAMAFILE -DGGML_USE_OPENMP -D_GNU_SOURCE -D_XOPEN_SOURCE=600 -Dggml_cpu_EXPORTS -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/.. -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/. -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/ggml-cpu -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/../include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wmissing-declarations -Wmissing-noreturn -Wall -Wextra -Wpedantic -Wcast-qual -Wno-unused-function -Wno-array-bounds -Wextra-semi -march=native -fopenmp -MD -MT vendor/llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/unary-ops.cpp.o -MF vendor/llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/unary-ops.cpp.o.d -o vendor/llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/unary-ops.cpp.o -c /tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/ggml-cpu/unary-ops.cpp
+  [19/339] /opt/ohpc/pub/compiler/gcc/12.4.0/bin/g++ -DGGML_BUILD -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -DGGML_USE_OPENMP -D_GNU_SOURCE -D_XOPEN_SOURCE=600 -Dggml_base_EXPORTS -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/. -I/tmp/tmpli05ygwl/build/vendor/llama.cpp/ggml/src -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/../include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wmissing-declarations -Wmissing-noreturn -Wall -Wextra -Wpedantic -Wcast-qual -Wno-unused-function -Wno-array-bounds -Wextra-semi -fopenmp -pthread -MD -MT vendor/llama.cpp/ggml/src/CMakeFiles/ggml-base.dir/ggml-backend-meta.cpp.o -MF vendor/llama.cpp/ggml/src/CMakeFiles/ggml-base.dir/ggml-backend-meta.cpp.o.d -o vendor/llama.cpp/ggml/src/CMakeFiles/ggml-base.dir/ggml-backend-meta.cpp.o -c /tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/ggml-backend-meta.cpp
+  [20/339] /opt/ohpc/pub/compiler/gcc/12.4.0/bin/g++ -DGGML_BUILD -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -DGGML_USE_OPENMP -D_GNU_SOURCE -D_XOPEN_SOURCE=600 -Dggml_base_EXPORTS -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/. -I/tmp/tmpli05ygwl/build/vendor/llama.cpp/ggml/src -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/../include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wmissing-declarations -Wmissing-noreturn -Wall -Wextra -Wpedantic -Wcast-qual -Wno-unused-function -Wno-array-bounds -Wextra-semi -fopenmp -pthread -MD -MT vendor/llama.cpp/ggml/src/CMakeFiles/ggml-base.dir/gguf.cpp.o -MF vendor/llama.cpp/ggml/src/CMakeFiles/ggml-base.dir/gguf.cpp.o.d -o vendor/llama.cpp/ggml/src/CMakeFiles/ggml-base.dir/gguf.cpp.o -c /tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/gguf.cpp
+  [21/339] /opt/ohpc/pub/compiler/gcc/12.4.0/bin/g++ -DGGML_BACKEND_BUILD -DGGML_BACKEND_SHARED -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -DGGML_USE_CPU_REPACK -DGGML_USE_LLAMAFILE -DGGML_USE_OPENMP -D_GNU_SOURCE -D_XOPEN_SOURCE=600 -Dggml_cpu_EXPORTS -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/.. -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/. -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/ggml-cpu -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/../include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wmissing-declarations -Wmissing-noreturn -Wall -Wextra -Wpedantic -Wcast-qual -Wno-unused-function -Wno-array-bounds -Wextra-semi -march=native -fopenmp -MD -MT vendor/llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/tiled/tiled.cpp.o -MF vendor/llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/tiled/tiled.cpp.o.d -o vendor/llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/tiled/tiled.cpp.o -c /tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/ggml-cpu/tiled/tiled.cpp
+  [22/339] /opt/ohpc/pub/compiler/gcc/12.4.0/bin/g++ -DGGML_BACKEND_BUILD -DGGML_BACKEND_SHARED -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -DGGML_USE_CPU_REPACK -DGGML_USE_LLAMAFILE -DGGML_USE_OPENMP -D_GNU_SOURCE -D_XOPEN_SOURCE=600 -Dggml_cpu_EXPORTS -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/.. -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/. -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/ggml-cpu -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/../include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wmissing-declarations -Wmissing-noreturn -Wall -Wextra -Wpedantic -Wcast-qual -Wno-unused-function -Wno-array-bounds -Wextra-semi -march=native -fopenmp -MD -MT vendor/llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/arch/x86/repack.cpp.o -MF vendor/llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/arch/x86/repack.cpp.o.d -o vendor/llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/arch/x86/repack.cpp.o -c /tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/ggml-cpu/arch/x86/repack.cpp
+  FAILED: [code=1] vendor/llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/arch/x86/repack.cpp.o
+  /opt/ohpc/pub/compiler/gcc/12.4.0/bin/g++ -DGGML_BACKEND_BUILD -DGGML_BACKEND_SHARED -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -DGGML_USE_CPU_REPACK -DGGML_USE_LLAMAFILE -DGGML_USE_OPENMP -D_GNU_SOURCE -D_XOPEN_SOURCE=600 -Dggml_cpu_EXPORTS -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/.. -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/. -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/ggml-cpu -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/../include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wmissing-declarations -Wmissing-noreturn -Wall -Wextra -Wpedantic -Wcast-qual -Wno-unused-function -Wno-array-bounds -Wextra-semi -march=native -fopenmp -MD -MT vendor/llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/arch/x86/repack.cpp.o -MF vendor/llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/arch/x86/repack.cpp.o.d -o vendor/llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/arch/x86/repack.cpp.o -c /tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/ggml-cpu/arch/x86/repack.cpp
+  /tmp/ccLZxwQ1.s: Assembler messages:
+  /tmp/ccLZxwQ1.s:1348: Error: no such instruction: `{vex} vpdpbusd %ymm14,%ymm6,%ymm13'
+  /tmp/ccLZxwQ1.s:1352: Error: no such instruction: `{vex} vpdpbusd %ymm14,%ymm15,%ymm13'
+  /tmp/ccLZxwQ1.s:1354: Error: no such instruction: `{vex} vpdpbusd %ymm0,%ymm14,%ymm13'
+  /tmp/ccLZxwQ1.s:1366: Error: no such instruction: `{vex} vpdpbusd %ymm11,%ymm6,%ymm13'
+  /tmp/ccLZxwQ1.s:1369: Error: no such instruction: `{vex} vpdpbusd %ymm10,%ymm15,%ymm13'
+  /tmp/ccLZxwQ1.s:1374: Error: no such instruction: `{vex} vpdpbusd %ymm9,%ymm14,%ymm15'
+  /tmp/ccLZxwQ1.s:1378: Error: no such instruction: `{vex} vpdpbusd %ymm10,%ymm14,%ymm9'
+  /tmp/ccLZxwQ1.s:1381: Error: no such instruction: `{vex} vpdpbusd %ymm10,%ymm13,%ymm9'
+  /tmp/ccLZxwQ1.s:1385: Error: no such instruction: `{vex} vpdpbusd %ymm10,%ymm12,%ymm9'
+  /tmp/ccLZxwQ1.s:1388: Error: no such instruction: `{vex} vpdpbusd %ymm10,%ymm11,%ymm9'
+  /tmp/ccLZxwQ1.s:1394: Error: no such instruction: `{vex} vpdpbusd %ymm8,%ymm14,%ymm10'
+  /tmp/ccLZxwQ1.s:1398: Error: no such instruction: `{vex} vpdpbusd %ymm7,%ymm13,%ymm10'
+  /tmp/ccLZxwQ1.s:1402: Error: no such instruction: `{vex} vpdpbusd %ymm5,%ymm12,%ymm10'
+  /tmp/ccLZxwQ1.s:1405: Error: no such instruction: `{vex} vpdpbusd %ymm4,%ymm11,%ymm10'
+  /tmp/ccLZxwQ1.s:1409: Error: no such instruction: `{vex} vpdpbusd %ymm4,%ymm12,%ymm5'
+  /tmp/ccLZxwQ1.s:1414: Error: no such instruction: `{vex} vpdpbusd %ymm4,%ymm11,%ymm5'
+  /tmp/ccLZxwQ1.s:1419: Error: no such instruction: `{vex} vpdpbusd %ymm4,%ymm8,%ymm5'
+  /tmp/ccLZxwQ1.s:1423: Error: no such instruction: `{vex} vpdpbusd %ymm4,%ymm7,%ymm5'
+  /tmp/ccLZxwQ1.s:1426: Error: no such instruction: `{vex} vpdpbusd %ymm3,%ymm12,%ymm4'
+  /tmp/ccLZxwQ1.s:1429: Error: no such instruction: `{vex} vpdpbusd %ymm2,%ymm11,%ymm4'
+  /tmp/ccLZxwQ1.s:1431: Error: no such instruction: `{vex} vpdpbusd %ymm1,%ymm8,%ymm4'
+  /tmp/ccLZxwQ1.s:1432: Error: no such instruction: `{vex} vpdpbusd %ymm0,%ymm7,%ymm4'
+  /tmp/ccLZxwQ1.s:1769: Error: no such instruction: `{vex} vpdpbusd %ymm14,%ymm13,%ymm12'
+  /tmp/ccLZxwQ1.s:1771: Error: no such instruction: `{vex} vpdpbusd %ymm15,%ymm14,%ymm12'
+  /tmp/ccLZxwQ1.s:1773: Error: no such instruction: `{vex} vpdpbusd %ymm3,%ymm15,%ymm12'
+  /tmp/ccLZxwQ1.s:1786: Error: no such instruction: `{vex} vpdpbusd %ymm3,%ymm13,%ymm12'
+  /tmp/ccLZxwQ1.s:1790: Error: no such instruction: `{vex} vpdpbusd %ymm11,%ymm14,%ymm12'
+  /tmp/ccLZxwQ1.s:1799: Error: no such instruction: `{vex} vpdpbusd %ymm10,%ymm15,%ymm12'
+  /tmp/ccLZxwQ1.s:1806: Error: no such instruction: `{vex} vpdpbusd %ymm10,%ymm15,%ymm9'
+  /tmp/ccLZxwQ1.s:1809: Error: no such instruction: `{vex} vpdpbusd %ymm10,%ymm14,%ymm9'
+  /tmp/ccLZxwQ1.s:1814: Error: no such instruction: `{vex} vpdpbusd %ymm10,%ymm13,%ymm9'
+  /tmp/ccLZxwQ1.s:1817: Error: no such instruction: `{vex} vpdpbusd %ymm10,%ymm11,%ymm9'
+  /tmp/ccLZxwQ1.s:1823: Error: no such instruction: `{vex} vpdpbusd %ymm8,%ymm15,%ymm10'
+  /tmp/ccLZxwQ1.s:1826: Error: no such instruction: `{vex} vpdpbusd %ymm7,%ymm14,%ymm10'
+  /tmp/ccLZxwQ1.s:1830: Error: no such instruction: `{vex} vpdpbusd %ymm6,%ymm13,%ymm10'
+  /tmp/ccLZxwQ1.s:1834: Error: no such instruction: `{vex} vpdpbusd %ymm5,%ymm11,%ymm10'
+  /tmp/ccLZxwQ1.s:1839: Error: no such instruction: `{vex} vpdpbusd %ymm5,%ymm6,%ymm3'
+  /tmp/ccLZxwQ1.s:1843: Error: no such instruction: `{vex} vpdpbusd %ymm5,%ymm7,%ymm3'
+  /tmp/ccLZxwQ1.s:1846: Error: no such instruction: `{vex} vpdpbusd %ymm5,%ymm8,%ymm3'
+  /tmp/ccLZxwQ1.s:1848: Error: no such instruction: `{vex} vpdpbusd %ymm11,%ymm5,%ymm3'
+  /tmp/ccLZxwQ1.s:1851: Error: no such instruction: `{vex} vpdpbusd %ymm11,%ymm6,%ymm4'
+  /tmp/ccLZxwQ1.s:1856: Error: no such instruction: `{vex} vpdpbusd %ymm6,%ymm7,%ymm2'
+  /tmp/ccLZxwQ1.s:1859: Error: no such instruction: `{vex} vpdpbusd %ymm4,%ymm8,%ymm2'
+  /tmp/ccLZxwQ1.s:1864: Error: no such instruction: `{vex} vpdpbusd %ymm0,%ymm5,%ymm1'
+  /tmp/ccLZxwQ1.s:3533: Error: no such instruction: `{vex} vpdpbusd %ymm0,%ymm15,%ymm14'
+  /tmp/ccLZxwQ1.s:3550: Error: no such instruction: `{vex} vpdpbusd %ymm9,%ymm15,%ymm14'
+  /tmp/ccLZxwQ1.s:3555: Error: no such instruction: `{vex} vpdpbusd %ymm10,%ymm15,%ymm9'
+  /tmp/ccLZxwQ1.s:3560: Error: no such instruction: `{vex} vpdpbusd %ymm10,%ymm14,%ymm9'
+  /tmp/ccLZxwQ1.s:3564: Error: no such instruction: `{vex} vpdpbusd %ymm10,%ymm13,%ymm9'
+  /tmp/ccLZxwQ1.s:3567: Error: no such instruction: `{vex} vpdpbusd %ymm10,%ymm12,%ymm9'
+  /tmp/ccLZxwQ1.s:3573: Error: no such instruction: `{vex} vpdpbusd %ymm7,%ymm15,%ymm10'
+  /tmp/ccLZxwQ1.s:3577: Error: no such instruction: `{vex} vpdpbusd %ymm6,%ymm14,%ymm10'
+  /tmp/ccLZxwQ1.s:3581: Error: no such instruction: `{vex} vpdpbusd %ymm5,%ymm13,%ymm10'
+  /tmp/ccLZxwQ1.s:3584: Error: no such instruction: `{vex} vpdpbusd %ymm4,%ymm12,%ymm10'
+  /tmp/ccLZxwQ1.s:3589: Error: no such instruction: `{vex} vpdpbusd %ymm5,%ymm13,%ymm4'
+  /tmp/ccLZxwQ1.s:3591: Error: no such instruction: `{vex} vpdpbusd %ymm5,%ymm12,%ymm4'
+  /tmp/ccLZxwQ1.s:3598: Error: no such instruction: `{vex} vpdpbusd %ymm5,%ymm7,%ymm4'
+  /tmp/ccLZxwQ1.s:3604: Error: no such instruction: `{vex} vpdpbusd %ymm5,%ymm6,%ymm4'
+  /tmp/ccLZxwQ1.s:3609: Error: no such instruction: `{vex} vpdpbusd %ymm3,%ymm13,%ymm5'
+  /tmp/ccLZxwQ1.s:3612: Error: no such instruction: `{vex} vpdpbusd %ymm2,%ymm12,%ymm5'
+  /tmp/ccLZxwQ1.s:3619: Error: no such instruction: `{vex} vpdpbusd %ymm1,%ymm7,%ymm5'
+  /tmp/ccLZxwQ1.s:3621: Error: no such instruction: `{vex} vpdpbusd %ymm0,%ymm6,%ymm5'
+  /tmp/ccLZxwQ1.s:3985: Error: no such instruction: `{vex} vpdpbusd %ymm14,%ymm13,%ymm12'
+  /tmp/ccLZxwQ1.s:3987: Error: no such instruction: `{vex} vpdpbusd %ymm15,%ymm14,%ymm12'
+  /tmp/ccLZxwQ1.s:3989: Error: no such instruction: `{vex} vpdpbusd %ymm0,%ymm15,%ymm12'
+  /tmp/ccLZxwQ1.s:4005: Error: no such instruction: `{vex} vpdpbusd %ymm0,%ymm13,%ymm12'
+  /tmp/ccLZxwQ1.s:4009: Error: no such instruction: `{vex} vpdpbusd %ymm11,%ymm14,%ymm12'
+  /tmp/ccLZxwQ1.s:4017: Error: no such instruction: `{vex} vpdpbusd %ymm10,%ymm15,%ymm12'
+  /tmp/ccLZxwQ1.s:4023: Error: no such instruction: `{vex} vpdpbusd %ymm10,%ymm15,%ymm9'
+  /tmp/ccLZxwQ1.s:4026: Error: no such instruction: `{vex} vpdpbusd %ymm10,%ymm14,%ymm9'
+  /tmp/ccLZxwQ1.s:4029: Error: no such instruction: `{vex} vpdpbusd %ymm10,%ymm13,%ymm9'
+  /tmp/ccLZxwQ1.s:4034: Error: no such instruction: `{vex} vpdpbusd %ymm10,%ymm11,%ymm9'
+  /tmp/ccLZxwQ1.s:4036: Error: no such instruction: `{vex} vpdpbusd %ymm8,%ymm15,%ymm10'
+  /tmp/ccLZxwQ1.s:4043: Error: no such instruction: `{vex} vpdpbusd %ymm7,%ymm14,%ymm10'
+  /tmp/ccLZxwQ1.s:4047: Error: no such instruction: `{vex} vpdpbusd %ymm6,%ymm13,%ymm10'
+  /tmp/ccLZxwQ1.s:4051: Error: no such instruction: `{vex} vpdpbusd %ymm5,%ymm11,%ymm10'
+  /tmp/ccLZxwQ1.s:4055: Error: no such instruction: `{vex} vpdpbusd %ymm7,%ymm6,%ymm5'
+  /tmp/ccLZxwQ1.s:4058: Error: no such instruction: `{vex} vpdpbusd %ymm8,%ymm7,%ymm5'
+  /tmp/ccLZxwQ1.s:4061: Error: no such instruction: `{vex} vpdpbusd %ymm11,%ymm8,%ymm5'
+  /tmp/ccLZxwQ1.s:4065: Error: no such instruction: `{vex} vpdpbusd %ymm13,%ymm11,%ymm5'
+  /tmp/ccLZxwQ1.s:4068: Error: no such instruction: `{vex} vpdpbusd %ymm13,%ymm6,%ymm3'
+  /tmp/ccLZxwQ1.s:4071: Error: no such instruction: `{vex} vpdpbusd %ymm6,%ymm7,%ymm3'
+  /tmp/ccLZxwQ1.s:4078: Error: no such instruction: `{vex} vpdpbusd %ymm3,%ymm8,%ymm1'
+  /tmp/ccLZxwQ1.s:4081: Error: no such instruction: `{vex} vpdpbusd %ymm0,%ymm11,%ymm1'
+  /tmp/ccLZxwQ1.s:4395: Error: no such instruction: `{vex} vpdpbusd %ymm1,%ymm14,%ymm0'
+  /tmp/ccLZxwQ1.s:4403: Error: no such instruction: `{vex} vpdpbusd %ymm1,%ymm14,%ymm0'
+  /tmp/ccLZxwQ1.s:4407: Error: no such instruction: `{vex} vpdpbusd %ymm1,%ymm12,%ymm0'
+  /tmp/ccLZxwQ1.s:4415: Error: no such instruction: `{vex} vpdpbusd %ymm1,%ymm12,%ymm0'
+  /tmp/ccLZxwQ1.s:4418: Error: no such instruction: `{vex} vpdpbusd %ymm1,%ymm3,%ymm0'
+  /tmp/ccLZxwQ1.s:5817: Error: no such instruction: `{vex} vpdpbusd %ymm11,%ymm15,%ymm0'
+  /tmp/ccLZxwQ1.s:5827: Error: no such instruction: `{vex} vpdpbusd %ymm11,%ymm9,%ymm0'
+  /tmp/ccLZxwQ1.s:5830: Error: no such instruction: `{vex} vpdpbusd %ymm3,%ymm11,%ymm0'
+  /tmp/ccLZxwQ1.s:5836: Error: no such instruction: `{vex} vpdpbusd %ymm3,%ymm11,%ymm0'
+  /tmp/ccLZxwQ1.s:5841: Error: no such instruction: `{vex} vpdpbusd %ymm3,%ymm5,%ymm0'
+  /tmp/ccLZxwQ1.s:5849: Error: no such instruction: `{vex} vpdpbusd %ymm3,%ymm10,%ymm0'
+  /tmp/ccLZxwQ1.s:5854: Error: no such instruction: `{vex} vpdpbusd %ymm2,%ymm4,%ymm0'
+  [23/339] /opt/ohpc/pub/compiler/gcc/12.4.0/bin/gcc -DGGML_BUILD -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -DGGML_USE_OPENMP -D_GNU_SOURCE -D_XOPEN_SOURCE=600 -Dggml_base_EXPORTS -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/. -I/tmp/tmpli05ygwl/build/vendor/llama.cpp/ggml/src -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/../include -O3 -DNDEBUG -std=gnu11 -fPIC -Wshadow -Wstrict-prototypes -Wpointer-arith -Wmissing-prototypes -Werror=implicit-int -Werror=implicit-function-declaration -Wall -Wextra -Wpedantic -Wcast-qual -Wno-unused-function -Wdouble-promotion -fopenmp -pthread -MD -MT vendor/llama.cpp/ggml/src/CMakeFiles/ggml-base.dir/ggml-quants.c.o -MF vendor/llama.cpp/ggml/src/CMakeFiles/ggml-base.dir/ggml-quants.c.o.d -o vendor/llama.cpp/ggml/src/CMakeFiles/ggml-base.dir/ggml-quants.c.o -c /tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/ggml-quants.c
+  [24/339] /opt/ohpc/pub/compiler/gcc/12.4.0/bin/g++ -DGGML_BACKEND_BUILD -DGGML_BACKEND_SHARED -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -DGGML_USE_CPU_REPACK -DGGML_USE_LLAMAFILE -DGGML_USE_OPENMP -D_GNU_SOURCE -D_XOPEN_SOURCE=600 -Dggml_cpu_EXPORTS -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/.. -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/. -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/ggml-cpu -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/../include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wmissing-declarations -Wmissing-noreturn -Wall -Wextra -Wpedantic -Wcast-qual -Wno-unused-function -Wno-array-bounds -Wextra-semi -march=native -fopenmp -MD -MT vendor/llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/llamafile/sgemm.cpp.o -MF vendor/llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/llamafile/sgemm.cpp.o.d -o vendor/llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/llamafile/sgemm.cpp.o -c /tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/ggml-cpu/llamafile/sgemm.cpp
+  FAILED: [code=1] vendor/llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/llamafile/sgemm.cpp.o
+  /opt/ohpc/pub/compiler/gcc/12.4.0/bin/g++ -DGGML_BACKEND_BUILD -DGGML_BACKEND_SHARED -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -DGGML_USE_CPU_REPACK -DGGML_USE_LLAMAFILE -DGGML_USE_OPENMP -D_GNU_SOURCE -D_XOPEN_SOURCE=600 -Dggml_cpu_EXPORTS -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/.. -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/. -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/ggml-cpu -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/../include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wmissing-declarations -Wmissing-noreturn -Wall -Wextra -Wpedantic -Wcast-qual -Wno-unused-function -Wno-array-bounds -Wextra-semi -march=native -fopenmp -MD -MT vendor/llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/llamafile/sgemm.cpp.o -MF vendor/llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/llamafile/sgemm.cpp.o.d -o vendor/llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/llamafile/sgemm.cpp.o -c /tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/ggml-cpu/llamafile/sgemm.cpp
+  /tmp/ccSkfotO.s: Assembler messages:
+  /tmp/ccSkfotO.s:1451: Error: no such instruction: `vdpbf16ps %zmm4,%zmm3,%zmm28'
+  /tmp/ccSkfotO.s:1452: Error: no such instruction: `vdpbf16ps %zmm4,%zmm2,%zmm27'
+  /tmp/ccSkfotO.s:1453: Error: no such instruction: `vdpbf16ps %zmm4,%zmm1,%zmm26'
+  /tmp/ccSkfotO.s:1454: Error: no such instruction: `vdpbf16ps %zmm4,%zmm0,%zmm25'
+  /tmp/ccSkfotO.s:1456: Error: no such instruction: `vdpbf16ps %zmm4,%zmm3,%zmm24'
+  /tmp/ccSkfotO.s:1457: Error: no such instruction: `vdpbf16ps %zmm4,%zmm2,%zmm23'
+  /tmp/ccSkfotO.s:1458: Error: no such instruction: `vdpbf16ps %zmm4,%zmm1,%zmm22'
+  /tmp/ccSkfotO.s:1459: Error: no such instruction: `vdpbf16ps %zmm4,%zmm0,%zmm21'
+  /tmp/ccSkfotO.s:1461: Error: no such instruction: `vdpbf16ps %zmm4,%zmm3,%zmm20'
+  /tmp/ccSkfotO.s:1462: Error: no such instruction: `vdpbf16ps %zmm4,%zmm2,%zmm19'
+  /tmp/ccSkfotO.s:1463: Error: no such instruction: `vdpbf16ps %zmm4,%zmm1,%zmm18'
+  /tmp/ccSkfotO.s:1464: Error: no such instruction: `vdpbf16ps %zmm4,%zmm0,%zmm17'
+  /tmp/ccSkfotO.s:1466: Error: no such instruction: `vdpbf16ps %zmm4,%zmm3,%zmm16'
+  /tmp/ccSkfotO.s:1467: Error: no such instruction: `vdpbf16ps %zmm4,%zmm2,%zmm15'
+  /tmp/ccSkfotO.s:1468: Error: no such instruction: `vdpbf16ps %zmm4,%zmm1,%zmm14'
+  /tmp/ccSkfotO.s:1469: Error: no such instruction: `vdpbf16ps %zmm4,%zmm0,%zmm13'
+  /tmp/ccSkfotO.s:1471: Error: no such instruction: `vdpbf16ps %zmm4,%zmm3,%zmm12'
+  /tmp/ccSkfotO.s:1472: Error: no such instruction: `vdpbf16ps %zmm4,%zmm2,%zmm11'
+  /tmp/ccSkfotO.s:1473: Error: no such instruction: `vdpbf16ps %zmm4,%zmm1,%zmm10'
+  /tmp/ccSkfotO.s:1474: Error: no such instruction: `vdpbf16ps %zmm4,%zmm0,%zmm9'
+  /tmp/ccSkfotO.s:1477: Error: no such instruction: `vdpbf16ps %zmm4,%zmm3,%zmm8'
+  /tmp/ccSkfotO.s:1478: Error: no such instruction: `vdpbf16ps %zmm4,%zmm2,%zmm7'
+  /tmp/ccSkfotO.s:1479: Error: no such instruction: `vdpbf16ps %zmm4,%zmm1,%zmm6'
+  /tmp/ccSkfotO.s:1480: Error: no such instruction: `vdpbf16ps %zmm4,%zmm0,%zmm5'
+  /tmp/ccSkfotO.s:1672: Error: no such instruction: `vdpbf16ps %zmm4,%zmm3,%zmm24'
+  /tmp/ccSkfotO.s:1673: Error: no such instruction: `vdpbf16ps %zmm4,%zmm2,%zmm23'
+  /tmp/ccSkfotO.s:1674: Error: no such instruction: `vdpbf16ps %zmm4,%zmm1,%zmm22'
+  /tmp/ccSkfotO.s:1675: Error: no such instruction: `vdpbf16ps %zmm4,%zmm0,%zmm21'
+  /tmp/ccSkfotO.s:1677: Error: no such instruction: `vdpbf16ps %zmm4,%zmm3,%zmm20'
+  /tmp/ccSkfotO.s:1678: Error: no such instruction: `vdpbf16ps %zmm4,%zmm2,%zmm19'
+  /tmp/ccSkfotO.s:1679: Error: no such instruction: `vdpbf16ps %zmm4,%zmm1,%zmm18'
+  /tmp/ccSkfotO.s:1680: Error: no such instruction: `vdpbf16ps %zmm4,%zmm0,%zmm17'
+  /tmp/ccSkfotO.s:1682: Error: no such instruction: `vdpbf16ps %zmm4,%zmm3,%zmm16'
+  /tmp/ccSkfotO.s:1683: Error: no such instruction: `vdpbf16ps %zmm4,%zmm2,%zmm15'
+  /tmp/ccSkfotO.s:1684: Error: no such instruction: `vdpbf16ps %zmm4,%zmm1,%zmm14'
+  /tmp/ccSkfotO.s:1685: Error: no such instruction: `vdpbf16ps %zmm4,%zmm0,%zmm13'
+  /tmp/ccSkfotO.s:1687: Error: no such instruction: `vdpbf16ps %zmm4,%zmm3,%zmm12'
+  /tmp/ccSkfotO.s:1688: Error: no such instruction: `vdpbf16ps %zmm4,%zmm2,%zmm11'
+  /tmp/ccSkfotO.s:1689: Error: no such instruction: `vdpbf16ps %zmm4,%zmm1,%zmm10'
+  /tmp/ccSkfotO.s:1690: Error: no such instruction: `vdpbf16ps %zmm4,%zmm0,%zmm9'
+  /tmp/ccSkfotO.s:1693: Error: no such instruction: `vdpbf16ps %zmm4,%zmm3,%zmm8'
+  /tmp/ccSkfotO.s:1694: Error: no such instruction: `vdpbf16ps %zmm4,%zmm2,%zmm7'
+  /tmp/ccSkfotO.s:1695: Error: no such instruction: `vdpbf16ps %zmm4,%zmm1,%zmm6'
+  /tmp/ccSkfotO.s:1696: Error: no such instruction: `vdpbf16ps %zmm4,%zmm0,%zmm5'
+  /tmp/ccSkfotO.s:2043: Error: no such instruction: `vdpbf16ps %zmm1,%zmm4,%zmm20'
+  /tmp/ccSkfotO.s:2044: Error: no such instruction: `vdpbf16ps %zmm1,%zmm3,%zmm19'
+  /tmp/ccSkfotO.s:2045: Error: no such instruction: `vdpbf16ps %zmm1,%zmm2,%zmm18'
+  /tmp/ccSkfotO.s:2046: Error: no such instruction: `vdpbf16ps %zmm1,%zmm0,%zmm17'
+  /tmp/ccSkfotO.s:2048: Error: no such instruction: `vdpbf16ps %zmm1,%zmm4,%zmm16'
+  /tmp/ccSkfotO.s:2049: Error: no such instruction: `vdpbf16ps %zmm1,%zmm3,%zmm15'
+  /tmp/ccSkfotO.s:2050: Error: no such instruction: `vdpbf16ps %zmm1,%zmm2,%zmm14'
+  /tmp/ccSkfotO.s:2051: Error: no such instruction: `vdpbf16ps %zmm1,%zmm0,%zmm13'
+  /tmp/ccSkfotO.s:2053: Error: no such instruction: `vdpbf16ps %zmm1,%zmm4,%zmm12'
+  /tmp/ccSkfotO.s:2054: Error: no such instruction: `vdpbf16ps %zmm1,%zmm3,%zmm11'
+  /tmp/ccSkfotO.s:2055: Error: no such instruction: `vdpbf16ps %zmm1,%zmm2,%zmm10'
+  /tmp/ccSkfotO.s:2056: Error: no such instruction: `vdpbf16ps %zmm1,%zmm0,%zmm9'
+  /tmp/ccSkfotO.s:2059: Error: no such instruction: `vdpbf16ps %zmm1,%zmm4,%zmm8'
+  /tmp/ccSkfotO.s:2060: Error: no such instruction: `vdpbf16ps %zmm1,%zmm3,%zmm7'
+  /tmp/ccSkfotO.s:2061: Error: no such instruction: `vdpbf16ps %zmm1,%zmm2,%zmm6'
+  /tmp/ccSkfotO.s:2062: Error: no such instruction: `vdpbf16ps %zmm1,%zmm0,%zmm5'
+  /tmp/ccSkfotO.s:2348: Error: no such instruction: `vdpbf16ps %zmm2,%zmm15,%zmm14'
+  /tmp/ccSkfotO.s:2349: Error: no such instruction: `vdpbf16ps %zmm1,%zmm15,%zmm13'
+  /tmp/ccSkfotO.s:2350: Error: no such instruction: `vdpbf16ps %zmm0,%zmm15,%zmm12'
+  /tmp/ccSkfotO.s:2352: Error: no such instruction: `vdpbf16ps %zmm2,%zmm15,%zmm11'
+  /tmp/ccSkfotO.s:2353: Error: no such instruction: `vdpbf16ps %zmm1,%zmm15,%zmm10'
+  /tmp/ccSkfotO.s:2354: Error: no such instruction: `vdpbf16ps %zmm0,%zmm15,%zmm9'
+  /tmp/ccSkfotO.s:2356: Error: no such instruction: `vdpbf16ps %zmm2,%zmm15,%zmm8'
+  /tmp/ccSkfotO.s:2357: Error: no such instruction: `vdpbf16ps %zmm1,%zmm15,%zmm7'
+  /tmp/ccSkfotO.s:2358: Error: no such instruction: `vdpbf16ps %zmm0,%zmm15,%zmm6'
+  /tmp/ccSkfotO.s:2361: Error: no such instruction: `vdpbf16ps %zmm2,%zmm15,%zmm5'
+  /tmp/ccSkfotO.s:2362: Error: no such instruction: `vdpbf16ps %zmm1,%zmm15,%zmm4'
+  /tmp/ccSkfotO.s:2363: Error: no such instruction: `vdpbf16ps %zmm0,%zmm15,%zmm3'
+  /tmp/ccSkfotO.s:2598: Error: no such instruction: `vdpbf16ps %zmm1,%zmm10,%zmm9'
+  /tmp/ccSkfotO.s:2599: Error: no such instruction: `vdpbf16ps %zmm0,%zmm10,%zmm8'
+  /tmp/ccSkfotO.s:2602: Error: no such instruction: `vdpbf16ps %zmm1,%zmm12,%zmm7'
+  /tmp/ccSkfotO.s:2603: Error: no such instruction: `vdpbf16ps %zmm0,%zmm12,%zmm6'
+  /tmp/ccSkfotO.s:2604: Error: no such instruction: `vdpbf16ps %zmm1,%zmm14,%zmm5'
+  /tmp/ccSkfotO.s:2605: Error: no such instruction: `vdpbf16ps %zmm0,%zmm14,%zmm4'
+  /tmp/ccSkfotO.s:2606: Error: no such instruction: `vdpbf16ps %zmm1,%zmm10,%zmm3'
+  /tmp/ccSkfotO.s:2607: Error: no such instruction: `vdpbf16ps %zmm0,%zmm10,%zmm2'
+  /tmp/ccSkfotO.s:4228: Error: no such instruction: `{vex} vpdpbusd %ymm4,%ymm11,%ymm3'
+  /tmp/ccSkfotO.s:4245: Error: no such instruction: `{vex} vpdpbusd %ymm8,%ymm10,%ymm3'
+  /tmp/ccSkfotO.s:4254: Error: no such instruction: `{vex} vpdpbusd %ymm6,%ymm9,%ymm8'
+  /tmp/ccSkfotO.s:4326: Error: no such instruction: `{vex} vpdpbusd %ymm5,%ymm11,%ymm7'
+  /tmp/ccSkfotO.s:4334: Error: no such instruction: `{vex} vpdpbusd %ymm4,%ymm10,%ymm5'
+  /tmp/ccSkfotO.s:4339: Error: no such instruction: `{vex} vpdpbusd %ymm3,%ymm9,%ymm4'
+  /tmp/ccSkfotO.s:4345: Error: no such instruction: `{vex} vpdpbusd %ymm2,%ymm8,%ymm3'
+  /tmp/ccSkfotO.s:4671: Error: no such instruction: `{vex} vpdpbusd %ymm7,%ymm2,%ymm5'
+  /tmp/ccSkfotO.s:5047: Error: no such instruction: `{vex} vpdpbusd %ymm5,%ymm6,%ymm4'
+  /tmp/ccSkfotO.s:5129: Error: no such instruction: `{vex} vpdpbusd %ymm6,%ymm7,%ymm1'
+  /tmp/ccSkfotO.s:5134: Error: no such instruction: `{vex} vpdpbusd %ymm5,%ymm7,%ymm1'
+  /tmp/ccSkfotO.s:5140: Error: no such instruction: `{vex} vpdpbusd %ymm4,%ymm7,%ymm1'
+  /tmp/ccSkfotO.s:5742: Error: no such instruction: `{vex} vpdpbusd %ymm2,%ymm3,%ymm7'
+  /tmp/ccSkfotO.s:5808: Error: no such instruction: `{vex} vpdpbusd %ymm1,%ymm8,%ymm4'
+  /tmp/ccSkfotO.s:6037: Error: no such instruction: `{vex} vpdpbusd %ymm14,%ymm4,%ymm15'
+  /tmp/ccSkfotO.s:6057: Error: no such instruction: `{vex} vpdpbusd %ymm14,%ymm4,%ymm15'
+  /tmp/ccSkfotO.s:6066: Error: no such instruction: `{vex} vpdpbusd %ymm14,%ymm4,%ymm15'
+  /tmp/ccSkfotO.s:6073: Error: no such instruction: `{vex} vpdpbusd %ymm2,%ymm4,%ymm15'
+  /tmp/ccSkfotO.s:6081: Error: no such instruction: `{vex} vpdpbusd %ymm4,%ymm2,%ymm15'
+  /tmp/ccSkfotO.s:6088: Error: no such instruction: `{vex} vpdpbusd %ymm4,%ymm2,%ymm15'
+  /tmp/ccSkfotO.s:6097: Error: no such instruction: `{vex} vpdpbusd %ymm4,%ymm2,%ymm15'
+  /tmp/ccSkfotO.s:6102: Error: no such instruction: `{vex} vpdpbusd %ymm1,%ymm2,%ymm15'
+  /tmp/ccSkfotO.s:6331: Error: no such instruction: `{vex} vpdpbusd %ymm15,%ymm3,%ymm14'
+  /tmp/ccSkfotO.s:6343: Error: no such instruction: `{vex} vpdpbusd %ymm15,%ymm2,%ymm14'
+  /tmp/ccSkfotO.s:6381: Error: no such instruction: `{vex} vpdpbusd %ymm0,%ymm15,%ymm5'
+  /tmp/ccSkfotO.s:6590: Error: no such instruction: `{vex} vpdpbusd %ymm5,%ymm15,%ymm0'
+  /tmp/ccSkfotO.s:6600: Error: no such instruction: `{vex} vpdpbusd %ymm0,%ymm7,%ymm6'
+  /tmp/ccSkfotO.s:6610: Error: no such instruction: `{vex} vpdpbusd %ymm3,%ymm15,%ymm6'
+  /tmp/ccSkfotO.s:6629: Error: no such instruction: `{vex} vpdpbusd %ymm2,%ymm15,%ymm6'
+  /tmp/ccSkfotO.s:6634: Error: no such instruction: `{vex} vpdpbusd %ymm5,%ymm7,%ymm2'
+  /tmp/ccSkfotO.s:6843: Error: no such instruction: `{vex} vpdpbusd %ymm10,%ymm2,%ymm4'
+  /tmp/ccSkfotO.s:6858: Error: no such instruction: `{vex} vpdpbusd %ymm10,%ymm2,%ymm4'
+  /tmp/ccSkfotO.s:6866: Error: no such instruction: `{vex} vpdpbusd %ymm10,%ymm2,%ymm4'
+  /tmp/ccSkfotO.s:6876: Error: no such instruction: `{vex} vpdpbusd %ymm1,%ymm2,%ymm4'
+  /tmp/ccSkfotO.s:7061: Error: no such instruction: `{vex} vpdpbusd %ymm12,%ymm14,%ymm0'
+  /tmp/ccSkfotO.s:7071: Error: no such instruction: `{vex} vpdpbusd %ymm0,%ymm13,%ymm6'
+  /tmp/ccSkfotO.s:7086: Error: no such instruction: `{vex} vpdpbusd %ymm2,%ymm14,%ymm3'
+  /tmp/ccSkfotO.s:7091: Error: no such instruction: `{vex} vpdpbusd %ymm4,%ymm13,%ymm2'
+  /tmp/ccSkfotO.s:7275: Error: no such instruction: `{vex} vpdpbusd %ymm5,%ymm2,%ymm4'
+  /tmp/ccSkfotO.s:7289: Error: no such instruction: `{vex} vpdpbusd %ymm5,%ymm2,%ymm4'
+  /tmp/ccSkfotO.s:7296: Error: no such instruction: `{vex} vpdpbusd %ymm5,%ymm2,%ymm4'
+  /tmp/ccSkfotO.s:7305: Error: no such instruction: `{vex} vpdpbusd %ymm4,%ymm2,%ymm1'
+  /tmp/ccSkfotO.s:7485: Error: no such instruction: `{vex} vpdpbusd %ymm12,%ymm0,%ymm1'
+  /tmp/ccSkfotO.s:7500: Error: no such instruction: `{vex} vpdpbusd %ymm12,%ymm1,%ymm3'
+  /tmp/ccSkfotO.s:7511: Error: no such instruction: `{vex} vpdpbusd %ymm2,%ymm1,%ymm3'
+  /tmp/ccSkfotO.s:7680: Error: no such instruction: `{vex} vpdpbusd %ymm0,%ymm2,%ymm3'
+  /tmp/ccSkfotO.s:7694: Error: no such instruction: `{vex} vpdpbusd %ymm4,%ymm2,%ymm3'
+  /tmp/ccSkfotO.s:7704: Error: no such instruction: `{vex} vpdpbusd %ymm3,%ymm2,%ymm1'
+  /tmp/ccSkfotO.s:7867: Error: no such instruction: `{vex} vpdpbusd %ymm3,%ymm0,%ymm1'
+  /tmp/ccSkfotO.s:7882: Error: no such instruction: `{vex} vpdpbusd %ymm2,%ymm1,%ymm3'
+  /tmp/ccSkfotO.s:8030: Error: no such instruction: `{vex} vpdpbusd %ymm0,%ymm4,%ymm2'
+  /tmp/ccSkfotO.s:8043: Error: no such instruction: `{vex} vpdpbusd %ymm2,%ymm4,%ymm1'
+  /tmp/ccSkfotO.s:8185: Error: no such instruction: `{vex} vpdpbusd %ymm2,%ymm0,%ymm1'
+  /tmp/ccSkfotO.s:8394: Error: no such instruction: `{vex} vpdpbusd %ymm9,%ymm10,%ymm8'
+  /tmp/ccSkfotO.s:8516: Error: no such instruction: `{vex} vpdpbusd %ymm4,%ymm9,%ymm5'
+  /tmp/ccSkfotO.s:8521: Error: no such instruction: `{vex} vpdpbusd %ymm3,%ymm8,%ymm4'
+  /tmp/ccSkfotO.s:8527: Error: no such instruction: `{vex} vpdpbusd %ymm1,%ymm7,%ymm3'
+  /tmp/ccSkfotO.s:8872: Error: no such instruction: `{vex} vpdpbusd %ymm14,%ymm13,%ymm10'
+  /tmp/ccSkfotO.s:8901: Error: no such instruction: `{vex} vpdpbusd %ymm14,%ymm12,%ymm10'
+  /tmp/ccSkfotO.s:8908: Error: no such instruction: `{vex} vpdpbusd %ymm14,%ymm11,%ymm10'
+  /tmp/ccSkfotO.s:8915: Error: no such instruction: `{vex} vpdpbusd %ymm7,%ymm10,%ymm14'
+  /tmp/ccSkfotO.s:8948: Error: no such instruction: `{vex} vpdpbusd %ymm7,%ymm10,%ymm14'
+  /tmp/ccSkfotO.s:8954: Error: no such instruction: `{vex} vpdpbusd %ymm3,%ymm13,%ymm14'
+  /tmp/ccSkfotO.s:8962: Error: no such instruction: `{vex} vpdpbusd %ymm2,%ymm12,%ymm3'
+  /tmp/ccSkfotO.s:8967: Error: no such instruction: `{vex} vpdpbusd %ymm1,%ymm11,%ymm2'
+  /tmp/ccSkfotO.s:8973: Error: no such instruction: `{vex} vpdpbusd %ymm6,%ymm10,%ymm1'
+  /tmp/ccSkfotO.s:9277: Error: no such instruction: `{vex} vpdpbusd %ymm5,%ymm8,%ymm4'
+  /tmp/ccSkfotO.s:9294: Error: no such instruction: `{vex} vpdpbusd %ymm5,%ymm8,%ymm4'
+  /tmp/ccSkfotO.s:9303: Error: no such instruction: `{vex} vpdpbusd %ymm9,%ymm8,%ymm4'
+  /tmp/ccSkfotO.s:9362: Error: no such instruction: `{vex} vpdpbusd %ymm4,%ymm3,%ymm1'
+  /tmp/ccSkfotO.s:9365: Error: no such instruction: `{vex} vpdpbusd %ymm6,%ymm3,%ymm7'
+  /tmp/ccSkfotO.s:9371: Error: no such instruction: `{vex} vpdpbusd %ymm5,%ymm3,%ymm6'
+  /tmp/ccSkfotO.s:9669: Error: no such instruction: `{vex} vpdpbusd %ymm2,%ymm11,%ymm0'
+  /tmp/ccSkfotO.s:9687: Error: no such instruction: `{vex} vpdpbusd %ymm5,%ymm10,%ymm2'
+  /tmp/ccSkfotO.s:9702: Error: no such instruction: `{vex} vpdpbusd %ymm4,%ymm9,%ymm8'
+  /tmp/ccSkfotO.s:9714: Error: no such instruction: `{vex} vpdpbusd %ymm7,%ymm11,%ymm12'
+  /tmp/ccSkfotO.s:9723: Error: no such instruction: `{vex} vpdpbusd %ymm13,%ymm10,%ymm12'
+  /tmp/ccSkfotO.s:9731: Error: no such instruction: `{vex} vpdpbusd %ymm8,%ymm9,%ymm12'
+  /tmp/ccSkfotO.s:9738: Error: no such instruction: `{vex} vpdpbusd %ymm1,%ymm11,%ymm8'
+  /tmp/ccSkfotO.s:9751: Error: no such instruction: `{vex} vpdpbusd %ymm0,%ymm10,%ymm6'
+  /tmp/ccSkfotO.s:9755: Error: no such instruction: `{vex} vpdpbusd %ymm7,%ymm9,%ymm0'
+  /tmp/ccSkfotO.s:10110: Error: no such instruction: `{vex} vpdpbusd %ymm1,%ymm9,%ymm2'
+  /tmp/ccSkfotO.s:10669: Error: no such instruction: `{vex} vpdpbusd %ymm2,%ymm5,%ymm0'
+  /tmp/ccSkfotO.s:10734: Error: no such instruction: `{vex} vpdpbusd %ymm4,%ymm15,%ymm1'
+  /tmp/ccSkfotO.s:10959: Error: no such instruction: `{vex} vpdpbusd %ymm2,%ymm3,%ymm1'
+  /tmp/ccSkfotO.s:11018: Error: no such instruction: `{vex} vpdpbusd %ymm0,%ymm11,%ymm1'
+  /tmp/ccSkfotO.s:11252: Error: no such instruction: `{vex} vpdpbusd %ymm11,%ymm2,%ymm13'
+  /tmp/ccSkfotO.s:11260: Error: no such instruction: `{vex} vpdpbusd %ymm2,%ymm1,%ymm13'
+  /tmp/ccSkfotO.s:11269: Error: no such instruction: `{vex} vpdpbusd %ymm1,%ymm2,%ymm13'
+  /tmp/ccSkfotO.s:11279: Error: no such instruction: `{vex} vpdpbusd %ymm2,%ymm1,%ymm13'
+  /tmp/ccSkfotO.s:11498: Error: no such instruction: `{vex} vpdpbusd %ymm2,%ymm12,%ymm0'
+  /tmp/ccSkfotO.s:11505: Error: no such instruction: `{vex} vpdpbusd %ymm3,%ymm15,%ymm1'
+  /tmp/ccSkfotO.s:11722: Error: no such instruction: `{vex} vpdpbusd %ymm15,%ymm2,%ymm4'
+  /tmp/ccSkfotO.s:11728: Error: no such instruction: `{vex} vpdpbusd %ymm4,%ymm2,%ymm1'
+  /tmp/ccSkfotO.s:11921: Error: no such instruction: `{vex} vpdpbusd %ymm13,%ymm0,%ymm1'
+  /tmp/ccSkfotO.s:11940: Error: no such instruction: `{vex} vpdpbusd %ymm14,%ymm0,%ymm13'
+  /tmp/ccSkfotO.s:11955: Error: no such instruction: `{vex} vpdpbusd %ymm2,%ymm0,%ymm13'
+  /tmp/ccSkfotO.s:12137: Error: no such instruction: `{vex} vpdpbusd %ymm1,%ymm2,%ymm3'
+  /tmp/ccSkfotO.s:12148: Error: no such instruction: `{vex} vpdpbusd %ymm4,%ymm2,%ymm3'
+  /tmp/ccSkfotO.s:12158: Error: no such instruction: `{vex} vpdpbusd %ymm3,%ymm2,%ymm0'
+  /tmp/ccSkfotO.s:12326: Error: no such instruction: `{vex} vpdpbusd %ymm11,%ymm0,%ymm1'
+  /tmp/ccSkfotO.s:12346: Error: no such instruction: `{vex} vpdpbusd %ymm2,%ymm0,%ymm3'
+  /tmp/ccSkfotO.s:12506: Error: no such instruction: `{vex} vpdpbusd %ymm1,%ymm4,%ymm2'
+  /tmp/ccSkfotO.s:12518: Error: no such instruction: `{vex} vpdpbusd %ymm2,%ymm4,%ymm0'
+  /tmp/ccSkfotO.s:12670: Error: no such instruction: `{vex} vpdpbusd %ymm2,%ymm0,%ymm1'
+  /tmp/ccSkfotO.s:12901: Error: no such instruction: `{vex} vpdpbusd %ymm8,%ymm9,%ymm7'
+  /tmp/ccSkfotO.s:13003: Error: no such instruction: `{vex} vpdpbusd %ymm3,%ymm9,%ymm6'
+  /tmp/ccSkfotO.s:13010: Error: no such instruction: `{vex} vpdpbusd %ymm2,%ymm8,%ymm3'
+  /tmp/ccSkfotO.s:13018: Error: no such instruction: `{vex} vpdpbusd %ymm2,%ymm7,%ymm1'
+  /tmp/ccSkfotO.s:13480: Error: no such instruction: `{vex} vpdpbusd %ymm2,%ymm15,%ymm3'
+  /tmp/ccSkfotO.s:13485: Error: no such instruction: `{vex} vpdpbusd %ymm1,%ymm14,%ymm2'
+  /tmp/ccSkfotO.s:13491: Error: no such instruction: `{vex} vpdpbusd %ymm5,%ymm7,%ymm1'
+  /tmp/ccSkfotO.s:13883: Error: no such instruction: `{vex} vpdpbusd %ymm7,%ymm3,%ymm8'
+  /tmp/ccSkfotO.s:13891: Error: no such instruction: `{vex} vpdpbusd %ymm6,%ymm3,%ymm8'
+  /tmp/ccSkfotO.s:13896: Error: no such instruction: `{vex} vpdpbusd %ymm5,%ymm3,%ymm6'
+  /tmp/ccSkfotO.s:13902: Error: no such instruction: `{vex} vpdpbusd %ymm4,%ymm3,%ymm5'
+  /tmp/ccSkfotO.s:14209: Error: no such instruction: `{vex} vpdpbusd %ymm2,%ymm11,%ymm0'
+  /tmp/ccSkfotO.s:14230: Error: no such instruction: `{vex} vpdpbusd %ymm4,%ymm10,%ymm2'
+  /tmp/ccSkfotO.s:14248: Error: no such instruction: `{vex} vpdpbusd %ymm4,%ymm9,%ymm12'
+  /tmp/ccSkfotO.s:14261: Error: no such instruction: `{vex} vpdpbusd %ymm7,%ymm11,%ymm12'
+  /tmp/ccSkfotO.s:14270: Error: no such instruction: `{vex} vpdpbusd %ymm13,%ymm10,%ymm12'
+  /tmp/ccSkfotO.s:14278: Error: no such instruction: `{vex} vpdpbusd %ymm8,%ymm9,%ymm12'
+  /tmp/ccSkfotO.s:14285: Error: no such instruction: `{vex} vpdpbusd %ymm1,%ymm11,%ymm12'
+  /tmp/ccSkfotO.s:14291: Error: no such instruction: `{vex} vpdpbusd %ymm0,%ymm10,%ymm11'
+  /tmp/ccSkfotO.s:14302: Error: no such instruction: `{vex} vpdpbusd %ymm7,%ymm9,%ymm0'
+  /tmp/ccSkfotO.s:14654: Error: no such instruction: `{vex} vpdpbusd %ymm1,%ymm15,%ymm2'
+  /tmp/ccSkfotO.s:14660: Error: no such instruction: `{vex} vpdpbusd %ymm5,%ymm7,%ymm1'
+  /tmp/ccSkfotO.s:14978: Error: no such instruction: `{vex} vpdpbusd %ymm3,%ymm0,%ymm4'
+  /tmp/ccSkfotO.s:14985: Error: no such instruction: `{vex} vpdpbusd %ymm1,%ymm0,%ymm3'
+  /tmp/ccSkfotO.s:15240: Error: no such instruction: `{vex} vpdpbusd %ymm2,%ymm5,%ymm0'
+  /tmp/ccSkfotO.s:15262: Error: no such instruction: `{vex} vpdpbusd %ymm4,%ymm15,%ymm2'
+  /tmp/ccSkfotO.s:15279: Error: no such instruction: `{vex} vpdpbusd %ymm4,%ymm14,%ymm8'
+  /tmp/ccSkfotO.s:15305: Error: no such instruction: `{vex} vpdpbusd %ymm0,%ymm15,%ymm6'
+  /tmp/ccSkfotO.s:15309: Error: no such instruction: `{vex} vpdpbusd %ymm3,%ymm14,%ymm0'
+  /tmp/ccSkfotO.s:15543: Error: no such instruction: `{vex} vpdpbusd %ymm2,%ymm3,%ymm1'
+  /tmp/ccSkfotO.s:15890: Error: no such instruction: `{vex} vpdpbusd %ymm3,%ymm1,%ymm2'
+  /tmp/ccSkfotO.s:16088: Error: no such instruction: `{vex} vpdpbusd %ymm2,%ymm13,%ymm1'
+  /tmp/ccSkfotO.s:16344: Error: no such instruction: `{vex} vpdpbusd %ymm10,%ymm2,%ymm4'
+  /tmp/ccSkfotO.s:16358: Error: no such instruction: `{vex} vpdpbusd %ymm4,%ymm2,%ymm1'
+  /tmp/ccSkfotO.s:16559: Error: no such instruction: `{vex} vpdpbusd %ymm1,%ymm0,%ymm15'
+  /tmp/ccSkfotO.s:16582: Error: no such instruction: `{vex} vpdpbusd %ymm12,%ymm0,%ymm15'
+  /tmp/ccSkfotO.s:16781: Error: no such instruction: `{vex} vpdpbusd %ymm1,%ymm3,%ymm14'
+  /tmp/ccSkfotO.s:16795: Error: no such instruction: `{vex} vpdpbusd %ymm14,%ymm3,%ymm2'
+  /tmp/ccSkfotO.s:16804: Error: no such instruction: `{vex} vpdpbusd %ymm0,%ymm3,%ymm2'
+  /tmp/ccSkfotO.s:16988: Error: no such instruction: `{vex} vpdpbusd %ymm2,%ymm0,%ymm13'
+  /tmp/ccSkfotO.s:17010: Error: no such instruction: `{vex} vpdpbusd %ymm13,%ymm0,%ymm14'
+  /tmp/ccSkfotO.s:17171: Error: no such instruction: `{vex} vpdpbusd %ymm1,%ymm13,%ymm2'
+  /tmp/ccSkfotO.s:17186: Error: no such instruction: `{vex} vpdpbusd %ymm2,%ymm13,%ymm0'
+  /tmp/ccSkfotO.s:17346: Error: no such instruction: `{vex} vpdpbusd %ymm2,%ymm0,%ymm1'
+  /tmp/ccSkfotO.s:17549: Error: no such instruction: `{vex} vpdpbusd %ymm11,%ymm12,%ymm10'
+  /tmp/ccSkfotO.s:17681: Error: no such instruction: `{vex} vpdpbusd %ymm4,%ymm11,%ymm5'
+  /tmp/ccSkfotO.s:17686: Error: no such instruction: `{vex} vpdpbusd %ymm3,%ymm10,%ymm4'
+  /tmp/ccSkfotO.s:17692: Error: no such instruction: `{vex} vpdpbusd %ymm1,%ymm9,%ymm3'
+  /tmp/ccSkfotO.s:18041: Error: no such instruction: `{vex} vpdpbusd %ymm14,%ymm13,%ymm10'
+  /tmp/ccSkfotO.s:18072: Error: no such instruction: `{vex} vpdpbusd %ymm14,%ymm12,%ymm10'
+  /tmp/ccSkfotO.s:18079: Error: no such instruction: `{vex} vpdpbusd %ymm14,%ymm11,%ymm10'
+  /tmp/ccSkfotO.s:18086: Error: no such instruction: `{vex} vpdpbusd %ymm9,%ymm10,%ymm14'
+  /tmp/ccSkfotO.s:18119: Error: no such instruction: `{vex} vpdpbusd %ymm9,%ymm10,%ymm14'
+  /tmp/ccSkfotO.s:18125: Error: no such instruction: `{vex} vpdpbusd %ymm3,%ymm13,%ymm14'
+  /tmp/ccSkfotO.s:18133: Error: no such instruction: `{vex} vpdpbusd %ymm2,%ymm12,%ymm3'
+  /tmp/ccSkfotO.s:18138: Error: no such instruction: `{vex} vpdpbusd %ymm1,%ymm11,%ymm2'
+  /tmp/ccSkfotO.s:18144: Error: no such instruction: `{vex} vpdpbusd %ymm6,%ymm10,%ymm1'
+  /tmp/ccSkfotO.s:18449: Error: no such instruction: `{vex} vpdpbusd %ymm7,%ymm10,%ymm6'
+  /tmp/ccSkfotO.s:18466: Error: no such instruction: `{vex} vpdpbusd %ymm7,%ymm10,%ymm6'
+  /tmp/ccSkfotO.s:18475: Error: no such instruction: `{vex} vpdpbusd %ymm11,%ymm10,%ymm6'
+  /tmp/ccSkfotO.s:18538: Error: no such instruction: `{vex} vpdpbusd %ymm6,%ymm3,%ymm1'
+  /tmp/ccSkfotO.s:18541: Error: no such instruction: `{vex} vpdpbusd %ymm8,%ymm3,%ymm9'
+  /tmp/ccSkfotO.s:18547: Error: no such instruction: `{vex} vpdpbusd %ymm7,%ymm3,%ymm8'
+  /tmp/ccSkfotO.s:18846: Error: no such instruction: `{vex} vpdpbusd %ymm2,%ymm13,%ymm0'
+  /tmp/ccSkfotO.s:18866: Error: no such instruction: `{vex} vpdpbusd %ymm5,%ymm12,%ymm2'
+  /tmp/ccSkfotO.s:18883: Error: no such instruction: `{vex} vpdpbusd %ymm4,%ymm11,%ymm10'
+  /tmp/ccSkfotO.s:18895: Error: no such instruction: `{vex} vpdpbusd %ymm7,%ymm13,%ymm14'
+  /tmp/ccSkfotO.s:18904: Error: no such instruction: `{vex} vpdpbusd %ymm15,%ymm12,%ymm14'
+  /tmp/ccSkfotO.s:18912: Error: no such instruction: `{vex} vpdpbusd %ymm10,%ymm11,%ymm14'
+  /tmp/ccSkfotO.s:18919: Error: no such instruction: `{vex} vpdpbusd %ymm1,%ymm13,%ymm10'
+  /tmp/ccSkfotO.s:18932: Error: no such instruction: `{vex} vpdpbusd %ymm0,%ymm12,%ymm6'
+  /tmp/ccSkfotO.s:18936: Error: no such instruction: `{vex} vpdpbusd %ymm7,%ymm11,%ymm0'
+  /tmp/ccSkfotO.s:19298: Error: no such instruction: `{vex} vpdpbusd %ymm1,%ymm9,%ymm2'
+  /tmp/ccSkfotO.s:19863: Error: no such instruction: `{vex} vpdpbusd %ymm2,%ymm5,%ymm0'
+  /tmp/ccSkfotO.s:19932: Error: no such instruction: `{vex} vpdpbusd %ymm4,%ymm15,%ymm1'
+  /tmp/ccSkfotO.s:20158: Error: no such instruction: `{vex} vpdpbusd %ymm2,%ymm3,%ymm1'
+  /tmp/ccSkfotO.s:20219: Error: no such instruction: `{vex} vpdpbusd %ymm0,%ymm13,%ymm1'
+  /tmp/ccSkfotO.s:20465: Error: no such instruction: `{vex} vpdpbusd %ymm11,%ymm14,%ymm15'
+  /tmp/ccSkfotO.s:20472: Error: no such instruction: `{vex} vpdpbusd %ymm15,%ymm13,%ymm14'
+  /tmp/ccSkfotO.s:20479: Error: no such instruction: `{vex} vpdpbusd %ymm14,%ymm3,%ymm13'
+  /tmp/ccSkfotO.s:20487: Error: no such instruction: `{vex} vpdpbusd %ymm1,%ymm2,%ymm3'
+  /tmp/ccSkfotO.s:20709: Error: no such instruction: `{vex} vpdpbusd %ymm3,%ymm15,%ymm0'
+  /tmp/ccSkfotO.s:20716: Error: no such instruction: `{vex} vpdpbusd %ymm1,%ymm12,%ymm2'
+  /tmp/ccSkfotO.s:20916: Error: no such instruction: `{vex} vpdpbusd %ymm15,%ymm2,%ymm4'
+  /tmp/ccSkfotO.s:20926: Error: no such instruction: `{vex} vpdpbusd %ymm15,%ymm2,%ymm4'
+  /tmp/ccSkfotO.s:20934: Error: no such instruction: `{vex} vpdpbusd %ymm15,%ymm2,%ymm4'
+  /tmp/ccSkfotO.s:20940: Error: no such instruction: `{vex} vpdpbusd %ymm4,%ymm2,%ymm1'
+  /tmp/ccSkfotO.s:21135: Error: no such instruction: `{vex} vpdpbusd %ymm1,%ymm0,%ymm5'
+  /tmp/ccSkfotO.s:21156: Error: no such instruction: `{vex} vpdpbusd %ymm13,%ymm0,%ymm5'
+  /tmp/ccSkfotO.s:21173: Error: no such instruction: `{vex} vpdpbusd %ymm4,%ymm0,%ymm5'
+  /tmp/ccSkfotO.s:21357: Error: no such instruction: `{vex} vpdpbusd %ymm1,%ymm2,%ymm3'
+  /tmp/ccSkfotO.s:21367: Error: no such instruction: `{vex} vpdpbusd %ymm4,%ymm2,%ymm3'
+  /tmp/ccSkfotO.s:21377: Error: no such instruction: `{vex} vpdpbusd %ymm3,%ymm2,%ymm0'
+  /tmp/ccSkfotO.s:21546: Error: no such instruction: `{vex} vpdpbusd %ymm1,%ymm0,%ymm11'
+  /tmp/ccSkfotO.s:21568: Error: no such instruction: `{vex} vpdpbusd %ymm2,%ymm0,%ymm5'
+  /tmp/ccSkfotO.s:21730: Error: no such instruction: `{vex} vpdpbusd %ymm1,%ymm4,%ymm2'
+  /tmp/ccSkfotO.s:21742: Error: no such instruction: `{vex} vpdpbusd %ymm2,%ymm4,%ymm0'
+  /tmp/ccSkfotO.s:21895: Error: no such instruction: `{vex} vpdpbusd %ymm2,%ymm0,%ymm1'
+  /tmp/ccSkfotO.s:29042: Error: no such instruction: `vdpbf16ps %zmm0,%zmm5,%zmm4'
+  /tmp/ccSkfotO.s:29045: Error: no such instruction: `vdpbf16ps %zmm0,%zmm6,%zmm2'
+  /tmp/ccSkfotO.s:29046: Error: no such instruction: `vdpbf16ps %zmm0,%zmm7,%zmm3'
+  /tmp/ccSkfotO.s:29047: Error: no such instruction: `vdpbf16ps %zmm0,%zmm5,%zmm1'
+  /tmp/ccSkfotO.s:33284: Error: no such instruction: `vdpbf16ps %zmm0,%zmm7,%zmm3'
+  /tmp/ccSkfotO.s:33286: Error: no such instruction: `vdpbf16ps %zmm0,%zmm7,%zmm2'
+  /tmp/ccSkfotO.s:33288: Error: no such instruction: `vdpbf16ps %zmm0,%zmm7,%zmm1'
+  /tmp/ccSkfotO.s:33291: Error: no such instruction: `vdpbf16ps %zmm0,%zmm7,%zmm4'
+  /tmp/ccSkfotO.s:33975: Error: no such instruction: `vdpbf16ps %zmm0,%zmm7,%zmm3'
+  /tmp/ccSkfotO.s:33977: Error: no such instruction: `vdpbf16ps %zmm0,%zmm7,%zmm2'
+  /tmp/ccSkfotO.s:33979: Error: no such instruction: `vdpbf16ps %zmm0,%zmm7,%zmm1'
+  /tmp/ccSkfotO.s:33982: Error: no such instruction: `vdpbf16ps %zmm0,%zmm7,%zmm4'
+  /tmp/ccSkfotO.s:35343: Error: no such instruction: `vdpbf16ps %zmm0,%zmm7,%zmm3'
+  /tmp/ccSkfotO.s:35345: Error: no such instruction: `vdpbf16ps %zmm0,%zmm7,%zmm2'
+  /tmp/ccSkfotO.s:35347: Error: no such instruction: `vdpbf16ps %zmm0,%zmm7,%zmm1'
+  /tmp/ccSkfotO.s:35350: Error: no such instruction: `vdpbf16ps %zmm0,%zmm7,%zmm4'
+  /tmp/ccSkfotO.s:36399: Error: no such instruction: `vdpbf16ps %zmm0,%zmm7,%zmm3'
+  /tmp/ccSkfotO.s:36401: Error: no such instruction: `vdpbf16ps %zmm0,%zmm7,%zmm2'
+  /tmp/ccSkfotO.s:36403: Error: no such instruction: `vdpbf16ps %zmm0,%zmm7,%zmm1'
+  /tmp/ccSkfotO.s:36406: Error: no such instruction: `vdpbf16ps %zmm0,%zmm7,%zmm4'
+  /tmp/ccSkfotO.s:37350: Error: no such instruction: `vdpbf16ps %zmm0,%zmm6,%zmm1'
+  /tmp/ccSkfotO.s:37351: Error: no such instruction: `vdpbf16ps %zmm0,%zmm7,%zmm2'
+  /tmp/ccSkfotO.s:37355: Error: no such instruction: `vdpbf16ps %zmm0,%zmm6,%zmm4'
+  /tmp/ccSkfotO.s:37356: Error: no such instruction: `vdpbf16ps %zmm0,%zmm7,%zmm3'
+  [25/339] /opt/ohpc/pub/compiler/gcc/12.4.0/bin/g++ -DGGML_BACKEND_BUILD -DGGML_BACKEND_SHARED -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -DGGML_USE_CPU_REPACK -DGGML_USE_LLAMAFILE -DGGML_USE_OPENMP -D_GNU_SOURCE -D_XOPEN_SOURCE=600 -Dggml_cpu_EXPORTS -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/.. -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/. -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/ggml-cpu -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/../include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wmissing-declarations -Wmissing-noreturn -Wall -Wextra -Wpedantic -Wcast-qual -Wno-unused-function -Wno-array-bounds -Wextra-semi -march=native -fopenmp -MD -MT vendor/llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/repack.cpp.o -MF vendor/llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/repack.cpp.o.d -o vendor/llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/repack.cpp.o -c /tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/ggml-cpu/repack.cpp
+  [26/339] /opt/ohpc/pub/compiler/gcc/12.4.0/bin/g++ -DGGML_BACKEND_BUILD -DGGML_BACKEND_SHARED -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -DGGML_USE_CPU_REPACK -DGGML_USE_LLAMAFILE -DGGML_USE_OPENMP -D_GNU_SOURCE -D_XOPEN_SOURCE=600 -Dggml_cpu_EXPORTS -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/.. -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/. -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/ggml-cpu -I/tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/../include -O3 -DNDEBUG -std=gnu++17 -fPIC -Wmissing-declarations -Wmissing-noreturn -Wall -Wextra -Wpedantic -Wcast-qual -Wno-unused-function -Wno-array-bounds -Wextra-semi -march=native -fopenmp -MD -MT vendor/llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/ops.cpp.o -MF vendor/llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/ops.cpp.o.d -o vendor/llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/ops.cpp.o -c /tmp/pip-req-build-gb07i6c9/vendor/llama.cpp/ggml/src/ggml-cpu/ops.cpp
+  ninja: build stopped: subcommand failed.
+
+  *** CMake build failed
+  error: subprocess-exited-with-error
+  
+  × Building wheel for llama_cpp_python (pyproject.toml) did not run successfully.
+  │ exit code: 1
+  ╰─> See above for output.
+  
+  note: This error originates from a subprocess, and is likely not a problem with pip.
+  full command: /tmp/e028-llama-hpuvvad-20261110/bin/python /tmp/e028-llama-hpuvvad-20261110/lib64/python3.11/site-packages/pip/_vendor/pep517/in_process/_in_process.py build_wheel /tmp/tmp7ah48tqw
+  cwd: /tmp/pip-req-build-gb07i6c9
+  Building wheel for llama_cpp_python (pyproject.toml): finished with status 'error'
+  ERROR: Failed building wheel for llama_cpp_python
+Failed to build llama_cpp_python
+ERROR: Could not build wheels for llama_cpp_python, which is required to install pyproject.toml-based projects
+
+[notice] A new release of pip available: 22.3.1 -> 26.3
+[notice] To update, run: /tmp/e028-llama-hpuvvad-20261110/bin/python -m pip install --upgrade pip
