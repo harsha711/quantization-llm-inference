@@ -164,6 +164,13 @@
 - E025 (diagnostic) and E026 are complete; read their EXPERIMENTS entries and the top of docs/BOTTLENECK_ASSESSMENT.md. E026's direct single-query attention passes its 5% criterion versus stock-attention graph-Marlin at contexts 256–2048 (c7) and at 2048 on c9. At context128 it is 5.00–5.03% on c7 and 4.90–5.06% on c9: not a robust pass; say "about 5%, below the bar in two of eight cells". It helps FP16 too; quote Marlin's gain against GRA (45.5% at 128, 42.5% at 2048) as well as against GR.
 - E026's contexts 256/512/1024 ran on c7 only; no sanitizer or trace. It is not a repository default. Output-head quantization and prefill are untested ideas, not authorized experiments.
 
+## E027–E030 external comparison and gap diagnostic
+
+- E027 and E028 are complete at contexts 128/512/2048 with outcome "slower" everywhere; read their result blocks in EXPERIMENTS. On identical G128 codes/scales vLLM v0.33.0 decodes 63 tokens in 238.1–248.9 ms versus our GQA 326.8–376.0 ms, with identical 64 tokens. llama.cpp Q4_K_M and ONNX Runtime GenAI INT4 are faster still, but use their own quantizers including the embedding/output matrix: always say stack against stack, not identical weights. No quality evaluation exists for any quantized model.
+- Never present our path as competitive with or faster than a production stack. Say it decodes faster than our own FP16 and than llama.cpp/ORT FP16 (vLLM FP16 not run), with the E021 third-gate disclosure. Batch 1 favours us against serving stacks; one model, 64 tokens, RTX 5060 Ti only.
+- The 1.4–2.0 ms per-step gap to vLLM is a calculation and is unprofiled; do not attribute it (compile, attention, graphs, sampler, kernel build). E030 is a predeclared, queued diagnostic, not an optimization. E029 and the E027/E028 long-context extensions are running: give them no result until their records say so; E029's 426 ms context4096 GQA cell is a smoke cell only.
+- E029's raised 2048-row operator assertion (`scripts/e028/long.py`) is a recorded deviation; the unchanged E021 gate covers it per context. Preserve all failed attempts (wheel path, llama.cpp ISA, ORT `onnx-ir`, FlashInfer sampler JIT, the row assertion). No optimization follows from E027–E030 without a user request.
+
 ## Rooflines, if requested
 
 - Recompute all ceilings, ridge points, arithmetic intensities, and performance coordinates from specifications/data. Keep the primary full-machine roof distinct from core-count, ISA, NUMA, and memory-domain sensitivity roofs.

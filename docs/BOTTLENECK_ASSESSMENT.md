@@ -1,6 +1,21 @@
 # Bottleneck assessment
 
-## Full-model decode after the attention change, 2026-11-10 (current)
+## Against production stacks, 2026-11-10 (current)
+
+E027 and E028 compared our best decode path (graph-replayed Marlin with direct decode attention, accepted only under E021's third, post hoc gate) with three production stacks at contexts 128/512/2048, batch 1, 64 tokens. Our path is slower than all three.
+
+| Decode, 63 tokens, ms | context128 | context512 | context2048 |
+|---|---:|---:|---:|
+| Ours (E027 run, c9) | 326.8–327.0 | 335.8–336.0 | 375.5–376.0 |
+| vLLM v0.33.0, identical G128 codes/scales | 238.1–238.8 | 240.8–241.1 | 248.1–248.9 |
+| llama.cpp Q4_K_M, own quantizer (c5) | 208.5–208.6 | 210.9–211.2 | 227.5 |
+| ONNX Runtime GenAI INT4, own quantizer (c10) | 185.2–185.4 | 185.1–185.3 | 191.6–192.2 |
+
+**Current bottleneck: unknown.** On identical weights vLLM spends 3.8–3.9 ms per decode step and we spend 5.2–6.0 ms, a gap of about 1.4–2.0 ms per step (calculation from the medians). Where it lies (vLLM's compiled backbone, its attention, its graphs, its sampler or its kernel build, or host time) has not been measured and must not be attributed. The llama.cpp and ORT gaps also include different weights, including a quantized embedding/output matrix, so they cannot be split into runtime and format.
+
+E030, a predeclared and queued diagnostic, profiles both decode steps at contexts 128 and 2048 on the same weights and compares per-kernel device time per step; a host-side gap would show up there as unexplained rather than located. It is not an optimization. The E026-era breakdown below remains our own step's composition.
+
+## Full-model decode after the attention change, 2026-11-10 (E026 snapshot)
 
 E025 measured the split below on an eager Marlin step; E026 then removed most of the attention and copy rows.
 
