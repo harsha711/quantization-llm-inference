@@ -87,12 +87,12 @@ ort) cat <<'EOF'
 # ONNX Runtime GenAI (CUDA provider) from PyPI; its model builder exports FP16 and its own INT4 from the same base model.
 if [[ ! -e "$XV/INSTALLED" ]]; then
  rm -rf "$XV"; python3.11 -m venv "$XV"
- "$XV/bin/python" -m pip install onnxruntime-genai-cuda onnxruntime-gpu onnx torch transformers safetensors $(constraint ort) > "$S/ext-install.log" 2>&1
+ "$XV/bin/python" -m pip install onnxruntime-genai-cuda onnxruntime-gpu onnx onnx-ir torch transformers safetensors $(constraint ort) > "$S/ext-install.log" 2>&1
  touch "$XV/INSTALLED"
 fi
 freeze ort
 if [[ ! -e "$OUT/ort.sha256" ]]; then
- mkdir "$OUT/ort"
+ rm -rf "$OUT/ort"; mkdir "$OUT/ort"
  for p in fp16 int4; do (set -x; "$XV/bin/python" -m onnxruntime_genai.models.builder -m Qwen/Qwen2.5-1.5B -i "$MODEL" -o "$OUT/ort/$p" -p "$p" -e cuda -c "$S/ort-cache") > "$S/build-$p.log" 2>&1; done
  rm -rf "$S/ort-cache"; (cd "$OUT" && find ort -type f | sort | xargs sha256sum > ort.sha256)
 fi
