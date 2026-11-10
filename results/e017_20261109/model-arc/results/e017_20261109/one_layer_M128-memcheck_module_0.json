@@ -1,0 +1,9 @@
+{
+  "bitwise_equal": true,
+  "workspace": {
+    "locks_zero": true,
+    "lock_guards": true,
+    "scratch_guards": true
+  },
+  "bias": false
+}

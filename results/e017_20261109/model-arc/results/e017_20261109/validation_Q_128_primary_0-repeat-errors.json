@@ -1,0 +1,11 @@
+{
+  "shape_equal": true,
+  "finite": true,
+  "candidate_sha256": "c9f97902749303012459d45c1d6270b202be3b754fda50f5bfa4f8104f287c19",
+  "reference_sha256": "c9f97902749303012459d45c1d6270b202be3b754fda50f5bfa4f8104f287c19",
+  "bitwise_equal": true,
+  "bad_logits": 0,
+  "logits_checked": 9723904,
+  "max_abs": 0.0,
+  "relative_l2": 0.0
+}

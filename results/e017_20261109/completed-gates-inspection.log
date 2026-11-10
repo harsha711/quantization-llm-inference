@@ -1,0 +1,9 @@
+{
+  "status": "completed gates inspected; full-model failure remains rejected",
+  "operator_cases": 44,
+  "ordinary_cases": 12,
+  "sanitizer_cases": 32,
+  "complete_O_R_requests": 8,
+  "failed_Q_requests": 1,
+  "request_timing_samples": 0
+}

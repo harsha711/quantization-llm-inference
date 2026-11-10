@@ -1,0 +1,129 @@
+# W4A16 CSC 548 continuation rules
+
+## Every session
+
+- Reporting checkpoint: [PROJECT_SYNTHESIS.md](docs/PROJECT_SYNTHESIS.md) and [offline figures](scripts/reporting/README.md) synthesize completed E001–E012. Read them before preparing the final report. Keep upstream performance separate from our contributions, practical 5% gates separate from winner reversals, and batch scaling separate from worker scaling. Next task is the ACM report draft and resolution of the saved course requirements. This checkpoint authorizes no new GPU run or E012 retry. Historical manifests stay immutable. Reporting inputs/outputs have their own manifest.
+
+- Read `README.md`, `docs/STATUS.md`, `docs/CONTRACT.md`, and relevant `docs/EXPERIMENTS.md` entries before editing. Consult `docs/OPTIMIZATION_MAP.md` and `docs/REFERENCES.md` before selecting/interpreting experiments. Verify the handoff against `git status`, `git log`, code, and raw evidence.
+- Implement only the requested experiment. Choose from measured evidence, state hypothesis and success criterion before implementation, and change one main optimization at a time. Propose other optimizations separately and wait for a request.
+- Preserve baseline implementations and raw records, especially `results/baseline_*` and `results/ncu/`. Never silently change numerical tolerance, layout, or benchmark conditions. Rerun every series point when executable, flags, kernel, ranks/threads, placement, or topology changes.
+- Record every attempt, alternatives, selected design, failures, exact version/commands, validation, raw results, decision, and revisit conditions in `docs/EXPERIMENTS.md`. Untested ideas are not measured failures. Record inconclusive evidence as inconclusive. Do not retry rejected experiments unless their revisit condition is met.
+- Update `docs/STATUS.md` and experiment records before ending. Update contract/map/references when affected. Cite hardware assumptions. Distinguish documented facts, observations, calculations, and hypotheses.
+- Commit validated checkpoints as work proceeds. No co-author trailers. Do not push unless requested. Preserve unrelated changes.
+
+## Build and numerical checks
+
+- Run `bash scripts/build.sh`, then `ctest --test-dir build --output-on-failure`. CPU-only passes do not validate CUDA. On a GPU run `bash scripts/check_inblock.sh` before measuring. Inspect FP64 and Compute Sanitizer results. Record unavailable checks.
+- Compute row-major `C=A*B`, FP16 storage, FP32 accumulation, FP64 CPU reference. Reconstruct `FP16((q-8)*s)` before FP32 accumulation. Preserve packing/scales and group multiples of eight. See `docs/CONTRACT.md` for exact rounding, tails, tolerance, commands, and methodology.
+- Never relax `|error| <= 1e-3*|reference| + 1e-3*rms(reference)`. Fail immediately on correctness/launcher errors and preserve diagnostics. No partial measurement claims. E002 requires all output bits to match retained E001 outside timing. E003 selectors `inblock_m2`/`inblock_m4` require full-output bitwise agreement with E002, including rows not sampled by FP64 checks.
+- Compare naive/inblock/inblock_specialized/inblock_m2/inblock_m4 in the same executable, seed, flags, node, and cache policy, retaining each defined launch mapping. Sweep M={1,8,32,128}, K=N=4096, group=128, seed=1, 10 warmups, at least 100 iterations, both flush and no-flush. E003 additionally measures M=5 with the same conditions as a separate row-tail point. Preserve the fixed two/four-row selectors and incomplete-tile bounds. Store flushing does not prove eviction. Query target metrics and profile separately. `eff_gbps` is modeled, not measured DRAM bandwidth.
+
+## E004 external comparator
+
+- Read E004 before using Marlin. Keep vLLM v0.33.0/source `4ba787ec9959e566d3b587a796dff07673324da5` and its official binary provenance explicit. Use isolated Python 3.11/Torch 2.14, direct dense uint4b8 operator, lossless codes/scales, FP32 global reduction. No serving/model dependencies or silent fallback. Do not change external kernels without a separately requested experiment.
+- E004 uses fresh common graph-event comparisons and explicit cuBLAS FP32-reduction math mode 16. Preserve both cache policies, raw samples, all-row FP64 checks, full retained controls and failed attempts. Do not use historical medians as E004 denominators. `scripts/e004/analyze.py` validates recorded evidence. E005 is implemented but stopped at its failed external racecheck gate. Read E005 before any Marlin rerun. Historical stage/resume helpers have fixed evidence paths, so use a distinct output root for reruns and never overwrite records. ARC prun flattens quoted `python -c` commands: use a script file.
+
+## E005 stopped safety gate
+
+- Read E005 and `results/e005_20261106/GATE1.md`. A/B/C share compiled device code and differ only in the gated host policy. Preserve same-build A and untouched upstream source. Occupancy queries predict capacity, not achieved residency.
+- E005 memcheck/synccheck and numerical checks pass, but racecheck reports hazards in A/B/C and isolated official wheel. No primary/held-out timings or Nsight counters were released. Never create VALIDATED manually, suppress these reports, or treat passing outputs as race freedom. Revisit only after a separately authorized resolution, then a new matched build and complete validation/series. No next optimization is authorized.
+
+## E006 synchronization correction
+
+- Read E006 and `results/e006_20261106/ACCESS_ANALYSIS.md` before further Marlin work. One source-supported block barrier after the existing stripe-final async drain removes the reported hazard in the tested A/B/C matrix. The original terminal lookahead is unused in the analyzed small-M specialization. No incorrect original output or applicable sanitizer limitation was established.
+- Preserve E005 unchanged. E006 control/patched sources, patch, matched binaries/hashes and all failed diagnostics remain separate. The unpatched control still fails racecheck. The corrected body passes full numerical/replay/workspace checks and representative memcheck/racecheck/synccheck on c58. This is bounded evidence, not general validation of other formats/hardware or exact wheel source mapping.
+- E006 authorizes no timing. E005's old VALIDATED remains absent. Await a separately requested E005 continuation using the SAME corrected body for A/B/C, with complete validation and all original timing/held-out/profile criteria. Never splice original-body or wheel times into corrected comparisons. No next optimization is authorized.
+
+## E005-R1 corrected-body performance continuation
+
+- The user authorized E005-R1 after E006. Reuse the exact corrected E006 binary and verified validation when source/binary/environment identity holds. Rebuilding or changed conditions require relevant fresh validation. Keep original E005/E006 records immutable and their VALIDATED sentinels absent.
+- Use a separate `scripts/e005_r1/` and `results/e005_r1_20261106/`. Compare corrected A36/101376 B, B36/49664 B and C72/49664 B using the same corrected entrypoint. Only corrected A is a performance denominator. Preserve both cache policies, two balanced primary/fallback series, seed-2 held-outs and targeted M8 A/B/C profiles under the original 5% criteria. No new optimization or automatic dispatch.
+- E005-R1 is complete and rejected under the primary latency criterion. C increases observed concurrent CTA activity but gives only 0–0.237% M1 and 2.653–2.765% M8 no-flush gains. B gives no consistent primary gain. Held-out rectangular benefits do not override that criterion. Run its analyzer before interpreting results. Preserve failures, samples, profiler reports and corrected A. Await a user request before another optimization or a repeat with changed conditions.
+
+## Authorized continuation while user is away
+
+- The user authorized continued project work after E005-R1. E007 is one bounded source-supported terminal-lookahead experiment, predeclared in EXPERIMENTS.md. This overrides the earlier instruction to wait at the completed E005-R1 checkpoint only for this continuation. Keep E005/E006/E005-R1 immutable. Preserve the E006 barrier, fixed format and host launch policy. Do not turn it into a tuning search.
+- E007 is complete and rejected under its5% latency criterion. Participating LDS loads fall 1.931% but issued warp instructions rise 1.757%, with M8 median ties and no reproducible M1 gain. Registers126→124 still allocate128. Preserve measured checker snapshots and corrected static counts: 121 total load opcode sites, 70 permanently off, 51 potentially active in each body. Do not repeat this guard unless its recorded revisit condition changes. Hand off before another optimization.
+
+## E005-R2 rectangular confirmation
+
+- E005-R2 is complete. Read its experiment entry and fresh c10 evidence. Both M=4/seed 2 rectangles pass 5% lower C no-flush median in both reversed series,16 rows/1600 samples. Stronger K=4096/N=11008 gain 13.33%/13.28% has store-flush regression5.48%/6.06%. Corrected E006 A remains default and E005-R1/E007 stay negative.
+- One conditional A/C profile pair shows more ready work with higher instruction/L2 overhead and high replay DRAM throughput. Replay duration differs from application timing. No concrete improved partitioner or store-flush cause is established. Run E005-R2 timing/profile analyzers and negative-data check before interpretation. c10's changed driver/runtime received fresh relevant validation. Preserve all old source/binaries/results.
+- Stop after this confirmation. No additional measurements, E008, automatic dispatch or partition change is authorized. Await the user's next bounded investigation request. Revalidate c10 allocation 328681, do not assume saved state remains current.
+
+## E008 weight reuse distance
+
+- E008 is complete. Read its experiment record and run the timing analyzer/negative-data checks. The unchanged E006 A/C binary, fresh seeds 3–6, fixed M=4 activation and independent weights/scales pass complete-cycle validation and three sanitizers. Exactly24 timing rows/2400 cycle samples use reversed rectangle/count/configuration orders.
+- Only repeated-single-matrix cases pass 5% in both series. Two/four-matrix gains are subthreshold or absent. Four-matrix transpose C regresses0.757%/0.431%. Keep A default and close that workload's lead. Preserve C as reuse-dependent experimental configuration, not a general decoding improvement. Retain outliers, including series 2 transpose single-matrix3.413 ms C/7.667 ms A. Medians do not establish tail stability.
+- No new timing, profiles, dispatch, partition rewrite or next optimization is authorized by completed E008. Await a separately requested investigation. Revalidate current allocation, never trust saved328681/c10 state.
+
+## E009 completed cyclic baseline comparison
+
+- E009 is complete on c4. Read its final design/results record and run the complete/negative-data analyzers before interpretation. All 36 timing rows/3600 cycle samples pass the fixed5% gate versus both W_hat cuBLAS and timed GPU dequantization+cuBLAS in both series. Two/four-matrix speedups are 3.60–4.40× and 7.96–9.33×. Keep corrected A unchanged and preserve all raw data. c10 validation/diagnostic attempts remain separate, with no timings there.
+- Preserve M=4/G128, seeds 3–6, fixed activation, complete cycles, no artificial flush, one reusable unfused temporary and mode 16. All paths compute with W_hat. This measures net compressed execution including kernels/footprints, and the unfused comparison does not isolate fusion alone. No inference/token-throughput, stable-tail or unique-bottleneck claim.
+- Source/binary/dependency/operand identities and fresh c4 validation pass. Measured tooling is frozen by its manifest. The installed launch-dump option caused exit99 from informational records, reproduced by a harmless fill control. Preserve those c10 failures and never repeat that diagnosis without new evidence. Final racecheck has no dump and zero hazards/errors/warnings. Await another request before measurements, tuning, profiles, dispatch or a partition rewrite. Reverify saved allocation 328964/c4 before any future work.
+
+## E010 completed batch crossover
+
+- E010 is complete. Read its final record and run its analyzers before interpretation. Four matrices/two rectangles/M4,16,64,128 produce 32 timing rows/3200 samples in two reversed series. Marlin has lower medians everywhere, with no sign-change bracket, so no midpoint is run. K4096/N11008 at M128 gains only 2.166%/2.903%, below 5%. The transpose gains 15.203%/16.808%. No dispatch or extrapolation above 128.
+- Actual-call traces and resource queries verify M4 eight-row 128Kx128N, M16 sixteen-row 128Kx128N, M64/M128 sixty-four-row 64Kx256N, with two 64-row tiles inside one M128 call. Keep corrected E006 body and original A dispatcher unchanged. The transition alone is not a bottleneck explanation.
+- Full four-matrix numerical/memcheck/synccheck and representative one-matrix racecheck cover every shape/M. The original composed racecheck is incomplete exit 143/four rows/11m12s and stays preserved. Do not call it a pass or repeat it unchanged. Final representative racecheck reports 0 hazards/errors/warnings. Measured tooling is frozen. Await another request before further measurement, profiling, tuning, dispatch or kernel work. Reverify saved 328964/c4 rather than trusting the handoff.
+
+## E011 completed endpoint profiling
+
+- E011 is the only authorized continuation from E010. Profile corrected A and pre-materialized W_hat cuBLAS at M4/M128 on both rectangles, eight cases. Keep four matrices, seeds/prefixes, binaries, mode16, numerical contract and sequential cycles unchanged. No C, tuning, sweep, dispatch or kernel change.
+- Use the installed-capability-verified application replay with no profiler flushing/clock locking, dynamic pipeline boost and strict matching. Target every kernel of the fourth GEMM in the final100-cycle graph, after ten direct cycle warmups. Validate actual complete operations and the profiler-window skip/count first. Reuse E010 safety evidence only with matching identities. Never treat isolated replay counters as E010 cache-state measurements.
+- Fresh timing context is16 rows, two reversed endpoint series, ten warmups/100 complete-cycle samples, separate from profiling. Query targeted metrics first. Preserve raw reports/traces/commands and failed submissions. Sum additive multi-kernel work only, keep utilization/resources per kernel. Distinguish observations, interpretations and unresolved questions. Stop after documented/committed E011, with at most one supported future hypothesis.
+
+- E011 is complete at evidence checkpoint `ca574cc`: eight full-operation profiles and 16 fresh timing rows, both positive/negative analyzers pass. No kernel change justified yet. Marlin reads nearly constant DRAM bytes with more M128 instruction/Tensor work; differing cuBLAS selection/service accompanies the orientation gap. Do not claim unique causality or infer a rewrite from logical scratch models. Exact main-loop versus reduction/epilogue/lock critical-path attribution remains unresolved. Preserve the timeout, interrupted profile and successful three-case resume. All job/node IDs are historical. Await a user request; no further profiling, tuning, dispatch or kernel change is authorized.
+
+## E012 completed continuation while away
+
+- The user explicitly requests continued work after E011. E012 is one bounded source-PC attribution experiment, predeclared in EXPERIMENTS. This overrides the prior wait instruction only for E012. Preserve the corrected A body and all frozen E011 harness/operands/binaries. No optimization, dispatch, partition rewrite or cuBLAS tuning.
+- Query installed source/warp-sampling support and verify PC/source correlation first. At most four diagnostic instruction profiles and eight unpatched sampling profiles at the existing four Marlin shape/M cases. Keep full cyclic preceding accesses on every application-replay pass. Do not silently substitute isolated replay, interpret samples as wall time, or use SASS-patched durations as production latency. Record unsupported/insufficient cases as inconclusive and stop that branch.
+- Verify live allocation and actual selected-node hardware/environment. A changed node/driver gets relevant fresh numerical/sanitizer coverage. Use an inspected cheap prerequisite before dependent real profiles. Record all attempts, uncertainty and exact quality criteria. Commit/update the handoff and stop after E012 without pushing or starting another experiment.
+
+- E012 is complete at evidence checkpoint `181f6fe`. Four instruction captures quantify work, but ambiguous callers leave the majority explanation unresolved. All eight sampling captures fail zero-dropped-data quality, and M128 source coverage is below 95%. Zero overflow is not losslessness. Keep all-ones PC samples in the denominator, never treat saved failed-quality shares as accepted stall/phase time, and do not repeat unchanged 32-cycle sampling. Preserve the successful graph/source support evidence and all failed operational probes. No kernel change justified. Await a user-selected investigation rather than retuning, dispatching or rewriting partitioning.
+
+## E013 completed existing-tile comparison
+
+- E013 is complete on c4. The existing M128 64K×128N/128-thread tile regresses 7.576–8.739% versus 64K×256N/256 threads across both rectangles and two reversed series. Eight rows/800 cycle samples pass. Neither shape clears 5%, so held-out timing is omitted by design. Keep corrected A default.
+- Preserve the exact E006 device body/all 16 SASS functions, failed smoke cleanup/successful unchanged-binary resume, complete numerical/memcheck/synccheck and representative racecheck evidence. Both configurations use 255 registers/thread and query one-block capacity under the fixed shared reservation. No unique critical-path cause or global-optimality claim follows. Source/binary/tooling/results are isolated in scripts/e013 and results/e013_20261108. No additional tile, combined grid/reservation change, profiling, batching implementation or dispatch is authorized by completed E013. Verify live allocation rather than trusting historical 330208–330213/c4 state.
+
+## E014 completed full-model investigation
+
+- E014 is complete at its predeclared numerical gate. Read [INFERENCE_OVERHEAD.md](docs/INFERENCE_OVERHEAD.md) and run the stopped/negative analyzers before interpreting results. Static eager caching passes both contexts; compiled static decode has actual graph replay at 128 but fails the elementwise logit bound at 2048 (415 values), despite exact tokens and passing relative L2. No primary/held-out timing or accepted inference speedup exists. Preserve failed diagnostics, frozen inputs and the unchanged GEMM contract/corrected Marlin A.
+- The failed tensor itself was not retained by the original validator; do not invent error indices or claim post-failure checks. Keep the preservation-job negative-check failure distinct from the corrected offline pass. Stop after E014. No tolerance relaxation, passing-subset timing, unchanged retry, compiler-mode search, quantization/speculation or kernel tuning is authorized. Any new investigation needs a separately requested bounded question.
+
+## E015 completed direct graph comparison
+
+- E015 is complete on c9. Direct replay of static-cache forward+argmax passes bitwise full-logit and exact-token checks at 128/2048 across both passages and repeated resets. Actual replay, stable pointers/cache progression, unchanged weights and kernel-name multiset agreement pass. No Inductor/compiler transformation or local Marlin change is involved.
+- All 160 primary requests show 1.803%/1.866% short-context and 1.085%/1.296% long-context lower decode medians, below 5%. Keep eager E default. Held-out job331874 is cancelled unstarted. Preserve every sample, cold/memory cost, c7 quota interruption/corrupt tensor member and subsequent fresh c9 validation. The final root is on compute-node-only BeeGFS because home is full. Do not splice old c7/E014 timings into this comparison.
+- Read docs/INFERENCE_DIRECT_GRAPH.md and run E015 primary/negative checks before interpretation. Source snapshots and tensor integrity pass. Jobs331861/331864/331865 and c9 are historical. Stop after E015. No larger capture, fusion, profiling, compiler retry, tolerance relaxation or next optimization is authorized without a new request.
+
+## E016 completed full-decode capture comparison
+
+- E016 is complete. Read docs/INFERENCE_FULL_DECODE_GRAPH.md and run the primary/negative-data analyzers on an evidence copy before interpretation. One H graph covers all63 steps with bitwise logits, exact tokens, complete cache equality/restoration and actual63-versus1 launches at both contexts/passages. No model arithmetic/backend/compiler/custom-kernel change is involved.
+- All160 fresh c52 primary requests pass. Gains are −0.197%/−0.091% at128 and −0.134%/+0.048% at2048, below5%. Held-out timing is omitted by design, despite passing held-out numerical validation. Existing defaults remain unchanged. H setup is2.46–3.31s versus42–55ms for G, and warm reserved memory increases20MiB at128. First-use/memory records remain separate from warmed timing and complete process startup.
+- Preserve c9 full validation, c58 initial prerequisites, corrected preservation ordering, every failed metadata/submission attempt, all raw c52 samples/tensors/traces and source snapshots. Final timings are entirely c52/driver615.71.09 within332017. Job IDs/nodes are historical. No whole-model sanitizer, stable-tail, unique-bottleneck or global-optimality claim. Stop after this comparison without another optimization, retry, profile or measurement unless separately requested.
+
+## E017 authorized corrected-Marlin model bridge
+
+- The user explicitly requests one bounded integration after E016. E017 supersedes the prior stop only for this task. Read its predeclaration before execution. Use all196 supported block projections, with original tied embedding/head and other model operations common. Preserve exact corrected E006 A and all historical sources/results/manifests.
+- Compare Q compressed corrected Marlin against R FP16 reconstructed from identical deterministic project G128 codes/scales. O original FP16 is a separate quantization-change reference, with the same explicit bias boundary. Require inspected actual-layer FP64/packing/repeated-call/sanitizer gate, then all distinct shapes and full-model numerical/token/state validation before timing. Do not loosen gates or fall back. M2048/N8960 splits across two existing launches and N256 uses existing dispatch fallbacks.
+- Separate processes and actual resident tensor inventories must exclude unused selected FP16 GPU weights from Q. Fresh wall timing uses3 warmups/20 requests/two reversed series and5% in both series per context before held-out timing. Preserve all cold/setup/memory costs and exact execution evidence. Use isolated ARC storage, verified sbatch/prun prerequisites/dependencies. Stop after documented/committed comparison or concrete integration failure, without pushing or another mechanism.
+
+## ARC
+
+- Verify current [ARC documentation](https://arcm.csc.ncsu.edu/~mueller/cluster/arc/) and `scontrol show job` each session. Confirm allocation ownership, RUNNING state, nodes, remaining time, and GPU. Saved IDs/nodes are historical. Do no compute on the gateway.
+- Use `sbatch` for unattended jobs, `salloc` interactively, and ARC `prun` inside allocations. No `srun` unless the user explicitly overrides this after confirming a policy change. Use one process on one GPU node. Verify one rank with `prun /bin/hostname`, record OpenMP threads/binding, and leave user-created allocations running.
+- Batch scripts are spooled. Export an absolute project path at submission. Never derive it from `BASH_SOURCE` inside batch jobs. Use `SLURM_SUBMIT_DIR` only after validating project files. Helpers executed from real shared-storage paths may locate themselves.
+- Inspect a cheap prerequisite using the actual executable, launcher, paths, shared storage, rank/thread layout, topology, and small correctness case before expensive work. Expensive batch jobs must depend on successful prerequisites. Start with the smallest representative smoke test.
+- Capture per-node CPU model, ISA, topology, NUMA, affinity, compiler/MPI/GPU/tool versions, source/executable hashes, build flags, commands, and logs. Multi-node CPU generations may differ. Use a portable host ISA. Never distribute `-march=native` without verifying every node's required ISA.
+- `scripts/remote.sh` defaults to c7, uses `rsync --delete`, and lacks the allocation environment. Use isolated experiment directories and verified live allocations. Never claim ARC validation or guaranteed script operation from local checks alone.
+
+## Rooflines, if requested
+
+- Recompute all ceilings, ridge points, arithmetic intensities, and performance coordinates from specifications/data. Keep the primary full-machine roof distinct from core-count, ISA, NUMA, and memory-domain sensitivity roofs.
+- Keep cores, clock convention, SIMD width, operation count, FMA throughput, and bandwidth scope consistent across equations/plots/captions/classifications. An AVX/FMA roof is not an SSE/non-FMA build's applicable ceiling.
+- State finite problem/block traffic models. Label asymptotic approximations/counter proxies and distinguish modeled traffic from measured DRAM. Verify report values, generated labels, packaged plots, and bound classifications agree.

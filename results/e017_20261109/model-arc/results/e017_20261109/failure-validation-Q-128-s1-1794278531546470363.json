@@ -1,0 +1,8 @@
+{
+  "error": "AssertionError({'shape_equal': True, 'finite': True, 'candidate_sha256': 'c9f97902749303012459d45c1d6270b202be3b754fda50f5bfa4f8104f287c19', 'reference_sha256': '2ccab3d5613e5f9e9a06087f9c065b5c5a015a7f83991c5514ccada161db7a36', 'bitwise_equal': False, 'bad_logits': 591, 'logits_checked': 9723904, 'max_abs': 0.0546875, 'relative_l2': 0.0022366868833862915})",
+  "compiler": {},
+  "allocated": 1245685248,
+  "reserved": 2518679552,
+  "peak_allocated": 1294916096,
+  "peak_reserved": 2518679552
+}

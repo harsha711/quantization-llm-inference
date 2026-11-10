@@ -1,0 +1,2 @@
+2026-11-09, after the complete failed-stage retrieval:
+The new supplemental offline helper first requested argument-local-check.exit, which does not exist. The measured prerequisite's actual label is argument-check. Corrected only the offline helper to read argument-check.exit; the completed-gates inspection then passed. No measured source, raw record, acceptance gate or GPU execution changed. A later exploratory ls for *cold* found no such separate filename; cold/setup values are nested in recorded setup identity instead, and no cold-latency result is inferred.

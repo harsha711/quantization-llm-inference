@@ -1,0 +1,2 @@
+    PID STAT COMMAND
+ 649466 T    bash /var/spool/slurmd/job332899/slurm_script

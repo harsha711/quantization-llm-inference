@@ -1,0 +1,17 @@
+{
+  "K": 1536,
+  "N": 8960,
+  "hashes": {
+    "weight": "1779b1bf08231c52ec852eec87d35baa97264b97859e55506c5a75973d3212ad",
+    "codes": "1a678d0842a595f93e626af779df657d1abf79dec77c5d289ddb926521c71ba0",
+    "packed": "ff0c2eede84aa529c498746089538738bed57e70a5395e01048f2c244c673fe5",
+    "scales": "70eedd1e55186cc3604e61e9b3a32be58edb51558ab4858cb18b56002c4f50b9",
+    "reconstructed": "9cdf214ddefb1e62818fce4330549f0449d746d4bab307d36d9eb5a1ecb0d393",
+    "marlin_packed": "75ff138cac162c030f0fddeba7c836d1cf40d4906dded562b0daf803fa06d6cc",
+    "marlin_scales": "6ea41929d13da32fdee0634d7c84aa72925dd73aff82c46971b0526618bfd5c6"
+  },
+  "repack_s": 0.00026527210138738155,
+  "quantize_s": 0.11503273784182966,
+  "file_sha256": "b99bc52abd0914df95438ef439df0b20247135f4f50e53e40c2656c8c124b2db",
+  "preparation_s": 0.4140213909558952
+}

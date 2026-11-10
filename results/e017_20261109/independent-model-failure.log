@@ -1,0 +1,139 @@
+{
+  "status": "independently reproduced failed elementwise gate; no timing accepted",
+  "shape": [
+    64,
+    1,
+    151936
+  ],
+  "bad_logits": 591,
+  "total_logits": 9723904,
+  "finite": true,
+  "max_abs": 0.0546875,
+  "relative_l2": 0.00223668688338611,
+  "bad_by_generated_position": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    12,
+    0,
+    0,
+    0,
+    0,
+    0,
+    443,
+    0,
+    0,
+    4,
+    0,
+    0,
+    0,
+    0,
+    4,
+    0,
+    3,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    11,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    107,
+    0,
+    0,
+    3,
+    0,
+    1,
+    0,
+    0,
+    0
+  ],
+  "greedy_tokens_equal": true,
+  "cache_and_feedback_checks": true,
+  "weights_unchanged": true,
+  "model_operator_resident_bytes": {
+    "O": 3087428864,
+    "R": 3087428864,
+    "Q": 1144967232
+  },
+  "runner_resident_bytes": {
+    "O": 24955960,
+    "R": 24955960,
+    "Q": 24955960
+  },
+  "resident_reduction_pct": 62.91518663472597,
+  "request_allocator_bytes": {
+    "O": {
+      "allocated": 3147469824,
+      "reserved": 3363831808,
+      "peak_allocated": 3155429376,
+      "peak_reserved": 3363831808
+    },
+    "R": {
+      "allocated": 3147469824,
+      "reserved": 3363831808,
+      "peak_allocated": 3155429376,
+      "peak_reserved": 3363831808
+    },
+    "Q": {
+      "allocated": 1246296576,
+      "reserved": 2518679552,
+      "peak_allocated": 1247493632,
+      "peak_reserved": 2518679552
+    }
+  },
+  "setup_costs": {
+    "O": {
+      "load_s": 0.6197448279708624,
+      "replace_s": 0.0,
+      "load_peak_allocated": null,
+      "replace_peak_allocated": null
+    },
+    "R": {
+      "load_s": 0.6307087261229753,
+      "replace_s": 13.764309974154457,
+      "load_peak_allocated": null,
+      "replace_peak_allocated": null
+    },
+    "Q": {
+      "load_s": 0.6293258189689368,
+      "replace_s": 4.394635252887383,
+      "load_peak_allocated": null,
+      "replace_peak_allocated": null
+    }
+  },
+  "limits": [
+    "First Q128 primary request only; no repeated Q or held-out Q request completed",
+    "No context2048 model validation or complete-model coverage trace",
+    "Resident storage is observed setup storage, not accepted warmed inference memory",
+    "O/R later free-running differences include changed conditioning"
+  ]
+}

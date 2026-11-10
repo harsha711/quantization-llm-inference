@@ -1,0 +1,16 @@
+{
+  "status": "final local checks pass; E017 numerical gate remains failed",
+  "host_build": "pass; CUDA unavailable locally",
+  "ctest": "1/1 CPU pass",
+  "scalar_corruptions": 21,
+  "trace_corruptions": 4,
+  "quantizer_contract": "four native complete cases bitwise match",
+  "argument_suffixes": 3,
+  "tensor_selfcheck": "CRC/hash rejection passes",
+  "python_shell_syntax": "pass",
+  "new_report_links": "pass",
+  "stopped_corruption_check": "rejects premature timing",
+  "retrieval_files": 1328,
+  "whole_model_sanitizers": "not run",
+  "performance_samples": 0
+}
