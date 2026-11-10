@@ -2,6 +2,23 @@
 
 Read the numerical/measurement [contract](CONTRACT.md) before interpreting these records. Preserve raw evidence, failed attempts, and inconclusive outcomes. An alternative that has not been implemented or measured is not a failed optimization. Historical entries below reconstruct only what the repository supports. Missing prior failure numbers or commit IDs remain unknown.
 
+## E021 — Acceptance of the Marlin path against the FP64-projection control
+
+Predeclared 2026-11-10 from `1b0cb87`, requested by the user ("go ahead") after E020. This is the THIRD model gate for the same path, written after seeing E017, E018, E019 and E020. The four context128/2048 cases are already known to satisfy it from E019 data, so they are confirmation only. The predictive test is six cases never run in any form: contexts 256, 512 and 1024 × primary/held-out passages. E017 and E019 remain failed under their gates. No timing, kernel, model or tolerance change; E020's timing is not rerun.
+
+Reference: the same model with every projection GEMM accumulated in FP64 on the identical W_hat and rounded to FP16 (E018 mode F64), instead of R's FP16-rounded greedy trajectory. Per case, 64 tokens, `scripts/e021/validate.py`:
+1. finite Q logits;
+2. Q's greedy tokens equal the control's, or first differ at a step where the control's own logits for the two tokens differ by no more than E017's elementwise bound `0.03+0.01|logit|`; logits are then compared through that step only (later steps have different inputs);
+3. Q-versus-control relative L2 over the compared steps ≤ 0.003 (E017's threshold);
+4. Q bitwise repeatable, P pass-through bitwise equal to R, workspace guards intact;
+5. all 196×64 same-input Q operator calls pass the unchanged GEMM rule against FP64;
+6. unchanged `infer.checked` structural state invariants on the Q request.
+R and F32 statistics against the control, old-gate counts and Q-versus-R are reported, not gating. Accepted only if all ten cases pass; any failure is recorded as a rejection with no rule edit.
+
+If accepted, the permitted statement is: "Q agrees with a higher-precision evaluation of the same quantized model within the stated bounds on ten requests; under that third, post hoc gate the E020 timing applies to contexts 128 and 2048." Not covered: sanitizer coverage at the new prefill M values 256/512/1024 (operator outputs are FP64-checked on every call; race/memory checks exist only for M1/128/2048), model quality, other models, batch sizes or hardware.
+
+ARC: c7, sbatch+prun, one rank, `scripts/e021/submit.sh`. Smoke is plumbing only: context128 (already seen), 8 tokens; its verdict is not binding. Full job depends on the inspected smoke.
+
 ## E020 — Descriptive primary timing of the numerically unaccepted Marlin path
 
 Predeclared 2026-11-10 01:20 EST from `5dcd85c`, before any timing sample exists. After E019's rejection the user was offered stop / descriptive timing / a third gate and delegated the choice ("please figure out the best approach"). Chosen: measure, without changing or adding any acceptance gate. Reason: whether the bridge has any latency benefit is unknown after E017–E019, the node is held, and a measurement labelled as unaccepted misleads nobody, whereas a third post hoc gate would.
