@@ -161,8 +161,8 @@
 
 ## E025/E026 completed profile and decode attention
 
-- E025 (diagnostic) and E026 are complete; read their EXPERIMENTS entries and the top of docs/BOTTLENECK_ASSESSMENT.md. E026's direct single-query attention passes its 5% criterion versus stock-attention graph-Marlin at all five contexts, but only by 0.004–0.03 points at context128: say "about 5%" there. It helps FP16 too; quote Marlin's gain against GRA (45.5% at 128, 42.5% at 2048) as well as against GR.
-- E026 ran on c7 only; no second-node replication, sanitizer or trace. It is not a repository default. Output-head quantization and prefill are untested ideas, not authorized experiments.
+- E025 (diagnostic) and E026 are complete; read their EXPERIMENTS entries and the top of docs/BOTTLENECK_ASSESSMENT.md. E026's direct single-query attention passes its 5% criterion versus stock-attention graph-Marlin at contexts 256–2048 (c7) and at 2048 on c9. At context128 it is 5.00–5.03% on c7 and 4.90–5.06% on c9: not a robust pass; say "about 5%, below the bar in two of eight cells". It helps FP16 too; quote Marlin's gain against GRA (45.5% at 128, 42.5% at 2048) as well as against GR.
+- E026's contexts 256/512/1024 ran on c7 only; no sanitizer or trace. It is not a repository default. Output-head quantization and prefill are untested ideas, not authorized experiments.
 
 ## Rooflines, if requested
 

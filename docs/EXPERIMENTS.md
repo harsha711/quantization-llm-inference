@@ -16,7 +16,7 @@ Timing after inspected acceptance: one process per cell, 3 warmups + 20 requests
 
 Execution notes recorded 2026-11-10 before any full-job result was read: smoke 334148 FAILED exit 1 at install because the self-check called PyTorch's SDPA on CPU, whose math backend this runtime disables; the check now writes the attention definition out explicitly (committed). Smoke 334149 on c7 COMPLETED and inspected (both context128 cases accepted). Full job 334151 (contexts 128, 512, 2048) is running. Because the submitting laptop's VPN is about to drop, a second full job 334160 for contexts 256 and 1024 is queued behind it with `afterok`, extending coverage to E024's five contexts under the same inspected smoke and the same criteria; both jobs run unattended and their results stay on BeeGFS until retrieved under a later holding job.
 
-### E026 result — passes at all five contexts; at the threshold at context128 (2026-11-10, c7, UUID GPU-29e9569a-8a7a-cd23-5443-bd0b72ca241a, driver 610.57.04)
+### E026 result — passes at contexts 256–2048; context128 is 4.9–5.1% and not a robust pass (2026-11-10, c7, UUID GPU-29e9569a-8a7a-cd23-5443-bd0b72ca241a, driver 610.57.04)
 
 Attempts: smokes 334148 (failed) and 334149 as noted above; full 334151 (contexts 128, 512, 2048) and 334160 (256, 1024) COMPLETED exit 0 unattended. No failed full job. Identity checks pass. 336 files listed in `e026-all.sha256`, non-tensor files hash-verified, `results/e026_20261110/`.
 
@@ -39,9 +39,11 @@ Timing, 80 cells, 1600 timed requests; ranges over both passages and both revers
 - Passage and series differences are under 0.2%; GQA's largest min–max spread over 20 requests is 1.04 ms.
 - End-to-end at context2048 is 570 ms for GQA, of which roughly 196 ms is the unchanged eager prefill, now about a third of the request.
 
-Limits: c7 only (no second-node replication), one model, batch 1, 64 tokens; reference tokens and logits are each variant's own validated output; the custom attention handles only batch 1 with an explicit mask and one query token; no sanitizer or trace under replay; third-gate acceptance. PyTorch supplies the matmul/softmax kernels; ours is the decode-path restructuring and its validation.
+Limits: contexts 256, 512 and 1024 measured on c7 only, one model, batch 1, 64 tokens; reference tokens and logits are each variant's own validated output; the custom attention handles only batch 1 with an explicit mask and one query token; no sanitizer or trace under replay; third-gate acceptance. PyTorch supplies the matmul/softmax kernels; ours is the decode-path restructuring and its validation.
 
-Decision: supported improvement at every tested context. Not made a repository default; any report must present it as an inference-path change that benefits FP16 too and quote Marlin's gain against GRA, not only against stock-attention FP16.
+Second-node replication (added the same day, after the c7 result was read; not in the predeclaration): smoke 334175 and full 334177 on c9 (UUID GPU-02862ae3-8b7f-fb81-413c-791b5874af21, driver 610.57.04, hashed runtime archive), contexts 128 and 2048, both passages, two series, 32 cells, both COMPLETED exit 0. All four validation cases accepted with values identical to c7's. Context2048 replicates: GQA 41.1–41.3% below GQ, 42.3–42.4% below GRA, 58.4–58.5% below GR. **Context128 does not pass on c9:** GQA is 4.90%, 4.90%, 5.02% and 5.06% below GQ in its four cells, so two cells miss 5%. Against GRA and GR the context128 gains replicate (45.3% and 46.9%). `e026-c9-all.sha256` lists the retrieved files.
+
+Decision: supported improvement at contexts 256–2048 on c7 and at 2048 on both nodes. At context128 the gain over stock-attention graph-Marlin is 4.9–5.1% across two nodes: real and repeatable in sign, but not a robust pass of the 5% criterion, and it must not be claimed as one. Not made a repository default; any report must present it as an inference-path change that benefits FP16 too and quote Marlin's gain against GRA, not only against stock-attention FP16.
 
 ## E025 — Decode-step device time by operation (diagnostic)
 

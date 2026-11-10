@@ -290,7 +290,7 @@ For decode steps only, attention is computed directly as `softmax(scale·q·Kᵀ
 | 1024 | 749–750 | 476–477 | 627 | 351 | 26.3–26.4% | 44.0–44.1% | 53.2% |
 | 2048 | 900 | 634 | 650 | 374 | 41.0% | 42.5% | 58.5% |
 
-The change passes its 5% criterion against stock-attention graph-Marlin at every context, at the threshold at context 128. It is an inference-path change, not a W4A16 kernel result: FP16 gains 3–28% from it as well. Its relevance to the compressed kernel is that, with the context-proportional cost removed, Marlin's advantage over FP16 stays at 42–45% at every context instead of fading to 30%. Decode time becomes nearly flat in context (325 to 374 ms).
+The change passes its 5% criterion against stock-attention graph-Marlin at contexts 256–2048. At context 128 it measures 5.0% on c7 and 4.9–5.1% on a second node (c9), where two of four cells fall below 5%, so it is not a robust pass there. The context-2048 result replicates on c9 (41.1–41.3%), as do the gains against FP16 at both contexts. It is an inference-path change, not a W4A16 kernel result: FP16 gains 3–28% from it as well. Its relevance to the compressed kernel is that, with the context-proportional cost removed, Marlin's advantage over FP16 stays at 42–45% at every context instead of fading to 30%. Decode time becomes nearly flat in context (325 to 374 ms).
 
 ### 6.7 Contributions and attribution for the full-model part
 
