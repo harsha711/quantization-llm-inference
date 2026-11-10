@@ -1,0 +1,24 @@
++ prun timeout 3000 /tmp/e017-hpuvvad-20261109/bin/python /mnt/beegfs/hpuvvad/csc548-w4a16-e026-20261110/smoke-c7-334148/att.py validate /mnt/beegfs/hpuvvad/csc548-w4a16-e026-20261110/smoke-c7-334148/ref 128
+[prun] Master compute host = c7
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun timeout 3000 /tmp/e017-hpuvvad-20261109/bin/python /mnt/beegfs/hpuvvad/csc548-w4a16-e026-20261110/smoke-c7-334148/att.py validate /mnt/beegfs/hpuvvad/csc548-w4a16-e026-20261110/smoke-c7-334148/ref 128 (family=openmpi4)
+Traceback (most recent call last):
+  File "/mnt/beegfs/hpuvvad/csc548-w4a16-e026-20261110/smoke-c7-334148/att.py", line 137, in <module>
+    validate(target, [int(c) for c in sys.argv[3:]])
+  File "/mnt/beegfs/hpuvvad/csc548-w4a16-e026-20261110/smoke-c7-334148/att.py", line 65, in validate
+    install(work.model)
+  File "/mnt/beegfs/hpuvvad/csc548-w4a16-e026-20261110/smoke-c7-334148/att.py", line 52, in install
+    want = torch.nn.functional.scaled_dot_product_attention(q, k.repeat_interleave(6, 1), v.repeat_interleave(6, 1), attn_mask=mask, scale=.25)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: No viable backend for scaled_dot_product_attention was found. This is likely due to turning off both the math kernel and the fused kernels.
+--------------------------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code. Per user-direction, the job has been aborted.
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+mpirun detected that one or more processes exited with non-zero status, thus causing
+the job to be terminated. The first process to do so was:
+
+  Process name: [[11222,1],0]
+  Exit code:    1
+--------------------------------------------------------------------------

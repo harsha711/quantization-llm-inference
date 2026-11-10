@@ -1,6 +1,25 @@
 # Bottleneck assessment
 
-## Full-model decode after graph replay, 2026-11-10 (current)
+## Full-model decode after the attention change, 2026-11-10 (current)
+
+E025 measured the split below on an eager Marlin step; E026 then removed most of the attention and copy rows.
+
+| Device time per decode step (E025, eager Marlin, c9) | context128 | context2048 |
+|---|---:|---:|
+| Marlin kernels, 196 projections | 2.44 ms | 2.49 ms |
+| FP16 output head GEMV, unquantized | 1.17 ms | 1.17 ms |
+| Stock attention kernel | 0.47 ms | 4.00 ms |
+| Copies incl. key/value head expansion | 0.37 ms | 1.42 ms |
+| Everything else | 1.08 ms | 1.10 ms |
+| Total | 5.53 ms | 10.18 ms |
+
+After E026 the replayed Marlin step is 5.16 ms at context128 and 5.94 ms at context2048 (E026 medians / 63), so attention plus copies now cost roughly 0.5 ms and 1.2 ms (calculation: step minus the other E025 rows; not re-profiled).
+
+**Current bottleneck: the Marlin projections (about 2.4 ms, near their weight traffic of 0.68 GB per step) and the unquantized output head (1.2 ms, 467 MB per step), then about 1.1 ms of small elementwise kernels.** For a whole long-context request, the eager prefill (about 196 ms of 570 ms at context2048) is now a third of the time.
+
+Candidates, none run: quantizing the output head (a quantization-scope change that alters model outputs and needs its own acceptance and a quality argument); the 56 small k/v projections, which use Marlin's fallback dispatch and whose share of the 2.4 ms is unmeasured; prefill.
+
+## Full-model decode after graph replay, 2026-11-10 (E023 snapshot)
 
 E023 tested the hypothesis below and it holds at short context only.
 

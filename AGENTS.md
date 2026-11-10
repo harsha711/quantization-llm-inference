@@ -159,6 +159,11 @@
 - E024 is complete: graph-Marlin's decode gain over eager and graph FP16 passes all predeclared robustness criteria in 28 cells (c7 five contexts × two passages × two series; c52 contexts 128/2048). Quote gains with their context: 45% at 128 falling to 30% at 2048. Eager Marlin at context128 sits at the 5% threshold (3.6–5.8% across experiments); do not claim it passes.
 - Scope is one model, batch 1, 64 tokens, two RTX 5060 Ti nodes. The c7 runtime archive on BeeGFS (`csc548-w4a16-e024-20261110/runtime.tar`, hash recorded) lets other partition nodes reproduce the node-local venv at the identical /tmp path.
 
+## E025/E026 completed profile and decode attention
+
+- E025 (diagnostic) and E026 are complete; read their EXPERIMENTS entries and the top of docs/BOTTLENECK_ASSESSMENT.md. E026's direct single-query attention passes its 5% criterion versus stock-attention graph-Marlin at all five contexts, but only by 0.004–0.03 points at context128: say "about 5%" there. It helps FP16 too; quote Marlin's gain against GRA (45.5% at 128, 42.5% at 2048) as well as against GR.
+- E026 ran on c7 only; no second-node replication, sanitizer or trace. It is not a repository default. Output-head quantization and prefill are untested ideas, not authorized experiments.
+
 ## Rooflines, if requested
 
 - Recompute all ceilings, ridge points, arithmetic intensities, and performance coordinates from specifications/data. Keep the primary full-machine roof distinct from core-count, ISA, NUMA, and memory-domain sensitivity roofs.

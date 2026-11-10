@@ -16,6 +16,33 @@ Timing after inspected acceptance: one process per cell, 3 warmups + 20 requests
 
 Execution notes recorded 2026-11-10 before any full-job result was read: smoke 334148 FAILED exit 1 at install because the self-check called PyTorch's SDPA on CPU, whose math backend this runtime disables; the check now writes the attention definition out explicitly (committed). Smoke 334149 on c7 COMPLETED and inspected (both context128 cases accepted). Full job 334151 (contexts 128, 512, 2048) is running. Because the submitting laptop's VPN is about to drop, a second full job 334160 for contexts 256 and 1024 is queued behind it with `afterok`, extending coverage to E024's five contexts under the same inspected smoke and the same criteria; both jobs run unattended and their results stay on BeeGFS until retrieved under a later holding job.
 
+### E026 result — passes at all five contexts; at the threshold at context128 (2026-11-10, c7, UUID GPU-29e9569a-8a7a-cd23-5443-bd0b72ca241a, driver 610.57.04)
+
+Attempts: smokes 334148 (failed) and 334149 as noted above; full 334151 (contexts 128, 512, 2048) and 334160 (256, 1024) COMPLETED exit 0 unattended. No failed full job. Identity checks pass. 336 files listed in `e026-all.sha256`, non-tensor files hash-verified, `results/e026_20261110/`.
+
+Validation, 10 cases at 64 tokens against the stock-attention FP64-projection control: all accepted. GQA's tokens equal the control's in every case (the near-tie rule was not used); relative L2 0.00200–0.00252 against the 0.003 bound, versus 0.00192–0.00259 for stock-attention GQ in the same runs, so the new attention does not move Marlin measurably farther from the control. GQA is bitwise equal to its eager counterpart and repeatable. The attention change by itself moves logits by relative L2 0.0017–0.0020 (GQA versus GQ), the same size as the projection rounding. E021's disclosure applies.
+
+Timing, 80 cells, 1600 timed requests; ranges over both passages and both reversed series, decode medians of 20:
+
+| Context | GR ms | GQ ms | GRA ms | GQA ms | GQA below GQ (criterion) | GRA below GR | GQA below GRA | GQA below GR |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| 128 | 614.4–615.0 | 342.4–343.0 | 596.3–596.8 | 325.2–325.8 | 5.0% | 2.9–3.0% | 45.4–45.5% | 47.0–47.1% |
+| 256 | 632.7–633.5 | 362.7–363.6 | 600.2–600.8 | 328.7–329.3 | 9.4% | 5.1–5.2% | 45.2% | 48.0–48.1% |
+| 512 | 670.6–671.3 | 399.7–400.6 | 606.9–606.9 | 334.2–334.8 | 16.4% | 9.5–9.6% | 44.8–44.9% | 50.1–50.2% |
+| 1024 | 749.4–750.3 | 476.1–477.1 | 627.2–627.2 | 350.9–351.4 | 26.3–26.4% | 16.3–16.4% | 44.0–44.1% | 53.2% |
+| 2048 | 900.0–900.1 | 633.8–634.0 | 650.0–650.1 | 373.9–374.0 | 41.0% | 27.8% | 42.5% | 58.5% |
+
+- Criterion (GQA ≥5% below GQ in every cell of a context): **passes at all five contexts**. At context128 the margin is 5.004–5.031%, i.e. at the threshold; it should be described as "about 5%", not as a clear pass. The gain grows with context to 41.0% at 2048.
+- The expected short-context regression did not occur: the direct path is slightly faster even where the stock kernel was cheap.
+- The change is not specific to Marlin: FP16 gains 2.9% at context128 and 27.8% at 2048 from it. With attention equalized, Marlin's advantage over FP16 is 45.5% at context128 and 42.5% at 2048, so the Marlin gain no longer fades with context; previously it fell to 29.6%.
+- Decode time now grows only from 325 to 374 ms between context128 and 2048 (5.2 to 5.9 ms per step).
+- Passage and series differences are under 0.2%; GQA's largest min–max spread over 20 requests is 1.04 ms.
+- End-to-end at context2048 is 570 ms for GQA, of which roughly 196 ms is the unchanged eager prefill, now about a third of the request.
+
+Limits: c7 only (no second-node replication), one model, batch 1, 64 tokens; reference tokens and logits are each variant's own validated output; the custom attention handles only batch 1 with an explicit mask and one query token; no sanitizer or trace under replay; third-gate acceptance. PyTorch supplies the matmul/softmax kernels; ours is the decode-path restructuring and its validation.
+
+Decision: supported improvement at every tested context. Not made a repository default; any report must present it as an inference-path change that benefits FP16 too and quote Marlin's gain against GRA, not only against stock-attention FP16.
+
 ## E025 — Decode-step device time by operation (diagnostic)
 
 Predeclared 2026-11-10 from `fe36faf`, under the user's standing instruction to continue toward robust optimizations while away. Diagnostic only: no optimization, kernel or model-path change, no timing claim.
