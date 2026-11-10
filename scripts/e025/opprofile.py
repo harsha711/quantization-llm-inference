@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """E025 diagnostic: which operations carry the device time of an eager Marlin decode step?
 
-profile.py OUT CONTEXT...  — per context: one warm request, then one profiled 8-token request (7 decode
+opprofile.py OUT CONTEXT...  — per context: one warm request, then one profiled 8-token request (7 decode
 steps). Device kernel time is attributed to the launching operator (self device time) for events that
 start inside the decode span. Profiler overhead distorts host time; only device time is used.
 """

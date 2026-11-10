@@ -23,7 +23,7 @@ exec > "\$S/driver.log" 2>&1
 # Hold the allocation after finishing so BeeGFS results can be retrieved over ssh.
 trap 'rc=\$?;echo "\$rc" > "\$S/driver.exit";touch "\$S/FINISHED";for ((i=0;i<450;i++));do [[ -e "\$S/RETRIEVED" ]] && break;sleep 2;done;exit "\$rc"' EXIT
 [[ $stage == smoke ]] || ls "\$OUT"/smoke-*/INSPECTED
-$(for f in "$here/../e018/diagnose.py" "$here/profile.py"; do b=$(basename "$f"); printf 'cat > "$S/%s" <<'"'"'PYEOF'"'"'\n' "$b"; cat "$f"; printf 'PYEOF\necho "%s  $S/%s" | sha256sum -c\n' "$(sha256sum < "$f" | cut -d' ' -f1)" "$b"; done)
+$(for f in "$here/../e018/diagnose.py" "$here/opprofile.py"; do b=$(basename "$f"); printf 'cat > "$S/%s" <<'"'"'PYEOF'"'"'\n' "$b"; cat "$f"; printf 'PYEOF\necho "%s  $S/%s" | sha256sum -c\n' "$(sha256sum < "$f" | cut -d' ' -f1)" "$b"; done)
 # Nodes other than c7 get the hashed c7 runtime archive (E024) unpacked to the identical node-local path.
 V=/tmp/e017-hpuvvad-20261109; T=/mnt/beegfs/hpuvvad/csc548-w4a16-e024-20261110/runtime.tar
 if [[ ! -e "\$V/bin/python" ]]; then sha256sum -c "\$T.sha256"; tar xf "\$T" -C /tmp; fi
@@ -39,5 +39,5 @@ sha256sum -c "\$R/binaries.sha256" > "\$S/binary-check.log"
 "\$E017_PYTHON" -m pip freeze > "\$S/pip-freeze.txt"
 diff -u "\$R/pip-freeze.txt" "\$S/pip-freeze.txt"
 (cd "\$E017_ROOT" && sha256sum -c "\$R/source-validation.sha256") > "\$S/source-check.log"
-(set -x; prun timeout 3000 "\$E017_PYTHON" "\$S/profile.py" "\$S/out" $gen $contexts) > "\$S/profile.log" 2>&1
+(set -x; prun timeout 3000 "\$E017_PYTHON" "\$S/opprofile.py" "\$S/out" $gen $contexts) > "\$S/opprofile.log" 2>&1
 EOF
