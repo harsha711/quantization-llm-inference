@@ -2,6 +2,25 @@
 
 Read the numerical/measurement [contract](CONTRACT.md) before interpreting these records. Preserve raw evidence, failed attempts, and inconclusive outcomes. An alternative that has not been implemented or measured is not a failed optimization. Historical entries below reconstruct only what the repository supports. Missing prior failure numbers or commit IDs remain unknown.
 
+## E024 — Robustness of the E020/E023 decode gains
+
+Predeclared 2026-11-10 from `cc8a4c0`, requested by the user ("check if these gains are robust enough"). No new mechanism: the four E023 variants (R eager FP16, GR graph FP16, Q eager Marlin, GQ graph Marlin) with unchanged library, integration, graph procedure and E021 gate. What changes is only the conditions under which they are measured.
+
+Threats tested:
+- **Other inputs:** contexts 128, 256, 512, 1024, 2048 × primary and held-out passages (E020/E023 timed only primary at 128/2048). Each timed variant is checked against its own validated tokens and bitwise-anchored logits, so the context128 held-out case, where R and Marlin legitimately emit different tokens after R's exact tie, can be timed; there the paths generate different text of equal length, disclosed.
+- **Repetition:** fresh processes, both series orders reversed across contexts, passages and variants; context128/2048 primary cells repeat E023.
+- **Another GPU of the same model:** the same run on a second RTX 5060 Ti node at contexts 128 and 2048, both passages, using the c7 runtime copied byte-for-byte to the identical node-local path, with that node's own full validation first (fresh validation for a changed node/driver).
+
+Validation per node before its timing: dual-module process, every context × passage at 64 tokens, graph-Marlin under E021's gate against the FP64-projection control, bitwise equal to eager Marlin and repeatable (E021 disclosure applies). Timing: 3 warmups + 20 requests per cell, one process per cell; 80 cells on c7, 32 on the second node.
+
+Predeclared robustness criteria, evaluated per node over every (context, passage, series) cell:
+- (a) GQ decode median ≥5% lower than both R and GR in every cell;
+- (b) the slowest of GQ's 20 requests is faster than the fastest of R's and GR's in every cell;
+- (c) on c7, context128/2048 primary medians of each variant within 2% of E023's.
+"Robust" means all three hold on c7 and (a),(b) hold on the second node. Any failing cell is reported as the boundary of the claim, with no rerun to replace it. Eager-Marlin-versus-R gains are reported per cell without a criterion (E020 already shows they are below 5% at short context).
+
+Not covered: other models, batch sizes, GPU models, generated lengths, system load from other users, sanitizers under graph replay, model quality. ARC: sbatch+prun, one rank per node; per node an inspected smoke (context128 validation plus one timed cell) before the dependent full job; `scripts/e024/`.
+
 ## E023 — CUDA-graph replay of the Marlin decode step
 
 Predeclared 2026-11-10 from `6f01dc2`, requested by the user ("get a new node and test this out") as the one hypothesis E022 supports. One main change: the per-token decode step of the Marlin model (forward + argmax) is captured once with `torch.cuda.CUDAGraph` and replayed per token, exactly E015's procedure (three side-stream warmups, capture at the first decode position, stable token/position/mask/cache addresses). No kernel, dispatch, tile, model, quantization or tolerance change; corrected E006 A library `e4eca5e3…` and E017 integration unchanged; prefill stays eager. Whether Marlin's external ctypes launches can be captured is unknown and is the first thing the smoke tests; a capture failure is recorded as a concrete negative result.
