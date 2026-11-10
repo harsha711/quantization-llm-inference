@@ -27,6 +27,8 @@ Outcome per stack and context, fixed now, GQA versus the stack's 4-bit variant w
 
 Not covered: TensorRT-LLM and ExLlamaV2 (engine build / calibration toolchains not attempted), batch sizes above 1, tuning of either stack. `scripts/e028/`. A failed install or build is recorded as a failed attempt of that comparator only. Smokes inspected before dependent full jobs.
 
+Execution notes: llama.cpp smoke 334239 on c7 FAILED exit 1 during the CUDA build of llama-cpp-python 0.3.36, before any model conversion or measurement: `-march=native` made GCC 12.4 emit AVX-VNNI/AVX512-BF16 instructions the node's assembler rejects. The build now passes `-DGGML_NATIVE=OFF` (portable host ISA; all model layers run on the GPU). Both submit scripts now rebuild a venv unless a completed-install marker exists, so a failed install cannot be mistaken for a usable environment.
+
 ## E027 — Our decode path versus vLLM on the same quantized weights
 
 Predeclared 2026-11-10 at the user's request ("go") after the question whether the result is faster than or comparable to a state-of-the-art inference stack. Every earlier full-model comparison used Hugging Face Transformers FP16 as the baseline. This experiment adds one external comparator and changes nothing in our paths.

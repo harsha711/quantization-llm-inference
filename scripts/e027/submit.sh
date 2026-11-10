@@ -49,10 +49,11 @@ export PIP_CACHE_DIR=/mnt/beegfs/hpuvvad/csc548-w4a16-e016-final-20261109/cache/
 export VLLM_NO_USAGE_STATS=1 DO_NOT_TRACK=1 VLLM_CONFIG_ROOT="$S/vllm-config" VLLM_CACHE_ROOT="$S/vllm-cache"
 WHEEL=/mnt/beegfs/hpuvvad/csc548-w4a16-e017-20261109/external/vllm-0.33.0-cp38-abi3-manylinux_2_28_x86_64.whl
 echo "4b6bdec4ab269990bf70d45a3c1e94c3760a27064513760193b26d6f0da883aa  $WHEEL" | sha256sum -c
-if [[ ! -e "$VV/bin/python" ]]; then
- python3.11 -m venv "$VV"
+if [[ ! -e "$VV/INSTALLED" ]]; then
+ rm -rf "$VV"; python3.11 -m venv "$VV"
  if [[ -e "$OUT/vllm-freeze.txt" ]]; then "$VV/bin/python" -m pip install "$WHEEL" -c "$OUT/vllm-freeze.txt" > "$S/vllm-install.log" 2>&1
  else "$VV/bin/python" -m pip install "$WHEEL" > "$S/vllm-install.log" 2>&1; fi
+ touch "$VV/INSTALLED"
 fi
 "$VV/bin/python" -m pip freeze > "$S/vllm-freeze.txt"
 [[ -e "$OUT/vllm-freeze.txt" ]] || cp "$S/vllm-freeze.txt" "$OUT/vllm-freeze.txt"

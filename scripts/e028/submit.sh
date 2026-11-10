@@ -64,9 +64,10 @@ if [[ ! -e "$OUT/llama-sdist.sha256" ]]; then
  mkdir "$OUT/llama-sdist"; (cd "$OUT/llama-sdist" && curl -fsSLO "$url"); (cd "$OUT" && sha256sum llama-sdist/* > llama-sdist.sha256)
 fi
 (cd "$OUT" && sha256sum -c llama-sdist.sha256)
-if [[ ! -e "$XV/bin/python" ]]; then
- python3.11 -m venv "$XV"
- CMAKE_ARGS="-DGGML_CUDA=on" CMAKE_BUILD_PARALLEL_LEVEL=16 "$XV/bin/python" -m pip install -v "$OUT"/llama-sdist/*.tar.gz torch transformers sentencepiece safetensors protobuf $(constraint llama) > "$S/ext-install.log" 2>&1
+if [[ ! -e "$XV/INSTALLED" ]]; then
+ rm -rf "$XV"; python3.11 -m venv "$XV"
+ CMAKE_ARGS="-DGGML_CUDA=on -DGGML_NATIVE=OFF" CMAKE_BUILD_PARALLEL_LEVEL=16 "$XV/bin/python" -m pip install -v "$OUT"/llama-sdist/*.tar.gz torch transformers sentencepiece safetensors protobuf $(constraint llama) > "$S/ext-install.log" 2>&1
+ touch "$XV/INSTALLED"
 fi
 freeze llama
 F="$OUT/gguf/qwen-f16.gguf" Q="$OUT/gguf/qwen-q4_k_m.gguf"
@@ -83,9 +84,10 @@ EOF
 ;;
 ort) cat <<'EOF'
 # ONNX Runtime GenAI (CUDA provider) from PyPI; its model builder exports FP16 and its own INT4 from the same base model.
-if [[ ! -e "$XV/bin/python" ]]; then
- python3.11 -m venv "$XV"
+if [[ ! -e "$XV/INSTALLED" ]]; then
+ rm -rf "$XV"; python3.11 -m venv "$XV"
  "$XV/bin/python" -m pip install onnxruntime-genai-cuda onnxruntime-gpu onnx torch transformers safetensors $(constraint ort) > "$S/ext-install.log" 2>&1
+ touch "$XV/INSTALLED"
 fi
 freeze ort
 if [[ ! -e "$OUT/ort.sha256" ]]; then
