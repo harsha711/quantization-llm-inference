@@ -115,6 +115,11 @@
 
 - E017 stops at its first Q128 primary request:591/9,723,904 finite logits exceed the unchanged elementwise bound, relativeL2=0.00223669 and exact64 tokens pass. All12 ordinary shape cases and32 additional operator sanitizers pass; these do not establish model equivalence. Independent tensors/artifacts/failed-indices and stopped/corruption checks preserve the failure. No further Q128,2048 model validation, full-model trace or timing runs. Setup model/operator storage falls62.92%, not a warmed-memory or latency result. Read docs/INFERENCE_MARLIN_BRIDGE.md. All jobs are terminal; preserve historical evidence/defaults and stop without retry, tolerance change or next mechanism.
 
+## E018 completed divergence diagnostic
+
+- E018 is complete. Read its EXPERIMENTS entry and `results/e018_20261109/full-333413/out/summary.json`. E017's Q/R failure reproduces bitwise; zero same-input operator failures over 196 modules × 64 forwards; Marlin-free FP32/FP64 controls fail the same logit gate. Interpretation: propagated FP16 rounding, one context128 primary request only.
+- E017 remains failed under its declared gate. Do not relabel it as passed or release timing from it. Any end-to-end timing needs a new predeclared experiment with a control-calibrated gate, disclosed as post hoc, plus context2048/held-out validation. Jobs 333407/333409/333413 and c7 are historical.
+
 ## ARC
 
 - Verify current [ARC documentation](https://arcm.csc.ncsu.edu/~mueller/cluster/arc/) and `scontrol show job` each session. Confirm allocation ownership, RUNNING state, nodes, remaining time, and GPU. Saved IDs/nodes are historical. Do no compute on the gateway.

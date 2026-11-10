@@ -20,6 +20,30 @@ Whether the unchanged 0.03+0.01|R| gate also rejects the Marlin-free controls is
 
 ARC: sbatch+prun, one rank, c7 preferred (node-local E017 venv). An 8-token smoke job with identity checks (allocation, launcher, binary/source/pip hashes) is inspected before the dependent 64-token job. Home is at quota, so the script is embedded in the batch file and results stay on BeeGFS until retrieved.
 
+### E018 result — hypothesis supported (2026-11-09, c7, UUID GPU-29e9569a-8a7a-cd23-5443-bd0b72ca241a, driver 610.57.04)
+
+Attempts: smoke 333407 FAILED exit1 after R/Q/Q2 from a diagnostic-script bug (`'F32'.rstrip('2')` selected a nonexistent mode); no result used. Fixed and committed before resubmission; smoke 333409 COMPLETED (8 tokens) and inspected, dependent full 333413 COMPLETED in 2m42s. All three preserved under `results/e018_20261109/`; 44 retrieved files match the BeeGFS hashes (`retrieved.sha256`). Allocation, single-rank prun, E017 binary (3), source (80) and pip-freeze identities pass in each job.
+
+Observations, context128 primary, 64 tokens:
+
+| Versus R, unchanged E017 gate | Violations | Max abs | Relative L2 | Tokens |
+|---|---:|---:|---:|---|
+| Q (corrected Marlin), run twice, bitwise repeatable | 591 | 0.0547 | 0.0022367 | equal |
+| F32 control, no Marlin | 667 | 0.0515 | 0.0022444 | equal |
+| F64 control, no Marlin | 102 | 0.0449 | 0.0022569 | equal |
+| R repeat / P pass-through | 0 | 0 | 0 | bitwise |
+
+- Fresh R and fresh Q logits are bitwise equal to the preserved E017 tensors, so this is the same failure, reproduced.
+- Same-input operator check: 12,544 calls (196 modules × prefill M128 + 63 decode M1), 123,217,920 outputs, zero Q and zero R violations of the unchanged GEMM rule. Relative L2 to FP64: Q median 2.0694e-4, max 3.7258e-4; R median 2.0694e-4, max 3.7258e-4. GPU and CPU FP64 references agree exactly on all 196 prefill calls. Workspace guards intact.
+- Against the F64-projection model: R has 106 violations/relative L2 0.0022566, Q 79/0.0019838, F32 53/0.0020728.
+- Block-output divergence from R grows through depth within one forward (prefill 0.00026 after block0, ≈0.0007 mid-stack, 0.00276 after block27) and is the same for Q, F32 and F64; maximum over all forwards 0.0035/0.0039/0.0029.
+
+Interpretation under the predeclared reading: supported. No integration or operator defect is found at any of the 196 modules with real activations; the Marlin-free controls reach 100.3%/100.9% of Q-versus-R relative L2 and themselves fail the E017 gate. That gate therefore cannot distinguish corrected Marlin from a higher-precision evaluation of the same weights; in this request R is the farthest of the three from the F64 control.
+
+Limits: one request, context128, primary passage, one node. Context2048, held-out passage, complete-model trace and whole-model sanitizers remain unrun. F64 changes only the 196 projection GEMMs; it is not a full-FP64 model oracle. E017 remains failed under its declared gate and no timing exists.
+
+Decision: stop. Revisit E017 acceptance only through a new predeclared experiment whose model gate is calibrated against Marlin-free controls (candidate: Q must pass the unchanged per-operator rule on every call and be no farther from F64 than R is, plus exact tokens), disclosed as chosen after the E017 failure.
+
 ## E017 — Corrected Marlin in the pinned full model
 
 Predeclared 2026-11-09 from clean `b867a13`, explicitly requested by the user. E017 is the next unused number. This integration comparison supersedes the prior stop only for this bounded task. Every historical implementation, measurement and manifest remains immutable. Upstream Marlin supplies compressed Tensor Core execution; our contributions are the synchronization correction, integration, validation and controlled comparison. No speedup will be attributed to adding the barrier alone.

@@ -1,3 +1,7 @@
+# E018 complete — E017 divergence is rounding noise, not a bridge defect
+
+2026-11-09: [E018](EXPERIMENTS.md#e018--locate-the-e017-qr-logit-divergence-diagnostic) reproduces the E017 Q/R failure bitwise on c7 and locates it. All 12,544 same-input projection calls pass the unchanged GEMM rule for both Q and R. Marlin-free FP32/FP64 projection controls differ from R as much as Q does (relative L2 0.00224/0.00226 versus 0.00224) and themselves violate the E017 logit gate at 667/102 values. E017 stays failed under its declared gate; no timing exists. Evidence: `results/e018_20261109/` (smoke 333407 failed from a script bug, smoke 333409 and full 333413 completed; all historical). Next step needs a user request: a new predeclared end-to-end comparison with a control-calibrated model gate, or the report draft.
+
 # E017 stopped — full-model elementwise logit gate fails
 
 2026-11-09: [E017](INFERENCE_MARLIN_BRIDGE.md) stops at its first corrected-Marlin full-model request. At context128,591 of9,723,904 finite Q/R logits exceed the unchanged elementwise bound; relativeL2=0.00223669 passes its separate bound. Original-weight and reconstructed-FP16 alternating/repeated validation at128 complete before this failure. All12 distinct-shape numerical checks and32 additional operator sanitizer invocations exit0. Those operator results do not override complete-model validation.
