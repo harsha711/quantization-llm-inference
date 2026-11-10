@@ -92,7 +92,7 @@ if [[ ! -e "$XV/INSTALLED" ]]; then
 fi
 freeze ort
 if [[ ! -e "$OUT/ort.sha256" ]]; then
- rm -rf "$OUT/ort"; mkdir "$OUT/ort"
+ rm -rf "$OUT/ort"; rm -rf "$OUT/ort"; mkdir "$OUT/ort"
  for p in fp16 int4; do (set -x; "$XV/bin/python" -m onnxruntime_genai.models.builder -m Qwen/Qwen2.5-1.5B -i "$MODEL" -o "$OUT/ort/$p" -p "$p" -e cuda -c "$S/ort-cache") > "$S/build-$p.log" 2>&1; done
  rm -rf "$S/ort-cache"; (cd "$OUT" && find ort -type f | sort | xargs sha256sum > ort.sha256)
 fi
