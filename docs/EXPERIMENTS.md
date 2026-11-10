@@ -2,6 +2,16 @@
 
 Read the numerical/measurement [contract](CONTRACT.md) before interpreting these records. Preserve raw evidence, failed attempts, and inconclusive outcomes. An alternative that has not been implemented or measured is not a failed optimization. Historical entries below reconstruct only what the repository supports. Missing prior failure numbers or commit IDs remain unknown.
 
+## E022 — Decode-step projection time breakdown (diagnostic)
+
+Predeclared 2026-11-10 from `a928561`, requested by the user ("test first") before the report. Diagnostic only: no optimization, kernel, dispatch or model-path change, no end-to-end claim.
+
+Motivation (calculation from E020, not a finding): one decode step takes about 9.9 ms with R and 9.6 ms with Q at context128. R reads 3.09 GB of selected FP16 weights per step, Q about a quarter of that, yet Q is only 3–5% faster. So Q's step is probably not limited by weight traffic. Question: is the Q step limited by host-side per-call launch cost (196 Python/ctypes calls) or by device execution?
+
+Method, `scripts/e022/breakdown.py`, c7, one process: all 196 actual modules with fixed random M=1 FP16 inputs, called once back-to-back per repetition as in a decode step, then one synchronize. 20 warmups + 200 repetitions per path, two reversed path orders. Paths: R module, Q module, raw Q operator call with preallocated output (no wrapper), raw Q call with a synchronize after each call, empty Python loop. Record median host-return time and synchronized total.
+
+Predeclared reading: if Q's host-return time is ≥70% of its synchronized total in both orders, the step is launch/host-bound and reducing per-call launch cost (for example graph replay of the decode step) is the one supported next hypothesis. If ≤40%, it is device-bound and that hypothesis is not supported. Between: inconclusive. No attention/norm/cache work is included, so the sum is not a decode-step time. Smoke: 5 repetitions, inspected before the dependent full job.
+
 ## E021 — Acceptance of the Marlin path against the FP64-projection control
 
 Predeclared 2026-11-10 from `1b0cb87`, requested by the user ("go ahead") after E020. This is the THIRD model gate for the same path, written after seeing E017, E018, E019 and E020. The four context128/2048 cases are already known to satisfy it from E019 data, so they are confirmation only. The predictive test is six cases never run in any form: contexts 256, 512 and 1024 × primary/held-out passages. E017 and E019 remain failed under their gates. No timing, kernel, model or tolerance change; E020's timing is not rerun.
