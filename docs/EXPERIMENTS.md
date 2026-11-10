@@ -2,6 +2,24 @@
 
 Read the numerical/measurement [contract](CONTRACT.md) before interpreting these records. Preserve raw evidence, failed attempts, and inconclusive outcomes. An alternative that has not been implemented or measured is not a failed optimization. Historical entries below reconstruct only what the repository supports. Missing prior failure numbers or commit IDs remain unknown.
 
+## E018 — Locate the E017 Q/R logit divergence (diagnostic)
+
+Predeclared 2026-11-09 from clean `35cae94`, requested by the user after E017 ("identify ... and bridge the gap", ARC use permitted). Diagnostic only. E017 stays failed and immutable. No timing, no tolerance change, no kernel/dispatch/model change, no passing-subset release.
+
+Offline observation motivating it (existing E017 tensors, CPU only, nothing rerun): Q−R per-position relative L2 is 0.0011–0.0056 with no trend over the 64 positions, prefill position 0.0015. All 591 violations have |R|<1. Positions 19/56 carry a near-uniform shift (mean +0.0184/−0.0134, std 0.0068/0.0075; all 443/107 violations one-signed). Subtracting each position's mean difference leaves 4 violations. E014 C128 (same FP16 weights, no Marlin, compiler reordering) recorded max 0.035–0.039 and relative L2 ≈0.00155, and C2048 failed the same gate with 415 values and exact tokens. These are observations, not a cause.
+
+Hypothesis: the Q/R logit difference is propagated FP16 rounding from individually valid operator results, not an integration defect.
+
+Design, `scripts/e018/diagnose.py`, one process, context128, primary passage, 64 tokens, reusing unchanged E017 `integration.py`/`infer.py`, artifacts, runtime and corrected library from the preserved E017 BeeGFS root (read-only); new output root. Modes switch per request: R; Q (twice); F32 and F64 (same W_hat, projection GEMM accumulated in FP32/FP64 then rounded to FP16, Marlin-free controls); P (R trajectory, every one of the 196×64 projection calls also runs Q on the identical input, both checked against FP64 under the unchanged GEMM rule `abs(err)<=1e-3*abs(ref)+1e-3*rms(ref)`). P's reference is GPU FP64, cross-checked against CPU FP64 on all 196 prefill calls; this deviation from the CPU-reference convention is for runtime only. Block outputs are recorded per forward for per-block divergence. Fresh R/Q are compared with the saved E017 tensors.
+
+Predeclared reading:
+- Supported: zero Q failures over all 12,544 same-input calls, AND a Marlin-free control (F32 or F64 versus R) reaches at least half of Q-versus-R relative L2 under the unchanged logit gate.
+- Refuted: any same-input Q operator failure, Q nondeterminism, or workspace-guard damage; report the first failing layer/step and stop.
+- Otherwise inconclusive.
+Whether the unchanged 0.03+0.01|R| gate also rejects the Marlin-free controls is reported, not a criterion. No outcome accepts E017 or releases timing; any later gate/timing experiment needs its own predeclaration.
+
+ARC: sbatch+prun, one rank, c7 preferred (node-local E017 venv). An 8-token smoke job with identity checks (allocation, launcher, binary/source/pip hashes) is inspected before the dependent 64-token job. Home is at quota, so the script is embedded in the batch file and results stay on BeeGFS until retrieved.
+
 ## E017 — Corrected Marlin in the pinned full model
 
 Predeclared 2026-11-09 from clean `b867a13`, explicitly requested by the user. E017 is the next unused number. This integration comparison supersedes the prior stop only for this bounded task. Every historical implementation, measurement and manifest remains immutable. Upstream Marlin supplies compressed Tensor Core execution; our contributions are the synchronization correction, integration, validation and controlled comparison. No speedup will be attributed to adding the barrier alone.
