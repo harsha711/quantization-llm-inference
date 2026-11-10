@@ -2,6 +2,16 @@
 
 Read the numerical/measurement [contract](CONTRACT.md) before interpreting these records. Preserve raw evidence, failed attempts, and inconclusive outcomes. An alternative that has not been implemented or measured is not a failed optimization. Historical entries below reconstruct only what the repository supports. Missing prior failure numbers or commit IDs remain unknown.
 
+## E025 — Decode-step device time by operation (diagnostic)
+
+Predeclared 2026-11-10 from `fe36faf`, under the user's standing instruction to continue toward robust optimizations while away. Diagnostic only: no optimization, kernel or model-path change, no timing claim.
+
+Motivation (E024 calculation): graph-Marlin's decode step is 5.44 ms at context128 and 10.06 ms at context2048; FP16's is 4.4–4.5 ms higher at every context. So both paths share a cost of about 2.4 µs per context token per step, and at context128 about 3 ms of the Marlin step is neither that nor (by E022's bound) projections. Question: which operations carry (i) the context-proportional device time and (ii) the remaining short-context device time?
+
+Method, `scripts/e025/profile.py`, c7, one Q process, unchanged eager E017 runner: per context 128 and 2048, one warm 8-token request, then one 8-token request under `torch.profiler` (CPU+CUDA activities, E017 markers). Device kernel time for kernels starting inside the decode span is attributed to the launching operator and reported per decode step, with the 2048−128 difference per operator. Only device time is used; profiler overhead makes host times invalid. Profiled-request tokens must equal the unprofiled request's.
+
+Reading: the operator family with the largest 2048−128 device-time difference is the candidate for one next predeclared optimization; if no family carries at least half of the difference, the result is recorded as diffuse and no optimization is proposed from it. Kernel durations under an eager profiler are not graph-replay latencies; sums are compared with E024's step times as a consistency check only. Smoke: context128 alone, inspected before the dependent full job.
+
 ## E024 — Robustness of the E020/E023 decode gains
 
 Predeclared 2026-11-10 from `cc8a4c0`, requested by the user ("check if these gains are robust enough"). No new mechanism: the four E023 variants (R eager FP16, GR graph FP16, Q eager Marlin, GQ graph Marlin) with unchanged library, integration, graph procedure and E021 gate. What changes is only the conditions under which they are measured.
