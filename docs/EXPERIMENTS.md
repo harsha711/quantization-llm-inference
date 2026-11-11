@@ -164,7 +164,7 @@ Predeclared outcome: **"slower" at all three contexts.** llama.cpp Q4_K_M decode
 | 8192 | 544.8–544.9 / 543.7–544.0 | 566.9–567.6 | 221.7–222.0 | 145.4–145.7% slower | 611.4–611.5 | 290.4–290.6 | 87.1–87.3% slower |
 | 16384 | 802.4–802.6 / 800.9–801.2 | 603.0–603.3 | 259.4–259.5 | 209.2–209.5% slower | 701.6–701.7 | 380.8–380.9 | 110.3–110.4% slower |
 
-Outcome "slower" at every context for both stacks. At 16384 our 4-bit path is also slower than both stacks' FP16 paths (802 ms against 603 and 702 ms), so the earlier statement that it beats their FP16 holds only up to context 8192 for ORT (545 against 567 ms) and 8192 for llama.cpp. Our graph FP16 is 2.2–5.3 times slower than theirs at these contexts. End-to-end for 64 tokens at 16384: GQA 5.1 s, ORT INT4 2.1 s, llama.cpp Q4_K_M 4.4 s. Same limits as the main E028 results.
+Outcome "slower" at every context for both stacks. At 16384 our 4-bit path is also slower than both stacks' FP16 paths (802 ms against 603 and 702 ms), so the earlier statement that it beats their FP16 holds only up to context 8192 for ORT (545 against 567 ms) and 8192 for llama.cpp. Our graph FP16 is 2.1–5.3 times slower than theirs at these contexts. End-to-end for 64 tokens at 16384: GQA 5.1 s, ORT INT4 2.1 s, llama.cpp Q4_K_M 4.4 s. Same limits as the main E028 results.
 
 Extension predeclared 2026-11-10 after the ORT result above and before any long-context external measurement: with nodes kept at the user's instruction, each external stack is also run at contexts 4096, 8192 and 16384 with the same cells and rule, our variants validated through `long.py` as in E029. A stack that cannot run a context (memory, limits) is recorded as such.
 
