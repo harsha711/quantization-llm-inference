@@ -1,0 +1,5 @@
++ prun timeout 6000 /tmp/e017-hpuvvad-20261109/bin/python /mnt/beegfs/hpuvvad/csc548-w4a16-e027-20261110/head-full-c10-334245-hf/head.py time /mnt/beegfs/hpuvvad/csc548-w4a16-e027-20261110/head-full-c10-334245-hf/out GQA 2048 primary 1 /mnt/beegfs/hpuvvad/csc548-w4a16-e027-20261110/head-full-c10-334245-hf/ref
+[prun] Master compute host = c10
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun timeout 6000 /tmp/e017-hpuvvad-20261109/bin/python /mnt/beegfs/hpuvvad/csc548-w4a16-e027-20261110/head-full-c10-334245-hf/head.py time /mnt/beegfs/hpuvvad/csc548-w4a16-e027-20261110/head-full-c10-334245-hf/out GQA 2048 primary 1 /mnt/beegfs/hpuvvad/csc548-w4a16-e027-20261110/head-full-c10-334245-hf/ref (family=openmpi4)
+DONE primary GQA 2048 1 0.37547948851715773

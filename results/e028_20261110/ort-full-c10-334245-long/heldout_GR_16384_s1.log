@@ -1,0 +1,5 @@
++ prun timeout 6000 /tmp/e017-hpuvvad-20261109/bin/python /mnt/beegfs/hpuvvad/csc548-w4a16-e028-20261110/ort-full-c10-334245-long/long.py time /mnt/beegfs/hpuvvad/csc548-w4a16-e028-20261110/ort-full-c10-334245-long/out GR 16384 heldout 1 /mnt/beegfs/hpuvvad/csc548-w4a16-e028-20261110/ort-full-c10-334245-long/ref
+[prun] Master compute host = c10
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun timeout 6000 /tmp/e017-hpuvvad-20261109/bin/python /mnt/beegfs/hpuvvad/csc548-w4a16-e028-20261110/ort-full-c10-334245-long/long.py time /mnt/beegfs/hpuvvad/csc548-w4a16-e028-20261110/ort-full-c10-334245-long/out GR 16384 heldout 1 /mnt/beegfs/hpuvvad/csc548-w4a16-e028-20261110/ort-full-c10-334245-long/ref (family=openmpi4)
+DONE heldout GR 16384 1 3.1792896545957774

@@ -1,0 +1,12 @@
+ort/fp16/chat_template.jinja: OK
+ort/fp16/genai_config.json: OK
+ort/fp16/model.onnx: OK
+ort/fp16/model.onnx.data: OK
+ort/fp16/tokenizer_config.json: OK
+ort/fp16/tokenizer.json: OK
+ort/int4/chat_template.jinja: OK
+ort/int4/genai_config.json: OK
+ort/int4/model.onnx: OK
+ort/int4/model.onnx.data: OK
+ort/int4/tokenizer_config.json: OK
+ort/int4/tokenizer.json: OK

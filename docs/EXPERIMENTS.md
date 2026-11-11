@@ -19,6 +19,30 @@ Contexts 128 and 2048 × primary/held-out × two reversed series, 3 warmups + 20
 
 Execution notes: smoke `head-smoke-c9-334243-hs` (inside kept job 334243, c9) COMPLETED exit 0 on the first attempt and was inspected. Head weight quantization error 0.1219 relative L2. Both context128 cases ACCEPTED under the gate at 151,936 output columns (GQAH versus its FP64 control: relative L2 0.00209 / 0.00192, tokens identical, bitwise equal to eager and on repeat, workspace guards intact). Head effect, reported only: the head-quantized control keeps 64/64 leading tokens of the FP16-head control on the primary passage and 47/64 on the held-out passage; logit relative L2 between the two controls 0.170 / 0.123 at the first step. vLLM accepted the quantized head (model memory 1.23 GiB against 1.12 GiB) and its tokens equal GQAH's in all 64 positions. One held-out cell each, smoke only, not the result: GQAH 271.5 ms, V 238.9 ms, VH 180.8 ms. Because c9 had under an hour left, the complete predeclared run (contexts 128 and 2048) is queued inside kept job 334245 on c10 behind the ORT long-context run; c9's remaining time runs the same cells at context128 only, as a second-node replication decided before any full result.
 
+### E031 result — both arms pass on every node; vLLM with the project's 4-bit head is 23–24% faster than stock vLLM (2026-11-10, c10, c7, c9)
+
+Runs, all exit 0 inside kept allocations, no failed attempt: `head-full-c10-334245-hf` (the predeclared complete run, contexts 128 and 2048, 32 cells), `head-full-c7-334241-hf` (the same on a second node, started when c7 became free, before any full result was read), `head-full-c9-334243-hf128` (context128 only, 16 cells). 80 cells, 1600 timed requests. `results/e031_20261110/`; logit archives and the head checkpoint stay on BeeGFS (`e031-all.sha256`, `model-gptq-head.sha256`).
+
+Correctness of the head-quantized model (gate): all four cases ACCEPTED on c10 and on c7 with identical values, and both context128 cases on c9. GQAH versus its FP64 control: relative L2 0.00192–0.00233 against the 0.003 bound, tokens identical in every case (near-tie rule unused), bitwise equal to eager and on repeat, workspace guards intact at 151,936 output columns. vLLM with the head checkpoint returned GQAH's 64 tokens in every request; stock vLLM returned GQA's.
+
+Decode medians, ranges over two passages and two reversed series:
+
+| Node | Context | GQA ms | GQAH ms | vLLM ms | vLLM + 4-bit head ms | GQAH below GQA | VH below V | GQAH versus V | GQAH versus VH |
+|---|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| c10 | 128 | 326.8–326.9 | 271.4–271.5 | 237.4–238.6 | 180.7–180.8 | 17.0% | 23.9–24.3% | 13.7–14.3% slower | 50.1–50.2% slower |
+| c10 | 2048 | 375.4–375.6 | 320.2–320.3 | 248.6–249.2 | 190.9–191.1 | 14.7% | 23.1–23.4% | 28.5–28.8% slower | 67.6–67.7% slower |
+| c7 | 128 | 325.3–325.4 | 269.8 | 237.8–238.3 | 180.1–180.4 | 17.1% | 24.1–24.4% | 13.2–13.5% slower | 49.6–49.8% slower |
+| c7 | 2048 | 373.4–374.0 | 318.1–318.8 | 247.6–248.1 | 190.2–190.8 | 14.8% | 23.1–23.3% | 28.3–28.7% slower | 67.1–67.4% slower |
+| c9 | 128 | 326.7–326.8 | 271.3–271.4 | 237.6–238.2 | 180.7 | 17.0% | 23.9–24.1% | 13.9–14.2% slower | 50.1% slower |
+
+- Criterion (≥5% in every cell of a context): **passes for both arms at both contexts on every node.** The saving is 0.88 ms per step in our path and 0.92 ms in vLLM (calculated from the medians), somewhat more than the 0.6–0.8 ms expected.
+- vLLM with the project-quantized head decodes at 2.87 ms per step at context128 and 3.03 ms at 2048. On the same node (c10) ONNX Runtime INT4 measured 185.1–185.4 ms and 191.6–192.2 ms earlier the same day (E028): vLLM+head is 2.4–2.5% lower at context128 and 0.3–0.6% lower at 2048 — a tie within the 5% rule, from separate jobs, with different quantizers; it is not a claim of beating ORT. llama.cpp Q4_K_M (208.5/227.5 ms) was measured on c5 only.
+- Our own path with the 4-bit head is still slower than stock vLLM (13–29%) and than vLLM+head (50–68%); the E030 gap (merged projections, fused small kernels) is untouched.
+
+Effect on outputs (reported, not gated, NOT a quality evaluation): head weight quantization error 0.1219 relative L2. Against the FP16-head control, the head-quantized control's logits differ by relative L2 0.123–0.170 at the first step; all 64 tokens are kept in three of four cases (both passages at context2048, primary at 128) and 47/64 in one (held-out at 128). This is a large logit change compared with the 0.002 runtime rounding the gate bounds; whether generation quality suffers is unmeasured. For scale only: the 196 block projections were already quantized with weight error 0.118–0.181 in every earlier experiment.
+
+Limits: one model, batch 1, 64 tokens, two passages, RTX 5060 Ti; no perplexity or task metric; the vLLM arm relies on vLLM's own acceptance of `lm_head: true` and its unpatched Marlin; the embedding table stays FP16, so model memory rises by the head codes (vLLM reported 1.23 against 1.12 GiB). Decision: supported decode improvement for both runtimes, conditional on an output-quality evaluation that has not been done. Not a repository default.
+
 ## E030 — Where the per-step gap to vLLM lies (diagnostic)
 
 Predeclared 2026-11-10 after the E027 result, with the user's agreement ("alright") to the proposed next step. Question: on identical weights vLLM spends 3.8–3.9 ms per decode step and our GQA path 5.2–6.0 ms; which GPU kernels account for the difference? No path is changed and no speedup is claimed.
@@ -61,6 +85,23 @@ Hypotheses, from the E026 measurements (calculations, not results): (a) GQA stay
 Limits fixed now: one model (trained limit 32,768 positions), batch 1, 64 generated tokens, repeated-passage prompts, one node; no sanitizer coverage at these prefill sizes. `scripts/e028/submit.sh long`. Smoke (context4096 validation + one GQA cell) inspected before the dependent full job.
 
 Execution notes: smoke 334241 on c7 FAILED exit 1 in validation at context4096 before any timing: the E017 operator wrapper asserts at most 2048 activation rows per call, and a 4096-token prefill exceeds it. Deviation from "no code change", recorded before any result: `scripts/e028/long.py` runs E026's `att.py` with that assertion bound raised to 16384 (the wrapper's workspace size does not depend on the bound above 64 rows; decode is one row and unaffected). Whether Marlin's existing dispatch is correct at these prefill sizes is exactly what the unchanged E021 gate then tests per context. At the user's instruction not to release GPUs, the finished job's allocation is kept (`scripts/e028/inalloc.sh`, batch shell paused) and later stages run inside it as tagged directories.
+
+### E029 result — both hypotheses hold to 8192; the step grows faster than linear at 16384; prefill dominates (2026-11-10, c7)
+
+Smoke 334241 failed (recorded above); rerun `long-smoke-c7-334241-s2` and full `long-full-c7-334241-full` inside kept job 334241, exit 0, 48 cells, 960 timed requests; `results/e029_20261110/`. Validation: all six cases ACCEPTED under the unchanged gate with the raised row bound (GQA versus FP64 control relative L2 0.00208–0.00224, tokens identical, workspace guards intact), so Marlin's existing dispatch is correct for prefills of 4096–16384 rows in this test.
+
+| Context | GR ms | GQ ms | GRA ms | GQA ms | GQA below GRA | GQA below GQ | GQA below GR | GQA ms per step | GQA end-to-end ms | Peak allocated GR / GQA GiB |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| 4096 | 1210.5–1210.8 | 943.8–944.0 | 698.6–698.7 | 426.8–427.0 | 38.9% | 54.8% | 64.7% | 6.78 | 921–922 | 3.39 / 1.62 |
+| 8192 | 1875.1–1876.1 | 1602.1–1602.3 | 801.6–801.7 | 540.7–540.8 | 32.5% | 66.3% | 71.2% | 8.58 | 1927–1928 | 3.84 / 2.07 |
+| 16384 | 3149.1–3152.2 | 2878.8–2881.3 | 1063.6–1063.7 | 795.8–796.1 | 25.2% | 72.3–72.4% | 74.7–74.8% | 12.64 | 5053 | 4.95 / 3.17 |
+
+- (a) holds: GQA is ≥5% below GRA in every cell; 38.9%, 32.5%, 25.2% against the projected 38%, 34%, 27%. The Marlin saving stays 4.1–4.3 ms per step in absolute terms while the common cost grows.
+- (b) holds to 8192 and not beyond: projected 6.78 / 8.46 / 11.82 ms per step, measured 6.78 / 8.58 / 12.64. Between 8192 and 16384 the slope is 0.50 ms per 1,000 tokens, not 0.41; the cause was not profiled.
+- Prefill is the unchanged eager code and dominates: time to first token 0.49 s, 1.39 s and 4.26 s for GQA, i.e. 54%, 72% and 84% of the 64-token request.
+- Peak allocated memory stays 1.8 GiB lower with Marlin at every context.
+
+Limits as predeclared; in addition, the peak-memory and first-token figures are from the primary-passage series-1 files. Compared with production stacks at these contexts the path falls further behind (E027/E028 extensions).
 
 ## E028 — Our decode path versus llama.cpp and ONNX Runtime GenAI
 
@@ -112,6 +153,18 @@ Full run `llama-full-c5-334244-full` inside kept job 334244, exit 0, 48 cells, 9
 | 2048 | 903.7–903.8 | 375.7 | 547.9–548.0 | 227.5 | 65.2% slower | 64.9% slower | 58.5% |
 
 Predeclared outcome: **"slower" at all three contexts.** llama.cpp Q4_K_M decodes in 3.3–3.6 ms per step. Our 4-bit path remains faster than llama.cpp's FP16 (38–31%). End-to-end: GQA 341/379/573 ms versus Q4_K_M 220/248/412 ms. Token agreement with ours is the same pattern as ORT: 64/64 except the context128 held-out passage (46/64 FP16, 28/64 Q4_K_M). Same limits as the ORT result: own quantizer at 5.08 bits per weight including the embedding/output matrix, stack against stack, cause not profiled, batch 1, one node.
+
+### E028 long-context extension result — the deficit widens with context (2026-11-10)
+
+`ort-full-c10-334245-long` (c10) and `llama-full-c5-334244-long` (c5), inside the kept jobs, exit 0, 48 cells each; our variants validated through `long.py`; external tokens 64/64 equal to ours in every cell at these contexts. Decode medians (ranges over passages and series):
+
+| Context | GQA ms (c10 / c5) | ORT FP16 ms | ORT INT4 ms | GQA versus ORT INT4 | llama.cpp FP16 ms | llama.cpp Q4_K_M ms | GQA versus Q4_K_M |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| 4096 | 429.5–429.7 / 428.8–429.1 | 549.3–550.1 | 202.5–202.8 | 111.9–112.1% slower | 567.4–567.9 | 246.6 | 73.9–74.0% slower |
+| 8192 | 544.8–544.9 / 543.7–544.0 | 566.9–567.6 | 221.7–222.0 | 145.4–145.7% slower | 611.4–611.5 | 290.4–290.6 | 87.1–87.3% slower |
+| 16384 | 802.4–802.6 / 800.9–801.2 | 603.0–603.3 | 259.4–259.5 | 209.2–209.5% slower | 701.6–701.7 | 380.8–380.9 | 110.3–110.4% slower |
+
+Outcome "slower" at every context for both stacks. At 16384 our 4-bit path is also slower than both stacks' FP16 paths (802 ms against 603 and 702 ms), so the earlier statement that it beats their FP16 holds only up to context 8192 for ORT (545 against 567 ms) and 8192 for llama.cpp. Our graph FP16 is 2.2–5.3 times slower than theirs at these contexts. End-to-end for 64 tokens at 16384: GQA 5.1 s, ORT INT4 2.1 s, llama.cpp Q4_K_M 4.4 s. Same limits as the main E028 results.
 
 Extension predeclared 2026-11-10 after the ORT result above and before any long-context external measurement: with nodes kept at the user's instruction, each external stack is also run at contexts 4096, 8192 and 16384 with the same cells and rule, our variants validated through `long.py` as in E029. A stack that cannot run a context (memory, limits) is recorded as such.
 

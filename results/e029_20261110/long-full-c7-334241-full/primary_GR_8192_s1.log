@@ -1,0 +1,5 @@
++ prun timeout 6000 /tmp/e017-hpuvvad-20261109/bin/python /mnt/beegfs/hpuvvad/csc548-w4a16-e029-20261110/long-full-c7-334241-full/long.py time /mnt/beegfs/hpuvvad/csc548-w4a16-e029-20261110/long-full-c7-334241-full/out GR 8192 primary 1 /mnt/beegfs/hpuvvad/csc548-w4a16-e029-20261110/long-full-c7-334241-full/ref
+[prun] Master compute host = c7
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun timeout 6000 /tmp/e017-hpuvvad-20261109/bin/python /mnt/beegfs/hpuvvad/csc548-w4a16-e029-20261110/long-full-c7-334241-full/long.py time /mnt/beegfs/hpuvvad/csc548-w4a16-e029-20261110/long-full-c7-334241-full/out GR 8192 primary 1 /mnt/beegfs/hpuvvad/csc548-w4a16-e029-20261110/long-full-c7-334241-full/ref (family=openmpi4)
+DONE primary GR 8192 1 1.8759673234308138
