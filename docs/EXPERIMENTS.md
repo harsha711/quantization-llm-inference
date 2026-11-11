@@ -2,6 +2,16 @@
 
 Read the numerical/measurement [contract](CONTRACT.md) before interpreting these records. Preserve raw evidence, failed attempts, and inconclusive outcomes. An alternative that has not been implemented or measured is not a failed optimization. Historical entries below reconstruct only what the repository supports. Missing prior failure numbers or commit IDs remain unknown.
 
+## E032 — Output quality of the quantized model, with and without the 4-bit head
+
+Predeclared 2026-11-10 at the user's request ("go ahead") after E031, whose speedup is conditional on this. It is also the first quality measurement of the block quantization used since E017. No runtime, kernel or timing is involved.
+
+Method: teacher-forced perplexity on the WikiText-2 test split (the plain-text file distributed with the PyTorch examples, hash recorded at first download), tokenized once without special tokens, non-overlapping 2048-token windows over the whole text, next-token NLL summed in FP64 over every scored position, perplexity = exp(mean). Four models, one process each, PyTorch FP16 arithmetic on reconstructed weights (`scripts/e032/quality.py`): O original FP16; R the 196 block projections replaced by their project-G128 reconstruction; OH and RH the same with the output head replaced by its G128 reconstruction, which must hash-equal the head timed in E031. Marlin and vLLM are not run: E021/E031 already bound their deviation from these weights' exact computation to relative L2 ≤ 0.003, which is taken as negligible for perplexity (an assumption, stated).
+
+Reported: perplexity and top-1 next-token accuracy of all four, the relative perplexity rise from the head (RH versus R, and OH versus O), from the blocks (R versus O) and from both, and the share of positions where the top-1 prediction is unchanged. Labels fixed now for the head's effect, RH versus R: "negligible" if perplexity rises ≤ 1%, "modest" if ≤ 5%, "substantial" above that. The same labels are applied to R versus O for context. E031's conditional claim becomes unconditional only on "negligible" or "modest", and then only with the measured rise quoted.
+
+Limits fixed now: one model, one corpus, one metric; perplexity on a tokenized-style Wikipedia text is not a task evaluation; the quantizer is plain per-group max-scaling round-to-nearest with no calibration, so a poor result would describe this quantizer, not 4-bit head quantization in general.
+
 ## E031 — 4-bit output head through Marlin, in our path and in vLLM
 
 Predeclared 2026-11-10 from the E030 result. The user agreed beforehand to the experiment the profile would select and asked that follow-ups be queued on the kept nodes; E030 selects this one because the FP16 output head (1169 µs per step) is the largest single kernel in both stacks and the one cost vLLM has not removed. One main change: the output projection (the tied 151,936 × 1536 embedding matrix, cast to FP16 as both runtimes load it) is quantized with the unchanged project G128 quantizer and executed by Marlin. The FP16 embedding lookup, the 196 block projections and everything else are unchanged. No kernel change.
