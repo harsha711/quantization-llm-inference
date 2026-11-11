@@ -22,6 +22,17 @@ Checks in the process, also run by the in-job prerequisite (8 calibration window
 
 Limits fixed now: one model, one metric, one test corpus, one run, one seed for S; validation and test are both WikiText-2, so selection is in-domain for the test even though calibration is not; the head recipe is not searched; nothing is timed or gated (E038).
 
+### E037 attempt 1 — stopped after the in-job prerequisite; S diverged (2026-11-11, c7, job 335222)
+
+The prerequisite (8 calibration windows, 2 windows per split, 20 sign-SGD steps) ran W/G, C/AMT and six blocks of C/S; I cancelled the job by hand before the full run. `scancel` ended the job without its retrieval wait, so the run directory (`calib-c7-335222` on BeeGFS) was retrieved during the next job; the numbers below were read from `smoke.log` while the job ran. No full-run number exists from this attempt.
+
+- Observed, C/S: the block loss ROSE in four of six blocks (block 1: 5.4e5 at the start, 5.1e6 at the end; block 3: 1.9e6 to 3.3e6) and 1.1e8 gradient elements were non-finite in block 1. The plain squared error is of order 1e6 from block 1 on, where it was 2e4 in block 0. Interpretation, not separately measured: a few token positions carry activations far larger than the rest in this model family from the second block on, they own a plain squared error, and their gradients overflow FP16.
+- Observed, 2 windows per split, not comparable with full runs: O 8.009, plain rounding 9.077, W/G 8.547 (+6.7%), C/AMT 9.040 (+12.9%), i.e. C/AMT barely better than plain rounding, with calibration output error ABOVE plain rounding's in some `down_proj` (ratio 1.44, 1.62). With 8 windows this cannot separate the calibration source from the A/M/T settings.
+
+Amendment before any full run (commit follows this entry):
+- S now runs in FP32 (the block is cast to FP32 for the steps and back, exact for FP16 values) and minimizes the PER-TOKEN RELATIVE error ‖y−t‖²/‖t‖² averaged over tokens, so no position owns the loss. This departs from AutoRound's plain squared error; the final hidden state passes a per-token normalization before the head, which is the argument for a per-token relative measure.
+- The ladder is replaced by single factors, because a bad first rung would hide the later ones: C/G, C/A, C/M (shrunken scales, E036's order), C/T (staged, E036's order and scales), then C/+ = the combination of those of A, M, T that alone lower VALIDATION perplexity below C/G (not run if fewer than two do), then C/S. W/G is kept. Selection rule, criteria and limits are unchanged. The prerequisite now runs every variant (10 sign-SGD steps).
+
 ## E036 — Does a calibrated quantizer in the same 4-bit format remove the quality cost?
 
 Predeclared 2026-11-11 at the user's request ("i guess one last test should be fine", answering the proposal of exactly this experiment) after E032/E034: plain rounding costs +13.12% perplexity in the blocks and +8.60% in the head, and no uncalibrated 4-bit head reached 5%. Quality only: no runtime, kernel, gate or timing. This is the calibrated quantizer that AGENTS listed as needing a user request.

@@ -5,11 +5,14 @@ Runtime format unchanged (scripts/e017/quantize.py): symmetric, groups of 128 al
 reconstruction FP16(q*s). Variants are SOURCE/KIND. SOURCE of the calibration text: W WikiText-2 train (in-domain, as E036),
 C the first C4 shard (out-of-domain). KIND:
   G    E036's GPTQ: natural column order, each group's scale max|w|/7 of the already compensated weights
-  A    GPTQ, columns in descending Hessian-diagonal order, scales fixed beforehand per stored group ("static groups")
-  AM   A with each scale chosen from 21 shrink factors 1.0..0.5 to minimize sum |w - w_hat|^2.4
-  AMT  AM with the block's projections quantized in four stages (q/k/v, o, gate/up, down), inputs re-collected per stage
-  S    signed-gradient rounding (AutoRound, Cheng et al. 2023): per block, 200 sign-SGD steps on a rounding offset per
-       weight and a shrink factor per scale, minimizing the error of the block's output against the original block's
+  letters A, M, T modify G and combine (e.g. AMT):
+  A    columns in descending Hessian-diagonal order, scales fixed beforehand per stored group ("static groups")
+  M    each scale chosen from 21 shrink factors 1.0..0.5 to minimize sum |w - w_hat|^2.4
+  T    the block's projections quantized in four stages (q/k/v, o, gate/up, down), inputs re-collected per stage
+  +    the combination of those of A, M, T that alone lowered VALIDATION perplexity below C/G (skipped if already run)
+  S    signed-gradient rounding (after AutoRound, Cheng et al. 2023): per block, 200 sign-SGD steps on a rounding offset
+       per weight and a shrink factor per scale, minimizing the per-token relative error of the block's output against
+       the original block's; FP32 (the first attempt in FP16 with a plain squared error diverged, job 335222)
 Blocks are calibrated in order on the outputs of the already quantized blocks. Every variant is scored with the FP16 head on
 the WikiText-2 validation and test splits (E032's windows and metric). The C/ variant with the lowest VALIDATION perplexity
 is selected; its head is then GPTQ-quantized (E036's recipe, kind G) on its own final hidden states and both are saved.
@@ -125,12 +128,14 @@ def signround(layer, mods, x, tgt, gen, steps):
         return (z + (z.round().clamp(-7, 7) - z).detach()) * s
 
     losses, bad = [], 0
+    layer.float()  # exact both ways for FP16 values; the block's other parameters are not changed
     for t in range(steps):
         idx = torch.randint(len(x), (BATCH,), generator=gen)
-        with torch.enable_grad(), torch.autocast('cuda', dtype=torch.float16):
-            y = torch.func.functional_call(layer, {f'{n}.weight': soft(n) for n in names}, (x[idx],), kwargs)
-            y = y[0] if isinstance(y, tuple) else y
-            loss = (y.float() - tgt[idx].float()).pow(2).sum() / BATCH
+        with torch.enable_grad():
+            y = torch.func.functional_call(layer, {f'{n}.weight': soft(n) for n in names}, (x[idx].float(),), kwargs32)
+            y, t32 = y[0] if isinstance(y, tuple) else y, tgt[idx].float()
+            # per-token relative error: a few positions carry activations ~1000x the rest and would own a plain squared error
+            loss = ((y - t32).pow(2).sum(-1) / t32.pow(2).sum(-1).clamp_min(1e-6)).mean()
             grads = torch.autograd.grad(loss, params)
         lr = (1 - t / steps) / steps
         for p, g in zip(params, grads):
@@ -140,6 +145,7 @@ def signround(layer, mods, x, tgt, gen, steps):
             V[n].clamp_(-0.5, 0.5)
             A[n].clamp_(0.5, 1)
         losses.append(float(loss))
+    layer.half()
     assert all(math.isfinite(v) for v in losses)
     res = {}
     for n in names:
@@ -158,7 +164,7 @@ class Stop(Exception):
 
 with torch.no_grad():
     out, (test, valid, train, c4), head_hash, ncal = Path(sys.argv[1]), sys.argv[2:6], sys.argv[6], int(sys.argv[7])
-    variants = os.environ.get('E037_VARIANTS', 'W/G C/G C/A C/AM C/AMT C/S').split()
+    variants = os.environ.get('E037_VARIANTS', 'W/G C/G C/A C/M C/T C/+ C/S').split()
     steps = int(os.environ.get('E037_STEPS', 200))
     full = len(sys.argv) <= 8
     work = I.Workload(D.E017 / 'results/e017_20261109', 'O')
@@ -243,6 +249,8 @@ with torch.no_grad():
         inps0[src] = torch.stack(got)
     handle.remove()
     kwargs = box['kwargs']  # identical shapes for every sample, so one set of kwargs serves all
+    f32 = lambda v: v.float() if torch.is_tensor(v) and v.is_floating_point() else type(v)(f32(e) for e in v) if isinstance(v, (tuple, list)) else v
+    kwargs32 = {k: f32(v) for k, v in kwargs.items()}
     step = lambda layer, x: (lambda y: y[0] if isinstance(y, tuple) else y)(layer(x, **kwargs))
     x = inps0['C'][:1].cuda()
     for layer in body.layers:  # the layer-by-layer replay used for calibration must be the model's own forward
@@ -250,9 +258,16 @@ with torch.no_grad():
     assert torch.equal(body.norm(x), body(input_ids=cal['C'][:1].cuda(), use_cache=False).last_hidden_state), 'layer replay differs from the model'
     del x
 
-    layers_log, saved, hhs = {}, {}, {}
+    layers_log, saved, hhs, combo = {}, {}, {}, {}
     for tag in variants:
         src, kind = tag.split('/')
+        if kind == '+':
+            base = arms[f'{src}/G/F']['valid']['perplexity']
+            kind = ''.join(f for f in 'AMT' if arms[f'{src}/{f}/F']['valid']['perplexity'] < base)
+            combo[tag] = kind
+            print('COMBINATION', tag, repr(kind), flush=True)
+            if len(kind) < 2:  # nothing or one letter: that variant is already in the table
+                continue
         for (b, n), p in orig.items():
             allmods[b][n].weight = p
         cur = inps0[src].cuda()
@@ -311,6 +326,7 @@ with torch.no_grad():
         score(tag, dict(F=fp16_head))
 
     # selection on the validation split among the out-of-domain variants, then the head on the selected blocks
+    variants = [t for t in variants if f'{t}/F' in arms]
     best = min((t for t in variants if t[0] == 'C'), key=lambda t: arms[f'{t}/F']['valid']['perplexity'])
     names = {m.name: m for mods in allmods.values() for m in mods.values()}
     for name, (codes, scales) in saved[best].items():
@@ -340,7 +356,7 @@ with torch.no_grad():
     result = dict(sha256={k: hashlib.sha256(v).hexdigest() for k, v in raw.items()}, windows=nwin, scored_tokens={s: n * (WINDOW - 1) for s, n in nwin.items()},
                   calibration=dict(windows=ncal, tokens=ncal * WINDOW, wikitext_stride=stride, c4_documents_read=seen, damp=DAMP, sign_steps=steps, sign_batch=BATCH,
                                    ids_sha256={k: tensor_sha(v.numpy()) for k, v in cal.items()}),
-                  gpu=work.identity['gpu'], variants=variants, selected=best, checkpoint_sha256=sha.hexdigest(), e036_c_f_test=E036_CF,
+                  gpu=work.identity['gpu'], variants=variants, combination=combo, selected=best, checkpoint_sha256=sha.hexdigest(), e036_c_f_test=E036_CF,
                   arms=arms, compare=compare, layers=layers_log)
     (out / 'quality.json').write_text(json.dumps(result, indent=1))
     print('DONE', json.dumps(dict(selected=best, compare=compare)), flush=True)
