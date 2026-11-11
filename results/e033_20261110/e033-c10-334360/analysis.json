@@ -1,0 +1,392 @@
+{
+ "vllm_head_versus_ort_int4": {
+  "128": {
+   "cells": [
+    {
+     "prompt": "primary",
+     "series": 1,
+     "decode_ms": {
+      "V": 238.125,
+      "VH": 180.72,
+      "OQ": 185.125
+     },
+     "VH_vs_OQ_pct": 2.38,
+     "VH_vs_V_pct": 24.107
+    },
+    {
+     "prompt": "primary",
+     "series": 2,
+     "decode_ms": {
+      "V": 238.275,
+      "VH": 180.748,
+      "OQ": 185.173
+     },
+     "VH_vs_OQ_pct": 2.39,
+     "VH_vs_V_pct": 24.143
+    },
+    {
+     "prompt": "heldout",
+     "series": 1,
+     "decode_ms": {
+      "V": 238.57,
+      "VH": 180.743,
+      "OQ": 185.005
+     },
+     "VH_vs_OQ_pct": 2.304,
+     "VH_vs_V_pct": 24.239
+    },
+    {
+     "prompt": "heldout",
+     "series": 2,
+     "decode_ms": {
+      "V": 238.723,
+      "VH": 180.918,
+      "OQ": 185.303
+     },
+     "VH_vs_OQ_pct": 2.367,
+     "VH_vs_V_pct": 24.214
+    }
+   ],
+   "outcome": "tie"
+  },
+  "2048": {
+   "cells": [
+    {
+     "prompt": "primary",
+     "series": 1,
+     "decode_ms": {
+      "V": 248.799,
+      "VH": 190.909,
+      "OQ": 191.703
+     },
+     "VH_vs_OQ_pct": 0.414,
+     "VH_vs_V_pct": 23.268
+    },
+    {
+     "prompt": "primary",
+     "series": 2,
+     "decode_ms": {
+      "V": 249.025,
+      "VH": 191.189,
+      "OQ": 191.687
+     },
+     "VH_vs_OQ_pct": 0.26,
+     "VH_vs_V_pct": 23.225
+    },
+    {
+     "prompt": "heldout",
+     "series": 1,
+     "decode_ms": {
+      "V": 249.245,
+      "VH": 190.987,
+      "OQ": 191.703
+     },
+     "VH_vs_OQ_pct": 0.373,
+     "VH_vs_V_pct": 23.374
+    },
+    {
+     "prompt": "heldout",
+     "series": 2,
+     "decode_ms": {
+      "V": 249.181,
+      "VH": 191.447,
+      "OQ": 191.834
+     },
+     "VH_vs_OQ_pct": 0.202,
+     "VH_vs_V_pct": 23.17
+    }
+   ],
+   "outcome": "tie"
+  }
+ },
+ "batch_sweep": [
+  {
+   "context": 128,
+   "batch": 1,
+   "series": 1,
+   "decode_ms": {
+    "V": 238.125,
+    "VH": 180.72
+   },
+   "tokens_per_s": {
+    "V": 264.6,
+    "VH": 348.6
+   },
+   "VH_vs_V_pct": 24.107,
+   "tokens_agree_min": {
+    "V": 64,
+    "VH": 64
+   }
+  },
+  {
+   "context": 128,
+   "batch": 1,
+   "series": 2,
+   "decode_ms": {
+    "V": 238.275,
+    "VH": 180.748
+   },
+   "tokens_per_s": {
+    "V": 264.4,
+    "VH": 348.6
+   },
+   "VH_vs_V_pct": 24.143,
+   "tokens_agree_min": {
+    "V": 64,
+    "VH": 64
+   }
+  },
+  {
+   "context": 128,
+   "batch": 2,
+   "series": 1,
+   "decode_ms": {
+    "V": 239.028,
+    "VH": 184.985
+   },
+   "tokens_per_s": {
+    "V": 527.1,
+    "VH": 681.1
+   },
+   "VH_vs_V_pct": 22.61,
+   "tokens_agree_min": {
+    "V": 64,
+    "VH": 64
+   }
+  },
+  {
+   "context": 128,
+   "batch": 2,
+   "series": 2,
+   "decode_ms": {
+    "V": 238.996,
+    "VH": 184.96
+   },
+   "tokens_per_s": {
+    "V": 527.2,
+    "VH": 681.2
+   },
+   "VH_vs_V_pct": 22.61,
+   "tokens_agree_min": {
+    "V": 64,
+    "VH": 64
+   }
+  },
+  {
+   "context": 128,
+   "batch": 4,
+   "series": 1,
+   "decode_ms": {
+    "V": 239.653,
+    "VH": 186.722
+   },
+   "tokens_per_s": {
+    "V": 1051.5,
+    "VH": 1349.6
+   },
+   "VH_vs_V_pct": 22.087,
+   "tokens_agree_min": {
+    "V": 64,
+    "VH": 64
+   }
+  },
+  {
+   "context": 128,
+   "batch": 4,
+   "series": 2,
+   "decode_ms": {
+    "V": 240.682,
+    "VH": 186.749
+   },
+   "tokens_per_s": {
+    "V": 1047.0,
+    "VH": 1349.4
+   },
+   "VH_vs_V_pct": 22.408,
+   "tokens_agree_min": {
+    "V": 64,
+    "VH": 64
+   }
+  },
+  {
+   "context": 128,
+   "batch": 8,
+   "series": 1,
+   "decode_ms": {
+    "V": 242.962,
+    "VH": 188.817
+   },
+   "tokens_per_s": {
+    "V": 2074.4,
+    "VH": 2669.2
+   },
+   "VH_vs_V_pct": 22.285,
+   "tokens_agree_min": {
+    "V": 64,
+    "VH": 64
+   }
+  },
+  {
+   "context": 128,
+   "batch": 8,
+   "series": 2,
+   "decode_ms": {
+    "V": 242.631,
+    "VH": 189.022
+   },
+   "tokens_per_s": {
+    "V": 2077.2,
+    "VH": 2666.4
+   },
+   "VH_vs_V_pct": 22.095,
+   "tokens_agree_min": {
+    "V": 64,
+    "VH": 64
+   }
+  },
+  {
+   "context": 2048,
+   "batch": 1,
+   "series": 1,
+   "decode_ms": {
+    "V": 248.799,
+    "VH": 190.909
+   },
+   "tokens_per_s": {
+    "V": 253.2,
+    "VH": 330.0
+   },
+   "VH_vs_V_pct": 23.268,
+   "tokens_agree_min": {
+    "V": 64,
+    "VH": 64
+   }
+  },
+  {
+   "context": 2048,
+   "batch": 1,
+   "series": 2,
+   "decode_ms": {
+    "V": 249.025,
+    "VH": 191.189
+   },
+   "tokens_per_s": {
+    "V": 253.0,
+    "VH": 329.5
+   },
+   "VH_vs_V_pct": 23.225,
+   "tokens_agree_min": {
+    "V": 64,
+    "VH": 64
+   }
+  },
+  {
+   "context": 2048,
+   "batch": 2,
+   "series": 1,
+   "decode_ms": {
+    "V": 262.387,
+    "VH": 208.199
+   },
+   "tokens_per_s": {
+    "V": 480.2,
+    "VH": 605.2
+   },
+   "VH_vs_V_pct": 20.652,
+   "tokens_agree_min": {
+    "V": 64,
+    "VH": 64
+   }
+  },
+  {
+   "context": 2048,
+   "batch": 2,
+   "series": 2,
+   "decode_ms": {
+    "V": 262.548,
+    "VH": 209.131
+   },
+   "tokens_per_s": {
+    "V": 479.9,
+    "VH": 602.5
+   },
+   "VH_vs_V_pct": 20.346,
+   "tokens_agree_min": {
+    "V": 64,
+    "VH": 64
+   }
+  },
+  {
+   "context": 2048,
+   "batch": 4,
+   "series": 1,
+   "decode_ms": {
+    "V": 280.239,
+    "VH": 226.035
+   },
+   "tokens_per_s": {
+    "V": 899.2,
+    "VH": 1114.9
+   },
+   "VH_vs_V_pct": 19.342,
+   "tokens_agree_min": {
+    "V": 64,
+    "VH": 64
+   }
+  },
+  {
+   "context": 2048,
+   "batch": 4,
+   "series": 2,
+   "decode_ms": {
+    "V": 281.313,
+    "VH": 225.512
+   },
+   "tokens_per_s": {
+    "V": 895.8,
+    "VH": 1117.5
+   },
+   "VH_vs_V_pct": 19.836,
+   "tokens_agree_min": {
+    "V": 64,
+    "VH": 64
+   }
+  },
+  {
+   "context": 2048,
+   "batch": 8,
+   "series": 1,
+   "decode_ms": {
+    "V": 336.905,
+    "VH": 281.581
+   },
+   "tokens_per_s": {
+    "V": 1496.0,
+    "VH": 1789.9
+   },
+   "VH_vs_V_pct": 16.421,
+   "tokens_agree_min": {
+    "V": 64,
+    "VH": 64
+   }
+  },
+  {
+   "context": 2048,
+   "batch": 8,
+   "series": 2,
+   "decode_ms": {
+    "V": 336.224,
+    "VH": 281.978
+   },
+   "tokens_per_s": {
+    "V": 1499.0,
+    "VH": 1787.4
+   },
+   "VH_vs_V_pct": 16.134,
+   "tokens_agree_min": {
+    "V": 64,
+    "VH": 64
+   }
+  }
+ ]
+}

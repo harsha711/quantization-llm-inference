@@ -65,6 +65,28 @@ Predeclared 2026-11-10 after the user invited concurrent runs while E032 is in p
 
 References and correctness come from `head.py validate` rerun in the job (E031's gate). Limits fixed now: identical prompts in a batch (no mix of lengths), vLLM only for the batch sweep (our path is batch-1 only; ORT's batch API is not exercised), decode measured as the 64-token minus 1-token wall-time difference, one node (the one that already holds both node-local environments), E031's output-change caveat and E032's pending quality result apply unchanged. `scripts/e027/submit.sh e033`, `scripts/e033/analyze.py`.
 
+### E033 result — vLLM with the 4-bit head ties ONNX Runtime INT4 in the same job; the head gain holds to batch 8 (2026-11-10, c10)
+
+Job 334360 on c10, exit 0 on the first attempt, 19:43–20:17 EST. `results/e033_20261110/e033-c10-334360/` (`analysis.json`, 48 cell records, logs, `all.sha256` of every file including the logit archives and compile cache left on BeeGFS). All four `head.py validate` cases accepted under E031's gate. Every cell has 3 warmups + 20 requests.
+
+1. vLLM+head against ORT INT4, interleaved. Decode medians for 63 tokens: context 128, VH 180.7–180.9 ms, OQ 185.0–185.3 ms, VH lower by 2.30–2.39%; context 2048, VH 190.9–191.4 ms, OQ 191.7–191.8 ms, VH lower by 0.20–0.41%. All eight cells are within ±5%: outcome **"tie"** at both contexts. This confirms E031's cross-job reading with a same-job measurement; it is not a win. Different quantizers, stack against stack; the VH model carries E032's +8.6% perplexity cost and ORT's INT4 model has no quality measurement here.
+2. Head gain in vLLM by batch size (primary passage, identical prompts in a batch, two series):
+
+| Context | Batch | V decode ms | VH decode ms | V tokens/s | VH tokens/s | VH below V (s1 / s2) |
+|---:|---:|---:|---:|---:|---:|---:|
+| 128 | 1 | 238.1–238.3 | 180.7–180.7 | 264.6–264.4 | 348.6–348.6 | 24.1% / 24.1% |
+| 128 | 2 | 239.0–239.0 | 185.0–185.0 | 527.1–527.2 | 681.1–681.2 | 22.6% / 22.6% |
+| 128 | 4 | 239.7–240.7 | 186.7–186.7 | 1051.5–1047.0 | 1349.6–1349.4 | 22.1% / 22.4% |
+| 128 | 8 | 243.0–242.6 | 188.8–189.0 | 2074.4–2077.2 | 2669.2–2666.4 | 22.3% / 22.1% |
+| 2048 | 1 | 248.8–249.0 | 190.9–191.2 | 253.2–253.0 | 330.0–329.5 | 23.3% / 23.2% |
+| 2048 | 2 | 262.4–262.5 | 208.2–209.1 | 480.2–479.9 | 605.2–602.5 | 20.7% / 20.3% |
+| 2048 | 4 | 280.2–281.3 | 226.0–225.5 | 899.2–895.8 | 1114.9–1117.5 | 19.3% / 19.8% |
+| 2048 | 8 | 336.9–336.2 | 281.6–282.0 | 1496.0–1499.0 | 1789.9–1787.4 | 16.4% / 16.1% |
+
+The hypothesis holds: VH is at least 5% below V at every batch size and context (16.1–24.1%). As expected, the percentage shrinks with batch, mildly at context 128 (24.1% to 22.1%) and more at 2048 (23.3% to 16.1%). Every sequence of every batch reproduced all 64 reference tokens. Observation, not explained: at context 128 the whole batch decodes in nearly the batch-1 time (throughput 7.8 times higher at batch 8), while at 2048 batch 8 takes 35% longer than batch 1.
+
+Limits as predeclared: identical prompts per batch, vLLM only (our path is batch-1 only), one node, 64 tokens. The batch code path of `vbench.py` ran here for the first time; its only checks are the token agreement and the batch-1 cells reproducing E031's medians (V 237.4–238.6 then, 238.1–238.7 now; VH 180.7 both times). The 4-bit head's speedup still CHANGES MODEL OUTPUTS and costs +8.6% perplexity (E032); E034 found no uncalibrated 4-bit head under 5%.
+
 ## E032 — Output quality of the quantized model, with and without the 4-bit head
 
 Predeclared 2026-11-10 at the user's request ("go ahead") after E031, whose speedup is conditional on this. It is also the first quality measurement of the block quantization used since E017. No runtime, kernel or timing is involved.
