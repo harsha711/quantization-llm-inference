@@ -2,6 +2,22 @@
 
 Read the numerical/measurement [contract](CONTRACT.md) before interpreting these records. Preserve raw evidence, failed attempts, and inconclusive outcomes. An alternative that has not been implemented or measured is not a failed optimization. Historical entries below reconstruct only what the repository supports. Missing prior failure numbers or commit IDs remain unknown.
 
+## E038 — Do the calibrated tensors pass the gate and run at the speed of the plain-rounded ones?
+
+Predeclared 2026-11-11 under the same user request as E037 ("one last attempt"), before E037's full run finished and without knowledge of which variant it selects or what it costs. It closes E036's open item "nothing was timed". It runs whatever E037 selects and saves, pass or fail on E037's quality criteria; the quality figures quoted with E038's timings are E037's for that checkpoint.
+
+Change, one: the VALUES of codes and scales (E037's selected checkpoint, blocks and head) in place of the plain-rounded ones. No kernel, operator, runtime, format, graph or request changes. `scripts/e038/ckpt.py` re-lays-out the checkpoint into E017's artifact format under a new root (symlinks to the old one except `artifacts`), through the unchanged repack with its round-trip assertions, and checks that the FP16 baseline loaded from that root equals the checkpoint's reconstruction bit for bit. Every existing script (E031 `head.py`, E027 `convert.py`/`vbench.py`, E031 `headconv.py`) then runs unchanged with `E017_ROOT` pointing at it; only the head's source of codes is swapped.
+
+One job, one node, contexts 128 and 2048, primary and held-out prompts, two series in reversed order, 3 warmups + 20 requests per cell, 64 tokens, batch 1 — E031's protocol. Eight arms: GQA, GQAH, V, VH on the plain-rounded tensors (E031's arms) and cGQA, cGQAH, cV, cVH on the calibrated ones.
+
+Criteria, fixed now:
+1. Gate: E031's `validate` (E021's criteria against an FP64 control on the same weights and the same 4-bit head: finite, tokens, relative L2 ≤ 0.003, graph bitwise equal to eager, repeat bitwise, workspace, state) is accepted in all four cases on the calibrated root. If not, the job stops and no calibrated timing is released. The plain root's gate is rerun in the same job as the control.
+2. Equal speed: for each arm and each of the eight cells, the calibrated decode median is within 5% of the plain-rounded median. Reported: the largest absolute difference per arm. "Equal" here means "no difference at the project's 5% threshold", not a proof of equality.
+3. Head gain on calibrated tensors: cGQAH at least 5% below cGQA and cVH at least 5% below cV in every cell (E031's criterion).
+Reported besides: vLLM's leading-token agreement with our path on the same calibrated weights.
+
+Limits fixed now: the gate is E021's third, post hoc gate (E017 and E019 remain failed) and it shows that the Marlin path computes the calibrated model, not that the calibrated model is good — that is E037's perplexity. No FP16 baseline is timed on the calibrated reconstruction (dense FP16 time does not depend on values; expected, not measured), so "faster than our own FP16" stays E024/E026's statement about plain-rounded weights. Our path remains slower than vLLM. One model, one node, batch 1, 64 tokens, no sanitizer. Marlin, vLLM and its `lm_head` support are upstream. Not a repository default.
+
 ## E037 — Which calibrated quantizer in the same 4-bit format costs least, with out-of-domain calibration?
 
 Predeclared 2026-11-11 at the user's request ("i want to give one last one try ... you can use any tool you'd like ... this is one last attempt"; the choice of experiment was left to the agent). This request authorizes the items AGENTS listed after E036 as needing one: other GPTQ settings, out-of-domain calibration data, and keeping a calibrated checkpoint for timing (E038, predeclared separately after this result). Quality only: no runtime, kernel, gate or timing here.

@@ -31,6 +31,7 @@ if [[ ! -e "$VENV/bin/python" ]]; then sha256sum -c "$T.sha256"; tar xf "$T" -C 
 EOF
 embed "$here/../e018/diagnose.py"; embed "$here/../e021/validate.py"; embed "$here/../e023/run.py"; embed "$here/../e026/att.py"
 embed "$here/../e028/long.py"; embed "$here/../e030/gprofile.py"; embed "$here/../e030/vprofile.py"; embed "$here/../e031/head.py"; embed "$here/../e031/headconv.py"; embed "$here/../e031/headanalyze.py"; embed "$here/../e028/obench.py"; printf 'cat > "$S/e033analyze.py" <<'"'"'PYEOF'"'"'\n'; cat "$here/../e033/analyze.py"; printf 'PYEOF\n'; embed "$here/convert.py"; embed "$here/vbench.py"; embed "$here/analyze.py"
+embed "$here/../e038/ckpt.py"; printf 'cat > "$S/e038analyze.py" <<'"'"'PYEOF'"'"'\n'; cat "$here/../e038/analyze.py"; printf 'PYEOF\n'
 embed "$here/../e035/head8conv.py"; printf 'cat > "$S/e035analyze.py" <<'"'"'PYEOF'"'"'\n'; cat "$here/../e035/analyze.py"; printf 'PYEOF\n'
 cat <<'EOF'
 export PROJECT_ROOT=$E017_ROOT
@@ -199,6 +200,51 @@ for series in 1 2; do
  for c in "${cs[@]}"; do for p in "${ps[@]}"; do for v in "${vs[@]}"; do cell out "$p" "$v" "$c" "$series"; done; done; done
 done
 python3 "$S/e035analyze.py" "$S/out" > "$S/analysis.json"
+EOF
+;;
+e038) cat <<EOF
+CK=$prior  # E037 run directory holding checkpoint.npz and quality.json
+EOF
+cat <<'EOF'
+# E038: gate and time E037's calibrated checkpoint against the plain-rounded tensors, in our path and in vLLM, one job.
+X=/mnt/beegfs/hpuvvad/csc548-w4a16-e038-20261111; mkdir -p "$X"
+export E038_CKPT="$CK/checkpoint.npz"
+echo "$(python3 -c "import json,sys;print(json.load(open(sys.argv[1]))['checkpoint_sha256'])" "$CK/quality.json")  $E038_CKPT" | sha256sum -c
+cp "$CK/quality.json" "$S/e037-quality.json"
+(cd "$OUT" && sha256sum -c model-gptq-head.sha256) > "$S/head-model-check.log"
+if [[ ! -e "$X/built.sha256" ]]; then
+ rm -rf "$X/root" "$X/model-gptq-c" "$X/model-gptq-c-head"
+ (set -x; prun timeout 3000 "$E017_PYTHON" "$S/ckpt.py" root "$X/root") > "$S/root.log" 2>&1
+ (set -x; E017_ROOT="$X/root" prun timeout 3000 "$E017_PYTHON" "$S/convert.py" "$X/model-gptq-c") > "$S/convert-c.log" 2>&1
+ (set -x; prun timeout 3000 "$E017_PYTHON" "$S/ckpt.py" headconv "$X/model-gptq-c" "$X/model-gptq-c-head") > "$S/headconv-c.log" 2>&1
+ (cd "$X" && sha256sum model-gptq-c/* model-gptq-c-head/* root/results/e017_20261109/artifacts/* > built.sha256)
+fi
+(cd "$X" && sha256sum -c built.sha256) > "$S/built-check.log"
+cell() { local dir=$1 p=$2 v=$3 c=$4 series=$5 label
+ label="${p}_${v}_${c}_s${series}"
+ clock > "$S/$dir-$label-clocks-before.csv"
+ case $v in
+ GQA|GQAH) (set -x; prun timeout 6000 "$E017_PYTHON" "$S/head.py" time "$S/$dir" "$v" "$c" "$p" "$series" "$S/ref") > "$S/$dir-$label.log" 2>&1;;
+ cGQA|cGQAH) (set -x; E017_ROOT="$X/root" prun timeout 6000 "$E017_PYTHON" "$S/ckpt.py" head time "$S/${dir}c" "${v#c}" "$c" "$p" "$series" "$S/refc") > "$S/$dir-$label.log" 2>&1;;
+ V) (set -x; prun timeout 6000 "$VV/bin/python" "$S/vbench.py" "$OUT/model-gptq" "$S/ref" "$S/$dir" "$c" "$p" "$series" V GQA) > "$S/$dir-$label.log" 2>&1;;
+ VH) (set -x; prun timeout 6000 "$VV/bin/python" "$S/vbench.py" "$OUT/model-gptq-head" "$S/ref" "$S/$dir" "$c" "$p" "$series" VH GQAH) > "$S/$dir-$label.log" 2>&1;;
+ cV) (set -x; prun timeout 6000 "$VV/bin/python" "$S/vbench.py" "$X/model-gptq-c" "$S/refc" "$S/${dir}c" "$c" "$p" "$series" V GQA) > "$S/$dir-$label.log" 2>&1;;
+ cVH) (set -x; prun timeout 6000 "$VV/bin/python" "$S/vbench.py" "$X/model-gptq-c-head" "$S/refc" "$S/${dir}c" "$c" "$p" "$series" VH GQAH) > "$S/$dir-$label.log" 2>&1;;
+ esac
+ printf '{"label":"%s/%s","finished_utc_ns":%s}\n' "$dir" "$label" "$(date +%s%N)" >> "$S/order.jsonl"; }
+# The gate, plain then calibrated (E031's validate: E021 criteria against an FP64 control on the same weights and head).
+(set -x; prun timeout 6000 "$E017_PYTHON" "$S/head.py" validate "$S/ref" 128 2048) > "$S/validate.log" 2>&1
+(set -x; E017_ROOT="$X/root" prun timeout 6000 "$E017_PYTHON" "$S/ckpt.py" head validate "$S/refc" 128 2048) > "$S/validate-c.log" 2>&1
+# Cheap prerequisite: one calibrated cell per stack must load, match its reference and write a row.
+mkdir "$S/smoke" "$S/smokec" "$S/out" "$S/outc"
+cell smoke heldout cGQAH 128 1; cell smoke heldout cVH 128 1
+ls "$S/smokec/heldout_GQAH_128_s1.json" "$S/smokec/heldout_VH_128_s1.json"
+for series in 1 2; do
+ cs=(128 2048); ps=(primary heldout); vs=(GQA cGQA GQAH cGQAH V cV VH cVH)
+ if [[ $series == 2 ]]; then cs=(2048 128); ps=(heldout primary); vs=(cVH VH cV V cGQAH GQAH cGQA GQA); fi
+ for c in "${cs[@]}"; do for p in "${ps[@]}"; do for v in "${vs[@]}"; do cell out "$p" "$v" "$c" "$series"; done; done; done
+done
+python3 "$S/e038analyze.py" "$S/out" "$S/outc" > "$S/analysis.json"
 EOF
 ;;
 *) exit 2;;
