@@ -166,7 +166,7 @@
 
 ## E027–E030 external comparison and gap diagnostic
 
-- E027 and E028 are complete at contexts 128/512/2048 with outcome "slower" everywhere; read their result blocks in EXPERIMENTS. On identical G128 codes/scales vLLM v0.33.0 decodes 63 tokens in 238.1–248.9 ms versus our GQA 326.8–376.0 ms, with identical 64 tokens. llama.cpp Q4_K_M and ONNX Runtime GenAI INT4 are faster still, but use their own quantizers including the embedding/output matrix: always say stack against stack, not identical weights. No quality evaluation exists for any quantized model.
+- E027 and E028 are complete at contexts 128/512/2048 with outcome "slower" everywhere; read their result blocks in EXPERIMENTS. On identical G128 codes/scales vLLM v0.33.0 decodes 63 tokens in 238.1–248.9 ms versus our GQA 326.8–376.0 ms, with identical 64 tokens. llama.cpp Q4_K_M and ONNX Runtime GenAI INT4 are faster still, but use their own quantizers including the embedding/output matrix: always say stack against stack, not identical weights. Quality is measured only for the project quantizer (E032/E034); llama.cpp's and ONNX Runtime's quantized models remain unmeasured.
 - Never present our path as competitive with or faster than a production stack. Say it decodes faster than our own FP16 and, up to context 8192, than llama.cpp/ORT FP16 (vLLM FP16 not run), with the E021 third-gate disclosure. Batch 1 favours us against serving stacks; one model, 64 tokens, RTX 5060 Ti only.
 - Long-context extensions are complete: the deficit widens with context (vLLM to 4096/8192; llama.cpp/ORT to 16384). "Faster than llama.cpp/ORT FP16" holds only up to context 8192; at 16384 our 4-bit path is slower than both FP16 paths. Always attach that qualifier.
 - E029 is complete: GQA stays 38.9%/32.5%/25.2% below GRA at 4096/8192/16384; the step grows faster than linear beyond 8192 (unprofiled, do not attribute); prefill is 54–84% of the request. Its raised 2048-row operator assertion (`scripts/e028/long.py`) is a recorded deviation covered per context by the unchanged E021 gate; no sanitizer at those prefill sizes.
@@ -175,8 +175,17 @@
 ## E031 completed 4-bit output head
 
 - E031 is complete: project G128 head through Marlin passes 5% in every cell on c10/c7/c9. Ours 17.0%/14.7% lower decode at 128/2048; vLLM with `lm_head: true` 23.1–24.4% below stock vLLM. Our path with the head is still slower than stock vLLM; never say otherwise.
-- Every mention must say: it CHANGES MODEL OUTPUTS (logit relative L2 0.12–0.17 versus FP16 head; 47/64 tokens in one of four cases) and NO quality evaluation exists; the gain is conditional on one. Our arm also carries the E021 third-gate disclosure.
-- Versus ONNX Runtime INT4 it is a tie within 5% (separate jobs, different quantizers), never a win. Credit Marlin, vLLM and its `lm_head` support to upstream; ours is the head quantization, conversion, gate and measurement. Not a repository default. The next step would be a quality evaluation, only on user request.
+- Every mention must say: it CHANGES MODEL OUTPUTS (logit relative L2 0.12–0.17 versus FP16 head; 47/64 tokens in one of four cases) and COSTS +8.6% WikiText-2 perplexity over the FP16 head (E032, "substantial"); the gain stays conditional on accepting that cost. Our arm also carries the E021 third-gate disclosure.
+- Versus ONNX Runtime INT4 it is a tie within 5% (separate jobs, different quantizers; same-job confirmation in E033), never a win. Credit Marlin, vLLM and its `lm_head` support to upstream; ours is the head quantization, conversion, gate and measurement. Not a repository default.
+
+## E032–E035 quality and head precision
+
+- E032–E035 are complete; read their EXPERIMENTS entries. WikiText-2 perplexity (307,050 scored tokens): original FP16 8.606; 4-bit blocks, FP16 head 9.735 (+13.12%); 4-bit blocks and head 10.572 (head +8.60%, both +22.85%); all "substantial". The quantizer is plain uncalibrated round-to-nearest: this bounds this quantizer, not 4-bit quantization in general.
+- Every full-model 4-bit speedup since E020 must say the blocks cost 13.1% perplexity versus the FP16 original (speed comparisons stay like for like: the FP16 baselines ran the same reconstructed weights). Every 4-bit head gain must quote +8.6%.
+- E033 (c10, one job): vLLM with the 4-bit head is 2.30–2.39% / 0.20–0.41% below ONNX Runtime INT4 at contexts 128/2048: a tie, never a win, different quantizers. The vLLM head gain holds at batch 1–8 (16.1–24.1%, shrinking with batch; context 2048 23.3% to 16.1%), identical prompts per batch, vLLM only.
+- E034: no uncalibrated 4-bit head reaches 5%; best is group 32 with error-minimizing scales at +5.82%, "substantial", never "about 5%". The 8-bit head costs +0.04%. Failed attempt 334362 (bit-for-bit control, negative zero, cause inferred) stays preserved.
+- E035 (c51): the 8-bit head in vLLM passes in all eight cells, 15.6–16.5% below stock vLLM, about 70% of the 4-bit head's same-job 22.5–23.6% gain, all 64 tokens unchanged. vLLM only: no project arm (our operator is 4-bit only), no logit check or E021-style gate, no same-node ONNX Runtime/llama.cpp comparison, batch 1, one node, one corpus. Marlin, vLLM, its 8-bit kernel and `dynamic` override are upstream; ours is the head quantization, conversion and measurement. Not a default.
+- Not authorized without a user request: a calibrated (GPTQ/AWQ-style) quantizer for head or blocks, an 8-bit arm in our own operator, a same-node 8-bit head versus ONNX Runtime comparison, mixed precision.
 
 ## Rooflines, if requested
 
