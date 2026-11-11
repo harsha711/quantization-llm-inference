@@ -38,6 +38,25 @@ Checks in the process, also run by the in-job prerequisite (8 calibration window
 
 Limits fixed now: one model, one metric, one test corpus, one run, one seed for S; validation and test are both WikiText-2, so selection is in-domain for the test even though calibration is not; the head recipe is not searched; nothing is timed or gated (E038).
 
+### E037 attempt 2 — full run crashed at the last variant, out of GPU memory; no result file (2026-11-11, c4, job 335226)
+
+Exit 1 after 1 h 52 min. `results/e037_20261111/attempt-c4-335226-oom/` (logs, the prerequisite's `quality.json`). The prerequisite passed (all seven variants; S with the amended loss fell in every block but block 0, zero non-finite gradients). The full run scored six variants, finished all 28 blocks of C/S, and died allocating the 1.2 GB logits tensor while scoring C/S (7.9 GiB allocated, 6.3 GiB reserved but unusable). `quality.json` and the checkpoint are written at the end, so neither exists; the numbers below are the four-decimal `ARM` lines of `calib.log`, and C/S has no score.
+
+| Variant (128 windows; FP16 head) | Validation ppl | Test ppl | Test rise vs original |
+|---|---:|---:|---:|
+| O original | 8.9684 | 8.6058 | — |
+| plain rounding | 10.2168 | 9.7350 | +13.12% |
+| W/G (in-domain, E036's quantizer) | 9.6088 | 9.1882 | +6.77% |
+| C/G (C4, E036's quantizer) | 9.7689 | 9.3425 | +8.56% |
+| C/A | 9.5394 | 9.1288 | +6.08% |
+| C/M | 9.6457 | 9.2305 | +7.26% |
+| C/T | 9.7036 | 9.2747 | +7.77% |
+| C/+ = AMT | 9.7247 | 9.3411 | +8.54% |
+
+Observed: the controls reproduce E032 (8.6058, 9.7350) and W/G reproduces E036 (9.188). Out-of-domain calibration costs 1.8 points with the unchanged quantizer (8.56% against 6.77%). Each of A, M, T alone lowers both validation and test perplexity, but their combination is no better than none of them: the factors are not additive. Not explained; one candidate, untested, is that fixed scales that have also been shrunk clip the compensated weights. S: per-block loss at the end over the start 0.31–0.84 in blocks 1–27, 1.18 in block 0.
+
+Amendment before attempt 3 (commit follows): memory only — the head's FP32 copy leaves the GPU until needed, each variant's weights are reloaded from their saved codes after a cache release before scoring, `PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True`; the table is written after every variant. Added variants, chosen AFTER seeing the table above including its test column (disclosed; the selection rule still reads only the validation column): the three pairs C/AM, C/AT, C/MT, because the combination rule produced only the triple and the triple failed. Run order: W/G, C/G, C/A, C/M, C/T, C/+, C/AM, C/AT, C/MT, C/S. The prerequisite runs C/G, C/AM, C/S (10 steps); it cannot reproduce the memory failure, which needs full-size calibration.
+
 ### E037 attempt 1 — stopped after the in-job prerequisite; S diverged (2026-11-11, c7, job 335222)
 
 The prerequisite (8 calibration windows, 2 windows per split, 20 sign-SGD steps) ran W/G, C/AMT and six blocks of C/S; I cancelled the job by hand before the full run. `scancel` ended the job without its retrieval wait, so the run directory (`calib-c7-335222` on BeeGFS) was retrieved during the next job; the numbers below were read from `smoke.log` while the job ran. No full-run number exists from this attempt.

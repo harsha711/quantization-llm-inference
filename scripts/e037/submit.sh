@@ -48,10 +48,11 @@ cmp "$OUT/wikitext2-train.txt" /mnt/beegfs/hpuvvad/csc548-w4a16-e036-20261111/wi
 C4=c4-train.00000-of-01024.json.gz
 [[ -e "$OUT/$C4" ]] || curl -fsSL -o "$OUT/$C4" https://huggingface.co/datasets/allenai/c4/resolve/main/en/$C4
 echo "8ef8d75b0e045dec4aa5123a671b4564466b0707086a7ed1ba8721626dfffbc9  $OUT/$C4" | sha256sum -c
+export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True  # allocator only; attempt 2 died of fragmentation
 H=b3481cea6dd697b8b741ec35d375975d4c48c85d456c884fd314fe6860a7128d
 ARGS="$OUT/wikitext2-test.txt $OUT/wikitext2-valid.txt $OUT/wikitext2-train.txt $OUT/$C4 $H"
-# Cheap prerequisite: 8 calibration windows, 2 windows per split, every variant, 10 sign-SGD steps.
-mkdir "$S/smoke"; (set -x; E037_VARIANTS="W/G C/G C/A C/M C/T C/+ C/S" E037_STEPS=10 prun timeout 3600 "$E017_PYTHON" "$S/calib.py" "$S/smoke" $ARGS 8 2) > "$S/smoke.log" 2>&1
+# Cheap prerequisite: 8 calibration windows, 2 windows per split, three variants (the combination rule ran unchanged in attempt 2), 10 sign-SGD steps.
+mkdir "$S/smoke"; (set -x; E037_VARIANTS="C/G C/AM C/S" E037_STEPS=10 prun timeout 3600 "$E017_PYTHON" "$S/calib.py" "$S/smoke" $ARGS 8 2) > "$S/smoke.log" 2>&1
 rm "$S/smoke/checkpoint.npz"
 [[ -n "${E037_SMOKE_ONLY:-}" ]] && exit 0
 (set -x; prun timeout 21600 "$E017_PYTHON" "$S/calib.py" "$S" $ARGS 128) > "$S/calib.log" 2>&1

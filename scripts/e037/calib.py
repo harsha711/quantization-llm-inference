@@ -18,6 +18,7 @@ the WikiText-2 validation and test splits (E032's windows and metric). The C/ va
 is selected; its head is then GPTQ-quantized (E036's recipe, kind G) on its own final hidden states and both are saved.
 Env: E037_VARIANTS (space separated), E037_STEPS (sign-SGD steps per block).
 """
+import gc
 import gzip
 import hashlib
 import json
@@ -164,7 +165,7 @@ class Stop(Exception):
 
 with torch.no_grad():
     out, (test, valid, train, c4), head_hash, ncal = Path(sys.argv[1]), sys.argv[2:6], sys.argv[6], int(sys.argv[7])
-    variants = os.environ.get('E037_VARIANTS', 'W/G C/G C/A C/M C/T C/+ C/S').split()
+    variants = os.environ.get('E037_VARIANTS', 'W/G C/G C/A C/M C/T C/+ C/AM C/AT C/MT C/S').split()
     steps = int(os.environ.get('E037_STEPS', 200))
     full = len(sys.argv) <= 8
     work = I.Workload(D.E017 / 'results/e017_20261109', 'O')
@@ -194,6 +195,7 @@ with torch.no_grad():
     fp16_head = work.model.lm_head.weight.detach().clone()  # [N,K]
     head = fp16_head.float()
     assert tensor_sha(np.ascontiguousarray(rtn(head).T.cpu().numpy())) == head_hash, 'rtn() is not the project quantizer / not the head E031 timed'
+    head = head.cpu()  # 0.9 GB, needed again only for the selected head
 
     allmods = {}
     for b, layer in enumerate(body.layers):
@@ -220,6 +222,7 @@ with torch.no_grad():
             n = nwin[split] * (WINDOW - 1)
             for h, (nll, correct) in r.items():
                 arms.setdefault(f'{tag}/{h}', {})[split] = dict(nll_sum=nll, perplexity=math.exp(nll / n), top1_accuracy_pct=100 * correct / n)
+        (out / 'arms.json').write_text(json.dumps(arms, indent=1))  # survives a later crash (attempt 2 lost its table to one)
         print('ARM', tag, {h: {s: round(arms[f'{tag}/{h}'][s]['perplexity'], 4) for s in ids} for h in heads}, flush=True)
 
     score('O', dict(F=fp16_head))
@@ -258,7 +261,13 @@ with torch.no_grad():
     assert torch.equal(body.norm(x), body(input_ids=cal['C'][:1].cuda(), use_cache=False).last_hidden_state), 'layer replay differs from the model'
     del x
 
-    layers_log, saved, hhs, combo = {}, {}, {}, {}
+    layers_log, saved, hhs, combo, ran = {}, {}, {}, {}, set()
+    names = {m.name: m for mods in allmods.values() for m in mods.values()}
+
+    def load(keep):
+        for name, (codes, scales) in keep.items():
+            setw(names[name], decode(torch.from_numpy(codes).cuda(), torch.from_numpy(scales).cuda()))
+
     for tag in variants:
         src, kind = tag.split('/')
         if kind == '+':
@@ -266,8 +275,9 @@ with torch.no_grad():
             kind = ''.join(f for f in 'AMT' if arms[f'{src}/{f}/F']['valid']['perplexity'] < base)
             combo[tag] = kind
             print('COMBINATION', tag, repr(kind), flush=True)
-            if len(kind) < 2:  # nothing or one letter: that variant is already in the table
-                continue
+        if (src, kind or 'G') in ran:  # e.g. the combination is empty, one letter, or a listed pair
+            continue
+        ran.add((src, kind))
         for (b, n), p in orig.items():
             allmods[b][n].weight = p
         cur = inps0[src].cuda()
@@ -281,10 +291,10 @@ with torch.no_grad():
                     tgt[j] = step(layer, fp[j:j + 1])[0]
                 res, info = signround(layer, mods, cur, tgt, gen, steps)
                 fp = tgt
-                del tgt
                 for n, (rec, codes, scales) in res.items():
                     setw(mods[n], rec)
                     keep[mods[n].name] = (codes.cpu().numpy(), scales.cpu().numpy())
+                del tgt, res, rec, codes, scales
                 layers_log[f'{tag}:{b}'] = info
                 print('BLOCK', tag, b, info, flush=True)
             else:
@@ -322,16 +332,19 @@ with torch.no_grad():
             hh += x.T @ x
         hhs[tag], saved[tag] = hh.cpu(), keep
         del cur, outs, fp, hh
+        # attempt 2 ran out of memory scoring C/S: its weights sat scattered in the freed training arena. Reload them compactly.
+        for (b, n), p in orig.items():
+            allmods[b][n].weight = p
+        gc.collect()
         torch.cuda.empty_cache()
+        load(keep)
         score(tag, dict(F=fp16_head))
 
     # selection on the validation split among the out-of-domain variants, then the head on the selected blocks
     variants = [t for t in variants if f'{t}/F' in arms]
     best = min((t for t in variants if t[0] == 'C'), key=lambda t: arms[f'{t}/F']['valid']['perplexity'])
-    names = {m.name: m for mods in allmods.values() for m in mods.values()}
-    for name, (codes, scales) in saved[best].items():
-        setw(names[name], decode(torch.from_numpy(codes).cuda(), torch.from_numpy(scales).cuda()))
-    hh = hhs[best].cuda()
+    load(saved[best])
+    hh, head = hhs[best].cuda(), head.cuda()
     h_rec, h_codes, h_scales = gptq(head, hh)
     layers_log['lm_head'] = record(head, hh, h_rec)
     score('SEL', dict(F=fp16_head, GPTQ=h_rec))
