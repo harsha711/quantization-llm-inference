@@ -167,9 +167,16 @@
 ## E027–E030 external comparison and gap diagnostic
 
 - E027 and E028 are complete at contexts 128/512/2048 with outcome "slower" everywhere; read their result blocks in EXPERIMENTS. On identical G128 codes/scales vLLM v0.33.0 decodes 63 tokens in 238.1–248.9 ms versus our GQA 326.8–376.0 ms, with identical 64 tokens. llama.cpp Q4_K_M and ONNX Runtime GenAI INT4 are faster still, but use their own quantizers including the embedding/output matrix: always say stack against stack, not identical weights. No quality evaluation exists for any quantized model.
-- Never present our path as competitive with or faster than a production stack. Say it decodes faster than our own FP16 and than llama.cpp/ORT FP16 (vLLM FP16 not run), with the E021 third-gate disclosure. Batch 1 favours us against serving stacks; one model, 64 tokens, RTX 5060 Ti only.
-- The 1.4–2.0 ms per-step gap to vLLM is a calculation and is unprofiled; do not attribute it (compile, attention, graphs, sampler, kernel build). E030 is a predeclared, queued diagnostic, not an optimization. E029 and the E027/E028 long-context extensions are running: give them no result until their records say so; E029's 426 ms context4096 GQA cell is a smoke cell only.
-- E029's raised 2048-row operator assertion (`scripts/e028/long.py`) is a recorded deviation; the unchanged E021 gate covers it per context. Preserve all failed attempts (wheel path, llama.cpp ISA, ORT `onnx-ir`, FlashInfer sampler JIT, the row assertion). No optimization follows from E027–E030 without a user request.
+- Never present our path as competitive with or faster than a production stack. Say it decodes faster than our own FP16 and, up to context 8192, than llama.cpp/ORT FP16 (vLLM FP16 not run), with the E021 third-gate disclosure. Batch 1 favours us against serving stacks; one model, 64 tokens, RTX 5060 Ti only.
+- Long-context extensions are complete: the deficit widens with context (vLLM to 4096/8192; llama.cpp/ORT to 16384). "Faster than llama.cpp/ORT FP16" holds only up to context 8192; at 16384 our 4-bit path is slower than both FP16 paths. Always attach that qualifier.
+- E029 is complete: GQA stays 38.9%/32.5%/25.2% below GRA at 4096/8192/16384; the step grows faster than linear beyond 8192 (unprofiled, do not attribute); prefill is 54–84% of the request. Its raised 2048-row operator assertion (`scripts/e028/long.py`) is a recorded deviation covered per context by the unchanged E021 gate; no sanitizer at those prefill sizes.
+- E030 (diagnostic) locates the gap on the device: vLLM issues 112 Marlin calls per step versus our 196 (merged projections) and 276 other launches versus our 1264 (fused compiled kernels, FlashAttention); the FP16 head is 1169 µs in both. Per-call Marlin difference and ORT/llama.cpp internals remain unprofiled. Preserve all failed attempts (wheel path, llama.cpp ISA, ORT `onnx-ir`, FlashInfer sampler JIT, the row assertion, E030's 2/34-token request). No optimization follows from E027–E030 without a user request.
+
+## E031 completed 4-bit output head
+
+- E031 is complete: project G128 head through Marlin passes 5% in every cell on c10/c7/c9. Ours 17.0%/14.7% lower decode at 128/2048; vLLM with `lm_head: true` 23.1–24.4% below stock vLLM. Our path with the head is still slower than stock vLLM; never say otherwise.
+- Every mention must say: it CHANGES MODEL OUTPUTS (logit relative L2 0.12–0.17 versus FP16 head; 47/64 tokens in one of four cases) and NO quality evaluation exists; the gain is conditional on one. Our arm also carries the E021 third-gate disclosure.
+- Versus ONNX Runtime INT4 it is a tie within 5% (separate jobs, different quantizers), never a win. Credit Marlin, vLLM and its `lm_head` support to upstream; ours is the head quantization, conversion, gate and measurement. Not a repository default. The next step would be a quality evaluation, only on user request.
 
 ## Rooflines, if requested
 

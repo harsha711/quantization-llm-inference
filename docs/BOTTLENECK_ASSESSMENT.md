@@ -1,6 +1,6 @@
 # Bottleneck assessment
 
-## Against production stacks, 2026-11-10 (current)
+## Against production stacks, 2026-11-10, after E030/E031 (current)
 
 E027 and E028 compared our best decode path (graph-replayed Marlin with direct decode attention, accepted only under E021's third, post hoc gate) with three production stacks at contexts 128/512/2048, batch 1, 64 tokens. Our path is slower than all three.
 
@@ -11,9 +11,22 @@ E027 and E028 compared our best decode path (graph-replayed Marlin with direct d
 | llama.cpp Q4_K_M, own quantizer (c5) | 208.5–208.6 | 210.9–211.2 | 227.5 |
 | ONNX Runtime GenAI INT4, own quantizer (c10) | 185.2–185.4 | 185.1–185.3 | 191.6–192.2 |
 
-**Current bottleneck: unknown.** On identical weights vLLM spends 3.8–3.9 ms per decode step and we spend 5.2–6.0 ms, a gap of about 1.4–2.0 ms per step (calculation from the medians). Where it lies (vLLM's compiled backbone, its attention, its graphs, its sampler or its kernel build, or host time) has not been measured and must not be attributed. The llama.cpp and ORT gaps also include different weights, including a quantized embedding/output matrix, so they cannot be split into runtime and format.
+The long-context extensions widen the deficit: at 8192 our decode is 91.2–91.7% slower than vLLM, and at 16384 110.3–110.4% slower than llama.cpp Q4_K_M and 209.2–209.5% slower than ORT INT4; at 16384 our 4-bit path is slower even than both stacks' FP16 paths (E027/E028 extensions, E029).
 
-E030, a predeclared and queued diagnostic, profiles both decode steps at contexts 128 and 2048 on the same weights and compares per-kernel device time per step; a host-side gap would show up there as unexplained rather than located. It is not an optimization. The E026-era breakdown below remains our own step's composition.
+**The gap to vLLM is located on the device (E030, diagnostic, c51, primary passage).** Device kernel time per decode step, (64-token − 8-token)/56:
+
+| Per decode step | Ours 128 | vLLM 128 | Ours 2048 | vLLM 2048 |
+|---|---:|---:|---:|---:|
+| Total device time | 5109 µs | 3733 µs | 5846 µs | 3820 µs |
+| Marlin projections | 2405 µs, 196 calls | 2019 µs, 112 calls | 2396 µs, 196 calls | 2018 µs, 112 calls |
+| FP16 output head (one GEMV) | 1169 µs | 1169 µs | 1169 µs | 1169 µs |
+| Everything else | 1535 µs, 1264 launches | 545 µs, 276 launches | 2281 µs, 1264 launches | 633 µs, 276 launches |
+
+Device totals match the wall-clock steps, so both steps are device-bound. vLLM merges the query/key/value and the two MLP input projections (4 Marlin calls per block against our 7) and runs fused compiled kernels plus FlashAttention for the small operations; at context 2048 our attention path (two GEMVs plus copies) costs more than FlashAttention's two kernels. The per-call cause of the 0.38 ms Marlin difference was not isolated.
+
+**The output head was the largest shared cost, and E031 removes most of it in both runtimes.** Quantizing the 151,936 × 1536 head with the project G128 quantizer and running it through Marlin saves 0.88 ms per step in our path (decode 17.0% / 14.7% lower at contexts 128 / 2048) and 0.92 ms in vLLM (23.1–24.4% lower; 180.1–180.8 / 190.2–191.1 ms for 63 tokens), passing 5% in every cell on three nodes. vLLM with that head is level with ORT INT4 on the same node (a tie within 5%, separate jobs and quantizers). Our arm is accepted only under E021's third, post hoc gate. **This changes model outputs** (logit relative L2 0.123–0.170 against the FP16 head; 47/64 tokens kept in one of four cases), and no perplexity or task metric exists.
+
+**What remains in our path:** the unmerged projections (196 Marlin calls against 112), roughly 1000 more small unfused kernel launches per step than vLLM, the attention copies at long context, and, for long requests, the unchanged eager prefill (54–84% of the request at 4096–16384, E029). Closing those would mean reimplementing what vLLM's model code and compiler already provide (hypothesis, not measured). Why our step grows faster than linear beyond context 8192 is unprofiled. **The open question is output quality:** whether the head-quantized model is acceptable needs a quality evaluation that has not been done. The llama.cpp and ORT gaps include different weights and cannot be split into runtime and format. The E026-era breakdown below remains our own step's composition before E031.
 
 ## Full-model decode after the attention change, 2026-11-10 (E026 snapshot)
 

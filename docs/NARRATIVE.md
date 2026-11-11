@@ -1,6 +1,6 @@
 # The project in one sitting
 
-**Summary.** We set out to make 4-bit-weight matrix multiplication fast on a GPU and to turn that into faster language-model inference. Our own kernels gave real but shape-specific gains; the fastest kernel we used is an existing open-source one (Marlin), in which we found and fixed a synchronization hazard. Inside a full model that kernel, plus graph replay and a rewritten decode attention step, made generation about 1.7–2.4 times faster than our own 16-bit baseline. That speedup is only accepted under a numerical check chosen after two earlier checks had failed. Measured against three production inference systems, our path is slower than all of them, including vLLM running the very same 4-bit weights. **The project did not beat the state of the art.** What it did produce is a validated account of where the 4-bit saving goes and what recovers it.
+**Summary.** We set out to make 4-bit-weight matrix multiplication fast on a GPU and to turn that into faster language-model inference. Our own kernels gave real but shape-specific gains; the fastest kernel we used is an existing open-source one (Marlin), in which we found and fixed a synchronization hazard. Inside a full model that kernel, plus graph replay and a rewritten decode attention step, made generation about 1.7–2.4 times faster than our own 16-bit baseline. That speedup is only accepted under a numerical check chosen after two earlier checks had failed. Measured against three production inference systems, our path is slower than all of them, including vLLM running the very same 4-bit weights. **The project did not beat the state of the art.** Profiling showed that both our path and vLLM spent their largest single kernel on a 16-bit output matrix; compressing it with our 4-bit format made vLLM itself about 23–24% faster, level with the fastest system we measured. That change alters the model's outputs and nobody has measured whether quality suffers, so the result is conditional.
 
 ## 1. The goal
 
@@ -46,9 +46,9 @@ With Marlin, decoding was 29% faster at a 2048-token prompt but only about 4% at
 
 Against our 16-bit path with the same attention, that is 1.8× at 128 tokens and 1.7× at 2048; against our original 16-bit path, 1.9× and 2.4× (ratios of the medians above). The attention change helps 16-bit too, so it is not a 4-bit result.
 
-## 7. The reality check
+## 7. The reality check, and what it led to
 
-We then asked whether this is competitive. We ran vLLM, a production server, on the same 4-bit weights; it produced the same 64 tokens and was faster at every prompt length ([E027](EXPERIMENTS.md#e027--our-decode-path-versus-vllm-on-the-same-quantized-weights)). llama.cpp and ONNX Runtime, each with its own 4-bit format, were faster still ([E028](EXPERIMENTS.md#e028--our-decode-path-versus-llamacpp-and-onnx-runtime-genai)). Their weights differ from ours (they also compress the large output matrix we left in 16-bit), so those two are whole-system comparisons, and nobody has measured output quality for any of the 4-bit models.
+We then asked whether this is competitive. vLLM, a production server, ran the same 4-bit weights, produced the same 64 tokens and was faster at every prompt length ([E027](EXPERIMENTS.md#e027--our-decode-path-versus-vllm-on-the-same-quantized-weights)). llama.cpp and ONNX Runtime, each with its own 4-bit format that also compresses the large output matrix we left in 16-bit, were faster still; those are whole-system comparisons ([E028](EXPERIMENTS.md#e028--our-decode-path-versus-llamacpp-and-onnx-runtime-genai)).
 
 | 63 decode steps | 128-token prompt | 2048-token prompt |
 |---|---:|---:|
@@ -57,13 +57,29 @@ We then asked whether this is competitive. We ran vLLM, a production server, on 
 | llama.cpp, own 4-bit format | 208.5–208.6 ms | 227.5 ms |
 | ONNX Runtime, own 4-bit format | 185.2–185.4 ms | 191.6–192.2 ms |
 
-Our 4-bit path does decode faster than llama.cpp's and ONNX Runtime's 16-bit paths (vLLM's 16-bit path was not run), but our own 16-bit path is slower than theirs. On identical weights vLLM spends 3.8–3.9 ms per step to our 5.2–6.0 ms. Where that 1.4–2.0 ms goes has not been measured.
+Longer prompts made it worse. At 4,096–16,384 tokens our path stays 38.9% to 25.2% faster than our own 16-bit path ([E029](EXPERIMENTS.md#e029--our-decode-paths-at-contexts-beyond-2048)) but falls further behind all three systems; at 16,384 it is slower even than llama.cpp's and ONNX Runtime's 16-bit paths, so "our 4-bit path beats their 16-bit path" holds only up to 8,192 tokens.
+
+**Locating the gap.** A kernel-level profile of our path and vLLM on identical weights put the difference on the GPU ([E030](EXPERIMENTS.md#e030--where-the-per-step-gap-to-vllm-lies-diagnostic)). vLLM merges weight matrices, making 112 Marlin calls per step to our 196, and fuses small operations, launching 276 other kernels to our 1264. The profile also showed one cost neither system had removed: the 16-bit output matrix (151,936 × 1,536) took 1.17 ms per step in both, the largest single kernel in either.
+
+**Compressing the output matrix.** We quantized it with the project's own 4-bit format and ran it through Marlin, in our path and in unmodified vLLM, which already supports this ([E031](EXPERIMENTS.md#e031--4-bit-output-head-through-marlin-in-our-path-and-in-vllm)). Both passed the 5% bar in every measurement on three GPUs (one node shown; the others agree):
+
+| 63 decode steps | 128-token prompt | 2048-token prompt |
+|---|---:|---:|
+| Ours, 16-bit output matrix | 326.8–326.9 ms | 375.4–375.6 ms |
+| Ours, 4-bit output matrix | 271.4–271.5 ms | 320.2–320.3 ms |
+| vLLM, stock | 237.4–238.6 ms | 248.6–249.2 ms |
+| vLLM, our 4-bit output matrix | 180.7–180.8 ms | 190.9–191.1 ms |
+| ONNX Runtime, own 4-bit format (same GPU, separate job) | 185.1–185.4 ms | 191.6–192.2 ms |
+
+Our path gets 17.0% and 14.7% faster; vLLM gets 23.1–24.4% faster, level with ONNX Runtime within our 5% rule. That is a tie, from separate jobs with different quantizers, not a win, and our own path is still slower than stock vLLM.
+
+Two caveats always go with this. **It changes what the model computes:** the output matrix was 16-bit in the original model, the scores move by a relative 0.12–0.17, and the 64 generated tokens stayed identical in three of four tests but only 47 of 64 in the fourth. **Nobody has measured whether answers got worse:** no perplexity or task benchmark was run. Our side also carries the after-the-fact gate disclosure of section 5.
 
 ## 8. Conclusion and what is open
 
-The project did not produce a faster inference system than existing ones. It did produce: three measured kernel optimizations with their regressions; a fix to a synchronization hazard in a widely used kernel; a numerically validated integration of that kernel into a full model; and a measured explanation of why a 4-bit kernel's saving is hidden in a plain PyTorch model and how much graph replay and a decode-attention rewrite recover. The scope is one model, one request at a time (which favours us against serving systems), 64 generated tokens and one GPU type.
+The project did not build a faster inference system than existing ones. It produced three measured kernel optimizations with their regressions; a fix to a synchronization hazard in a widely used kernel; a validated integration of that kernel into a full model; a measured account of why its saving was hidden and how graph replay and a decode-attention rewrite recover it; a profile locating the gap to vLLM; and one concrete, measured improvement to vLLM's default setup, conditional on output quality. Marlin and vLLM are upstream work; ours is the idea tested, the quantized weights, conversion, validation and measurement. Scope: one model (Qwen2.5-1.5B), one request at a time (which favours us against serving systems), 64 generated tokens, one GPU type (RTX 5060 Ti).
 
-Still open: runs at prompts of 4,096–16,384 tokens are in progress with no result yet (E029 and long-context extensions of the comparisons); a profile locating the gap to vLLM is queued (E030); our own kernels were never run inside the model; compressing the output matrix, batches larger than one, and any quality evaluation are untested.
+Still open: a quality evaluation of the 4-bit output matrix, the natural next step; merged weights and fused kernels in our path; prompt processing, which is 54–84% of a request at 4,096–16,384 tokens; batches above one; and our own kernels inside the model.
 
 ## Where to look
 

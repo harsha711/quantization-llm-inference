@@ -1,12 +1,12 @@
-# W4A16 CUDA GEMM: project synthesis (kernel study through E012, full-model inference through E026)
+# W4A16 CUDA GEMM: project synthesis (kernel study through E012, full-model inference through E031)
 
-**Report-draft update, 2026-11-10:** §6.8 adds the comparison with production inference stacks (E027–E028; long-context runs E029 and the extensions are still running and not included). §6 adds the full-model inference results (E013–E026) and revises the findings and limits in §5.4; §1–§5.3 are the 2026-11-08 kernel-level review and are otherwise unchanged. Figures 1–4 cover the kernel study only; the §6 tables have no figure yet.
+**Report-draft update, 2026-11-10:** §6.8 adds the comparison with production inference stacks (E027–E028); §6.9 adds the long-context runs (E029 and the E027/E028 extensions), the gap profile (E030) and the 4-bit output head (E031). §6 adds the full-model inference results (E013–E026) and revises the findings and limits in §5.4; §1–§5.3 are the 2026-11-08 kernel-level review and are otherwise unchanged. Figures 1–4 cover the kernel study only; the §6 tables have no figure yet.
 
 Evidence review, 2026-11-08. Experimental endpoint: `a78c4a4`. This document uses saved results only. It introduces no GPU allocation, measurement, kernel change, dispatch policy, or E012 retry. [Figure reproduction](../scripts/reporting/README.md), [recomputed comparisons](../results/reporting/project_synthesis/matched-comparisons.csv), and [source applicability](REFERENCES.md) accompany the report.
 
 **Central finding.** Compressed execution can substantially reduce small-batch GEMM latency in the tested setup, but the benefit depends on the implementation, weight reuse, batch size, and FP16 comparator. Our scalar CUDA changes produce useful, shape-specific improvements and clear regressions. The strongest compressed-versus-FP16 results come from maintained Marlin, whose Tensor Core implementation is upstream work. Our contribution is the retained kernel progression, lossless integration, validation and bounded synchronization correction, and controlled characterization of where benefits survive. The existing evidence supports a defensible course report. It does not establish a universal decoding speedup, an exact memory/compute crossover, or a new fast GEMM algorithm.
 
-**Full-model finding (added 2026-11-10, §6).** Placing the corrected Marlin kernel under all 196 block projections of Qwen2.5-1.5B and replaying the decode step as a CUDA graph lowers 63-step decode latency by 45% at a 128-token context and 30% at 2048 tokens against FP16 on the same reconstructed weights, with about 58% lower peak allocated GPU memory, reproduced over five contexts, two passages and two GPUs of the same model. A profile-guided change to the decode attention path, which also helps FP16, then holds the Marlin advantage at 42–45% across all tested contexts (§6.6). The kernel alone was not enough: in eager execution its saving was hidden behind host time at short context. The path is numerically accepted only against a higher-precision control, under a gate chosen after two earlier gates against the FP16 reference rejected it; that history is part of the result. These gains are against our own FP16 path; they do not make the path competitive with production inference stacks. On the same quantized weights vLLM decodes faster than our path at every tested context, and llama.cpp and ONNX Runtime with their own 4-bit formats are faster still (§6.8).
+**Full-model finding (added 2026-11-10, §6).** Placing the corrected Marlin kernel under all 196 block projections of Qwen2.5-1.5B and replaying the decode step as a CUDA graph lowers 63-step decode latency by 45% at a 128-token context and 30% at 2048 tokens against FP16 on the same reconstructed weights, with about 58% lower peak allocated GPU memory, reproduced over five contexts, two passages and two GPUs of the same model. A profile-guided change to the decode attention path, which also helps FP16, then holds the Marlin advantage at 42–45% across all tested contexts (§6.6). The kernel alone was not enough: in eager execution its saving was hidden behind host time at short context. The path is numerically accepted only against a higher-precision control, under a gate chosen after two earlier gates against the FP16 reference rejected it; that history is part of the result. These gains are against our own FP16 path; they do not make the path competitive with production inference stacks. On the same quantized weights vLLM decodes faster than our path at every tested context, and llama.cpp and ONNX Runtime with their own 4-bit formats are faster still (§6.8), with the deficit widening up to context 16384 (§6.9). A profile then located the vLLM gap on the device and found the FP16 output head to be the largest kernel in both runtimes; quantizing that head with the project's G128 format made vLLM itself 23.1–24.4% faster, level with ONNX Runtime INT4, at the cost of changed model outputs that no quality evaluation has yet judged (§6.9).
 
 ## 1. What problem did we implement, and what changed in scope?
 
@@ -193,17 +193,18 @@ The deck also explicitly asks for a timed serial baseline and worker-count scali
 3. Weight reuse distance removes C's substantial launch-policy advantage, while corrected A retains a strong M4 advantage against the established FP16 cyclic baselines.
 4. Larger M narrows the relative advantage without a measured winner reversal through M128. Counts and aggregate profiles support bounded explanations, while exact critical-path attribution remains open.
 
-*Full-model inference (E013–E026, §6):*
+*Full-model inference (E013–E031, §6):*
 
 5. The corrected Marlin kernel passes every same-input operator check inside the model, yet the model's logits differ from the FP16 reference at the level of propagated FP16 rounding; Marlin-free higher-precision controls differ from that reference just as much. An elementwise logit gate against the FP16 path cannot separate the two.
 6. Eager Marlin decode is host-bound. Its gain over FP16 is 4–6% at a 128-token context and 29% at 2048, and graph replay turns that into 45% and 30%; FP16 gains under 2% from the same replay.
 7. The graph-replayed gain is a near-constant 4.4–4.5 ms per decode step and is reproduced in all 28 tested cells across contexts, passages, run order and a second GPU.
 8. Profiling attributes the context-proportional cost to single-query attention; computing it directly makes decode nearly flat in context and keeps Marlin's advantage over FP16 at 42–45% at every tested context. The remaining step is Marlin projections plus the unquantized output head.
-9. Against production stacks the path is slower: on the identical quantized weights our decode takes 36.9–51.4% longer than vLLM's at contexts 128–2048 (a 1.4–2.0 ms per-step gap, unprofiled), and llama.cpp and ONNX Runtime with their own 4-bit formats are faster still (§6.8).
+9. Against production stacks the path is slower: on the identical quantized weights our decode takes 36.9–51.4% longer than vLLM's at contexts 128–2048 (a 1.4–2.0 ms per-step gap), and llama.cpp and ONNX Runtime with their own 4-bit formats are faster still (§6.8); the deficit widens to context 16384, where our 4-bit path is slower even than their FP16 paths (§6.9).
+10. The vLLM gap lies on the device: unmerged projections (196 Marlin calls per step against 112) and 1264 small kernel launches against 276 mostly fused ones; the FP16 output head is the largest kernel in both runtimes (E030). Quantizing it with the project's G128 format through Marlin lowers decode 14.7–17.1% in our path and 23.1–24.4% in vLLM, but changes model outputs, and no quality evaluation exists (E031, §6.9).
 
 Limits of the kernel study are synthetic inputs, few shapes and one principal GPU model, unlocked clocks, limited repeated series, benchmark-specific cuBLAS settings, excluded setup/repacking costs, incomplete historical provenance and selected sanitizer/reference coverage, with no applicable validated roofline/crossover classification and no accepted E012 stall attribution. Limits of the full-model results are one model, batch size 1, 64 generated tokens, two passages, one GPU model, a post hoc acceptance gate, no model-quality evaluation of the quantized weights, no sanitizer or trace coverage under graph replay, and no stable-tail claim. Historical failed, stopped and inconclusive results remain part of the evidence.
 
-## 6. Does the compressed kernel speed up full-model inference? (E013–E026)
+## 6. Does the compressed kernel speed up full-model inference? (E013–E031)
 
 ### 6.1 Workload and compared paths
 
@@ -304,9 +305,12 @@ The change passes its 5% criterion against stock-attention graph-Marlin at conte
 | Our robustness evidence | [E024](../results/e024_20261110/) | One model, batch 1, 64 tokens, one GPU model on two nodes |
 | Our device-time breakdown | [E025](../results/e025_20261110/) | One profiled request per context, eager, instrumented |
 | Our decode-attention restructuring chosen from that breakdown | [E026](../results/e026_20261110/) | PyTorch supplies the kernels; benefits FP16 too; batch 1, one query token |
-| Our external comparison with vLLM on identical weights, and with llama.cpp and ONNX Runtime | [E027](../results/e027_20261110/), [E028](../results/e028_20261110/) | A negative result: our path is slower than all three. The stacks are upstream work; only the conversion, harness and measurement are ours. llama.cpp/ORT use their own quantizers. Gap unprofiled |
+| Our external comparison with vLLM on identical weights, and with llama.cpp and ONNX Runtime | [E027](../results/e027_20261110/), [E028](../results/e028_20261110/) | A negative result: our path is slower than all three, at every context 128–16384. The stacks are upstream work; only the conversion, harness and measurement are ours. llama.cpp/ORT use their own quantizers |
+| Our long-context measurement of our own paths | [E029](../results/e029_20261110/) | Raised operator row bound (recorded deviation); no sanitizer at these prefill sizes; super-linear growth beyond 8192 unprofiled |
+| Our kernel-level location of the per-step gap to vLLM | [E030](../results/e030_20261110/) | Diagnostic; one passage, one node, in-process vLLM, grouping by kernel name; the vLLM structure it reflects (merged projections, compiled fused kernels) is upstream design |
+| Our test of a 4-bit output head, in our path and inside vLLM | [E031](../results/e031_20261110/) | **Ours:** the idea tested here, the head codes/scales from the project's own G128 quantizer, the checkpoint conversion, the FP64-control validation gate and the measurement. **Upstream:** the Marlin kernel that executes the head, the vLLM runtime and its existing `lm_head` quantization support. Quantized output heads are common in other stacks (llama.cpp, ORT quantize theirs), so the novelty is the measurement on this stack, not the concept. Changes model outputs; no quality evaluation; tie, not win, versus ORT INT4 |
 
-No row above claims a speedup over the state of the art. The gains in this section are against our own FP16 path (and against llama.cpp's and ONNX Runtime's FP16 paths); the project's scalar kernels (E001–E003) were never run inside the model.
+No row above claims a speedup over the state of the art. The gains in this section are against our own FP16 path (and, up to context 8192, against llama.cpp's and ONNX Runtime's FP16 paths), plus E031's gain for vLLM over its own stock configuration, which is conditional on an unperformed quality evaluation; the project's scalar kernels (E001–E003) were never run inside the model.
 
 For the course requirements in §5.2–§5.3, the full-model study adds an inference claim that the kernel study did not make, so the statement there that no inference measurement is needed no longer applies; the serial-baseline and worker-scaling question is unchanged and still open.
 
@@ -332,8 +336,44 @@ Outcome: **"slower" at all three contexts**; the hypothesis that GQA is ≥5% be
 | 512 | 335.5–336.2 / 336.1–336.7 | 210.9–211.2 | 185.1–185.3 | 59.0–59.3% slower | 81.4–81.9% slower |
 | 2048 | 375.7 / 376.1–376.2 | 227.5 | 191.6–192.2 | 65.2% slower | 95.8–96.3% slower |
 
-Outcome: **"slower" at all three contexts for both stacks.** Our 4-bit path remains faster than either stack's FP16 path (38–31% below llama.cpp FP16, 38–30% below ORT FP16 across contexts), while our own graph FP16 (GR) is 15.9–67.8% slower than theirs, so their FP16 paths are also better than ours. Leading-token agreement with ours is 64/64 except the context-128 held-out passage (46/64 for both FP16 variants, 28/64 Q4_K_M, 29/64 ORT INT4); the FP16 first-token check passed in every request.
+Outcome: **"slower" at all three contexts for both stacks.** At these contexts our 4-bit path remains faster than either stack's FP16 path (38–31% below llama.cpp FP16, 38–30% below ORT FP16), which holds only up to context 8192 (§6.9), while our own graph FP16 (GR) is 15.9–67.8% slower than theirs, so their FP16 paths are also better than ours. Leading-token agreement with ours is 64/64 except the context-128 held-out passage (46/64 for both FP16 variants, 28/64 Q4_K_M, 29/64 ORT INT4); the FP16 first-token check passed in every request.
 
-**Limits.** One model, batch 1 (not the serving stacks' design point, and a setting that favours us), 64 tokens, one node per stack, RTX 5060 Ti only. vLLM decode is the difference of two wall times, ours a synchronized phase timer; vLLM's Marlin lacks the E006 barrier and its backbone runs under `torch.compile`; vLLM FP16 was not run. No output-quality comparison exists for any quantized model. No stack was tuned, and TensorRT-LLM and ExLlamaV2 were not attempted. Long-context runs (our variants at 4096–16384, E029; vLLM at 4096/8192 and llama.cpp/ORT at 4096–16384) are running and have no result. E030, a predeclared diagnostic profile of the vLLM gap, is queued. Failed attempts (wheel path, FlashInfer sampler JIT, llama.cpp build ISA, ORT missing `onnx-ir`) are recorded in the experiment log.
+**Limits.** One model, batch 1 (not the serving stacks' design point, and a setting that favours us), 64 tokens, one node per stack, RTX 5060 Ti only. vLLM decode is the difference of two wall times, ours a synchronized phase timer; vLLM's Marlin lacks the E006 barrier and its backbone runs under `torch.compile`; vLLM FP16 was not run. No output-quality comparison exists for any quantized model. No stack was tuned, and TensorRT-LLM and ExLlamaV2 were not attempted. Long-context runs and the gap profile are in §6.9. Failed attempts (wheel path, FlashInfer sampler JIT, llama.cpp build ISA, ORT missing `onnx-ir`) are recorded in the experiment log.
 
-**What this means for the report.** The project does not beat the state of the art at batch 1 on this GPU. What it supports is a validated explanation of why a 4-bit kernel's saving was hidden in a plain PyTorch model (host time, then attention) and how much of it graph replay and a decode-attention change recover, plus a measured, still-unexplained 1.4–2.0 ms per-step gap to vLLM on identical weights.
+**What this means for the report.** The project does not beat the state of the art at batch 1 on this GPU. What it supports is a validated explanation of why a 4-bit kernel's saving was hidden in a plain PyTorch model (host time, then attention) and how much of it graph replay and a decode-attention change recover, plus a measured 1.4–2.0 ms per-step gap to vLLM on identical weights, located in §6.9.
+
+### 6.9 Long context, the gap profile and a 4-bit output head (E029–E031)
+
+**Our paths at contexts 4096–16384 (E029, c7).** Same four variants, validation accepted in all six cases under E021's gate (third-gate disclosure) with the operator's 2048-row assertion raised to 16384 (recorded deviation; no sanitizer at these prefill sizes).
+
+| Context | GRA ms | GQA ms | GQA below GRA | GQA ms per step | Prefill share of request |
+|---|---:|---:|---:|---:|---:|
+| 4096 | 698.6–698.7 | 426.8–427.0 | 38.9% | 6.78 | 54% |
+| 8192 | 801.6–801.7 | 540.7–540.8 | 32.5% | 8.58 | 72% |
+| 16384 | 1063.6–1063.7 | 795.8–796.1 | 25.2% | 12.64 | 84% |
+
+The Marlin saving stays 4.1–4.3 ms per step while the common cost grows. Step time follows the predeclared linear projection to 8192 and grows faster beyond it (0.50 against 0.41 ms per 1,000 tokens); the cause was not profiled.
+
+**Production stacks at long context (E027/E028 extensions).** Outcome "slower" at every context; external tokens equal ours in every request.
+
+| Context | GQA ms | vLLM ms | ORT FP16 ms | ORT INT4 ms | llama.cpp FP16 ms | llama.cpp Q4_K_M ms |
+|---|---:|---:|---:|---:|---:|---:|
+| 4096 | 428.8–429.7 | 266.3–266.5 | 549.3–550.1 | 202.5–202.8 | 567.4–567.9 | 246.6 |
+| 8192 | 543.7–544.9 | 284.1–284.8 | 566.9–567.6 | 221.7–222.0 | 611.4–611.5 | 290.4–290.6 |
+| 16384 | 800.9–802.6 | not run | 603.0–603.3 | 259.4–259.5 | 701.6–701.7 | 380.8–380.9 |
+
+GQA ranges span the c9, c10 and c5 runs. At 16384 our 4-bit path is slower than both stacks' FP16 paths, so the statement that it beats their FP16 holds only up to context 8192.
+
+**Where the vLLM gap lies (E030, diagnostic, c51).** Device kernel time per decode step on identical weights: ours 5109 / 5846 µs, vLLM 3733 / 3820 µs at contexts 128 / 2048, matching the wall-clock steps, so the gap is on the device. Of the 1376 / 2026 µs gap, 386 / 378 µs is Marlin (vLLM merges projections: 112 calls per step against our 196) and 990 / 1648 µs is everything else (276 mostly fused compiled kernels plus FlashAttention against our 1264 small launches). The FP16 output head is 1169 µs in both, the largest single kernel in either, and the one large cost vLLM had not removed.
+
+**4-bit output head (E031, c10/c7/c9).** The tied 151,936 × 1536 head is quantized with the unchanged project G128 quantizer and executed by Marlin, in our path (GQAH) and in vLLM via `lm_head: true` (VH). The gate (E021 rule against an FP64 control with the same head weights) accepts every case; VH returns GQAH's tokens in every request. 80 cells, 1600 requests:
+
+| Node, context | GQA ms | GQAH ms | vLLM ms | vLLM + 4-bit head ms | GQAH below GQA | VH below vLLM |
+|---|---:|---:|---:|---:|---:|---:|
+| c10, 128 | 326.8–326.9 | 271.4–271.5 | 237.4–238.6 | 180.7–180.8 | 17.0% | 23.9–24.3% |
+| c10, 2048 | 375.4–375.6 | 320.2–320.3 | 248.6–249.2 | 190.9–191.1 | 14.7% | 23.1–23.4% |
+| c7, 128 | 325.3–325.4 | 269.8 | 237.8–238.3 | 180.1–180.4 | 17.1% | 24.1–24.4% |
+| c7, 2048 | 373.4–374.0 | 318.1–318.8 | 247.6–248.1 | 190.2–190.8 | 14.8% | 23.1–23.3% |
+| c9, 128 | 326.7–326.8 | 271.3–271.4 | 237.6–238.2 | 180.7 | 17.0% | 23.9–24.1% |
+
+Both arms pass 5% in every cell on every node (0.88 ms per step saved in ours, 0.92 ms in vLLM). On c10, VH is 2.4–2.5% / 0.3–0.6% below ORT INT4 from E028: a tie within the 5% rule, from separate jobs with different quantizers, not a win. Our path with the head is still 13.2–28.8% slower than stock vLLM. **The head change alters model outputs:** logit relative L2 0.123–0.170 against the FP16-head control at the first step; all 64 tokens kept in three of four cases and 47/64 in one. No perplexity or task metric exists, so this is a supported decode improvement conditional on an output-quality evaluation that has not been done. It is not a repository default. Scope: one model, batch 1, 64 tokens, two passages, RTX 5060 Ti.
