@@ -2,6 +2,15 @@
 
 Read the numerical/measurement [contract](CONTRACT.md) before interpreting these records. Preserve raw evidence, failed attempts, and inconclusive outcomes. An alternative that has not been implemented or measured is not a failed optimization. Historical entries below reconstruct only what the repository supports. Missing prior failure numbers or commit IDs remain unknown.
 
+## E033 — vLLM with the 4-bit head: same-job comparison with ONNX Runtime, and batch sizes 1–8
+
+Predeclared 2026-11-10 after the user invited concurrent runs while E032 is in progress. Two open points from E031, no change to any path:
+
+1. E031 compared vLLM+head with ONNX Runtime INT4 across separate jobs. Here stock vLLM (V), vLLM with the project 4-bit head (VH) and ORT INT4 (OQ) are interleaved in one job on one node, contexts 128 and 2048, two passages, two reversed series, 3 warmups + 20 requests. Outcome per context, fixed now, VH against OQ: "faster" if VH is ≥5% below OQ in all four cells, "slower" if OQ is ≥5% below VH in all four, "tie" if all are within ±5%, otherwise "mixed". Different quantizers; stack against stack.
+2. Every full-model measurement so far is batch 1. V and VH are also run with 2, 4 and 8 identical concurrent requests (primary passage, both contexts, both series). Hypothesis: VH's decode median is ≥5% below V's at every batch size. Expected, not measured: the percentage shrinks as the batch grows, because the FP16 head becomes a multi-row GEMM. Reported: decode time for the 63 steps of the whole batch, tokens per second (63 × batch / decode time), the gain, and the smallest number of leading tokens any sequence of a batch shares with the batch-1 reference (batched kernels take different tile paths, so later tokens may differ; only the first token is required to match).
+
+References and correctness come from `head.py validate` rerun in the job (E031's gate). Limits fixed now: identical prompts in a batch (no mix of lengths), vLLM only for the batch sweep (our path is batch-1 only; ORT's batch API is not exercised), decode measured as the 64-token minus 1-token wall-time difference, one node (the one that already holds both node-local environments), E031's output-change caveat and E032's pending quality result apply unchanged. `scripts/e027/submit.sh e033`, `scripts/e033/analyze.py`.
+
 ## E032 — Output quality of the quantized model, with and without the 4-bit head
 
 Predeclared 2026-11-10 at the user's request ("go ahead") after E031, whose speedup is conditional on this. It is also the first quality measurement of the block quantization used since E017. No runtime, kernel or timing is involved.

@@ -30,7 +30,7 @@ T=/mnt/beegfs/hpuvvad/csc548-w4a16-e024-20261110/runtime.tar
 if [[ ! -e "$VENV/bin/python" ]]; then sha256sum -c "$T.sha256"; tar xf "$T" -C /tmp; fi
 EOF
 embed "$here/../e018/diagnose.py"; embed "$here/../e021/validate.py"; embed "$here/../e023/run.py"; embed "$here/../e026/att.py"
-embed "$here/../e028/long.py"; embed "$here/../e030/gprofile.py"; embed "$here/../e030/vprofile.py"; embed "$here/../e031/head.py"; embed "$here/../e031/headconv.py"; embed "$here/../e031/headanalyze.py"; embed "$here/convert.py"; embed "$here/vbench.py"; embed "$here/analyze.py"
+embed "$here/../e028/long.py"; embed "$here/../e030/gprofile.py"; embed "$here/../e030/vprofile.py"; embed "$here/../e031/head.py"; embed "$here/../e031/headconv.py"; embed "$here/../e031/headanalyze.py"; embed "$here/../e028/obench.py"; printf 'cat > "$S/e033analyze.py" <<'"'"'PYEOF'"'"'\n'; cat "$here/../e033/analyze.py"; printf 'PYEOF\n'; embed "$here/convert.py"; embed "$here/vbench.py"; embed "$here/analyze.py"
 cat <<'EOF'
 export PROJECT_ROOT=$E017_ROOT
 set +u; source "$E017_ROOT/scripts/e017/env_arc.sh"; set -u
@@ -143,6 +143,34 @@ done
 python3 "$S/headanalyze.py" "$S/out" "${contexts[@]}" > "$S/analysis.json"
 EOF
 fi
+;;
+e033) cat <<'EOF'
+# E033: vLLM+head versus ORT INT4 interleaved in one job, and the head gain in vLLM by batch size. Needs both node-local venvs.
+XV=/tmp/e028-ort-hpuvvad-20261110; [[ -e "$XV/INSTALLED" ]]
+(cd "$OUT" && sha256sum -c model-gptq-head.sha256) > "$S/head-model-check.log"
+(cd /mnt/beegfs/hpuvvad/csc548-w4a16-e028-20261110 && sha256sum -c ort.sha256) > "$S/ort-model-check.log"
+"$XV/bin/python" -m pip freeze > "$S/ort-freeze.txt"; diff -u /mnt/beegfs/hpuvvad/csc548-w4a16-e028-20261110/ort-freeze.txt "$S/ort-freeze.txt"
+(set -x; prun timeout 6000 "$E017_PYTHON" "$S/head.py" validate "$S/ref" 128 2048) > "$S/validate.log" 2>&1
+mkdir "$S/out"
+cell() { local p=$1 v=$2 c=$3 series=$4 b=$5 label
+ label="${p}_${v}_${c}_s${series}"
+ clock > "$S/$label-clocks-before.csv"
+ case $v in
+ OQ) (set -x; prun timeout 6000 "$XV/bin/python" "$S/obench.py" /mnt/beegfs/hpuvvad/csc548-w4a16-e028-20261110/ort/int4 "$S/ref" "$S/out" OQ "$c" "$p" "$series") > "$S/$label.log" 2>&1;;
+ VH*) (set -x; prun timeout 6000 "$VV/bin/python" "$S/vbench.py" "$OUT/model-gptq-head" "$S/ref" "$S/out" "$c" "$p" "$series" "$v" GQAH "$b") > "$S/$label.log" 2>&1;;
+ V*) (set -x; prun timeout 6000 "$VV/bin/python" "$S/vbench.py" "$OUT/model-gptq" "$S/ref" "$S/out" "$c" "$p" "$series" "$v" GQA "$b") > "$S/$label.log" 2>&1;;
+ esac
+ printf '{"label":"%s","finished_utc_ns":%s}\n' "$label" "$(date +%s%N)" >> "$S/order.jsonl"; }
+for series in 1 2; do
+ cs=(128 2048); ps=(primary heldout); vs=(V VH OQ); bs=(2 4 8)
+ if [[ $series == 2 ]]; then cs=(2048 128); ps=(heldout primary); vs=(OQ VH V); bs=(8 4 2); fi
+ for c in "${cs[@]}"; do
+  for p in "${ps[@]}"; do for v in "${vs[@]}"; do cell "$p" "$v" "$c" "$series" 1; done; done
+  for b in "${bs[@]}"; do for v in "${vs[@]}"; do [[ $v == OQ ]] || cell primary "${v}b$b" "$c" "$series" "$b"; done; done
+ done
+done
+python3 "$S/e033analyze.py" "$S/out" > "$S/analysis.json"
+EOF
 ;;
 *) exit 2;;
 esac

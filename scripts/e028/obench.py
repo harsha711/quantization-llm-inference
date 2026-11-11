@@ -17,7 +17,8 @@ import onnxruntime_genai as og
 
 model_dir, refdir, out, variant = sys.argv[1], Path(sys.argv[2]), Path(sys.argv[3]), sys.argv[4]
 context, prompt, series = int(sys.argv[5]), sys.argv[6], int(sys.argv[7])
-ref = json.loads((refdir / f'reference-{context}-{prompt}.json').read_text())[dict(OF='GR', OQ='GQ')[variant]]
+ref = json.loads((refdir / f'reference-{context}-{prompt}.json').read_text())
+ref = ref.get(dict(OF='GR', OQ='GQ')[variant]) or ref['GQA']  # E033 reference files carry GQA; tokens equal GQ's in every validated case
 assert len(ref['input_ids']) == context
 model = og.Model(model_dir)
 params = og.GeneratorParams(model)

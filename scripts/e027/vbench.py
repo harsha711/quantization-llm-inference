@@ -20,14 +20,17 @@ def main():
     label = sys.argv[7] if len(sys.argv) > 7 else 'V'  # E031: V against our GQA tokens, VH (4-bit head checkpoint) against GQAH
     ref = json.loads((refdir / f'reference-{context}-{prompt}.json').read_text())[sys.argv[8] if len(sys.argv) > 8 else 'GQ']
     assert len(ref['input_ids']) == context and len(ref['output_ids']) == 64
+    batch = int(sys.argv[9]) if len(sys.argv) > 9 else 1  # E033: identical concurrent requests
     llm = LLM(model=model, dtype='float16', max_model_len=context + 64, gpu_memory_utilization=0.6,
               enable_prefix_caching=False, generation_config='vllm', seed=0)
 
     def run(n):
         params = SamplingParams(temperature=0, max_tokens=n, min_tokens=n, ignore_eos=True, detokenize=False)
         start = time.perf_counter()
-        result = llm.generate([{'prompt_token_ids': ref['input_ids']}], params, use_tqdm=False)[0]
-        return time.perf_counter() - start, list(result.outputs[0].token_ids), result
+        results = llm.generate([{'prompt_token_ids': ref['input_ids']}] * batch, params, use_tqdm=False)
+        elapsed = time.perf_counter() - start
+        worst = min(results, key=lambda r: next((i for i, (x, y) in enumerate(zip(r.outputs[0].token_ids, ref['output_ids'])) if x != y), 64))
+        return elapsed, list(worst.outputs[0].token_ids), worst  # the least-agreeing sequence of the batch
 
     rows = []
     for index in range(23):  # 3 warmups + 20 samples
@@ -41,7 +44,7 @@ def main():
     summary = {k: statistics.median(r[k] for r in kept) for k in ('decode_s', 'first_s', 'e2e_s')}
     summary.update(decode_min=min(r['decode_s'] for r in kept), decode_max=max(r['decode_s'] for r in kept), rows=rows,
                    tokens_agree_min=min(r['tokens_agree'] for r in rows), output_ids=ids, metrics=repr(getattr(result, 'metrics', None)),
-                   vllm=vllm.__version__, torch=torch.__version__)
+                   batch=batch, vllm=vllm.__version__, torch=torch.__version__)
     (out / f'{prompt}_{label}_{context}_s{series}.json').write_text(json.dumps(summary, indent=1))
     print('DONE', prompt, 'V', context, series, summary['decode_s'], summary['tokens_agree_min'], flush=True)
 
