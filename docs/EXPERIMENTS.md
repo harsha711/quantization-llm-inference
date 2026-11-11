@@ -2,6 +2,20 @@
 
 Read the numerical/measurement [contract](CONTRACT.md) before interpreting these records. Preserve raw evidence, failed attempts, and inconclusive outcomes. An alternative that has not been implemented or measured is not a failed optimization. Historical entries below reconstruct only what the repository supports. Missing prior failure numbers or commit IDs remain unknown.
 
+## E036 — Does a calibrated quantizer in the same 4-bit format remove the quality cost?
+
+Predeclared 2026-11-11 at the user's request ("i guess one last test should be fine", answering the proposal of exactly this experiment) after E032/E034: plain rounding costs +13.12% perplexity in the blocks and +8.60% in the head, and no uncalibrated 4-bit head reached 5%. Quality only: no runtime, kernel, gate or timing. This is the calibrated quantizer that AGENTS listed as needing a user request.
+
+Change, one: how codes and scales are chosen. The runtime format is unchanged (symmetric, groups of 128 along K, integer codes in [−7, 7], FP16 scale, reconstruction FP16(q·s)), so the tensors remain loadable by the Marlin operator and vLLM paths timed in E020–E035. The quantizer is GPTQ (Frantar et al. 2022, cited from memory, not re-read): columns are rounded one at a time and the remaining columns are compensated through the inverse Hessian H = Σxᵀx of the layer's inputs, damping 1% of the mean diagonal; each group's scale is max|w|/7 of the already compensated weights. Own implementation, `scripts/e036/gptq.py`; no external GPTQ library. Blocks are calibrated in order, each on the outputs of the already quantized blocks before it, all seven projections of a block from one pass. The head is calibrated on the final hidden states of the blocks it is paired with. Calibration: 128 evenly spaced 2048-token windows of the WikiText-2 TRAIN split (pytorch/examples raw file).
+
+Measurement: E032's test text, windows and metric, one process, PyTorch FP16 on reconstructed weights. Arms (blocks/head): O/F, R/F, R/G128 (controls: must reproduce E032's O, R, RH to 1e-5 relative); R/GPTQ (plain-rounded blocks, calibrated head); C/F (calibrated blocks, FP16 head); C/GPTQ (both calibrated).
+
+Checks inside the process, also run by the in-job prerequisite (8 calibration windows, 2 test windows) before the full run: the script's plain-rounding function reproduces E031's head bit for bit (hash); the layer-by-layer replay used for calibration equals the model's own forward bit for bit; for each of the 196 projections and both heads the calibration output error tr(ΔW·H·ΔWᵀ) of GPTQ is not above plain rounding's (a failure stops the job; it is not a guaranteed property of the algorithm, so a stop here would be a finding, not a bug by assumption).
+
+Criteria, fixed now, with E032's labels (negligible ≤1%, modest ≤5%, substantial >5%): blocks "pass" if C/F is at most 5% above O/F; head "pass" if the calibrated head is at most 5% above the FP16 head on the same blocks, required for both R/GPTQ against R/F and C/GPTQ against C/F. Reported besides: C/GPTQ against O/F, top-1 accuracy, per-layer errors.
+
+Limits fixed now: calibration and test are the two splits of ONE corpus, so calibration is in-domain and the result may flatter the quantizer on other text; out-of-domain calibration is untested. One model, one metric, one seedless deterministic sample choice, one run (GPU linear algebra is not guaranteed bit-reproducible; hashes of the reconstructed weights identify this run only, and the weights themselves are not kept). No timing: speed is expected, not measured, to equal the plain-rounded tensors' because format and shapes are identical. No token-level or logit gate against anything; nothing here changes E017/E019/E021. Not a repository default.
+
 ## E035 — How much of the head speedup survives with an 8-bit head (vLLM)?
 
 Predeclared 2026-11-10 at the user's request ("go ahead") after E034: no uncalibrated 4-bit head reached 5% perplexity cost, while the 8-bit group-128 head (B8) cost +0.04%. This times that head. vLLM only: our operator executes 4-bit codes only, so our own path has no 8-bit arm.
