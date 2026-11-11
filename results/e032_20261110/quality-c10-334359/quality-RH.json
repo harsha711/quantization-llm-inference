@@ -1,0 +1,11 @@
+{
+ "variant": "RH",
+ "text_sha256": "d790b833ef8cf03a90db7bf1271b7520b83c45ce07ba3c1a9699df81e239eca0",
+ "tokens": 309009,
+ "windows": 150,
+ "scored_tokens": 307050,
+ "nll_sum": 724082.0048828125,
+ "perplexity": 10.57179109043232,
+ "top1_accuracy": 0.5087347337567172,
+ "gpu": "GPU-38a74fc5-9f81-89d1-4ad5-3f5796d39bf2, 610.57.04"
+}

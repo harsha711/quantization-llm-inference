@@ -1,0 +1,6 @@
++ prun timeout 1500 /tmp/e017-hpuvvad-20261109/bin/python /mnt/beegfs/hpuvvad/csc548-w4a16-e032-20261110/quality-c10-334359/quality.py /mnt/beegfs/hpuvvad/csc548-w4a16-e032-20261110/quality-c10-334359 RH /mnt/beegfs/hpuvvad/csc548-w4a16-e032-20261110/wikitext2-test.txt b3481cea6dd697b8b741ec35d375975d4c48c85d456c884fd314fe6860a7128d
+[prun] Master compute host = c10
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun timeout 1500 /tmp/e017-hpuvvad-20261109/bin/python /mnt/beegfs/hpuvvad/csc548-w4a16-e032-20261110/quality-c10-334359/quality.py /mnt/beegfs/hpuvvad/csc548-w4a16-e032-20261110/quality-c10-334359 RH /mnt/beegfs/hpuvvad/csc548-w4a16-e032-20261110/wikitext2-test.txt b3481cea6dd697b8b741ec35d375975d4c48c85d456c884fd314fe6860a7128d (family=openmpi4)
+Token indices sequence length is longer than the specified maximum sequence length for this model (309009 > 131072). Running this sequence through the model will result in indexing errors
+DONE {"variant": "RH", "text_sha256": "d790b833ef8cf03a90db7bf1271b7520b83c45ce07ba3c1a9699df81e239eca0", "tokens": 309009, "windows": 150, "scored_tokens": 307050, "nll_sum": 724082.0048828125, "perplexity": 10.57179109043232, "top1_accuracy": 0.5087347337567172, "gpu": "GPU-38a74fc5-9f81-89d1-4ad5-3f5796d39bf2, 610.57.04"}

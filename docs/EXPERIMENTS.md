@@ -21,6 +21,24 @@ Reported: perplexity and top-1 next-token accuracy of all four, the relative per
 
 Limits fixed now: one model, one corpus, one metric; perplexity on a tokenized-style Wikipedia text is not a task evaluation; the quantizer is plain per-group max-scaling round-to-nearest with no calibration, so a poor result would describe this quantizer, not 4-bit head quantization in general.
 
+### E032 result — the 4-bit head raises perplexity 8.6%: "substantial"; the block quantization alone costs 13.1% (2026-11-10, c10)
+
+Job 334359 on c10, exit 0 on the first attempt, no failed attempt. `results/e032_20261110/` (`analysis.json`, per-variant records and top-1 arrays). WikiText-2 test file 1,256,449 bytes, hash recorded; 307,050 scored positions in 150 windows; the head reconstruction hash equals E031's.
+
+| Model | Perplexity | Top-1 next-token accuracy |
+|---|---:|---:|
+| O: original FP16 | 8.606 | 53.86% |
+| OH: original blocks, 4-bit head | 9.297 | 52.72% |
+| R: 4-bit blocks, FP16 head (the model of E017–E030) | 9.735 | 52.06% |
+| RH: 4-bit blocks and 4-bit head (the model of E031) | 10.572 | 50.87% |
+
+- Head effect, the predeclared comparison RH versus R: perplexity +8.60% (and +8.03% on the original blocks). Above the 5% line: **"substantial"**. The top-1 prediction changes at 15.9% of positions.
+- Block quantization, R versus O: +13.12%, also "substantial"; top-1 changes at 17.8% of positions. Both together: +22.85%, top-1 changes at 23.8% of positions.
+
+Consequence, as fixed beforehand: E031's speedup does NOT become unconditional. With this quantizer, the 23–24% decode gain in vLLM (15–17% in our path) is bought with a measured 8.6% perplexity increase on top of a model that is already 13.1% worse than FP16. Every statement of E031's gain must now quote that cost. The same applies in retrospect to every full-model Marlin speedup since E020: they compare runtimes on a 4-bit model whose perplexity is 13.1% above the FP16 original's; the FP16 baselines R/GR/GRA ran those same reconstructed weights, so the speed comparisons remain like for like, but "4-bit versus the original model" carries that quality cost.
+
+Limits: one corpus, one metric, one model; plain per-group max-scaling round-to-nearest at group 128 with no calibration or clipping search, which is the weakest common 4-bit quantizer, so this bounds this quantizer and not 4-bit quantization of these matrices in general (llama.cpp and ONNX Runtime use other schemes whose quality was not measured here either). Untested ideas, not authorized: smaller groups or error-minimizing scales for the head, a calibrated quantizer (GPTQ/AWQ), an 8-bit head.
+
 ## E031 — 4-bit output head through Marlin, in our path and in vLLM
 
 Predeclared 2026-11-10 from the E030 result. The user agreed beforehand to the experiment the profile would select and asked that follow-ups be queued on the kept nodes; E030 selects this one because the FP16 output head (1169 µs per step) is the largest single kernel in both stacks and the one cost vLLM has not removed. One main change: the output projection (the tied 151,936 × 1536 embedding matrix, cast to FP16 as both runtimes load it) is quantized with the unchanged project G128 quantizer and executed by Marlin. The FP16 embedding lookup, the 196 block projections and everything else are unchanged. No kernel change.

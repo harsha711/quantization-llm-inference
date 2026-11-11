@@ -1,0 +1,27 @@
+{
+ "scored_tokens": 307050,
+ "perplexity": {
+  "O": 8.605813234340317,
+  "OH": 9.29673607922614,
+  "R": 9.734986752455836,
+  "RH": 10.57179109043232
+ },
+ "top1_accuracy_pct": {
+  "O": 53.864,
+  "OH": 52.716,
+  "R": 52.061,
+  "RH": 50.873
+ },
+ "perplexity_rise_pct": {
+  "head_on_quantized_blocks": 8.596,
+  "head_on_original": 8.029,
+  "blocks": 13.121,
+  "blocks_and_head": 22.845
+ },
+ "top1_agreement_pct": {
+  "RH_vs_R": 84.088,
+  "OH_vs_O": 84.506,
+  "R_vs_O": 82.18,
+  "RH_vs_O": 76.198
+ }
+}
