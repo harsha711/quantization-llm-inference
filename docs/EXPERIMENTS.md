@@ -2,6 +2,27 @@
 
 Read the numerical/measurement [contract](CONTRACT.md) before interpreting these records. Preserve raw evidence, failed attempts, and inconclusive outcomes. An alternative that has not been implemented or measured is not a failed optimization. Historical entries below reconstruct only what the repository supports. Missing prior failure numbers or commit IDs remain unknown.
 
+## E034 — Can a better head quantizer keep the 4-bit head's speed at a smaller quality cost?
+
+Predeclared 2026-11-10 at the user's request ("run those multiple tests concurrently if you can") after E032 labelled the E031 head "substantial" (+8.60% perplexity). Quality only: no runtime, kernel, gate or timing. The blocks stay the project G128 reconstruction (R) in every variant; only the output head changes.
+
+Method: E032's corpus, tokenization, 2048-token windows and metric, unchanged. One process (`scripts/e034/heads.py`): the 4-bit blocks run once per window and each head variant is applied to the same final hidden states in PyTorch FP16, which is how the "concurrent" request is met on one GPU. Variants, all symmetric, groups along K, reconstruction FP16(q·s) with FP16 scales:
+
+| Variant | Head | Runtime format |
+|---|---|---|
+| F | FP16 (control) | — |
+| G128 | E031's head: group 128, scale max/7 (control) | as timed in E031 |
+| G128M | group 128, scale c·max/7, c ∈ {1.00, 0.95, …, 0.50} chosen per group and column to minimize squared weight error | identical to G128 |
+| G32 | group 32, scale max/7 | four times the scales |
+| G32M | group 32 with the same search | as G32 |
+| B8 | group 128, 8-bit, scale max/127 | none of ours; upper bound only |
+
+Controls, fixed now: the in-process G128 reconstruction must equal `scripts/e017/quantize.py` bit for bit and hash-equal E031's head (asserted before any scoring); F and G128 must reproduce E032's R and RH perplexities (9.735, 10.572) within 0.01%, otherwise the run is invalid. A two-window smoke of the same script precedes the full run in the job.
+
+Reported per variant: relative weight error, perplexity, top-1 accuracy, perplexity rise against F from the same run, top-1 agreement with F. Labels are E032's, unchanged: "negligible" ≤ 1%, "modest" ≤ 5%, "substantial" above. Hypothesis: at least one 4-bit variant is "modest" or better. If so, the one with the least format change (order G128M, G32, G32M) is the candidate for a separate, user-requested gate-and-timing experiment; nothing here makes E031's claim unconditional, because E031 timed the G128 head only. If none is, the result is that these uncalibrated fixes are insufficient; a calibrated quantizer stays untested.
+
+Limits fixed now: one model, one corpus, one metric; the search minimizes weight error, not output error, and uses no calibration data; choosing among variants on the test corpus is a selection on that corpus (five variants, disclosed); B8 has no runtime in our operator and no timing anywhere; whether the pinned Marlin build accepts a group-32 head, and what it costs in time, is unverified.
+
 ## E033 — vLLM with the 4-bit head: same-job comparison with ONNX Runtime, and batch sizes 1–8
 
 Predeclared 2026-11-10 after the user invited concurrent runs while E032 is in progress. Two open points from E031, no change to any path:
