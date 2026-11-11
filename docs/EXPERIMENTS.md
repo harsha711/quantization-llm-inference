@@ -38,6 +38,36 @@ Checks in the process, also run by the in-job prerequisite (8 calibration window
 
 Limits fixed now: one model, one metric, one test corpus, one run, one seed for S; validation and test are both WikiText-2, so selection is in-domain for the test even though calibration is not; the head recipe is not searched; nothing is timed or gated (E038).
 
+### E037 result — best out-of-domain blocks +5.62% (fail, down from E036's in-domain +6.77%); head +1.57% (pass) (2026-11-11, c4)
+
+Job 335301 on c4, third attempt, exit 0, 11:23–13:28 EST. `results/e037_20261111/calib-c4-335301/` (`quality.json` with every arm and per-layer records, `arms.json`, logs, the in-job prerequisite, `all.sha256`). The prerequisite passed and the full run followed: 128 calibration windows per source (C4: the first 128 documents with at least 2048 tokens among the first 4,179 of the shard), validation 132 windows / 270,204 scored tokens, test 150 windows / 307,050. Controls: O 8.605813 and in-process plain rounding 9.734987 reproduce E032 to 1e-5; W/G gives 9.1882, E036's 9.188. Every GPTQ arm equals attempt 2's log line to all four printed decimals. The selected checkpoint reloaded from its saved codes and scales scores bit-identically.
+
+| Variant (blocks; FP16 head) | Validation ppl | Validation rise | Test ppl | Test rise vs original | Test top-1 |
+|---|---:|---:|---:|---:|---:|
+| O original | 8.9684 | — | 8.6058 | — | 53.86% |
+| plain rounding (E017's) | 10.2168 | +13.92% | 9.7350 | +13.12% | 52.06% |
+| W/G in-domain, E036's quantizer | 9.6088 | +7.14% | 9.1882 | +6.77% | 53.00% |
+| C/G C4, E036's quantizer | 9.7689 | +8.93% | 9.3425 | +8.56% | 52.68% |
+| C/A | 9.5394 | +6.37% | 9.1288 | +6.08% | 52.90% |
+| C/M | 9.6457 | +7.55% | 9.2305 | +7.26% | 52.94% |
+| C/T | 9.7036 | +8.20% | 9.2747 | +7.77% | 52.75% |
+| C/+ = AMT | 9.7247 | +8.43% | 9.3411 | +8.54% | 52.77% |
+| C/AM | 9.7305 | +8.50% | 9.3179 | +8.27% | 52.83% |
+| **C/AT (selected: lowest validation)** | **9.4933** | **+5.85%** | **9.0894** | **+5.62%** | 53.04% |
+| C/MT | 9.6238 | +7.31% | 9.2200 | +7.14% | 52.93% |
+| C/S sign-SGD rounding | 9.7412 | +8.62% | 9.3158 | +8.25% | 52.88% |
+| **C/AT blocks + calibrated head** | 9.6511 | head +1.66% | 9.2319 | **head +1.57%**; whole model +7.28% | 52.70% |
+
+- Block criterion (selected C/AT at most 5% above O/F on test): **fail**, +5.62%, "substantial". Say +5.62% or "5.6%", never "about 5%".
+- Head criterion (calibrated head at most 5% above the FP16 head on the selected blocks): **pass**, +1.57%, "modest". With in-domain calibration E036 measured +0.89–1.03%; say "about 1.6%" for this checkpoint.
+- Whole model, selected blocks and head: +7.28% over the original, against +22.84% for plain rounding and +7.72% for E036's in-domain checkpoint, in the identical runtime format.
+- Calibration source, same quantizer: C4 costs 1.79 points more than in-domain (8.56% against 6.77%). The selected out-of-domain variant is nevertheless 1.15 points better than E036's in-domain result.
+- A, M and T each help alone; A with T is the best pair; every combination containing both A and M is no better than C/G, and only those two variants have calibration output error above plain rounding's anywhere (`down_proj` of blocks 2 and 26, ratio up to 1.78). Observation; the cause (scales fixed in advance and also shrunk, so compensated weights clip) is a hypothesis, not tested.
+- Validation and test rank the eleven calibrated variants in the same order except for neighbours within 0.3 points; the variant selected on validation is also the best on test.
+- S (signed-gradient rounding, own implementation): the per-block loss falls (end/start 0.32–0.84, median 0.63, in blocks 1–27; 1.18 in block 0; zero non-finite gradients) but the model is no better than C/G. This does NOT measure AutoRound: it is my implementation from memory with a different loss (per-token relative), batch 4, one seed, no best-step tracking, no tuning. Recorded as "this implementation did not help", not as a result about the published method.
+
+What this does not show: one model, one metric, one test corpus, one run; validation and test are both WikiText-2, so the selection is in-domain for the test even though calibration is not; eleven variants were scored on test and three of them were added after a table with test numbers was seen (attempt 2), with the selection rule unchanged; the head recipe was not searched; NOTHING IS TIMED OR GATED here (E038 does that for this checkpoint). GPTQ and activation ordering are upstream methods (Frantar et al.; llm-compressor's "static" ordering); ours is the implementation in the project format, the comparison and the measurement. The checkpoint (`checkpoint.npz`, sha256 bb161620…ba93b, 1.57 GB) stays on BeeGFS. Not a repository default. Untested, not authorized: more calibration windows, mixed calibration sources, group sizes other than 128, the upstream AutoRound or llm-compressor libraries, other damping.
+
 ### E037 attempt 2 — full run crashed at the last variant, out of GPU memory; no result file (2026-11-11, c4, job 335226)
 
 Exit 1 after 1 h 52 min. `results/e037_20261111/attempt-c4-335226-oom/` (logs, the prerequisite's `quality.json`). The prerequisite passed (all seven variants; S with the amended loss fell in every block but block 0, zero non-finite gradients). The full run scored six variants, finished all 28 blocks of C/S, and died allocating the 1.2 GB logits tensor while scoring C/S (7.9 GiB allocated, 6.3 GiB reserved but unusable). `quality.json` and the checkpoint are written at the end, so neither exists; the numbers below are the four-decimal `ARM` lines of `calib.log`, and C/S has no score.
