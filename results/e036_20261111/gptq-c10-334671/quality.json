@@ -1,0 +1,1463 @@
+{
+ "test_sha256": "d790b833ef8cf03a90db7bf1271b7520b83c45ce07ba3c1a9699df81e239eca0",
+ "train_sha256": "9e9fa1ad55b1c2c95b08e37dd8e653f638fac2c6de904b79e813611eefbc985f",
+ "windows": 150,
+ "scored_tokens": 307050,
+ "calibration": {
+  "windows": 128,
+  "tokens": 262144,
+  "stride": 19915,
+  "damp": 0.01
+ },
+ "gpu": "GPU-38a74fc5-9f81-89d1-4ad5-3f5796d39bf2, 610.57.04",
+ "arms": {
+  "R/F": {
+   "nll_sum": 698761.7536621094,
+   "perplexity": 9.734986752455836,
+   "top1_accuracy_pct": 52.06122781305976
+  },
+  "R/G128": {
+   "nll_sum": 724082.0048828125,
+   "perplexity": 10.57179109043232,
+   "top1_accuracy_pct": 50.873473375671715
+  },
+  "R/GPTQ": {
+   "nll_sum": 701907.5229492188,
+   "perplexity": 9.835235679642528,
+   "top1_accuracy_pct": 51.846279107637194
+  },
+  "O/F": {
+   "nll_sum": 660906.0671386719,
+   "perplexity": 8.605813234340317,
+   "top1_accuracy_pct": 53.86386581989904
+  },
+  "C/F": {
+   "nll_sum": 681010.7192382812,
+   "perplexity": 9.188151141140912,
+   "top1_accuracy_pct": 52.99723172121804
+  },
+  "C/GPTQ": {
+   "nll_sum": 683727.6369628906,
+   "perplexity": 9.269812828605138,
+   "top1_accuracy_pct": 52.87086793681811
+  }
+ },
+ "compare": {
+  "R/F vs O/F": {
+   "rise_pct": 13.12105535371957,
+   "label": "substantial"
+  },
+  "C/F vs O/F": {
+   "rise_pct": 6.766796942290765,
+   "label": "substantial"
+  },
+  "R/G128 vs R/F": {
+   "rise_pct": 8.595844650383167,
+   "label": "substantial"
+  },
+  "R/GPTQ vs R/F": {
+   "rise_pct": 1.0297798007932846,
+   "label": "modest"
+  },
+  "C/GPTQ vs C/F": {
+   "rise_pct": 0.8887717040110266,
+   "label": "negligible"
+  },
+  "R/G128 vs O/F": {
+   "rise_pct": 22.844765538799262,
+   "label": "substantial"
+  },
+  "C/GPTQ vs O/F": {
+   "rise_pct": 7.715710022792743,
+   "label": "substantial"
+  }
+ },
+ "layers": {
+  "lm_head@R": {
+   "proxy_rtn": 14159913984.0,
+   "proxy_gptq": 1665910016.0,
+   "weight_rel_l2_rtn": 0.12179940938949585,
+   "weight_rel_l2_gptq": 0.1402558982372284,
+   "reconstructed_sha256": "87ea685193c0cf67d4becdf5fc001951d8b7ba1afd2ad3d89c4a321425a948eb"
+  },
+  "0.self_attn.q_proj": {
+   "proxy_rtn": 7730600.0,
+   "proxy_gptq": 1977370.25,
+   "weight_rel_l2_rtn": 0.1322958767414093,
+   "weight_rel_l2_gptq": 0.1686837077140808,
+   "reconstructed_sha256": "447ac01fe13da00c6f613c3f69cbdd059eecd546392159a634aaf6f585039be3"
+  },
+  "0.self_attn.k_proj": {
+   "proxy_rtn": 1469714.25,
+   "proxy_gptq": 369248.75,
+   "weight_rel_l2_rtn": 0.12197338044643402,
+   "weight_rel_l2_gptq": 0.15653063356876373,
+   "reconstructed_sha256": "309ea8396872e23d9d2dbb215dc6bb7f1dd38d4e32deb79eaadfdb116b519cf4"
+  },
+  "0.self_attn.v_proj": {
+   "proxy_rtn": 134677.75,
+   "proxy_gptq": 38111.90625,
+   "weight_rel_l2_rtn": 0.12832142412662506,
+   "weight_rel_l2_gptq": 0.15829609334468842,
+   "reconstructed_sha256": "8766e935d33874aa70523eb66300cda88fe8df99c405723d1f20ecb7210f79a0"
+  },
+  "0.self_attn.o_proj": {
+   "proxy_rtn": 455582.8125,
+   "proxy_gptq": 93602.8359375,
+   "weight_rel_l2_rtn": 0.11951861530542374,
+   "weight_rel_l2_gptq": 0.1587289720773697,
+   "reconstructed_sha256": "472d872708d763ca6c6a8f96e496d09432b09adf27c8f96065c7a323d02d904f"
+  },
+  "0.mlp.gate_proj": {
+   "proxy_rtn": 5250260.0,
+   "proxy_gptq": 1287261.75,
+   "weight_rel_l2_rtn": 0.12120864540338516,
+   "weight_rel_l2_gptq": 0.19664323329925537,
+   "reconstructed_sha256": "0d81a9e2a6b70147e58548c2d0ad96a42c87efc2b6b1187b49b3ae03cf158ee7"
+  },
+  "0.mlp.up_proj": {
+   "proxy_rtn": 3597826.25,
+   "proxy_gptq": 881779.5,
+   "weight_rel_l2_rtn": 0.1212017759680748,
+   "weight_rel_l2_gptq": 0.1966658979654312,
+   "reconstructed_sha256": "d7b798667ae5fb4b7df5c69d3647532ef81588836e4e5cc49011b921aa705097"
+  },
+  "0.mlp.down_proj": {
+   "proxy_rtn": 492784.6875,
+   "proxy_gptq": 174231.6875,
+   "weight_rel_l2_rtn": 0.12228357046842575,
+   "weight_rel_l2_gptq": 0.15564227104187012,
+   "reconstructed_sha256": "cadb7cd29e64f54a7184be7e7fe71b63916b7d7f9fbfc470f78e4797eb91eab2"
+  },
+  "1.self_attn.q_proj": {
+   "proxy_rtn": 1366631.75,
+   "proxy_gptq": 412712.625,
+   "weight_rel_l2_rtn": 0.12103492021560669,
+   "weight_rel_l2_gptq": 0.15666669607162476,
+   "reconstructed_sha256": "e16e81a82d3c94b7d90ef12b696f7583fffe67eae84caafb26350c8dea1d54a7"
+  },
+  "1.self_attn.k_proj": {
+   "proxy_rtn": 415361.8125,
+   "proxy_gptq": 120359.125,
+   "weight_rel_l2_rtn": 0.11993753165006638,
+   "weight_rel_l2_gptq": 0.15460975468158722,
+   "reconstructed_sha256": "7970d5dae404f18e0aa117742f545e544ddef459cad0fee2532c270adb1360db"
+  },
+  "1.self_attn.v_proj": {
+   "proxy_rtn": 92003.1328125,
+   "proxy_gptq": 27521.1640625,
+   "weight_rel_l2_rtn": 0.12566830217838287,
+   "weight_rel_l2_gptq": 0.162770077586174,
+   "reconstructed_sha256": "5a70a1d499f7942aa5ad83ec8f879b53679889dc563949e9cad0b13c5343d981"
+  },
+  "1.self_attn.o_proj": {
+   "proxy_rtn": 390562.09375,
+   "proxy_gptq": 36359.96484375,
+   "weight_rel_l2_rtn": 0.11939819157123566,
+   "weight_rel_l2_gptq": 0.15109257400035858,
+   "reconstructed_sha256": "cf07d62ad664d8c1ee6e79fa8b305e90af6b023fbbc2defa738ca9d04e7ccf3e"
+  },
+  "1.mlp.gate_proj": {
+   "proxy_rtn": 211786176.0,
+   "proxy_gptq": 27233950.0,
+   "weight_rel_l2_rtn": 0.11884300410747528,
+   "weight_rel_l2_gptq": 0.14580591022968292,
+   "reconstructed_sha256": "e669c445ff1d3dc3809d46d05344bc89f369f817f757b3a6ae0569cd3b4cd5ed"
+  },
+  "1.mlp.up_proj": {
+   "proxy_rtn": 156047648.0,
+   "proxy_gptq": 22162126.0,
+   "weight_rel_l2_rtn": 0.12036130577325821,
+   "weight_rel_l2_gptq": 0.14720718562602997,
+   "reconstructed_sha256": "daebe5d8fd862dd23893a3a5178e6eceebf8838b44ba79b8a8d9f1306cfb78da"
+  },
+  "1.mlp.down_proj": {
+   "proxy_rtn": 48775440.0,
+   "proxy_gptq": 1300414.25,
+   "weight_rel_l2_rtn": 0.1278432458639145,
+   "weight_rel_l2_gptq": 0.248485267162323,
+   "reconstructed_sha256": "b1ae3c7181bb5b7adbe106aa4bd490ee5f35075cdf1964734a486efe5b78bdc4"
+  },
+  "2.self_attn.q_proj": {
+   "proxy_rtn": 3672951.0,
+   "proxy_gptq": 1260712.625,
+   "weight_rel_l2_rtn": 0.12749631702899933,
+   "weight_rel_l2_gptq": 0.16162489354610443,
+   "reconstructed_sha256": "513c84369c4c82ee25a79cb538f8a17d57339a2651c60dea0be5de7de4d47f0e"
+  },
+  "2.self_attn.k_proj": {
+   "proxy_rtn": 766879.1875,
+   "proxy_gptq": 273208.5,
+   "weight_rel_l2_rtn": 0.12094433605670929,
+   "weight_rel_l2_gptq": 0.1545691192150116,
+   "reconstructed_sha256": "15a55a8f1a6720c77fca37e604095e19e15b0dbbf7b18cfdbcd68e83a68fc05b"
+  },
+  "2.self_attn.v_proj": {
+   "proxy_rtn": 341820.65625,
+   "proxy_gptq": 114580.5390625,
+   "weight_rel_l2_rtn": 0.12393061071634293,
+   "weight_rel_l2_gptq": 0.1583232879638672,
+   "reconstructed_sha256": "6f6186bbc7dbc535527424906d1f9c7e03f1064ffcb9185fa3ff2ac8e8f73c01"
+  },
+  "2.self_attn.o_proj": {
+   "proxy_rtn": 187998.9375,
+   "proxy_gptq": 58143.1015625,
+   "weight_rel_l2_rtn": 0.11911294609308243,
+   "weight_rel_l2_gptq": 0.14924517273902893,
+   "reconstructed_sha256": "6810d64352cf709d4ce4c05c67338a850f908f666d438a557e07adda48e7bf50"
+  },
+  "2.mlp.gate_proj": {
+   "proxy_rtn": 127923472.0,
+   "proxy_gptq": 24200584.0,
+   "weight_rel_l2_rtn": 0.11908864974975586,
+   "weight_rel_l2_gptq": 0.14285102486610413,
+   "reconstructed_sha256": "1046d03a37470ea7581f56121246fc1cc598b9f222d133f026ae6821a6025477"
+  },
+  "2.mlp.up_proj": {
+   "proxy_rtn": 80220672.0,
+   "proxy_gptq": 15890768.0,
+   "weight_rel_l2_rtn": 0.12077736854553223,
+   "weight_rel_l2_gptq": 0.1444990187883377,
+   "reconstructed_sha256": "fae3a3afb5bb9bf419f3880bbc0bcf6c58de4f538f5e0d5deb149d4ed1978e96"
+  },
+  "2.mlp.down_proj": {
+   "proxy_rtn": 24763190.0,
+   "proxy_gptq": 2629824.5,
+   "weight_rel_l2_rtn": 0.1273672729730606,
+   "weight_rel_l2_gptq": 0.14735519886016846,
+   "reconstructed_sha256": "0b1345af7f2d9a2f46d4fbfae9d91415c268f48e01a6f1da3ddf28e8db4c3120"
+  },
+  "3.self_attn.q_proj": {
+   "proxy_rtn": 4107063.5,
+   "proxy_gptq": 1253147.25,
+   "weight_rel_l2_rtn": 0.12339333444833755,
+   "weight_rel_l2_gptq": 0.15638546645641327,
+   "reconstructed_sha256": "2b110299ad0a3e2681fa7e2b080ed7db32b95c904b72e933430106c0e3819b03"
+  },
+  "3.self_attn.k_proj": {
+   "proxy_rtn": 915132.75,
+   "proxy_gptq": 267524.4375,
+   "weight_rel_l2_rtn": 0.12342416495084763,
+   "weight_rel_l2_gptq": 0.15663859248161316,
+   "reconstructed_sha256": "069a84366051d6259d2090639c4139b65a12e700e8727b272a6c7cd55bd057da"
+  },
+  "3.self_attn.v_proj": {
+   "proxy_rtn": 483126.1875,
+   "proxy_gptq": 151995.84375,
+   "weight_rel_l2_rtn": 0.12643255293369293,
+   "weight_rel_l2_gptq": 0.15947245061397552,
+   "reconstructed_sha256": "4c920eac5dc8a2b9512b24df37b7a73d4d50b524d186360d4fa5081fbc915fb3"
+  },
+  "3.self_attn.o_proj": {
+   "proxy_rtn": 183883.140625,
+   "proxy_gptq": 67630.6953125,
+   "weight_rel_l2_rtn": 0.12002440541982651,
+   "weight_rel_l2_gptq": 0.1516408771276474,
+   "reconstructed_sha256": "2b12098a5abb91f858924db30f3f5f3137727420c0a35a128576a9a517d3bec3"
+  },
+  "3.mlp.gate_proj": {
+   "proxy_rtn": 79423848.0,
+   "proxy_gptq": 20349384.0,
+   "weight_rel_l2_rtn": 0.1202797219157219,
+   "weight_rel_l2_gptq": 0.14111442863941193,
+   "reconstructed_sha256": "452616e070930e0528390b60986a480637608bdbd28d02e1a8ea411a4acf0b8a"
+  },
+  "3.mlp.up_proj": {
+   "proxy_rtn": 43451752.0,
+   "proxy_gptq": 11272245.0,
+   "weight_rel_l2_rtn": 0.12017963826656342,
+   "weight_rel_l2_gptq": 0.14082059264183044,
+   "reconstructed_sha256": "a6c557e5a9482d941de325181bbb8337fc00e92bef93cab51a5d95d5967ca029"
+  },
+  "3.mlp.down_proj": {
+   "proxy_rtn": 1448153.75,
+   "proxy_gptq": 595977.0,
+   "weight_rel_l2_rtn": 0.12570886313915253,
+   "weight_rel_l2_gptq": 0.16493915021419525,
+   "reconstructed_sha256": "66c01d599c4296e09d9cbf35518c3ca722d41c06102b1cd6456dbf45e3091f62"
+  },
+  "4.self_attn.q_proj": {
+   "proxy_rtn": 4879067.0,
+   "proxy_gptq": 1659318.25,
+   "weight_rel_l2_rtn": 0.12236042320728302,
+   "weight_rel_l2_gptq": 0.1520673781633377,
+   "reconstructed_sha256": "d6ffedbfb18b3180911c2674edd22711f0e9541a515d5d71f367b3e8962b072d"
+  },
+  "4.self_attn.k_proj": {
+   "proxy_rtn": 909874.125,
+   "proxy_gptq": 318690.4375,
+   "weight_rel_l2_rtn": 0.12051616609096527,
+   "weight_rel_l2_gptq": 0.15001243352890015,
+   "reconstructed_sha256": "f1d1730d28eaf1915573d1a998a61a5f53be1051bdea74890a039d014727ae93"
+  },
+  "4.self_attn.v_proj": {
+   "proxy_rtn": 577763.75,
+   "proxy_gptq": 217567.90625,
+   "weight_rel_l2_rtn": 0.12109612673521042,
+   "weight_rel_l2_gptq": 0.149128720164299,
+   "reconstructed_sha256": "9d5f7c2ae2297bc50ef1bfd20751fa25ea220f1a21b7be3c4dbea5c3b7b34ce6"
+  },
+  "4.self_attn.o_proj": {
+   "proxy_rtn": 273186.4375,
+   "proxy_gptq": 102193.9296875,
+   "weight_rel_l2_rtn": 0.11944693326950073,
+   "weight_rel_l2_gptq": 0.14401642978191376,
+   "reconstructed_sha256": "7ec77abc4689b499f2bbfadcd5ce3123066ad751fd3628d0f0e86a5d32e78346"
+  },
+  "4.mlp.gate_proj": {
+   "proxy_rtn": 40816864.0,
+   "proxy_gptq": 13837254.0,
+   "weight_rel_l2_rtn": 0.12220102548599243,
+   "weight_rel_l2_gptq": 0.14026100933551788,
+   "reconstructed_sha256": "8301595a90965733af3393dfab59860920677a4c65eda80c1946598712ca3cc6"
+  },
+  "4.mlp.up_proj": {
+   "proxy_rtn": 25642782.0,
+   "proxy_gptq": 8571130.0,
+   "weight_rel_l2_rtn": 0.1207866296172142,
+   "weight_rel_l2_gptq": 0.13856710493564606,
+   "reconstructed_sha256": "04c2a49ad94ce47cda3aab817f3c52245d24eae56f9e538a6e4d858311e612a3"
+  },
+  "4.mlp.down_proj": {
+   "proxy_rtn": 1494574.875,
+   "proxy_gptq": 737097.875,
+   "weight_rel_l2_rtn": 0.12660269439220428,
+   "weight_rel_l2_gptq": 0.15620896220207214,
+   "reconstructed_sha256": "8eb0f361fe4307a974d7751559bf80f3ba69455adf500bacf5d62ab8e5650ec5"
+  },
+  "5.self_attn.q_proj": {
+   "proxy_rtn": 5169001.5,
+   "proxy_gptq": 1700032.5,
+   "weight_rel_l2_rtn": 0.13002988696098328,
+   "weight_rel_l2_gptq": 0.16062267124652863,
+   "reconstructed_sha256": "cd5c5db45c8dffed3d5c0ab26f8b1cfa3264fa4b1ecc9b79aa96dbd3f89319d8"
+  },
+  "5.self_attn.k_proj": {
+   "proxy_rtn": 1032511.625,
+   "proxy_gptq": 363237.21875,
+   "weight_rel_l2_rtn": 0.1398131102323532,
+   "weight_rel_l2_gptq": 0.1727970689535141,
+   "reconstructed_sha256": "5eaaf1acdda09d5b78bea98fee930e39827357230cc77c00adf0042b915ef9ef"
+  },
+  "5.self_attn.v_proj": {
+   "proxy_rtn": 804717.75,
+   "proxy_gptq": 300482.0,
+   "weight_rel_l2_rtn": 0.12916238605976105,
+   "weight_rel_l2_gptq": 0.1581939458847046,
+   "reconstructed_sha256": "9d8c774216654969e0fc258b4b637e28a6408851c71fe643985b06fcc2fb61bc"
+  },
+  "5.self_attn.o_proj": {
+   "proxy_rtn": 456131.71875,
+   "proxy_gptq": 139807.0,
+   "weight_rel_l2_rtn": 0.12085848301649094,
+   "weight_rel_l2_gptq": 0.16625352203845978,
+   "reconstructed_sha256": "551f53e952cc5ae3a4390b13d26df9984d325022fcc6b086cc4c62fd8a979f45"
+  },
+  "5.mlp.gate_proj": {
+   "proxy_rtn": 89670200.0,
+   "proxy_gptq": 27261800.0,
+   "weight_rel_l2_rtn": 0.11947827786207199,
+   "weight_rel_l2_gptq": 0.1371442675590515,
+   "reconstructed_sha256": "1ed29f83a3bd9c0af8481db38a62cb54a3471972a7dd89de265af2d28ae9b2dd"
+  },
+  "5.mlp.up_proj": {
+   "proxy_rtn": 58903064.0,
+   "proxy_gptq": 17877716.0,
+   "weight_rel_l2_rtn": 0.12109933793544769,
+   "weight_rel_l2_gptq": 0.1389629989862442,
+   "reconstructed_sha256": "e6c7351fd489b5d74fafe233c9fd5f5319f582418fb81141917381e821cac316"
+  },
+  "5.mlp.down_proj": {
+   "proxy_rtn": 1498269.875,
+   "proxy_gptq": 909966.1875,
+   "weight_rel_l2_rtn": 0.1261441856622696,
+   "weight_rel_l2_gptq": 0.16425848007202148,
+   "reconstructed_sha256": "cbd8afd2eaae2fc5d8dc96b65390d0c13decc66d310bb891ed4ea51344ea9486"
+  },
+  "6.self_attn.q_proj": {
+   "proxy_rtn": 6559222.0,
+   "proxy_gptq": 2228411.75,
+   "weight_rel_l2_rtn": 0.13145165145397186,
+   "weight_rel_l2_gptq": 0.1696404069662094,
+   "reconstructed_sha256": "70e945a6851257365e11608c390c4ce4fa58b77f88cd5878e2187b17cde648c1"
+  },
+  "6.self_attn.k_proj": {
+   "proxy_rtn": 1378688.25,
+   "proxy_gptq": 461142.875,
+   "weight_rel_l2_rtn": 0.13352037966251373,
+   "weight_rel_l2_gptq": 0.17300871014595032,
+   "reconstructed_sha256": "c53d7584e694abcd72855337b72dcb56784aefe6c506c0df00d7bca3e80a155f"
+  },
+  "6.self_attn.v_proj": {
+   "proxy_rtn": 696361.75,
+   "proxy_gptq": 249139.8125,
+   "weight_rel_l2_rtn": 0.12722787261009216,
+   "weight_rel_l2_gptq": 0.16233819723129272,
+   "reconstructed_sha256": "9d765a8f163b1faeba97b87e86a0c8dff6212e15d1054b241d4155a7b5a27921"
+  },
+  "6.self_attn.o_proj": {
+   "proxy_rtn": 316821.28125,
+   "proxy_gptq": 80580.78125,
+   "weight_rel_l2_rtn": 0.12218639999628067,
+   "weight_rel_l2_gptq": 0.1573134809732437,
+   "reconstructed_sha256": "6db1a8246ca423e54e36681c2e38d8d68f82cbbaa522607f30d9dbcf77f5ea98"
+  },
+  "6.mlp.gate_proj": {
+   "proxy_rtn": 17495040.0,
+   "proxy_gptq": 8159029.5,
+   "weight_rel_l2_rtn": 0.12139906734228134,
+   "weight_rel_l2_gptq": 0.1372157484292984,
+   "reconstructed_sha256": "d555804a2f0e1aee03b436ae8daa89feb3f8d9e3bb5a76ca2c68d19a3844e348"
+  },
+  "6.mlp.up_proj": {
+   "proxy_rtn": 14639148.0,
+   "proxy_gptq": 6868060.0,
+   "weight_rel_l2_rtn": 0.12173924595117569,
+   "weight_rel_l2_gptq": 0.13756580650806427,
+   "reconstructed_sha256": "856a4129e2ca96041e39918155febe0aafe4b85859b28bd50f9aab86ba1876da"
+  },
+  "6.mlp.down_proj": {
+   "proxy_rtn": 1353613.25,
+   "proxy_gptq": 723595.0625,
+   "weight_rel_l2_rtn": 0.12615975737571716,
+   "weight_rel_l2_gptq": 0.15230128169059753,
+   "reconstructed_sha256": "53fb986e50af9fbc7dd0ca3b9e5ff0acce7085c2f853aaeee5b28e3c4ecc0b00"
+  },
+  "7.self_attn.q_proj": {
+   "proxy_rtn": 3494797.25,
+   "proxy_gptq": 1105911.875,
+   "weight_rel_l2_rtn": 0.1222308948636055,
+   "weight_rel_l2_gptq": 0.15508508682250977,
+   "reconstructed_sha256": "75cb7170bd887b3c6d84b87636e63ace63aa88d8dadb2d2a12bf15019a36896d"
+  },
+  "7.self_attn.k_proj": {
+   "proxy_rtn": 677517.75,
+   "proxy_gptq": 216904.4375,
+   "weight_rel_l2_rtn": 0.12266352027654648,
+   "weight_rel_l2_gptq": 0.15659114718437195,
+   "reconstructed_sha256": "91ec4a96ace79e83f2bb59d8561c88ed75748c5fd22e79d858475c146e293b2c"
+  },
+  "7.self_attn.v_proj": {
+   "proxy_rtn": 563145.375,
+   "proxy_gptq": 172934.765625,
+   "weight_rel_l2_rtn": 0.12644799053668976,
+   "weight_rel_l2_gptq": 0.16072078049182892,
+   "reconstructed_sha256": "1758dba44d66b756e2befd8d3b1d28c4f3dcadf367d9310e404f003f87f6f81c"
+  },
+  "7.self_attn.o_proj": {
+   "proxy_rtn": 444801.5625,
+   "proxy_gptq": 115096.71875,
+   "weight_rel_l2_rtn": 0.12061852216720581,
+   "weight_rel_l2_gptq": 0.16863738000392914,
+   "reconstructed_sha256": "18217af9bd0301811e90eac9e0edfa873cc150c5f53493d1237fea1bdd3fe310"
+  },
+  "7.mlp.gate_proj": {
+   "proxy_rtn": 14852878.0,
+   "proxy_gptq": 7021411.0,
+   "weight_rel_l2_rtn": 0.12207286059856415,
+   "weight_rel_l2_gptq": 0.13890191912651062,
+   "reconstructed_sha256": "fe4c95af0bcd76493faed8608e6ca191afdda562683540658bd991f069200f15"
+  },
+  "7.mlp.up_proj": {
+   "proxy_rtn": 14170334.0,
+   "proxy_gptq": 6734537.5,
+   "weight_rel_l2_rtn": 0.12428640574216843,
+   "weight_rel_l2_gptq": 0.14144743978977203,
+   "reconstructed_sha256": "12ea183822bbf37d81a50c7bf195543e585cd98682688e118a56c80371e397c6"
+  },
+  "7.mlp.down_proj": {
+   "proxy_rtn": 1399301.25,
+   "proxy_gptq": 728464.5625,
+   "weight_rel_l2_rtn": 0.13093765079975128,
+   "weight_rel_l2_gptq": 0.1559928059577942,
+   "reconstructed_sha256": "0f915bd4b66f3e64075a769abd904c1c77f5c7e48ea9983e6856a9affb15191e"
+  },
+  "8.self_attn.q_proj": {
+   "proxy_rtn": 6049602.0,
+   "proxy_gptq": 2155013.25,
+   "weight_rel_l2_rtn": 0.12972210347652435,
+   "weight_rel_l2_gptq": 0.16378362476825714,
+   "reconstructed_sha256": "969647181cef7fd989814e58d4ab1cc766454846a1513881575957867d48b2ea"
+  },
+  "8.self_attn.k_proj": {
+   "proxy_rtn": 1077582.5,
+   "proxy_gptq": 383071.75,
+   "weight_rel_l2_rtn": 0.1285799741744995,
+   "weight_rel_l2_gptq": 0.16262300312519073,
+   "reconstructed_sha256": "e6cb1ededd9fe58b9fe5286030a1903f66958277508010f5273500ed19716448"
+  },
+  "8.self_attn.v_proj": {
+   "proxy_rtn": 628099.25,
+   "proxy_gptq": 240246.4375,
+   "weight_rel_l2_rtn": 0.12350020557641983,
+   "weight_rel_l2_gptq": 0.15538953244686127,
+   "reconstructed_sha256": "cfa49926ccecf491591071d2d5a8bafa2a1495f27212056dd137bb0981e087d3"
+  },
+  "8.self_attn.o_proj": {
+   "proxy_rtn": 489192.65625,
+   "proxy_gptq": 160790.03125,
+   "weight_rel_l2_rtn": 0.1218339279294014,
+   "weight_rel_l2_gptq": 0.1510358303785324,
+   "reconstructed_sha256": "9c13b9980401ba47eb9c3ccba411c2d28af11af335cc8fec033d1b1613924d60"
+  },
+  "8.mlp.gate_proj": {
+   "proxy_rtn": 15037229.0,
+   "proxy_gptq": 7115055.5,
+   "weight_rel_l2_rtn": 0.12135221064090729,
+   "weight_rel_l2_gptq": 0.13811281323432922,
+   "reconstructed_sha256": "2583878b50cd83e6cb7a06a7a502f9e01156c514e266435f30614f8e8f25690d"
+  },
+  "8.mlp.up_proj": {
+   "proxy_rtn": 13946902.0,
+   "proxy_gptq": 6550969.0,
+   "weight_rel_l2_rtn": 0.12203654646873474,
+   "weight_rel_l2_gptq": 0.138896644115448,
+   "reconstructed_sha256": "e2563fd5878b1d120de71405d7a604de39d4e519394e5c6a63819bcd7a4d6a8f"
+  },
+  "8.mlp.down_proj": {
+   "proxy_rtn": 1266417.875,
+   "proxy_gptq": 683158.625,
+   "weight_rel_l2_rtn": 0.12736332416534424,
+   "weight_rel_l2_gptq": 0.15233147144317627,
+   "reconstructed_sha256": "b12e3dcd7a0c02333e147a46c5343abfdfeaf79b8851b23021509a8b335c5339"
+  },
+  "9.self_attn.q_proj": {
+   "proxy_rtn": 5081403.5,
+   "proxy_gptq": 1719865.125,
+   "weight_rel_l2_rtn": 0.12348707765340805,
+   "weight_rel_l2_gptq": 0.15395298600196838,
+   "reconstructed_sha256": "9f754a0d5bbfab507b0ae0dcc3ceb0bc779a27d68f2843cc9d71ed54153e8a8a"
+  },
+  "9.self_attn.k_proj": {
+   "proxy_rtn": 1053768.5,
+   "proxy_gptq": 356682.5,
+   "weight_rel_l2_rtn": 0.1272212117910385,
+   "weight_rel_l2_gptq": 0.158628910779953,
+   "reconstructed_sha256": "2fd78d754c431b82dace719939769ce4d76abfc107e0c98c58a5f632e4f14760"
+  },
+  "9.self_attn.v_proj": {
+   "proxy_rtn": 548814.75,
+   "proxy_gptq": 205209.046875,
+   "weight_rel_l2_rtn": 0.1222819909453392,
+   "weight_rel_l2_gptq": 0.150991290807724,
+   "reconstructed_sha256": "b0405e1a6b2340322ac6fa1a35e70dd5513cc574c291e0037297b04110bb1d52"
+  },
+  "9.self_attn.o_proj": {
+   "proxy_rtn": 433182.96875,
+   "proxy_gptq": 159947.8125,
+   "weight_rel_l2_rtn": 0.1195211336016655,
+   "weight_rel_l2_gptq": 0.15071246027946472,
+   "reconstructed_sha256": "1565a654e06c98cff3cbc6848ef87431923494542f2476a51668a221ee6a51a9"
+  },
+  "9.mlp.gate_proj": {
+   "proxy_rtn": 13322118.0,
+   "proxy_gptq": 6496834.5,
+   "weight_rel_l2_rtn": 0.12193410098552704,
+   "weight_rel_l2_gptq": 0.13913986086845398,
+   "reconstructed_sha256": "96f1cfc55066a0504bde74f009fe5afbd088935beff1d4e9e3c98a1993d659b8"
+  },
+  "9.mlp.up_proj": {
+   "proxy_rtn": 12961224.0,
+   "proxy_gptq": 6301788.0,
+   "weight_rel_l2_rtn": 0.12232881784439087,
+   "weight_rel_l2_gptq": 0.13962385058403015,
+   "reconstructed_sha256": "f5b9428ddc69432d5857c541451f12c75f52d901a0a2b65d109d6deb25484e7f"
+  },
+  "9.mlp.down_proj": {
+   "proxy_rtn": 1151316.375,
+   "proxy_gptq": 658708.3125,
+   "weight_rel_l2_rtn": 0.12725327908992767,
+   "weight_rel_l2_gptq": 0.14893506467342377,
+   "reconstructed_sha256": "14c013e8c337e3346d28ce6e7cef9ea9a6b4a956a60fdb6a8396085bf31bcfd8"
+  },
+  "10.self_attn.q_proj": {
+   "proxy_rtn": 4602362.0,
+   "proxy_gptq": 1793559.375,
+   "weight_rel_l2_rtn": 0.12375392764806747,
+   "weight_rel_l2_gptq": 0.15072418749332428,
+   "reconstructed_sha256": "649ab9186896b957dbdc1bffd5725c0eeca0615d43f67d72f05398c7e2539b74"
+  },
+  "10.self_attn.k_proj": {
+   "proxy_rtn": 883291.25,
+   "proxy_gptq": 352715.0625,
+   "weight_rel_l2_rtn": 0.13151265680789948,
+   "weight_rel_l2_gptq": 0.16040155291557312,
+   "reconstructed_sha256": "a145f942d601d7a495ab547acca5dee8984b7559ff341535bbf3b5bbb1a0dfd7"
+  },
+  "10.self_attn.v_proj": {
+   "proxy_rtn": 692680.75,
+   "proxy_gptq": 302760.1875,
+   "weight_rel_l2_rtn": 0.1314326524734497,
+   "weight_rel_l2_gptq": 0.15907345712184906,
+   "reconstructed_sha256": "80a4f83aa75cb2d92aff70d03969f990f48294176b4c43db630644d27a0fb949"
+  },
+  "10.self_attn.o_proj": {
+   "proxy_rtn": 710167.75,
+   "proxy_gptq": 259228.53125,
+   "weight_rel_l2_rtn": 0.11971897631883621,
+   "weight_rel_l2_gptq": 0.14804847538471222,
+   "reconstructed_sha256": "f2e4eccf45e0110a2b30943be5c9f6b1dda9dba7559ec271fa6d155657f1295e"
+  },
+  "10.mlp.gate_proj": {
+   "proxy_rtn": 13252237.0,
+   "proxy_gptq": 6279510.0,
+   "weight_rel_l2_rtn": 0.12295190989971161,
+   "weight_rel_l2_gptq": 0.14097455143928528,
+   "reconstructed_sha256": "7c4562389b70c40f6aada344d1620576f616e9384af22d2e34021320b786bb41"
+  },
+  "10.mlp.up_proj": {
+   "proxy_rtn": 12587654.0,
+   "proxy_gptq": 5919998.0,
+   "weight_rel_l2_rtn": 0.12299051880836487,
+   "weight_rel_l2_gptq": 0.14106740057468414,
+   "reconstructed_sha256": "967f68803ade519154625fdfe777456dc88be1d49c3093b3419d2b55d4534ce8"
+  },
+  "10.mlp.down_proj": {
+   "proxy_rtn": 1064764.0,
+   "proxy_gptq": 580735.5,
+   "weight_rel_l2_rtn": 0.12926407158374786,
+   "weight_rel_l2_gptq": 0.15305259823799133,
+   "reconstructed_sha256": "f7368491ce519307038a7c095b405708007369c236935fb0aac3a331500a486f"
+  },
+  "11.self_attn.q_proj": {
+   "proxy_rtn": 5095186.0,
+   "proxy_gptq": 1735850.75,
+   "weight_rel_l2_rtn": 0.12498822808265686,
+   "weight_rel_l2_gptq": 0.15455782413482666,
+   "reconstructed_sha256": "035c9abf1355ad90c4f3c80233ea6351fa6bc45da1a0aba69fffcb9a00233255"
+  },
+  "11.self_attn.k_proj": {
+   "proxy_rtn": 986584.125,
+   "proxy_gptq": 337894.375,
+   "weight_rel_l2_rtn": 0.12715904414653778,
+   "weight_rel_l2_gptq": 0.15684844553470612,
+   "reconstructed_sha256": "f84a9937792449f1e2609b47260be5e498e906bfd9d32147f9b1823fc2b14085"
+  },
+  "11.self_attn.v_proj": {
+   "proxy_rtn": 709685.3125,
+   "proxy_gptq": 245181.59375,
+   "weight_rel_l2_rtn": 0.12882867455482483,
+   "weight_rel_l2_gptq": 0.15983349084854126,
+   "reconstructed_sha256": "201dfe131545707c4251a3b732ed2723d274c69bdd2270c5cf106d89ca8a5616"
+  },
+  "11.self_attn.o_proj": {
+   "proxy_rtn": 814680.375,
+   "proxy_gptq": 244621.03125,
+   "weight_rel_l2_rtn": 0.11934970319271088,
+   "weight_rel_l2_gptq": 0.14928050339221954,
+   "reconstructed_sha256": "212ef817c8b3edaecb9c64ce13a48d7ea7b5e97a3134bc87e60bfe84a9b371d9"
+  },
+  "11.mlp.gate_proj": {
+   "proxy_rtn": 14164828.0,
+   "proxy_gptq": 6153578.0,
+   "weight_rel_l2_rtn": 0.1235719546675682,
+   "weight_rel_l2_gptq": 0.1426631361246109,
+   "reconstructed_sha256": "05e290d6f226e82d5d602974dfed394285da495c64fed4c4dd72b01b94d32f83"
+  },
+  "11.mlp.up_proj": {
+   "proxy_rtn": 12607400.0,
+   "proxy_gptq": 5409098.5,
+   "weight_rel_l2_rtn": 0.12374534457921982,
+   "weight_rel_l2_gptq": 0.14283780753612518,
+   "reconstructed_sha256": "0cb265aadd740f1f94d1bf2bb9a8b04bad6379f4b0360e82f99bf002014caf75"
+  },
+  "11.mlp.down_proj": {
+   "proxy_rtn": 989678.375,
+   "proxy_gptq": 492463.625,
+   "weight_rel_l2_rtn": 0.12728936970233917,
+   "weight_rel_l2_gptq": 0.15628637373447418,
+   "reconstructed_sha256": "83976b87a2389e6d48768847c98e6bc969f7b9c634300318de9d78aa5953121a"
+  },
+  "12.self_attn.q_proj": {
+   "proxy_rtn": 5544006.5,
+   "proxy_gptq": 2105609.0,
+   "weight_rel_l2_rtn": 0.12567582726478577,
+   "weight_rel_l2_gptq": 0.15727391839027405,
+   "reconstructed_sha256": "929f2828308d5588d7335ae813f3d7903d7e8e35d328a56c3d6215f483faf5ee"
+  },
+  "12.self_attn.k_proj": {
+   "proxy_rtn": 1186832.25,
+   "proxy_gptq": 455195.4375,
+   "weight_rel_l2_rtn": 0.1352062076330185,
+   "weight_rel_l2_gptq": 0.1689453125,
+   "reconstructed_sha256": "770483382339d1c5e04bcd60f598175635a32ace21f044a589a65111ec7949bd"
+  },
+  "12.self_attn.v_proj": {
+   "proxy_rtn": 619793.4375,
+   "proxy_gptq": 237797.21875,
+   "weight_rel_l2_rtn": 0.12320936471223831,
+   "weight_rel_l2_gptq": 0.15412266552448273,
+   "reconstructed_sha256": "81da891fd21a19a4080bfc7b0aea9e76cc6b7f091d6625b4a2dcbe24792e3a15"
+  },
+  "12.self_attn.o_proj": {
+   "proxy_rtn": 576703.625,
+   "proxy_gptq": 158437.78125,
+   "weight_rel_l2_rtn": 0.11989084631204605,
+   "weight_rel_l2_gptq": 0.15671458840370178,
+   "reconstructed_sha256": "89065eb580598bbdc36c4f4dac78b141e1508adc2b5fc713960d42eb4e0a5237"
+  },
+  "12.mlp.gate_proj": {
+   "proxy_rtn": 12848910.0,
+   "proxy_gptq": 5799133.0,
+   "weight_rel_l2_rtn": 0.1252746880054474,
+   "weight_rel_l2_gptq": 0.1450049728155136,
+   "reconstructed_sha256": "686e06988fbfb2cca0b60756513f6eea85a9f7acb464385a52b074d5a6bacf05"
+  },
+  "12.mlp.up_proj": {
+   "proxy_rtn": 11630707.0,
+   "proxy_gptq": 5270963.5,
+   "weight_rel_l2_rtn": 0.12460308521986008,
+   "weight_rel_l2_gptq": 0.14417806267738342,
+   "reconstructed_sha256": "4e34c103a65c3eeec8a642175f34c105aa801b23e9dfab4f6550e9d84bbe099a"
+  },
+  "12.mlp.down_proj": {
+   "proxy_rtn": 1014798.625,
+   "proxy_gptq": 532989.0,
+   "weight_rel_l2_rtn": 0.1312352865934372,
+   "weight_rel_l2_gptq": 0.15868116915225983,
+   "reconstructed_sha256": "f730d50fdccad7976dca47ff7b8cb9325443a13adeabad4daa80088a5c3a98fd"
+  },
+  "13.self_attn.q_proj": {
+   "proxy_rtn": 3944467.5,
+   "proxy_gptq": 1376638.25,
+   "weight_rel_l2_rtn": 0.12391943484544754,
+   "weight_rel_l2_gptq": 0.16248396039009094,
+   "reconstructed_sha256": "bbb6f172d3e60531a15c289287b3fedca3eedc56da40849e0d07ab91ce92a548"
+  },
+  "13.self_attn.k_proj": {
+   "proxy_rtn": 798418.125,
+   "proxy_gptq": 279807.9375,
+   "weight_rel_l2_rtn": 0.12282495200634003,
+   "weight_rel_l2_gptq": 0.1614498794078827,
+   "reconstructed_sha256": "a60a0d9cabd0649d14763e6da2fd5c02d7337b8c3e8849e66e732be819f7c6b0"
+  },
+  "13.self_attn.v_proj": {
+   "proxy_rtn": 515190.0625,
+   "proxy_gptq": 184898.65625,
+   "weight_rel_l2_rtn": 0.12979254126548767,
+   "weight_rel_l2_gptq": 0.17070873081684113,
+   "reconstructed_sha256": "2bb127161544908a108b2a1039a54b1f887505f9804b97e4cb8741a2d9c45942"
+  },
+  "13.self_attn.o_proj": {
+   "proxy_rtn": 699032.9375,
+   "proxy_gptq": 216476.46875,
+   "weight_rel_l2_rtn": 0.11964260041713715,
+   "weight_rel_l2_gptq": 0.1532127559185028,
+   "reconstructed_sha256": "dcdc8488c14a9868ef4d0efda0fb8326bffb2268b896ae379a82f5383ab79bd0"
+  },
+  "13.mlp.gate_proj": {
+   "proxy_rtn": 11140731.0,
+   "proxy_gptq": 5344890.0,
+   "weight_rel_l2_rtn": 0.12375562638044357,
+   "weight_rel_l2_gptq": 0.14304329454898834,
+   "reconstructed_sha256": "354cf7a47e57f3148b4e9d505c454a42b7003a0b203af1be49d75003bb4a3d71"
+  },
+  "13.mlp.up_proj": {
+   "proxy_rtn": 10663462.0,
+   "proxy_gptq": 5128607.0,
+   "weight_rel_l2_rtn": 0.12431152909994125,
+   "weight_rel_l2_gptq": 0.14362117648124695,
+   "reconstructed_sha256": "862894b17eaab452487a95fbdb0b629aefc2a082b43e67a1de9865599ddbc8c8"
+  },
+  "13.mlp.down_proj": {
+   "proxy_rtn": 782097.5,
+   "proxy_gptq": 447256.71875,
+   "weight_rel_l2_rtn": 0.12771546840667725,
+   "weight_rel_l2_gptq": 0.14822742342948914,
+   "reconstructed_sha256": "36a1e2c42eefe073f9304fd45ca42982f777b1206b47d9facdc3322dbbf3e2c9"
+  },
+  "14.self_attn.q_proj": {
+   "proxy_rtn": 8097092.5,
+   "proxy_gptq": 3276431.0,
+   "weight_rel_l2_rtn": 0.13294725120067596,
+   "weight_rel_l2_gptq": 0.174231618642807,
+   "reconstructed_sha256": "c82f27589e6a9938899c049bd9a04d6da47b8826a146e819a4fcec295a7d4e6d"
+  },
+  "14.self_attn.k_proj": {
+   "proxy_rtn": 1275227.875,
+   "proxy_gptq": 496718.75,
+   "weight_rel_l2_rtn": 0.12155259400606155,
+   "weight_rel_l2_gptq": 0.1599045842885971,
+   "reconstructed_sha256": "2e974d428890b2d92c77d81ecfc9c69567d5d381b9c715531e0a3c78979b9305"
+  },
+  "14.self_attn.v_proj": {
+   "proxy_rtn": 892479.125,
+   "proxy_gptq": 373614.3125,
+   "weight_rel_l2_rtn": 0.12759701907634735,
+   "weight_rel_l2_gptq": 0.1666165590286255,
+   "reconstructed_sha256": "9fe34a05d52d471615c178a7e9269e37823cd1f9b590333abe10fc5e04981715"
+  },
+  "14.self_attn.o_proj": {
+   "proxy_rtn": 551991.4375,
+   "proxy_gptq": 163969.90625,
+   "weight_rel_l2_rtn": 0.12110147625207901,
+   "weight_rel_l2_gptq": 0.1547745019197464,
+   "reconstructed_sha256": "ced1b3d020e9d38e36b18d56c72444111e28b1180a000ec63fd75d7da4741244"
+  },
+  "14.mlp.gate_proj": {
+   "proxy_rtn": 11481951.0,
+   "proxy_gptq": 5794888.0,
+   "weight_rel_l2_rtn": 0.12539233267307281,
+   "weight_rel_l2_gptq": 0.1436132937669754,
+   "reconstructed_sha256": "570fa27e909ac320000a37833383c70b9e295d1a8e9bb5cb77b237f8606c4eac"
+  },
+  "14.mlp.up_proj": {
+   "proxy_rtn": 11692637.0,
+   "proxy_gptq": 5888808.5,
+   "weight_rel_l2_rtn": 0.1253923624753952,
+   "weight_rel_l2_gptq": 0.14359140396118164,
+   "reconstructed_sha256": "531c0969def9affdf5cde325730d4a9933fc70d8af7031e2fdc6f764b185a152"
+  },
+  "14.mlp.down_proj": {
+   "proxy_rtn": 941181.625,
+   "proxy_gptq": 549418.875,
+   "weight_rel_l2_rtn": 0.1341101974248886,
+   "weight_rel_l2_gptq": 0.15594995021820068,
+   "reconstructed_sha256": "16623f8a4ef62d19b98a8bf656f9d5be4b9c06764bffa178f2e160f1f763fe06"
+  },
+  "15.self_attn.q_proj": {
+   "proxy_rtn": 6402050.0,
+   "proxy_gptq": 2846391.5,
+   "weight_rel_l2_rtn": 0.14479896426200867,
+   "weight_rel_l2_gptq": 0.18434423208236694,
+   "reconstructed_sha256": "818343a31d37dd8954ce8358bc786d768c70e020419d68601efc783b5dad01e8"
+  },
+  "15.self_attn.k_proj": {
+   "proxy_rtn": 891663.375,
+   "proxy_gptq": 367883.03125,
+   "weight_rel_l2_rtn": 0.12934662401676178,
+   "weight_rel_l2_gptq": 0.16731436550617218,
+   "reconstructed_sha256": "0798ebe9e93871d8239397bb49b7a1c4aa44c54903b386a080dbfb2311c6c5ba"
+  },
+  "15.self_attn.v_proj": {
+   "proxy_rtn": 710811.375,
+   "proxy_gptq": 324319.71875,
+   "weight_rel_l2_rtn": 0.12853503227233887,
+   "weight_rel_l2_gptq": 0.16377468407154083,
+   "reconstructed_sha256": "964192795a4f7ed25df092819b1b4d72aee9cfa2db0fb7eb9993410a4bf3cc4d"
+  },
+  "15.self_attn.o_proj": {
+   "proxy_rtn": 828201.375,
+   "proxy_gptq": 281164.53125,
+   "weight_rel_l2_rtn": 0.12075964361429214,
+   "weight_rel_l2_gptq": 0.1546776443719864,
+   "reconstructed_sha256": "97c379007a597aeb09cabc6c57d221ad86700475dad2ddbbcee188ae6636d9ea"
+  },
+  "15.mlp.gate_proj": {
+   "proxy_rtn": 11752672.0,
+   "proxy_gptq": 5305376.0,
+   "weight_rel_l2_rtn": 0.12572382390499115,
+   "weight_rel_l2_gptq": 0.14527428150177002,
+   "reconstructed_sha256": "3fb2f1bf774ba615eb45c9608553eef560fca88aa67eb921abceff0c53467da8"
+  },
+  "15.mlp.up_proj": {
+   "proxy_rtn": 11129858.0,
+   "proxy_gptq": 5017360.0,
+   "weight_rel_l2_rtn": 0.1248861700296402,
+   "weight_rel_l2_gptq": 0.14429856836795807,
+   "reconstructed_sha256": "a7f88c1a2aab3208e2877a07b48eece5143f2c8dfdd143d6c7533f1d3662ce74"
+  },
+  "15.mlp.down_proj": {
+   "proxy_rtn": 897655.5,
+   "proxy_gptq": 463955.1875,
+   "weight_rel_l2_rtn": 0.13022468984127045,
+   "weight_rel_l2_gptq": 0.1555095911026001,
+   "reconstructed_sha256": "7b73128e93c0d63b076c196ba3e23ac63dda05e291cf6182d9b89ed93efc56c2"
+  },
+  "16.self_attn.q_proj": {
+   "proxy_rtn": 6386932.0,
+   "proxy_gptq": 2596135.0,
+   "weight_rel_l2_rtn": 0.12366833537817001,
+   "weight_rel_l2_gptq": 0.1589725911617279,
+   "reconstructed_sha256": "6f7054f17c6d99c5d3570f2a416d927e6e4831e6d2a6cad74a13ec987f9829c4"
+  },
+  "16.self_attn.k_proj": {
+   "proxy_rtn": 1144582.0,
+   "proxy_gptq": 484118.4375,
+   "weight_rel_l2_rtn": 0.1316917985677719,
+   "weight_rel_l2_gptq": 0.16918152570724487,
+   "reconstructed_sha256": "9ada8d7f9ce892f273812adf093026d67686fc48ec3d5c31cf791cea5314fd2f"
+  },
+  "16.self_attn.v_proj": {
+   "proxy_rtn": 876299.125,
+   "proxy_gptq": 373104.0,
+   "weight_rel_l2_rtn": 0.12643195688724518,
+   "weight_rel_l2_gptq": 0.1616266369819641,
+   "reconstructed_sha256": "2a40cbefeedb2147a879dfa4a3d3d0260d780c1ec751785991178f6b85a376f8"
+  },
+  "16.self_attn.o_proj": {
+   "proxy_rtn": 893098.8125,
+   "proxy_gptq": 184541.484375,
+   "weight_rel_l2_rtn": 0.1216825619339943,
+   "weight_rel_l2_gptq": 0.14920355379581451,
+   "reconstructed_sha256": "ddad2d1c158e798ad7c02d405e7ad559a0e77d7c3323bf454cf7133725dcab3a"
+  },
+  "16.mlp.gate_proj": {
+   "proxy_rtn": 13443455.0,
+   "proxy_gptq": 5972289.5,
+   "weight_rel_l2_rtn": 0.12641850113868713,
+   "weight_rel_l2_gptq": 0.14601609110832214,
+   "reconstructed_sha256": "db2d7c90a929abd3783151129023dab727a1ff8a39d10032a92c9a31771e2b9a"
+  },
+  "16.mlp.up_proj": {
+   "proxy_rtn": 13322137.0,
+   "proxy_gptq": 5882600.5,
+   "weight_rel_l2_rtn": 0.1258687525987625,
+   "weight_rel_l2_gptq": 0.14543794095516205,
+   "reconstructed_sha256": "14bbbdc3ae73505a4c296adcca1cf61a4ce90a6a2d4d32af7a7356c253e66268"
+  },
+  "16.mlp.down_proj": {
+   "proxy_rtn": 1041019.625,
+   "proxy_gptq": 561157.375,
+   "weight_rel_l2_rtn": 0.13006247580051422,
+   "weight_rel_l2_gptq": 0.1537543386220932,
+   "reconstructed_sha256": "6b0b5c14340c7091a6ae9cdff977f9a067f406d69b42b6f3a2215b7376ecca51"
+  },
+  "17.self_attn.q_proj": {
+   "proxy_rtn": 5547742.0,
+   "proxy_gptq": 2339268.75,
+   "weight_rel_l2_rtn": 0.12426663935184479,
+   "weight_rel_l2_gptq": 0.15716499090194702,
+   "reconstructed_sha256": "9d50d6994d6df81496ff7f6145758ae37cff4fca410a1e4bbd02b957f2c8702a"
+  },
+  "17.self_attn.k_proj": {
+   "proxy_rtn": 679253.75,
+   "proxy_gptq": 288863.34375,
+   "weight_rel_l2_rtn": 0.12668178975582123,
+   "weight_rel_l2_gptq": 0.16060508787631989,
+   "reconstructed_sha256": "0d56fd379ef48986c867a48fc834df0e30bfc8eee61dc24ff2f86ce7946f3300"
+  },
+  "17.self_attn.v_proj": {
+   "proxy_rtn": 1178417.25,
+   "proxy_gptq": 508222.5,
+   "weight_rel_l2_rtn": 0.12606917321681976,
+   "weight_rel_l2_gptq": 0.15857452154159546,
+   "reconstructed_sha256": "ffa17dc30f7b4723d4afcce1936ea109fe0277a7d22b417787b659cb286f75e1"
+  },
+  "17.self_attn.o_proj": {
+   "proxy_rtn": 717333.125,
+   "proxy_gptq": 151768.6875,
+   "weight_rel_l2_rtn": 0.12113062292337418,
+   "weight_rel_l2_gptq": 0.1614656001329422,
+   "reconstructed_sha256": "91e14c18e0ad23d39c0af057e7bde77634edb8df1249e7ede06c49f019d1aed9"
+  },
+  "17.mlp.gate_proj": {
+   "proxy_rtn": 14874761.0,
+   "proxy_gptq": 6028569.5,
+   "weight_rel_l2_rtn": 0.12739209830760956,
+   "weight_rel_l2_gptq": 0.14866086840629578,
+   "reconstructed_sha256": "266215ab964466365542a6a5ca48dd58ca8bce32c5909b283cb699874936c53f"
+  },
+  "17.mlp.up_proj": {
+   "proxy_rtn": 14740034.0,
+   "proxy_gptq": 6003421.0,
+   "weight_rel_l2_rtn": 0.12576737999916077,
+   "weight_rel_l2_gptq": 0.146756112575531,
+   "reconstructed_sha256": "bcb444ed80e0bf1b8a35c40ba50aecba18f86022d6be13ecad056d311d67e897"
+  },
+  "17.mlp.down_proj": {
+   "proxy_rtn": 1403246.25,
+   "proxy_gptq": 707985.25,
+   "weight_rel_l2_rtn": 0.12870925664901733,
+   "weight_rel_l2_gptq": 0.15650750696659088,
+   "reconstructed_sha256": "09c8340f29b184b742d79716d032316f4cd1924a10f2b1dbe2f31ea837fcc3fa"
+  },
+  "18.self_attn.q_proj": {
+   "proxy_rtn": 5358701.5,
+   "proxy_gptq": 1978729.5,
+   "weight_rel_l2_rtn": 0.12408705800771713,
+   "weight_rel_l2_gptq": 0.16173610091209412,
+   "reconstructed_sha256": "5f46d2b1e8314269ec0193a0e2a881e01bc6a87472828583c185a83038d16f10"
+  },
+  "18.self_attn.k_proj": {
+   "proxy_rtn": 903210.6875,
+   "proxy_gptq": 333082.75,
+   "weight_rel_l2_rtn": 0.1247507855296135,
+   "weight_rel_l2_gptq": 0.16303598880767822,
+   "reconstructed_sha256": "0899de921cedb3da871edb7a565a69417dfbf38b1c0812325c51b667af27444a"
+  },
+  "18.self_attn.v_proj": {
+   "proxy_rtn": 903792.375,
+   "proxy_gptq": 340171.25,
+   "weight_rel_l2_rtn": 0.12487523257732391,
+   "weight_rel_l2_gptq": 0.1632077395915985,
+   "reconstructed_sha256": "2346a49113dc69cd1aa7d673fc1b4bb0b9c2e62ac8d5110d1f39c3e945c72569"
+  },
+  "18.self_attn.o_proj": {
+   "proxy_rtn": 1048714.5,
+   "proxy_gptq": 365885.375,
+   "weight_rel_l2_rtn": 0.12017392367124557,
+   "weight_rel_l2_gptq": 0.15301966667175293,
+   "reconstructed_sha256": "a4b360fda2d91286ed1d6cc3211a4152ccbd0bdaf755aace9f5942f0aa9c5723"
+  },
+  "18.mlp.gate_proj": {
+   "proxy_rtn": 16081172.0,
+   "proxy_gptq": 6529992.0,
+   "weight_rel_l2_rtn": 0.1292128711938858,
+   "weight_rel_l2_gptq": 0.15133237838745117,
+   "reconstructed_sha256": "c96146d3a11ae0b34d81781d0a60a32659f97274c9fd0f7f3f0e74d821cd5705"
+  },
+  "18.mlp.up_proj": {
+   "proxy_rtn": 15930662.0,
+   "proxy_gptq": 6441686.0,
+   "weight_rel_l2_rtn": 0.12665115296840668,
+   "weight_rel_l2_gptq": 0.1483871042728424,
+   "reconstructed_sha256": "87f7304c96d0fa9330bbd2135695f9de71e3e14d138fe7512a416eee95f6b35c"
+  },
+  "18.mlp.down_proj": {
+   "proxy_rtn": 1747241.25,
+   "proxy_gptq": 895812.875,
+   "weight_rel_l2_rtn": 0.13040025532245636,
+   "weight_rel_l2_gptq": 0.15684978663921356,
+   "reconstructed_sha256": "af1146c5193e55d66502442d51ec462096010f4f242769d21ddc65f37eb950ea"
+  },
+  "19.self_attn.q_proj": {
+   "proxy_rtn": 7112666.5,
+   "proxy_gptq": 2729572.0,
+   "weight_rel_l2_rtn": 0.12362383306026459,
+   "weight_rel_l2_gptq": 0.15745732188224792,
+   "reconstructed_sha256": "dd2aff62592ec5ebaf59b07e7ef41c978b4114061bf9f286539d09c5eafbcde9"
+  },
+  "19.self_attn.k_proj": {
+   "proxy_rtn": 889951.875,
+   "proxy_gptq": 358140.3125,
+   "weight_rel_l2_rtn": 0.1258624792098999,
+   "weight_rel_l2_gptq": 0.15977437794208527,
+   "reconstructed_sha256": "f4ad4667b04f681011f0c642507cfddc6e11d2e1f7ef67791aa535080eca8416"
+  },
+  "19.self_attn.v_proj": {
+   "proxy_rtn": 1790668.75,
+   "proxy_gptq": 725807.75,
+   "weight_rel_l2_rtn": 0.15319165587425232,
+   "weight_rel_l2_gptq": 0.1940566748380661,
+   "reconstructed_sha256": "6faea9e6c2b564e5fc02e167159155bcfa9b23d953c466343ea21aaa625c7790"
+  },
+  "19.self_attn.o_proj": {
+   "proxy_rtn": 1040343.125,
+   "proxy_gptq": 345455.90625,
+   "weight_rel_l2_rtn": 0.12049800902605057,
+   "weight_rel_l2_gptq": 0.14970403909683228,
+   "reconstructed_sha256": "1a243d40873acc030cfb003f9a9d09c28ac1362d3fa37fb02799d2a36d46c4d7"
+  },
+  "19.mlp.gate_proj": {
+   "proxy_rtn": 18438672.0,
+   "proxy_gptq": 7270689.0,
+   "weight_rel_l2_rtn": 0.1289353221654892,
+   "weight_rel_l2_gptq": 0.15115611255168915,
+   "reconstructed_sha256": "36821859af0636ce2ed6ff8824b6382e15f8b9334fba840d26685143f9862d90"
+  },
+  "19.mlp.up_proj": {
+   "proxy_rtn": 19605338.0,
+   "proxy_gptq": 7812253.0,
+   "weight_rel_l2_rtn": 0.1274443119764328,
+   "weight_rel_l2_gptq": 0.14933748543262482,
+   "reconstructed_sha256": "084c6e0bfe6981e0115074a71d0828081f3b7e708f7173010ba23f037282434e"
+  },
+  "19.mlp.down_proj": {
+   "proxy_rtn": 3284837.75,
+   "proxy_gptq": 1564842.75,
+   "weight_rel_l2_rtn": 0.13719210028648376,
+   "weight_rel_l2_gptq": 0.17320282757282257,
+   "reconstructed_sha256": "7f3e88a5c33eba8bc61453d8bb0fd5ee7c6412db5476bf60afa2ac712e27e390"
+  },
+  "20.self_attn.q_proj": {
+   "proxy_rtn": 7975011.0,
+   "proxy_gptq": 3289448.5,
+   "weight_rel_l2_rtn": 0.1303749829530716,
+   "weight_rel_l2_gptq": 0.1665138155221939,
+   "reconstructed_sha256": "d88f5ee13b9ea335587d583fddcfe0b856c7a8c95d3d52b11ea3bb408cbc3ed8"
+  },
+  "20.self_attn.k_proj": {
+   "proxy_rtn": 963819.875,
+   "proxy_gptq": 405346.0625,
+   "weight_rel_l2_rtn": 0.12964341044425964,
+   "weight_rel_l2_gptq": 0.16493800282478333,
+   "reconstructed_sha256": "997733bf96211194666823e87ff46f405f9b01396db71b57c3a4e208521fc371"
+  },
+  "20.self_attn.v_proj": {
+   "proxy_rtn": 2210905.5,
+   "proxy_gptq": 962985.125,
+   "weight_rel_l2_rtn": 0.14829647541046143,
+   "weight_rel_l2_gptq": 0.18678660690784454,
+   "reconstructed_sha256": "c71c515ceae82e4ecdad5d0c38ad536f731a2dfb5934da45958a4f557d3caba6"
+  },
+  "20.self_attn.o_proj": {
+   "proxy_rtn": 1471327.0,
+   "proxy_gptq": 477807.3125,
+   "weight_rel_l2_rtn": 0.12027979642152786,
+   "weight_rel_l2_gptq": 0.14465969800949097,
+   "reconstructed_sha256": "6b16f61dfb02357a26137247bc1c24064674aab021fa8313f50fab461ea20cce"
+  },
+  "20.mlp.gate_proj": {
+   "proxy_rtn": 19189134.0,
+   "proxy_gptq": 7845975.5,
+   "weight_rel_l2_rtn": 0.12696798145771027,
+   "weight_rel_l2_gptq": 0.14891280233860016,
+   "reconstructed_sha256": "7308d016bb8763e679a9588b2672cb5314a2a939ae6fa720d0b5f89d22b2afea"
+  },
+  "20.mlp.up_proj": {
+   "proxy_rtn": 19550428.0,
+   "proxy_gptq": 8068496.5,
+   "weight_rel_l2_rtn": 0.12373630702495575,
+   "weight_rel_l2_gptq": 0.1451760232448578,
+   "reconstructed_sha256": "a766e109ca30cbf7815fc5cfe376ae73b0d5735a29abd3c61baeb1c0fadc31e9"
+  },
+  "20.mlp.down_proj": {
+   "proxy_rtn": 2825850.5,
+   "proxy_gptq": 1460160.375,
+   "weight_rel_l2_rtn": 0.12704946100711823,
+   "weight_rel_l2_gptq": 0.15492266416549683,
+   "reconstructed_sha256": "d32c39d4f34056722c42e6037f61f5d072643adbbab34e8d94b6e5868b379dc6"
+  },
+  "21.self_attn.q_proj": {
+   "proxy_rtn": 7841604.0,
+   "proxy_gptq": 3219083.25,
+   "weight_rel_l2_rtn": 0.12630246579647064,
+   "weight_rel_l2_gptq": 0.16368037462234497,
+   "reconstructed_sha256": "1a6c2fe351f4454557744fa9b4486330319db7233a0e5ad1925acb74221613c6"
+  },
+  "21.self_attn.k_proj": {
+   "proxy_rtn": 957238.3125,
+   "proxy_gptq": 392466.3125,
+   "weight_rel_l2_rtn": 0.12619136273860931,
+   "weight_rel_l2_gptq": 0.16379590332508087,
+   "reconstructed_sha256": "abac6f0aa3067c58cc3404a954a049af7d6ccc5d31a7647bddc17b627556b044"
+  },
+  "21.self_attn.v_proj": {
+   "proxy_rtn": 2024811.125,
+   "proxy_gptq": 857305.1875,
+   "weight_rel_l2_rtn": 0.12941041588783264,
+   "weight_rel_l2_gptq": 0.16688649356365204,
+   "reconstructed_sha256": "af5ca7b31d20403d10df75fc810829b8b3f8b40b0cc26ac3a07f84dd8eb75f2a"
+  },
+  "21.self_attn.o_proj": {
+   "proxy_rtn": 1753057.5,
+   "proxy_gptq": 312821.65625,
+   "weight_rel_l2_rtn": 0.12163680046796799,
+   "weight_rel_l2_gptq": 0.15441247820854187,
+   "reconstructed_sha256": "35af25e546f5dffa41edb75334600771557116632ea24c2ce52e61d587a616de"
+  },
+  "21.mlp.gate_proj": {
+   "proxy_rtn": 27587258.0,
+   "proxy_gptq": 10893852.0,
+   "weight_rel_l2_rtn": 0.12982046604156494,
+   "weight_rel_l2_gptq": 0.15147651731967926,
+   "reconstructed_sha256": "0327b8470a5e0a8e7d5df5c892b8bb9d5f4d4c5aabcac297f4778d67222ad95e"
+  },
+  "21.mlp.up_proj": {
+   "proxy_rtn": 27884108.0,
+   "proxy_gptq": 10941831.0,
+   "weight_rel_l2_rtn": 0.12484060972929001,
+   "weight_rel_l2_gptq": 0.14567860960960388,
+   "reconstructed_sha256": "3f1040c625fafff7f730380fd84a3695d9309228c4222de6adf1f62ccbcd9035"
+  },
+  "21.mlp.down_proj": {
+   "proxy_rtn": 5016467.0,
+   "proxy_gptq": 2469597.25,
+   "weight_rel_l2_rtn": 0.12872183322906494,
+   "weight_rel_l2_gptq": 0.16519077122211456,
+   "reconstructed_sha256": "f0a569617fdf3bc4fec89fe32c2f022090c167d463ec35f4c35651a03091f668"
+  },
+  "22.self_attn.q_proj": {
+   "proxy_rtn": 7404982.0,
+   "proxy_gptq": 2987884.0,
+   "weight_rel_l2_rtn": 0.12516546249389648,
+   "weight_rel_l2_gptq": 0.16527873277664185,
+   "reconstructed_sha256": "dcb20698a8a8ecbc52b3e999b2473fe3ca088c12554f0014e79551399bed2a77"
+  },
+  "22.self_attn.k_proj": {
+   "proxy_rtn": 1103844.75,
+   "proxy_gptq": 446527.125,
+   "weight_rel_l2_rtn": 0.12861351668834686,
+   "weight_rel_l2_gptq": 0.16886171698570251,
+   "reconstructed_sha256": "9a48a0dc3926cb7922619e56a22b8b57713d4696409d2c63743e8b50f54b21ad"
+  },
+  "22.self_attn.v_proj": {
+   "proxy_rtn": 2387842.25,
+   "proxy_gptq": 989426.625,
+   "weight_rel_l2_rtn": 0.16642190515995026,
+   "weight_rel_l2_gptq": 0.21670269966125488,
+   "reconstructed_sha256": "b2c57c02b4e809e39bd9b02d8e1c9a237b15ff060918b5e213835668401da5dd"
+  },
+  "22.self_attn.o_proj": {
+   "proxy_rtn": 1068143.0,
+   "proxy_gptq": 370562.09375,
+   "weight_rel_l2_rtn": 0.1209002137184143,
+   "weight_rel_l2_gptq": 0.15560264885425568,
+   "reconstructed_sha256": "a5343abaf4bba1d8e22479a8746e2539f5eefd79dce737389df84b7d252e4d52"
+  },
+  "22.mlp.gate_proj": {
+   "proxy_rtn": 35211568.0,
+   "proxy_gptq": 13014856.0,
+   "weight_rel_l2_rtn": 0.1289871335029602,
+   "weight_rel_l2_gptq": 0.15216562151908875,
+   "reconstructed_sha256": "494752ef2d81eff2d8814c9862f83177e135417ad5b0191576068cadaae14374"
+  },
+  "22.mlp.up_proj": {
+   "proxy_rtn": 34683996.0,
+   "proxy_gptq": 12900654.0,
+   "weight_rel_l2_rtn": 0.1256355196237564,
+   "weight_rel_l2_gptq": 0.14811237156391144,
+   "reconstructed_sha256": "9fa6a0230406f8a31b639507e5e7ea80dcc4ae5f09dad612f16de2ec70a9d303"
+  },
+  "22.mlp.down_proj": {
+   "proxy_rtn": 6848523.5,
+   "proxy_gptq": 3338314.25,
+   "weight_rel_l2_rtn": 0.12753526866436005,
+   "weight_rel_l2_gptq": 0.16457264125347137,
+   "reconstructed_sha256": "3226db8008f645d65d0702db78e2b0714491e32ee522f41cb601b83967403966"
+  },
+  "23.self_attn.q_proj": {
+   "proxy_rtn": 11512402.0,
+   "proxy_gptq": 4605783.0,
+   "weight_rel_l2_rtn": 0.1266659051179886,
+   "weight_rel_l2_gptq": 0.1770213097333908,
+   "reconstructed_sha256": "4e258bbd0de6f4aefd0c7064c6da68cedb65abacf9319645840d06a3ed9d1220"
+  },
+  "23.self_attn.k_proj": {
+   "proxy_rtn": 1341611.75,
+   "proxy_gptq": 524584.1875,
+   "weight_rel_l2_rtn": 0.13042934238910675,
+   "weight_rel_l2_gptq": 0.18241238594055176,
+   "reconstructed_sha256": "c1c4b2ac9f1e4cf253ae93b1dde8277a89414d218eb83b1510586db070d9475b"
+  },
+  "23.self_attn.v_proj": {
+   "proxy_rtn": 3434941.0,
+   "proxy_gptq": 1478902.25,
+   "weight_rel_l2_rtn": 0.1682356595993042,
+   "weight_rel_l2_gptq": 0.22769400477409363,
+   "reconstructed_sha256": "7b408bee3251279e7859290bd877eb23dea3b233be8922d96f6520f229aeeb7a"
+  },
+  "23.self_attn.o_proj": {
+   "proxy_rtn": 3224806.25,
+   "proxy_gptq": 355607.21875,
+   "weight_rel_l2_rtn": 0.11990782618522644,
+   "weight_rel_l2_gptq": 0.14512664079666138,
+   "reconstructed_sha256": "b99bcd22a6449cba4d22511fbae919aede6175a415113a3c2d1ff31332fdf3a9"
+  },
+  "23.mlp.gate_proj": {
+   "proxy_rtn": 35013232.0,
+   "proxy_gptq": 13337478.0,
+   "weight_rel_l2_rtn": 0.12492921948432922,
+   "weight_rel_l2_gptq": 0.14742602407932281,
+   "reconstructed_sha256": "87816dbe6cd2a0af279a0ce77a3f47a54a51e2286a1fb081110ceb7564fee22a"
+  },
+  "23.mlp.up_proj": {
+   "proxy_rtn": 36735952.0,
+   "proxy_gptq": 13916320.0,
+   "weight_rel_l2_rtn": 0.12312832474708557,
+   "weight_rel_l2_gptq": 0.14530044794082642,
+   "reconstructed_sha256": "0ce5a825b2d537eaaf7ebf15cdb6f66c49285b14f008acee2f7b918b87c4d085"
+  },
+  "23.mlp.down_proj": {
+   "proxy_rtn": 8534208.0,
+   "proxy_gptq": 4330570.0,
+   "weight_rel_l2_rtn": 0.12463849037885666,
+   "weight_rel_l2_gptq": 0.15905886888504028,
+   "reconstructed_sha256": "8c071f2141ae2d5cbb285468dfe367021020e9dc6b5dbd79cd645c483a2ac82e"
+  },
+  "24.self_attn.q_proj": {
+   "proxy_rtn": 9098105.0,
+   "proxy_gptq": 4115345.0,
+   "weight_rel_l2_rtn": 0.12840594351291656,
+   "weight_rel_l2_gptq": 0.17185692489147186,
+   "reconstructed_sha256": "00415f9ccee2cfa0db5eef80f796b9979a2a6046e2406b0ee9870fbe47a5ef6c"
+  },
+  "24.self_attn.k_proj": {
+   "proxy_rtn": 1171123.75,
+   "proxy_gptq": 540954.25,
+   "weight_rel_l2_rtn": 0.13138175010681152,
+   "weight_rel_l2_gptq": 0.17538505792617798,
+   "reconstructed_sha256": "72ba6427e3deafb6ca66fe11ed7404ba090a596b3a340a451f034f2b9e9f32af"
+  },
+  "24.self_attn.v_proj": {
+   "proxy_rtn": 4466962.0,
+   "proxy_gptq": 2218846.0,
+   "weight_rel_l2_rtn": 0.17737922072410583,
+   "weight_rel_l2_gptq": 0.2333715558052063,
+   "reconstructed_sha256": "95ce6050f8cae764783b424c3764472b0e1e8e0fa8c835bc41d079880035e62a"
+  },
+  "24.self_attn.o_proj": {
+   "proxy_rtn": 2414717.0,
+   "proxy_gptq": 523404.5625,
+   "weight_rel_l2_rtn": 0.1196165606379509,
+   "weight_rel_l2_gptq": 0.14835259318351746,
+   "reconstructed_sha256": "9a0625da84dff1852b32ab72d7a74f90e5b377626afbc0c7b04370464b099a9a"
+  },
+  "24.mlp.gate_proj": {
+   "proxy_rtn": 35144236.0,
+   "proxy_gptq": 13943288.0,
+   "weight_rel_l2_rtn": 0.12214511632919312,
+   "weight_rel_l2_gptq": 0.14323541522026062,
+   "reconstructed_sha256": "7e7b55f2bcd5e46ee80bc0964306ca00c7a3b80799e2b983e94faec23ff9ae9d"
+  },
+  "24.mlp.up_proj": {
+   "proxy_rtn": 37739400.0,
+   "proxy_gptq": 14993915.0,
+   "weight_rel_l2_rtn": 0.1206602081656456,
+   "weight_rel_l2_gptq": 0.14155536890029907,
+   "reconstructed_sha256": "a915f8704c6ed32a91d51c81b93c71b7c4b6d62d61c88453a32298ab5a5e3c2b"
+  },
+  "24.mlp.down_proj": {
+   "proxy_rtn": 10934063.0,
+   "proxy_gptq": 5474292.5,
+   "weight_rel_l2_rtn": 0.1214398667216301,
+   "weight_rel_l2_gptq": 0.14771153032779694,
+   "reconstructed_sha256": "48d3a01ea7e0424b6e6db1e281198dde6d0df10f1e27335f5a86268669062b79"
+  },
+  "25.self_attn.q_proj": {
+   "proxy_rtn": 10356607.0,
+   "proxy_gptq": 5078947.0,
+   "weight_rel_l2_rtn": 0.12560665607452393,
+   "weight_rel_l2_gptq": 0.1800829917192459,
+   "reconstructed_sha256": "24ada3f919baf56476ef9f0ca9bb123a6726f23e1402da3b70126efa66f16d80"
+  },
+  "25.self_attn.k_proj": {
+   "proxy_rtn": 1059525.5,
+   "proxy_gptq": 518727.5,
+   "weight_rel_l2_rtn": 0.13506171107292175,
+   "weight_rel_l2_gptq": 0.19390258193016052,
+   "reconstructed_sha256": "37873627e2e743f4460a19551a869ba99ef17489fbe57f1c368f17dedf7e07a5"
+  },
+  "25.self_attn.v_proj": {
+   "proxy_rtn": 4543309.5,
+   "proxy_gptq": 2183398.25,
+   "weight_rel_l2_rtn": 0.18125350773334503,
+   "weight_rel_l2_gptq": 0.25948232412338257,
+   "reconstructed_sha256": "23b010fcf67c31e7265f25994220b9352901b088b4aecd592754c1456893677b"
+  },
+  "25.self_attn.o_proj": {
+   "proxy_rtn": 8491986.0,
+   "proxy_gptq": 920283.6875,
+   "weight_rel_l2_rtn": 0.12095305323600769,
+   "weight_rel_l2_gptq": 0.1484556943178177,
+   "reconstructed_sha256": "62ca9bc3fd26bbce34bd60a76a8328528a5f5ef3cf681de8b0e3037e458e9f2d"
+  },
+  "25.mlp.gate_proj": {
+   "proxy_rtn": 35286236.0,
+   "proxy_gptq": 13996575.0,
+   "weight_rel_l2_rtn": 0.12188408523797989,
+   "weight_rel_l2_gptq": 0.14114774763584137,
+   "reconstructed_sha256": "f5ecdb01a65a26a66440151d403313c1face74cff50f45f28d9246c05bafbe2f"
+  },
+  "25.mlp.up_proj": {
+   "proxy_rtn": 40716800.0,
+   "proxy_gptq": 16202866.0,
+   "weight_rel_l2_rtn": 0.12077760696411133,
+   "weight_rel_l2_gptq": 0.13993240892887115,
+   "reconstructed_sha256": "4e07129694802ef77e4b84b74aafe9be57f5d3209c7e13640d68206d6d38525c"
+  },
+  "25.mlp.down_proj": {
+   "proxy_rtn": 15038138.0,
+   "proxy_gptq": 7343241.5,
+   "weight_rel_l2_rtn": 0.12140685319900513,
+   "weight_rel_l2_gptq": 0.14676371216773987,
+   "reconstructed_sha256": "1949933dd9f6a7716c949c2176c9f86d5d13b4d7b600931a9be9cca904f9071d"
+  },
+  "26.self_attn.q_proj": {
+   "proxy_rtn": 8582522.0,
+   "proxy_gptq": 4275677.0,
+   "weight_rel_l2_rtn": 0.12892554700374603,
+   "weight_rel_l2_gptq": 0.19123093783855438,
+   "reconstructed_sha256": "bb61105f4d3b3fe036ed961f4b0d14fbe2ff3163f56733f37bb34218c5a45c9e"
+  },
+  "26.self_attn.k_proj": {
+   "proxy_rtn": 1080524.75,
+   "proxy_gptq": 525122.375,
+   "weight_rel_l2_rtn": 0.1413893699645996,
+   "weight_rel_l2_gptq": 0.2079809010028839,
+   "reconstructed_sha256": "7e303f35ffeea6475492ff7731bbcda3e7b8882db86c4c16a0dbaba2c6dc3e09"
+  },
+  "26.self_attn.v_proj": {
+   "proxy_rtn": 5742593.5,
+   "proxy_gptq": 2903625.25,
+   "weight_rel_l2_rtn": 0.1504090428352356,
+   "weight_rel_l2_gptq": 0.2196836620569229,
+   "reconstructed_sha256": "04cd89d953b268c7b84cc1cd1769fa45eda586ae08ea077df46070d88ed25365"
+  },
+  "26.self_attn.o_proj": {
+   "proxy_rtn": 10508434.0,
+   "proxy_gptq": 594120.25,
+   "weight_rel_l2_rtn": 0.11830072849988937,
+   "weight_rel_l2_gptq": 0.14807137846946716,
+   "reconstructed_sha256": "281967226574939cb9541d1671c4bf950781998f22670be4e53e51f2c06f60a5"
+  },
+  "26.mlp.gate_proj": {
+   "proxy_rtn": 34624224.0,
+   "proxy_gptq": 13877315.0,
+   "weight_rel_l2_rtn": 0.12207359075546265,
+   "weight_rel_l2_gptq": 0.14069466292858124,
+   "reconstructed_sha256": "970802eecea9118ef785df0779d762e1f448dcd5d83171ec95ed2c54b0d76dc2"
+  },
+  "26.mlp.up_proj": {
+   "proxy_rtn": 41672432.0,
+   "proxy_gptq": 16759792.0,
+   "weight_rel_l2_rtn": 0.12020016461610794,
+   "weight_rel_l2_gptq": 0.1385648250579834,
+   "reconstructed_sha256": "97c001a056d7a852285cd8e48a19e9955ca02309e9e136b3ce42d3a07fb477c2"
+  },
+  "26.mlp.down_proj": {
+   "proxy_rtn": 82451048.0,
+   "proxy_gptq": 22504548.0,
+   "weight_rel_l2_rtn": 0.12197103351354599,
+   "weight_rel_l2_gptq": 0.14705675840377808,
+   "reconstructed_sha256": "bed32ceaff9710889c25ccaf59d7cf39ba922f8f15b4dbe745a8562d2f664eee"
+  },
+  "27.self_attn.q_proj": {
+   "proxy_rtn": 8276390.0,
+   "proxy_gptq": 4213790.5,
+   "weight_rel_l2_rtn": 0.13030081987380981,
+   "weight_rel_l2_gptq": 0.1894621104001999,
+   "reconstructed_sha256": "1a872211dee8e46cf056a86ecc9c472172b81e6981b320a427c1fb7e8573f494"
+  },
+  "27.self_attn.k_proj": {
+   "proxy_rtn": 841595.0625,
+   "proxy_gptq": 434253.3125,
+   "weight_rel_l2_rtn": 0.1446981132030487,
+   "weight_rel_l2_gptq": 0.2082890421152115,
+   "reconstructed_sha256": "92789683ae8e8e96d21bc1176b7d2ec24e8a1a6b34bdddd5ce4a993b41ce1581"
+  },
+  "27.self_attn.v_proj": {
+   "proxy_rtn": 5842890.0,
+   "proxy_gptq": 3016729.5,
+   "weight_rel_l2_rtn": 0.15758134424686432,
+   "weight_rel_l2_gptq": 0.228108212351799,
+   "reconstructed_sha256": "597238b0f78ca2be52e6763fbdcaf0c81ea81f7a68bb5dc4a6d57da5e0da564e"
+  },
+  "27.self_attn.o_proj": {
+   "proxy_rtn": 17069038.0,
+   "proxy_gptq": 2488993.25,
+   "weight_rel_l2_rtn": 0.11980001628398895,
+   "weight_rel_l2_gptq": 0.15033531188964844,
+   "reconstructed_sha256": "dae7640d1fca626c9a4ed4ea983778f5ba3f8597d7cac73d48e204722ecbeed3"
+  },
+  "27.mlp.gate_proj": {
+   "proxy_rtn": 67174768.0,
+   "proxy_gptq": 19556066.0,
+   "weight_rel_l2_rtn": 0.12259220331907272,
+   "weight_rel_l2_gptq": 0.14084987342357635,
+   "reconstructed_sha256": "9a425c4edc06e0b9b2ab9543a82ff27015f5079045ae30404772152bc7804d9b"
+  },
+  "27.mlp.up_proj": {
+   "proxy_rtn": 69348472.0,
+   "proxy_gptq": 20212600.0,
+   "weight_rel_l2_rtn": 0.12144657224416733,
+   "weight_rel_l2_gptq": 0.13960550725460052,
+   "reconstructed_sha256": "f924ef4e2b892331540769a1f4341c8a40afa352b5d9ae3ee8ba1f172870df08"
+  },
+  "27.mlp.down_proj": {
+   "proxy_rtn": 116384416.0,
+   "proxy_gptq": 14335260.0,
+   "weight_rel_l2_rtn": 0.13151997327804565,
+   "weight_rel_l2_gptq": 0.16477346420288086,
+   "reconstructed_sha256": "a732b7f6986943e340e1bc13a27b6553f46b752ec0e140e5a6fe18aadb3caf5b"
+  },
+  "lm_head@C": {
+   "proxy_rtn": 14315608064.0,
+   "proxy_gptq": 1620984832.0,
+   "weight_rel_l2_rtn": 0.12179940938949585,
+   "weight_rel_l2_gptq": 0.14058807492256165,
+   "reconstructed_sha256": "193d96719053c947416327d18f16a56c2386a779034b6412d7924d170b3514fd"
+  }
+ }
+}

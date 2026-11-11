@@ -16,6 +16,28 @@ Criteria, fixed now, with E032's labels (negligible ≤1%, modest ≤5%, substan
 
 Limits fixed now: calibration and test are the two splits of ONE corpus, so calibration is in-domain and the result may flatter the quantizer on other text; out-of-domain calibration is untested. One model, one metric, one seedless deterministic sample choice, one run (GPU linear algebra is not guaranteed bit-reproducible; hashes of the reconstructed weights identify this run only, and the weights themselves are not kept). No timing: speed is expected, not measured, to equal the plain-rounded tensors' because format and shapes are identical. No token-level or logit gate against anything; nothing here changes E017/E019/E021. Not a repository default.
 
+### E036 result — head passes (+0.9–1.0%), blocks fail (+6.77%, down from +13.12%) (2026-11-11, c10)
+
+Job 334671 on c10, exit 0 on the first attempt, no failed attempt, 00:13–00:31 EST. `results/e036_20261111/gptq-c10-334671/` (`quality.json` with per-layer records, `top1.npz`, logs, the in-job smoke, `all.sha256`). The in-job prerequisite (8 calibration windows, 2 test windows) passed every in-process check and the full run followed: 128 calibration windows (262,144 tokens of the train split, stride 19,915 tokens), 150 test windows, 307,050 scored tokens. The three controls reproduce E032 to every printed digit (O 8.605813, R 9.734987, RH 10.571791).
+
+| Arm (blocks / head) | Perplexity | Top-1 accuracy | Compared with | Rise | Label |
+|---|---:|---:|---|---:|---|
+| O/F: original | 8.606 | 53.86% | — | — | — |
+| R/F: plain-rounded blocks, FP16 head (control) | 9.735 | 52.06% | O/F | +13.12% | substantial |
+| **C/F: calibrated blocks, FP16 head** | 9.188 | 53.00% | O/F | **+6.77%** | substantial |
+| R/G128: plain-rounded blocks and head (control) | 10.572 | 50.87% | R/F | +8.60% | substantial |
+| **R/GPTQ: plain-rounded blocks, calibrated head** | 9.835 | 51.85% | R/F | **+1.03%** | modest |
+| **C/GPTQ: calibrated blocks and head** | 9.270 | 52.87% | C/F | **+0.89%** | negligible |
+| C/GPTQ, whole model | 9.270 | 52.87% | O/F | +7.72% | substantial |
+| R/G128, whole model (control) | 10.572 | 50.87% | O/F | +22.84% | substantial |
+
+- Head criterion (at most 5% above the FP16 head, on both block sets): **pass**, +1.03% and +0.89% against +8.60% for plain rounding. One arm is 0.03 points above the 1% "negligible" line, so the head's label is "modest"; say "about 1%", not "negligible".
+- Block criterion (C/F at most 5% above O/F): **fail**, +6.77%. Calibration removes about half of the block cost (13.12% to 6.77%) but the result is still "substantial".
+- Whole model with both calibrated: +7.72% over the original, against +22.84% with plain rounding, in the identical runtime format.
+- Mechanism check, observed: GPTQ's calibration output error is below plain rounding's in all 196 projections (ratio 0.027–0.607, median 0.394) and both heads (0.113–0.118), while the head's WEIGHT error rises (0.1218 to 0.1403–0.1406). The quantizer trades weight fidelity for output fidelity on the calibration inputs, which is why E034's weight-error-minimizing search could not find this.
+
+What this does not show: calibration and test are two splits of one corpus (in-domain), so these numbers may flatter the quantizer on other text; one model, one metric, one run; the calibrated tensors were not kept (hashes in `quality.json` identify this run only) and NOTHING WAS TIMED: that Marlin or vLLM decode these tensors at the speeds of E020–E035 is expected from the identical format and shapes, not measured, and no token or logit gate was applied to them. Untested, not authorized: more calibration data, out-of-domain calibration, block-sequential ordering inside a block, other damping, timing the calibrated checkpoint. GPTQ is upstream work (Frantar et al.); ours is this implementation in the project format and the measurement. Not a repository default.
+
 ## E035 — How much of the head speedup survives with an 8-bit head (vLLM)?
 
 Predeclared 2026-11-10 at the user's request ("go ahead") after E034: no uncalibrated 4-bit head reached 5% perplexity cost, while the 8-bit group-128 head (B8) cost +0.04%. This times that head. vLLM only: our operator executes 4-bit codes only, so our own path has no 8-bit arm.

@@ -1,0 +1,2 @@
+   4358  241211 1256449 /mnt/beegfs/hpuvvad/csc548-w4a16-e036-20261111/wikitext2-test.txt
+   36718  2051910 10797148 /mnt/beegfs/hpuvvad/csc548-w4a16-e036-20261111/wikitext2-train.txt

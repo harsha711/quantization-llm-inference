@@ -1,0 +1,4 @@
+/mnt/beegfs/hpuvvad/csc548-w4a16-e036-20261111/gptq-c10-334671/diagnose.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e036-20261111/gptq-c10-334671/gptq.py: OK
+wikitext2-test.txt: OK
+wikitext2-train.txt: OK
