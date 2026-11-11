@@ -1,0 +1,10 @@
+model-gptq-head/config.json: OK
+model-gptq-head/conversion.json: OK
+model-gptq-head/generation_config.json: OK
+model-gptq-head/LICENSE: OK
+model-gptq-head/merges.txt: OK
+model-gptq-head/model.safetensors: OK
+model-gptq-head/README.md: OK
+model-gptq-head/tokenizer_config.json: OK
+model-gptq-head/tokenizer.json: OK
+model-gptq-head/vocab.json: OK

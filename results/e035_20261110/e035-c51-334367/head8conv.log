@@ -1,0 +1,5 @@
++ prun timeout 3000 /tmp/e017-hpuvvad-20261109/bin/python /mnt/beegfs/hpuvvad/csc548-w4a16-e027-20261110/e035-c51-334367/head8conv.py /mnt/beegfs/hpuvvad/csc548-w4a16-e027-20261110/model-gptq /mnt/beegfs/hpuvvad/csc548-w4a16-e027-20261110/model-gptq-head8
+[prun] Master compute host = c51
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun timeout 3000 /tmp/e017-hpuvvad-20261109/bin/python /mnt/beegfs/hpuvvad/csc548-w4a16-e027-20261110/e035-c51-334367/head8conv.py /mnt/beegfs/hpuvvad/csc548-w4a16-e027-20261110/model-gptq /mnt/beegfs/hpuvvad/csc548-w4a16-e027-20261110/model-gptq-head8 (family=openmpi4)
+HEAD8 CONVERTED 151936 1536 0.006722508744414013

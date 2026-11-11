@@ -14,6 +14,21 @@ Criterion, fixed now: "pass" if VH8's decode median is at least 5% below V's in 
 
 Limits fixed now: the 8-bit head's correctness evidence is token agreement plus E034's perplexity of the same reconstruction in PyTorch FP16; there is no logit-level check of vLLM's 8-bit kernel against that reconstruction and no E021-style gate (no project arm exists). One node, batch 1, 64 tokens, one model. Quality: +0.04% perplexity over the FP16 head on WikiText-2, on blocks that are themselves 13.1% above the FP16 original (E032). Marlin, vLLM and its 8-bit and per-module support are upstream; ours is the head quantization, conversion and measurement.
 
+### E035 result — pass: the 8-bit head keeps about 70% of the head speedup, 15.6–16.5% below stock vLLM, with all 64 tokens unchanged (2026-11-10, c51)
+
+Job 334367 on c51, exit 0 on the first attempt, no failed attempt. `results/e035_20261110/e035-c51-334367/` (`analysis.json`, 24 cell records plus the smoke cell, logs, `all.sha256` covering the files left on BeeGFS). Conversion: head weight error 0.0067225, equal to E034's B8. In-job prerequisite passed: vLLM loaded the 8-bit head through the `dynamic` override (the quarter-size-per-word tensors would not load under the 4-bit setting) and the smoke cell reproduced 64 of 64 FP16-head reference tokens. All four `head.py validate` cases accepted. 3 warmups + 20 requests per cell.
+
+| Context | V: FP16 head, ms | VH: 4-bit head, ms | VH8: 8-bit head, ms | VH below V | VH8 below V | Share of VH's gain kept |
+|---:|---:|---:|---:|---:|---:|---:|
+| 128 | 233.6–233.7 | 178.5–178.6 | 195.2 | 23.6% | 16.4–16.5% | 69.7–69.8% |
+| 2048 | 244.1–244.5 | 189.1–189.3 | 205.9–206.1 | 22.5–22.6% | 15.6–15.7% | 69.3–69.8% |
+
+- Criterion met in all eight cells (minimum 15.62%): **pass**. VH8 sits between V and VH as expected.
+- VH8 reproduced all 64 tokens of the FP16-head reference (our GQA path) in every cell and every request, where the 4-bit head changed tokens in one of four E031 cases.
+- Combined with E034: in vLLM an 8-bit group-128 head decodes 15.6–16.5% faster than the FP16 head at a measured perplexity cost of +0.04% over that head, against 22.5–23.6% faster at +8.6% for the 4-bit head. This is the first head result whose quality cost is "negligible" under E032's labels.
+
+What this does not show: no project arm (our operator is 4-bit only, so our own path gains nothing here); no logit-level check of vLLM's 8-bit kernel against the reconstruction and no E021-style gate, only token agreement plus E034's perplexity of the same weights in PyTorch FP16; no same-node comparison with ONNX Runtime or llama.cpp (c51's V is 233.6 ms against c10's 238.1 ms, so cross-node comparison with E033's ORT numbers is not made); batch 1, 64 tokens, one model, one node, one corpus for quality. The blocks remain 13.1% above the FP16 original in perplexity (E032). Marlin, vLLM, its 8-bit kernel and per-module override are upstream; ours is the head quantization, conversion and measurement. Not a repository default.
+
 ## E034 — Can a better head quantizer keep the 4-bit head's speed at a smaller quality cost?
 
 Predeclared 2026-11-10 at the user's request ("run those multiple tests concurrently if you can") after E032 labelled the E031 head "substantial" (+8.60% perplexity). Quality only: no runtime, kernel, gate or timing. The blocks stay the project G128 reconstruction (R) in every variant; only the output head changes.

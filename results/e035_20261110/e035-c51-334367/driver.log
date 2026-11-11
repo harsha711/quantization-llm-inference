@@ -1,0 +1,17 @@
+/mnt/beegfs/hpuvvad/csc548-w4a16-e027-20261110/e035-c51-334367/diagnose.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e027-20261110/e035-c51-334367/validate.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e027-20261110/e035-c51-334367/run.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e027-20261110/e035-c51-334367/att.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e027-20261110/e035-c51-334367/long.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e027-20261110/e035-c51-334367/gprofile.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e027-20261110/e035-c51-334367/vprofile.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e027-20261110/e035-c51-334367/head.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e027-20261110/e035-c51-334367/headconv.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e027-20261110/e035-c51-334367/headanalyze.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e027-20261110/e035-c51-334367/obench.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e027-20261110/e035-c51-334367/convert.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e027-20261110/e035-c51-334367/vbench.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e027-20261110/e035-c51-334367/analyze.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e027-20261110/e035-c51-334367/head8conv.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e017-20261109/external/vllm-0.33.0-cp38-abi3-manylinux_2_28_x86_64.whl: OK
+smoke agree 64

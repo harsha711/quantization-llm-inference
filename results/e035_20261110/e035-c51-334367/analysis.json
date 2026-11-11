@@ -1,0 +1,149 @@
+{
+ "outcome": "pass",
+ "cells": [
+  {
+   "context": 128,
+   "prompt": "primary",
+   "series": 1,
+   "decode_ms": {
+    "V": 233.612,
+    "VH": 178.548,
+    "VH8": 195.225
+   },
+   "VH_vs_V_pct": 23.571,
+   "VH8_vs_V_pct": 16.432,
+   "retained_pct": 69.7,
+   "tokens_agree_min": {
+    "V": 64,
+    "VH": 64,
+    "VH8": 64
+   }
+  },
+  {
+   "context": 128,
+   "prompt": "primary",
+   "series": 2,
+   "decode_ms": {
+    "V": 233.6,
+    "VH": 178.516,
+    "VH8": 195.19
+   },
+   "VH_vs_V_pct": 23.58,
+   "VH8_vs_V_pct": 16.442,
+   "retained_pct": 69.7,
+   "tokens_agree_min": {
+    "V": 64,
+    "VH": 64,
+    "VH8": 64
+   }
+  },
+  {
+   "context": 128,
+   "prompt": "heldout",
+   "series": 1,
+   "decode_ms": {
+    "V": 233.634,
+    "VH": 178.545,
+    "VH8": 195.226
+   },
+   "VH_vs_V_pct": 23.579,
+   "VH8_vs_V_pct": 16.439,
+   "retained_pct": 69.7,
+   "tokens_agree_min": {
+    "V": 64,
+    "VH": 64,
+    "VH8": 64
+   }
+  },
+  {
+   "context": 128,
+   "prompt": "heldout",
+   "series": 2,
+   "decode_ms": {
+    "V": 233.658,
+    "VH": 178.594,
+    "VH8": 195.22
+   },
+   "VH_vs_V_pct": 23.566,
+   "VH8_vs_V_pct": 16.45,
+   "retained_pct": 69.8,
+   "tokens_agree_min": {
+    "V": 64,
+    "VH": 64,
+    "VH8": 64
+   }
+  },
+  {
+   "context": 2048,
+   "prompt": "primary",
+   "series": 1,
+   "decode_ms": {
+    "V": 244.538,
+    "VH": 189.307,
+    "VH8": 206.054
+   },
+   "VH_vs_V_pct": 22.586,
+   "VH8_vs_V_pct": 15.738,
+   "retained_pct": 69.7,
+   "tokens_agree_min": {
+    "V": 64,
+    "VH": 64,
+    "VH8": 64
+   }
+  },
+  {
+   "context": 2048,
+   "prompt": "primary",
+   "series": 2,
+   "decode_ms": {
+    "V": 244.139,
+    "VH": 189.216,
+    "VH8": 205.994
+   },
+   "VH_vs_V_pct": 22.497,
+   "VH8_vs_V_pct": 15.624,
+   "retained_pct": 69.5,
+   "tokens_agree_min": {
+    "V": 64,
+    "VH": 64,
+    "VH8": 64
+   }
+  },
+  {
+   "context": 2048,
+   "prompt": "heldout",
+   "series": 1,
+   "decode_ms": {
+    "V": 244.333,
+    "VH": 189.266,
+    "VH8": 205.891
+   },
+   "VH_vs_V_pct": 22.538,
+   "VH8_vs_V_pct": 15.733,
+   "retained_pct": 69.8,
+   "tokens_agree_min": {
+    "V": 64,
+    "VH": 64,
+    "VH8": 64
+   }
+  },
+  {
+   "context": 2048,
+   "prompt": "heldout",
+   "series": 2,
+   "decode_ms": {
+    "V": 244.206,
+    "VH": 189.129,
+    "VH8": 206.046
+   },
+   "VH_vs_V_pct": 22.554,
+   "VH8_vs_V_pct": 15.626,
+   "retained_pct": 69.3,
+   "tokens_agree_min": {
+    "V": 64,
+    "VH": 64,
+    "VH8": 64
+   }
+  }
+ ]
+}
