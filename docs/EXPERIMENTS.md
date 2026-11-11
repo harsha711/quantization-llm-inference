@@ -2,6 +2,18 @@
 
 Read the numerical/measurement [contract](CONTRACT.md) before interpreting these records. Preserve raw evidence, failed attempts, and inconclusive outcomes. An alternative that has not been implemented or measured is not a failed optimization. Historical entries below reconstruct only what the repository supports. Missing prior failure numbers or commit IDs remain unknown.
 
+## E035 — How much of the head speedup survives with an 8-bit head (vLLM)?
+
+Predeclared 2026-11-10 at the user's request ("go ahead") after E034: no uncalibrated 4-bit head reached 5% perplexity cost, while the 8-bit group-128 head (B8) cost +0.04%. This times that head. vLLM only: our operator executes 4-bit codes only, so our own path has no 8-bit arm.
+
+Change: one checkpoint, the E027 AutoGPTQ checkpoint (196 block projections, project G128 codes, unchanged) plus an 8-bit head: symmetric, group 128, scale FP16(max/127), codes q+128 packed four per word, selected for `lm_head` alone through the GPTQ config's `dynamic` per-module override (`scripts/e035/head8conv.py`). Source reading of the pinned v0.33.0 wheel says the loader maps (8 bits, symmetric) to `uint8b128` and honours `dynamic`; that it does so for the head is verified by the smoke, not assumed. The converter asserts the head's weight error equals E034's B8 (0.0067225 ± 1e-5).
+
+Measurement: stock vLLM (V), vLLM with the 4-bit head (VH, E031's checkpoint) and with the 8-bit head (VH8), interleaved in one job on one node; contexts 128 and 2048, two passages, two reversed series, 3 warmups + 20 requests, decode = 64-token minus 1-token wall time, as in E031/E033 (`scripts/e027/submit.sh e035`, `scripts/e035/analyze.py`). References from `head.py validate` rerun in the job. In-job prerequisite before any timing: one VH8 cell must load, reproduce the first reference token and agree with the FP16-head reference on at least 32 leading tokens.
+
+Criterion, fixed now: "pass" if VH8's decode median is at least 5% below V's in all eight cells. Reported besides: VH against V, the share of VH's gain that VH8 retains, and VH8's leading-token agreement with the FP16-head tokens of our GQA path. Expected, not measured: VH8 lands between V and VH, because the head reads twice the weight bytes of the 4-bit one.
+
+Limits fixed now: the 8-bit head's correctness evidence is token agreement plus E034's perplexity of the same reconstruction in PyTorch FP16; there is no logit-level check of vLLM's 8-bit kernel against that reconstruction and no E021-style gate (no project arm exists). One node, batch 1, 64 tokens, one model. Quality: +0.04% perplexity over the FP16 head on WikiText-2, on blocks that are themselves 13.1% above the FP16 original (E032). Marlin, vLLM and its 8-bit and per-module support are upstream; ours is the head quantization, conversion and measurement.
+
 ## E034 — Can a better head quantizer keep the 4-bit head's speed at a smaller quality cost?
 
 Predeclared 2026-11-10 at the user's request ("run those multiple tests concurrently if you can") after E032 labelled the E031 head "substantial" (+8.60% perplexity). Quality only: no runtime, kernel, gate or timing. The blocks stay the project G128 reconstruction (R) in every variant; only the output head changes.

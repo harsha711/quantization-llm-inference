@@ -31,6 +31,7 @@ if [[ ! -e "$VENV/bin/python" ]]; then sha256sum -c "$T.sha256"; tar xf "$T" -C 
 EOF
 embed "$here/../e018/diagnose.py"; embed "$here/../e021/validate.py"; embed "$here/../e023/run.py"; embed "$here/../e026/att.py"
 embed "$here/../e028/long.py"; embed "$here/../e030/gprofile.py"; embed "$here/../e030/vprofile.py"; embed "$here/../e031/head.py"; embed "$here/../e031/headconv.py"; embed "$here/../e031/headanalyze.py"; embed "$here/../e028/obench.py"; printf 'cat > "$S/e033analyze.py" <<'"'"'PYEOF'"'"'\n'; cat "$here/../e033/analyze.py"; printf 'PYEOF\n'; embed "$here/convert.py"; embed "$here/vbench.py"; embed "$here/analyze.py"
+embed "$here/../e035/head8conv.py"; printf 'cat > "$S/e035analyze.py" <<'"'"'PYEOF'"'"'\n'; cat "$here/../e035/analyze.py"; printf 'PYEOF\n'
 cat <<'EOF'
 export PROJECT_ROOT=$E017_ROOT
 set +u; source "$E017_ROOT/scripts/e017/env_arc.sh"; set -u
@@ -170,6 +171,34 @@ for series in 1 2; do
  done
 done
 python3 "$S/e033analyze.py" "$S/out" > "$S/analysis.json"
+EOF
+;;
+e035) cat <<'EOF'
+# E035: 8-bit output head in vLLM against the FP16 head (V) and the 4-bit head (VH), interleaved in one job.
+(cd "$OUT" && sha256sum -c model-gptq-head.sha256) > "$S/head-model-check.log"
+if [[ ! -e "$OUT/model-gptq-head8.sha256" ]]; then
+ rm -rf "$OUT/model-gptq-head8"
+ (set -x; prun timeout 3000 "$E017_PYTHON" "$S/head8conv.py" "$OUT/model-gptq" "$OUT/model-gptq-head8") > "$S/head8conv.log" 2>&1
+ (cd "$OUT" && sha256sum model-gptq-head8/* > model-gptq-head8.sha256)
+fi
+(cd "$OUT" && sha256sum -c model-gptq-head8.sha256) > "$S/head8-model-check.log"
+(set -x; prun timeout 6000 "$E017_PYTHON" "$S/head.py" validate "$S/ref" 128 2048) > "$S/validate.log" 2>&1
+cell() { local dir=$1 p=$2 v=$3 c=$4 series=$5 m=model-gptq key=GQA label
+ label="${p}_${v}_${c}_s${series}"
+ case $v in VH) m=model-gptq-head; key=GQAH;; VH8) m=model-gptq-head8;; esac  # VH8 is compared with the FP16-head tokens
+ clock > "$S/$dir-$label-clocks-before.csv"
+ (set -x; prun timeout 6000 "$VV/bin/python" "$S/vbench.py" "$OUT/$m" "$S/ref" "$S/$dir" "$c" "$p" "$series" "$v" "$key") > "$S/$dir-$label.log" 2>&1
+ printf '{"label":"%s/%s","finished_utc_ns":%s}\n' "$dir" "$label" "$(date +%s%N)" >> "$S/order.jsonl"; }
+# Cheap prerequisite: one 8-bit-head cell must load, match the first reference token and agree on at least 32 leading tokens.
+mkdir "$S/smoke" "$S/out"; cell smoke heldout VH8 128 1
+python3 -c "import json,sys; a=json.load(open(sys.argv[1]))['tokens_agree_min']; print('smoke agree', a); assert a >= 32" "$S/smoke/heldout_VH8_128_s1.json"
+grep -h "AutoGPTQLinearMethod\|lm_head\|uint8b128" "$S/smoke-heldout_VH8_128_s1.log" | head -20 > "$S/smoke-kernel-lines.txt" || true
+for series in 1 2; do
+ cs=(128 2048); ps=(primary heldout); vs=(V VH VH8)
+ if [[ $series == 2 ]]; then cs=(2048 128); ps=(heldout primary); vs=(VH8 VH V); fi
+ for c in "${cs[@]}"; do for p in "${ps[@]}"; do for v in "${vs[@]}"; do cell out "$p" "$v" "$c" "$series"; done; done; done
+done
+python3 "$S/e035analyze.py" "$S/out" > "$S/analysis.json"
 EOF
 ;;
 *) exit 2;;
