@@ -1,0 +1,20 @@
++ prun timeout 600 /tmp/e017-hpuvvad-20261109/bin/python /mnt/beegfs/hpuvvad/csc548-w4a16-e034-20261110/heads-c51-334362/heads.py /mnt/beegfs/hpuvvad/csc548-w4a16-e034-20261110/heads-c51-334362/smoke /mnt/beegfs/hpuvvad/csc548-w4a16-e034-20261110/wikitext2-test.txt b3481cea6dd697b8b741ec35d375975d4c48c85d456c884fd314fe6860a7128d 2
+[prun] Master compute host = c51
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun timeout 600 /tmp/e017-hpuvvad-20261109/bin/python /mnt/beegfs/hpuvvad/csc548-w4a16-e034-20261110/heads-c51-334362/heads.py /mnt/beegfs/hpuvvad/csc548-w4a16-e034-20261110/heads-c51-334362/smoke /mnt/beegfs/hpuvvad/csc548-w4a16-e034-20261110/wikitext2-test.txt b3481cea6dd697b8b741ec35d375975d4c48c85d456c884fd314fe6860a7128d 2 (family=openmpi4)
+Traceback (most recent call last):
+  File "/mnt/beegfs/hpuvvad/csc548-w4a16-e034-20261110/heads-c51-334362/heads.py", line 61, in <module>
+    assert np.array_equal(heads['G128'].cpu().numpy().view(np.uint16), np.ascontiguousarray(reference['reconstructed'].T).view(np.uint16)), 'G128 differs from the project quantizer'
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: G128 differs from the project quantizer
+--------------------------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code. Per user-direction, the job has been aborted.
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+mpirun detected that one or more processes exited with non-zero status, thus causing
+the job to be terminated. The first process to do so was:
+
+  Process name: [[16833,1],0]
+  Exit code:    1
+--------------------------------------------------------------------------

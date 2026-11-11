@@ -23,6 +23,27 @@ Reported per variant: relative weight error, perplexity, top-1 accuracy, perplex
 
 Limits fixed now: one model, one corpus, one metric; the search minimizes weight error, not output error, and uses no calibration data; choosing among variants on the test corpus is a selection on that corpus (five variants, disclosed); B8 has no runtime in our operator and no timing anywhere; whether the pinned Marlin build accepts a group-32 head, and what it costs in time, is unverified.
 
+### E034 result — no uncalibrated 4-bit head reaches 5%; the best is 5.8%; an 8-bit head costs 0.04% (2026-11-10, c51)
+
+Attempts: job 334362 (c51) stopped in its two-window smoke at the bit-for-bit control ("G128 differs from the project quantizer"), before any scoring; logs in `results/e034_20261110/attempt-334362-negative-zero/`. Change: `+ 0.0` after rounding, so a weight that rounds to −0 reconstructs as +0 as in `scripts/e017/quantize.py`. That this was the cause is inferred from the control passing afterwards; the differing elements were not dumped. Job 334363 (c51), exit 0: smoke and full run. Evidence `results/e034_20261110/` (`quality.json`, `top1.npz`).
+
+Controls pass: G128 is bit-identical to the project quantizer and hash-equal to E031's head; F and G128 reproduce E032's R and RH perplexities to every printed digit (9.734987, 10.571791). 307,050 scored positions, 150 windows.
+
+| Head (blocks 4-bit G128 in all) | Weight error | Perplexity | Rise vs FP16 head | Label | Top-1 same as FP16 head |
+|---|---:|---:|---:|---|---:|
+| F: FP16 | 0 | 9.735 | — | — | 100% |
+| G128: E031's head | 0.1218 | 10.572 | +8.60% | substantial | 84.09% |
+| G128M: group 128, error-minimizing scales | 0.1102 | 10.504 | +7.90% | substantial | 83.69% |
+| G32: group 32 | 0.0987 | 10.509 | +7.95% | substantial | 83.42% |
+| G32M: group 32, error-minimizing scales | 0.0935 | 10.301 | +5.82% | substantial | 84.97% |
+| B8: 8-bit, group 128 | 0.0067 | 9.738 | +0.04% | negligible | 98.83% |
+
+- The hypothesis is rejected: no 4-bit variant is "modest". G32M comes closest at +5.82%, above the 5% line; it is not rounded down. No candidate goes forward to a gate-and-timing experiment, and E031's statement keeps its 8.6% cost.
+- Weight error and perplexity do not move together: G128M and G32 cut the weight error by 10% and 19% but the perplexity rise only from 8.60% to about 7.9%, and both agree with the FP16 head's top-1 slightly less often than G128 does. Lower squared weight error is a weak proxy for output quality here (observation; not explained).
+- The 8-bit head is indistinguishable from FP16 on this metric (+0.04%). It shows the loss is a matter of bits in the head, not of quantizing it at all. No runtime of ours executes an 8-bit head and no timing of one exists, so this is a quality bound, not a speed result.
+
+Limits as predeclared: one corpus, one metric; weight-error search without calibration data; five variants compared on the test corpus. Untested, not authorized: a calibrated head quantizer (GPTQ/AWQ-style, output-error-aware), an 8-bit head timed in vLLM (its Marlin build's 8-bit support for the head is unverified), mixed precision.
+
 ## E033 — vLLM with the 4-bit head: same-job comparison with ONNX Runtime, and batch sizes 1–8
 
 Predeclared 2026-11-10 after the user invited concurrent runs while E032 is in progress. Two open points from E031, no change to any path:

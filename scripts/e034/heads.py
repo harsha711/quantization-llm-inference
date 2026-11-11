@@ -35,7 +35,7 @@ def requantize(w, group, qmax, shrink):
     best = err = None
     for c in shrink:
         s = (amax * c / qmax).half().float()
-        rec = (torch.where(s > 0, g / s, 0).round().clamp(-qmax, qmax) * s).half()
+        rec = ((torch.where(s > 0, g / s, 0).round().clamp(-qmax, qmax) + 0.0) * s).half()  # + 0.0: a rounded -0 is code 0, i.e. +0, as in quantize.py
         e = (rec.float() - g).square().sum(1, keepdim=True)
         if best is None:
             best, err = rec, e
