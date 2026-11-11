@@ -1,0 +1,380 @@
+{
+ "cells": [
+  {
+   "context": 128,
+   "prompt": "primary",
+   "series": 1,
+   "decode_ms": {
+    "plain": {
+     "GQA": 326.781,
+     "GQAH": 271.4,
+     "V": 237.708,
+     "VH": 180.735
+    },
+    "cal": {
+     "GQA": 326.75,
+     "GQAH": 271.33,
+     "V": 238.284,
+     "VH": 180.708
+    }
+   },
+   "calibrated_vs_plain_pct": {
+    "GQA": -0.009,
+    "GQAH": -0.026,
+    "V": 0.242,
+    "VH": -0.015
+   },
+   "head_gain_pct": {
+    "plain": {
+     "GQAH_vs_GQA": 16.947,
+     "VH_vs_V": 23.968
+    },
+    "cal": {
+     "GQAH_vs_GQA": 16.961,
+     "VH_vs_V": 24.163
+    }
+   },
+   "vllm_tokens_agree_min": {
+    "plain": {
+     "V": 64,
+     "VH": 64
+    },
+    "cal": {
+     "V": 64,
+     "VH": 64
+    }
+   }
+  },
+  {
+   "context": 128,
+   "prompt": "primary",
+   "series": 2,
+   "decode_ms": {
+    "plain": {
+     "GQA": 326.909,
+     "GQAH": 271.33,
+     "V": 238.544,
+     "VH": 180.721
+    },
+    "cal": {
+     "GQA": 326.852,
+     "GQAH": 271.396,
+     "V": 238.222,
+     "VH": 180.731
+    }
+   },
+   "calibrated_vs_plain_pct": {
+    "GQA": -0.017,
+    "GQAH": 0.024,
+    "V": -0.135,
+    "VH": 0.006
+   },
+   "head_gain_pct": {
+    "plain": {
+     "GQAH_vs_GQA": 17.001,
+     "VH_vs_V": 24.24
+    },
+    "cal": {
+     "GQAH_vs_GQA": 16.967,
+     "VH_vs_V": 24.133
+    }
+   },
+   "vllm_tokens_agree_min": {
+    "plain": {
+     "V": 64,
+     "VH": 64
+    },
+    "cal": {
+     "V": 64,
+     "VH": 64
+    }
+   }
+  },
+  {
+   "context": 128,
+   "prompt": "heldout",
+   "series": 1,
+   "decode_ms": {
+    "plain": {
+     "GQA": 326.828,
+     "GQAH": 271.348,
+     "V": 238.14,
+     "VH": 180.705
+    },
+    "cal": {
+     "GQA": 326.838,
+     "GQAH": 270.994,
+     "V": 238.323,
+     "VH": 180.705
+    }
+   },
+   "calibrated_vs_plain_pct": {
+    "GQA": 0.003,
+    "GQAH": -0.13,
+    "V": 0.077,
+    "VH": 0.0
+   },
+   "head_gain_pct": {
+    "plain": {
+     "GQAH_vs_GQA": 16.975,
+     "VH_vs_V": 24.118
+    },
+    "cal": {
+     "GQAH_vs_GQA": 17.086,
+     "VH_vs_V": 24.176
+    }
+   },
+   "vllm_tokens_agree_min": {
+    "plain": {
+     "V": 64,
+     "VH": 64
+    },
+    "cal": {
+     "V": 64,
+     "VH": 64
+    }
+   }
+  },
+  {
+   "context": 128,
+   "prompt": "heldout",
+   "series": 2,
+   "decode_ms": {
+    "plain": {
+     "GQA": 326.827,
+     "GQAH": 271.458,
+     "V": 238.316,
+     "VH": 180.757
+    },
+    "cal": {
+     "GQA": 326.848,
+     "GQAH": 271.407,
+     "V": 238.449,
+     "VH": 180.762
+    }
+   },
+   "calibrated_vs_plain_pct": {
+    "GQA": 0.006,
+    "GQAH": -0.019,
+    "V": 0.056,
+    "VH": 0.003
+   },
+   "head_gain_pct": {
+    "plain": {
+     "GQAH_vs_GQA": 16.941,
+     "VH_vs_V": 24.152
+    },
+    "cal": {
+     "GQAH_vs_GQA": 16.962,
+     "VH_vs_V": 24.192
+    }
+   },
+   "vllm_tokens_agree_min": {
+    "plain": {
+     "V": 64,
+     "VH": 64
+    },
+    "cal": {
+     "V": 64,
+     "VH": 64
+    }
+   }
+  },
+  {
+   "context": 2048,
+   "prompt": "primary",
+   "series": 1,
+   "decode_ms": {
+    "plain": {
+     "GQA": 375.273,
+     "GQAH": 320.152,
+     "V": 248.135,
+     "VH": 190.9
+    },
+    "cal": {
+     "GQA": 375.372,
+     "GQAH": 320.107,
+     "V": 248.329,
+     "VH": 191.061
+    }
+   },
+   "calibrated_vs_plain_pct": {
+    "GQA": 0.026,
+    "GQAH": -0.014,
+    "V": 0.078,
+    "VH": 0.084
+   },
+   "head_gain_pct": {
+    "plain": {
+     "GQAH_vs_GQA": 14.688,
+     "VH_vs_V": 23.066
+    },
+    "cal": {
+     "GQAH_vs_GQA": 14.723,
+     "VH_vs_V": 23.061
+    }
+   },
+   "vllm_tokens_agree_min": {
+    "plain": {
+     "V": 64,
+     "VH": 64
+    },
+    "cal": {
+     "V": 64,
+     "VH": 64
+    }
+   }
+  },
+  {
+   "context": 2048,
+   "prompt": "primary",
+   "series": 2,
+   "decode_ms": {
+    "plain": {
+     "GQA": 375.533,
+     "GQAH": 320.271,
+     "V": 248.758,
+     "VH": 190.722
+    },
+    "cal": {
+     "GQA": 375.484,
+     "GQAH": 320.226,
+     "V": 248.905,
+     "VH": 191.259
+    }
+   },
+   "calibrated_vs_plain_pct": {
+    "GQA": -0.013,
+    "GQAH": -0.014,
+    "V": 0.059,
+    "VH": 0.282
+   },
+   "head_gain_pct": {
+    "plain": {
+     "GQAH_vs_GQA": 14.716,
+     "VH_vs_V": 23.33
+    },
+    "cal": {
+     "GQAH_vs_GQA": 14.717,
+     "VH_vs_V": 23.16
+    }
+   },
+   "vllm_tokens_agree_min": {
+    "plain": {
+     "V": 64,
+     "VH": 64
+    },
+    "cal": {
+     "V": 64,
+     "VH": 64
+    }
+   }
+  },
+  {
+   "context": 2048,
+   "prompt": "heldout",
+   "series": 1,
+   "decode_ms": {
+    "plain": {
+     "GQA": 375.475,
+     "GQAH": 320.248,
+     "V": 249.07,
+     "VH": 191.258
+    },
+    "cal": {
+     "GQA": 375.441,
+     "GQAH": 320.232,
+     "V": 248.795,
+     "VH": 191.077
+    }
+   },
+   "calibrated_vs_plain_pct": {
+    "GQA": -0.009,
+    "GQAH": -0.005,
+    "V": -0.111,
+    "VH": -0.095
+   },
+   "head_gain_pct": {
+    "plain": {
+     "GQAH_vs_GQA": 14.709,
+     "VH_vs_V": 23.211
+    },
+    "cal": {
+     "GQAH_vs_GQA": 14.705,
+     "VH_vs_V": 23.199
+    }
+   },
+   "vllm_tokens_agree_min": {
+    "plain": {
+     "V": 64,
+     "VH": 64
+    },
+    "cal": {
+     "V": 64,
+     "VH": 64
+    }
+   }
+  },
+  {
+   "context": 2048,
+   "prompt": "heldout",
+   "series": 2,
+   "decode_ms": {
+    "plain": {
+     "GQA": 375.454,
+     "GQAH": 320.172,
+     "V": 248.903,
+     "VH": 191.351
+    },
+    "cal": {
+     "GQA": 375.449,
+     "GQAH": 320.189,
+     "V": 249.216,
+     "VH": 191.511
+    }
+   },
+   "calibrated_vs_plain_pct": {
+    "GQA": -0.001,
+    "GQAH": 0.005,
+    "V": 0.125,
+    "VH": 0.084
+   },
+   "head_gain_pct": {
+    "plain": {
+     "GQAH_vs_GQA": 14.724,
+     "VH_vs_V": 23.123
+    },
+    "cal": {
+     "GQAH_vs_GQA": 14.718,
+     "VH_vs_V": 23.154
+    }
+   },
+   "vllm_tokens_agree_min": {
+    "plain": {
+     "V": 64,
+     "VH": 64
+    },
+    "cal": {
+     "V": 64,
+     "VH": 64
+    }
+   }
+  }
+ ],
+ "max_abs_calibrated_vs_plain_pct": {
+  "GQA": 0.026,
+  "GQAH": 0.13,
+  "V": 0.242,
+  "VH": 0.282
+ },
+ "equal_speed_within_5pct": {
+  "GQA": true,
+  "GQAH": true,
+  "V": true,
+  "VH": true
+ },
+ "calibrated_head_gain_at_least_5pct_all_cells": {
+  "ours": true,
+  "vllm": true
+ }
+}

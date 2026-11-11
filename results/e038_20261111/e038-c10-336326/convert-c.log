@@ -1,0 +1,6 @@
++ E017_ROOT=/mnt/beegfs/hpuvvad/csc548-w4a16-e038-20261111/root
++ prun timeout 3000 /tmp/e017-hpuvvad-20261109/bin/python /mnt/beegfs/hpuvvad/csc548-w4a16-e027-20261110/e038-c10-336326/convert.py /mnt/beegfs/hpuvvad/csc548-w4a16-e038-20261111/model-gptq-c
+[prun] Master compute host = c10
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun timeout 3000 /tmp/e017-hpuvvad-20261109/bin/python /mnt/beegfs/hpuvvad/csc548-w4a16-e027-20261110/e038-c10-336326/convert.py /mnt/beegfs/hpuvvad/csc548-w4a16-e038-20261111/model-gptq-c (family=openmpi4)
+CONVERTED 196 0.13293087482452393 0.2840954661369324

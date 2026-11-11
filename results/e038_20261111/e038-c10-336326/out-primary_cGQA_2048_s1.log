@@ -1,0 +1,6 @@
++ E017_ROOT=/mnt/beegfs/hpuvvad/csc548-w4a16-e038-20261111/root
++ prun timeout 6000 /tmp/e017-hpuvvad-20261109/bin/python /mnt/beegfs/hpuvvad/csc548-w4a16-e027-20261110/e038-c10-336326/ckpt.py head time /mnt/beegfs/hpuvvad/csc548-w4a16-e027-20261110/e038-c10-336326/outc GQA 2048 primary 1 /mnt/beegfs/hpuvvad/csc548-w4a16-e027-20261110/e038-c10-336326/refc
+[prun] Master compute host = c10
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun timeout 6000 /tmp/e017-hpuvvad-20261109/bin/python /mnt/beegfs/hpuvvad/csc548-w4a16-e027-20261110/e038-c10-336326/ckpt.py head time /mnt/beegfs/hpuvvad/csc548-w4a16-e027-20261110/e038-c10-336326/outc GQA 2048 primary 1 /mnt/beegfs/hpuvvad/csc548-w4a16-e027-20261110/e038-c10-336326/refc (family=openmpi4)
+DONE primary GQA 2048 1 0.37537185358814895
