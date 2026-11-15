@@ -2,3 +2,5 @@ build*/
 *.ncu-rep
 *.nsys-rep
 __pycache__/
+results/e017_20261109/model-arc/results/e017_20261109/operator_model.layers.0.mlp.gate_proj_M2048-memcheck_0-outputs.npz
+results/e018_20261109/full-333413/out/logits.npz

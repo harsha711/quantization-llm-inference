@@ -2,6 +2,15 @@
 
 Read the numerical/measurement [contract](CONTRACT.md) before interpreting these records. Preserve raw evidence, failed attempts, and inconclusive outcomes. An alternative that has not been implemented or measured is not a failed optimization. Historical entries below reconstruct only what the repository supports. Missing prior failure numbers or commit IDs remain unknown.
 
+## Repository note — two raw files over GitHub's 100 MB limit kept out of git (2026-11-15)
+
+At the user's choice (option 2 of three offered after the first push was rejected), two raw evidence files were removed from the 115 unpushed commits with `git filter-branch --index-filter` before the first push of those commits; no other file changed (verified by a tree diff against the pre-rewrite branch, kept locally as `backup/pre-drop-large-npz`). Both stay in the local working copy, listed in `.gitignore`, with their SHA-256 unchanged and already recorded in the committed retrieval manifests:
+
+- `results/e017_20261109/model-arc/results/e017_20261109/operator_model.layers.0.mlp.gate_proj_M2048-memcheck_0-outputs.npz`, 158,110,075 bytes, sha256 c0b9cbe4aef155b7b78db658273e6b76939d3b963c78036765592a433efc96c9 (in `results/e017_20261109/model-arc/retrieval.sha256`, `final-arc/retrieval.sha256`, `handoff.sha256`).
+- `results/e018_20261109/full-333413/out/logits.npz`, 122,852,120 bytes, sha256 0fdb7d4b9b6d2616fca7b78c0ecc72897661abd3a474e352ff6994eaad02c85a (in `results/e018_20261109/retrieved.sha256`).
+
+A clone from GitHub therefore lacks these two files, and hash checks over those manifests fail for them there. No result, analyzer output or conclusion changes.
+
 ## E038 — Do the calibrated tensors pass the gate and run at the speed of the plain-rounded ones?
 
 Predeclared 2026-11-11 under the same user request as E037 ("one last attempt"), before E037's full run finished and without knowledge of which variant it selects or what it costs. It closes E036's open item "nothing was timed". It runs whatever E037 selects and saves, pass or fail on E037's quality criteria; the quality figures quoted with E038's timings are E037's for that checkpoint.
