@@ -1,6 +1,6 @@
 # Bottleneck assessment
 
-## Against production stacks, 2026-11-10, after E030–E035 (current)
+## Against production stacks, 2026-11-15, after E030–E038 (current)
 
 E027 and E028 compared our best decode path (graph-replayed Marlin with direct decode attention, accepted only under E021's third, post hoc gate) with three production stacks at contexts 128/512/2048, batch 1, 64 tokens. Our path is slower than all three.
 
