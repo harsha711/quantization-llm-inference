@@ -9,7 +9,7 @@ At the user's choice (option 2 of three offered after the first push was rejecte
 - `results/e017_20261109/model-arc/results/e017_20261109/operator_model.layers.0.mlp.gate_proj_M2048-memcheck_0-outputs.npz`, 158,110,075 bytes, sha256 c0b9cbe4aef155b7b78db658273e6b76939d3b963c78036765592a433efc96c9 (in `results/e017_20261109/model-arc/retrieval.sha256`, `final-arc/retrieval.sha256`, `handoff.sha256`).
 - `results/e018_20261109/full-333413/out/logits.npz`, 122,852,120 bytes, sha256 0fdb7d4b9b6d2616fca7b78c0ecc72897661abd3a474e352ff6994eaad02c85a (in `results/e018_20261109/retrieved.sha256`).
 
-A clone from GitHub therefore lacks these two files, and hash checks over those manifests fail for them there. No result, analyzer output or conclusion changes.
+A clone from GitHub therefore lacks these two files, and hash checks over those manifests fail for them there. No result, analyzer output or conclusion changes. The rewrite gave new IDs to the commits from the first one containing either file onward; the 57 such IDs cited in this file were remapped one to one (same 115 commits, same order, identical subjects) and every commit ID cited in the docs resolves on the branch. Commit IDs inside `results/` logs and manifests are raw evidence and were left as recorded; for those, use the local `backup/pre-drop-large-npz` branch.
 
 ## E038 — Do the calibrated tensors pass the gate and run at the speed of the plain-rounded ones?
 
@@ -550,7 +550,7 @@ Decision: supported improvement at contexts 256–2048 on c7 and at 2048 on both
 
 ## E025 — Decode-step device time by operation (diagnostic)
 
-Predeclared 2026-11-10 from `fe36faf`, under the user's standing instruction to continue toward robust optimizations while away. Diagnostic only: no optimization, kernel or model-path change, no timing claim.
+Predeclared 2026-11-10 from `8642e6d`, under the user's standing instruction to continue toward robust optimizations while away. Diagnostic only: no optimization, kernel or model-path change, no timing claim.
 
 Motivation (E024 calculation): graph-Marlin's decode step is 5.44 ms at context128 and 10.06 ms at context2048; FP16's is 4.4–4.5 ms higher at every context. So both paths share a cost of about 2.4 µs per context token per step, and at context128 about 3 ms of the Marlin step is neither that nor (by E022's bound) projections. Question: which operations carry (i) the context-proportional device time and (ii) the remaining short-context device time?
 
@@ -581,7 +581,7 @@ Limits: one profiled request per context, seven decode steps, eager execution un
 
 ## E024 — Robustness of the E020/E023 decode gains
 
-Predeclared 2026-11-10 from `cc8a4c0`, requested by the user ("check if these gains are robust enough"). No new mechanism: the four E023 variants (R eager FP16, GR graph FP16, Q eager Marlin, GQ graph Marlin) with unchanged library, integration, graph procedure and E021 gate. What changes is only the conditions under which they are measured.
+Predeclared 2026-11-10 from `5cbb73a`, requested by the user ("check if these gains are robust enough"). No new mechanism: the four E023 variants (R eager FP16, GR graph FP16, Q eager Marlin, GQ graph Marlin) with unchanged library, integration, graph procedure and E021 gate. What changes is only the conditions under which they are measured.
 
 Threats tested:
 - **Other inputs:** contexts 128, 256, 512, 1024, 2048 × primary and held-out passages (E020/E023 timed only primary at 128/2048). Each timed variant is checked against its own validated tokens and bitwise-anchored logits, so the context128 held-out case, where R and Marlin legitimately emit different tokens after R's exact tie, can be timed; there the paths generate different text of equal length, disclosed.
@@ -638,7 +638,7 @@ Decision: the graph-replayed Marlin decode gain is robust across five contexts, 
 
 ## E023 — CUDA-graph replay of the Marlin decode step
 
-Predeclared 2026-11-10 from `6f01dc2`, requested by the user ("get a new node and test this out") as the one hypothesis E022 supports. One main change: the per-token decode step of the Marlin model (forward + argmax) is captured once with `torch.cuda.CUDAGraph` and replayed per token, exactly E015's procedure (three side-stream warmups, capture at the first decode position, stable token/position/mask/cache addresses). No kernel, dispatch, tile, model, quantization or tolerance change; corrected E006 A library `e4eca5e3…` and E017 integration unchanged; prefill stays eager. Whether Marlin's external ctypes launches can be captured is unknown and is the first thing the smoke tests; a capture failure is recorded as a concrete negative result.
+Predeclared 2026-11-10 from `40ffd20`, requested by the user ("get a new node and test this out") as the one hypothesis E022 supports. One main change: the per-token decode step of the Marlin model (forward + argmax) is captured once with `torch.cuda.CUDAGraph` and replayed per token, exactly E015's procedure (three side-stream warmups, capture at the first decode position, stable token/position/mask/cache addresses). No kernel, dispatch, tile, model, quantization or tolerance change; corrected E006 A library `e4eca5e3…` and E017 integration unchanged; prefill stays eager. Whether Marlin's external ctypes launches can be captured is unknown and is the first thing the smoke tests; a capture failure is recorded as a concrete negative result.
 
 Hypothesis: graph-replayed Marlin (GQ) lowers the 63-step decode median by ≥5% versus eager Marlin (Q) in both reversed series for a context. Reported without a gate: GQ versus eager FP16 (R) and versus graph-replayed FP16 (GR, the stronger FP16 baseline), TTFT, end-to-end, peak memory, graph setup is inside the untimed first request.
 
@@ -676,7 +676,7 @@ Limits: one model, one GPU, batch 1, primary passage only, no held-out timing, n
 
 ## E022 — Decode-step projection time breakdown (diagnostic)
 
-Predeclared 2026-11-10 from `a928561`, requested by the user ("test first") before the report. Diagnostic only: no optimization, kernel, dispatch or model-path change, no end-to-end claim.
+Predeclared 2026-11-10 from `8a7f465`, requested by the user ("test first") before the report. Diagnostic only: no optimization, kernel, dispatch or model-path change, no end-to-end claim.
 
 Motivation (calculation from E020, not a finding): one decode step takes about 9.9 ms with R and 9.6 ms with Q at context128. R reads 3.09 GB of selected FP16 weights per step, Q about a quarter of that, yet Q is only 3–5% faster. So Q's step is probably not limited by weight traffic. Question: is the Q step limited by host-side per-call launch cost (196 Python/ctypes calls) or by device execution?
 
@@ -704,7 +704,7 @@ Decision: diagnostic complete; no optimization implemented. Await a user request
 
 ## E021 — Acceptance of the Marlin path against the FP64-projection control
 
-Predeclared 2026-11-10 from `1b0cb87`, requested by the user ("go ahead") after E020. This is the THIRD model gate for the same path, written after seeing E017, E018, E019 and E020. The four context128/2048 cases are already known to satisfy it from E019 data, so they are confirmation only. The predictive test is six cases never run in any form: contexts 256, 512 and 1024 × primary/held-out passages. E017 and E019 remain failed under their gates. No timing, kernel, model or tolerance change; E020's timing is not rerun.
+Predeclared 2026-11-10 from `9c5b745`, requested by the user ("go ahead") after E020. This is the THIRD model gate for the same path, written after seeing E017, E018, E019 and E020. The four context128/2048 cases are already known to satisfy it from E019 data, so they are confirmation only. The predictive test is six cases never run in any form: contexts 256, 512 and 1024 × primary/held-out passages. E017 and E019 remain failed under their gates. No timing, kernel, model or tolerance change; E020's timing is not rerun.
 
 Reference: the same model with every projection GEMM accumulated in FP64 on the identical W_hat and rounded to FP16 (E018 mode F64), instead of R's FP16-rounded greedy trajectory. Per case, 64 tokens, `scripts/e021/validate.py`:
 1. finite Q logits;
@@ -742,7 +742,7 @@ Decision: accepted under this gate only. E017 and E019 stay failed under theirs.
 
 ## E020 — Descriptive primary timing of the numerically unaccepted Marlin path
 
-Predeclared 2026-11-10 01:20 EST from `5dcd85c`, before any timing sample exists. After E019's rejection the user was offered stop / descriptive timing / a third gate and delegated the choice ("please figure out the best approach"). Chosen: measure, without changing or adding any acceptance gate. Reason: whether the bridge has any latency benefit is unknown after E017–E019, the node is held, and a measurement labelled as unaccepted misleads nobody, whereas a third post hoc gate would.
+Predeclared 2026-11-10 01:20 EST from `46bd761`, before any timing sample exists. After E019's rejection the user was offered stop / descriptive timing / a third gate and delegated the choice ("please figure out the best approach"). Chosen: measure, without changing or adding any acceptance gate. Reason: whether the bridge has any latency benefit is unknown after E017–E019, the node is held, and a measurement labelled as unaccepted misleads nobody, whereas a third post hoc gate would.
 
 Status of the measured path: Q FAILED E017's gate and E019's gate. E020 does not validate it. Any report must present E020 numbers as "latency of a path that is not numerically accepted against the FP16 reference", never as an accepted speedup, and must cite E017/E018/E019 alongside.
 
@@ -773,7 +773,7 @@ Decision: stop. Turning this into an accepted claim needs a user-requested accep
 
 ## E019 — Corrected Marlin end-to-end with a control-calibrated model gate
 
-Predeclared 2026-11-09 from `4a4b8a6`, explicitly requested by the user ("go") after E018. E017 remains failed under its own gate and immutable. This is a new comparison whose model gate was chosen AFTER seeing the E017 failure and the E018 controls; every report of E019 must say so. No kernel, dispatch, tile, model, compiler or graph change. Unchanged E017 `integration.py`/`infer.py`, artifacts, runtime and corrected library `e4eca5e3…` are used from the preserved E017 BeeGFS root; E019 writes only to its own root.
+Predeclared 2026-11-09 from `4488fc9`, explicitly requested by the user ("go") after E018. E017 remains failed under its own gate and immutable. This is a new comparison whose model gate was chosen AFTER seeing the E017 failure and the E018 controls; every report of E019 must say so. No kernel, dispatch, tile, model, compiler or graph change. Unchanged E017 `integration.py`/`infer.py`, artifacts, runtime and corrected library `e4eca5e3…` are used from the preserved E017 BeeGFS root; E019 writes only to its own root.
 
 Hypothesis (E017's, unchanged): Q lowers the 63-step decode median by ≥5% versus fresh R in both reversed primary series for a context.
 
@@ -815,7 +815,7 @@ Decision: stop. No timing, no held-out campaign, no gate edit. Revisit only as a
 
 ## E018 — Locate the E017 Q/R logit divergence (diagnostic)
 
-Predeclared 2026-11-09 from clean `35cae94`, requested by the user after E017 ("identify ... and bridge the gap", ARC use permitted). Diagnostic only. E017 stays failed and immutable. No timing, no tolerance change, no kernel/dispatch/model change, no passing-subset release.
+Predeclared 2026-11-09 from clean `20fb49b`, requested by the user after E017 ("identify ... and bridge the gap", ARC use permitted). Diagnostic only. E017 stays failed and immutable. No timing, no tolerance change, no kernel/dispatch/model change, no passing-subset release.
 
 Offline observation motivating it (existing E017 tensors, CPU only, nothing rerun): Q−R per-position relative L2 is 0.0011–0.0056 with no trend over the 64 positions, prefill position 0.0015. All 591 violations have |R|<1. Positions 19/56 carry a near-uniform shift (mean +0.0184/−0.0134, std 0.0068/0.0075; all 443/107 violations one-signed). Subtracting each position's mean difference leaves 4 violations. E014 C128 (same FP16 weights, no Marlin, compiler reordering) recorded max 0.035–0.039 and relative L2 ≈0.00155, and C2048 failed the same gate with 415 values and exact tokens. These are observations, not a cause.
 

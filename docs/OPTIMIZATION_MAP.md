@@ -4,6 +4,8 @@ E017 stopped at the full-model numerical gate:591 Q/R logits fail at context128 
 
 # Optimization decision map
 
+This map covers decisions through E017. Later decisions (E018–E038: acceptance gates, graph replay, attention, production-stack comparisons, output head, quality and calibration) are recorded in [STATUS.md](STATUS.md), [EXPERIMENTS.md](EXPERIMENTS.md) and [PROJECT_SYNTHESIS.md](PROJECT_SYNTHESIS.md) §6.
+
 E015 is complete: [direct replay](INFERENCE_DIRECT_GRAPH.md) passes bitwise full-logit/token validation at 128/2048 with actual graph replay and the same observed decode kernel multiset. Fresh reversed timings give 1.80–1.87% and 1.08–1.30% lower decode medians, below 5%. Keep eager static E, preserve all 160 samples and cancel held-out timing by design. More reserved allocator memory and graph setup costs remain explicit. This bounds direct replay of forward+argmax under common mask staging, without establishing no broader headroom. No new optimization or compiler retry is authorized.
 
 E014 completes at its numerical gate. A supported short-context overhead opportunity is visible in the full-model trace; static eager caching passes, and compiled static decoding actually replays graphs at 128 tokens. C2048 fails the declared elementwise logit bound despite identical greedy tokens. No timing campaign is released, so improved single-request latency is unestablished. Preserve the stopped record and [report](INFERENCE_OVERHEAD.md); do not infer a Marlin result, time a passing subset or retune compilation without a new request.
