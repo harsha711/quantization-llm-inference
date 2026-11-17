@@ -13,6 +13,27 @@ A clone from GitHub therefore lacks these two files, and hash checks over those 
 
 Second rewrite (same day, same user choice). The second push was rejected too: an independent read-only review found eight more paths holding one 158,110,075-byte blob, byte-identical to the memcheck_0 file above (sha256 c0b9cbe4…c96c9, recorded for `..._M2048_0-outputs.npz` in `results/e017_20261109/model-arc/retrieval.sha256`): `operator_model.layers.0.mlp.gate_proj_M2048{_0,_1,_2,-memcheck_1,-memcheck_2,-synccheck_0,-synccheck_1,-synccheck_2}-outputs.npz` in the same directory. They were removed the same way from the 117 unpushed commits (tree diff against `backup/pre-drop-large-npz-2`: those eight files only), kept in the working copy with that hash and added to `.gitignore`; no tracked blob over 100 MB remains. Commit IDs from `Record E017 full-model numerical gate failure` onward changed again; the cited IDs were remapped the same way (same subjects, same order), and every commit ID cited in the docs resolves on the branch. Ten raw files are therefore missing from a GitHub clone.
 
+## E040 — Does AWQ beat GPTQ on this model? (llm-compressor AWQ, three arms)
+
+Predeclared 2026-11-16 at the user's request ("option 2 for the report", after I offered AWQ as the one untested method designed for activation outliers, which E037 observed in this model family). Quality only: no runtime, kernel, gate or timing. Nothing changes the runtime contract or any default.
+
+Why this: E039 showed that the remaining block cost (+5.15% with upstream GPTQ) is mainly the model. AWQ (Lin et al.) chooses per-channel scales from activation statistics and folds them into the preceding norm or projection before quantizing. It is the standard method aimed at the outlier channels that make small models hard. If any 4-bit method in this tool reaches 5% on Qwen2.5-1.5B, AWQ is the likeliest.
+
+Arms, all in llm-compressor 0.15.0 (E039's overlay recipe: llmcompressor 0.15.0, torch 2.14.0, numpy 2.4.6 pinned), with E037's 128 C4 calibration windows, the FP16 head, and E032's WikiText-2 windows and metric. `scripts/e040/awq.py` runs each arm and `scripts/e040/score.py` scores them in the frozen E017 environment:
+- AWQs: `AWQModifier()` then `QuantizationModifier(scheme="W4A16")`. Symmetric, group 128, the same weight format family as E039's arms.
+- AWQa: `AWQModifier()` then `QuantizationModifier(scheme="W4A16_ASYM")`. Zero points, AWQ's usual setting. This is not our runtime format (no zero points); it is reported for the report only.
+- AWQG: `AWQModifier()` then `GPTQModifier(scheme="W4A16")`. AWQ smoothing followed by GPTQ, symmetric.
+All other settings are the tool's defaults (mappings inferred for Qwen2, `duo_scaling=True`, `n_grid=20`), except `offload_device=cpu` for AWQ's cached activations, which affects memory only. The export holds every changed tensor: the 196 reconstructed weights (compressed-tensors' own `fake_quantize` of the stored scales and zero points) and the norm weights and biases AWQ rescaled. Checks: each reconstruction is FP16(c·s) with integer c spanning at most 16 levels per group; only layer norms, biases and block weights changed (embedding, head and final norm unchanged); original-weight hashes are equal across environments; O reproduces E032 to 1e−5; originals are restored after every arm (a second O score must equal the first bit for bit).
+
+Criteria on the TEST split, E032's labels:
+1. "AWQ helps" if an arm's perplexity is at least 1% below E039's L (9.0491, upstream GPTQ, same tool, windows and scorer). Within 1% is "no material difference". More than 1% above is "worse".
+2. Block criterion as in E036/E037: an arm "passes" if it is at most 5% above O.
+Reported besides: validation, top-1, and which arm is lowest. For the report, the best format-compatible arm (AWQs or AWQG) is stated separately from AWQa.
+
+Process: one cheap prerequisite job (8 calibration windows, 2 scoring windows, all three arms) inspected before the full job, as in E039.
+
+Limits fixed now: one model, one metric, one corpus, one run, one recipe per arm with defaults; validation and test are both WikiText-2; AWQa is not in the runtime format; nothing is timed or gated; llm-compressor ran in its own overlay (transformers 5.21.0) and scoring in the frozen environment. AWQ, GPTQ and llm-compressor are upstream; ours is the comparison and the measurement.
+
 ## E039 — Is the remaining block cost our quantizer, or the model? (16-level grid and upstream llm-compressor)
 
 Predeclared 2026-11-16 at the user's request. The user asked why our 4-bit quality is worse than published results ("there have been established papers where accuracy is robust … identify what the issue is"). I proposed this experiment and the user answered "go". This request authorizes the two items AGENTS listed as needing one: the upstream llm-compressor library and a change to the quantization grid. Quality only: no runtime, kernel, gate or timing. Nothing here changes the runtime contract or any default.
