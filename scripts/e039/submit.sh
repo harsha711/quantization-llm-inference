@@ -57,7 +57,7 @@ if [[ ! -e "$LCV/OK" ]]; then
 fi
 "$LCV/bin/python" -m pip freeze --path "$("$LCV/bin/python" -c 'import sysconfig;print(sysconfig.get_paths()["purelib"])')" > "$S/lc-overlay-freeze.txt" 2>&1 || true
 "$LCV/bin/python" -c 'import torch,transformers,llmcompressor,compressed_tensors as c;print(torch.__version__,torch.__file__,transformers.__version__,llmcompressor.__version__,c.__version__)' > "$S/lc-versions.txt"
-grep -q '^2.14.0 ' "$S/lc-versions.txt"; grep -q ' 0.15.0 ' "$S/lc-versions.txt"
+grep -q -E '^2\.14\.0[+ ]' "$S/lc-versions.txt"; grep -q ' 0.15.0 ' "$S/lc-versions.txt"
 "$E017_PYTHON" -m pip freeze | diff -u "$R/pip-freeze.txt" -  # frozen environment untouched by the overlay
 H=b3481cea6dd697b8b741ec35d375975d4c48c85d456c884fd314fe6860a7128d
 if [[ $MODE == prereq ]]; then NCAL=8; WIN=2; else NCAL=128; WIN=; fi

@@ -1,0 +1,152 @@
+Collecting llmcompressor==0.15.0
+  Using cached llmcompressor-0.15.0-py3-none-any.whl (433 kB)
+Collecting loguru>=0.7.2
+  Using cached loguru-0.8.0-py3-none-any.whl (69 kB)
+Requirement already satisfied: pyyaml>=6.0.1 in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from llmcompressor==0.15.0) (6.0.3)
+Requirement already satisfied: numpy>=2.0.0 in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from llmcompressor==0.15.0) (2.4.6)
+Requirement already satisfied: requests>=2.32.2 in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from llmcompressor==0.15.0) (2.34.2)
+Requirement already satisfied: tqdm>=4.66.3 in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from llmcompressor==0.15.0) (4.70.1)
+Requirement already satisfied: torch<=2.14.1,>=2.10.0 in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from llmcompressor==0.15.0) (2.14.0)
+Collecting transformers<=5.21.0,>=5.15.0
+  Downloading transformers-5.21.0-py3-none-any.whl (13.0 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 13.0/13.0 MB 32.4 MB/s eta 0:00:00
+Collecting datasets>=4.8.4
+  Using cached datasets-5.2.0-py3-none-any.whl (608 kB)
+Collecting auto-round>=0.15.1
+  Downloading auto_round-0.16.1-py3-none-any.whl (1.5 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.5/1.5 MB 16.5 MB/s eta 0:00:00
+Collecting accelerate>=1.15.0
+  Using cached accelerate-1.16.0-py3-none-any.whl (389 kB)
+Collecting nvidia-ml-py>=12.560.30
+  Using cached nvidia_ml_py-13.615.71-py3-none-any.whl (58 kB)
+Collecting pillow>=12.0.0
+  Using cached pillow-13.0.0-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (7.1 MB)
+Collecting compressed-tensors==0.20.1
+  Downloading compressed_tensors-0.20.1-py3-none-any.whl (260 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 260.6/260.6 kB 93.3 MB/s eta 0:00:00
+Collecting pydantic>=2.0
+  Using cached pydantic-2.14.3-py3-none-any.whl (494 kB)
+Collecting psutil
+  Using cached psutil-7.2.2-cp36-abi3-manylinux2010_x86_64.manylinux_2_12_x86_64.manylinux_2_28_x86_64.whl (155 kB)
+Requirement already satisfied: packaging>=20.0 in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from accelerate>=1.15.0->llmcompressor==0.15.0) (26.3)
+Requirement already satisfied: huggingface_hub>=0.21.0 in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from accelerate>=1.15.0->llmcompressor==0.15.0) (0.36.0)
+Requirement already satisfied: safetensors>=0.4.3 in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from accelerate>=1.15.0->llmcompressor==0.15.0) (0.6.2)
+Collecting py-cpuinfo
+  Downloading py_cpuinfo-9.0.0-py3-none-any.whl (22 kB)
+Requirement already satisfied: filelock in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from datasets>=4.8.4->llmcompressor==0.15.0) (4.2.9)
+Collecting pyarrow>=24.0.0
+  Using cached pyarrow-26.0.1-cp311-cp311-manylinux_2_28_x86_64.whl (55.0 MB)
+Collecting dill<0.4.2,>=0.3.0
+  Using cached dill-0.4.1-py3-none-any.whl (120 kB)
+Collecting pandas
+  Using cached pandas-3.1.1-cp311-cp311-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl (12.4 MB)
+Collecting xxhash
+  Using cached xxhash-4.1.0-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (471 kB)
+Collecting multiprocess<0.70.20
+  Using cached multiprocess-0.70.19-py311-none-any.whl (144 kB)
+Requirement already satisfied: fsspec<=2026.9.0,>=2023.1.0 in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from datasets>=4.8.4->llmcompressor==0.15.0) (2026.9.0)
+Collecting huggingface_hub>=0.21.0
+  Downloading huggingface_hub-2.4.0-py3-none-any.whl (857 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 857.0/857.0 kB 68.2 MB/s eta 0:00:00
+Requirement already satisfied: charset_normalizer<4,>=2 in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from requests>=2.32.2->llmcompressor==0.15.0) (3.5.2)
+Requirement already satisfied: idna<4,>=2.5 in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from requests>=2.32.2->llmcompressor==0.15.0) (3.20)
+Requirement already satisfied: urllib3<3,>=1.26 in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from requests>=2.32.2->llmcompressor==0.15.0) (2.8.0)
+Requirement already satisfied: certifi>=2023.5.7 in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from requests>=2.32.2->llmcompressor==0.15.0) (2026.10.23)
+Requirement already satisfied: typing-extensions>=4.10.0 in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from torch<=2.14.1,>=2.10.0->llmcompressor==0.15.0) (4.16.0)
+Requirement already satisfied: setuptools>=77.0.3 in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from torch<=2.14.1,>=2.10.0->llmcompressor==0.15.0) (84.2.1)
+Requirement already satisfied: sympy>=1.13.3 in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from torch<=2.14.1,>=2.10.0->llmcompressor==0.15.0) (1.14.0)
+Requirement already satisfied: networkx>=2.5.1 in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from torch<=2.14.1,>=2.10.0->llmcompressor==0.15.0) (3.6.1)
+Requirement already satisfied: jinja2 in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from torch<=2.14.1,>=2.10.0->llmcompressor==0.15.0) (3.1.6)
+Requirement already satisfied: cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.3 in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from torch<=2.14.1,>=2.10.0->llmcompressor==0.15.0) (13.0.3.0)
+Requirement already satisfied: cuda-bindings<14,>=13.0.3 in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from torch<=2.14.1,>=2.10.0->llmcompressor==0.15.0) (13.5.0)
+Requirement already satisfied: nvidia-cudnn-cu13==9.24.0.43 in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from torch<=2.14.1,>=2.10.0->llmcompressor==0.15.0) (9.24.0.43)
+Requirement already satisfied: nvidia-cusparselt-cu13==0.8.1 in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from torch<=2.14.1,>=2.10.0->llmcompressor==0.15.0) (0.8.1)
+Requirement already satisfied: nvidia-nccl-cu13==2.30.7 in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from torch<=2.14.1,>=2.10.0->llmcompressor==0.15.0) (2.30.7)
+Requirement already satisfied: nvidia-nvshmem-cu13==3.4.5 in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from torch<=2.14.1,>=2.10.0->llmcompressor==0.15.0) (3.4.5)
+Requirement already satisfied: triton~=3.8.0 in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from torch<=2.14.1,>=2.10.0->llmcompressor==0.15.0) (3.8.0)
+Requirement already satisfied: nvidia-cublas==13.1.1.3.* in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.3->torch<=2.14.1,>=2.10.0->llmcompressor==0.15.0) (13.1.1.3)
+Requirement already satisfied: nvidia-cuda-nvrtc==13.0.88.* in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.3->torch<=2.14.1,>=2.10.0->llmcompressor==0.15.0) (13.0.88)
+Requirement already satisfied: nvidia-cuda-runtime==13.0.96.* in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.3->torch<=2.14.1,>=2.10.0->llmcompressor==0.15.0) (13.0.96)
+Requirement already satisfied: nvidia-cufft==12.0.0.61.* in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.3->torch<=2.14.1,>=2.10.0->llmcompressor==0.15.0) (12.0.0.61)
+Requirement already satisfied: nvidia-nvjitlink<14,>=13.0.88 in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.3->torch<=2.14.1,>=2.10.0->llmcompressor==0.15.0) (13.5.37)
+Requirement already satisfied: nvidia-cufile==1.15.1.6.* in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.3->torch<=2.14.1,>=2.10.0->llmcompressor==0.15.0) (1.15.1.6)
+Requirement already satisfied: nvidia-cuda-cupti==13.0.85.* in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.3->torch<=2.14.1,>=2.10.0->llmcompressor==0.15.0) (13.0.85)
+Requirement already satisfied: nvidia-curand==10.4.0.35.* in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.3->torch<=2.14.1,>=2.10.0->llmcompressor==0.15.0) (10.4.0.35)
+Requirement already satisfied: nvidia-cusolver==12.0.4.66.* in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.3->torch<=2.14.1,>=2.10.0->llmcompressor==0.15.0) (12.0.4.66)
+Requirement already satisfied: nvidia-cusparse==12.6.3.3.* in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.3->torch<=2.14.1,>=2.10.0->llmcompressor==0.15.0) (12.6.3.3)
+Requirement already satisfied: nvidia-nvtx==13.0.85.* in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.3->torch<=2.14.1,>=2.10.0->llmcompressor==0.15.0) (13.0.85)
+Requirement already satisfied: regex>=2025.10.22 in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from transformers<=5.21.0,>=5.15.0->llmcompressor==0.15.0) (2026.11.8)
+Collecting tokenizers<0.24.0,>=0.23.1
+  Downloading tokenizers-0.23.3-cp310-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (3.4 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.4/3.4 MB 40.0 MB/s eta 0:00:00
+Collecting typer
+  Downloading typer-0.29.1-py3-none-any.whl (121 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 121.1/121.1 kB 105.2 MB/s eta 0:00:00
+Collecting safetensors>=0.4.3
+  Downloading safetensors-0.8.0-cp310-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (516 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 516.0/516.0 kB 60.6 MB/s eta 0:00:00
+Requirement already satisfied: cuda-pathfinder>=1.4.2 in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from cuda-bindings<14,>=13.0.3->torch<=2.14.1,>=2.10.0->llmcompressor==0.15.0) (1.8.6)
+Collecting click<9.0.0,>=8.4.2
+  Downloading click-8.5.1-py3-none-any.whl (126 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 126.2/126.2 kB 79.9 MB/s eta 0:00:00
+Requirement already satisfied: hf-xet<2.0.0,>=1.6.0 in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from huggingface_hub>=0.21.0->accelerate>=1.15.0->llmcompressor==0.15.0) (1.8.0)
+Collecting httpx2<3,>=2.0.0
+  Downloading httpx2-2.16.2-py3-none-any.whl (97 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 97.9/97.9 kB 64.3 MB/s eta 0:00:00
+Collecting annotated-types>=0.6.0
+  Using cached annotated_types-0.8.0-py3-none-any.whl (13 kB)
+Collecting pydantic-core==2.50.4
+  Using cached pydantic_core-2.50.4-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (2.3 MB)
+Collecting typing-inspection>=0.4.4
+  Using cached typing_inspection-0.4.5-py3-none-any.whl (14 kB)
+Requirement already satisfied: mpmath<1.4,>=1.1.0 in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from sympy>=1.13.3->torch<=2.14.1,>=2.10.0->llmcompressor==0.15.0) (1.3.0)
+Requirement already satisfied: MarkupSafe>=2.0 in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from jinja2->torch<=2.14.1,>=2.10.0->llmcompressor==0.15.0) (3.0.4)
+Collecting python-dateutil>=2.9.0
+  Using cached python_dateutil-4.0.0-py3-none-any.whl (92 kB)
+Collecting shellingham>=1.3.0
+  Downloading shellingham-1.5.4-py2.py3-none-any.whl (9.8 kB)
+Collecting rich>=13.8.0
+  Downloading rich-15.0.0-py3-none-any.whl (310 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 310.7/310.7 kB 81.4 MB/s eta 0:00:00
+Collecting annotated-doc>=0.0.2
+  Downloading annotated_doc-0.0.6-py3-none-any.whl (5.3 kB)
+Collecting anyio>=4.10
+  Using cached anyio-4.16.0-py3-none-any.whl (134 kB)
+Collecting httpcore2==2.16.2
+  Downloading httpcore2-2.16.2-py3-none-any.whl (85 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 85.6/85.6 kB 66.6 MB/s eta 0:00:00
+Collecting truststore>=0.10
+  Downloading truststore-0.10.5-py3-none-any.whl (19 kB)
+Collecting h11>=0.16
+  Using cached h11-0.16.0-py3-none-any.whl (37 kB)
+Collecting tzdata
+  Using cached tzdata-2026.6-py2.py3-none-any.whl (348 kB)
+Collecting markdown-it-py>=2.2.0
+  Downloading markdown_it_py-4.3.0-py3-none-any.whl (96 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 97.0/97.0 kB 78.7 MB/s eta 0:00:00
+Collecting pygments<3.0.0,>=2.13.0
+  Downloading pygments-2.21.0-py3-none-any.whl (1.3 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.3/1.3 MB 66.3 MB/s eta 0:00:00
+Collecting mdurl~=0.1
+  Downloading mdurl-0.1.2-py3-none-any.whl (10.0 kB)
+Installing collected packages: py-cpuinfo, nvidia-ml-py, xxhash, tzdata, typing-inspection, truststore, shellingham, safetensors, pygments, pydantic-core, pyarrow, psutil, pillow, mdurl, loguru, h11, dill, click, anyio, annotated-types, annotated-doc, python-dateutil, pydantic, multiprocess, markdown-it-py, httpcore2, rich, pandas, httpx2, typer, huggingface_hub, tokenizers, datasets, accelerate, transformers, compressed-tensors, auto-round, llmcompressor
+  Attempting uninstall: safetensors
+    Found existing installation: safetensors 0.6.2
+    Not uninstalling safetensors at /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages, outside environment /tmp/e039-lc-hpuvvad-20261116-r1
+    Can't uninstall 'safetensors'. No files were found to uninstall.
+  Attempting uninstall: huggingface_hub
+    Found existing installation: huggingface-hub 0.36.0
+    Not uninstalling huggingface-hub at /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages, outside environment /tmp/e039-lc-hpuvvad-20261116-r1
+    Can't uninstall 'huggingface-hub'. No files were found to uninstall.
+  Attempting uninstall: tokenizers
+    Found existing installation: tokenizers 0.22.1
+    Not uninstalling tokenizers at /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages, outside environment /tmp/e039-lc-hpuvvad-20261116-r1
+    Can't uninstall 'tokenizers'. No files were found to uninstall.
+  Attempting uninstall: transformers
+    Found existing installation: transformers 4.57.1
+    Not uninstalling transformers at /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages, outside environment /tmp/e039-lc-hpuvvad-20261116-r1
+    Can't uninstall 'transformers'. No files were found to uninstall.
+Successfully installed accelerate-1.16.0 annotated-doc-0.0.6 annotated-types-0.8.0 anyio-4.16.0 auto-round-0.16.1 click-8.5.1 compressed-tensors-0.20.1 datasets-5.2.0 dill-0.4.1 h11-0.16.0 httpcore2-2.16.2 httpx2-2.16.2 huggingface_hub-2.4.0 llmcompressor-0.15.0 loguru-0.8.0 markdown-it-py-4.3.0 mdurl-0.1.2 multiprocess-0.70.19 nvidia-ml-py-13.615.71 pandas-3.1.1 pillow-13.0.0 psutil-7.2.2 py-cpuinfo-9.0.0 pyarrow-26.0.1 pydantic-2.14.3 pydantic-core-2.50.4 pygments-2.21.0 python-dateutil-4.0.0 rich-15.0.0 safetensors-0.8.0 shellingham-1.5.4 tokenizers-0.23.3 transformers-5.21.0 truststore-0.10.5 typer-0.29.1 typing-inspection-0.4.5 tzdata-2026.6 xxhash-4.1.0
+
+[notice] A new release of pip available: 22.3.1 -> 26.3
+[notice] To update, run: /tmp/e039-lc-hpuvvad-20261116-r1/bin/python -m pip install --upgrade pip
