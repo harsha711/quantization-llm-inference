@@ -47,11 +47,12 @@ recipe = [AWQModifier(offload_device=torch.device('cpu')),
            'AWQG': lambda: GPTQModifier(scheme='W4A16', **quant)}[arm]()]
 assert torch.cuda.get_device_capability() == (12, 0)
 tok = AutoTokenizer.from_pretrained(path, local_files_only=True)
-model = AutoModelForCausalLM.from_pretrained(path, local_files_only=True, dtype=torch.float16).eval().to('cuda')
+# amendment 2: FP16 calibration overflowed in AWQ's scale search (attempt 1, layer 2); the FP16 checkpoint is calibrated in FP32
+model = AutoModelForCausalLM.from_pretrained(path, local_files_only=True, dtype=torch.float16).float().eval().to('cuda')
 lins = {n: m for n, m in model.named_modules() if isinstance(m, torch.nn.Linear) and n.startswith('model.layers.')}
 assert len(lins) == 196
 before = {n: p.detach().cpu().clone() for n, p in model.named_parameters()}
-original = {n: tensor_sha(m.weight.detach().cpu().numpy()) for n, m in lins.items()}
+original = {n: tensor_sha(m.weight.detach().half().cpu().numpy()) for n, m in lins.items()}  # FP16->FP32->FP16 is exact
 
 rows, seen = [], 0
 with gzip.open(c4, 'rt') as f:  # E037's calibration windows
@@ -77,14 +78,16 @@ with torch.no_grad():
         args = m.quantization_scheme.weights
         assert args.num_bits == 4 and args.group_size == GROUP and args.strategy == 'group', (n, str(args))
         assert getattr(args, 'actorder', None) in (None, 'static') or str(args.actorder).endswith('STATIC'), (n, str(args.actorder))
-        rec = fake_quantize(w, s, zp if zp is not None else torch.zeros_like(s, dtype=torch.int8), args).half()
+        fq = fake_quantize(w, s, zp if zp is not None else torch.zeros_like(s, dtype=torch.int8), args).float()
         sf = s.float().repeat_interleave(GROUP, 1)
-        c = (rec.float() / sf).round()  # integer offsets q - zp
-        assert torch.equal((c * sf).half(), rec), (n, 'reconstruction is not FP16(c*s) with integer c')
+        c = (fq / sf).round()  # integer offsets q - zp of the tool's own reconstruction
+        assert torch.allclose(c * sf, fq, rtol=1e-6, atol=0), (n, 'tool reconstruction is not c*s with integer c')
+        s16 = s.half().float().repeat_interleave(GROUP, 1)
+        rec = (c * s16).half()  # project-style FP16(c*FP16(s)): same integer codes, scale rounded to FP16
         span = c.view(nn, -1, GROUP)
         assert int((span.amax(2) - span.amin(2)).max()) <= 15, (n, 'more than 16 levels in a group')
         arrays[n + '.weight'] = rec.cpu().numpy()
-        stats[n] = dict(already_fake_quantized=bool(torch.equal(rec, w.half())), zero_points_nonzero=int((zp != 0).sum()) if zp is not None else 0,
+        stats[n] = dict(already_fake_quantized=bool(torch.equal(fq, w.float())), max_abs_rec_minus_tool=float((rec.float() - fq).abs().max()), zero_points_nonzero=int((zp != 0).sum()) if zp is not None else 0,
                         rel_l2_vs_original=float((rec.float() - before[n + '.weight'].cuda().float()).norm() / before[n + '.weight'].float().norm()))
     for n, p in model.named_parameters():
         if n not in before or n.endswith('.weight') and n[:-7] in lins:

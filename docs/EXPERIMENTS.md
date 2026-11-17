@@ -32,6 +32,9 @@ Reported besides: validation, top-1, and which arm is lowest. For the report, th
 
 Process: one cheap prerequisite job (8 calibration windows, 2 scoring windows, all three arms) inspected before the full job, as in E039.
 
+Attempt 1, prerequisite job 342301 on c58, exit 1 (2026-11-16): AWQs stopped in AWQ's scale search at layer index 2 with "No finite loss was found in best scales grid search … NaN values are appearing in the forward pass". The tool also skipped 28 mappings for incompatible shapes, as expected: with grouped-query attention, v_proj (256 outputs) cannot be balanced against o_proj (1536 inputs). AWQa, AWQG and the scorer did not run. Interpretation, not tested separately: FP16 overflow. E037 recorded activations about 1000× the rest from the second block on, and the model was loaded in FP16, while the tool's examples use BF16. Retrieved to `results/e040_20261116/prereq-342301/`.
+Amendment 2, before any further job: awq.py loads the FP16 checkpoint and calibrates in FP32. Export keeps the tool's integer codes (c = q − zero point, from its own `fake_quantize` and asserted integer) and writes FP16(c·FP16(s)), i.e. the same codes with the scale rounded to FP16, the format of E039's arms. Changed norm weights and biases are cast to FP16. The largest per-layer difference from the tool's FP32 reconstruction is recorded. The scorer is unchanged.
+
 Limits fixed now: one model, one metric, one corpus, one run, one recipe per arm with defaults; validation and test are both WikiText-2; AWQa is not in the runtime format; nothing is timed or gated; llm-compressor ran in its own overlay (transformers 5.21.0) and scoring in the frozen environment. AWQ, GPTQ and llm-compressor are upstream; ours is the comparison and the measurement.
 
 ## E039 — Is the remaining block cost our quantizer, or the model? (16-level grid and upstream llm-compressor)
