@@ -1,0 +1,38 @@
+/mnt/beegfs/hpuvvad/csc548-w4a16-e024-20261110/runtime.tar: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e039-20261116/prereq-c58-342182/diagnose.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e039-20261116/prereq-c58-342182/grid.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e039-20261116/prereq-c58-342182/lc.py: OK
+wikitext2-test.txt: OK
+wikitext2-valid.txt: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e037-20261111/c4-train.00000-of-01024.json.gz: OK
+model /home/hpuvvad/csc548-w4a16-e014-c4-20261108/cache/huggingface/hub/models--Qwen--Qwen2.5-1.5B/snapshots/8faed761d45a263340a0528343f099c05c9a4323
+/tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "/tmp/e039-lc-hpuvvad-20261116/lib64/python3.11/site-packages/llmcompressor/__init__.py", line 28, in <module>
+    from llmcompressor.entrypoints import Oneshot, oneshot, train
+  File "/tmp/e039-lc-hpuvvad-20261116/lib64/python3.11/site-packages/llmcompressor/entrypoints/__init__.py", line 2, in <module>
+    from .oneshot import Oneshot, oneshot
+  File "/tmp/e039-lc-hpuvvad-20261116/lib64/python3.11/site-packages/llmcompressor/entrypoints/oneshot.py", line 9, in <module>
+    from llmcompressor.args import parse_args
+  File "/tmp/e039-lc-hpuvvad-20261116/lib64/python3.11/site-packages/llmcompressor/args/__init__.py", line 7, in <module>
+    from .utils import parse_args
+  File "/tmp/e039-lc-hpuvvad-20261116/lib64/python3.11/site-packages/llmcompressor/args/utils.py", line 12, in <module>
+    from llmcompressor.transformers.utils.helpers import resolve_processor_from_model_args
+  File "/tmp/e039-lc-hpuvvad-20261116/lib64/python3.11/site-packages/llmcompressor/transformers/__init__.py", line 14, in <module>
+    from .finetune import *
+  File "/tmp/e039-lc-hpuvvad-20261116/lib64/python3.11/site-packages/llmcompressor/transformers/finetune/__init__.py", line 3, in <module>
+    from .data import TextGenerationDataset
+  File "/tmp/e039-lc-hpuvvad-20261116/lib64/python3.11/site-packages/llmcompressor/transformers/finetune/data/__init__.py", line 3, in <module>
+    from .base import TextGenerationDataset
+  File "/tmp/e039-lc-hpuvvad-20261116/lib64/python3.11/site-packages/llmcompressor/transformers/finetune/data/base.py", line 7, in <module>
+    from datasets import Dataset, IterableDataset
+  File "/tmp/e039-lc-hpuvvad-20261116/lib64/python3.11/site-packages/datasets/__init__.py", line 17, in <module>
+    from .arrow_dataset import Column, Dataset
+  File "/tmp/e039-lc-hpuvvad-20261116/lib64/python3.11/site-packages/datasets/arrow_dataset.py", line 59, in <module>
+    import pyarrow as pa
+  File "/tmp/e039-lc-hpuvvad-20261116/lib64/python3.11/site-packages/pyarrow/__init__.py", line 59, in <module>
+    from pyarrow.lib import (BuildInfo, CppBuildInfo, RuntimeInfo, set_timezone_db_path,
+  File "pyarrow/lib.pyx", line 42, in init pyarrow.lib
+ImportError: pyarrow requires NumPy 2.0 or newer, found 1.26.4

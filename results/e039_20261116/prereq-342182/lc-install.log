@@ -1,0 +1,275 @@
+Collecting llmcompressor
+  Downloading llmcompressor-0.15.0-py3-none-any.whl (433 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 433.0/433.0 kB 1.5 MB/s eta 0:00:00
+Collecting loguru>=0.7.2
+  Downloading loguru-0.8.0-py3-none-any.whl (69 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 69.4/69.4 kB 15.5 MB/s eta 0:00:00
+Requirement already satisfied: pyyaml>=6.0.1 in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from llmcompressor) (6.0.3)
+Requirement already satisfied: numpy>=2.0.0 in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from llmcompressor) (2.4.6)
+Requirement already satisfied: requests>=2.32.2 in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from llmcompressor) (2.34.2)
+Requirement already satisfied: tqdm>=4.66.3 in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from llmcompressor) (4.70.1)
+Requirement already satisfied: torch<=2.14.1,>=2.10.0 in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from llmcompressor) (2.14.0)
+Collecting llmcompressor
+  Downloading llmcompressor-0.14.0.1-py3-none-any.whl (394 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 394.9/394.9 kB 12.3 MB/s eta 0:00:00
+  Downloading llmcompressor-0.14.0-py3-none-any.whl (394 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 394.9/394.9 kB 21.0 MB/s eta 0:00:00
+Collecting loguru<=0.7.3,>=0.7.2
+  Downloading loguru-0.7.3-py3-none-any.whl (61 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 61.6/61.6 kB 24.2 MB/s eta 0:00:00
+Collecting llmcompressor
+  Downloading llmcompressor-0.13.0-py3-none-any.whl (323 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 323.7/323.7 kB 19.9 MB/s eta 0:00:00
+Collecting tqdm<=4.70.0,>=4.66.3
+  Downloading tqdm-4.70.0-py3-none-any.whl (80 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 80.2/80.2 kB 26.0 MB/s eta 0:00:00
+Collecting llmcompressor
+  Downloading llmcompressor-0.12.0.3-py3-none-any.whl (298 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 298.2/298.2 kB 21.2 MB/s eta 0:00:00
+  Downloading llmcompressor-0.12.0.2-py3-none-any.whl (298 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 298.2/298.2 kB 22.3 MB/s eta 0:00:00
+Collecting tqdm<=4.68.2,>=4.66.3
+  Downloading tqdm-4.68.2-py3-none-any.whl (78 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 78.6/78.6 kB 27.3 MB/s eta 0:00:00
+Collecting llmcompressor
+  Downloading llmcompressor-0.12.0.1-py3-none-any.whl (298 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 298.2/298.2 kB 21.1 MB/s eta 0:00:00
+  Downloading llmcompressor-0.12.0-py3-none-any.whl (298 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 298.2/298.2 kB 20.9 MB/s eta 0:00:00
+  Downloading llmcompressor-0.11.0-py3-none-any.whl (311 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 311.4/311.4 kB 21.3 MB/s eta 0:00:00
+Collecting tqdm<=4.67.3,>=4.66.3
+  Downloading tqdm-4.67.3-py3-none-any.whl (78 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 78.4/78.4 kB 22.7 MB/s eta 0:00:00
+Collecting llmcompressor
+  Downloading llmcompressor-0.10.0.5-py3-none-any.whl (295 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 295.5/295.5 kB 22.0 MB/s eta 0:00:00
+  Downloading llmcompressor-0.10.0.4-py3-none-any.whl (295 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 295.5/295.5 kB 21.6 MB/s eta 0:00:00
+Collecting numpy<=2.4.2,>=2.0.0
+  Downloading numpy-2.4.2-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (16.9 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 16.9/16.9 MB 23.3 MB/s eta 0:00:00
+Collecting llmcompressor
+  Downloading llmcompressor-0.10.0.3-py3-none-any.whl (295 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 295.5/295.5 kB 80.0 MB/s eta 0:00:00
+  Downloading llmcompressor-0.10.0.2-py3-none-any.whl (295 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 295.5/295.5 kB 87.2 MB/s eta 0:00:00
+Collecting requests<=2.32.5,>=2.32.2
+  Downloading requests-2.32.5-py3-none-any.whl (64 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 64.7/64.7 kB 75.2 MB/s eta 0:00:00
+Collecting llmcompressor
+  Downloading llmcompressor-0.10.0.1-py3-none-any.whl (295 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 295.5/295.5 kB 66.5 MB/s eta 0:00:00
+  Downloading llmcompressor-0.10.0-py3-none-any.whl (295 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 295.5/295.5 kB 84.0 MB/s eta 0:00:00
+  Downloading llmcompressor-0.9.0.6-py3-none-any.whl (282 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 282.1/282.1 kB 87.2 MB/s eta 0:00:00
+  Downloading llmcompressor-0.9.0.5-py3-none-any.whl (282 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 282.1/282.1 kB 66.5 MB/s eta 0:00:00
+Collecting numpy<=2.3.5,>=2.0.0
+  Downloading numpy-2.3.5-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (16.9 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 16.9/16.9 MB 38.2 MB/s eta 0:00:00
+Collecting tqdm<=4.67.1,>=4.66.3
+  Downloading tqdm-4.67.1-py3-none-any.whl (78 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 78.5/78.5 kB 87.3 MB/s eta 0:00:00
+Collecting llmcompressor
+  Downloading llmcompressor-0.9.0.4-py3-none-any.whl (282 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 282.1/282.1 kB 78.8 MB/s eta 0:00:00
+  Downloading llmcompressor-0.9.0.3-py3-none-any.whl (282 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 282.1/282.1 kB 85.6 MB/s eta 0:00:00
+  Downloading llmcompressor-0.9.0.2-py3-none-any.whl (282 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 282.1/282.1 kB 82.6 MB/s eta 0:00:00
+  Downloading llmcompressor-0.9.0.1-py3-none-any.whl (282 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 282.1/282.1 kB 80.4 MB/s eta 0:00:00
+  Downloading llmcompressor-0.9.0-py3-none-any.whl (282 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 282.0/282.0 kB 88.3 MB/s eta 0:00:00
+  Downloading llmcompressor-0.8.1-py3-none-any.whl (273 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 273.2/273.2 kB 81.4 MB/s eta 0:00:00
+Collecting numpy<=2.3.3,>=2.0.0
+  Downloading numpy-2.3.3-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (16.9 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 16.9/16.9 MB 38.1 MB/s eta 0:00:00
+Collecting llmcompressor
+  Downloading llmcompressor-0.8.0-py3-none-any.whl (273 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 273.2/273.2 kB 81.6 MB/s eta 0:00:00
+  Downloading llmcompressor-0.7.1.5-py3-none-any.whl (263 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 263.8/263.8 kB 91.7 MB/s eta 0:00:00
+  Downloading llmcompressor-0.7.1.4-py3-none-any.whl (263 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 263.8/263.8 kB 81.1 MB/s eta 0:00:00
+Collecting pyyaml<=6.0.2,>=6.0.1
+  Downloading PyYAML-6.0.2-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (762 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 763.0/763.0 kB 71.4 MB/s eta 0:00:00
+Collecting numpy<=2.3.2,>=2.0.0
+  Downloading numpy-2.3.2-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (16.9 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 16.9/16.9 MB 38.2 MB/s eta 0:00:00
+Collecting llmcompressor
+  Downloading llmcompressor-0.7.1.3-py3-none-any.whl (263 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 263.8/263.8 kB 99.3 MB/s eta 0:00:00
+  Downloading llmcompressor-0.7.1.2-py3-none-any.whl (263 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 263.8/263.8 kB 74.6 MB/s eta 0:00:00
+  Downloading llmcompressor-0.7.1.1-py3-none-any.whl (263 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 263.8/263.8 kB 95.4 MB/s eta 0:00:00
+  Downloading llmcompressor-0.7.1-py3-none-any.whl (263 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 263.8/263.8 kB 86.5 MB/s eta 0:00:00
+  Downloading llmcompressor-0.7.0-py3-none-any.whl (263 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 263.7/263.7 kB 94.5 MB/s eta 0:00:00
+  Downloading llmcompressor-0.6.0.1-py3-none-any.whl (253 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 253.4/253.4 kB 89.2 MB/s eta 0:00:00
+Collecting numpy<2.0,>=1.17.0
+  Downloading numpy-1.26.4-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (18.3 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 18.3/18.3 MB 37.9 MB/s eta 0:00:00
+Collecting llmcompressor
+  Downloading llmcompressor-0.6.0-py3-none-any.whl (253 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 253.4/253.4 kB 86.5 MB/s eta 0:00:00
+Requirement already satisfied: transformers<5.0,>4.0 in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from llmcompressor) (4.57.1)
+Collecting datasets
+  Downloading datasets-5.2.0-py3-none-any.whl (608 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 608.3/608.3 kB 68.6 MB/s eta 0:00:00
+Collecting accelerate!=1.1.0,>=0.20.3
+  Downloading accelerate-1.16.0-py3-none-any.whl (389 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 389.4/389.4 kB 72.2 MB/s eta 0:00:00
+Collecting pynvml
+  Downloading pynvml-13.0.1-py3-none-any.whl (28 kB)
+Collecting pillow
+  Downloading pillow-13.0.0-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (7.1 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 7.1/7.1 MB 40.3 MB/s eta 0:00:00
+Collecting compressed-tensors==0.10.2
+  Downloading compressed_tensors-0.10.2-py3-none-any.whl (169 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 169.0/169.0 kB 94.9 MB/s eta 0:00:00
+Collecting pydantic>=2.0
+  Downloading pydantic-2.14.3-py3-none-any.whl (494 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 494.1/494.1 kB 73.0 MB/s eta 0:00:00
+Requirement already satisfied: packaging>=20.0 in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from accelerate!=1.1.0,>=0.20.3->llmcompressor) (26.3)
+Collecting psutil
+  Downloading psutil-7.2.2-cp36-abi3-manylinux2010_x86_64.manylinux_2_12_x86_64.manylinux_2_28_x86_64.whl (155 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 155.6/155.6 kB 112.8 MB/s eta 0:00:00
+Requirement already satisfied: huggingface_hub>=0.21.0 in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from accelerate!=1.1.0,>=0.20.3->llmcompressor) (0.36.0)
+Requirement already satisfied: safetensors>=0.4.3 in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from accelerate!=1.1.0,>=0.20.3->llmcompressor) (0.6.2)
+Requirement already satisfied: charset_normalizer<4,>=2 in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from requests>=2.32.2->llmcompressor) (3.5.2)
+Requirement already satisfied: idna<4,>=2.5 in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from requests>=2.32.2->llmcompressor) (3.20)
+Requirement already satisfied: urllib3<3,>=1.26 in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from requests>=2.32.2->llmcompressor) (2.8.0)
+Requirement already satisfied: certifi>=2023.5.7 in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from requests>=2.32.2->llmcompressor) (2026.10.23)
+Requirement already satisfied: filelock in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from torch<=2.14.1,>=2.10.0->llmcompressor) (4.2.9)
+Requirement already satisfied: typing-extensions>=4.10.0 in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from torch<=2.14.1,>=2.10.0->llmcompressor) (4.16.0)
+Requirement already satisfied: setuptools>=77.0.3 in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from torch<=2.14.1,>=2.10.0->llmcompressor) (84.2.1)
+Requirement already satisfied: sympy>=1.13.3 in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from torch<=2.14.1,>=2.10.0->llmcompressor) (1.14.0)
+Requirement already satisfied: networkx>=2.5.1 in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from torch<=2.14.1,>=2.10.0->llmcompressor) (3.6.1)
+Requirement already satisfied: jinja2 in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from torch<=2.14.1,>=2.10.0->llmcompressor) (3.1.6)
+Requirement already satisfied: fsspec>=0.8.5 in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from torch<=2.14.1,>=2.10.0->llmcompressor) (2026.9.0)
+Requirement already satisfied: cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.3 in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from torch<=2.14.1,>=2.10.0->llmcompressor) (13.0.3.0)
+Requirement already satisfied: cuda-bindings<14,>=13.0.3 in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from torch<=2.14.1,>=2.10.0->llmcompressor) (13.5.0)
+Requirement already satisfied: nvidia-cudnn-cu13==9.24.0.43 in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from torch<=2.14.1,>=2.10.0->llmcompressor) (9.24.0.43)
+Requirement already satisfied: nvidia-cusparselt-cu13==0.8.1 in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from torch<=2.14.1,>=2.10.0->llmcompressor) (0.8.1)
+Requirement already satisfied: nvidia-nccl-cu13==2.30.7 in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from torch<=2.14.1,>=2.10.0->llmcompressor) (2.30.7)
+Requirement already satisfied: nvidia-nvshmem-cu13==3.4.5 in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from torch<=2.14.1,>=2.10.0->llmcompressor) (3.4.5)
+Requirement already satisfied: triton~=3.8.0 in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from torch<=2.14.1,>=2.10.0->llmcompressor) (3.8.0)
+Requirement already satisfied: nvidia-cublas==13.1.1.3.* in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.3->torch<=2.14.1,>=2.10.0->llmcompressor) (13.1.1.3)
+Requirement already satisfied: nvidia-cuda-nvrtc==13.0.88.* in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.3->torch<=2.14.1,>=2.10.0->llmcompressor) (13.0.88)
+Requirement already satisfied: nvidia-cuda-runtime==13.0.96.* in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.3->torch<=2.14.1,>=2.10.0->llmcompressor) (13.0.96)
+Requirement already satisfied: nvidia-cufft==12.0.0.61.* in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.3->torch<=2.14.1,>=2.10.0->llmcompressor) (12.0.0.61)
+Requirement already satisfied: nvidia-nvjitlink<14,>=13.0.88 in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.3->torch<=2.14.1,>=2.10.0->llmcompressor) (13.5.37)
+Requirement already satisfied: nvidia-cufile==1.15.1.6.* in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.3->torch<=2.14.1,>=2.10.0->llmcompressor) (1.15.1.6)
+Requirement already satisfied: nvidia-cuda-cupti==13.0.85.* in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.3->torch<=2.14.1,>=2.10.0->llmcompressor) (13.0.85)
+Requirement already satisfied: nvidia-curand==10.4.0.35.* in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.3->torch<=2.14.1,>=2.10.0->llmcompressor) (10.4.0.35)
+Requirement already satisfied: nvidia-cusolver==12.0.4.66.* in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.3->torch<=2.14.1,>=2.10.0->llmcompressor) (12.0.4.66)
+Requirement already satisfied: nvidia-cusparse==12.6.3.3.* in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.3->torch<=2.14.1,>=2.10.0->llmcompressor) (12.6.3.3)
+Requirement already satisfied: nvidia-nvtx==13.0.85.* in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.3->torch<=2.14.1,>=2.10.0->llmcompressor) (13.0.85)
+Requirement already satisfied: regex!=2019.12.17 in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from transformers<5.0,>4.0->llmcompressor) (2026.11.8)
+Requirement already satisfied: tokenizers<=0.23.0,>=0.22.0 in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from transformers<5.0,>4.0->llmcompressor) (0.22.1)
+Collecting pyarrow>=24.0.0
+  Downloading pyarrow-26.0.1-cp311-cp311-manylinux_2_28_x86_64.whl (55.0 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 55.0/55.0 MB 31.6 MB/s eta 0:00:00
+Collecting dill<0.4.2,>=0.3.0
+  Downloading dill-0.4.1-py3-none-any.whl (120 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 120.0/120.0 kB 136.4 MB/s eta 0:00:00
+Collecting pandas
+  Downloading pandas-3.1.1-cp311-cp311-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl (12.4 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 12.4/12.4 MB 38.9 MB/s eta 0:00:00
+Collecting xxhash
+  Downloading xxhash-4.1.0-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (471 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 471.4/471.4 kB 72.8 MB/s eta 0:00:00
+Collecting multiprocess<0.70.20
+  Downloading multiprocess-0.70.19-py311-none-any.whl (144 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 144.5/144.5 kB 105.9 MB/s eta 0:00:00
+Collecting datasets
+  Downloading datasets-5.1.0-py3-none-any.whl (604 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 604.4/604.4 kB 68.6 MB/s eta 0:00:00
+Collecting fsspec[http]<=2026.7.0,>=2023.1.0
+  Downloading fsspec-2026.7.0-py3-none-any.whl (206 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 206.6/206.6 kB 85.1 MB/s eta 0:00:00
+Collecting datasets
+  Downloading datasets-5.0.1-py3-none-any.whl (559 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 559.1/559.1 kB 72.7 MB/s eta 0:00:00
+Collecting httpx<1.0.0
+  Downloading httpx-0.28.1-py3-none-any.whl (73 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 73.5/73.5 kB 84.2 MB/s eta 0:00:00
+Collecting fsspec[http]<=2026.6.0,>=2023.1.0
+  Downloading fsspec-2026.6.0-py3-none-any.whl (203 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 203.9/203.9 kB 81.1 MB/s eta 0:00:00
+Collecting nvidia-ml-py>=12.0.0
+  Downloading nvidia_ml_py-13.615.71-py3-none-any.whl (58 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 58.1/58.1 kB 79.2 MB/s eta 0:00:00
+Requirement already satisfied: cuda-pathfinder>=1.4.2 in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from cuda-bindings<14,>=13.0.3->torch<=2.14.1,>=2.10.0->llmcompressor) (1.8.6)
+Collecting aiohttp!=4.0.0a0,!=4.0.0a1
+  Downloading aiohttp-3.14.5-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (1.9 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.9/1.9 MB 67.0 MB/s eta 0:00:00
+Collecting anyio
+  Downloading anyio-4.16.0-py3-none-any.whl (134 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 134.5/134.5 kB 140.3 MB/s eta 0:00:00
+Collecting httpcore==1.*
+  Downloading httpcore-1.0.9-py3-none-any.whl (78 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 78.8/78.8 kB 85.8 MB/s eta 0:00:00
+Collecting h11>=0.16
+  Downloading h11-0.16.0-py3-none-any.whl (37 kB)
+Requirement already satisfied: hf-xet<2.0.0,>=1.1.3 in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from huggingface_hub>=0.21.0->accelerate!=1.1.0,>=0.20.3->llmcompressor) (1.8.0)
+Collecting annotated-types>=0.6.0
+  Downloading annotated_types-0.8.0-py3-none-any.whl (13 kB)
+Collecting pydantic-core==2.50.4
+  Downloading pydantic_core-2.50.4-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (2.3 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.3/2.3 MB 65.6 MB/s eta 0:00:00
+Collecting typing-inspection>=0.4.4
+  Downloading typing_inspection-0.4.5-py3-none-any.whl (14 kB)
+Requirement already satisfied: mpmath<1.4,>=1.1.0 in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from sympy>=1.13.3->torch<=2.14.1,>=2.10.0->llmcompressor) (1.3.0)
+Requirement already satisfied: MarkupSafe>=2.0 in /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages (from jinja2->torch<=2.14.1,>=2.10.0->llmcompressor) (3.0.4)
+Collecting pandas
+  Downloading pandas-3.1.0-cp311-cp311-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl (12.3 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 12.3/12.3 MB 37.6 MB/s eta 0:00:00
+  Downloading pandas-3.0.6-cp311-cp311-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl (11.1 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 11.1/11.1 MB 18.4 MB/s eta 0:00:00
+Collecting python-dateutil>=2.8.2
+  Downloading python_dateutil-4.0.0-py3-none-any.whl (92 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 92.9/92.9 kB 256.2 kB/s eta 0:00:00
+Collecting aiohappyeyeballs>=2.5.0
+  Downloading aiohappyeyeballs-2.7.1-py3-none-any.whl (15 kB)
+Collecting aiosignal>=1.4.0
+  Downloading aiosignal-1.4.0-py3-none-any.whl (7.5 kB)
+Collecting attrs>=17.3.0
+  Downloading attrs-26.1.0-py3-none-any.whl (67 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 67.5/67.5 kB 86.1 MB/s eta 0:00:00
+Collecting frozenlist>=1.1.1
+  Downloading frozenlist-1.8.0-cp311-cp311-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl (231 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 231.1/231.1 kB 92.0 MB/s eta 0:00:00
+Collecting multidict<8.0,>=4.5
+  Downloading multidict-7.2.1-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (510 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 510.1/510.1 kB 76.9 MB/s eta 0:00:00
+Collecting propcache>=0.2.0
+  Downloading propcache-0.5.4-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (235 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 235.4/235.4 kB 90.5 MB/s eta 0:00:00
+Collecting yarl<2.0,>=1.25.1
+  Downloading yarl-1.25.1-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (117 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 117.7/117.7 kB 129.0 MB/s eta 0:00:00
+Collecting tzdata
+  Downloading tzdata-2026.6-py2.py3-none-any.whl (348 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 348.2/348.2 kB 75.2 MB/s eta 0:00:00
+Installing collected packages: nvidia-ml-py, xxhash, tzdata, typing-inspection, pynvml, pydantic-core, pyarrow, psutil, propcache, pillow, numpy, multidict, loguru, h11, fsspec, frozenlist, dill, attrs, anyio, annotated-types, aiohappyeyeballs, yarl, python-dateutil, pydantic, multiprocess, httpcore, aiosignal, pandas, httpx, aiohttp, datasets, compressed-tensors, accelerate, llmcompressor
+  Attempting uninstall: numpy
+    Found existing installation: numpy 2.4.6
+    Not uninstalling numpy at /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages, outside environment /tmp/e039-lc-hpuvvad-20261116
+    Can't uninstall 'numpy'. No files were found to uninstall.
+  Attempting uninstall: fsspec
+    Found existing installation: fsspec 2026.9.0
+    Not uninstalling fsspec at /tmp/e017-hpuvvad-20261109/lib/python3.11/site-packages, outside environment /tmp/e039-lc-hpuvvad-20261116
+    Can't uninstall 'fsspec'. No files were found to uninstall.
+Successfully installed accelerate-1.16.0 aiohappyeyeballs-2.7.1 aiohttp-3.14.5 aiosignal-1.4.0 annotated-types-0.8.0 anyio-4.16.0 attrs-26.1.0 compressed-tensors-0.10.2 datasets-5.0.1 dill-0.4.1 frozenlist-1.8.0 fsspec-2026.6.0 h11-0.16.0 httpcore-1.0.9 httpx-0.28.1 llmcompressor-0.6.0 loguru-0.8.0 multidict-7.2.1 multiprocess-0.70.19 numpy-1.26.4 nvidia-ml-py-13.615.71 pandas-3.0.6 pillow-13.0.0 propcache-0.5.4 psutil-7.2.2 pyarrow-26.0.1 pydantic-2.14.3 pydantic-core-2.50.4 pynvml-13.0.1 python-dateutil-4.0.0 typing-inspection-0.4.5 tzdata-2026.6 xxhash-4.1.0 yarl-1.25.1
+
+[notice] A new release of pip available: 22.3.1 -> 26.3
+[notice] To update, run: /tmp/e039-lc-hpuvvad-20261116/bin/python -m pip install --upgrade pip

@@ -21,7 +21,7 @@ export E017_ROOT=/mnt/beegfs/hpuvvad/csc548-w4a16-e017-r2-20261109
 OUT=/mnt/beegfs/hpuvvad/csc548-w4a16-e039-20261116
 E037=/mnt/beegfs/hpuvvad/csc548-w4a16-e037-20261111
 VENV=/tmp/e017-hpuvvad-20261109
-LCV=/tmp/e039-lc-hpuvvad-20261116
+LCV=/tmp/e039-lc-hpuvvad-20261116-r1  # attempt 1's overlay (llmcompressor 0.6.0, numpy 1.26.4) is never reused
 mkdir -p "$OUT"; S="$OUT/$MODE-$(hostname)-$SLURM_JOB_ID"; mkdir "$S"
 exec > "$S/driver.log" 2>&1
 trap 'rc=$?;echo "$rc" > "$S/driver.exit";touch "$S/FINISHED";for ((i=0;i<450;i++));do [[ -e "$S/RETRIEVED" ]] && break;sleep 2;done;exit "$rc"' EXIT
@@ -46,18 +46,18 @@ grep -q d790b833ef8cf03a90db7bf1271b7520b83c45ce07ba3c1a9699df81e239eca0 "$E037/
 C4=$E037/c4-train.00000-of-01024.json.gz
 echo "8ef8d75b0e045dec4aa5123a671b4564466b0707086a7ed1ba8721626dfffbc9  $C4" | sha256sum -c
 MODEL=$("$E017_PYTHON" -c "import json;print(json.load(open('$R/model.json'))['path'])"); echo "model $MODEL"
-# llm-compressor overlay: a fresh venv that sees the frozen E017 packages through a .pth; torch/transformers pinned as constraints
+# llm-compressor overlay: a fresh venv that sees the frozen E017 packages through a .pth; torch and numpy pinned, its own transformers 5.x (amendment 1)
 if [[ ! -e "$LCV/OK" ]]; then
  rm -rf "$LCV"; "$E017_PYTHON" -m venv --without-pip "$LCV"
  SP=$("$E017_PYTHON" -c 'import sysconfig;print(sysconfig.get_paths()["purelib"])'); LSP=$("$LCV/bin/python" -c 'import sysconfig;print(sysconfig.get_paths()["purelib"])')
  echo "$SP" > "$LSP/e017-frozen.pth"
- printf 'torch==2.14.0\ntransformers==4.57.1\n' > "$S/constraints.txt"
- PIP_CACHE_DIR=/tmp/e039-pip-cache "$LCV/bin/python" -m pip install -c "$S/constraints.txt" llmcompressor > "$S/lc-install.log" 2>&1 || { echo INSTALL-FAILED; exit 3; }
+ printf 'torch==2.14.0\nnumpy==2.4.6\n' > "$S/constraints.txt"
+ PIP_CACHE_DIR=/tmp/e039-pip-cache "$LCV/bin/python" -m pip install -c "$S/constraints.txt" llmcompressor==0.15.0 > "$S/lc-install.log" 2>&1 || { echo INSTALL-FAILED; exit 3; }
  touch "$LCV/OK"
 fi
 "$LCV/bin/python" -m pip freeze --path "$("$LCV/bin/python" -c 'import sysconfig;print(sysconfig.get_paths()["purelib"])')" > "$S/lc-overlay-freeze.txt" 2>&1 || true
 "$LCV/bin/python" -c 'import torch,transformers,llmcompressor,compressed_tensors as c;print(torch.__version__,torch.__file__,transformers.__version__,llmcompressor.__version__,c.__version__)' > "$S/lc-versions.txt"
-grep -q '^2.14.0' "$S/lc-versions.txt"; grep -q ' 4.57.1 ' "$S/lc-versions.txt"
+grep -q '^2.14.0 ' "$S/lc-versions.txt"; grep -q ' 0.15.0 ' "$S/lc-versions.txt"
 "$E017_PYTHON" -m pip freeze | diff -u "$R/pip-freeze.txt" -  # frozen environment untouched by the overlay
 H=b3481cea6dd697b8b741ec35d375975d4c48c85d456c884fd314fe6860a7128d
 if [[ $MODE == prereq ]]; then NCAL=8; WIN=2; else NCAL=128; WIN=; fi
