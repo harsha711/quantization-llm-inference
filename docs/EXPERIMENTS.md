@@ -31,6 +31,25 @@ Attempt 1, prerequisite job 342499 on c58 (AMD EPYC 9115 16-core, 1 NUMA node), 
 
 Limits fixed now: one node type, one CPU kernel design (not a tuned BLAS), a CPU baseline the GPU kernels were not designed against, wall-clock CPU time versus CUDA-event GPU time (both exclude setup and transfers).
 
+Prerequisite 342500 on c58 passed after amendment 1: affinity 0–15, CTest 2/2, FP64 and equal hashes at p = 1 and 16 (M4), all eight GPU rows pass.
+
+### Result (full job 342501, c58, AMD EPYC 9115 16-core, 32 MiB L3, RTX 5060 Ti, driver/runtime 13.0.40, 2026-11-17)
+
+All 18 strong-scaling and 6 weak-scaling points pass the FP64 check (rel. L2 2.0–2.1e−4), each shape's output hash is identical for p = 1…16, and all 24 GPU rows pass. Both criteria met. Medians of 10 repetitions (CPU, ms) and Sp = T1/Tp:
+
+| M | T1 (ms) | p=2 | p=4 | p=8 | p=12 | p=16 | E16 |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| 1 | 26.57 | 2.00 | 3.91 | 7.79 | 9.79 | 13.12 | 0.82 |
+| 4 | 31.29 | 1.97 | 3.73 | 7.30 | 9.58 | 12.34 | 0.77 |
+| 128 | 241.24 | 1.99 | 3.74 | 6.58 | 9.33 | 12.27 | 0.77 |
+
+Weak scaling (M4, N = 512p): efficiency T(1)/T(p) = 1.00, 0.97, 0.96, 0.91, 0.86, 0.79 at p = 1, 2, 4, 8, 12, 16.
+GPU, same node and job, no-flush median µs (store-flush in `gpu.csv`): M1 naive 110.2, inblock 38.4, inblock_m4 58.9, cuBLAS 83.5; M4 114.2, 120.1, 58.6, 52.8; M128 2578.6, 3445.3, 1499.7, 108.1. Best of our kernels over the serial CPU T1: 691× (M1 inblock), 534× (M4 inblock_m4), 161× (M128 inblock_m4); over the 16-thread CPU: 52.7×, 43.3×, 13.1×. cuBLAS on W_hat at M128: 2232× over T1.
+
+Decision: the descriptive study is complete; the hypothesis is NOT confirmed. Scaling is near-linear to p = 8 for M1 and M4 and 82%/77%/77% efficient at p = 16, but M1, not M128, scales best, and the CPU kernel is not memory-bandwidth bound: at p = 16, M1 moves 8.65 MB of modelled weight bytes in 2.02 ms, about 4.3 GB/s, and the 8.65 MB fits in the 32 MiB L3. Calculation, not measured: 64 column blocks over 12 threads give at most 6 blocks per thread, which caps p = 12 at 10.7×, matching the dip at p = 12. The remaining loss at p = 16 and the weak-scaling decline are unattributed (shared L3, all-core clock or memory are hypotheses; no CPU profile was run).
+
+Limits: one node, one untuned CPU kernel (no SIMD intrinsics; FP16 conversion in software), CPU wall clock against GPU CUDA events. The GPU-over-CPU ratios compare different processors and are not parallel speedups of one program; Marlin is not in this job.
+
 ## E040 — Does AWQ beat GPTQ on this model? (llm-compressor AWQ, three arms)
 
 Predeclared 2026-11-16 at the user's request ("option 2 for the report", after I offered AWQ as the one untested method designed for activation outliers, which E037 observed in this model family). Quality only: no runtime, kernel, gate or timing. Nothing changes the runtime contract or any default.
