@@ -1,0 +1,70 @@
++ E039_VARIANTS='AT15 AT16'
++ E039_LC=/mnt/beegfs/hpuvvad/csc548-w4a16-e039-20261116/full-c58-342265/lc.npz
++ prun timeout 18000 /tmp/e017-hpuvvad-20261109/bin/python /mnt/beegfs/hpuvvad/csc548-w4a16-e039-20261116/full-c58-342265/grid.py /mnt/beegfs/hpuvvad/csc548-w4a16-e039-20261116/full-c58-342265 /mnt/beegfs/hpuvvad/csc548-w4a16-e037-20261111/wikitext2-test.txt /mnt/beegfs/hpuvvad/csc548-w4a16-e037-20261111/wikitext2-valid.txt /mnt/beegfs/hpuvvad/csc548-w4a16-e037-20261111/c4-train.00000-of-01024.json.gz b3481cea6dd697b8b741ec35d375975d4c48c85d456c884fd314fe6860a7128d 128
+[prun] Master compute host = c58
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun timeout 18000 /tmp/e017-hpuvvad-20261109/bin/python /mnt/beegfs/hpuvvad/csc548-w4a16-e039-20261116/full-c58-342265/grid.py /mnt/beegfs/hpuvvad/csc548-w4a16-e039-20261116/full-c58-342265 /mnt/beegfs/hpuvvad/csc548-w4a16-e037-20261111/wikitext2-test.txt /mnt/beegfs/hpuvvad/csc548-w4a16-e037-20261111/wikitext2-valid.txt /mnt/beegfs/hpuvvad/csc548-w4a16-e037-20261111/c4-train.00000-of-01024.json.gz b3481cea6dd697b8b741ec35d375975d4c48c85d456c884fd314fe6860a7128d 128 (family=openmpi4)
+Token indices sequence length is longer than the specified maximum sequence length for this model (270674 > 131072). Running this sequence through the model will result in indexing errors
+ARM O {'valid': 8.9684, 'test': 8.6058}
+ARM RTN {'valid': 10.2168, 'test': 9.735}
+ARM RTN16 {'valid': 10.1873, 'test': 9.7109}
+ARM L {'valid': 9.4509, 'test': 9.0491}
+BLOCK AT15 0 {'self_attn.q_proj': 0.2456, 'self_attn.k_proj': 0.2454, 'self_attn.v_proj': 0.292, 'self_attn.o_proj': 0.1862, 'mlp.gate_proj': 0.1894, 'mlp.up_proj': 0.1896, 'mlp.down_proj': 0.3731}
+BLOCK AT15 1 {'self_attn.q_proj': 0.302, 'self_attn.k_proj': 0.2902, 'self_attn.v_proj': 0.3034, 'self_attn.o_proj': 0.0808, 'mlp.gate_proj': 0.1281, 'mlp.up_proj': 0.1429, 'mlp.down_proj': 0.0066}
+BLOCK AT15 2 {'self_attn.q_proj': 0.3547, 'self_attn.k_proj': 0.3633, 'self_attn.v_proj': 0.3413, 'self_attn.o_proj': 0.3786, 'mlp.gate_proj': 0.1859, 'mlp.up_proj': 0.1964, 'mlp.down_proj': 0.0511}
+BLOCK AT15 3 {'self_attn.q_proj': 0.3042, 'self_attn.k_proj': 0.2889, 'self_attn.v_proj': 0.316, 'self_attn.o_proj': 0.3681, 'mlp.gate_proj': 0.2478, 'mlp.up_proj': 0.2523, 'mlp.down_proj': 0.5432}
+BLOCK AT15 4 {'self_attn.q_proj': 0.3437, 'self_attn.k_proj': 0.3459, 'self_attn.v_proj': 0.3849, 'self_attn.o_proj': 0.4664, 'mlp.gate_proj': 0.3577, 'mlp.up_proj': 0.3533, 'mlp.down_proj': 0.6113}
+BLOCK AT15 5 {'self_attn.q_proj': 0.3107, 'self_attn.k_proj': 0.3262, 'self_attn.v_proj': 0.3646, 'self_attn.o_proj': 0.334, 'mlp.gate_proj': 0.3126, 'mlp.up_proj': 0.3132, 'mlp.down_proj': 0.5536}
+BLOCK AT15 6 {'self_attn.q_proj': 0.3148, 'self_attn.k_proj': 0.3078, 'self_attn.v_proj': 0.3299, 'self_attn.o_proj': 0.2802, 'mlp.gate_proj': 0.5145, 'mlp.up_proj': 0.5158, 'mlp.down_proj': 0.6021}
+BLOCK AT15 7 {'self_attn.q_proj': 0.2857, 'self_attn.k_proj': 0.2902, 'self_attn.v_proj': 0.2743, 'self_attn.o_proj': 0.2467, 'mlp.gate_proj': 0.5219, 'mlp.up_proj': 0.5222, 'mlp.down_proj': 0.5982}
+BLOCK AT15 8 {'self_attn.q_proj': 0.3322, 'self_attn.k_proj': 0.3295, 'self_attn.v_proj': 0.3563, 'self_attn.o_proj': 0.3391, 'mlp.gate_proj': 0.5179, 'mlp.up_proj': 0.5111, 'mlp.down_proj': 0.6075}
+BLOCK AT15 9 {'self_attn.q_proj': 0.3012, 'self_attn.k_proj': 0.3056, 'self_attn.v_proj': 0.3415, 'self_attn.o_proj': 0.3331, 'mlp.gate_proj': 0.5266, 'mlp.up_proj': 0.5233, 'mlp.down_proj': 0.6359}
+BLOCK AT15 10 {'self_attn.q_proj': 0.3577, 'self_attn.k_proj': 0.3602, 'self_attn.v_proj': 0.4049, 'self_attn.o_proj': 0.3307, 'mlp.gate_proj': 0.5062, 'mlp.up_proj': 0.4991, 'mlp.down_proj': 0.6026}
+BLOCK AT15 11 {'self_attn.q_proj': 0.2906, 'self_attn.k_proj': 0.2919, 'self_attn.v_proj': 0.2935, 'self_attn.o_proj': 0.2534, 'mlp.gate_proj': 0.4565, 'mlp.up_proj': 0.4488, 'mlp.down_proj': 0.5423}
+BLOCK AT15 12 {'self_attn.q_proj': 0.3476, 'self_attn.k_proj': 0.3518, 'self_attn.v_proj': 0.3539, 'self_attn.o_proj': 0.2444, 'mlp.gate_proj': 0.4766, 'mlp.up_proj': 0.4756, 'mlp.down_proj': 0.5514}
+BLOCK AT15 13 {'self_attn.q_proj': 0.2951, 'self_attn.k_proj': 0.2944, 'self_attn.v_proj': 0.3031, 'self_attn.o_proj': 0.2548, 'mlp.gate_proj': 0.4939, 'mlp.up_proj': 0.495, 'mlp.down_proj': 0.6173}
+BLOCK AT15 14 {'self_attn.q_proj': 0.3456, 'self_attn.k_proj': 0.3341, 'self_attn.v_proj': 0.3651, 'self_attn.o_proj': 0.2657, 'mlp.gate_proj': 0.5215, 'mlp.up_proj': 0.5193, 'mlp.down_proj': 0.6241}
+BLOCK AT15 15 {'self_attn.q_proj': 0.3817, 'self_attn.k_proj': 0.3411, 'self_attn.v_proj': 0.3874, 'self_attn.o_proj': 0.3114, 'mlp.gate_proj': 0.4562, 'mlp.up_proj': 0.4562, 'mlp.down_proj': 0.5476}
+BLOCK AT15 16 {'self_attn.q_proj': 0.3545, 'self_attn.k_proj': 0.3658, 'self_attn.v_proj': 0.3715, 'self_attn.o_proj': 0.2118, 'mlp.gate_proj': 0.4434, 'mlp.up_proj': 0.4391, 'mlp.down_proj': 0.5659}
+BLOCK AT15 17 {'self_attn.q_proj': 0.3814, 'self_attn.k_proj': 0.3887, 'self_attn.v_proj': 0.3912, 'self_attn.o_proj': 0.2275, 'mlp.gate_proj': 0.3967, 'mlp.up_proj': 0.3999, 'mlp.down_proj': 0.5175}
+BLOCK AT15 18 {'self_attn.q_proj': 0.3161, 'self_attn.k_proj': 0.315, 'self_attn.v_proj': 0.318, 'self_attn.o_proj': 0.2591, 'mlp.gate_proj': 0.3958, 'mlp.up_proj': 0.3951, 'mlp.down_proj': 0.5213}
+BLOCK AT15 19 {'self_attn.q_proj': 0.3373, 'self_attn.k_proj': 0.3445, 'self_attn.v_proj': 0.3641, 'self_attn.o_proj': 0.2785, 'mlp.gate_proj': 0.3937, 'mlp.up_proj': 0.3965, 'mlp.down_proj': 0.4937}
+BLOCK AT15 20 {'self_attn.q_proj': 0.381, 'self_attn.k_proj': 0.387, 'self_attn.v_proj': 0.4085, 'self_attn.o_proj': 0.2883, 'mlp.gate_proj': 0.419, 'mlp.up_proj': 0.4209, 'mlp.down_proj': 0.548}
+BLOCK AT15 21 {'self_attn.q_proj': 0.3713, 'self_attn.k_proj': 0.3685, 'self_attn.v_proj': 0.3807, 'self_attn.o_proj': 0.1711, 'mlp.gate_proj': 0.4139, 'mlp.up_proj': 0.4129, 'mlp.down_proj': 0.5033}
+BLOCK AT15 22 {'self_attn.q_proj': 0.372, 'self_attn.k_proj': 0.3731, 'self_attn.v_proj': 0.3895, 'self_attn.o_proj': 0.3143, 'mlp.gate_proj': 0.3795, 'mlp.up_proj': 0.3819, 'mlp.down_proj': 0.4993}
+BLOCK AT15 23 {'self_attn.q_proj': 0.3397, 'self_attn.k_proj': 0.343, 'self_attn.v_proj': 0.3799, 'self_attn.o_proj': 0.1253, 'mlp.gate_proj': 0.39, 'mlp.up_proj': 0.3892, 'mlp.down_proj': 0.5047}
+BLOCK AT15 24 {'self_attn.q_proj': 0.4173, 'self_attn.k_proj': 0.4218, 'self_attn.v_proj': 0.4659, 'self_attn.o_proj': 0.2322, 'mlp.gate_proj': 0.3993, 'mlp.up_proj': 0.4008, 'mlp.down_proj': 0.4961}
+BLOCK AT15 25 {'self_attn.q_proj': 0.4478, 'self_attn.k_proj': 0.4509, 'self_attn.v_proj': 0.4479, 'self_attn.o_proj': 0.1413, 'mlp.gate_proj': 0.4178, 'mlp.up_proj': 0.4195, 'mlp.down_proj': 0.5193}
+BLOCK AT15 26 {'self_attn.q_proj': 0.4582, 'self_attn.k_proj': 0.4487, 'self_attn.v_proj': 0.4765, 'self_attn.o_proj': 0.0689, 'mlp.gate_proj': 0.4144, 'mlp.up_proj': 0.4149, 'mlp.down_proj': 0.1014}
+BLOCK AT15 27 {'self_attn.q_proj': 0.4726, 'self_attn.k_proj': 0.4851, 'self_attn.v_proj': 0.4735, 'self_attn.o_proj': 0.1358, 'mlp.gate_proj': 0.2727, 'mlp.up_proj': 0.2709, 'mlp.down_proj': 0.1001}
+ARM AT15 {'valid': 9.4933, 'test': 9.0894}
+BLOCK AT16 0 {'self_attn.q_proj': 0.2811, 'self_attn.k_proj': 0.2176, 'self_attn.v_proj': 0.2623, 'self_attn.o_proj': 0.1653, 'mlp.gate_proj': 0.167, 'mlp.up_proj': 0.1672, 'mlp.down_proj': 0.3293}
+BLOCK AT16 1 {'self_attn.q_proj': 0.2662, 'self_attn.k_proj': 0.2555, 'self_attn.v_proj': 0.268, 'self_attn.o_proj': 0.0712, 'mlp.gate_proj': 0.1128, 'mlp.up_proj': 0.1261, 'mlp.down_proj': 0.0356}
+BLOCK AT16 2 {'self_attn.q_proj': 0.3151, 'self_attn.k_proj': 0.3204, 'self_attn.v_proj': 0.3005, 'self_attn.o_proj': 0.3346, 'mlp.gate_proj': 0.163, 'mlp.up_proj': 0.1716, 'mlp.down_proj': 0.1121}
+BLOCK AT16 3 {'self_attn.q_proj': 0.2709, 'self_attn.k_proj': 0.2578, 'self_attn.v_proj': 0.2791, 'self_attn.o_proj': 0.3264, 'mlp.gate_proj': 0.2189, 'mlp.up_proj': 0.2213, 'mlp.down_proj': 0.4858}
+BLOCK AT16 4 {'self_attn.q_proj': 0.3062, 'self_attn.k_proj': 0.309, 'self_attn.v_proj': 0.3403, 'self_attn.o_proj': 0.4053, 'mlp.gate_proj': 0.3168, 'mlp.up_proj': 0.3109, 'mlp.down_proj': 0.5415}
+BLOCK AT16 5 {'self_attn.q_proj': 0.2785, 'self_attn.k_proj': 0.2928, 'self_attn.v_proj': 0.3215, 'self_attn.o_proj': 0.2938, 'mlp.gate_proj': 0.2766, 'mlp.up_proj': 0.2764, 'mlp.down_proj': 0.4896}
+BLOCK AT16 6 {'self_attn.q_proj': 0.2872, 'self_attn.k_proj': 0.2834, 'self_attn.v_proj': 0.2921, 'self_attn.o_proj': 0.2477, 'mlp.gate_proj': 0.4566, 'mlp.up_proj': 0.4573, 'mlp.down_proj': 0.535}
+BLOCK AT16 7 {'self_attn.q_proj': 0.2553, 'self_attn.k_proj': 0.2586, 'self_attn.v_proj': 0.2435, 'self_attn.o_proj': 0.2179, 'mlp.gate_proj': 0.4623, 'mlp.up_proj': 0.4624, 'mlp.down_proj': 0.5311}
+BLOCK AT16 8 {'self_attn.q_proj': 0.3008, 'self_attn.k_proj': 0.2993, 'self_attn.v_proj': 0.3159, 'self_attn.o_proj': 0.2982, 'mlp.gate_proj': 0.4586, 'mlp.up_proj': 0.4526, 'mlp.down_proj': 0.5366}
+BLOCK AT16 9 {'self_attn.q_proj': 0.2677, 'self_attn.k_proj': 0.2704, 'self_attn.v_proj': 0.3022, 'self_attn.o_proj': 0.2945, 'mlp.gate_proj': 0.4662, 'mlp.up_proj': 0.4629, 'mlp.down_proj': 0.561}
+BLOCK AT16 10 {'self_attn.q_proj': 0.3189, 'self_attn.k_proj': 0.32, 'self_attn.v_proj': 0.3569, 'self_attn.o_proj': 0.2877, 'mlp.gate_proj': 0.4472, 'mlp.up_proj': 0.4409, 'mlp.down_proj': 0.5278}
+BLOCK AT16 11 {'self_attn.q_proj': 0.2565, 'self_attn.k_proj': 0.2576, 'self_attn.v_proj': 0.2557, 'self_attn.o_proj': 0.2208, 'mlp.gate_proj': 0.401, 'mlp.up_proj': 0.3934, 'mlp.down_proj': 0.4747}
+BLOCK AT16 12 {'self_attn.q_proj': 0.3057, 'self_attn.k_proj': 0.3085, 'self_attn.v_proj': 0.3088, 'self_attn.o_proj': 0.2139, 'mlp.gate_proj': 0.4175, 'mlp.up_proj': 0.4162, 'mlp.down_proj': 0.4804}
+BLOCK AT16 13 {'self_attn.q_proj': 0.2575, 'self_attn.k_proj': 0.2566, 'self_attn.v_proj': 0.2656, 'self_attn.o_proj': 0.2214, 'mlp.gate_proj': 0.4321, 'mlp.up_proj': 0.4334, 'mlp.down_proj': 0.5424}
+BLOCK AT16 14 {'self_attn.q_proj': 0.3058, 'self_attn.k_proj': 0.2925, 'self_attn.v_proj': 0.3193, 'self_attn.o_proj': 0.2405, 'mlp.gate_proj': 0.4576, 'mlp.up_proj': 0.4558, 'mlp.down_proj': 0.5486}
+BLOCK AT16 15 {'self_attn.q_proj': 0.3754, 'self_attn.k_proj': 0.3011, 'self_attn.v_proj': 0.3418, 'self_attn.o_proj': 0.268, 'mlp.gate_proj': 0.4, 'mlp.up_proj': 0.3997, 'mlp.down_proj': 0.4801}
+BLOCK AT16 16 {'self_attn.q_proj': 0.3102, 'self_attn.k_proj': 0.3231, 'self_attn.v_proj': 0.3258, 'self_attn.o_proj': 0.1844, 'mlp.gate_proj': 0.3895, 'mlp.up_proj': 0.3856, 'mlp.down_proj': 0.4993}
+BLOCK AT16 17 {'self_attn.q_proj': 0.3375, 'self_attn.k_proj': 0.3457, 'self_attn.v_proj': 0.3436, 'self_attn.o_proj': 0.1929, 'mlp.gate_proj': 0.348, 'mlp.up_proj': 0.3505, 'mlp.down_proj': 0.4532}
+BLOCK AT16 18 {'self_attn.q_proj': 0.2778, 'self_attn.k_proj': 0.2794, 'self_attn.v_proj': 0.2772, 'self_attn.o_proj': 0.2303, 'mlp.gate_proj': 0.3482, 'mlp.up_proj': 0.3471, 'mlp.down_proj': 0.4606}
+BLOCK AT16 19 {'self_attn.q_proj': 0.2983, 'self_attn.k_proj': 0.3058, 'self_attn.v_proj': 0.3212, 'self_attn.o_proj': 0.2421, 'mlp.gate_proj': 0.3472, 'mlp.up_proj': 0.3497, 'mlp.down_proj': 0.4392}
+BLOCK AT16 20 {'self_attn.q_proj': 0.3367, 'self_attn.k_proj': 0.354, 'self_attn.v_proj': 0.3617, 'self_attn.o_proj': 0.2547, 'mlp.gate_proj': 0.3701, 'mlp.up_proj': 0.3706, 'mlp.down_proj': 0.4861}
+BLOCK AT16 21 {'self_attn.q_proj': 0.3288, 'self_attn.k_proj': 0.3326, 'self_attn.v_proj': 0.3363, 'self_attn.o_proj': 0.1507, 'mlp.gate_proj': 0.3657, 'mlp.up_proj': 0.3638, 'mlp.down_proj': 0.4468}
+BLOCK AT16 22 {'self_attn.q_proj': 0.3299, 'self_attn.k_proj': 0.3359, 'self_attn.v_proj': 0.3515, 'self_attn.o_proj': 0.274, 'mlp.gate_proj': 0.3354, 'mlp.up_proj': 0.3368, 'mlp.down_proj': 0.4424}
+BLOCK AT16 23 {'self_attn.q_proj': 0.3003, 'self_attn.k_proj': 0.312, 'self_attn.v_proj': 0.3474, 'self_attn.o_proj': 0.1059, 'mlp.gate_proj': 0.3449, 'mlp.up_proj': 0.3435, 'mlp.down_proj': 0.446}
+BLOCK AT16 24 {'self_attn.q_proj': 0.369, 'self_attn.k_proj': 0.3785, 'self_attn.v_proj': 0.4398, 'self_attn.o_proj': 0.2011, 'mlp.gate_proj': 0.352, 'mlp.up_proj': 0.3527, 'mlp.down_proj': 0.4394}
+BLOCK AT16 25 {'self_attn.q_proj': 0.3964, 'self_attn.k_proj': 0.4134, 'self_attn.v_proj': 0.4536, 'self_attn.o_proj': 0.122, 'mlp.gate_proj': 0.3686, 'mlp.up_proj': 0.3697, 'mlp.down_proj': 0.459}
+BLOCK AT16 26 {'self_attn.q_proj': 0.4113, 'self_attn.k_proj': 0.4099, 'self_attn.v_proj': 0.4768, 'self_attn.o_proj': 0.0591, 'mlp.gate_proj': 0.3661, 'mlp.up_proj': 0.3661, 'mlp.down_proj': 0.1053}
+BLOCK AT16 27 {'self_attn.q_proj': 0.4249, 'self_attn.k_proj': 0.4487, 'self_attn.v_proj': 0.4717, 'self_attn.o_proj': 0.1173, 'mlp.gate_proj': 0.2406, 'mlp.up_proj': 0.239, 'mlp.down_proj': 0.0889}
+ARM AT16 {'valid': 9.46, 'test': 9.0592}
+DONE {"RTN vs O": {"valid": {"rise_pct": 13.919327565875527, "label": "substantial"}, "test": {"rise_pct": 13.12105535371957, "label": "substantial"}}, "RTN16 vs O": {"valid": {"rise_pct": 13.590408653844953, "label": "substantial"}, "test": {"rise_pct": 12.840633432193037, "label": "substantial"}}, "L vs O": {"valid": {"rise_pct": 5.379329651530873, "label": "substantial"}, "test": {"rise_pct": 5.151049554514153, "label": "substantial"}}, "AT15 vs O": {"valid": {"rise_pct": 5.852017189512804, "label": "substantial"}, "test": {"rise_pct": 5.619497520888794, "label": "substantial"}}, "AT16 vs O": {"valid": {"rise_pct": 5.480722381312009, "label": "substantial"}, "test": {"rise_pct": 5.268789033771548, "label": "substantial"}}, "RTN16 vs RTN": {"valid": {"rise_pct": -0.28872968183590864, "label": "negligible"}, "test": {"rise_pct": -0.24789542552418053, "label": "negligible"}}, "AT16 vs AT15": {"valid": {"rise_pct": -0.35076781535117174, "label": "negligible"}, "test": {"rise_pct": -0.33204900169864215, "label": "negligible"}}, "L vs AT16": {"valid": {"rise_pct": -0.09612441732679278, "label": "negligible"}, "test": {"rise_pct": -0.1118465219730358, "label": "negligible"}}}

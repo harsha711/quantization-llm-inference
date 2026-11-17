@@ -1,0 +1,7 @@
+/mnt/beegfs/hpuvvad/csc548-w4a16-e039-20261116/full-c58-342265/diagnose.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e039-20261116/full-c58-342265/grid.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e039-20261116/full-c58-342265/lc.py: OK
+wikitext2-test.txt: OK
+wikitext2-valid.txt: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e037-20261111/c4-train.00000-of-01024.json.gz: OK
+model /home/hpuvvad/csc548-w4a16-e014-c4-20261108/cache/huggingface/hub/models--Qwen--Qwen2.5-1.5B/snapshots/8faed761d45a263340a0528343f099c05c9a4323

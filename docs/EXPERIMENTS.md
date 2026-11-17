@@ -33,11 +33,42 @@ Reported besides: validation numbers for every arm, top-1 accuracy, and llm-comp
 
 Process, fixed now: one cheap prerequisite job first. It installs llm-compressor into an overlay environment with torch 2.14.0 and transformers 4.57.1 pinned as constraints (if that cannot resolve, the job stops and the decision is recorded before any other environment is tried). It runs L on 8 windows with the bit-for-bit conversion check, and runs grid.py on 8 calibration and 2 scoring windows. I inspect it before the full job.
 
+Limits fixed now: one model, one metric, one corpus, one run. The 16-level grid is not the runtime contract: no arm here is timed or gated, and running a code-0 grid through our path would need a contract change and fresh validation. llm-compressor runs in a different software environment from our quantizer (scoring does not). L uses one recipe with its defaults, not a search. Validation and test are both WikiText-2. llm-compressor, GPTQ and the reference quantizer are upstream; ours is the comparison and the measurement.
+
 Attempt 1, prerequisite job 342182 on c58, exit 1 (2026-11-16): the install did not stop at a conflict. With transformers pinned to 4.57.1, pip backtracked from llm-compressor 0.15.0 (which requires transformers 5.15–5.21) to 0.6.0. That pulled numpy 1.26.4 into the overlay, and `datasets`' pyarrow then failed to import ("requires NumPy 2.0 or newer"). Neither lc.py nor grid.py ran. Retrieved to `results/e039_20261116/prereq-342182/` (`lc-install.log` holds the resolver trail). The frozen environment is not touched (its freeze diff runs after the install only on success, so that check did not run here).
 Amendment 1, before any further job: pin `llmcompressor==0.15.0` (the latest release, the version the predeclared recipe means) with torch 2.14.0 and numpy 2.4.6 as constraints. The overlay then carries its own transformers 5.x. Scoring stays in the frozen E017 environment with transformers 4.57.1. A loader or tokenizer difference between the two environments is caught by the existing checks: every original weight's hash and the calibration token-id hash must be equal across them. The overlay goes to a new path, so attempt 1's is never reused.
 Attempt 2, prerequisite job 342186 on c58, exit 1 (2026-11-16): the overlay installed (llm-compressor 0.15.0, compressed-tensors 0.20.1, transformers 5.21.0, with the frozen torch 2.14.0+cu130 seen through the .pth). The job then stopped at my own version check, which expected "2.14.0 " and so missed the "+cu130" local tag. A script error, fixed by matching `^2\.14\.0[+ ]`. lc.py and grid.py did not run. Retrieved to `results/e039_20261116/prereq-342186/`.
 
-Limits fixed now: one model, one metric, one corpus, one run. The 16-level grid is not the runtime contract: no arm here is timed or gated, and running a code-0 grid through our path would need a contract change and fresh validation. llm-compressor runs in a different software environment from our quantizer (scoring does not). L uses one recipe with its defaults, not a search. Validation and test are both WikiText-2. llm-compressor, GPTQ and the reference quantizer are upstream; ours is the comparison and the measurement.
+### E039 result — no material grid effect; our GPTQ matches upstream llm-compressor; upstream also costs +5.15% on this model (2026-11-16, c58)
+
+Prerequisite job 342188 passed (attempt 3), then full job 342265 on c58 ran 22:20–22:48 EST, exit 0. Driver 615.71.09. `results/e039_20261116/full-342265/` holds `quality.json`, `arms.json`, `lc.json` with the resolved recipe, the logs and `all.sha256`. `lc.npz` (1,330,787,158 bytes, sha256 in `lc.json`) stays on BeeGFS at `csc548-w4a16-e039-20261116/full-c58-342265/`.
+
+Checks passed:
+- O and RTN reproduce E032 to 1e−5, as asserted.
+- AT15 reproduces E037's C/AT test perplexity exactly (9.089416695696391).
+- The calibration token-id hash equals E037's (585ca1c3…).
+- All 196 original-weight hashes are equal in both environments.
+- llm-compressor's weights convert bit for bit to FP16(q·s) with q in −8…7 on contiguous groups.
+- Resolved recipe: symmetric int4, group 128, static activation order, damping 0.01, `memoryless_minmax` observer, sequential pipeline.
+- Code −8 is used 3,037,667 times by L, 3,035,246 times by AT16 and never by AT15.
+
+| Arm (blocks; FP16 head) | Validation ppl | Test ppl | Test rise vs O | Test top-1 |
+|---|---:|---:|---:|---:|
+| O original | 8.9684 | 8.6058 | — | 53.86% |
+| RTN, 15-level (E017's) | 10.2168 | 9.7350 | +13.12% | 52.06% |
+| RTN16, 16-level | 10.1873 | 9.7109 | +12.84% | 52.17% |
+| AT15 = E037's C/AT | 9.4933 | 9.0894 | +5.62% | 53.04% |
+| AT16 | 9.4600 | 9.0592 | +5.27% | 53.12% |
+| L, llm-compressor 0.15.0 W4A16 | 9.4509 | 9.0491 | +5.15% | 53.08% |
+
+1. Grid effect: **no material effect.** RTN16 lowers the rise by 0.28 points and AT16 by 0.35 points, both below the predeclared 1 point. The 16-level grid helps slightly and consistently on both splits, but it does not explain the cost.
+2. Implementation effect: **matches upstream.** L is 0.11% below AT16 on test and 0.10% on validation, within 1%.
+3. Model effect: **the upstream reference also fails the 5% bar on this model** (+5.15%, "substantial"). This supports "the model, not our code" as the main explanation of the remaining block cost, for this model, this metric and these calibration windows.
+
+Interpretation: E037's +5.62% splits into about 0.35 points of grid choice and about 0.1 points of implementation. The rest, about +5.2%, is what a standard GPTQ W4A16 recipe costs on Qwen2.5-1.5B in WikiText-2 perplexity. That is consistent with published 1–2B results (+6–21% calibrated, subagent-read, not re-verified). It does not show that no 4-bit method can do better: AWQ, other recipes, more calibration and larger models remain untested here.
+
+What this does not show: nothing is timed or gated. The 16-level arms are not in the runtime contract. L ran in a different software environment (transformers 5.21.0) than the scorer. It is one recipe with defaults, one model, one metric and one run. Validation and test are both WikiText-2. llm-compressor, GPTQ and the reference quantizer are upstream work; ours is the comparison and the measurement.
+
 
 ## E038 — Do the calibrated tensors pass the gate and run at the speed of the plain-rounded ones?
 
