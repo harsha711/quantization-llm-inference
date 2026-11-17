@@ -201,6 +201,10 @@
 
 - E041 is complete (c58, job 342501): T1 26.6/31.3/241.2 ms at M1/4/128, Sp16 13.1/12.3/12.3, weak efficiency 0.79; bandwidth hypothesis NOT confirmed (compute-bound, ~4.3 GB/s). GPU-over-CPU ratios compare processors, never call them parallel speedups. Preserve attempt 1 (342499, core guard). It was predeclared in EXPERIMENTS: new C++ OpenMP fused CPU W4A16 GEMM (`src/cpu_gemm.cpp`, `tools/cpu_bench`) for T1 and strong/weak thread scaling, plus same-node GPU naive/inblock/inblock_m4/cuBLAS. Descriptive; correctness at every p and equal output hashes across p are the criteria. No GPU kernel, Marlin or model change. Then the ACM report (`report/`, acmart sigconf, two authors, no ownership split).
 
+## E042 per-layer quality sensitivity
+
+- Predeclared in EXPERIMENTS (user request 2026-11-17). Quality-only diagnostic of the plain-rounding block cost: 7 per-type, 28 per-block, 2 kept-FP16 confirmation arms (selected on validation). The "mixed precision" restriction above covers a mixed-precision runtime or kernel, not this analysis. Nothing timed or gated; a kept-FP16 arm is not a proposed default.
+
 ## Rooflines, if requested
 
 - Recompute all ceilings, ridge points, arithmetic intensities, and performance coordinates from specifications/data. Keep the primary full-machine roof distinct from core-count, ISA, NUMA, and memory-domain sensitivity roofs.

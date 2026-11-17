@@ -13,6 +13,21 @@ A clone from GitHub therefore lacks these two files, and hash checks over those 
 
 Second rewrite (same day, same user choice). The second push was rejected too: an independent read-only review found eight more paths holding one 158,110,075-byte blob, byte-identical to the memcheck_0 file above (sha256 c0b9cbe4…c96c9, recorded for `..._M2048_0-outputs.npz` in `results/e017_20261109/model-arc/retrieval.sha256`): `operator_model.layers.0.mlp.gate_proj_M2048{_0,_1,_2,-memcheck_1,-memcheck_2,-synccheck_0,-synccheck_1,-synccheck_2}-outputs.npz` in the same directory. They were removed the same way from the 117 unpushed commits (tree diff against `backup/pre-drop-large-npz-2`: those eight files only), kept in the working copy with that hash and added to `.gitignore`; no tracked blob over 100 MB remains. Commit IDs from `Record E017 full-model numerical gate failure` onward changed again; the cited IDs were remapped the same way (same subjects, same order), and every commit ID cited in the docs resolves on the branch. Ten raw files are therefore missing from a GitHub clone.
 
+## E042 — Where does the plain-rounding block cost sit? (per-type and per-block sensitivity)
+
+Predeclared 2026-11-17 at the user's request ("do it", after I proposed locating the +13.1% block cost; the user clarified that the "mixed precision" restriction covers building a mixed-precision runtime as an enhancement, not analysing quality). Quality only and diagnostic: nothing is timed, gated or added to the runtime; no kernel, contract or default changes.
+
+Design (`scripts/e042/sens.py`, E039's frozen scoring environment and texts, E032's 2048-token windows and metric, FP16 head). Every arm quantizes a subset of the 196 block projections with the project quantizer (plain round-to-nearest, grid 15, checked against E031's head hash) and leaves the rest FP16:
+- controls O and RTN (must reproduce E032's test perplexities 8.6058 and 9.7350 within 1e−5 relative);
+- T pass, 7 arms: one projection type (q, k, v, o, gate, up, down) in all 28 blocks;
+- B pass, 28 arms: all seven projections of one block;
+- confirmation, 2 arms: KB3 keeps FP16 the three blocks with the largest single-block VALIDATION rise, KT1 keeps FP16 the type with the largest single-type VALIDATION rise; everything else quantized.
+Selection reads the validation split only; test is reported for every arm. Reported per arm: perplexity on both splits, rise against O, quantized parameter fraction; the sums of single-arm rises against the full RTN rise (an additivity check, not a decomposition).
+
+Hypothesis, to be reported as confirmed or not: the cost is concentrated, defined now as KB3 (10.7% of block parameters left FP16) recovering at least half of the RTN rise on test. Limits fixed now: single-subset effects interact and need not add up; plain rounding only (the timed weights), not GPTQ; one model, one corpus, one metric; a kept-FP16 arm is a measurement, not a proposed runtime.
+
+Process: prerequisite job (2 windows per split, all 39 arms, no E032 assertion) inspected before the full job.
+
 ## E041 — Serial CPU baseline and worker scaling for the course report
 
 Predeclared 2026-11-17 at the user's request (report plan: the course deck, pp.22–24, asks for a timed serial baseline, Sp = T1/Tp and a strong/weak scaling plot against ideal; PROJECT_SYNTHESIS §5.2 records that the project had neither). A descriptive measurement: no optimization, no change to any GPU kernel, Marlin, the model path or the numerical contract.
