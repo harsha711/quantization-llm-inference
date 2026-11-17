@@ -1,0 +1,137 @@
+\documentclass[sigconf,nonacm]{acmart}
+\settopmatter{printacmref=false}
+\setcopyright{none}
+\renewcommand\footnotetextcopyrightpermission[1]{}
+\usepackage{booktabs}
+\usepackage{siunitx}
+\sisetup{group-separator={,}}
+
+\begin{document}
+
+\title{Fused 4-bit-Weight GEMM on a Consumer GPU: From Serial Baseline to a Quantized Language Model}
+\subtitle{CSC 548 Parallel Systems, Fall 2026 --- Final Project Report}
+
+\author{[Author 1]}
+\affiliation{\institution{North Carolina State University}\city{Raleigh}\state{NC}\country{USA}}
+\author{[Author 2]}
+\affiliation{\institution{North Carolina State University}\city{Raleigh}\state{NC}\country{USA}}
+
+\begin{abstract}
+Generating text with a large language model at batch size one is dominated by multiplying a few activation rows by large weight matrices, so it is limited by the bytes of weights read. W4A16 stores weights as 4-bit integers with one 16-bit scale per group of 128 and keeps activations in FP16, cutting weight traffic about fourfold. We built and measured this operation end to end on an NVIDIA RTX~5060~Ti: a serial C++ baseline and its OpenMP scaling (12.3--13.1$\times$ on 16 cores), three fused CUDA kernels of our own (up to 3.85$\times$ over our naive kernel), and the maintained Marlin kernel, in which we found and fixed a shared-memory race. Under four cycled weight matrices Marlin is 3.6--4.4$\times$ faster than cuBLAS on the reconstructed FP16 weights at four rows; a roofline analysis shows why: both kernels run at 75--94\% of the memory roof, and 4-bit weights raise the arithmetic intensity 3.9$\times$. The lead shrinks to 2--17\% at 128 rows, where both reach the compute roof. Inside Qwen2.5-1.5B, Marlin with CUDA-graph replay and a rewritten decode-attention step decodes 45.5\%/42.5\% faster than our own FP16 path given the same attention (contexts 128/2048), yet it stays 37--51\% slower than vLLM running the identical 4-bit weights, and the 4-bit blocks cost 13.1\% WikiText-2 perplexity with plain rounding and still 5.2--5.9\% with upstream GPTQ or AWQ. We report the failures that shaped these results as carefully as the successes.
+\end{abstract}
+
+\maketitle
+
+\section{Problem and motivation}
+During autoregressive decoding a transformer produces one token per step, so every linear layer is a matrix product $C = A W$ with only $M$ = batch-size rows of activations $A$ ($M \times K$) against a weight matrix $W$ ($K \times N$) of millions of entries. With FP16 weights the arithmetic intensity is about $M$ FLOP per byte, far below the ridge point of a modern GPU, so the step is limited by reading weights from DRAM. Storing $W$ in 4 bits reduces that traffic by almost 4$\times$ and, if the kernel unpacks the weights on the fly (``fused''), should make small-$M$ products almost 4$\times$ faster. The question this project answers is how much of that ideal survives in practice: in our own kernels, in a maintained state-of-the-art kernel, and inside a real model, and at what accuracy cost.
+
+\paragraph{Contributions.} Ours: (1) a numerical contract with an FP64 reference and a fixed tolerance used for every result; (2) a serial CPU baseline with strong and weak scaling; (3) three CUDA kernels, each measured against the previous one; (4) a race fix in Marlin and a controlled characterization of when compressed execution wins (weight reuse, batch size, roofline); (5) integration into a 1.5B-parameter model with a validation gate, graph replay and a decode-attention rewrite; (6) external comparison and quality measurements. Upstream, credited throughout: Marlin~\cite{marlin} and vLLM~\cite{vllm} (kernel, runtime), GPTQ~\cite{gptq}, AWQ~\cite{awq} and llm-compressor~\cite{llmcompressor} (quantizers), PyTorch CUDA graphs~\cite{cudagraphs}.
+
+\section{Format and numerical contract}
+$W$ is split into groups of $g=128$ consecutive rows along $K$. Each (group, column) stores an FP16 scale $s = \mathrm{fp16}(\max|w|/7)$; each weight stores $q = \mathrm{clamp}(\mathrm{rne}(w/s), -7, 7) + 8$ in a nibble, eight per 32-bit word. The kernel reconstructs $\hat w = \mathrm{fp16}((q-8)s)$, accumulates in FP32 and writes FP16. Every kernel output is checked against an FP64 CPU product with the reconstructed weights, requiring $|C - C_{\mathrm{ref}}| \le 10^{-3}|C_{\mathrm{ref}}| + 10^{-3}\,\mathrm{rms}(C_{\mathrm{ref}})$ elementwise; the tolerance was never relaxed. Kernels that claim to preserve arithmetic order are additionally checked bit for bit against their predecessor on every output.
+
+\section{Baseline and parallel design}
+\paragraph{Serial and OpenMP baseline (E041).} The CPU kernel processes 64-column blocks; for each group it builds a 16-entry table of reconstructed weights per column, fills a per-thread tile, and accumulates FP32 in ascending $k$. OpenMP distributes the independent column blocks statically, so every output has identical arithmetic at any thread count; we verified bitwise-equal outputs across all thread counts. It is plain C++ with no intrinsics (FP16 conversion in software) and is a correctness-first baseline, not a tuned BLAS.
+
+\paragraph{Our CUDA kernels (E001--E003).} The naive kernel assigns one thread per output and loops over $K$. E001 splits each dot product across eight threads of a block (in-block $K$ splitting) with a shared-memory reduction, which parallelizes the long $K$ loop when $M$ is tiny. E002 compiles specialized versions for aligned shapes and tails. E003 lets each thread reuse every unpacked weight for two or four activation rows, raising arithmetic per weight byte. All are scalar CUDA cores; none uses Tensor Cores.
+
+\paragraph{Marlin and the race fix (E004--E006).} Marlin~\cite{marlin} is the 4-bit Tensor Core kernel maintained in vLLM. We feed it our exact codes and scales after a lossless repacking (checked bit for bit). While testing a launch setting, NVIDIA Compute Sanitizer~\cite{sanitizer} reported a shared-memory hazard, reproduced in the official wheel. We traced it to a buffer reused for the reduction while other warps could still read it, and added one block barrier after the existing asynchronous-copy drain; the corrected kernel passes numerical, memcheck, racecheck and synccheck tests. We could not show that the original ever produced a wrong output.
+
+\section{Experimental setup}
+All GPU measurements ran on NCSU ARC nodes with one NVIDIA GeForce RTX~5060~Ti (Blackwell, sm\_120, 36 SMs, 16\,GB GDDR7, 448\,GB/s, 32\,MiB L2), one process per node via \texttt{sbatch}/\texttt{prun}. E041's CPU is a 16-core AMD EPYC~9115 (one NUMA node, 32\,MiB L3), \texttt{OMP\_PROC\_BIND=close}, \texttt{OMP\_PLACES=cores}, GCC \texttt{-O3} without \texttt{-march=native}. CUDA~13 toolchain (13.4, driver 615.71 in E041), cuBLAS with FP32 reduction (math mode 16). Kernels are timed with CUDA events around one launch (or a whole cycle of launches captured in a CUDA graph), 10 warm-ups and 100 timed iterations, reporting medians; with and without an L2 flush. Model runs use batch 1, greedy decoding of 64 tokens, 3 warm-up and 20 timed requests per cell, two passages and two series in reversed order. Every change had to be at least 5\% faster in every cell of both series to count; anything less is reported as a tie. Each experiment's hypothesis and criterion were written down before it ran, and every failed attempt is preserved in the repository.
+
+\section{Results}
+\subsection{Serial baseline, speedup and scaling}
+\begin{figure}[t]
+\includegraphics[width=\linewidth]{figs/e041_scaling.pdf}
+\caption{CPU fused W4A16 GEMM (E041), medians of 10 runs. (a) Strong scaling at fixed size; (b) weak scaling with $N$ growing with $p$.}
+\label{fig:scaling}
+\end{figure}
+\begin{table}[t]
+\caption{E041, same node and job: serial time $T_1$, 16-thread speedup and efficiency, and our best GPU kernel (no L2 flush).}
+\label{tab:e041}
+\small
+\begin{tabular}{rrrrrr}
+\toprule
+$M$ & $T_1$ (ms) & $S_{16}$ & $E_{16}$ & best GPU ($\mu$s) & vs $T_1$ \\
+\midrule
+1 & 26.57 & 13.12 & 0.82 & 38.4 (inblock) & 691$\times$ \\
+4 & 31.29 & 12.34 & 0.77 & 58.6 (inblock\_m4) & 534$\times$ \\
+128 & 241.24 & 12.27 & 0.77 & 1499.7 (inblock\_m4) & 161$\times$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+Fig.~\ref{fig:scaling} and Table~\ref{tab:e041} give the course's $S_p = T_1/T_p$. Scaling is near-ideal to 8 threads and reaches 12.3--13.1$\times$ on 16 cores; weak-scaling efficiency falls to 0.79. We had predicted that small $M$ would stop scaling first because it streams weights; that is not what happened: $M=1$ scales best, and at 16 threads it moves only about 4.3\,GB/s of modelled weight bytes, and its 8.65\,MB of weights fit in L3. The CPU kernel is therefore compute-bound. The dip at 12 threads is load imbalance, by calculation: 64 column blocks over 12 threads give at most 6 per thread, capping $S_{12}$ at 10.7. The remaining loss at 16 threads is unattributed. Our GPU kernels are 161--691$\times$ faster than the serial baseline and 13--53$\times$ faster than all 16 cores; these ratios compare different processors, not thread counts of one program.
+
+\subsection{Our CUDA kernel progression}
+Each step was measured against the unchanged previous kernel in the same executable. In-block $K$ splitting (E001) is 3.85$\times$ faster than the naive kernel at $M=1$ with L2 flushed (2.89$\times$ without) but 1.3$\times$ slower at $M=128$, where one-thread-per-output already fills the GPU. Shape specialization (E002) gives 1.31--1.33$\times$ at $M=32$--128. Two/four-row weight reuse (E003) gives 1.55--1.75$\times$ at $M=32$--128, at the cost of slower $M=1$ and odd row counts. Profiling guided E003: an Nsight Compute~\cite{nsight} profile of E002 at $M=128$ recorded about 1.15\,GB of L2 traffic from loading and unpacking the same weights again for every row, which row reuse removes. These are real but shape-specific gains with clear regressions; at $M=128$ even the best of them is 14$\times$ slower than cuBLAS, which uses Tensor Cores.
+
+\subsection{Compressed versus FP16 execution, and the roofline}
+\begin{figure}[t]
+\includegraphics[width=\linewidth]{figs/roofline.pdf}
+\caption{Roofline of the RTX 5060 Ti (448 GB/s; 47.4 TFLOP/s dense FP16 Tensor with FP32 accumulation, ridge 106 FLOP/byte). Points are E010 per-GEMM times with four weight matrices cycled (larger than L2), labelled by $M$. Intensity uses the modelled bytes (each operand once), not measured DRAM traffic.}
+\label{fig:roofline}
+\end{figure}
+To approximate a model, where each layer's weights are evicted before reuse, E009/E010 cycle through four independent weight matrices (more than the 32\,MiB L2) of two layer shapes ($4096\times11008$ and its transpose). At $M=4$, corrected Marlin is 3.60--4.40$\times$ faster than cuBLAS on the pre-reconstructed FP16 weights and 7.96--9.33$\times$ faster than reconstructing and then calling cuBLAS. The lead narrows as $M$ grows, without reversing up to 128: 2.2--2.9\% for $K{=}4096,N{=}11008$ (below our 5\% bar) and 15.2--16.8\% for the transpose.
+
+Fig.~\ref{fig:roofline} explains both regimes. Arithmetic intensity is $2MNK$ divided by the modelled bytes. At $M=4$, cuBLAS sits at 4.0 FLOP/byte and Marlin at 15.4, both left of the ridge, at 75--94\% and 85--88\% of the memory roof respectively; the speedup is the intensity ratio (3.9$\times$) times their efficiencies. Four-bit Marlin at $M=4$ performs like FP16 at $M=16$. At $M=64$--128 Marlin (229--426 FLOP/byte) and cuBLAS at $M=128$ (123) are past the ridge at 82--99\% of the compute roof, so compression no longer helps. No point exceeds either roof. If one matrix is reused repeatedly, a Marlin launch setting that is 13\% faster vanishes when four matrices are cycled (E005-R2, E008): cache reuse, not the kernel, explained it.
+
+\subsection{What profiling and tuning did not fix}
+Three tuning experiments on corrected Marlin failed the 5\% criterion: a different shared-memory reservation and grid (E005-R1, 0--2.8\%), skipping loads that are never used (E007: shared loads fell 1.9\% but instructions rose 1.8\%), and a smaller tile at $M=128$ (E013, 7.6--8.7\% slower). Profiles at $M=4$ and 128 (E011) showed nearly constant DRAM bytes and more instruction and Tensor work at 128; source-level PC sampling (E012) failed its own data-quality checks (dropped samples in all eight captures), so we did not attribute time to code regions and did not rewrite the kernel.
+
+\subsection{Inside a language model}
+\begin{figure}[t]
+\includegraphics[width=\linewidth]{figs/model_decode.pdf}
+\caption{Qwen2.5-1.5B, batch 1, 63 decode steps, median of four cells (E027, one node). All 4-bit paths use identical codes and scales; vLLM produced the same 64 tokens.}
+\label{fig:model}
+\end{figure}
+We replaced all 196 block projections of Qwen2.5-1.5B~\cite{qwen25} with corrected Marlin (Q) and compared against FP16 using the identical reconstructed weights (R). Validation was the hardest part. The first gate, an elementwise logit bound against R, failed (E017: 591 of 9.7 million logits, with all 64 tokens identical); a diagnostic showed every individual Marlin call passed, and that even FP32 and FP64 Marlin-free controls failed the same bound, so the difference is propagated FP16 rounding (E018). A control-calibrated second gate also failed narrowly (E019: an exact FP16 tie in one case, a $3\times10^{-6}$ margin in another). A third gate, agreement with an FP64-projection control, accepted all ten cases (E021). It was chosen after the first two failed, four of its ten cases were known beforehand, and it has no sanitizer coverage at the new prefill sizes; we state this alongside every model speedup.
+
+Eager Marlin decode was 28.9\% faster than FP16 at context 2048 but only 3.6--4.6\% at context 128 (E020), because the 196 small launches were 99\% host time (E022). Replaying each decode step as a CUDA graph~\cite{cudagraphs} (E023, bitwise-equal to eager) and then replacing the stock attention with a direct single-query decode attention built from PyTorch operations (E026) gives 325\,ms and 374\,ms per 63 tokens at contexts 128 and 2048: 47.0\%/58.5\% below graph-replayed FP16, and 45.5\%/42.5\% below FP16 given the same attention. Graph replay's gains held in all 28 robustness cells across two nodes (E024), and peak allocated memory is about 60\% lower (E020/E023).
+
+Against production stacks the path is slower (Fig.~\ref{fig:model}). vLLM~v0.33.0 on the same 4-bit weights decodes in 238--249\,ms versus our 327--376\,ms: 37--51\% slower at contexts 128--2048, widening with context (E027/E028). llama.cpp~\cite{llamacpp} and ONNX Runtime GenAI~\cite{ortgenai} are faster still, though with their own quantizers. A kernel trace (E030) locates the gap: vLLM issues 112 Marlin calls per step (fused projections) against our 196 and 276 other launches (compiled fused kernels, FlashAttention) against our 1264. The FP16 output head was the largest single kernel in both; quantizing it with our format lowers decode time by 17.0\%/14.7\% in our path and by 23--24\% in vLLM (E031), but changes model outputs and costs +8.6\% perplexity, so it is not a default.
+
+\subsection{Accuracy cost}
+\begin{figure}[t]
+\includegraphics[width=\linewidth]{figs/quality.pdf}
+\caption{WikiText-2 test perplexity, 307,050 tokens, FP16 output head, only the 196 block projections quantized to 4-bit group-128.}
+\label{fig:quality}
+\end{figure}
+All timed results above use plain round-to-nearest weights, which raise WikiText-2~\cite{wikitext} perplexity by 13.1\% (E032, Fig.~\ref{fig:quality}). A GPTQ-style calibrated quantizer we implemented in the same format, calibrated on C4~\cite{c4}, reduces this to +5.62\% (E037) and runs at the same speed (within 0.3\%, E038), but still fails our 5\% bar. To find out whether that residue is our bug or the model, we ran upstream llm-compressor GPTQ: +5.15\%, within 0.5 points of ours, and the standard 16-level grid changes ours by only 0.35 points (E039). Activation-aware AWQ~\cite{awq}, designed for the outlier channels this model has, does not help: +5.72\% to +10.21\% across three recipes (E040). For this 1.5B model and metric, about 5\% is the cost of 4-bit group-128 weights with standard post-training methods; untested recipes or larger models may do better.
+
+\section{Failures and lessons}
+\begin{itemize}
+\item \textbf{Fix the gate before timing.} Two failed numerical gates (E017, E019) and a compiler-mode failure (E014) taught us that ``same tokens'' and ``passes elementwise'' are different claims; our accepted speedups carry the disclosure that the gate came third.
+\item \textbf{Single-matrix benchmarks lie.} A 13\% kernel gain disappeared once weights were cycled like a real model (E008); a 5\% bar with reversed series rejected most tuning (E005-R1, E007, E013).
+\item \textbf{Kernel speed is not system speed.} A 3.6--4.4$\times$ faster GEMM gave 3.6\% in the model until launch overhead was removed (E022/E023); the remaining gap to vLLM is fusion and launch count, not the GEMM.
+\item \textbf{Check the tools.} Marlin's race (E005/E006), \texttt{mpirun} pinning our OpenMP run to one core (E041, caught by a guard), and AWQ overflowing in FP16 (E040) were all found by checking preconditions instead of trusting results.
+\end{itemize}
+
+\section{Conclusion and limitations}
+Compressed 4-bit execution delivers the roofline-predicted gain where it should: about 4$\times$ for small batches, when weights do not stay in cache, shrinking to nothing once the product becomes compute-bound. Our own scalar kernels reach a fraction of that; the maintained Tensor Core kernel reaches 75--99\% of the roofs. In a full model the gain is real against our own FP16 path but smaller than production stacks achieve, and it costs 5--13\% perplexity on a 1.5B model. Limitations: one model, one GPU type, batch 1, 64 generated tokens, one quality metric and corpus; the CPU baseline is untuned; the model speedups rely on a post hoc third validation gate; proposed FP64/FP32 cuBLAS context runs were not done. The kernels are CUDA C++; Python drives the model-level measurements and analysis. Code, raw results and the per-experiment record (E001--E041) accompany this report.
+
+\appendix
+\section{Experiment index}
+\begin{table}[h]
+\small
+\begin{tabular}{p{0.16\linewidth}p{0.74\linewidth}}
+\toprule
+E001--E003 & Our CUDA kernels: in-block $K$ split, specialization, row reuse. Accepted, shape-specific. \\
+E004--E006 & Marlin integration; racecheck hazard; one-barrier fix. Accepted. \\
+E005-R1/R2, E007, E013 & Marlin tuning. Rejected ($<$5\% or slower). \\
+E008--E010 & Reuse distance, cyclic baselines, batch crossover. Descriptive. \\
+E011--E012 & Endpoint profiles; PC sampling. No kernel change justified. \\
+E014--E016 & FP16 model graphs/compiler. E014 failed gate; E015/E016 $<$5\%. \\
+E017--E021 & Model integration and validation gates. Two rejected, third accepted. \\
+E022--E026 & Host-bound diagnosis, graph replay, attention rewrite. Accepted. \\
+E027--E030 & vLLM, llama.cpp, ORT comparison; gap trace. Ours slower. \\
+E031--E035 & Output-head precision (4-/8-bit). Faster, changes outputs. \\
+E036--E040 & Calibrated quantizers, upstream GPTQ, AWQ. All $>$5\% perplexity. \\
+E041 & Serial baseline and OpenMP scaling. Descriptive. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{references}
+\end{document}

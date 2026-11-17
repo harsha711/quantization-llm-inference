@@ -33,7 +33,7 @@ Limits fixed now: one node type, one CPU kernel design (not a tuned BLAS), a CPU
 
 Prerequisite 342500 on c58 passed after amendment 1: affinity 0–15, CTest 2/2, FP64 and equal hashes at p = 1 and 16 (M4), all eight GPU rows pass.
 
-### Result (full job 342501, c58, AMD EPYC 9115 16-core, 32 MiB L3, RTX 5060 Ti, driver/runtime 13.0.40, 2026-11-17)
+### Result (full job 342501, c58, AMD EPYC 9115 16-core, 32 MiB L3, RTX 5060 Ti, driver 615.71.09, CUDA 13.4, GCC 12.4.0, 2026-11-17)
 
 All 18 strong-scaling and 6 weak-scaling points pass the FP64 check (rel. L2 2.0–2.1e−4), each shape's output hash is identical for p = 1…16, and all 24 GPU rows pass. Both criteria met. Medians of 10 repetitions (CPU, ms) and Sp = T1/Tp:
 
