@@ -13,6 +13,22 @@ A clone from GitHub therefore lacks these two files, and hash checks over those 
 
 Second rewrite (same day, same user choice). The second push was rejected too: an independent read-only review found eight more paths holding one 158,110,075-byte blob, byte-identical to the memcheck_0 file above (sha256 c0b9cbe4…c96c9, recorded for `..._M2048_0-outputs.npz` in `results/e017_20261109/model-arc/retrieval.sha256`): `operator_model.layers.0.mlp.gate_proj_M2048{_0,_1,_2,-memcheck_1,-memcheck_2,-synccheck_0,-synccheck_1,-synccheck_2}-outputs.npz` in the same directory. They were removed the same way from the 117 unpushed commits (tree diff against `backup/pre-drop-large-npz-2`: those eight files only), kept in the working copy with that hash and added to `.gitignore`; no tracked blob over 100 MB remains. Commit IDs from `Record E017 full-model numerical gate failure` onward changed again; the cited IDs were remapped the same way (same subjects, same order), and every commit ID cited in the docs resolves on the branch. Ten raw files are therefore missing from a GitHub clone.
 
+## E041 — Serial CPU baseline and worker scaling for the course report
+
+Predeclared 2026-11-17 at the user's request (report plan: the course deck, pp.22–24, asks for a timed serial baseline, Sp = T1/Tp and a strong/weak scaling plot against ideal; PROJECT_SYNTHESIS §5.2 records that the project had neither). A descriptive measurement: no optimization, no change to any GPU kernel, Marlin, the model path or the numerical contract.
+
+Design. `src/cpu_gemm.cpp` is a new fused W4A16 CPU GEMM in C++: for each 64-column block and each group of 128 rows it reconstructs W_hat = FP16((q−8)·s) (16-entry table per group and column, identical to `dequant_fp16`) into a per-thread tile, accumulates in FP32 in ascending k, and stores FP16. OpenMP (`omp for schedule(static)`) splits the independent column blocks, so every output has the same arithmetic at any thread count. `tools/cpu_bench` times it at `OMP_NUM_THREADS` (1 warmup, then timed repetitions, wall clock `steady_clock`), then outside timing runs the unchanged FP64 check (CONTRACT §2: all rows if M ≤ 64, else 64 sampled rows; unchanged tolerance) and an FNV-1a hash of all output bits. Local checks: `test_cpu` asserts bitwise equality with a plain ascending-k FP32 loop at 1 and 3 threads; CTest `cpu_bench_small` runs a tail shape (M5, N200, K264, G8).
+
+Sweep, one ARC GPU node (16 cores, 1 thread per core on c4/c7/c10 metadata), `OMP_PROC_BIND=close OMP_PLACES=cores`, portable `-O3` (no `-march=native`):
+- Strong scaling: K = N = 4096, G128, seed 1, M ∈ {1, 4, 128}, p ∈ {1, 2, 4, 8, 12, 16}, 10 timed repetitions each.
+- Weak scaling: M4, K4096, N = 512·p, same p values.
+- GPU on the same node and job, same build: `w4a16_bench` naive, inblock, inblock_m4 (our kernels) and cuBLAS on W_hat at M ∈ {1, 4, 128}, K = N = 4096, 10 warmups, 100 iterations, both cache policies (CONTRACT §3 unchanged).
+Reported: T1, Sp = T1/Tp and E_p = Sp/p per M; weak efficiency T(1)/T(p); Sp of each GPU kernel over the one-thread CPU T1 and over the 16-thread CPU. Marlin is not rebuilt here; its E009/E010 numbers may be cited only as a different job and node.
+
+Criteria (fixed now): the FP64 check passes at every point, and the output hash is equal across all p for each shape (strong scaling). Scaling itself has no pass threshold: it is descriptive. Hypothesis, to be reported as confirmed or not: strong scaling is near-linear at small p and bends before 16 because the kernel streams weights and becomes memory-bandwidth bound (M1/M4), while M128 scales closer to ideal (more arithmetic per weight byte). Process: a prerequisite job (M4, p ∈ {1, 16}, 2 repetitions, one GPU row) inspected before the full job.
+
+Limits fixed now: one node type, one CPU kernel design (not a tuned BLAS), a CPU baseline the GPU kernels were not designed against, wall-clock CPU time versus CUDA-event GPU time (both exclude setup and transfers).
+
 ## E040 — Does AWQ beat GPTQ on this model? (llm-compressor AWQ, three arms)
 
 Predeclared 2026-11-16 at the user's request ("option 2 for the report", after I offered AWQ as the one untested method designed for activation outliers, which E037 observed in this model family). Quality only: no runtime, kernel, gate or timing. Nothing changes the runtime contract or any default.

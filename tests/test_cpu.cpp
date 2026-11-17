@@ -3,7 +3,11 @@
 #include <cstdio>
 #include <cstdlib>
 #include <vector>
+#ifdef _OPENMP
+#include <omp.h>
+#endif
 
+#include "w4a16/cpu_gemm.h"
 #include "w4a16/fp16_host.h"
 #include "w4a16/quant.h"
 #include "w4a16/reference.h"
@@ -178,6 +182,28 @@ static void test_determinism() {
   CHECK(a.A != c.A && a.W != c.W);
 }
 
+// E041: fused CPU GEMM equals a plain ascending-k FP32 loop over W_hat, bit for bit, at 1 and 3 threads.
+static void test_cpu_gemm() {
+  const int M = 3, N = 130, K = 72, G = 24;
+  Problem p = make_problem(M, N, K, G, 7);
+  std::vector<float> W = dequantize_all(p.qw);
+  std::vector<uint16_t> want(M * N), got(M * N);
+  for (int m = 0; m < M; ++m)
+    for (int n = 0; n < N; ++n) {
+      float c = 0.0f;
+      for (int k = 0; k < K; ++k) c += half_to_float(p.A[m * K + k]) * W[k * N + n];
+      want[m * N + n] = float_to_half(c);
+    }
+  for (int threads : {1, 3}) {
+#ifdef _OPENMP
+    omp_set_num_threads(threads);
+#endif
+    (void)threads;
+    cpu_w4a16_gemm(p.A.data(), p.qw, M, got.data());
+    CHECK(got == want);
+  }
+}
+
 int main() {
   test_half_roundtrip();
   test_half_rounding();
@@ -188,6 +214,7 @@ int main() {
   test_compare_and_rows();
   test_memory_sizes();
   test_determinism();
+  test_cpu_gemm();
   if (g_failures) {
     std::printf("test_cpu: %d check(s) FAILED\n", g_failures);
     return EXIT_FAILURE;

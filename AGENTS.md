@@ -197,6 +197,10 @@
 
 - E040 is complete (c58, job 342317); read its EXPERIMENTS entry. llm-compressor 0.15.0 AWQ with defaults, calibrated in FP32 (amendment 2, after FP16 attempt 1 hit non-finite loss): AWQs +10.21%, AWQa +5.72% (zero points, not runtime format), AWQG +5.86% against O; upstream GPTQ alone +5.15% (E039). Say AWQ "does not help" on this model (no arm 1% below GPTQ) and every arm FAILS 5%. Quality only; nothing timed or gated. Tool defaults only; other AWQ recipes and larger models untested, never "4-bit cannot do better". Preserve attempt 1 (342301) and prerequisite 342303. Exports stay on BeeGFS, hashes in AWQ*.json.
 
+## E041 serial baseline and scaling (course report)
+
+- E041 is predeclared in EXPERIMENTS: new C++ OpenMP fused CPU W4A16 GEMM (`src/cpu_gemm.cpp`, `tools/cpu_bench`) for T1 and strong/weak thread scaling, plus same-node GPU naive/inblock/inblock_m4/cuBLAS. Descriptive; correctness at every p and equal output hashes across p are the criteria. No GPU kernel, Marlin or model change. Then the ACM report (`report/`, acmart sigconf, two authors, no ownership split).
+
 ## Rooflines, if requested
 
 - Recompute all ceilings, ridge points, arithmetic intensities, and performance coordinates from specifications/data. Keep the primary full-machine roof distinct from core-count, ISA, NUMA, and memory-domain sensitivity roofs.
