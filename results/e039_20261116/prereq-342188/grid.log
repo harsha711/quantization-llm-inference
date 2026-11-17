@@ -1,0 +1,70 @@
++ E039_VARIANTS='AT15 AT16'
++ E039_LC=/mnt/beegfs/hpuvvad/csc548-w4a16-e039-20261116/prereq-c58-342188/lc.npz
++ prun timeout 18000 /tmp/e017-hpuvvad-20261109/bin/python /mnt/beegfs/hpuvvad/csc548-w4a16-e039-20261116/prereq-c58-342188/grid.py /mnt/beegfs/hpuvvad/csc548-w4a16-e039-20261116/prereq-c58-342188 /mnt/beegfs/hpuvvad/csc548-w4a16-e037-20261111/wikitext2-test.txt /mnt/beegfs/hpuvvad/csc548-w4a16-e037-20261111/wikitext2-valid.txt /mnt/beegfs/hpuvvad/csc548-w4a16-e037-20261111/c4-train.00000-of-01024.json.gz b3481cea6dd697b8b741ec35d375975d4c48c85d456c884fd314fe6860a7128d 8 2
+[prun] Master compute host = c58
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun timeout 18000 /tmp/e017-hpuvvad-20261109/bin/python /mnt/beegfs/hpuvvad/csc548-w4a16-e039-20261116/prereq-c58-342188/grid.py /mnt/beegfs/hpuvvad/csc548-w4a16-e039-20261116/prereq-c58-342188 /mnt/beegfs/hpuvvad/csc548-w4a16-e037-20261111/wikitext2-test.txt /mnt/beegfs/hpuvvad/csc548-w4a16-e037-20261111/wikitext2-valid.txt /mnt/beegfs/hpuvvad/csc548-w4a16-e037-20261111/c4-train.00000-of-01024.json.gz b3481cea6dd697b8b741ec35d375975d4c48c85d456c884fd314fe6860a7128d 8 2 (family=openmpi4)
+Token indices sequence length is longer than the specified maximum sequence length for this model (270674 > 131072). Running this sequence through the model will result in indexing errors
+ARM O {'valid': 6.2317, 'test': 8.0094}
+ARM RTN {'valid': 7.0756, 'test': 9.0774}
+ARM RTN16 {'valid': 6.9929, 'test': 9.2276}
+ARM L {'valid': 6.8367, 'test': 8.8121}
+BLOCK AT15 0 {'self_attn.q_proj': 0.1635, 'self_attn.k_proj': 0.1647, 'self_attn.v_proj': 0.1925, 'self_attn.o_proj': 0.155, 'mlp.gate_proj': 0.1576, 'mlp.up_proj': 0.1573, 'mlp.down_proj': 0.1535}
+BLOCK AT15 1 {'self_attn.q_proj': 0.2455, 'self_attn.k_proj': 0.2358, 'self_attn.v_proj': 0.2495, 'self_attn.o_proj': 0.0635, 'mlp.gate_proj': 0.1011, 'mlp.up_proj': 0.1131, 'mlp.down_proj': 0.0046}
+BLOCK AT15 2 {'self_attn.q_proj': 0.2783, 'self_attn.k_proj': 0.2866, 'self_attn.v_proj': 0.269, 'self_attn.o_proj': 0.2769, 'mlp.gate_proj': 0.1427, 'mlp.up_proj': 0.1506, 'mlp.down_proj': 0.0338}
+BLOCK AT15 3 {'self_attn.q_proj': 0.2292, 'self_attn.k_proj': 0.2187, 'self_attn.v_proj': 0.2389, 'self_attn.o_proj': 0.2818, 'mlp.gate_proj': 0.189, 'mlp.up_proj': 0.1916, 'mlp.down_proj': 0.1965}
+BLOCK AT15 4 {'self_attn.q_proj': 0.2538, 'self_attn.k_proj': 0.2569, 'self_attn.v_proj': 0.2855, 'self_attn.o_proj': 0.3549, 'mlp.gate_proj': 0.2706, 'mlp.up_proj': 0.2672, 'mlp.down_proj': 0.2416}
+BLOCK AT15 5 {'self_attn.q_proj': 0.2286, 'self_attn.k_proj': 0.2407, 'self_attn.v_proj': 0.2739, 'self_attn.o_proj': 0.2512, 'mlp.gate_proj': 0.2373, 'mlp.up_proj': 0.2368, 'mlp.down_proj': 0.2}
+BLOCK AT15 6 {'self_attn.q_proj': 0.2185, 'self_attn.k_proj': 0.2139, 'self_attn.v_proj': 0.232, 'self_attn.o_proj': 0.1867, 'mlp.gate_proj': 0.3888, 'mlp.up_proj': 0.3889, 'mlp.down_proj': 0.2603}
+BLOCK AT15 7 {'self_attn.q_proj': 0.1985, 'self_attn.k_proj': 0.2028, 'self_attn.v_proj': 0.1915, 'self_attn.o_proj': 0.1769, 'mlp.gate_proj': 0.3878, 'mlp.up_proj': 0.3887, 'mlp.down_proj': 0.2709}
+BLOCK AT15 8 {'self_attn.q_proj': 0.2323, 'self_attn.k_proj': 0.2317, 'self_attn.v_proj': 0.2486, 'self_attn.o_proj': 0.2471, 'mlp.gate_proj': 0.3862, 'mlp.up_proj': 0.381, 'mlp.down_proj': 0.2789}
+BLOCK AT15 9 {'self_attn.q_proj': 0.2092, 'self_attn.k_proj': 0.2113, 'self_attn.v_proj': 0.2408, 'self_attn.o_proj': 0.2586, 'mlp.gate_proj': 0.3947, 'mlp.up_proj': 0.3928, 'mlp.down_proj': 0.314}
+BLOCK AT15 10 {'self_attn.q_proj': 0.2587, 'self_attn.k_proj': 0.2641, 'self_attn.v_proj': 0.2948, 'self_attn.o_proj': 0.2402, 'mlp.gate_proj': 0.3791, 'mlp.up_proj': 0.3721, 'mlp.down_proj': 0.2968}
+BLOCK AT15 11 {'self_attn.q_proj': 0.2039, 'self_attn.k_proj': 0.2064, 'self_attn.v_proj': 0.2091, 'self_attn.o_proj': 0.1741, 'mlp.gate_proj': 0.3314, 'mlp.up_proj': 0.3253, 'mlp.down_proj': 0.2531}
+BLOCK AT15 12 {'self_attn.q_proj': 0.2417, 'self_attn.k_proj': 0.2492, 'self_attn.v_proj': 0.2474, 'self_attn.o_proj': 0.174, 'mlp.gate_proj': 0.3491, 'mlp.up_proj': 0.3488, 'mlp.down_proj': 0.2783}
+BLOCK AT15 13 {'self_attn.q_proj': 0.216, 'self_attn.k_proj': 0.2157, 'self_attn.v_proj': 0.2245, 'self_attn.o_proj': 0.1959, 'mlp.gate_proj': 0.3761, 'mlp.up_proj': 0.3758, 'mlp.down_proj': 0.3377}
+BLOCK AT15 14 {'self_attn.q_proj': 0.2496, 'self_attn.k_proj': 0.2374, 'self_attn.v_proj': 0.2667, 'self_attn.o_proj': 0.2056, 'mlp.gate_proj': 0.4031, 'mlp.up_proj': 0.4012, 'mlp.down_proj': 0.3471}
+BLOCK AT15 15 {'self_attn.q_proj': 0.2815, 'self_attn.k_proj': 0.2437, 'self_attn.v_proj': 0.2878, 'self_attn.o_proj': 0.2298, 'mlp.gate_proj': 0.3344, 'mlp.up_proj': 0.335, 'mlp.down_proj': 0.2697}
+BLOCK AT15 16 {'self_attn.q_proj': 0.2581, 'self_attn.k_proj': 0.2621, 'self_attn.v_proj': 0.2692, 'self_attn.o_proj': 0.1337, 'mlp.gate_proj': 0.3201, 'mlp.up_proj': 0.3167, 'mlp.down_proj': 0.2794}
+BLOCK AT15 17 {'self_attn.q_proj': 0.2723, 'self_attn.k_proj': 0.2769, 'self_attn.v_proj': 0.2837, 'self_attn.o_proj': 0.1406, 'mlp.gate_proj': 0.2832, 'mlp.up_proj': 0.2841, 'mlp.down_proj': 0.2495}
+BLOCK AT15 18 {'self_attn.q_proj': 0.2206, 'self_attn.k_proj': 0.2201, 'self_attn.v_proj': 0.2226, 'self_attn.o_proj': 0.2083, 'mlp.gate_proj': 0.2889, 'mlp.up_proj': 0.2883, 'mlp.down_proj': 0.263}
+BLOCK AT15 19 {'self_attn.q_proj': 0.2426, 'self_attn.k_proj': 0.2466, 'self_attn.v_proj': 0.2665, 'self_attn.o_proj': 0.2108, 'mlp.gate_proj': 0.2885, 'mlp.up_proj': 0.292, 'mlp.down_proj': 0.2403}
+BLOCK AT15 20 {'self_attn.q_proj': 0.2684, 'self_attn.k_proj': 0.275, 'self_attn.v_proj': 0.2918, 'self_attn.o_proj': 0.1955, 'mlp.gate_proj': 0.3031, 'mlp.up_proj': 0.3044, 'mlp.down_proj': 0.2428}
+BLOCK AT15 21 {'self_attn.q_proj': 0.2461, 'self_attn.k_proj': 0.2442, 'self_attn.v_proj': 0.2543, 'self_attn.o_proj': 0.1021, 'mlp.gate_proj': 0.2871, 'mlp.up_proj': 0.2853, 'mlp.down_proj': 0.2065}
+BLOCK AT15 22 {'self_attn.q_proj': 0.2418, 'self_attn.k_proj': 0.2416, 'self_attn.v_proj': 0.2585, 'self_attn.o_proj': 0.2277, 'mlp.gate_proj': 0.2573, 'mlp.up_proj': 0.2585, 'mlp.down_proj': 0.1942}
+BLOCK AT15 23 {'self_attn.q_proj': 0.213, 'self_attn.k_proj': 0.2185, 'self_attn.v_proj': 0.2451, 'self_attn.o_proj': 0.075, 'mlp.gate_proj': 0.2541, 'mlp.up_proj': 0.2534, 'mlp.down_proj': 0.1554}
+BLOCK AT15 24 {'self_attn.q_proj': 0.2656, 'self_attn.k_proj': 0.2691, 'self_attn.v_proj': 0.3004, 'self_attn.o_proj': 0.1449, 'mlp.gate_proj': 0.2495, 'mlp.up_proj': 0.2508, 'mlp.down_proj': 0.1515}
+BLOCK AT15 25 {'self_attn.q_proj': 0.297, 'self_attn.k_proj': 0.3019, 'self_attn.v_proj': 0.2989, 'self_attn.o_proj': 0.097, 'mlp.gate_proj': 0.259, 'mlp.up_proj': 0.2579, 'mlp.down_proj': 0.1601}
+BLOCK AT15 26 {'self_attn.q_proj': 0.2973, 'self_attn.k_proj': 0.2948, 'self_attn.v_proj': 0.3131, 'self_attn.o_proj': 0.0248, 'mlp.gate_proj': 0.2527, 'mlp.up_proj': 0.2533, 'mlp.down_proj': 0.0372}
+BLOCK AT15 27 {'self_attn.q_proj': 0.3048, 'self_attn.k_proj': 0.3105, 'self_attn.v_proj': 0.3057, 'self_attn.o_proj': 0.0755, 'mlp.gate_proj': 0.1584, 'mlp.up_proj': 0.1572, 'mlp.down_proj': 0.0303}
+ARM AT15 {'valid': 6.9106, 'test': 8.846}
+BLOCK AT16 0 {'self_attn.q_proj': 0.1823, 'self_attn.k_proj': 0.1461, 'self_attn.v_proj': 0.1722, 'self_attn.o_proj': 0.138, 'mlp.gate_proj': 0.1388, 'mlp.up_proj': 0.1387, 'mlp.down_proj': 0.1353}
+BLOCK AT16 1 {'self_attn.q_proj': 0.2172, 'self_attn.k_proj': 0.2071, 'self_attn.v_proj': 0.2198, 'self_attn.o_proj': 0.056, 'mlp.gate_proj': 0.089, 'mlp.up_proj': 0.0997, 'mlp.down_proj': 0.0156}
+BLOCK AT16 2 {'self_attn.q_proj': 0.2468, 'self_attn.k_proj': 0.2532, 'self_attn.v_proj': 0.2368, 'self_attn.o_proj': 0.2451, 'mlp.gate_proj': 0.1255, 'mlp.up_proj': 0.1322, 'mlp.down_proj': 0.0933}
+BLOCK AT16 3 {'self_attn.q_proj': 0.2034, 'self_attn.k_proj': 0.1939, 'self_attn.v_proj': 0.2117, 'self_attn.o_proj': 0.2484, 'mlp.gate_proj': 0.168, 'mlp.up_proj': 0.1694, 'mlp.down_proj': 0.1745}
+BLOCK AT16 4 {'self_attn.q_proj': 0.2254, 'self_attn.k_proj': 0.2275, 'self_attn.v_proj': 0.2521, 'self_attn.o_proj': 0.3087, 'mlp.gate_proj': 0.2385, 'mlp.up_proj': 0.2349, 'mlp.down_proj': 0.2129}
+BLOCK AT16 5 {'self_attn.q_proj': 0.2034, 'self_attn.k_proj': 0.2144, 'self_attn.v_proj': 0.2413, 'self_attn.o_proj': 0.2234, 'mlp.gate_proj': 0.2088, 'mlp.up_proj': 0.2081, 'mlp.down_proj': 0.1765}
+BLOCK AT16 6 {'self_attn.q_proj': 0.1977, 'self_attn.k_proj': 0.1946, 'self_attn.v_proj': 0.2043, 'self_attn.o_proj': 0.1656, 'mlp.gate_proj': 0.3433, 'mlp.up_proj': 0.3433, 'mlp.down_proj': 0.2296}
+BLOCK AT16 7 {'self_attn.q_proj': 0.1765, 'self_attn.k_proj': 0.1787, 'self_attn.v_proj': 0.1685, 'self_attn.o_proj': 0.1552, 'mlp.gate_proj': 0.3434, 'mlp.up_proj': 0.3442, 'mlp.down_proj': 0.2404}
+BLOCK AT16 8 {'self_attn.q_proj': 0.2092, 'self_attn.k_proj': 0.2094, 'self_attn.v_proj': 0.2206, 'self_attn.o_proj': 0.2167, 'mlp.gate_proj': 0.3422, 'mlp.up_proj': 0.3373, 'mlp.down_proj': 0.2464}
+BLOCK AT16 9 {'self_attn.q_proj': 0.1862, 'self_attn.k_proj': 0.1866, 'self_attn.v_proj': 0.2128, 'self_attn.o_proj': 0.2299, 'mlp.gate_proj': 0.3492, 'mlp.up_proj': 0.3476, 'mlp.down_proj': 0.2755}
+BLOCK AT16 10 {'self_attn.q_proj': 0.2304, 'self_attn.k_proj': 0.2335, 'self_attn.v_proj': 0.2597, 'self_attn.o_proj': 0.2089, 'mlp.gate_proj': 0.3346, 'mlp.up_proj': 0.3282, 'mlp.down_proj': 0.2598}
+BLOCK AT16 11 {'self_attn.q_proj': 0.1806, 'self_attn.k_proj': 0.1825, 'self_attn.v_proj': 0.1823, 'self_attn.o_proj': 0.1516, 'mlp.gate_proj': 0.2914, 'mlp.up_proj': 0.286, 'mlp.down_proj': 0.2212}
+BLOCK AT16 12 {'self_attn.q_proj': 0.2133, 'self_attn.k_proj': 0.219, 'self_attn.v_proj': 0.2164, 'self_attn.o_proj': 0.1521, 'mlp.gate_proj': 0.3066, 'mlp.up_proj': 0.3065, 'mlp.down_proj': 0.2426}
+BLOCK AT16 13 {'self_attn.q_proj': 0.1899, 'self_attn.k_proj': 0.1897, 'self_attn.v_proj': 0.1969, 'self_attn.o_proj': 0.1705, 'mlp.gate_proj': 0.3303, 'mlp.up_proj': 0.3304, 'mlp.down_proj': 0.296}
+BLOCK AT16 14 {'self_attn.q_proj': 0.2205, 'self_attn.k_proj': 0.2086, 'self_attn.v_proj': 0.2332, 'self_attn.o_proj': 0.1888, 'mlp.gate_proj': 0.3546, 'mlp.up_proj': 0.3535, 'mlp.down_proj': 0.3051}
+BLOCK AT16 15 {'self_attn.q_proj': 0.2713, 'self_attn.k_proj': 0.2162, 'self_attn.v_proj': 0.2536, 'self_attn.o_proj': 0.1985, 'mlp.gate_proj': 0.2942, 'mlp.up_proj': 0.2944, 'mlp.down_proj': 0.2364}
+BLOCK AT16 16 {'self_attn.q_proj': 0.2269, 'self_attn.k_proj': 0.2319, 'self_attn.v_proj': 0.2371, 'self_attn.o_proj': 0.1172, 'mlp.gate_proj': 0.2817, 'mlp.up_proj': 0.2787, 'mlp.down_proj': 0.2455}
+BLOCK AT16 17 {'self_attn.q_proj': 0.2409, 'self_attn.k_proj': 0.2457, 'self_attn.v_proj': 0.2492, 'self_attn.o_proj': 0.1205, 'mlp.gate_proj': 0.2487, 'mlp.up_proj': 0.2495, 'mlp.down_proj': 0.2178}
+BLOCK AT16 18 {'self_attn.q_proj': 0.1946, 'self_attn.k_proj': 0.1955, 'self_attn.v_proj': 0.1945, 'self_attn.o_proj': 0.1831, 'mlp.gate_proj': 0.2531, 'mlp.up_proj': 0.2527, 'mlp.down_proj': 0.2301}
+BLOCK AT16 19 {'self_attn.q_proj': 0.2132, 'self_attn.k_proj': 0.2173, 'self_attn.v_proj': 0.2338, 'self_attn.o_proj': 0.183, 'mlp.gate_proj': 0.2526, 'mlp.up_proj': 0.2557, 'mlp.down_proj': 0.2118}
+BLOCK AT16 20 {'self_attn.q_proj': 0.2354, 'self_attn.k_proj': 0.2473, 'self_attn.v_proj': 0.2573, 'self_attn.o_proj': 0.167, 'mlp.gate_proj': 0.2651, 'mlp.up_proj': 0.266, 'mlp.down_proj': 0.2121}
+BLOCK AT16 21 {'self_attn.q_proj': 0.2166, 'self_attn.k_proj': 0.2176, 'self_attn.v_proj': 0.2223, 'self_attn.o_proj': 0.0879, 'mlp.gate_proj': 0.2515, 'mlp.up_proj': 0.2495, 'mlp.down_proj': 0.1811}
+BLOCK AT16 22 {'self_attn.q_proj': 0.2119, 'self_attn.k_proj': 0.2134, 'self_attn.v_proj': 0.2321, 'self_attn.o_proj': 0.1986, 'mlp.gate_proj': 0.2248, 'mlp.up_proj': 0.226, 'mlp.down_proj': 0.1696}
+BLOCK AT16 23 {'self_attn.q_proj': 0.1859, 'self_attn.k_proj': 0.1943, 'self_attn.v_proj': 0.2223, 'self_attn.o_proj': 0.0646, 'mlp.gate_proj': 0.2222, 'mlp.up_proj': 0.2213, 'mlp.down_proj': 0.1351}
+BLOCK AT16 24 {'self_attn.q_proj': 0.2325, 'self_attn.k_proj': 0.2381, 'self_attn.v_proj': 0.2834, 'self_attn.o_proj': 0.1267, 'mlp.gate_proj': 0.2175, 'mlp.up_proj': 0.2189, 'mlp.down_proj': 0.1325}
+BLOCK AT16 25 {'self_attn.q_proj': 0.2605, 'self_attn.k_proj': 0.2723, 'self_attn.v_proj': 0.3028, 'self_attn.o_proj': 0.0851, 'mlp.gate_proj': 0.2263, 'mlp.up_proj': 0.2253, 'mlp.down_proj': 0.1399}
+BLOCK AT16 26 {'self_attn.q_proj': 0.2643, 'self_attn.k_proj': 0.2661, 'self_attn.v_proj': 0.3139, 'self_attn.o_proj': 0.0206, 'mlp.gate_proj': 0.2213, 'mlp.up_proj': 0.2216, 'mlp.down_proj': 0.0532}
+BLOCK AT16 27 {'self_attn.q_proj': 0.2711, 'self_attn.k_proj': 0.2835, 'self_attn.v_proj': 0.3041, 'self_attn.o_proj': 0.0643, 'mlp.gate_proj': 0.1389, 'mlp.up_proj': 0.1376, 'mlp.down_proj': 0.0268}
+ARM AT16 {'valid': 6.8624, 'test': 8.6017}
+DONE {"RTN vs O": {"valid": {"rise_pct": 13.540550402766915, "label": "substantial"}, "test": {"rise_pct": 13.333551307711854, "label": "substantial"}}, "RTN16 vs O": {"valid": {"rise_pct": 12.21333292867195, "label": "substantial"}, "test": {"rise_pct": 15.208865447201037, "label": "substantial"}}, "L vs O": {"valid": {"rise_pct": 9.708141516726254, "label": "substantial"}, "test": {"rise_pct": 10.021277226333902, "label": "substantial"}}, "AT15 vs O": {"valid": {"rise_pct": 10.893555023436964, "label": "substantial"}, "test": {"rise_pct": 10.445347968831364, "label": "substantial"}}, "AT16 vs O": {"valid": {"rise_pct": 10.12080639948616, "label": "substantial"}, "test": {"rise_pct": 7.395064948347474, "label": "substantial"}}, "RTN16 vs RTN": {"valid": {"rise_pct": -1.1689369739594002, "label": "negligible"}, "test": {"rise_pct": 1.654685764145447, "label": "modest"}}, "AT16 vs AT15": {"valid": {"rise_pct": -0.6968381740376728, "label": "negligible"}, "test": {"rise_pct": -2.7618030786997982, "label": "negligible"}}, "L vs AT16": {"valid": {"rise_pct": -0.3747383407844751, "label": "negligible"}, "test": {"rise_pct": 2.4453751941483803, "label": "modest"}}}

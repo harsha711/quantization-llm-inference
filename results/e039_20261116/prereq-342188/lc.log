@@ -1,0 +1,775 @@
++ prun timeout 7200 /tmp/e039-lc-hpuvvad-20261116-r1/bin/python /mnt/beegfs/hpuvvad/csc548-w4a16-e039-20261116/prereq-c58-342188/lc.py /mnt/beegfs/hpuvvad/csc548-w4a16-e039-20261116/prereq-c58-342188/lc.npz /home/hpuvvad/csc548-w4a16-e014-c4-20261108/cache/huggingface/hub/models--Qwen--Qwen2.5-1.5B/snapshots/8faed761d45a263340a0528343f099c05c9a4323 /mnt/beegfs/hpuvvad/csc548-w4a16-e037-20261111/c4-train.00000-of-01024.json.gz 8
+[prun] Master compute host = c58
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun timeout 7200 /tmp/e039-lc-hpuvvad-20261116-r1/bin/python /mnt/beegfs/hpuvvad/csc548-w4a16-e039-20261116/prereq-c58-342188/lc.py /mnt/beegfs/hpuvvad/csc548-w4a16-e039-20261116/prereq-c58-342188/lc.npz /home/hpuvvad/csc548-w4a16-e014-c4-20261108/cache/huggingface/hub/models--Qwen--Qwen2.5-1.5B/snapshots/8faed761d45a263340a0528343f099c05c9a4323 /mnt/beegfs/hpuvvad/csc548-w4a16-e037-20261111/c4-train.00000-of-01024.json.gz 8 (family=openmpi4)
+Loading weights:   0%|          | 0/338 [00:00<?, ?it/s]Loading weights:   0%|          | 1/338 [00:08<48:35,  8.65s/it]Loading weights:  22%|██▏       | 73/338 [00:08<00:22, 11.76it/s]Loading weights:  32%|███▏      | 107/338 [00:11<00:18, 12.43it/s]Loading weights:  37%|███▋      | 126/338 [00:12<00:16, 12.87it/s]Loading weights:  41%|████      | 138/338 [00:13<00:15, 13.22it/s]Loading weights:  43%|████▎     | 147/338 [00:13<00:13, 14.32it/s]Loading weights:  46%|████▌     | 154/338 [00:14<00:13, 13.28it/s]Loading weights:  47%|████▋     | 159/338 [00:14<00:12, 14.42it/s]Loading weights:  49%|████▊     | 164/338 [00:14<00:12, 14.43it/s]Loading weights:  50%|████▉     | 168/338 [00:15<00:11, 14.38it/s]Loading weights:  51%|█████     | 171/338 [00:15<00:11, 14.63it/s]Loading weights:  51%|█████▏    | 174/338 [00:15<00:12, 13.18it/s]Loading weights:  52%|█████▏    | 177/338 [00:16<00:12, 12.89it/s]Loading weights:  54%|█████▍    | 183/338 [00:16<00:11, 13.51it/s]Loading weights:  55%|█████▍    | 185/338 [00:16<00:11, 13.61it/s]Loading weights:  57%|█████▋    | 193/338 [00:16<00:07, 19.61it/s]Loading weights:  58%|█████▊    | 196/338 [00:17<00:10, 13.11it/s]Loading weights:  60%|██████    | 203/338 [00:17<00:07, 17.30it/s]Loading weights:  61%|██████    | 206/338 [00:17<00:07, 18.19it/s]Loading weights:  62%|██████▏   | 209/338 [00:18<00:10, 12.25it/s]Loading weights:  63%|██████▎   | 213/338 [00:18<00:09, 12.54it/s]Loading weights:  65%|██████▍   | 219/338 [00:18<00:06, 17.07it/s]Loading weights:  66%|██████▌   | 222/338 [00:18<00:08, 14.25it/s]Loading weights:  67%|██████▋   | 227/338 [00:19<00:07, 15.09it/s]Loading weights:  68%|██████▊   | 231/338 [00:19<00:06, 16.71it/s]Loading weights:  69%|██████▉   | 233/338 [00:19<00:08, 12.70it/s]Loading weights:  70%|███████   | 237/338 [00:19<00:06, 15.01it/s]Loading weights:  72%|███████▏  | 244/338 [00:20<00:08, 11.64it/s]Loading weights:  75%|███████▍  | 253/338 [00:20<00:04, 18.17it/s]Loading weights:  76%|███████▌  | 256/338 [00:21<00:06, 13.33it/s]Loading weights:  78%|███████▊  | 263/338 [00:21<00:04, 17.36it/s]Loading weights:  79%|███████▊  | 266/338 [00:21<00:03, 18.03it/s]Loading weights:  80%|███████▉  | 269/338 [00:22<00:05, 13.09it/s]Loading weights:  81%|████████  | 273/338 [00:22<00:05, 12.88it/s]Loading weights:  83%|████████▎ | 279/338 [00:22<00:03, 17.13it/s]Loading weights:  83%|████████▎ | 282/338 [00:23<00:03, 14.31it/s]Loading weights:  85%|████████▍ | 287/338 [00:23<00:02, 17.50it/s]Loading weights:  86%|████████▌ | 290/338 [00:23<00:02, 17.53it/s]Loading weights:  87%|████████▋ | 293/338 [00:23<00:03, 12.44it/s]Loading weights:  89%|████████▉ | 300/338 [00:23<00:02, 18.13it/s]Loading weights:  90%|████████▉ | 303/338 [00:24<00:02, 15.46it/s]Loading weights:  90%|█████████ | 305/338 [00:24<00:02, 12.09it/s]Loading weights:  91%|█████████▏| 309/338 [00:24<00:02, 13.05it/s]Loading weights:  93%|█████████▎| 315/338 [00:25<00:01, 14.20it/s]Loading weights:  94%|█████████▍| 317/338 [00:25<00:01, 12.79it/s]Loading weights:  96%|█████████▌| 325/338 [00:25<00:00, 21.28it/s]Loading weights:  97%|█████████▋| 329/338 [00:26<00:00, 13.35it/s]Loading weights: 100%|██████████| 338/338 [00:26<00:00, 12.90it/s]
+2026-11-16T22:08:32.8705 | reset | INFO - Compression lifecycle reset
+2026-11-16T22:08:32.8732 | from_modifiers | INFO - Creating recipe from modifiers
+Applying quantization config:   0%|          | 0/196 [00:00<?, ?it/s]Applying quantization config:   1%|          | 1/196 [00:00<00:56,  3.44it/s]Applying quantization config: 100%|██████████| 196/196 [00:00<00:00, 646.01it/s]
+2026-11-16T22:08:33.1925 | initialize | INFO - Compression lifecycle initialized for 1 modifiers
+2026-11-16T22:08:33.1926 | IndependentPipeline | INFO - Inferred `SequentialPipeline` for `GPTQModifier`
+W1116 22:08:33.217000 3447923 torch/fx/_symbolic_trace.py:57] is_fx_tracing will return true for both fx.symbolic_trace and torch.export. Please use is_fx_tracing_symbolic_tracing() for specifically fx.symbolic_trace or torch.compiler.is_compiling() for specifically torch.export/compile.
+/tmp/e039-lc-hpuvvad-20261116-r1/lib64/python3.11/site-packages/llmcompressor/pipelines/sequential/helpers.py:686: FutureWarning: Found persistent modules outside of subgraphs. This feature will be deprecated in a future release.
+  return func(*args, **kwargs)
+Preparing cache:   0%|          | 0/8 [00:00<?, ?it/s]Preparing cache: 100%|██████████| 8/8 [00:00<00:00, 2561.80it/s]
+(1/29): Calibrating:   0%|          | 0/8 [00:00<?, ?it/s](1/29): Calibrating:  12%|█▎        | 1/8 [00:01<00:10,  1.48s/it](1/29): Calibrating: 100%|██████████| 8/8 [00:01<00:00,  5.40it/s]
+(1/29): Propagating:   0%|          | 0/8 [00:00<?, ?it/s](1/29): Propagating: 100%|██████████| 8/8 [00:00<00:00, 619.63it/s]
+(2/29): Calibrating:   0%|          | 0/8 [00:00<?, ?it/s](2/29): Calibrating:  12%|█▎        | 1/8 [00:07<00:50,  7.16s/it](2/29): Calibrating: 100%|██████████| 8/8 [00:07<00:00,  1.12it/s]
+2026-11-16T22:08:45.6589 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.0.self_attn.q_proj', 'model.layers.0.self_attn.o_proj']
+2026-11-16T22:08:51.9802 | GPTQ | METRIC - time 6.32s
+2026-11-16T22:08:51.9804 | GPTQ | METRIC - error 543.95
+2026-11-16T22:08:51.9806 | GPTQ | METRIC - Accelerator 0 | usage: 24.00% | total memory: 16.7 Gb
+2026-11-16T22:08:51.9806 | GPTQ | METRIC - time 6.32s
+2026-11-16T22:08:51.9806 | GPTQ | METRIC - error 12200.69
+2026-11-16T22:08:51.9807 | GPTQ | METRIC - Accelerator 0 | usage: 24.00% | total memory: 16.7 Gb
+2026-11-16T22:08:51.9814 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.0.self_attn.k_proj', 'model.layers.0.self_attn.v_proj']
+2026-11-16T22:08:51.9934 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:08:51.9935 | GPTQ | METRIC - error 207.70
+2026-11-16T22:08:51.9936 | GPTQ | METRIC - Accelerator 0 | usage: 24.00% | total memory: 16.7 Gb
+2026-11-16T22:08:51.9936 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:08:51.9937 | GPTQ | METRIC - error 1843.34
+2026-11-16T22:08:51.9937 | GPTQ | METRIC - Accelerator 0 | usage: 24.00% | total memory: 16.7 Gb
+2026-11-16T22:08:51.9942 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.0.mlp.gate_proj', 'model.layers.0.mlp.up_proj']
+2026-11-16T22:08:52.0263 | GPTQ | METRIC - time 0.03s
+2026-11-16T22:08:52.0263 | GPTQ | METRIC - error 4837.63
+2026-11-16T22:08:52.0264 | GPTQ | METRIC - Accelerator 0 | usage: 24.00% | total memory: 16.7 Gb
+2026-11-16T22:08:52.0265 | GPTQ | METRIC - time 0.03s
+2026-11-16T22:08:52.0265 | GPTQ | METRIC - error 7024.92
+2026-11-16T22:08:52.0266 | GPTQ | METRIC - Accelerator 0 | usage: 24.00% | total memory: 16.7 Gb
+2026-11-16T22:08:52.0274 | compress_module_list | INFO - Quantizing 1 module(s): ['model.layers.0.mlp.down_proj']
+2026-11-16T22:08:52.9699 | GPTQ | METRIC - time 0.94s
+2026-11-16T22:08:52.9700 | GPTQ | METRIC - error 670.07
+2026-11-16T22:08:52.9702 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+(2/29): Propagating:   0%|          | 0/8 [00:00<?, ?it/s](2/29): Propagating: 100%|██████████| 8/8 [00:00<00:00, 148.62it/s]
+2026-11-16T22:08:53.0247 | get_module_device | WARNING - Unable to get execution device of MemorylessMinMaxObserver(), falling back to CPU
+(3/29): Calibrating:   0%|          | 0/8 [00:00<?, ?it/s](3/29): Calibrating: 100%|██████████| 8/8 [00:00<00:00, 770.22it/s]
+2026-11-16T22:08:53.2703 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.1.self_attn.q_proj', 'model.layers.1.self_attn.o_proj']
+2026-11-16T22:08:53.2841 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:08:53.2842 | GPTQ | METRIC - error 206.16
+2026-11-16T22:08:53.2844 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:08:53.2844 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:08:53.2844 | GPTQ | METRIC - error 2528.09
+2026-11-16T22:08:53.2845 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:08:53.2849 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.1.self_attn.k_proj', 'model.layers.1.self_attn.v_proj']
+2026-11-16T22:08:53.2968 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:08:53.2968 | GPTQ | METRIC - error 167.64
+2026-11-16T22:08:53.2970 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:08:53.2970 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:08:53.2970 | GPTQ | METRIC - error 736.41
+2026-11-16T22:08:53.2971 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:08:53.2975 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.1.mlp.gate_proj', 'model.layers.1.mlp.up_proj']
+2026-11-16T22:08:53.3296 | GPTQ | METRIC - time 0.03s
+2026-11-16T22:08:53.3297 | GPTQ | METRIC - error 156075.38
+2026-11-16T22:08:53.3298 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:08:53.3298 | GPTQ | METRIC - time 0.03s
+2026-11-16T22:08:53.3298 | GPTQ | METRIC - error 190151.84
+2026-11-16T22:08:53.3299 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:08:53.3307 | compress_module_list | INFO - Quantizing 1 module(s): ['model.layers.1.mlp.down_proj']
+2026-11-16T22:08:53.6128 | GPTQ | METRIC - time 0.28s
+2026-11-16T22:08:53.6128 | GPTQ | METRIC - error 12642.29
+2026-11-16T22:08:53.6130 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+(3/29): Propagating:   0%|          | 0/8 [00:00<?, ?it/s](3/29): Propagating: 100%|██████████| 8/8 [00:00<00:00, 156.69it/s]
+(4/29): Calibrating:   0%|          | 0/8 [00:00<?, ?it/s](4/29): Calibrating: 100%|██████████| 8/8 [00:00<00:00, 789.74it/s]
+2026-11-16T22:08:53.9104 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.2.self_attn.q_proj', 'model.layers.2.self_attn.o_proj']
+2026-11-16T22:08:53.9242 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:08:53.9242 | GPTQ | METRIC - error 317.42
+2026-11-16T22:08:53.9244 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:08:53.9244 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:08:53.9244 | GPTQ | METRIC - error 7619.66
+2026-11-16T22:08:53.9245 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:08:53.9249 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.2.self_attn.k_proj', 'model.layers.2.self_attn.v_proj']
+2026-11-16T22:08:53.9369 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:08:53.9369 | GPTQ | METRIC - error 680.28
+2026-11-16T22:08:53.9371 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:08:53.9371 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:08:53.9371 | GPTQ | METRIC - error 1631.61
+2026-11-16T22:08:53.9372 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:08:53.9376 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.2.mlp.gate_proj', 'model.layers.2.mlp.up_proj']
+2026-11-16T22:08:53.9699 | GPTQ | METRIC - time 0.03s
+2026-11-16T22:08:53.9699 | GPTQ | METRIC - error 101614.12
+2026-11-16T22:08:53.9700 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:08:53.9701 | GPTQ | METRIC - time 0.03s
+2026-11-16T22:08:53.9701 | GPTQ | METRIC - error 154174.91
+2026-11-16T22:08:53.9702 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:08:53.9710 | compress_module_list | INFO - Quantizing 1 module(s): ['model.layers.2.mlp.down_proj']
+2026-11-16T22:08:54.2534 | GPTQ | METRIC - time 0.28s
+2026-11-16T22:08:54.2534 | GPTQ | METRIC - error 25266.51
+2026-11-16T22:08:54.2535 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+(4/29): Propagating:   0%|          | 0/8 [00:00<?, ?it/s](4/29): Propagating: 100%|██████████| 8/8 [00:00<00:00, 158.17it/s]
+(5/29): Calibrating:   0%|          | 0/8 [00:00<?, ?it/s](5/29): Calibrating: 100%|██████████| 8/8 [00:00<00:00, 792.86it/s]
+2026-11-16T22:08:54.5505 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.3.self_attn.q_proj', 'model.layers.3.self_attn.o_proj']
+2026-11-16T22:08:54.5642 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:08:54.5642 | GPTQ | METRIC - error 513.55
+2026-11-16T22:08:54.5643 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:08:54.5644 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:08:54.5644 | GPTQ | METRIC - error 7318.52
+2026-11-16T22:08:54.5645 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:08:54.5649 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.3.self_attn.k_proj', 'model.layers.3.self_attn.v_proj']
+2026-11-16T22:08:54.5768 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:08:54.5768 | GPTQ | METRIC - error 882.74
+2026-11-16T22:08:54.5769 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:08:54.5770 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:08:54.5770 | GPTQ | METRIC - error 1548.22
+2026-11-16T22:08:54.5771 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:08:54.5775 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.3.mlp.gate_proj', 'model.layers.3.mlp.up_proj']
+2026-11-16T22:08:54.6096 | GPTQ | METRIC - time 0.03s
+2026-11-16T22:08:54.6097 | GPTQ | METRIC - error 70019.05
+2026-11-16T22:08:54.6098 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:08:54.6098 | GPTQ | METRIC - time 0.03s
+2026-11-16T22:08:54.6098 | GPTQ | METRIC - error 126489.05
+2026-11-16T22:08:54.6099 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:08:54.6107 | compress_module_list | INFO - Quantizing 1 module(s): ['model.layers.3.mlp.down_proj']
+2026-11-16T22:08:54.8931 | GPTQ | METRIC - time 0.28s
+2026-11-16T22:08:54.8932 | GPTQ | METRIC - error 2037.47
+2026-11-16T22:08:54.8933 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+(5/29): Propagating:   0%|          | 0/8 [00:00<?, ?it/s](5/29): Propagating: 100%|██████████| 8/8 [00:00<00:00, 158.24it/s]
+(6/29): Calibrating:   0%|          | 0/8 [00:00<?, ?it/s](6/29): Calibrating: 100%|██████████| 8/8 [00:00<00:00, 795.47it/s]
+2026-11-16T22:08:55.1902 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.4.self_attn.q_proj', 'model.layers.4.self_attn.o_proj']
+2026-11-16T22:08:55.2040 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:08:55.2040 | GPTQ | METRIC - error 691.83
+2026-11-16T22:08:55.2042 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:08:55.2042 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:08:55.2042 | GPTQ | METRIC - error 9623.29
+2026-11-16T22:08:55.2043 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:08:55.2047 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.4.self_attn.k_proj', 'model.layers.4.self_attn.v_proj']
+2026-11-16T22:08:55.2167 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:08:55.2167 | GPTQ | METRIC - error 1259.53
+2026-11-16T22:08:55.2169 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:08:55.2169 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:08:55.2169 | GPTQ | METRIC - error 1842.72
+2026-11-16T22:08:55.2170 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:08:55.2174 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.4.mlp.gate_proj', 'model.layers.4.mlp.up_proj']
+2026-11-16T22:08:55.2497 | GPTQ | METRIC - time 0.03s
+2026-11-16T22:08:55.2497 | GPTQ | METRIC - error 55620.16
+2026-11-16T22:08:55.2498 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:08:55.2499 | GPTQ | METRIC - time 0.03s
+2026-11-16T22:08:55.2499 | GPTQ | METRIC - error 90220.06
+2026-11-16T22:08:55.2500 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:08:55.2508 | compress_module_list | INFO - Quantizing 1 module(s): ['model.layers.4.mlp.down_proj']
+2026-11-16T22:08:55.5331 | GPTQ | METRIC - time 0.28s
+2026-11-16T22:08:55.5332 | GPTQ | METRIC - error 2412.70
+2026-11-16T22:08:55.5333 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+(6/29): Propagating:   0%|          | 0/8 [00:00<?, ?it/s](6/29): Propagating: 100%|██████████| 8/8 [00:00<00:00, 158.18it/s]
+(7/29): Calibrating:   0%|          | 0/8 [00:00<?, ?it/s](7/29): Calibrating: 100%|██████████| 8/8 [00:00<00:00, 794.98it/s]
+2026-11-16T22:08:55.8301 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.5.self_attn.q_proj', 'model.layers.5.self_attn.o_proj']
+2026-11-16T22:08:55.8439 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:08:55.8439 | GPTQ | METRIC - error 948.22
+2026-11-16T22:08:55.8440 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:08:55.8441 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:08:55.8441 | GPTQ | METRIC - error 9634.41
+2026-11-16T22:08:55.8442 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:08:55.8446 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.5.self_attn.k_proj', 'model.layers.5.self_attn.v_proj']
+2026-11-16T22:08:55.8566 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:08:55.8566 | GPTQ | METRIC - error 1704.46
+2026-11-16T22:08:55.8567 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:08:55.8568 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:08:55.8568 | GPTQ | METRIC - error 2054.24
+2026-11-16T22:08:55.8569 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:08:55.8573 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.5.mlp.gate_proj', 'model.layers.5.mlp.up_proj']
+2026-11-16T22:08:55.8896 | GPTQ | METRIC - time 0.03s
+2026-11-16T22:08:55.8896 | GPTQ | METRIC - error 111508.27
+2026-11-16T22:08:55.8897 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:08:55.8897 | GPTQ | METRIC - time 0.03s
+2026-11-16T22:08:55.8898 | GPTQ | METRIC - error 169902.50
+2026-11-16T22:08:55.8898 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:08:55.8907 | compress_module_list | INFO - Quantizing 1 module(s): ['model.layers.5.mlp.down_proj']
+2026-11-16T22:08:56.1731 | GPTQ | METRIC - time 0.28s
+2026-11-16T22:08:56.1731 | GPTQ | METRIC - error 1838.26
+2026-11-16T22:08:56.1733 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+(7/29): Propagating:   0%|          | 0/8 [00:00<?, ?it/s](7/29): Propagating: 100%|██████████| 8/8 [00:00<00:00, 158.12it/s]
+(8/29): Calibrating:   0%|          | 0/8 [00:00<?, ?it/s](8/29): Calibrating: 100%|██████████| 8/8 [00:00<00:00, 796.34it/s]
+2026-11-16T22:08:56.4703 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.6.self_attn.q_proj', 'model.layers.6.self_attn.o_proj']
+2026-11-16T22:08:56.4840 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:08:56.4841 | GPTQ | METRIC - error 422.69
+2026-11-16T22:08:56.4842 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:08:56.4843 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:08:56.4843 | GPTQ | METRIC - error 11701.10
+2026-11-16T22:08:56.4844 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:08:56.4848 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.6.self_attn.k_proj', 'model.layers.6.self_attn.v_proj']
+2026-11-16T22:08:56.4968 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:08:56.4968 | GPTQ | METRIC - error 1290.26
+2026-11-16T22:08:56.4969 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:08:56.4970 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:08:56.4970 | GPTQ | METRIC - error 2443.59
+2026-11-16T22:08:56.4971 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:08:56.4975 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.6.mlp.gate_proj', 'model.layers.6.mlp.up_proj']
+2026-11-16T22:08:56.5297 | GPTQ | METRIC - time 0.03s
+2026-11-16T22:08:56.5298 | GPTQ | METRIC - error 41160.63
+2026-11-16T22:08:56.5299 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:08:56.5299 | GPTQ | METRIC - time 0.03s
+2026-11-16T22:08:56.5299 | GPTQ | METRIC - error 48989.07
+2026-11-16T22:08:56.5300 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:08:56.5308 | compress_module_list | INFO - Quantizing 1 module(s): ['model.layers.6.mlp.down_proj']
+2026-11-16T22:08:56.8134 | GPTQ | METRIC - time 0.28s
+2026-11-16T22:08:56.8134 | GPTQ | METRIC - error 2477.02
+2026-11-16T22:08:56.8135 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+(8/29): Propagating:   0%|          | 0/8 [00:00<?, ?it/s](8/29): Propagating: 100%|██████████| 8/8 [00:00<00:00, 158.19it/s]
+(9/29): Calibrating:   0%|          | 0/8 [00:00<?, ?it/s](9/29): Calibrating: 100%|██████████| 8/8 [00:00<00:00, 781.26it/s]
+2026-11-16T22:08:57.1107 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.7.self_attn.q_proj', 'model.layers.7.self_attn.o_proj']
+2026-11-16T22:08:57.1244 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:08:57.1245 | GPTQ | METRIC - error 626.89
+2026-11-16T22:08:57.1246 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:08:57.1246 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:08:57.1247 | GPTQ | METRIC - error 5525.55
+2026-11-16T22:08:57.1247 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:08:57.1252 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.7.self_attn.k_proj', 'model.layers.7.self_attn.v_proj']
+2026-11-16T22:08:57.1371 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:08:57.1372 | GPTQ | METRIC - error 856.85
+2026-11-16T22:08:57.1373 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:08:57.1373 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:08:57.1373 | GPTQ | METRIC - error 1076.82
+2026-11-16T22:08:57.1374 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:08:57.1378 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.7.mlp.gate_proj', 'model.layers.7.mlp.up_proj']
+2026-11-16T22:08:57.1701 | GPTQ | METRIC - time 0.03s
+2026-11-16T22:08:57.1701 | GPTQ | METRIC - error 38889.35
+2026-11-16T22:08:57.1702 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:08:57.1703 | GPTQ | METRIC - time 0.03s
+2026-11-16T22:08:57.1703 | GPTQ | METRIC - error 40546.96
+2026-11-16T22:08:57.1704 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:08:57.1712 | compress_module_list | INFO - Quantizing 1 module(s): ['model.layers.7.mlp.down_proj']
+2026-11-16T22:08:57.4536 | GPTQ | METRIC - time 0.28s
+2026-11-16T22:08:57.4537 | GPTQ | METRIC - error 2582.70
+2026-11-16T22:08:57.4538 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+(9/29): Propagating:   0%|          | 0/8 [00:00<?, ?it/s](9/29): Propagating: 100%|██████████| 8/8 [00:00<00:00, 158.14it/s]
+(10/29): Calibrating:   0%|          | 0/8 [00:00<?, ?it/s](10/29): Calibrating: 100%|██████████| 8/8 [00:00<00:00, 803.58it/s]
+2026-11-16T22:08:57.7506 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.8.self_attn.q_proj', 'model.layers.8.self_attn.o_proj']
+2026-11-16T22:08:57.7643 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:08:57.7644 | GPTQ | METRIC - error 847.85
+2026-11-16T22:08:57.7645 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:08:57.7645 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:08:57.7646 | GPTQ | METRIC - error 10962.39
+2026-11-16T22:08:57.7646 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:08:57.7651 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.8.self_attn.k_proj', 'model.layers.8.self_attn.v_proj']
+2026-11-16T22:08:57.7770 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:08:57.7771 | GPTQ | METRIC - error 1211.25
+2026-11-16T22:08:57.7772 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:08:57.7772 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:08:57.7773 | GPTQ | METRIC - error 1944.76
+2026-11-16T22:08:57.7773 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:08:57.7777 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.8.mlp.gate_proj', 'model.layers.8.mlp.up_proj']
+2026-11-16T22:08:57.8100 | GPTQ | METRIC - time 0.03s
+2026-11-16T22:08:57.8100 | GPTQ | METRIC - error 37556.93
+2026-11-16T22:08:57.8102 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:08:57.8102 | GPTQ | METRIC - time 0.03s
+2026-11-16T22:08:57.8102 | GPTQ | METRIC - error 40813.58
+2026-11-16T22:08:57.8103 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:08:57.8111 | compress_module_list | INFO - Quantizing 1 module(s): ['model.layers.8.mlp.down_proj']
+2026-11-16T22:08:58.0937 | GPTQ | METRIC - time 0.28s
+2026-11-16T22:08:58.0937 | GPTQ | METRIC - error 2322.07
+2026-11-16T22:08:58.0938 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+(10/29): Propagating:   0%|          | 0/8 [00:00<?, ?it/s](10/29): Propagating: 100%|██████████| 8/8 [00:00<00:00, 158.21it/s]
+(11/29): Calibrating:   0%|          | 0/8 [00:00<?, ?it/s](11/29): Calibrating: 100%|██████████| 8/8 [00:00<00:00, 806.25it/s]
+2026-11-16T22:08:58.3907 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.9.self_attn.q_proj', 'model.layers.9.self_attn.o_proj']
+2026-11-16T22:08:58.4045 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:08:58.4045 | GPTQ | METRIC - error 857.32
+2026-11-16T22:08:58.4047 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:08:58.4047 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:08:58.4047 | GPTQ | METRIC - error 8557.00
+2026-11-16T22:08:58.4048 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:08:58.4052 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.9.self_attn.k_proj', 'model.layers.9.self_attn.v_proj']
+2026-11-16T22:08:58.4172 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:08:58.4172 | GPTQ | METRIC - error 1013.55
+2026-11-16T22:08:58.4173 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:08:58.4174 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:08:58.4174 | GPTQ | METRIC - error 1751.07
+2026-11-16T22:08:58.4175 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:08:58.4179 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.9.mlp.gate_proj', 'model.layers.9.mlp.up_proj']
+2026-11-16T22:08:58.4501 | GPTQ | METRIC - time 0.03s
+2026-11-16T22:08:58.4502 | GPTQ | METRIC - error 35881.57
+2026-11-16T22:08:58.4503 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:08:58.4503 | GPTQ | METRIC - time 0.03s
+2026-11-16T22:08:58.4503 | GPTQ | METRIC - error 37020.97
+2026-11-16T22:08:58.4504 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:08:58.4512 | compress_module_list | INFO - Quantizing 1 module(s): ['model.layers.9.mlp.down_proj']
+2026-11-16T22:08:58.7339 | GPTQ | METRIC - time 0.28s
+2026-11-16T22:08:58.7340 | GPTQ | METRIC - error 2350.14
+2026-11-16T22:08:58.7341 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+(11/29): Propagating:   0%|          | 0/8 [00:00<?, ?it/s](11/29): Propagating: 100%|██████████| 8/8 [00:00<00:00, 158.26it/s]
+(12/29): Calibrating:   0%|          | 0/8 [00:00<?, ?it/s](12/29): Calibrating: 100%|██████████| 8/8 [00:00<00:00, 800.88it/s]
+2026-11-16T22:08:59.0308 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.10.self_attn.q_proj', 'model.layers.10.self_attn.o_proj']
+2026-11-16T22:08:59.0446 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:08:59.0447 | GPTQ | METRIC - error 1224.87
+2026-11-16T22:08:59.0448 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:08:59.0448 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:08:59.0448 | GPTQ | METRIC - error 9155.72
+2026-11-16T22:08:59.0449 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:08:59.0453 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.10.self_attn.k_proj', 'model.layers.10.self_attn.v_proj']
+2026-11-16T22:08:59.0573 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:08:59.0574 | GPTQ | METRIC - error 1543.42
+2026-11-16T22:08:59.0575 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:08:59.0575 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:08:59.0575 | GPTQ | METRIC - error 1785.49
+2026-11-16T22:08:59.0576 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:08:59.0580 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.10.mlp.gate_proj', 'model.layers.10.mlp.up_proj']
+2026-11-16T22:08:59.0903 | GPTQ | METRIC - time 0.03s
+2026-11-16T22:08:59.0903 | GPTQ | METRIC - error 33257.23
+2026-11-16T22:08:59.0905 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:08:59.0905 | GPTQ | METRIC - time 0.03s
+2026-11-16T22:08:59.0905 | GPTQ | METRIC - error 35300.99
+2026-11-16T22:08:59.0906 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:08:59.0914 | compress_module_list | INFO - Quantizing 1 module(s): ['model.layers.10.mlp.down_proj']
+2026-11-16T22:08:59.3741 | GPTQ | METRIC - time 0.28s
+2026-11-16T22:08:59.3741 | GPTQ | METRIC - error 2057.49
+2026-11-16T22:08:59.3743 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+(12/29): Propagating:   0%|          | 0/8 [00:00<?, ?it/s](12/29): Propagating: 100%|██████████| 8/8 [00:00<00:00, 158.25it/s]
+(13/29): Calibrating:   0%|          | 0/8 [00:00<?, ?it/s](13/29): Calibrating: 100%|██████████| 8/8 [00:00<00:00, 802.45it/s]
+2026-11-16T22:08:59.6709 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.11.self_attn.q_proj', 'model.layers.11.self_attn.o_proj']
+2026-11-16T22:08:59.6846 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:08:59.6847 | GPTQ | METRIC - error 1087.33
+2026-11-16T22:08:59.6848 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:08:59.6848 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:08:59.6849 | GPTQ | METRIC - error 8475.30
+2026-11-16T22:08:59.6850 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:08:59.6854 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.11.self_attn.k_proj', 'model.layers.11.self_attn.v_proj']
+2026-11-16T22:08:59.6973 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:08:59.6974 | GPTQ | METRIC - error 1184.31
+2026-11-16T22:08:59.6975 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:08:59.6975 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:08:59.6976 | GPTQ | METRIC - error 1657.72
+2026-11-16T22:08:59.6976 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:08:59.6981 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.11.mlp.gate_proj', 'model.layers.11.mlp.up_proj']
+2026-11-16T22:08:59.7303 | GPTQ | METRIC - time 0.03s
+2026-11-16T22:08:59.7303 | GPTQ | METRIC - error 29085.93
+2026-11-16T22:08:59.7305 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:08:59.7305 | GPTQ | METRIC - time 0.03s
+2026-11-16T22:08:59.7305 | GPTQ | METRIC - error 33069.09
+2026-11-16T22:08:59.7306 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:08:59.7314 | compress_module_list | INFO - Quantizing 1 module(s): ['model.layers.11.mlp.down_proj']
+2026-11-16T22:09:00.0139 | GPTQ | METRIC - time 0.28s
+2026-11-16T22:09:00.0139 | GPTQ | METRIC - error 1590.82
+2026-11-16T22:09:00.0141 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+(13/29): Propagating:   0%|          | 0/8 [00:00<?, ?it/s](13/29): Propagating: 100%|██████████| 8/8 [00:00<00:00, 158.31it/s]
+(14/29): Calibrating:   0%|          | 0/8 [00:00<?, ?it/s](14/29): Calibrating: 100%|██████████| 8/8 [00:00<00:00, 797.89it/s]
+2026-11-16T22:09:00.3109 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.12.self_attn.q_proj', 'model.layers.12.self_attn.o_proj']
+2026-11-16T22:09:00.3247 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:09:00.3248 | GPTQ | METRIC - error 749.37
+2026-11-16T22:09:00.3249 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:00.3249 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:09:00.3249 | GPTQ | METRIC - error 10090.47
+2026-11-16T22:09:00.3250 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:00.3254 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.12.self_attn.k_proj', 'model.layers.12.self_attn.v_proj']
+2026-11-16T22:09:00.3374 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:09:00.3374 | GPTQ | METRIC - error 1127.29
+2026-11-16T22:09:00.3376 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:00.3376 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:09:00.3376 | GPTQ | METRIC - error 2167.47
+2026-11-16T22:09:00.3377 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:00.3381 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.12.mlp.gate_proj', 'model.layers.12.mlp.up_proj']
+2026-11-16T22:09:00.3703 | GPTQ | METRIC - time 0.03s
+2026-11-16T22:09:00.3704 | GPTQ | METRIC - error 28366.48
+2026-11-16T22:09:00.3705 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:00.3705 | GPTQ | METRIC - time 0.03s
+2026-11-16T22:09:00.3706 | GPTQ | METRIC - error 31222.63
+2026-11-16T22:09:00.3706 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:00.3714 | compress_module_list | INFO - Quantizing 1 module(s): ['model.layers.12.mlp.down_proj']
+2026-11-16T22:09:00.6542 | GPTQ | METRIC - time 0.28s
+2026-11-16T22:09:00.6542 | GPTQ | METRIC - error 1765.86
+2026-11-16T22:09:00.6544 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+(14/29): Propagating:   0%|          | 0/8 [00:00<?, ?it/s](14/29): Propagating: 100%|██████████| 8/8 [00:00<00:00, 158.27it/s]
+(15/29): Calibrating:   0%|          | 0/8 [00:00<?, ?it/s](15/29): Calibrating: 100%|██████████| 8/8 [00:00<00:00, 802.49it/s]
+2026-11-16T22:09:00.9512 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.13.self_attn.q_proj', 'model.layers.13.self_attn.o_proj']
+2026-11-16T22:09:00.9650 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:09:00.9650 | GPTQ | METRIC - error 949.62
+2026-11-16T22:09:00.9652 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:00.9652 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:09:00.9652 | GPTQ | METRIC - error 6481.63
+2026-11-16T22:09:00.9653 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:00.9657 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.13.self_attn.k_proj', 'model.layers.13.self_attn.v_proj']
+2026-11-16T22:09:00.9777 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:09:00.9777 | GPTQ | METRIC - error 864.63
+2026-11-16T22:09:00.9778 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:00.9779 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:09:00.9779 | GPTQ | METRIC - error 1299.73
+2026-11-16T22:09:00.9780 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:00.9784 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.13.mlp.gate_proj', 'model.layers.13.mlp.up_proj']
+2026-11-16T22:09:01.0107 | GPTQ | METRIC - time 0.03s
+2026-11-16T22:09:01.0107 | GPTQ | METRIC - error 28170.90
+2026-11-16T22:09:01.0109 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:01.0109 | GPTQ | METRIC - time 0.03s
+2026-11-16T22:09:01.0109 | GPTQ | METRIC - error 29291.25
+2026-11-16T22:09:01.0110 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:01.0118 | compress_module_list | INFO - Quantizing 1 module(s): ['model.layers.13.mlp.down_proj']
+2026-11-16T22:09:01.2947 | GPTQ | METRIC - time 0.28s
+2026-11-16T22:09:01.2947 | GPTQ | METRIC - error 1661.79
+2026-11-16T22:09:01.2948 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+(15/29): Propagating:   0%|          | 0/8 [00:00<?, ?it/s](15/29): Propagating: 100%|██████████| 8/8 [00:00<00:00, 158.02it/s]
+(16/29): Calibrating:   0%|          | 0/8 [00:00<?, ?it/s](16/29): Calibrating: 100%|██████████| 8/8 [00:00<00:00, 788.24it/s]
+2026-11-16T22:09:01.5917 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.14.self_attn.q_proj', 'model.layers.14.self_attn.o_proj']
+2026-11-16T22:09:01.6055 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:09:01.6055 | GPTQ | METRIC - error 671.25
+2026-11-16T22:09:01.6056 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:01.6057 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:09:01.6057 | GPTQ | METRIC - error 15099.60
+2026-11-16T22:09:01.6058 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:01.6062 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.14.self_attn.k_proj', 'model.layers.14.self_attn.v_proj']
+2026-11-16T22:09:01.6182 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:09:01.6182 | GPTQ | METRIC - error 1708.01
+2026-11-16T22:09:01.6183 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:01.6184 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:09:01.6184 | GPTQ | METRIC - error 2260.55
+2026-11-16T22:09:01.6185 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:01.6189 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.14.mlp.gate_proj', 'model.layers.14.mlp.up_proj']
+2026-11-16T22:09:01.6511 | GPTQ | METRIC - time 0.03s
+2026-11-16T22:09:01.6512 | GPTQ | METRIC - error 32030.97
+2026-11-16T22:09:01.6513 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:01.6513 | GPTQ | METRIC - time 0.03s
+2026-11-16T22:09:01.6513 | GPTQ | METRIC - error 31506.63
+2026-11-16T22:09:01.6514 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:01.6522 | compress_module_list | INFO - Quantizing 1 module(s): ['model.layers.14.mlp.down_proj']
+2026-11-16T22:09:01.9355 | GPTQ | METRIC - time 0.28s
+2026-11-16T22:09:01.9355 | GPTQ | METRIC - error 1934.40
+2026-11-16T22:09:01.9357 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+(16/29): Propagating:   0%|          | 0/8 [00:00<?, ?it/s](16/29): Propagating: 100%|██████████| 8/8 [00:00<00:00, 158.30it/s]
+(17/29): Calibrating:   0%|          | 0/8 [00:00<?, ?it/s](17/29): Calibrating: 100%|██████████| 8/8 [00:00<00:00, 803.41it/s]
+2026-11-16T22:09:02.2322 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.15.self_attn.q_proj', 'model.layers.15.self_attn.o_proj']
+2026-11-16T22:09:02.2459 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:09:02.2460 | GPTQ | METRIC - error 1306.98
+2026-11-16T22:09:02.2461 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:02.2461 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:09:02.2461 | GPTQ | METRIC - error 14098.97
+2026-11-16T22:09:02.2462 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:02.2466 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.15.self_attn.k_proj', 'model.layers.15.self_attn.v_proj']
+2026-11-16T22:09:02.2586 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:09:02.2587 | GPTQ | METRIC - error 1448.95
+2026-11-16T22:09:02.2588 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:02.2588 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:09:02.2588 | GPTQ | METRIC - error 1607.93
+2026-11-16T22:09:02.2589 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:02.2593 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.15.mlp.gate_proj', 'model.layers.15.mlp.up_proj']
+2026-11-16T22:09:02.2916 | GPTQ | METRIC - time 0.03s
+2026-11-16T22:09:02.2916 | GPTQ | METRIC - error 25846.73
+2026-11-16T22:09:02.2918 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:02.2918 | GPTQ | METRIC - time 0.03s
+2026-11-16T22:09:02.2918 | GPTQ | METRIC - error 27322.14
+2026-11-16T22:09:02.2919 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:02.2927 | compress_module_list | INFO - Quantizing 1 module(s): ['model.layers.15.mlp.down_proj']
+2026-11-16T22:09:02.5755 | GPTQ | METRIC - time 0.28s
+2026-11-16T22:09:02.5756 | GPTQ | METRIC - error 1498.10
+2026-11-16T22:09:02.5757 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+(17/29): Propagating:   0%|          | 0/8 [00:00<?, ?it/s](17/29): Propagating: 100%|██████████| 8/8 [00:00<00:00, 158.29it/s]
+(18/29): Calibrating:   0%|          | 0/8 [00:00<?, ?it/s](18/29): Calibrating: 100%|██████████| 8/8 [00:00<00:00, 804.01it/s]
+2026-11-16T22:09:02.8722 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.16.self_attn.q_proj', 'model.layers.16.self_attn.o_proj']
+2026-11-16T22:09:02.8859 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:09:02.8860 | GPTQ | METRIC - error 803.63
+2026-11-16T22:09:02.8861 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:02.8861 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:09:02.8862 | GPTQ | METRIC - error 11290.95
+2026-11-16T22:09:02.8863 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:02.8867 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.16.self_attn.k_proj', 'model.layers.16.self_attn.v_proj']
+2026-11-16T22:09:02.8986 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:09:02.8987 | GPTQ | METRIC - error 1653.57
+2026-11-16T22:09:02.8988 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:02.8988 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:09:02.8989 | GPTQ | METRIC - error 2127.90
+2026-11-16T22:09:02.8989 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:02.8993 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.16.mlp.gate_proj', 'model.layers.16.mlp.up_proj']
+2026-11-16T22:09:02.9316 | GPTQ | METRIC - time 0.03s
+2026-11-16T22:09:02.9316 | GPTQ | METRIC - error 29682.84
+2026-11-16T22:09:02.9318 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:02.9318 | GPTQ | METRIC - time 0.03s
+2026-11-16T22:09:02.9318 | GPTQ | METRIC - error 30216.43
+2026-11-16T22:09:02.9319 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:02.9327 | compress_module_list | INFO - Quantizing 1 module(s): ['model.layers.16.mlp.down_proj']
+2026-11-16T22:09:03.2156 | GPTQ | METRIC - time 0.28s
+2026-11-16T22:09:03.2156 | GPTQ | METRIC - error 1836.30
+2026-11-16T22:09:03.2157 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+(18/29): Propagating:   0%|          | 0/8 [00:00<?, ?it/s](18/29): Propagating: 100%|██████████| 8/8 [00:00<00:00, 158.34it/s]
+(19/29): Calibrating:   0%|          | 0/8 [00:00<?, ?it/s](19/29): Calibrating: 100%|██████████| 8/8 [00:00<00:00, 802.81it/s]
+2026-11-16T22:09:03.5120 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.17.self_attn.q_proj', 'model.layers.17.self_attn.o_proj']
+2026-11-16T22:09:03.5258 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:09:03.5258 | GPTQ | METRIC - error 689.37
+2026-11-16T22:09:03.5260 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:03.5260 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:09:03.5260 | GPTQ | METRIC - error 10549.75
+2026-11-16T22:09:03.5261 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:03.5265 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.17.self_attn.k_proj', 'model.layers.17.self_attn.v_proj']
+2026-11-16T22:09:03.5385 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:09:03.5385 | GPTQ | METRIC - error 2276.79
+2026-11-16T22:09:03.5386 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:03.5387 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:09:03.5387 | GPTQ | METRIC - error 1299.50
+2026-11-16T22:09:03.5388 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:03.5392 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.17.mlp.gate_proj', 'model.layers.17.mlp.up_proj']
+2026-11-16T22:09:03.5714 | GPTQ | METRIC - time 0.03s
+2026-11-16T22:09:03.5715 | GPTQ | METRIC - error 30451.89
+2026-11-16T22:09:03.5716 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:03.5716 | GPTQ | METRIC - time 0.03s
+2026-11-16T22:09:03.5716 | GPTQ | METRIC - error 30608.21
+2026-11-16T22:09:03.5717 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:03.5725 | compress_module_list | INFO - Quantizing 1 module(s): ['model.layers.17.mlp.down_proj']
+2026-11-16T22:09:03.8554 | GPTQ | METRIC - time 0.28s
+2026-11-16T22:09:03.8555 | GPTQ | METRIC - error 2447.98
+2026-11-16T22:09:03.8556 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+(19/29): Propagating:   0%|          | 0/8 [00:00<?, ?it/s](19/29): Propagating: 100%|██████████| 8/8 [00:00<00:00, 158.31it/s]
+(20/29): Calibrating:   0%|          | 0/8 [00:00<?, ?it/s](20/29): Calibrating: 100%|██████████| 8/8 [00:00<00:00, 803.31it/s]
+2026-11-16T22:09:04.1522 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.18.self_attn.q_proj', 'model.layers.18.self_attn.o_proj']
+2026-11-16T22:09:04.1660 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:09:04.1660 | GPTQ | METRIC - error 1593.12
+2026-11-16T22:09:04.1662 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:04.1662 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:09:04.1662 | GPTQ | METRIC - error 8690.76
+2026-11-16T22:09:04.1663 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:04.1667 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.18.self_attn.k_proj', 'model.layers.18.self_attn.v_proj']
+2026-11-16T22:09:04.1787 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:09:04.1787 | GPTQ | METRIC - error 1475.22
+2026-11-16T22:09:04.1789 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:04.1789 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:09:04.1789 | GPTQ | METRIC - error 1455.44
+2026-11-16T22:09:04.1790 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:04.1794 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.18.mlp.gate_proj', 'model.layers.18.mlp.up_proj']
+2026-11-16T22:09:04.2117 | GPTQ | METRIC - time 0.03s
+2026-11-16T22:09:04.2117 | GPTQ | METRIC - error 33642.09
+2026-11-16T22:09:04.2118 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:04.2119 | GPTQ | METRIC - time 0.03s
+2026-11-16T22:09:04.2119 | GPTQ | METRIC - error 34163.23
+2026-11-16T22:09:04.2120 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:04.2128 | compress_module_list | INFO - Quantizing 1 module(s): ['model.layers.18.mlp.down_proj']
+2026-11-16T22:09:04.4956 | GPTQ | METRIC - time 0.28s
+2026-11-16T22:09:04.4957 | GPTQ | METRIC - error 3335.49
+2026-11-16T22:09:04.4958 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+(20/29): Propagating:   0%|          | 0/8 [00:00<?, ?it/s](20/29): Propagating: 100%|██████████| 8/8 [00:00<00:00, 158.36it/s]
+(21/29): Calibrating:   0%|          | 0/8 [00:00<?, ?it/s](21/29): Calibrating: 100%|██████████| 8/8 [00:00<00:00, 804.05it/s]
+2026-11-16T22:09:04.7926 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.19.self_attn.q_proj', 'model.layers.19.self_attn.o_proj']
+2026-11-16T22:09:04.8064 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:09:04.8064 | GPTQ | METRIC - error 1521.92
+2026-11-16T22:09:04.8066 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:04.8066 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:09:04.8066 | GPTQ | METRIC - error 12603.02
+2026-11-16T22:09:04.8067 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:04.8071 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.19.self_attn.k_proj', 'model.layers.19.self_attn.v_proj']
+2026-11-16T22:09:04.8191 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:09:04.8192 | GPTQ | METRIC - error 3365.17
+2026-11-16T22:09:04.8193 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:04.8193 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:09:04.8193 | GPTQ | METRIC - error 1667.81
+2026-11-16T22:09:04.8194 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:04.8198 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.19.mlp.gate_proj', 'model.layers.19.mlp.up_proj']
+2026-11-16T22:09:04.8521 | GPTQ | METRIC - time 0.03s
+2026-11-16T22:09:04.8521 | GPTQ | METRIC - error 41720.24
+2026-11-16T22:09:04.8522 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:04.8523 | GPTQ | METRIC - time 0.03s
+2026-11-16T22:09:04.8523 | GPTQ | METRIC - error 38828.88
+2026-11-16T22:09:04.8524 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:04.8532 | compress_module_list | INFO - Quantizing 1 module(s): ['model.layers.19.mlp.down_proj']
+2026-11-16T22:09:05.1361 | GPTQ | METRIC - time 0.28s
+2026-11-16T22:09:05.1361 | GPTQ | METRIC - error 5930.02
+2026-11-16T22:09:05.1362 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+(21/29): Propagating:   0%|          | 0/8 [00:00<?, ?it/s](21/29): Propagating: 100%|██████████| 8/8 [00:00<00:00, 158.00it/s]
+(22/29): Calibrating:   0%|          | 0/8 [00:00<?, ?it/s](22/29): Calibrating: 100%|██████████| 8/8 [00:00<00:00, 792.11it/s]
+2026-11-16T22:09:05.4337 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.20.self_attn.q_proj', 'model.layers.20.self_attn.o_proj']
+2026-11-16T22:09:05.4474 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:09:05.4475 | GPTQ | METRIC - error 2208.52
+2026-11-16T22:09:05.4476 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:05.4476 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:09:05.4477 | GPTQ | METRIC - error 15471.62
+2026-11-16T22:09:05.4477 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:05.4482 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.20.self_attn.k_proj', 'model.layers.20.self_attn.v_proj']
+2026-11-16T22:09:05.4602 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:09:05.4602 | GPTQ | METRIC - error 4660.48
+2026-11-16T22:09:05.4604 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:05.4604 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:09:05.4604 | GPTQ | METRIC - error 1943.85
+2026-11-16T22:09:05.4605 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:05.4609 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.20.mlp.gate_proj', 'model.layers.20.mlp.up_proj']
+2026-11-16T22:09:05.4932 | GPTQ | METRIC - time 0.03s
+2026-11-16T22:09:05.4932 | GPTQ | METRIC - error 42867.80
+2026-11-16T22:09:05.4934 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:05.4934 | GPTQ | METRIC - time 0.03s
+2026-11-16T22:09:05.4934 | GPTQ | METRIC - error 41791.83
+2026-11-16T22:09:05.4935 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:05.4943 | compress_module_list | INFO - Quantizing 1 module(s): ['model.layers.20.mlp.down_proj']
+2026-11-16T22:09:05.7776 | GPTQ | METRIC - time 0.28s
+2026-11-16T22:09:05.7777 | GPTQ | METRIC - error 5272.74
+2026-11-16T22:09:05.7778 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+(22/29): Propagating:   0%|          | 0/8 [00:00<?, ?it/s](22/29): Propagating: 100%|██████████| 8/8 [00:00<00:00, 158.03it/s]
+(23/29): Calibrating:   0%|          | 0/8 [00:00<?, ?it/s](23/29): Calibrating: 100%|██████████| 8/8 [00:00<00:00, 805.98it/s]
+2026-11-16T22:09:06.0751 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.21.self_attn.q_proj', 'model.layers.21.self_attn.o_proj']
+2026-11-16T22:09:06.0889 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:09:06.0889 | GPTQ | METRIC - error 1488.07
+2026-11-16T22:09:06.0891 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:06.0891 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:09:06.0891 | GPTQ | METRIC - error 14201.55
+2026-11-16T22:09:06.0892 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:06.0896 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.21.self_attn.k_proj', 'model.layers.21.self_attn.v_proj']
+2026-11-16T22:09:06.1017 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:09:06.1017 | GPTQ | METRIC - error 3819.38
+2026-11-16T22:09:06.1018 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:06.1019 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:09:06.1019 | GPTQ | METRIC - error 1745.46
+2026-11-16T22:09:06.1020 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:06.1024 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.21.mlp.gate_proj', 'model.layers.21.mlp.up_proj']
+2026-11-16T22:09:06.1347 | GPTQ | METRIC - time 0.03s
+2026-11-16T22:09:06.1347 | GPTQ | METRIC - error 58378.18
+2026-11-16T22:09:06.1348 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:06.1348 | GPTQ | METRIC - time 0.03s
+2026-11-16T22:09:06.1349 | GPTQ | METRIC - error 58199.57
+2026-11-16T22:09:06.1349 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:06.1358 | compress_module_list | INFO - Quantizing 1 module(s): ['model.layers.21.mlp.down_proj']
+2026-11-16T22:09:06.4191 | GPTQ | METRIC - time 0.28s
+2026-11-16T22:09:06.4191 | GPTQ | METRIC - error 8230.74
+2026-11-16T22:09:06.4193 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+(23/29): Propagating:   0%|          | 0/8 [00:00<?, ?it/s](23/29): Propagating: 100%|██████████| 8/8 [00:00<00:00, 157.99it/s]
+(24/29): Calibrating:   0%|          | 0/8 [00:00<?, ?it/s](24/29): Calibrating: 100%|██████████| 8/8 [00:00<00:00, 806.21it/s]
+2026-11-16T22:09:06.7166 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.22.self_attn.q_proj', 'model.layers.22.self_attn.o_proj']
+2026-11-16T22:09:06.7303 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:09:06.7304 | GPTQ | METRIC - error 1583.79
+2026-11-16T22:09:06.7305 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:06.7305 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:09:06.7306 | GPTQ | METRIC - error 13118.01
+2026-11-16T22:09:06.7306 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:06.7311 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.22.self_attn.k_proj', 'model.layers.22.self_attn.v_proj']
+2026-11-16T22:09:06.7431 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:09:06.7431 | GPTQ | METRIC - error 4527.22
+2026-11-16T22:09:06.7432 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:06.7433 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:09:06.7433 | GPTQ | METRIC - error 1984.43
+2026-11-16T22:09:06.7434 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:06.7438 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.22.mlp.gate_proj', 'model.layers.22.mlp.up_proj']
+2026-11-16T22:09:06.7760 | GPTQ | METRIC - time 0.03s
+2026-11-16T22:09:06.7761 | GPTQ | METRIC - error 66554.91
+2026-11-16T22:09:06.7762 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:06.7762 | GPTQ | METRIC - time 0.03s
+2026-11-16T22:09:06.7762 | GPTQ | METRIC - error 67150.63
+2026-11-16T22:09:06.7763 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:06.7771 | compress_module_list | INFO - Quantizing 1 module(s): ['model.layers.22.mlp.down_proj']
+2026-11-16T22:09:07.0605 | GPTQ | METRIC - time 0.28s
+2026-11-16T22:09:07.0605 | GPTQ | METRIC - error 10195.61
+2026-11-16T22:09:07.0607 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+(24/29): Propagating:   0%|          | 0/8 [00:00<?, ?it/s](24/29): Propagating: 100%|██████████| 8/8 [00:00<00:00, 158.00it/s]
+(25/29): Calibrating:   0%|          | 0/8 [00:00<?, ?it/s](25/29): Calibrating: 100%|██████████| 8/8 [00:00<00:00, 803.12it/s]
+2026-11-16T22:09:07.3582 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.23.self_attn.q_proj', 'model.layers.23.self_attn.o_proj']
+2026-11-16T22:09:07.3720 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:09:07.3721 | GPTQ | METRIC - error 1767.39
+2026-11-16T22:09:07.3722 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:07.3722 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:09:07.3722 | GPTQ | METRIC - error 18082.12
+2026-11-16T22:09:07.3723 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:07.3727 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.23.self_attn.k_proj', 'model.layers.23.self_attn.v_proj']
+2026-11-16T22:09:07.3848 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:09:07.3848 | GPTQ | METRIC - error 6426.74
+2026-11-16T22:09:07.3849 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:07.3850 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:09:07.3850 | GPTQ | METRIC - error 2108.86
+2026-11-16T22:09:07.3851 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:07.3855 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.23.mlp.gate_proj', 'model.layers.23.mlp.up_proj']
+2026-11-16T22:09:07.4177 | GPTQ | METRIC - time 0.03s
+2026-11-16T22:09:07.4177 | GPTQ | METRIC - error 70460.06
+2026-11-16T22:09:07.4179 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:07.4179 | GPTQ | METRIC - time 0.03s
+2026-11-16T22:09:07.4179 | GPTQ | METRIC - error 67533.33
+2026-11-16T22:09:07.4180 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:07.4188 | compress_module_list | INFO - Quantizing 1 module(s): ['model.layers.23.mlp.down_proj']
+2026-11-16T22:09:07.7021 | GPTQ | METRIC - time 0.28s
+2026-11-16T22:09:07.7022 | GPTQ | METRIC - error 10290.51
+2026-11-16T22:09:07.7023 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+(25/29): Propagating:   0%|          | 0/8 [00:00<?, ?it/s](25/29): Propagating: 100%|██████████| 8/8 [00:00<00:00, 158.05it/s]
+(26/29): Calibrating:   0%|          | 0/8 [00:00<?, ?it/s](26/29): Calibrating: 100%|██████████| 8/8 [00:00<00:00, 803.83it/s]
+2026-11-16T22:09:07.9992 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.24.self_attn.q_proj', 'model.layers.24.self_attn.o_proj']
+2026-11-16T22:09:08.0130 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:09:08.0131 | GPTQ | METRIC - error 3017.98
+2026-11-16T22:09:08.0132 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:08.0132 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:09:08.0132 | GPTQ | METRIC - error 17367.25
+2026-11-16T22:09:08.0133 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:08.0137 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.24.self_attn.k_proj', 'model.layers.24.self_attn.v_proj']
+2026-11-16T22:09:08.0258 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:09:08.0258 | GPTQ | METRIC - error 10446.43
+2026-11-16T22:09:08.0259 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:08.0260 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:09:08.0260 | GPTQ | METRIC - error 2320.16
+2026-11-16T22:09:08.0261 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:08.0265 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.24.mlp.gate_proj', 'model.layers.24.mlp.up_proj']
+2026-11-16T22:09:08.0587 | GPTQ | METRIC - time 0.03s
+2026-11-16T22:09:08.0588 | GPTQ | METRIC - error 72954.20
+2026-11-16T22:09:08.0589 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:08.0589 | GPTQ | METRIC - time 0.03s
+2026-11-16T22:09:08.0590 | GPTQ | METRIC - error 67882.22
+2026-11-16T22:09:08.0590 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:08.0598 | compress_module_list | INFO - Quantizing 1 module(s): ['model.layers.24.mlp.down_proj']
+2026-11-16T22:09:08.3432 | GPTQ | METRIC - time 0.28s
+2026-11-16T22:09:08.3432 | GPTQ | METRIC - error 12633.13
+2026-11-16T22:09:08.3434 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+(26/29): Propagating:   0%|          | 0/8 [00:00<?, ?it/s](26/29): Propagating: 100%|██████████| 8/8 [00:00<00:00, 158.01it/s]
+(27/29): Calibrating:   0%|          | 0/8 [00:00<?, ?it/s](27/29): Calibrating: 100%|██████████| 8/8 [00:00<00:00, 803.18it/s]
+2026-11-16T22:09:08.6407 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.25.self_attn.q_proj', 'model.layers.25.self_attn.o_proj']
+2026-11-16T22:09:08.6545 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:09:08.6545 | GPTQ | METRIC - error 4568.42
+2026-11-16T22:09:08.6547 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:08.6547 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:09:08.6547 | GPTQ | METRIC - error 22410.99
+2026-11-16T22:09:08.6548 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:08.6552 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.25.self_attn.k_proj', 'model.layers.25.self_attn.v_proj']
+2026-11-16T22:09:08.6672 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:09:08.6673 | GPTQ | METRIC - error 11205.10
+2026-11-16T22:09:08.6674 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:08.6674 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:09:08.6674 | GPTQ | METRIC - error 2396.29
+2026-11-16T22:09:08.6675 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:08.6679 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.25.mlp.gate_proj', 'model.layers.25.mlp.up_proj']
+2026-11-16T22:09:08.7002 | GPTQ | METRIC - time 0.03s
+2026-11-16T22:09:08.7002 | GPTQ | METRIC - error 77761.68
+2026-11-16T22:09:08.7003 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:08.7004 | GPTQ | METRIC - time 0.03s
+2026-11-16T22:09:08.7004 | GPTQ | METRIC - error 67162.17
+2026-11-16T22:09:08.7005 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:08.7013 | compress_module_list | INFO - Quantizing 1 module(s): ['model.layers.25.mlp.down_proj']
+2026-11-16T22:09:08.9846 | GPTQ | METRIC - time 0.28s
+2026-11-16T22:09:08.9847 | GPTQ | METRIC - error 16397.02
+2026-11-16T22:09:08.9848 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+(27/29): Propagating:   0%|          | 0/8 [00:00<?, ?it/s](27/29): Propagating: 100%|██████████| 8/8 [00:00<00:00, 157.87it/s]
+(28/29): Calibrating:   0%|          | 0/8 [00:00<?, ?it/s](28/29): Calibrating: 100%|██████████| 8/8 [00:00<00:00, 793.32it/s]
+2026-11-16T22:09:09.2819 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.26.self_attn.q_proj', 'model.layers.26.self_attn.o_proj']
+2026-11-16T22:09:09.2957 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:09:09.2957 | GPTQ | METRIC - error 2232.91
+2026-11-16T22:09:09.2959 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:09.2959 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:09:09.2959 | GPTQ | METRIC - error 19027.08
+2026-11-16T22:09:09.2960 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:09.2964 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.26.self_attn.k_proj', 'model.layers.26.self_attn.v_proj']
+2026-11-16T22:09:09.3085 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:09:09.3085 | GPTQ | METRIC - error 14907.50
+2026-11-16T22:09:09.3086 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:09.3087 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:09:09.3087 | GPTQ | METRIC - error 2397.24
+2026-11-16T22:09:09.3088 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:09.3092 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.26.mlp.gate_proj', 'model.layers.26.mlp.up_proj']
+2026-11-16T22:09:09.3414 | GPTQ | METRIC - time 0.03s
+2026-11-16T22:09:09.3414 | GPTQ | METRIC - error 77957.18
+2026-11-16T22:09:09.3416 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:09.3416 | GPTQ | METRIC - time 0.03s
+2026-11-16T22:09:09.3416 | GPTQ | METRIC - error 64739.91
+2026-11-16T22:09:09.3417 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+2026-11-16T22:09:09.3425 | compress_module_list | INFO - Quantizing 1 module(s): ['model.layers.26.mlp.down_proj']
+2026-11-16T22:09:09.6262 | GPTQ | METRIC - time 0.28s
+2026-11-16T22:09:09.6263 | GPTQ | METRIC - error 53148.35
+2026-11-16T22:09:09.6264 | GPTQ | METRIC - Accelerator 0 | usage: 27.66% | total memory: 16.7 Gb
+(28/29): Propagating:   0%|          | 0/8 [00:00<?, ?it/s](28/29): Propagating: 100%|██████████| 8/8 [00:00<00:00, 157.94it/s]
+(29/29): Calibrating:   0%|          | 0/8 [00:00<?, ?it/s](29/29): Calibrating: 100%|██████████| 8/8 [00:00<00:00, 727.59it/s]
+2026-11-16T22:09:10.0804 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.27.self_attn.q_proj', 'model.layers.27.self_attn.o_proj']
+2026-11-16T22:09:10.0942 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:09:10.0942 | GPTQ | METRIC - error 9712.76
+2026-11-16T22:09:10.0944 | GPTQ | METRIC - Accelerator 0 | usage: 28.78% | total memory: 16.7 Gb
+2026-11-16T22:09:10.0944 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:09:10.0944 | GPTQ | METRIC - error 18264.30
+2026-11-16T22:09:10.0945 | GPTQ | METRIC - Accelerator 0 | usage: 28.78% | total memory: 16.7 Gb
+2026-11-16T22:09:10.0949 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.27.self_attn.k_proj', 'model.layers.27.self_attn.v_proj']
+2026-11-16T22:09:10.1068 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:09:10.1068 | GPTQ | METRIC - error 14675.91
+2026-11-16T22:09:10.1070 | GPTQ | METRIC - Accelerator 0 | usage: 28.78% | total memory: 16.7 Gb
+2026-11-16T22:09:10.1070 | GPTQ | METRIC - time 0.01s
+2026-11-16T22:09:10.1070 | GPTQ | METRIC - error 1962.12
+2026-11-16T22:09:10.1071 | GPTQ | METRIC - Accelerator 0 | usage: 28.78% | total memory: 16.7 Gb
+2026-11-16T22:09:10.1075 | compress_module_list | INFO - Quantizing 2 module(s): ['model.layers.27.mlp.gate_proj', 'model.layers.27.mlp.up_proj']
+2026-11-16T22:09:10.1397 | GPTQ | METRIC - time 0.03s
+2026-11-16T22:09:10.1397 | GPTQ | METRIC - error 94496.59
+2026-11-16T22:09:10.1398 | GPTQ | METRIC - Accelerator 0 | usage: 28.78% | total memory: 16.7 Gb
+2026-11-16T22:09:10.1399 | GPTQ | METRIC - time 0.03s
+2026-11-16T22:09:10.1399 | GPTQ | METRIC - error 91429.80
+2026-11-16T22:09:10.1400 | GPTQ | METRIC - Accelerator 0 | usage: 28.78% | total memory: 16.7 Gb
+2026-11-16T22:09:10.1408 | compress_module_list | INFO - Quantizing 1 module(s): ['model.layers.27.mlp.down_proj']
+2026-11-16T22:09:10.4246 | GPTQ | METRIC - time 0.28s
+2026-11-16T22:09:10.4246 | GPTQ | METRIC - error 46181.42
+2026-11-16T22:09:10.4247 | GPTQ | METRIC - Accelerator 0 | usage: 31.39% | total memory: 16.7 Gb
+(29/29): Propagating:   0%|          | 0/8 [00:00<?, ?it/s](29/29): Propagating: 100%|██████████| 8/8 [00:00<00:00, 1027.92it/s]
+2026-11-16T22:09:10.4393 | finalize | INFO - Compression lifecycle finalized for 1 modifiers
+DONE {"versions": {"llmcompressor": "0.15.0", "compressed_tensors": "0.20.1", "torch": "2.14.0+cu130", "transformers": "5.21.0"}, "recipe": {"config_groups": null, "targets": ["Linear"], "ignore": ["lm_head"], "scheme": "W4A16", "kv_cache_scheme": null, "weight_observer": null, "input_observer": null, "output_observer": null, "observer": null, "bypass_divisibility_checks": false, "requires_calibration_data": true, "index": null, "group": null, "start": null, "end": null, "update": null, "initialized_": true, "finalized_": true, "started_": true, "ended_": true, "block_size": 128, "dampening_frac": 0.01, "actorder": "static", "batched_quantization": "auto"}, "scheme": "targets=['Linear'] weights=QuantizationArgs(num_bits=4, type='int', symmetric=True, group_size=128, strategy='group', block_structure=None, dynamic=False, actorder=<ActivationOrdering.STATIC: 'static'>, scale_dtype=None, zp_dtype=torch.int8, observer='memoryless_minmax', observer_kwargs={}) input_activations=None output_activations=None format=None", "calibration_ids_sha256": "469b65a004d6c1f290a1ece2f284ea49de4acc222d6abb70139309b1ec29acff", "c4_documents_read": 306, "ncal": 8, "npz_sha256": "aaffe3f04fd7df2a85f76c5cafe362fe2b5382f7c84847f01c171a426d4cc3b3", "code_minus8_total": 3255448}
