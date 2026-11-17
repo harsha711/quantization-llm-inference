@@ -28,6 +28,8 @@ Hypothesis, to be reported as confirmed or not: the cost is concentrated, define
 
 Process: prerequisite job (2 windows per split, all 39 arms, no E032 assertion) inspected before the full job.
 
+Prerequisite 342882 on c58 passed (2:09): environment, binary, source and text hashes verified, head-hash check passed, all 39 arms scored finite, selection ran (2-window values are not results). Retrieved to `results/e042_20261117/prereq-342882/`.
+
 ## E041 — Serial CPU baseline and worker scaling for the course report
 
 Predeclared 2026-11-17 at the user's request (report plan: the course deck, pp.22–24, asks for a timed serial baseline, Sp = T1/Tp and a strong/weak scaling plot against ideal; PROJECT_SYNTHESIS §5.2 records that the project had neither). A descriptive measurement: no optimization, no change to any GPU kernel, Marlin, the model path or the numerical contract.
