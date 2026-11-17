@@ -1,0 +1,544 @@
+{
+ "sha256": {
+  "test": "d790b833ef8cf03a90db7bf1271b7520b83c45ce07ba3c1a9699df81e239eca0",
+  "valid": "f0737ed31fc1329026e95cb8b98e19c2a182c39c240ab909dc31abf2f8af58e8"
+ },
+ "windows": {
+  "valid": 2,
+  "test": 2
+ },
+ "gpu": "GPU-51745a0b-32d9-31c9-1ecd-359ac0ac89cc, 615.71.09",
+ "e039": {
+  "L": 9.049102938610124,
+  "AT15": 9.089416695696391
+ },
+ "arms": {
+  "O": {
+   "valid": {
+    "nll_sum": 7490.614501953125,
+    "perplexity": 6.231746890152264,
+    "top1_accuracy_pct": 58.20713238886175
+   },
+   "test": {
+    "nll_sum": 8518.04736328125,
+    "perplexity": 8.009411866542376,
+    "top1_accuracy_pct": 55.03175378602833
+   }
+  },
+  "AWQs": {
+   "valid": {
+    "nll_sum": 7864.037109375,
+    "perplexity": 6.826887496865334,
+    "top1_accuracy_pct": 57.523204689789935
+   },
+   "test": {
+    "nll_sum": 8983.439697265625,
+    "perplexity": 8.973663547813077,
+    "top1_accuracy_pct": 53.07767464582316
+   }
+  },
+  "AWQa": {
+   "valid": {
+    "nll_sum": 7711.406005859375,
+    "perplexity": 6.57705582511331,
+    "top1_accuracy_pct": 58.329262335124575
+   },
+   "test": {
+    "nll_sum": 8772.51953125,
+    "perplexity": 8.523053578662179,
+    "top1_accuracy_pct": 54.46995603321935
+   }
+  },
+  "AWQG": {
+   "valid": {
+    "nll_sum": 8072.083251953125,
+    "perplexity": 7.182777793650643,
+    "top1_accuracy_pct": 56.643869076697605
+   },
+   "test": {
+    "nll_sum": 9056.48388671875,
+    "perplexity": 9.135206371117958,
+    "top1_accuracy_pct": 52.760136785539814
+   }
+  },
+  "O_restored": {
+   "valid": {
+    "nll_sum": 7490.614501953125,
+    "perplexity": 6.231746890152264,
+    "top1_accuracy_pct": 58.20713238886175
+   },
+   "test": {
+    "nll_sum": 8518.04736328125,
+    "perplexity": 8.009411866542376,
+    "top1_accuracy_pct": 55.03175378602833
+   }
+  }
+ },
+ "compare": {
+  "AWQs": {
+   "rise_vs_O": {
+    "valid": 9.5501408706689,
+    "test": 12.038982353981066
+   },
+   "label": "substantial",
+   "vs_E039_L_pct": -0.833667064114918
+  },
+  "AWQa": {
+   "rise_vs_O": {
+    "valid": 5.541125803853197,
+    "test": 6.412976641461432
+   },
+   "label": "substantial",
+   "vs_E039_L_pct": -5.813276338181906
+  },
+  "AWQG": {
+   "rise_vs_O": {
+    "valid": 15.261064357431597,
+    "test": 14.055894781467671
+   },
+   "label": "substantial",
+   "vs_E039_L_pct": 0.951513460416642
+  }
+ },
+ "awq": {
+  "AWQs": {
+   "arm": "AWQs",
+   "versions": {
+    "llmcompressor": "0.15.0",
+    "compressed_tensors": "0.20.1",
+    "torch": "2.14.0+cu130",
+    "transformers": "5.21.0"
+   },
+   "recipe": [
+    {
+     "requires_calibration_data": true,
+     "index": null,
+     "group": null,
+     "start": null,
+     "end": null,
+     "update": null,
+     "initialized_": true,
+     "finalized_": true,
+     "started_": true,
+     "ended_": true,
+     "mappings": [
+      {
+       "smooth_layer": "re:.*input_layernorm$",
+       "balance_layers": [
+        "re:.*q_proj$",
+        "re:.*k_proj$",
+        "re:.*v_proj$"
+       ],
+       "activation_hook_target": null
+      },
+      {
+       "smooth_layer": "re:.*v_proj$",
+       "balance_layers": [
+        "re:.*o_proj$"
+       ],
+       "activation_hook_target": null
+      },
+      {
+       "smooth_layer": "re:.*post_attention_layernorm$",
+       "balance_layers": [
+        "re:.*gate_proj$",
+        "re:.*up_proj$"
+       ],
+       "activation_hook_target": null
+      },
+      {
+       "smooth_layer": "re:.*up_proj$",
+       "balance_layers": [
+        "re:.*down_proj$"
+       ],
+       "activation_hook_target": null
+      }
+     ],
+     "offload_device": "cpu",
+     "duo_scaling": true,
+     "n_grid": 20
+    },
+    {
+     "config_groups": null,
+     "targets": [
+      "Linear"
+     ],
+     "ignore": [
+      "lm_head"
+     ],
+     "scheme": "W4A16",
+     "kv_cache_scheme": null,
+     "weight_observer": null,
+     "input_observer": null,
+     "output_observer": null,
+     "observer": null,
+     "bypass_divisibility_checks": false,
+     "requires_calibration_data": false,
+     "index": null,
+     "group": null,
+     "start": null,
+     "end": null,
+     "update": null,
+     "initialized_": true,
+     "finalized_": true,
+     "started_": true,
+     "ended_": true
+    }
+   ],
+   "scheme": "targets=['Linear'] weights=QuantizationArgs(num_bits=4, type='int', symmetric=True, group_size=128, strategy='group', block_structure=None, dynamic=False, actorder=None, scale_dtype=None, zp_dtype=torch.int8, observer='memoryless_minmax', observer_kwargs={}) input_activations=None output_activations=None format=None",
+   "calibration_ids_sha256": "469b65a004d6c1f290a1ece2f284ea49de4acc222d6abb70139309b1ec29acff",
+   "c4_documents_read": 306,
+   "ncal": 8,
+   "npz_sha256": "79306fcdbe14577156075dce1583d244446b4a42afcf82773eb20eff37391bb9",
+   "changed_other": [
+    "model.layers.0.input_layernorm.weight",
+    "model.layers.0.post_attention_layernorm.weight",
+    "model.layers.1.input_layernorm.weight",
+    "model.layers.1.post_attention_layernorm.weight",
+    "model.layers.2.input_layernorm.weight",
+    "model.layers.2.post_attention_layernorm.weight",
+    "model.layers.3.input_layernorm.weight",
+    "model.layers.3.post_attention_layernorm.weight",
+    "model.layers.4.input_layernorm.weight",
+    "model.layers.4.post_attention_layernorm.weight",
+    "model.layers.5.input_layernorm.weight",
+    "model.layers.5.post_attention_layernorm.weight",
+    "model.layers.6.input_layernorm.weight",
+    "model.layers.6.post_attention_layernorm.weight",
+    "model.layers.7.input_layernorm.weight",
+    "model.layers.7.post_attention_layernorm.weight",
+    "model.layers.8.post_attention_layernorm.weight",
+    "model.layers.9.input_layernorm.weight",
+    "model.layers.9.post_attention_layernorm.weight",
+    "model.layers.10.input_layernorm.weight",
+    "model.layers.10.post_attention_layernorm.weight",
+    "model.layers.11.input_layernorm.weight",
+    "model.layers.11.post_attention_layernorm.weight",
+    "model.layers.12.input_layernorm.weight",
+    "model.layers.12.post_attention_layernorm.weight",
+    "model.layers.13.input_layernorm.weight",
+    "model.layers.13.post_attention_layernorm.weight",
+    "model.layers.14.input_layernorm.weight",
+    "model.layers.14.post_attention_layernorm.weight",
+    "model.layers.15.input_layernorm.weight",
+    "model.layers.15.post_attention_layernorm.weight",
+    "model.layers.16.input_layernorm.weight",
+    "model.layers.16.post_attention_layernorm.weight",
+    "model.layers.17.input_layernorm.weight",
+    "model.layers.17.post_attention_layernorm.weight",
+    "model.layers.18.input_layernorm.weight",
+    "model.layers.18.post_attention_layernorm.weight",
+    "model.layers.19.input_layernorm.weight",
+    "model.layers.19.post_attention_layernorm.weight",
+    "model.layers.20.input_layernorm.weight",
+    "model.layers.20.post_attention_layernorm.weight",
+    "model.layers.21.input_layernorm.weight",
+    "model.layers.21.post_attention_layernorm.weight",
+    "model.layers.22.post_attention_layernorm.weight",
+    "model.layers.23.post_attention_layernorm.weight",
+    "model.layers.24.input_layernorm.weight",
+    "model.layers.24.post_attention_layernorm.weight",
+    "model.layers.25.post_attention_layernorm.weight",
+    "model.layers.26.post_attention_layernorm.weight",
+    "model.layers.27.post_attention_layernorm.weight"
+   ],
+   "already_fake_quantized": 0,
+   "zero_points_nonzero": 0
+  },
+  "AWQa": {
+   "arm": "AWQa",
+   "versions": {
+    "llmcompressor": "0.15.0",
+    "compressed_tensors": "0.20.1",
+    "torch": "2.14.0+cu130",
+    "transformers": "5.21.0"
+   },
+   "recipe": [
+    {
+     "requires_calibration_data": true,
+     "index": null,
+     "group": null,
+     "start": null,
+     "end": null,
+     "update": null,
+     "initialized_": true,
+     "finalized_": true,
+     "started_": true,
+     "ended_": true,
+     "mappings": [
+      {
+       "smooth_layer": "re:.*input_layernorm$",
+       "balance_layers": [
+        "re:.*q_proj$",
+        "re:.*k_proj$",
+        "re:.*v_proj$"
+       ],
+       "activation_hook_target": null
+      },
+      {
+       "smooth_layer": "re:.*v_proj$",
+       "balance_layers": [
+        "re:.*o_proj$"
+       ],
+       "activation_hook_target": null
+      },
+      {
+       "smooth_layer": "re:.*post_attention_layernorm$",
+       "balance_layers": [
+        "re:.*gate_proj$",
+        "re:.*up_proj$"
+       ],
+       "activation_hook_target": null
+      },
+      {
+       "smooth_layer": "re:.*up_proj$",
+       "balance_layers": [
+        "re:.*down_proj$"
+       ],
+       "activation_hook_target": null
+      }
+     ],
+     "offload_device": "cpu",
+     "duo_scaling": true,
+     "n_grid": 20
+    },
+    {
+     "config_groups": null,
+     "targets": [
+      "Linear"
+     ],
+     "ignore": [
+      "lm_head"
+     ],
+     "scheme": "W4A16_ASYM",
+     "kv_cache_scheme": null,
+     "weight_observer": null,
+     "input_observer": null,
+     "output_observer": null,
+     "observer": null,
+     "bypass_divisibility_checks": false,
+     "requires_calibration_data": false,
+     "index": null,
+     "group": null,
+     "start": null,
+     "end": null,
+     "update": null,
+     "initialized_": true,
+     "finalized_": true,
+     "started_": true,
+     "ended_": true
+    }
+   ],
+   "scheme": "targets=['Linear'] weights=QuantizationArgs(num_bits=4, type='int', symmetric=False, group_size=128, strategy='group', block_structure=None, dynamic=False, actorder=None, scale_dtype=None, zp_dtype=torch.int8, observer='memoryless_minmax', observer_kwargs={}) input_activations=None output_activations=None format=None",
+   "calibration_ids_sha256": "469b65a004d6c1f290a1ece2f284ea49de4acc222d6abb70139309b1ec29acff",
+   "c4_documents_read": 306,
+   "ncal": 8,
+   "npz_sha256": "63b96736f31d557151a9b36502b86b6ab6012c8e72af7129d88385ff57cc45f3",
+   "changed_other": [
+    "model.layers.0.input_layernorm.weight",
+    "model.layers.0.post_attention_layernorm.weight",
+    "model.layers.1.input_layernorm.weight",
+    "model.layers.1.post_attention_layernorm.weight",
+    "model.layers.2.input_layernorm.weight",
+    "model.layers.2.post_attention_layernorm.weight",
+    "model.layers.3.input_layernorm.weight",
+    "model.layers.3.post_attention_layernorm.weight",
+    "model.layers.4.input_layernorm.weight",
+    "model.layers.4.post_attention_layernorm.weight",
+    "model.layers.5.input_layernorm.weight",
+    "model.layers.5.post_attention_layernorm.weight",
+    "model.layers.6.input_layernorm.weight",
+    "model.layers.6.post_attention_layernorm.weight",
+    "model.layers.7.input_layernorm.weight",
+    "model.layers.7.post_attention_layernorm.weight",
+    "model.layers.8.input_layernorm.weight",
+    "model.layers.8.post_attention_layernorm.weight",
+    "model.layers.9.input_layernorm.weight",
+    "model.layers.9.post_attention_layernorm.weight",
+    "model.layers.10.input_layernorm.weight",
+    "model.layers.10.post_attention_layernorm.weight",
+    "model.layers.11.input_layernorm.weight",
+    "model.layers.11.post_attention_layernorm.weight",
+    "model.layers.12.input_layernorm.weight",
+    "model.layers.12.post_attention_layernorm.weight",
+    "model.layers.13.input_layernorm.weight",
+    "model.layers.13.post_attention_layernorm.weight",
+    "model.layers.14.input_layernorm.weight",
+    "model.layers.14.post_attention_layernorm.weight",
+    "model.layers.15.input_layernorm.weight",
+    "model.layers.15.post_attention_layernorm.weight",
+    "model.layers.16.input_layernorm.weight",
+    "model.layers.16.post_attention_layernorm.weight",
+    "model.layers.17.input_layernorm.weight",
+    "model.layers.17.post_attention_layernorm.weight",
+    "model.layers.18.input_layernorm.weight",
+    "model.layers.18.post_attention_layernorm.weight",
+    "model.layers.19.input_layernorm.weight",
+    "model.layers.19.post_attention_layernorm.weight",
+    "model.layers.20.input_layernorm.weight",
+    "model.layers.20.post_attention_layernorm.weight",
+    "model.layers.21.input_layernorm.weight",
+    "model.layers.21.post_attention_layernorm.weight",
+    "model.layers.22.input_layernorm.weight",
+    "model.layers.22.post_attention_layernorm.weight",
+    "model.layers.23.input_layernorm.weight",
+    "model.layers.23.post_attention_layernorm.weight",
+    "model.layers.24.input_layernorm.weight",
+    "model.layers.24.post_attention_layernorm.weight",
+    "model.layers.25.post_attention_layernorm.weight",
+    "model.layers.26.post_attention_layernorm.weight",
+    "model.layers.27.post_attention_layernorm.weight"
+   ],
+   "already_fake_quantized": 0,
+   "zero_points_nonzero": 6736441
+  },
+  "AWQG": {
+   "arm": "AWQG",
+   "versions": {
+    "llmcompressor": "0.15.0",
+    "compressed_tensors": "0.20.1",
+    "torch": "2.14.0+cu130",
+    "transformers": "5.21.0"
+   },
+   "recipe": [
+    {
+     "requires_calibration_data": true,
+     "index": null,
+     "group": null,
+     "start": null,
+     "end": null,
+     "update": null,
+     "initialized_": true,
+     "finalized_": true,
+     "started_": true,
+     "ended_": true,
+     "mappings": [
+      {
+       "smooth_layer": "re:.*input_layernorm$",
+       "balance_layers": [
+        "re:.*q_proj$",
+        "re:.*k_proj$",
+        "re:.*v_proj$"
+       ],
+       "activation_hook_target": null
+      },
+      {
+       "smooth_layer": "re:.*v_proj$",
+       "balance_layers": [
+        "re:.*o_proj$"
+       ],
+       "activation_hook_target": null
+      },
+      {
+       "smooth_layer": "re:.*post_attention_layernorm$",
+       "balance_layers": [
+        "re:.*gate_proj$",
+        "re:.*up_proj$"
+       ],
+       "activation_hook_target": null
+      },
+      {
+       "smooth_layer": "re:.*up_proj$",
+       "balance_layers": [
+        "re:.*down_proj$"
+       ],
+       "activation_hook_target": null
+      }
+     ],
+     "offload_device": "cpu",
+     "duo_scaling": true,
+     "n_grid": 20
+    },
+    {
+     "config_groups": null,
+     "targets": [
+      "Linear"
+     ],
+     "ignore": [
+      "lm_head"
+     ],
+     "scheme": "W4A16",
+     "kv_cache_scheme": null,
+     "weight_observer": null,
+     "input_observer": null,
+     "output_observer": null,
+     "observer": null,
+     "bypass_divisibility_checks": false,
+     "requires_calibration_data": true,
+     "index": null,
+     "group": null,
+     "start": null,
+     "end": null,
+     "update": null,
+     "initialized_": true,
+     "finalized_": true,
+     "started_": true,
+     "ended_": true,
+     "block_size": 128,
+     "dampening_frac": 0.01,
+     "actorder": "static",
+     "batched_quantization": "auto"
+    }
+   ],
+   "scheme": "targets=['Linear'] weights=QuantizationArgs(num_bits=4, type='int', symmetric=True, group_size=128, strategy='group', block_structure=None, dynamic=False, actorder=<ActivationOrdering.STATIC: 'static'>, scale_dtype=None, zp_dtype=torch.int8, observer='memoryless_minmax', observer_kwargs={}) input_activations=None output_activations=None format=None",
+   "calibration_ids_sha256": "469b65a004d6c1f290a1ece2f284ea49de4acc222d6abb70139309b1ec29acff",
+   "c4_documents_read": 306,
+   "ncal": 8,
+   "npz_sha256": "0e130feeda67051e495fca8fbbc2795ead531c2c7cadfef275ca710b998b0a26",
+   "changed_other": [
+    "model.layers.0.input_layernorm.weight",
+    "model.layers.0.post_attention_layernorm.weight",
+    "model.layers.1.input_layernorm.weight",
+    "model.layers.1.post_attention_layernorm.weight",
+    "model.layers.2.input_layernorm.weight",
+    "model.layers.2.post_attention_layernorm.weight",
+    "model.layers.3.input_layernorm.weight",
+    "model.layers.3.post_attention_layernorm.weight",
+    "model.layers.4.input_layernorm.weight",
+    "model.layers.4.post_attention_layernorm.weight",
+    "model.layers.5.input_layernorm.weight",
+    "model.layers.5.post_attention_layernorm.weight",
+    "model.layers.6.input_layernorm.weight",
+    "model.layers.6.post_attention_layernorm.weight",
+    "model.layers.7.input_layernorm.weight",
+    "model.layers.7.post_attention_layernorm.weight",
+    "model.layers.8.post_attention_layernorm.weight",
+    "model.layers.9.input_layernorm.weight",
+    "model.layers.9.post_attention_layernorm.weight",
+    "model.layers.10.input_layernorm.weight",
+    "model.layers.10.post_attention_layernorm.weight",
+    "model.layers.11.input_layernorm.weight",
+    "model.layers.11.post_attention_layernorm.weight",
+    "model.layers.12.input_layernorm.weight",
+    "model.layers.12.post_attention_layernorm.weight",
+    "model.layers.13.input_layernorm.weight",
+    "model.layers.13.post_attention_layernorm.weight",
+    "model.layers.14.input_layernorm.weight",
+    "model.layers.14.post_attention_layernorm.weight",
+    "model.layers.15.input_layernorm.weight",
+    "model.layers.15.post_attention_layernorm.weight",
+    "model.layers.16.input_layernorm.weight",
+    "model.layers.16.post_attention_layernorm.weight",
+    "model.layers.17.input_layernorm.weight",
+    "model.layers.17.post_attention_layernorm.weight",
+    "model.layers.18.input_layernorm.weight",
+    "model.layers.18.post_attention_layernorm.weight",
+    "model.layers.19.input_layernorm.weight",
+    "model.layers.19.post_attention_layernorm.weight",
+    "model.layers.20.input_layernorm.weight",
+    "model.layers.20.post_attention_layernorm.weight",
+    "model.layers.21.input_layernorm.weight",
+    "model.layers.21.post_attention_layernorm.weight",
+    "model.layers.22.post_attention_layernorm.weight",
+    "model.layers.23.post_attention_layernorm.weight",
+    "model.layers.24.input_layernorm.weight",
+    "model.layers.24.post_attention_layernorm.weight",
+    "model.layers.25.post_attention_layernorm.weight",
+    "model.layers.26.post_attention_layernorm.weight",
+    "model.layers.27.post_attention_layernorm.weight"
+   ],
+   "already_fake_quantized": 196,
+   "zero_points_nonzero": 0
+  }
+ }
+}

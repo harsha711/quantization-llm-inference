@@ -1,0 +1,11 @@
++ prun timeout 7200 /tmp/e017-hpuvvad-20261109/bin/python /mnt/beegfs/hpuvvad/csc548-w4a16-e040-20261116/prereq-c58-342303/score.py /mnt/beegfs/hpuvvad/csc548-w4a16-e040-20261116/prereq-c58-342303 /mnt/beegfs/hpuvvad/csc548-w4a16-e037-20261111/wikitext2-test.txt /mnt/beegfs/hpuvvad/csc548-w4a16-e037-20261111/wikitext2-valid.txt AWQs=/mnt/beegfs/hpuvvad/csc548-w4a16-e040-20261116/prereq-c58-342303/AWQs.npz AWQa=/mnt/beegfs/hpuvvad/csc548-w4a16-e040-20261116/prereq-c58-342303/AWQa.npz AWQG=/mnt/beegfs/hpuvvad/csc548-w4a16-e040-20261116/prereq-c58-342303/AWQG.npz 2
+[prun] Master compute host = c58
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun timeout 7200 /tmp/e017-hpuvvad-20261109/bin/python /mnt/beegfs/hpuvvad/csc548-w4a16-e040-20261116/prereq-c58-342303/score.py /mnt/beegfs/hpuvvad/csc548-w4a16-e040-20261116/prereq-c58-342303 /mnt/beegfs/hpuvvad/csc548-w4a16-e037-20261111/wikitext2-test.txt /mnt/beegfs/hpuvvad/csc548-w4a16-e037-20261111/wikitext2-valid.txt AWQs=/mnt/beegfs/hpuvvad/csc548-w4a16-e040-20261116/prereq-c58-342303/AWQs.npz AWQa=/mnt/beegfs/hpuvvad/csc548-w4a16-e040-20261116/prereq-c58-342303/AWQa.npz AWQG=/mnt/beegfs/hpuvvad/csc548-w4a16-e040-20261116/prereq-c58-342303/AWQG.npz 2 (family=openmpi4)
+Token indices sequence length is longer than the specified maximum sequence length for this model (270674 > 131072). Running this sequence through the model will result in indexing errors
+ARM O {'valid': 6.2317, 'test': 8.0094}
+ARM AWQs {'valid': 6.8269, 'test': 8.9737}
+ARM AWQa {'valid': 6.5771, 'test': 8.5231}
+ARM AWQG {'valid': 7.1828, 'test': 9.1352}
+ARM O_restored {'valid': 6.2317, 'test': 8.0094}
+DONE {"AWQs": {"rise_vs_O": {"valid": 9.5501408706689, "test": 12.038982353981066}, "label": "substantial", "vs_E039_L_pct": -0.833667064114918}, "AWQa": {"rise_vs_O": {"valid": 5.541125803853197, "test": 6.412976641461432}, "label": "substantial", "vs_E039_L_pct": -5.813276338181906}, "AWQG": {"rise_vs_O": {"valid": 15.261064357431597, "test": 14.055894781467671}, "label": "substantial", "vs_E039_L_pct": 0.951513460416642}}
