@@ -193,6 +193,10 @@
 
 - E039 is complete (c58, job 342265); read its EXPERIMENTS entry. Block cost with the FP16 head: upstream llm-compressor 0.15.0 W4A16 +5.15%, our C/AT on a 16-level grid +5.27%, on the contract's 15-level grid +5.62% (E037 reproduced exactly); plain rounding 13.12% to 12.84%. Say: the grid has "no material effect" (under 1 point), our GPTQ "matches upstream" (within 1%), and the upstream recipe also fails the 5% bar on this model, so the remaining cost is mainly the model, for this model/metric/calibration only. Never say 4-bit cannot do better (AWQ, other recipes, larger models untested). Quality only: no 16-level arm is timed, gated or in the runtime contract. llm-compressor ran in its own overlay (transformers 5.21.0); scoring in the frozen environment. Preserve attempts 1 (install backtracked to llmcompressor 0.6.0) and 2 (version-check pattern). `lc.npz` stays on BeeGFS, hash in `lc.json`.
 
+## E040 AWQ comparison
+
+- E040 is complete (c58, job 342317); read its EXPERIMENTS entry. llm-compressor 0.15.0 AWQ with defaults, calibrated in FP32 (amendment 2, after FP16 attempt 1 hit non-finite loss): AWQs +10.21%, AWQa +5.72% (zero points, not runtime format), AWQG +5.86% against O; upstream GPTQ alone +5.15% (E039). Say AWQ "does not help" on this model (no arm 1% below GPTQ) and every arm FAILS 5%. Quality only; nothing timed or gated. Tool defaults only; other AWQ recipes and larger models untested, never "4-bit cannot do better". Preserve attempt 1 (342301) and prerequisite 342303. Exports stay on BeeGFS, hashes in AWQ*.json.
+
 ## Rooflines, if requested
 
 - Recompute all ceilings, ridge points, arithmetic intensities, and performance coordinates from specifications/data. Keep the primary full-machine roof distinct from core-count, ISA, NUMA, and memory-domain sensitivity roofs.

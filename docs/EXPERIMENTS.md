@@ -37,6 +37,25 @@ Amendment 2, before any further job: awq.py loads the FP16 checkpoint and calibr
 
 Limits fixed now: one model, one metric, one corpus, one run, one recipe per arm with defaults; validation and test are both WikiText-2; AWQa is not in the runtime format; nothing is timed or gated; llm-compressor ran in its own overlay (transformers 5.21.0) and scoring in the frozen environment. AWQ, GPTQ and llm-compressor are upstream; ours is the comparison and the measurement.
 
+Prerequisite 342303 on c58 passed (2026-11-16, after amendment 2): all three arms ran in FP32, every export check held, and a second O score equalled the first bit for bit. Outside the block weights, AWQ changed only layer norms (50 in AWQs/AWQG, 53 in AWQa); embedding, head and final norm unchanged. The same 28 grouped-query mappings were skipped. Its 2-window perplexities are not results. Retrieved to `results/e040_20261116/prereq-342303/`.
+
+### Result (full job 342317, c58, COMPLETED 0:0, 2h31m, 2026-11-16/17)
+
+128 calibration windows (ids hash `585ca1c3…`, E037's), E032's full windows. O reproduces E032 (8.6058) and the restored O equals the first bit for bit.
+
+| Arm | Test ppl | vs O (test / valid) | vs E039 L (9.0491) | Top-1 test | Criterion 1 | Criterion 2 |
+|---|---:|---:|---:|---:|---|---|
+| O | 8.6058 | — | — | 53.86% | — | — |
+| AWQs (sym, round) | 9.4849 | +10.21% / +10.35% | +4.82% | 52.47% | worse | fails |
+| AWQa (asym, zero points) | 9.0978 | +5.72% / +5.85% | +0.54% | 52.98% | no material difference | fails |
+| AWQG (AWQ then GPTQ, sym) | 9.1103 | +5.86% / +5.94% | +0.68% | 53.03% | no material difference | fails |
+
+Decision: hypothesis rejected. AWQ does not help on this model: no arm is 1% below upstream GPTQ, and no arm passes the 5% block criterion; all are "substantial". The lowest arm is AWQa, which is not our runtime format; the best format-compatible arm is AWQG at +5.86%, slightly above GPTQ alone (+5.15%). AWQ smoothing with plain rounding (AWQs, +10.21%) improves on plain rounding (+12.84% on the same 16-level grid, E039) but stays far above GPTQ. Together with E039 this strengthens the conclusion that the remaining cost is mainly the model, for this model, metric and calibration set.
+
+Evidence checks: in every arm all 196 reconstructions are integer codes within 16 levels; the largest difference between our FP16(c·FP16(s)) export and the tool's FP32 reconstruction is 0.0019 (AWQs/AWQG) and 0.0046 (AWQa); AWQa has 6,718,761 nonzero zero points; AWQG's weights were already fake-quantized by GPTQModifier (196/196). The recorded `rel_l2_vs_original` reaches 1.1–1.8 because AWQ rescales weight columns and compensates in the norm, so it is not a quantization-error measure. No NaN or non-finite-loss message in the full logs. `.npz` exports stay on BeeGFS (`csc548-w4a16-e040-20261116/full-c58-342317/`, about 2.6 GB each), hashes in `AWQ*.json`.
+
+Additional limits: calibration ran in FP32, not the BF16 of the tool's examples (amendment 2); tool defaults only (no `n_grid`, mapping or `duo_scaling` search); 28 v_proj→o_proj mappings skipped by the tool for grouped-query attention. Not tested: other AWQ recipes, AutoAWQ or the original AWQ code, larger models. Revisit only on a user request.
+
 ## E039 — Is the remaining block cost our quantizer, or the model? (16-level grid and upstream llm-compressor)
 
 Predeclared 2026-11-16 at the user's request. The user asked why our 4-bit quality is worse than published results ("there have been established papers where accuracy is robust … identify what the issue is"). I proposed this experiment and the user answered "go". This request authorizes the two items AGENTS listed as needing one: the upstream llm-compressor library and a change to the quantization grid. Quality only: no runtime, kernel, gate or timing. Nothing here changes the runtime contract or any default.

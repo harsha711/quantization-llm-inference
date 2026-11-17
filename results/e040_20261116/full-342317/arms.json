@@ -1,0 +1,62 @@
+{
+ "O": {
+  "valid": {
+   "nll_sum": 592749.5466308594,
+   "perplexity": 8.968435270250946,
+   "top1_accuracy_pct": 53.07767464582316
+  },
+  "test": {
+   "nll_sum": 660906.0671386719,
+   "perplexity": 8.605813234340317,
+   "top1_accuracy_pct": 53.86386581989904
+  }
+ },
+ "AWQs": {
+  "valid": {
+   "nll_sum": 619361.7514648438,
+   "perplexity": 9.896691684302093,
+   "top1_accuracy_pct": 51.6617074506669
+  },
+  "test": {
+   "nll_sum": 690770.5207519531,
+   "perplexity": 9.484894135942838,
+   "top1_accuracy_pct": 52.47223579221625
+  }
+ },
+ "AWQa": {
+  "valid": {
+   "nll_sum": 608123.513671875,
+   "perplexity": 9.493514202045436,
+   "top1_accuracy_pct": 52.2446003760122
+  },
+  "test": {
+   "nll_sum": 677975.8562011719,
+   "perplexity": 9.097783359134752,
+   "top1_accuracy_pct": 52.9812734082397
+  }
+ },
+ "AWQG": {
+  "valid": {
+   "nll_sum": 608335.5007324219,
+   "perplexity": 9.500965208785503,
+   "top1_accuracy_pct": 52.29604298974108
+  },
+  "test": {
+   "nll_sum": 678397.6755371094,
+   "perplexity": 9.110290306430592,
+   "top1_accuracy_pct": 53.02686858817782
+  }
+ },
+ "O_restored": {
+  "valid": {
+   "nll_sum": 592749.5466308594,
+   "perplexity": 8.968435270250946,
+   "top1_accuracy_pct": 53.07767464582316
+  },
+  "test": {
+   "nll_sum": 660906.0671386719,
+   "perplexity": 8.605813234340317,
+   "top1_accuracy_pct": 53.86386581989904
+  }
+ }
+}

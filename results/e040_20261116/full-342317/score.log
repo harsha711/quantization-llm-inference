@@ -1,0 +1,11 @@
++ prun timeout 7200 /tmp/e017-hpuvvad-20261109/bin/python /mnt/beegfs/hpuvvad/csc548-w4a16-e040-20261116/full-c58-342317/score.py /mnt/beegfs/hpuvvad/csc548-w4a16-e040-20261116/full-c58-342317 /mnt/beegfs/hpuvvad/csc548-w4a16-e037-20261111/wikitext2-test.txt /mnt/beegfs/hpuvvad/csc548-w4a16-e037-20261111/wikitext2-valid.txt AWQs=/mnt/beegfs/hpuvvad/csc548-w4a16-e040-20261116/full-c58-342317/AWQs.npz AWQa=/mnt/beegfs/hpuvvad/csc548-w4a16-e040-20261116/full-c58-342317/AWQa.npz AWQG=/mnt/beegfs/hpuvvad/csc548-w4a16-e040-20261116/full-c58-342317/AWQG.npz
+[prun] Master compute host = c58
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun timeout 7200 /tmp/e017-hpuvvad-20261109/bin/python /mnt/beegfs/hpuvvad/csc548-w4a16-e040-20261116/full-c58-342317/score.py /mnt/beegfs/hpuvvad/csc548-w4a16-e040-20261116/full-c58-342317 /mnt/beegfs/hpuvvad/csc548-w4a16-e037-20261111/wikitext2-test.txt /mnt/beegfs/hpuvvad/csc548-w4a16-e037-20261111/wikitext2-valid.txt AWQs=/mnt/beegfs/hpuvvad/csc548-w4a16-e040-20261116/full-c58-342317/AWQs.npz AWQa=/mnt/beegfs/hpuvvad/csc548-w4a16-e040-20261116/full-c58-342317/AWQa.npz AWQG=/mnt/beegfs/hpuvvad/csc548-w4a16-e040-20261116/full-c58-342317/AWQG.npz (family=openmpi4)
+Token indices sequence length is longer than the specified maximum sequence length for this model (270674 > 131072). Running this sequence through the model will result in indexing errors
+ARM O {'valid': 8.9684, 'test': 8.6058}
+ARM AWQs {'valid': 9.8967, 'test': 9.4849}
+ARM AWQa {'valid': 9.4935, 'test': 9.0978}
+ARM AWQG {'valid': 9.501, 'test': 9.1103}
+ARM O_restored {'valid': 8.9684, 'test': 8.6058}
+DONE {"AWQs": {"rise_vs_O": {"valid": 10.350260508990349, "test": 10.214966066131549}, "label": "substantial", "vs_E039_L_pct": 4.815849706751685}, "AWQa": {"rise_vs_O": {"valid": 5.854744065960094, "test": 5.716718587748293}, "label": "substantial", "vs_E039_L_pct": 0.5379585231252149}, "AWQG": {"rise_vs_O": {"valid": 5.937824408467374, "test": 5.862049969632488}, "label": "substantial", "vs_E039_L_pct": 0.6761705357488879}}
