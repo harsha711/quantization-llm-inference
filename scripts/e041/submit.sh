@@ -34,6 +34,7 @@ cat <<'EOF2'
 B64
 echo "$TARSHA  $S/source.tar.gz" | sha256sum -c
 tar xzf "$S/source.tar.gz" -C "$SRC"
+export OMPI_MCA_hwloc_base_binding_policy=none  # attempt 1: mpirun bound the one rank to core 0 (nproc 1)
 prun bash "$SRC/scripts/e041/inner.sh" "$MODE" "$SRC" "$S" > "$S/inner.log" 2>&1
 (cd "$S" && sha256sum $(ls | grep -v -E '^(FINISHED|RETRIEVED|driver\.(log|exit))$') > all.sha256)
 EOF2

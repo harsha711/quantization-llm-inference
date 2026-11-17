@@ -27,6 +27,8 @@ Reported: T1, Sp = T1/Tp and E_p = Sp/p per M; weak efficiency T(1)/T(p); Sp of 
 
 Criteria (fixed now): the FP64 check passes at every point, and the output hash is equal across all p for each shape (strong scaling). Scaling itself has no pass threshold: it is descriptive. Hypothesis, to be reported as confirmed or not: strong scaling is near-linear at small p and bends before 16 because the kernel streams weights and becomes memory-bandwidth bound (M1/M4), while M128 scales closer to ideal (more arithmetic per weight byte). Process: a prerequisite job (M4, p ∈ {1, 16}, 2 repetitions, one GPU row) inspected before the full job.
 
+Attempt 1, prerequisite job 342499 on c58 (AMD EPYC 9115 16-core, 1 NUMA node), exit 4 before building: the inner guard found `nproc` = 1 (affinity list 0). ARC `prun` launches `mpirun`, whose default binds the single rank to one core, so OpenMP threads would all have shared core 0. Nothing was timed. Retrieved to `results/e041_20261117/prereq-342499/`. Amendment 1: the batch script exports `OMPI_MCA_hwloc_base_binding_policy=none` before `prun` (ARC `prun` accepts no mpirun flags); the 16-core guard is unchanged and must pass.
+
 Limits fixed now: one node type, one CPU kernel design (not a tuned BLAS), a CPU baseline the GPU kernels were not designed against, wall-clock CPU time versus CUDA-event GPU time (both exclude setup and transfers).
 
 ## E040 — Does AWQ beat GPTQ on this model? (llm-compressor AWQ, three arms)

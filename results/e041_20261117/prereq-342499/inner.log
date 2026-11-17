@@ -1,0 +1,15 @@
+[prun] Master compute host = c58
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun bash /tmp/e041-src-342499/scripts/e041/inner.sh prereq /tmp/e041-src-342499 /mnt/beegfs/hpuvvad/csc548-w4a16-e041-20261117/prereq-c58-342499 (family=openmpi4)
+expected 16 usable cores, got 1
+--------------------------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code. Per user-direction, the job has been aborted.
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+mpirun detected that one or more processes exited with non-zero status, thus causing
+the job to be terminated. The first process to do so was:
+
+  Process name: [[57704,1],0]
+  Exit code:    4
+--------------------------------------------------------------------------
