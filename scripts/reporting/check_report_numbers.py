@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Assert that report/main.tex quotes the numbers in the results files exactly as rounded in the text.
 
-Sources (read-only): report/figs/numbers.json (E041, roofline from E045), results/*/summary.json (E043-E046),
+Sources (read-only): report/figs/numbers.json (E041, roofline from E045), results/*/summary.json (E043-E048), E047/E048 SASS counts and resources,
 results/reporting/project_synthesis/matched-comparisons.csv (E001-E003, E008-E010), E001-E003 profile/SASS records,
 E046 raw Nsight CSV, model-level analysis/quality JSON (E017, E023, E026, E027, E030, E032, E039, E040)."""
 import csv
@@ -131,8 +131,8 @@ def lrange(cells, M):
         q = [c for c in cells if c['M'] == M and c['policy'] == pol]
         out.append((rng([c['parent_us'] for c in q]), rng([c['cand_us'] for c in q]), rng([c['parent_us'] / c['cand_us'] for c in q])))
     (pa, ca, ra), (pb, cb, rb) = out
-    return (f"& {M} & {pa[0]:.1f}--{pa[1]:.1f} $\\to$ {ca[0]:.1f}--{ca[1]:.1f} & {pb[0]:.1f}--{pb[1]:.1f} $\\to$ {cb[0]:.1f}--{cb[1]:.1f} & "
-            f"{ra[0]:.2f}--{ra[1]:.2f} / {rb[0]:.2f}--{rb[1]:.2f} \\\\")
+    return (f"& {M} & {f2(*pa, d=1)} $\\to$ {f2(*ca, d=1)} & {f2(*pb, d=1)} $\\to$ {f2(*cb, d=1)} & "
+            f"{f2(*ra)} / {f2(*rb)} \\\\")
 mainv = [c for c in cs if c['split'] == 'main']
 need += [lrange([c for c in mainv if c['kernel'] == 'inblock_vec'], 1), lrange([c for c in mainv if c['kernel'] == 'inblock_m4_vec'], 4)]
 # static LDG sites (SASS, prerequisite record)
@@ -161,6 +161,48 @@ for c in ws:
         t = next(d for d in ws if d['kernel'] == 'tc' and (d['M'], d['policy'], d['series'], d['parent_us']) == (c['M'], c['policy'], c['series'], c['parent_us']))
         unp.setdefault(c['M'] <= 8, []).append(c['cand_us'] / t['cand_us'])
 need += [f"worth {min(unp[True]):.2f}--{max(unp[True]):.2f}$\\times$ at $M \\le 8$ and {min(unp[False]):.2f}--{max(unp[False]):.2f}$\\times$ above"]
+
+# ---- E047, E048 (summary.json, SASS counts and resources of the c58 full job) ----
+def rung(e, k):
+    s = J(f'{e}_20261117/summary.json')
+    assert s['decision'] == 'rejected' and len(s['nodes']) == 5
+    cs = [c for nd in s['nodes'].values() for c in nd['cells']]
+    pr = [c for c in cs if c['primary']]
+    assert len(pr) == 60
+    return cs, pr, sum(c['gain_pct'] >= 5 for c in pr)
+pcu = lambda v: f"{r0(min(v))}--{r0(max(v))}\\%"
+sel4 = lambda cs, M, pol, sp='main', K=4096, N=4096: [c for c in cs if c['split'] == sp and c['K'] == K and c['N'] == N and c['M'] in M and c['policy'] in pol]
+c47, p47, n47 = rung('e047', 'tc_splitk')
+assert n47 == 0 and all(c['gain_pct'] < 0 for c in p47)  # "slower than its parent in every primary cell"
+need += [f"rejected, {n47} of 60 primary cells", f"splitting $K$ across blocks is slower in all {len(p47)} primary cells",
+         f"{pcu([-c['gain_pct'] for c in p47 if c['policy'] == 'flush'])} with store flush and {pcu([-c['gain_pct'] for c in p47 if c['policy'] == 'noflush'])} without at $M=1$--16",
+         f"$M=32$ with store flush ({pcu([c['gain_pct'] for c in sel4(c47, (32,), ('flush',), 'held', 11008, 4096)])})",
+         f"Rejected, {n47}/60 primary cells; slower in every one."]
+assert all(c['gain_pct'] > 0 for c in sel4(c47, (32,), ('flush',), 'held', 11008, 4096))
+assert all(c['gain_pct'] < 5 for c in c47 if not (c['split'] == 'held' and c['K'] == 11008 and c['M'] == 32 and c['policy'] == 'flush'))  # "the only gain"
+need += ["E047 & E044 $\\to$ split-$K$ " + lrange(sel4(c47, (M,), ('flush', 'noflush')), M) for M in (1, 16)]
+cnt = lambda e, j, name: [tuple(map(int, l.split()[:4])) for l in open(R / f'{e}_20261117/{j}/ldg_hmma_stg_atom_counts.txt') if name in l]
+assert {x[1] for x in cnt('e047', 'full-c58-343164', 'w4a16_tc_splitk_kernel')} == {16} and {x[1] for x in cnt('e047', 'full-c58-343164', 'w4a16_tc_kernel')} == {32}
+need += ["holds 16 MMA instructions against the parent's 32"]
+c48, p48, n48 = rung('e048', 'tc_m32')
+g48 = lambda M, pol, sp='main', K=4096, N=4096: [c['gain_pct'] for c in sel4(c48, M, pol, sp, K, N)]
+ho = [g for K, N in ((4096, 11008), (11008, 4096)) for g in g48((32, 64, 128), ('flush', 'noflush'), 'held', K, N)]
+m128 = sel4(c48, (128,), ('flush', 'noflush'))
+f128 = sel4(c48, (128,), ('flush',))
+need += [f"rejected, {n48} of 60 primary cells", f"Rejected, {n48}/60 primary cells",
+         f"is {f2(*rng(g48((128,), ('flush', 'noflush'))), d=1)}\\% faster at $M=128$ but up to {r0(-min(g48((32,), ('flush',))))}\\% slower at $M=32$",
+         f"At $M=128$ it is {f2(*rng(g48((128,), ('flush', 'noflush'))), d=1)}\\% faster ({sum(c['gain_pct'] >= 5 for c in m128)} of {len(m128)} cells pass), "
+         f"and {f2(*rng(ho), d=1)}\\% faster on the held-out rectangles at $M \\ge 32$; but with store flush it is {r0(-max(g48((32,), ('flush',))))}--{r0(-min(g48((32,), ('flush',))))}\\% slower at $M=32$ "
+         f"and ties at $M=64$ (${min(g48((64,), ('flush',))):.1f}$ to ${max(g48((64,), ('flush',))):+.1f}\\%$)",
+         f"from {f2(*rng([c['parent_vs_cublas_dq'] for c in f128]))}$\\times$ to {f2(*rng([c['cand_vs_cublas_dq'] for c in f128]))}$\\times$"]
+assert max(g48((32,), ('flush',))) < 0 and abs(min(g48((64,), ('flush',)))) < 5 and max(g48((64,), ('flush',))) < 5
+need += ["E048 & E044 $\\to$ 32-row tile " + lrange(sel4(c48, (M,), ('flush', 'noflush')), M) for M in (32, 128)]
+ru = [l for l in open(R / 'e048_20261117/full-c58-343175/res-usage.txt')]
+regs = lambda name: [int(ru[i + 1].split('REG:')[1].split()[0]) for i, l in enumerate(ru) if 'Function' in l and name in l]
+rm, rt = regs('w4a16_tc_m32_kernel'), regs('w4a16_tc_kernel')
+assert len(set(rm)) == 1 and len(rt) == 4
+need += [f"needs {rm[0]} registers per thread against the parent's {min(rt)}--{max(rt)}, so {65536 // (rm[0] * 256)} instead of {65536 // (max(rt) * 256)} blocks fit per SM",
+         f"$M=32$ the grid has only {4096 // 32} blocks"]
 
 # ---- E045 (summary.json) ----
 t45 = J('e045_20261117/summary.json')['table']
@@ -209,6 +251,9 @@ need += [f"DRAM is already at {r0(t1['dram_pct'])}\\% of peak", f"the tensor pip
 assert t1['grid'] == 128
 rect = p46['tc_M4_K4096xN11008']
 need += [f"at {rect['grid'] / SLOTS:.2f} waves, reach {r0(rect['dram_pct'])}\\% of DRAM peak"]
+need += [f"our kernel's {t1['grid']:.0f} blocks fill {t1['grid'] / SLOTS:.2f} waves, and the same weight bytes at {rect['grid'] / SLOTS:.2f} waves",
+         f"the tensor pipe is already {r0(t128['hmma_pct'])}\\% busy"]  # E047/E048 evidence
+assert 4096 // 64 // 4 // 8 == 2  # E047: "each warp keeps only two 64-wide chunks"
 raw = list(csv.reader(open(R / 'e046_20261117/full-c58-343125/ncu/tc_M1_4096x4096.raw.csv')))
 col = lambda name: float(raw[-1][raw[0].index(name)].replace(',', ''))
 el = col('sm__cycles_elapsed.avg')
