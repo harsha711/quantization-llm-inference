@@ -69,6 +69,14 @@ Reported, not part of the decision:
 
 Interpretation: replacing scalar FMAs with Tensor Core MMAs removes most of the M ≥ 8 cost, consistent with the hypothesis that scalar arithmetic and unpacking, not weight bytes, limited E043's kernels there; the fast unpack matters most at small M. No profile was taken, so the remaining M128 gap to cuBLAS is unattributed (candidates, not measured: no shared-memory staging or software pipelining of operands, one 16-row tile per block). Limits: synthetic weights, one GPU type (five nodes, two drivers), kernel level only, not in the model path, single repeated matrix: never compare these numbers with E009's cyclic Marlin result. Not a dispatch or default change. Retrieved to `results/e044_20261117/full-<node>-<job>/`.
 
+Post-result qualifications (independent read-only Codex review, 2026-11-17; claims checked against the code):
+- The E044 cuBLAS denominator ran without `cublasSetMathMode` (src/cuda/bench.cu creates the handle only), i.e. cuBLAS default math mode, not E009/E010's FP32-reduction mode 16. The `tc`-versus-`inblock_m4_vec` decision is unaffected; the `tc`/cuBLAS ratios may differ under mode 16 (E045 uses mode 16).
+- Timed points check sampled rows (`check_rows=64`): at M128 half the rows are FP64-checked, and `tc` has no full-output parent comparison. Say "all sampled outputs pass"; E045 validates every row.
+- The `__half2` output store needs a 4-byte-aligned C; the launcher checks only A. All buffers here come from cudaMalloc, so no measured case is affected; documented as an undocumented precondition, to be guarded in the next rung that edits the kernel.
+- The header's "only the FP32 addition order differs" is stronger than the PTX ISA guarantees (MMA internal accumulation and subnormal handling are unspecified); the FP64 tolerance is the actual claim.
+- The gain supports the Tensor Core design as a whole; row reuse and operand handling also changed, so it is not attributable to MMA alone.
+- Reviewer's untested next-rung hypothesis (not a measurement): at M128 eight 16-row tiles reload and unpack every weight 8x (64 MiB of code requests); a 32-row M tile could cut M128 latency 10-20%. At M1, 15/16 of the MMA rows are padding. Candidate for the profile-led rung after E046.
+
 ## E043 — Do wider operand loads bring our own scalar kernels closer to the memory roof at small M?
 
 Predeclared 2026-11-17 at the user's request ("go", after I pointed out that our own E001–E003 kernels were frozen after E003, never compared with the memory roof, and have headroom at M = 1/4: about 38 µs and 59 µs at K = N = 4096 against a modelled ≈19 µs to stream the 8.65 MB of codes and scales at 448 GB/s). One optimization, our kernels only: no Marlin, model-path, dispatch, layout or contract change.
