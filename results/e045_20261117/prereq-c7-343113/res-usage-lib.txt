@@ -1,0 +1,158 @@
+
+Fatbin elf code:
+================
+arch = sm_120
+code version = [1,8]
+host = linux
+compile_size = 64bit
+identifier = scripts/e045/tc_bridge.cu src/cuda/w4a16_tc.cu src/cuda/w4a16_inblock_vec.cu src/cuda/w4a16_inblock_rows.cu src/cuda/w4a16_inblock_specialized.cu 
+
+Resource usage:
+ Common:
+  GLOBAL:0
+
+Fatbin ptx code:
+================
+arch = sm_120
+code version = [9,4]
+host = linux
+compile_size = 64bit
+compressed
+identifier = scripts/e045/tc_bridge.cu
+ptxasOptions =  --generate-line-info 
+
+Fatbin elf code:
+================
+arch = sm_120
+code version = [1,8]
+host = linux
+compile_size = 64bit
+identifier = scripts/e045/tc_bridge.cu
+
+Resource usage:
+ Common:
+  GLOBAL:0
+
+Fatbin ptx code:
+================
+arch = sm_120
+code version = [9,4]
+host = linux
+compile_size = 64bit
+compressed
+identifier = src/cuda/w4a16_tc.cu
+ptxasOptions =  --generate-line-info 
+
+Fatbin elf code:
+================
+arch = sm_120
+code version = [1,8]
+host = linux
+compile_size = 64bit
+identifier = src/cuda/w4a16_tc.cu
+
+Resource usage:
+ Common:
+  GLOBAL:0
+ Function _ZN44_GLOBAL__N__cd689e13_11_w4a16_tc_cu_599bad6515w4a16_tc_kernelILb0ELb1EEEvPK6__halfPKjS3_PS1_iiii:
+  REG:64 STACK:0 SHARED:17408 LOCAL:0 CONSTANT[0]:944 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN44_GLOBAL__N__cd689e13_11_w4a16_tc_cu_599bad6515w4a16_tc_kernelILb0ELb0EEEvPK6__halfPKjS3_PS1_iiii:
+  REG:76 STACK:0 SHARED:17408 LOCAL:0 CONSTANT[0]:944 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN44_GLOBAL__N__cd689e13_11_w4a16_tc_cu_599bad6515w4a16_tc_kernelILb1ELb1EEEvPK6__halfPKjS3_PS1_iiii:
+  REG:68 STACK:0 SHARED:17408 LOCAL:0 CONSTANT[0]:944 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN44_GLOBAL__N__cd689e13_11_w4a16_tc_cu_599bad6515w4a16_tc_kernelILb1ELb0EEEvPK6__halfPKjS3_PS1_iiii:
+  REG:73 STACK:0 SHARED:17408 LOCAL:0 CONSTANT[0]:944 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN44_GLOBAL__N__cd689e13_11_w4a16_tc_cu_599bad6522unpack_selftest_kernelEPy:
+  REG:22 STACK:0 SHARED:0 LOCAL:0 CONSTANT[0]:904 TEXTURE:0 SURFACE:0 SAMPLER:0
+
+Fatbin ptx code:
+================
+arch = sm_120
+code version = [9,4]
+host = linux
+compile_size = 64bit
+compressed
+identifier = src/cuda/w4a16_inblock_vec.cu
+ptxasOptions =  --generate-line-info 
+
+Fatbin elf code:
+================
+arch = sm_120
+code version = [1,8]
+host = linux
+compile_size = 64bit
+identifier = src/cuda/w4a16_inblock_vec.cu
+
+Resource usage:
+ Common:
+  GLOBAL:0
+ Function _ZN53_GLOBAL__N__98bcf00d_20_w4a16_inblock_vec_cu_3bee750c24w4a16_inblock_vec_kernelILi4ELb1EEEvPK6__halfPKjS3_PS1_iiii:
+  REG:44 STACK:0 SHARED:5120 LOCAL:0 CONSTANT[0]:944 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN53_GLOBAL__N__98bcf00d_20_w4a16_inblock_vec_cu_3bee750c24w4a16_inblock_vec_kernelILi4ELb0EEEvPK6__halfPKjS3_PS1_iiii:
+  REG:46 STACK:0 SHARED:5120 LOCAL:0 CONSTANT[0]:944 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN53_GLOBAL__N__98bcf00d_20_w4a16_inblock_vec_cu_3bee750c24w4a16_inblock_vec_kernelILi1ELb0EEEvPK6__halfPKjS3_PS1_iiii:
+  REG:37 STACK:0 SHARED:2048 LOCAL:0 CONSTANT[0]:944 TEXTURE:0 SURFACE:0 SAMPLER:0
+
+Fatbin ptx code:
+================
+arch = sm_120
+code version = [9,4]
+host = linux
+compile_size = 64bit
+compressed
+identifier = src/cuda/w4a16_inblock_rows.cu
+ptxasOptions =  --generate-line-info 
+
+Fatbin elf code:
+================
+arch = sm_120
+code version = [1,8]
+host = linux
+compile_size = 64bit
+identifier = src/cuda/w4a16_inblock_rows.cu
+
+Resource usage:
+ Common:
+  GLOBAL:0
+ Function _ZN54_GLOBAL__N__114de07f_21_w4a16_inblock_rows_cu_27df3c5125w4a16_inblock_rows_kernelILi4ELb1ELb1EEEvPK6__halfPKjS3_PS1_iiii:
+  REG:46 STACK:0 SHARED:5120 LOCAL:0 CONSTANT[0]:944 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN54_GLOBAL__N__114de07f_21_w4a16_inblock_rows_cu_27df3c5125w4a16_inblock_rows_kernelILi4ELb1ELb0EEEvPK6__halfPKjS3_PS1_iiii:
+  REG:40 STACK:0 SHARED:5120 LOCAL:0 CONSTANT[0]:944 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN54_GLOBAL__N__114de07f_21_w4a16_inblock_rows_cu_27df3c5125w4a16_inblock_rows_kernelILi4ELb0ELb1EEEvPK6__halfPKjS3_PS1_iiii:
+  REG:38 STACK:0 SHARED:5120 LOCAL:0 CONSTANT[0]:944 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN54_GLOBAL__N__114de07f_21_w4a16_inblock_rows_cu_27df3c5125w4a16_inblock_rows_kernelILi4ELb0ELb0EEEvPK6__halfPKjS3_PS1_iiii:
+  REG:39 STACK:0 SHARED:5120 LOCAL:0 CONSTANT[0]:944 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN54_GLOBAL__N__114de07f_21_w4a16_inblock_rows_cu_27df3c5125w4a16_inblock_rows_kernelILi2ELb1ELb1EEEvPK6__halfPKjS3_PS1_iiii:
+  REG:40 STACK:0 SHARED:3072 LOCAL:0 CONSTANT[0]:944 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN54_GLOBAL__N__114de07f_21_w4a16_inblock_rows_cu_27df3c5125w4a16_inblock_rows_kernelILi2ELb1ELb0EEEvPK6__halfPKjS3_PS1_iiii:
+  REG:34 STACK:0 SHARED:3072 LOCAL:0 CONSTANT[0]:944 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN54_GLOBAL__N__114de07f_21_w4a16_inblock_rows_cu_27df3c5125w4a16_inblock_rows_kernelILi2ELb0ELb1EEEvPK6__halfPKjS3_PS1_iiii:
+  REG:36 STACK:0 SHARED:3072 LOCAL:0 CONSTANT[0]:944 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN54_GLOBAL__N__114de07f_21_w4a16_inblock_rows_cu_27df3c5125w4a16_inblock_rows_kernelILi2ELb0ELb0EEEvPK6__halfPKjS3_PS1_iiii:
+  REG:39 STACK:0 SHARED:3072 LOCAL:0 CONSTANT[0]:944 TEXTURE:0 SURFACE:0 SAMPLER:0
+
+Fatbin ptx code:
+================
+arch = sm_120
+code version = [9,4]
+host = linux
+compile_size = 64bit
+compressed
+identifier = src/cuda/w4a16_inblock_specialized.cu
+ptxasOptions =  --generate-line-info 
+
+Fatbin elf code:
+================
+arch = sm_120
+code version = [1,8]
+host = linux
+compile_size = 64bit
+identifier = src/cuda/w4a16_inblock_specialized.cu
+
+Resource usage:
+ Common:
+  GLOBAL:0
+ Function _ZN61_GLOBAL__N__a56a9a97_28_w4a16_inblock_specialized_cu_5fd0cb1832w4a16_inblock_specialized_kernelILb1EEEvPK6__halfPKjS3_PS1_iii:
+  REG:32 STACK:0 SHARED:2048 LOCAL:0 CONSTANT[0]:940 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN61_GLOBAL__N__a56a9a97_28_w4a16_inblock_specialized_cu_5fd0cb1832w4a16_inblock_specialized_kernelILb0EEEvPK6__halfPKjS3_PS1_iii:
+  REG:34 STACK:0 SHARED:2048 LOCAL:0 CONSTANT[0]:940 TEXTURE:0 SURFACE:0 SAMPLER:0

@@ -1,0 +1,1 @@
++ timeout 3000 nvcc -O3 -DNDEBUG -std=c++17 -lineinfo '--generate-code=arch=compute_120,code=[compute_120,sm_120]' -shared -Xcompiler=-fPIC -Isrc/cuda scripts/e045/tc_bridge.cu src/cuda/w4a16_tc.cu src/cuda/w4a16_inblock_vec.cu src/cuda/w4a16_inblock_rows.cu src/cuda/w4a16_inblock_specialized.cu -o /mnt/beegfs/hpuvvad/csc548-w4a16-e045-20261117/prereq-c7-343113/libe045_tc.so
