@@ -56,6 +56,12 @@ void launch_w4a16_tc_cvt(const __half* A, const uint32_t* qweight, const __half*
                          int M, int N, int K, int group_size, cudaStream_t stream);
 unsigned long long w4a16_tc_unpack_selftest();
 
+// E047: tc with K split over S blocks and a deterministic last-block reduction (fixed z order).
+void launch_w4a16_tc_splitk(const __half* A, const uint32_t* qweight, const __half* scales,
+                            __half* C, int M, int N, int K, int group_size, cudaStream_t stream);
+int w4a16_tc_splitk_factor(const __half* A, const __half* C, int M, int N, int K, int group_size);
+unsigned long long w4a16_tc_splitk_unpack_selftest();
+
 void launch_dequant_w4a16(const uint32_t* qweight, const __half* scales, __half* W, int N, int K,
                           int group_size, cudaStream_t stream);
 
