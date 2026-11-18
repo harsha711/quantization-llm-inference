@@ -1,7 +1,7 @@
 // Correctness check and timing for one GEMM shape.
 //
 //   w4a16_bench --M 16 --N 4096 --K 4096 [--group 128] [--seed 1] [--warmup 10]
-//               [--iters 100] [--kernels naive,inblock,inblock_specialized,inblock_m2,inblock_m4,inblock_vec,inblock_m4_vec,tc,tc_cvt,tc_splitk,tc_m32,cublas,cublas_dq,dequant,unfused]
+//               [--iters 100] [--kernels naive,inblock,inblock_specialized,inblock_m2,inblock_m4,inblock_vec,inblock_m4_vec,tc,tc_cvt,tc_splitk,tc_m32,tc_ladder,cublas,cublas_dq,dequant,unfused]
 //               [--no-flush-l2] [--check-rows 64] [--nocheck] [--csv results/out.csv]
 //
 // Kernels
@@ -69,7 +69,7 @@ struct Options {
 [[noreturn]] void usage(const char* prog) {
   std::fprintf(stderr,
                "usage: %s [--M m] [--N n] [--K k] [--group g] [--seed s] [--warmup w]\n"
-               "          [--iters i] [--kernels naive,inblock,inblock_specialized,inblock_m2,inblock_m4,inblock_vec,inblock_m4_vec,tc,tc_cvt,tc_splitk,tc_m32,cublas,cublas_dq,dequant,unfused]\n"
+               "          [--iters i] [--kernels naive,inblock,inblock_specialized,inblock_m2,inblock_m4,inblock_vec,inblock_m4_vec,tc,tc_cvt,tc_splitk,tc_m32,tc_ladder,cublas,cublas_dq,dequant,unfused]\n"
                "          [--no-flush-l2] [--check-rows r] [--nocheck] [--zero-weights] [--csv path]\n",
                prog);
   std::exit(EXIT_FAILURE);
@@ -161,7 +161,7 @@ double logical_bytes(const std::string& name, int M, int N, int K, int group) {
   const double w16 = static_cast<double>(fp16_bytes(K, N));
   const double qw = static_cast<double>(qweight_bytes(K, N));
   const double sc = static_cast<double>(scales_bytes(K, N, group));
-  if (name == "naive" || name == "inblock" || name == "inblock_specialized" || name == "inblock_m2" || name == "inblock_m4" || name == "inblock_vec" || name == "inblock_m4_vec" || name == "tc" || name == "tc_cvt" || name == "tc_splitk" || name == "tc_m32") return a + c + qw + sc;
+  if (name == "naive" || name == "inblock" || name == "inblock_specialized" || name == "inblock_m2" || name == "inblock_m4" || name == "inblock_vec" || name == "inblock_m4_vec" || name == "tc" || name == "tc_cvt" || name == "tc_splitk" || name == "tc_m32" || name == "tc_ladder") return a + c + qw + sc;
   if (name == "cublas" || name == "cublas_dq") return a + c + w16;
   if (name == "dequant") return qw + sc + w16;
   if (name == "unfused") return a + c + qw + sc + w16;
@@ -359,6 +359,10 @@ int main(int argc, char** argv) {
     } else if (name == "tc_m32") {
       launch = [&] { launch_w4a16_tc_m32(dA, dQ, dS, dC, o.M, o.N, o.K, o.group, 0); };
       ref = &ref_quant;
+    } else if (name == "tc_ladder") {
+      // E050 rung, dispatch only (same rule as scripts/e050/tc_bridge.cu): tc_m32 at M >= 64, else tc.
+      launch = [&] { (o.M >= 64 ? launch_w4a16_tc_m32 : launch_w4a16_tc)(dA, dQ, dS, dC, o.M, o.N, o.K, o.group, 0); };
+      ref = &ref_quant;
     } else if (name == "cublas") {
       launch = [&] { launch_cublas_fp16(handle, dA, dW, dC, o.M, o.N, o.K); };
       ref = &ref_fp16;
@@ -408,13 +412,13 @@ int main(int argc, char** argv) {
         }
       }
       if (name == "inblock_specialized" || name == "inblock_m2" || name == "inblock_m4" ||
-          name == "inblock_vec" || name == "inblock_m4_vec" || name == "tc_m32") {
+          name == "inblock_vec" || name == "inblock_m4_vec" || name == "tc_m32" || name == "tc_ladder") {
         // Parent of each candidate: E002<-E001, E003<-E002, E043 vec<-E002, m4_vec<-E003 m4,
         // E048 tc_m32<-E044 tc (same MMA sequence per 16-row tile and same warp-order reduction).
         const char* parent = name == "inblock_specialized" ? "inblock"
                              : name == "inblock_vec"       ? "inblock_specialized"
                              : name == "inblock_m4_vec"    ? "inblock_m4"
-                             : name == "tc_m32"            ? "tc"
+                             : name == "tc_m32" || name == "tc_ladder" ? "tc"
                                                            : "inblock_specialized";
         const std::string par = parent;
         if (par == "tc")

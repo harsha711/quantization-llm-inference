@@ -259,6 +259,10 @@
 - Predeclared in EXPERIMENTS (user-approved rung, 2026-11-18; parent `tc`). `tc_ladder` = unchanged `tc_m32` launcher at M >= 64, unchanged `tc` below, in the new bridge `scripts/e050/tc_bridge.cu` only; no device code change, outputs bitwise equal to `tc`. Threshold is POST HOC (from E049), so fresh seeds 7-10 (activation of seed 7) and a fresh job. Criterion: tc_ladder/tc <= 0.95 at M64/M128 on 4096x11008, 11008x4096 and 4096x4096, both series (12 cells). Also reports M4/16 and fraction of Marlin speed. New files only (`scripts/e050/`, `results/e050_20261118/`).
 - E050 is complete (c8, prerequisite 343302, full 343308): ACCEPTED, 12/12 primary cells. tc_ladder/tc 0.826-0.849 on 4096x11008, 0.864-0.872 on 11008x4096, 0.908-0.920 (M64) and 0.871-0.875 (M128) at 4096x4096; M4/16 tie; bitwise equal to tc everywhere. Fraction of Marlin speed at M64/128 0.71-0.87 (tc) to 0.83-0.94 (tc_ladder) (rectangles 0.71-0.75 to 0.83-0.87); still slower than Marlin in every M64/128 cell. Always disclose the post-hoc threshold (fresh seeds 7-10 as guard). Marlin at 4096x4096 M4/16 differs 10-13% between series: one-series fraction 1.099 at M16 is not a "beats Marlin" claim. No profile of tc_m32 in the cycle. tc_ladder is the parent of the next rung.
 
+## E051 `tc_ladder` kernel-level replays (descriptive)
+
+- Predeclared in EXPERIMENTS (user request 2026-11-18). Bench selector `tc_ladder` (host dispatch, bitwise == tc), (a) single-matrix sweep M 1/5/8/32/64/128 + held-out rectangles, (b) E009 cycle at M4 with Marlin/cuBLAS Ŵ/unfused, (c) E041 same-node CPU T1/T16 + GPU row, (d) E049-method cyclic profiles of tc_ladder M64/M128 and Marlin M128. Criteria are correctness and completeness only; no acceptance gate, no device change. c8, `scripts/e051/`, `results/e051_20261118/`. Processor ratios are never parallel speedups; single-matrix numbers are never compared with cyclic Marlin.
+
 ## Rooflines, if requested
 
 - Recompute all ceilings, ridge points, arithmetic intensities, and performance coordinates from specifications/data. Keep the primary full-machine roof distinct from core-count, ISA, NUMA, and memory-domain sensitivity roofs.
