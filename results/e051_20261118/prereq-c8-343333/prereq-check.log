@@ -1,0 +1,1 @@
+PREREQ PASS {"kernel": "void <unnamed>::w4a16_tc_m32_kernel<0>(const __half *, const unsigned int *, const __half *, __half *, int, int, int, int)", "passes": 18, "dur_us": 163.872, "dram_rd": 23319552.0, "inst": 17343104.0, "hmma": 1409024.0, "missing": []}

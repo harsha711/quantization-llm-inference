@@ -14,7 +14,7 @@ cat <<HDR
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=16
 #SBATCH --exclusive
-#SBATCH --time=$([[ $mode == prereq ]] && echo 02:00:00 || echo 04:00:00)
+#SBATCH --time=$([[ $mode == prereq ]] && echo 01:20:00 || echo 03:00:00)
 #SBATCH --output=/tmp/e051-%j.log
 MODE=$mode PRE_NAME=$pre
 NOTE="$note"

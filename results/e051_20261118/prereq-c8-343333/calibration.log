@@ -1,0 +1,9 @@
++ timeout 5400 ncu --replay-mode application --app-replay-mode strict --app-replay-match grid --profile-from-start off --graph-profiling node --cache-control none --clock-control none --pipeline-boost-state dynamic --launch-skip 399 --launch-count 1 --metrics gpu__time_duration.sum,launch__grid_size --export /mnt/beegfs/hpuvvad/csc548-w4a16-e051-20261118/prereq-c8-343333/ncu/calibration /tmp/e005-r2-hpuvvad-20261106/bin/python scripts/e049/calibrate.py
+==WARNING== Note: Running with uncontrolled GPU caches. Profiling results may be inconsistent.
+==WARNING== Note: Running with unmodified GPU clocks. If not controlled otherwise, profiling results may be inconsistent.
+==PROF== Connected to process 1517504 (/usr/bin/python3.11)
+==PROF== Profiling "vectorized_elementwise_kernel" - 0 (1/1): Application replay pass 1
+PASS: 100 event-delimited four-operation graph cycles, unique final add_ target
+==PROF== Disconnected from process 1517504
+==PROF== Creating report from application replay data: 0%...100%
+==PROF== Report: /mnt/beegfs/hpuvvad/csc548-w4a16-e051-20261118/prereq-c8-343333/ncu/calibration.ncu-repz

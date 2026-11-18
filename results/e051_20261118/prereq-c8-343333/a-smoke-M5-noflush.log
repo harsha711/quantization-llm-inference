@@ -1,0 +1,36 @@
++ timeout 5400 build/w4a16_bench --M 5 --N 4096 --K 4096 --group 128 --seed 1 --warmup 1 --iters 2 --check-rows 4096 --kernels naive,inblock,inblock_specialized,inblock_m2,inblock_m4,inblock_vec,inblock_m4_vec,tc,tc_m32,tc_ladder,cublas,cublas_dq,dequant,unfused --no-flush-l2 --csv /mnt/beegfs/hpuvvad/csc548-w4a16-e051-20261118/prereq-c8-343333/a-smoke.csv
+device: NVIDIA GeForce RTX 5060 Ti (sm_120, 36 SMs, L2 32.00 MiB from cudaDeviceProp, 15.52 GiB)
+software: driver API 13030, runtime 13040
+shape: M=5 N=4096 K=4096 group=128 seed=1 flush_l2=0 warmup=1 iters=2 check_rows=4096
+footprint: FP16 weights 32.0000 MiB, packed INT4 8.0000 MiB, FP16 scales 0.2500 MiB
+launch: naive grid=((N+255)/256, M)=(16, 5) block=256; dequant grid=(16, 512) block=256
+launch: inblock/inblock_specialized grid=(128, 5) block=(32, 8), shared partials=1024 bytes
+launch: inblock_m2 grid=(128, 3), inblock_m4 grid=(128, 2), block=(32, 8), shared partials=2048/4096 bytes
+weight quant: rel_l2(W_hat, W)=1.1722e-01  uniform-step prediction sqrt(mean(s^2/12)/mean(w^2))=1.1767e-01
+  (prediction assumes independent Uniform[-s/2,s/2] error per weight using that group's s)
+cache: warm/reused inputs, no flush between launches
+W_hat GPU vs CPU: 0 / 16777216 FP16 bits differ (bit-exact)
+kernel                median_us     min_us     p90_us  TFLOP/s  eff_GB/s  pass    max_abs     rel_l2  rel_l2_fp16
+naive                    157.25     154.53     154.53    1.067      55.5   yes  9.986e-04  2.033e-04    1.161e-01
+inblock                  140.88     140.13     140.13    1.191      62.0   yes  9.986e-04  2.033e-04    1.161e-01
+inblock_specialized vs inblock: 0 / 20480 FP16 outputs differ
+inblock_specialized      106.94     105.54     105.54    1.569      81.7   yes  9.986e-04  2.033e-04    1.161e-01
+inblock_m2 vs inblock_specialized: 0 / 20480 FP16 outputs differ
+inblock_m2                87.26      87.10      87.10    1.923     100.1   yes  9.986e-04  2.033e-04    1.161e-01
+inblock_m4 vs inblock_specialized: 0 / 20480 FP16 outputs differ
+inblock_m4               107.95     107.62     107.62    1.554      80.9   yes  9.986e-04  2.033e-04    1.161e-01
+inblock_vec vs inblock_specialized: 0 / 20480 FP16 outputs differ
+inblock_vec               87.38      86.94      86.94    1.920      99.9   yes  9.986e-04  2.033e-04    1.161e-01
+inblock_m4_vec vs inblock_m4: 0 / 20480 FP16 outputs differ
+inblock_m4_vec            78.03      76.90      76.90    2.150     111.9   yes  9.986e-04  2.033e-04    1.161e-01
+tc                        18.83      18.14      18.14    8.909     463.7   yes  9.986e-04  2.033e-04    1.161e-01
+tc_m32 vs tc: 0 / 20480 FP16 outputs differ
+tc_m32                    17.84      17.31      17.31    9.404     489.5   yes  9.986e-04  2.033e-04    1.161e-01
+tc_ladder vs tc: 0 / 20480 FP16 outputs differ
+tc_ladder                 19.63      19.36      19.36    8.546     444.8   yes  9.986e-04  2.033e-04    1.161e-01
+cublas                    84.67      78.88      78.88    1.981     397.3   yes  9.899e-04  2.090e-04    2.090e-04
+cublas_dq                 54.10      52.29      52.29    3.101     621.8   yes  9.986e-04  2.034e-04    1.161e-01
+dequant                  114.74     114.46     114.46    0.000     367.8   yes  0.000e+00  0.000e+00    0.000e+00
+unfused                  139.97     139.90     139.90    1.199     302.1   yes  9.986e-04  2.034e-04    1.161e-01
+checked 5 of 5 rows against the FP64 CPU reference (reconstructed W_hat for naive/inblock/inblock_specialized/inblock_m2/inblock_m4/cublas_dq/unfused; original W for cublas)
+checked row indices: 0 1 2 3 4

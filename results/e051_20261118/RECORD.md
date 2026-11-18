@@ -1,0 +1,6 @@
+# E051 draft record (working notes; final block goes to docs/EXPERIMENTS.md)
+
+- Predeclaration + harness: commit a09e3d8.
+- Prerequisite 343333 (c8): submitted 13:47 with 2:00 limit; pending because c4-c10/c50-c58 were PLANNED for 16-node turin jobs 343247 (start 15:14) / 343248 (16:45-18:15). DEVIATION (operational): limit lowered to 1:20 with scontrol so it backfills before 15:14; started 13:48:20 on c8.
+- Prerequisite 343333 finished 14:09 (21 min), exit 0, INNER-OK, PREREQ PASS, all.sha256 verified after retrieval. Venv present (no restore), empty dependency diff. All 26 step exits 0. SASS of tc/tc_m32 kernels in libe050/libe049 identical to the bench. tc_ladder == tc bitwise in all 6 ladder checks (M 1/5/63/64/65/128) and 4 smoke runs; cycle validation 24 rows; memcheck/synccheck 0 errors, racecheck 0 hazards; ladder memcheck M128 0 errors; metrics none dropped; calibration selects add_; first profile tc_m32 kernel, 18 passes, no missing metric. Smoke M128 noflush tc 119.9 / tc_m32 110.2 / tc_ladder 110.6 us; CPU T1 M4 31.5 ms, T16 3.8 ms, equal hashes.
+- submit.sh limits changed to 1:20 prereq / 3:00 full (record of the scontrol change; header only, not in the source archive hash's tree semantics).
