@@ -29,6 +29,35 @@ Checks (as E045/E049). Every active row of every path FP64-checked under the unc
 
 ARC. One RTX 5060 Ti node, c8 preferred (E049's node; the node-local venv is restored by E045's recipe if absent, with an empty dependency diff required). One inspected prerequisite (all checks above, untimed), then one full job (two timing series) depending on it with `afterok`. Results under `results/e050_20261118/`. Limits: one node, one GPU type, synthetic weights, kernel level, not in the model path; never "competitive with Marlin".
 
+Attempts (all retrieved to `results/e050_20261118/<mode>-<node>-<job>/`, `all.sha256` verified after retrieval):
+- Prerequisite 343302 (c8, commit `407acd2`), exit 0, PREREQ PASS. The node-local venv was still present on c8 (no restore; empty `dependency-diff.txt`; E010 input hashes pass). Build, ctest, `check_inblock.sh`, `scripts/e048/check.sh`, library build: exit 0. SASS of all six kernels in `libe050_tc.so` is instruction-identical to the same-job `w4a16_bench` and to E049's library (HMMA/LDG 32/32 and 64/40; REG 64/76/68/73 at 17,408 B, 114 at 33,792 B). E044-bench agreement on seed-7 M128 operands, all three shapes (tc and tc_m32 identical: max_abs 1.945e-3 / 1.924e-3 / 1.781e-3, rel L2 2.08e-4). Traced validation, 48 rows: `tc_ladder` runs `w4a16_tc_kernel<true,…>` at M4/16 and `w4a16_tc_m32_kernel<false>` at M64/128 on every shape; outputs bitwise equal to `tc` in all 12 cells. memcheck/synccheck of the composed cycle (all four paths, shapes, M): 0 errors; racecheck of `tc`/`tc_ladder` at K = N = 4096, all M: 0 hazards. The on-node summary printed the traced kernel names truncated to "void " (cosmetic: the assertions use the full names); fixed in `c79ae7b`, local rerun `local-prereq-check.log`.
+- Full 343308 (c8, commit `c79ae7b`, `--dependency=afterok:343302`), exit 0 (INNER-OK). 96 rows / 9,600 complete-cycle samples (48 / 4,800 per series), every row's validation and post-timing validation pass and are equal, `tc_ladder` bitwise equal to `tc` in all 12 cells of each series, path order as predeclared. SM clock 2805 MHz P0 before and after the series. `python3 scripts/e050/analyze.py results/e050_20261118/full-c8-343308 --stage full --out results/e050_20261118` → `analysis.txt`, `summary.json` (identical to the on-node analysis).
+
+### Result (job 343308, c8, 2026-11-18): ACCEPTED, 12/12 primary cells
+
+Per-GEMM time = four-matrix cycle median / 4 under cyclic reuse, µs, series 1 / series 2; fraction = Marlin median / path median (fraction of Marlin's speed). Fresh seeds 7–10, activation of seed 7. Primary cells in bold ratio.
+
+| K×N | M | tc | tc_ladder | Marlin | cuBLAS Ŵ | tc fraction | tc_ladder fraction | cuBLAS fraction | tc_ladder / tc |
+|---|---:|---|---|---|---|---|---|---|---|
+| 4096×11008 | 4 | 64.4 / 63.9 | 64.4 / 63.9 | 61.3 / 61.2 | 268.9 / 269.2 | 0.951 / 0.958 | 0.951 / 0.958 | 0.228 / 0.227 | 1.000 / 1.000 |
+| 4096×11008 | 16 | 71.6 / 71.3 | 71.6 / 71.5 | 64.3 / 63.8 | 247.7 / 246.9 | 0.898 / 0.894 | 0.898 / 0.892 | 0.260 / 0.258 | 1.000 / 1.002 |
+| 4096×11008 | 64 | 184.5 / 184.5 | 152.5 / 152.5 | 131.1 / 131.4 | 245.9 / 243.6 | 0.711 / 0.713 | 0.860 / 0.862 | 0.533 / 0.540 | **0.827 / 0.826** |
+| 4096×11008 | 128 | 338.1 / 338.1 | 286.8 / 286.9 | 250.2 / 250.4 | 257.5 / 257.3 | 0.740 / 0.741 | 0.872 / 0.873 | 0.971 / 0.973 | **0.848 / 0.849** |
+| 11008×4096 | 4 | 67.5 / 68.0 | 67.7 / 68.0 | 59.2 / 59.2 | 214.8 / 214.9 | 0.878 / 0.870 | 0.874 / 0.870 | 0.276 / 0.275 | 1.004 / 1.000 |
+| 11008×4096 | 16 | 70.3 / 71.1 | 70.1 / 71.1 | 61.2 / 61.2 | 215.7 / 215.7 | 0.871 / 0.862 | 0.874 / 0.862 | 0.284 / 0.284 | 0.997 / 1.000 |
+| 11008×4096 | 64 | 178.6 / 179.6 | 155.7 / 155.5 | 129.4 / 129.8 | 223.9 / 223.9 | 0.724 / 0.723 | 0.831 / 0.834 | 0.578 / 0.580 | **0.872 / 0.866** |
+| 11008×4096 | 128 | 327.1 / 327.6 | 283.0 / 283.0 | 245.5 / 245.8 | 292.0 / 289.1 | 0.751 / 0.750 | 0.867 / 0.868 | 0.841 / 0.850 | **0.865 / 0.864** |
+| 4096×4096 | 4 | 18.3 / 19.3 | 18.3 / 19.3 | 16.7 / 15.1 | 81.8 / 81.7 | 0.912 / 0.782 | 0.912 / 0.782 | 0.204 / 0.185 | 1.000 / 1.000 |
+| 4096×4096 | 16 | 20.4 / 21.4 | 20.4 / 21.2 | 22.4 / 19.7 | 82.2 / 82.3 | 1.099 / 0.921 | 1.099 / 0.927 | 0.272 / 0.239 | 1.000 / 0.993 |
+| 4096×4096 | 64 | 64.4 / 67.0 | 59.3 / 60.8 | 55.8 / 56.1 | 83.6 / 83.3 | 0.867 / 0.838 | 0.942 / 0.922 | 0.668 / 0.674 | **0.920 / 0.908** |
+| 4096×4096 | 128 | 126.4 / 126.5 | 110.0 / 110.6 | 98.1 / 98.1 | 103.7 / 103.8 | 0.777 / 0.776 | 0.892 / 0.887 | 0.946 / 0.945 | **0.871 / 0.875** |
+
+Decision: ACCEPTED. All 12 primary cell-series pass (ratio ≤ 0.95): `tc_ladder` is 17.3–17.4% (4096×11008 M64), 15.1–15.2% (M128), 12.8–13.4% (11008×4096 M64), 13.5–13.6% (M128), 8.0–9.2% (4096×4096 M64) and 12.5–12.9% (M128) faster than `tc`. `tc_ladder` becomes the parent of the next rung. Hypothesis (13–17% at M64/M128) holds on both rectangles; K = N = 4096 M64 is below that range (8–9%), still above the 5% bar.
+
+Observations: M4/M16 tie as expected (ratio 0.993–1.004; same kernel and bits). On the rectangles the c8 medians of `tc`, Marlin and cuBLAS reproduce E049's seed-3–6 medians within about 1%, so the fresh seeds change nothing visible. Fraction of Marlin's speed at M64/M128 rises from 0.71–0.78 (`tc`) to 0.83–0.94 (`tc_ladder`); `tc_ladder` is still slower than Marlin in every M64/M128 cell. At K = N = 4096 M4/M16, Marlin's medians differ 10–13% between the two series (16.7 vs 15.1, 22.4 vs 19.7 µs; position in the rotation differs), so those fractions are unstable; series 1's 4096×4096 M16 fraction 1.099 (`tc` and `tc_ladder` faster than Marlin) is one series only, unexplained and unprofiled; it is not a claim that our kernel beats Marlin there (series 2: 0.921/0.927). cuBLAS on Ŵ remains faster than both our paths at M128 (fraction 0.94–0.97 vs ours 0.87–0.89), except 11008×4096 where `tc_ladder` (283.0) beats cuBLAS (292.0/289.1).
+
+Limits: one node (c8), one GPU type, synthetic weights, kernel level, not in the model path. The threshold M ≥ 64 is post hoc (from E049); the fresh seeds/job are the guard, not a held-out node or shape family beyond K = N = 4096. No profile of `tc_m32` in the cycle; the cause attribution (per-tile load/unpack halved) rests on E049's `tc` counters and the matching gain, not on a counter measurement of `tc_ladder`. Never "competitive with Marlin".
+
 ## E049 — Why is Marlin faster than `tc` at M64 under cyclic weights? (diagnostic profile + descriptive `tc_m32` timing)
 
 Predeclared 2026-11-17 under the standing kernel-ladder scope (coordinator request), before any GPU run. DIAGNOSTIC plus one descriptive measurement: no kernel, Marlin, layout, dispatch or contract change, and no acceptance gate. Sources `src/cuda/w4a16_tc.cu` (E044) and `src/cuda/w4a16_tc_m32.cu` (E048) are used unchanged; E045's harness files are not modified (new files only under `scripts/e049/`, results under `results/e049_20261117/`).
