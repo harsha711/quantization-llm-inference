@@ -11,3 +11,4 @@
   graph E026 form ACCEPTED (0.00210/0.00195, tokens equal F64). Marlin control ACCEPTED (0.00210/0.00200).
   Smoke cells (not results): heldout 128 s1 GTA 315.0 ms, GQA 326.4 ms.
 - Submitted on c10: core 343363 (afterok prereq), long 343364 (afterok core), head 343365 (afterok core, afterany long), ext 343366 (afterok core, afterany head).
+- llama.cpp venv absent on c10: ext job 343367 pinned to c5 (E028's llama node), afterok core; same ext arms, stacks used only if their venvs are present there.
