@@ -7,6 +7,11 @@
 - Goal wording: "close the gap at small M; beat Marlin only where measured". Never claim "competitive with/faster than Marlin" beyond the measured cells. Marlin/vLLM stay upstream credit. Model-level work (E014–E042) is background/motivation in the report; it is frozen, not extended.
 - Weight-layout changes (offline lossless repack, as Marlin does) are allowed only with a documented CONTRACT.md amendment in the rung's predeclaration; the reconstruction FP16((q-8)*s), tolerance and scales stay unchanged.
 
+## Latest-kernel replay (user decision 2026-11-18)
+
+- The user asked for `tc_ladder` (E050, the top rung) results in every earlier experiment where a kernel choice matters. This unfreezes the model path for that purpose only. E051 = kernel-level replays (single-matrix sweeps of E001-E003/E043/E044 conditions, E008/E009 cyclic counts, E041 same-node GPU row, cyclic profile of tc_m32). E052 = `tc_ladder` replacing Marlin in the model path (E021-style gate first, then E023/E026 decode, prefill, E029 long context, E031 head, E038 calibrated weights, E027/E028 external stacks in the same job).
+- Not replayed, by design: Marlin-only tuning/diagnosis (E005-E007, E011-E013) and quality-only experiments (E032-E042: perplexity depends on the weights, not the GEMM kernel). Every replay is a new predeclared experiment with fresh jobs; never splice old timings into new comparisons, keep old records immutable, keep every AGENTS.md disclosure (E021 third gate, +13.1%/+8.6%, never "competitive with vLLM/Marlin").
+
 ## Every session
 
 - Reporting checkpoint: [PROJECT_SYNTHESIS.md](docs/PROJECT_SYNTHESIS.md) and [offline figures](scripts/reporting/README.md) synthesize completed E001–E012. Read them before preparing the final report. Keep upstream performance separate from our contributions, practical 5% gates separate from winner reversals, and batch scaling separate from worker scaling. Next task is the ACM report draft and resolution of the saved course requirements. This checkpoint authorizes no new GPU run or E012 retry. Historical manifests stay immutable. Reporting inputs/outputs have their own manifest.
