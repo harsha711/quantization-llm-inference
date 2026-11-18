@@ -167,7 +167,7 @@ def prereq(d):
     assert bits == 8
     for r in val:
         name, m, ks = r['config'], r['M'], r['traced_kernels']
-        assert len(ks) == 1, ks
+        assert len(ks) == 1 or name == 'cublas_dq', ks  # cuBLAS M4 4096x11008 adds splitKreduce (E011)
         if name == 'marlin': assert ks[0].startswith('void e005_marlin::Marlin<')
         elif name == 'tc' or (name == 'tc_m32' and m < 32): assert 'w4a16_tc_kernel<true' in ks[0], ks
         elif name == 'tc_m32': assert 'w4a16_tc_m32_kernel<false>' in ks[0], ks

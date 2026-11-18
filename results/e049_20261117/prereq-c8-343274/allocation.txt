@@ -1,0 +1,29 @@
+JobId=343274 JobName=w4a16-e049-prereq
+   UserId=hpuvvad(473382) GroupId=ncsu(108) MCS_label=N/A
+   Priority=1 Nice=0 Account=(null) QOS=normal
+   JobState=RUNNING Reason=None Dependency=(null)
+   Requeue=1 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=0:0
+   RunTime=00:00:00 TimeLimit=02:00:00 TimeMin=N/A
+   SubmitTime=2026-11-18T08:26:09 EligibleTime=2026-11-18T08:26:09
+   AccrueTime=2026-11-18T08:26:09
+   StartTime=2026-11-18T08:26:31 EndTime=2026-11-18T10:26:31 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2026-11-18T08:26:31 Scheduler=Backfill
+   Partition=rtx5060ti16g AllocNode:Sid=login2:16284
+   ReqNodeList=c8 ExcNodeList=(null)
+   NodeList=c8
+   BatchHost=c8
+   NumNodes=1 NumCPUs=16 NumTasks=1 CPUs/Task=16 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=16,mem=1M,node=1,billing=16
+   AllocTRES=cpu=16,node=1,billing=16
+   Socks/Node=* NtasksPerN:B:S:C=0:0:*:* CoreSpec=*
+   MinCPUsNode=16 MinMemoryNode=0 MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=NO Contiguous=0 Licenses=(null) LicensesAlloc=(null) Network=(null)
+   Command=(null)
+   WorkDir=/home/hpuvvad
+   StdErr=/tmp/e049-343274.log
+   StdIn=/dev/null
+   StdOut=/tmp/e049-343274.log
+   TresPerTask=cpu=16
+   
+

@@ -1,0 +1,22 @@
+[prun] Master compute host = c8
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun bash /tmp/e049-src-343274/scripts/e049/inner.sh prereq /tmp/e049-src-343274 /mnt/beegfs/hpuvvad/csc548-w4a16-e049-20261117/prereq-c8-343274  (family=openmpi4)
+Traceback (most recent call last):
+  File "/tmp/e049-src-343274/scripts/e049/analyze.py", line 326, in <module>
+    elif a.stage == 'prereq': prereq(a.dir)
+                              ^^^^^^^^^^^^^
+  File "/tmp/e049-src-343274/scripts/e049/analyze.py", line 170, in prereq
+    assert len(ks) == 1, ks
+           ^^^^^^^^^^^^
+AssertionError: ['void cutlass::Kernel2<cutlass_80_wmma_tensorop_s161616gemm_f16_16x16_64x2_nn_align8>(cutlass_80_wmma_tensorop_s161616gemm_f16_16x16_64x2_nn_align8::Params)', 'void cublasLt::splitKreduce_kernel<32, 16, int, float, __half, float, __half, false, __half, __half, __half, true, false, false, false>(cublasLt::cublasSplitKParams<float>, float const*, __half const*, __half*, __half*, float const*, float const*, __half const*, float const*, __half*, void*, long, float*, int*, float*, float*, float const*, float const*, float const*, float const*, float const*)']
+--------------------------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code. Per user-direction, the job has been aborted.
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+mpirun detected that one or more processes exited with non-zero status, thus causing
+the job to be terminated. The first process to do so was:
+
+  Process name: [[4428,1],0]
+  Exit code:    1
+--------------------------------------------------------------------------
