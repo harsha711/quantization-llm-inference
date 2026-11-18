@@ -9,7 +9,7 @@ uv venv /tmp/plot && uv pip install --python /tmp/plot/bin/python -r results/rep
 /tmp/plot/bin/python scripts/reporting/report_figures.py results/e041_20261117/full-342501   # writes report/figs/
 python3 scripts/reporting/check_report_numbers.py                                           # text matches figs/numbers.json
 ```
-Inputs (read-only): E041 CSVs, `results/reporting/project_synthesis/matched-comparisons.csv` (E010 rows), E027 `analysis.json`, E039/E040 `quality.json`. Earlier figures: `docs/figures/project_synthesis/` via `scripts/reporting/README.md`.
+Inputs (read-only): E041 CSVs, E045 `summary.json` (roofline: our `tc`, corrected Marlin, cuBLAS), E027 `analysis.json`, E039/E040/E042 `quality.json`. The checker also reads `results/*/summary.json`, the E001–E003/E008–E010 rows of `results/reporting/project_synthesis/matched-comparisons.csv` and the records it names. Earlier figures: `docs/figures/project_synthesis/` via `scripts/reporting/README.md`.
 
 ## Code
 - Build and host tests: `bash scripts/build.sh && ctest --test-dir build --output-on-failure` (CUDA targets need `nvcc`; set `CUDA_ARCH=120` for the RTX 5060 Ti).

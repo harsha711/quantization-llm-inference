@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Figures and numbers for the ACM report (report/figs/). report_figures.py E041_RUN_DIR
 
-Inputs are read-only: E041 CSVs, the project-synthesis matched-comparison table (E010 rows), E027 analysis,
+Inputs are read-only: E041 CSVs, E045 summary.json (roofline: tc, corrected Marlin, cuBLAS), E027 analysis,
 E032/E039/E040 quality JSON. Writes report/figs/*.pdf and report/figs/numbers.json (every number the report quotes
 from these figures). Roofline ceilings: 448 GB/s GDDR7 (NVIDIA RTX 5060 Ti specification) and 47.4 TFLOP/s dense
 FP16 Tensor with FP32 accumulation (36 SM x 2.572 GHz boost x 512 FLOP/clk/SM, third-party listing); traffic is the
@@ -74,37 +74,41 @@ e041['gpu_speedup_vs_T1'] = {M: {k: e041[M]['T1_ms'] * 1e3 / v['noflush'] for k,
 e041['gpu_speedup_vs_Tmax'] = {M: {k: e041[M]['Tp_ms'][ps[-1]] * 1e3 / v['noflush'] for k, v in g[M].items()} for M in g if M in e041}
 num['e041'] = e041
 
-# ---- Roofline from E010 (four cycled matrices, amortized per GEMM, series 1 and 2) ----
+# ---- Roofline from E045 (four cycled matrices, amortized per GEMM, series 1 and 2, one job/node c7):
+# our Tensor Core kernel tc, corrected Marlin A and cuBLAS on pre-materialized FP16 W_hat (math mode 16) ----
 BW, PEAK = 448e9, 36 * 2.572e9 * 512
-num['roofline'] = dict(bandwidth_GBps=BW / 1e9, peak_TFLOPs=PEAK / 1e12, ridge_flop_per_byte=PEAK / BW)
+num['roofline'] = dict(bandwidth_GBps=BW / 1e9, peak_TFLOPs=PEAK / 1e12, ridge_flop_per_byte=PEAK / BW, source='E045')
 pts = []
-for r in csv.DictReader(open(ROOT / 'results/reporting/project_synthesis/matched-comparisons.csv')):
-    if r['experiment'] != 'E010':
-        continue
-    M, N, K = int(r['M']), int(r['N']), int(r['K'])
+for r in json.load(open(ROOT / 'results/e045_20261117/summary.json'))['table']:
+    M, N, K = r['M'], r['N'], r['K']
     fl = 2 * M * N * K
-    by = {'cuBLAS FP16 $\\hat W$': K * N * 2 + M * K * 2 + M * N * 2,
-          'Marlin W4A16': K * N // 2 + (K // 128) * N * 2 + M * K * 2 + M * N * 2}
-    for (name, b), t in zip(by.items(), (float(r['baseline_amortized_us']), float(r['candidate_amortized_us']))):
-        ai, perf = fl / b, fl / (t * 1e-6)
-        roof = min(PEAK, ai * BW)
-        assert perf <= roof * 1.0001, ('above roof', r)
-        pts.append(dict(kernel=name, M=M, K=K, N=N, series=int(r['series']), ai=ai, tflops=perf / 1e12, frac_roof=perf / roof))
+    w4 = K * N // 2 + (K // 128) * N * 2 + M * K * 2 + M * N * 2  # codes + FP16 scales + A + C, each once
+    by = {'cuBLAS FP16 $\\hat W$': (K * N * 2 + M * K * 2 + M * N * 2, 'cublas_us'),
+          'Marlin W4A16 (corrected)': (w4, 'marlin_us'), 'ours: tc (E044)': (w4, 'tc_us')}
+    for s in (1, 2):
+        for name, (b, key) in by.items():
+            t = r[f's{s}'][key]
+            ai, perf = fl / b, fl / (t * 1e-6)
+            roof = min(PEAK, ai * BW)
+            assert perf <= roof * 1.0001, ('above roof', r)
+            pts.append(dict(kernel=name, M=M, K=K, N=N, series=s, ai=ai, tflops=perf / 1e12, frac_roof=perf / roof))
 num['roofline']['points'] = pts
-fig, ax = plt.subplots(figsize=(W1, 2.5))
+fig, ax = plt.subplots(figsize=(W1, 2.6))
 xs = [v / 10 for v in range(5, 10001)]
 ax.plot(xs, [min(PEAK, v * BW) / 1e12 for v in xs], color='k', lw=1)
 ax.axvline(PEAK / BW, ls=':', color=C[4], lw=0.8)
-ax.text(PEAK / BW * 1.08, 0.08, f'ridge {PEAK / BW:.0f}', color=C[4], fontsize=6.5)
+ax.text(PEAK / BW * 1.08, 4, f'ridge {PEAK / BW:.0f}', color=C[4], fontsize=6.5)
 for i, name in enumerate(dict.fromkeys(p['kernel'] for p in pts)):
     for mk, (K, N) in zip('os', ((4096, 11008), (11008, 4096))):
         q = [p for p in pts if p['kernel'] == name and p['K'] == K and p['series'] == 1]
         ax.scatter([p['ai'] for p in q], [p['tflops'] for p in q], marker=mk, s=14, color=C[i], zorder=3,
-                   label=f'{name}, K{K}×N{N}')
-        for p in q:
-            ax.annotate(f"{p['M']}", (p['ai'], p['tflops']), fontsize=5.5, xytext=(3, -6), textcoords='offset points')
+                   facecolors='none' if mk == 's' else C[i], label=f'{name}, K{K}×N{N}')
+        if mk == 'o' and i < 2:  # label M once per intensity: cuBLAS left of its point, Marlin above (tc shares Marlin's x)
+            for p in q:
+                ax.annotate(f"M{p['M']}", (p['ai'], p['tflops']), fontsize=5.5, color=C[i],
+                            xytext=(5, -7) if i == 0 else (-14, 4), textcoords='offset points')
 ax.set(xscale='log', yscale='log', xlabel='arithmetic intensity (FLOP/byte, modelled)', ylabel='TFLOP/s', xlim=(0.5, 1000), ylim=(0.05, 80))
-ax.legend(frameon=False, fontsize=5.5, loc='upper left')
+ax.legend(frameon=False, fontsize=5, loc='lower right')
 save(fig, 'roofline')
 
 # ---- Full model decode (E027, c9, 63 decode steps, batch 1) ----
