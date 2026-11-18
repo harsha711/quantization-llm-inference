@@ -46,7 +46,8 @@ def sass_blocks(path):
     blocks, name = {}, None
     for line in path.read_text().splitlines():
         if 'Function :' in line:
-            name = line.split()[-1]; blocks[name] = []
+            # Anonymous-namespace mangling carries a per-compilation hash; compare the code, not the hash.
+            name = re.sub(r'_GLOBAL__N__[0-9a-f]+_','_GLOBAL__N__',line.split()[-1]); blocks[name] = []
         elif name and re.match(r'\s*/\*([0-9a-f]{4,}\*/| 0x)',line):
             blocks[name].append(line.strip())
     return blocks
@@ -60,6 +61,13 @@ def prereq(d):
     assert 'FAILED' not in (d/'e010-inputs-check.log').read_text()
     bench, lib = sass_blocks(d/'sass-tc-bench.txt'), sass_blocks(d/'sass-tc-lib.txt')
     assert len(bench) == 4 and bench.keys() == lib.keys() and all(bench[k] == lib[k] and bench[k] for k in bench)
+    counts = {k: dict(HMMA=sum('HMMA' in x for x in v),LDG=sum('LDG' in x for x in v)) for k,v in lib.items()}
+    assert all(c == dict(HMMA=32,LDG=32) for c in counts.values()), counts  # E044 ldg_hmma_counts.txt
+    res = {re.sub(r'_GLOBAL__N__[0-9a-f]+_','_GLOBAL__N__',m.group(1)): m.group(2) for m in re.finditer(
+        r'Function (\S*w4a16_tc_kernel\S*):\s*\n\s*(REG:\d+ STACK:\d+ SHARED:\d+ LOCAL:\d+)',(d/'res-usage-lib.txt').read_text())}
+    # E044 record (results/e044_20261117/*/res-usage.txt): REG 64/76/68/73 for <0,1>/<0,0>/<1,1>/<1,0>, 17,408 B shared.
+    expect = {'ILb0ELb1E':64,'ILb0ELb0E':76,'ILb1ELb1E':68,'ILb1ELb0E':73}
+    assert len(res) == 4 and all(f'REG:{expect[t]} STACK:0 SHARED:17408 LOCAL:0' == v for k,v in res.items() for t in expect if t in k), res
     check_untimed(d/'smoke.jsonl',[(256,2048)],NAMES)
     val = check_untimed(d/'validation.jsonl',SHAPES,NAMES)
     for r in val:
@@ -82,7 +90,7 @@ def prereq(d):
         # Same seed-3 operands, all 128 rows: stats printed by the E044 build equal the bridge's.
         assert float(a['max_abs_err']) == float(f"{v['max_abs']:.4e}") and float(a['rel_l2_err']) == float(f"{v['rel_l2']:.4e}"), (a,v)
         out.append(dict(K=k,N=n,max_abs=v['max_abs'],rel_l2=v['rel_l2']))
-    print('PREREQ PASS',json.dumps(dict(sass_functions=sorted(bench),agreement=out)))
+    print('PREREQ PASS',json.dumps(dict(sass_counts=counts,resources=res,agreement=out)))
 
 
 def cells(series_rows):
