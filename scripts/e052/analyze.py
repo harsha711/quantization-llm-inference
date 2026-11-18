@@ -25,7 +25,7 @@ def keys(context):
 
 def gain(a, b, context, metric='decode_ms'):
     """Percent by which arm a is below arm b in each of the four cells (positive = a faster)."""
-    return [round(100 * (1 - cells[(a, context, p, s)][metric] / cells[(b, context, p, s)][metric]), 3) for p, s in keys(context)
+    return [100 * (1 - cells[(a, context, p, s)][metric] / cells[(b, context, p, s)][metric]) for p, s in keys(context)
             if (a, context, p, s) in cells and (b, context, p, s) in cells]
 
 
@@ -37,7 +37,7 @@ def outcome(g):
         return 'faster'
     if all((1 - x / 100) >= 1 / 0.95 for x in g):  # b >= 5% below a  <=>  b/a <= 0.95  <=>  a/b >= 1/0.95
         return 'slower'
-    if all(x < 5 and (1 - x / 100) < 1 / 0.95 for x in g):
+    if all(abs(x) < 5 for x in g):  # a within +-5% of b in every cell
         return 'comparable'
     return 'mixed'
 
@@ -59,11 +59,11 @@ for c in contexts:
             g = gain(a, b, c, metric)
             if not g:
                 continue
-            row = dict(context=c, a=a, b=b, metric=metric, hypothesis=h, pct_a_below_b=g, outcome=outcome(g))
+            row = dict(context=c, a=a, b=b, metric=metric, hypothesis=h, pct_a_below_b=[round(x, 3) for x in g], outcome=outcome(g))
             if h in ('H1', 'H5', 'H6') and metric == 'decode_ms':
                 row['passes_5pct_all_cells'] = len(g) == 4 and all(x >= 5 for x in g)
             result['comparisons'].append(row)
 if stage == 'head':  # E038 equal speed: calibrated within 5% of plain-rounded, per arm and cell
-    result['equal_speed'] = {a: [gain('c' + a, a, c) for c in contexts] for a in ('GTA', 'GTAH', 'GQA', 'GQAH', 'V', 'VH')
+    result['equal_speed'] = {a: [[round(x, 3) for x in gain('c' + a, a, c)] for c in contexts] for a in ('GTA', 'GTAH', 'GQA', 'GQAH', 'V', 'VH')
                              if any(('c' + a, c, p, s) in cells for c in contexts for p, s in keys(c))}
 print(json.dumps(result, indent=1))
