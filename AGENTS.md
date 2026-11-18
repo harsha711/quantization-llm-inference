@@ -263,6 +263,10 @@
 
 - Predeclared in EXPERIMENTS (user request 2026-11-18). Bench selector `tc_ladder` (host dispatch, bitwise == tc), (a) single-matrix sweep M 1/5/8/32/64/128 + held-out rectangles, (b) E009 cycle at M4 with Marlin/cuBLAS Ŵ/unfused, (c) E041 same-node CPU T1/T16 + GPU row, (d) E049-method cyclic profiles of tc_ladder M64/M128 and Marlin M128. Criteria are correctness and completeness only; no acceptance gate, no device change. c8, `scripts/e051/`, `results/e051_20261118/`. Processor ratios are never parallel speedups; single-matrix numbers are never compared with cyclic Marlin.
 
+## E052 `tc_ladder` in the model path (latest-kernel replay)
+
+- Predeclared in EXPERIMENTS (parts a–g, 2026-11-18). `scripts/e052/t.py` swaps only the E017 bridge's `Operator`/`Linear` for `tc_ladder` (exact E050 library, project-layout codes/scales, no repack, preconditions asserted: no silent fallback); all gate/timing scripts unchanged. Gate (E021 eager + E026 graph, contexts 128–2048, all 20 cases) before any timing; a rejection stops E052 without gate edits. Marlin/FP16/external arms re-run in the same jobs. Third-gate, +13.1%/+8.6% and "never competitive with Marlin/vLLM" disclosures apply.
+
 ## Rooflines, if requested
 
 - Recompute all ceilings, ridge points, arithmetic intensities, and performance coordinates from specifications/data. Keep the primary full-machine roof distinct from core-count, ISA, NUMA, and memory-domain sensitivity roofs.
