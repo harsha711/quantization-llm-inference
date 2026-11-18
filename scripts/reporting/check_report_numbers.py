@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Assert that report/main.tex quotes the numbers in the results files exactly as rounded in the text.
 
-Sources (read-only): report/figs/numbers.json (E041, roofline from E045), results/*/summary.json (E043-E048), E047/E048 SASS counts and resources,
+Sources (read-only): report/figs/numbers.json (E041, roofline from E045 plus E050 points), results/*/summary.json (E043-E050), E047/E048 SASS counts and resources,
 results/reporting/project_synthesis/matched-comparisons.csv (E001-E003, E008-E010), E001-E003 profile/SASS records,
 E046 raw Nsight CSV, model-level analysis/quality JSON (E017, E023, E026, E027, E030, E032, E039, E040)."""
 import csv
@@ -295,6 +295,49 @@ drift = max(abs(x[s][k] / y[s][k2] - 1) for x, y in zip(t49, t45) for s in ('s1'
 assert drift < 0.01  # "reproduce E045's medians within 1%"
 need += ["reproduce E045's medians within 1\\%"]
 
+# ---- E050 (summary.json): final rung tc_ladder ----
+s50 = J('e050_20261118/summary.json')
+t50, d50 = s50['timing'], s50['decision']
+assert d50['decision'] == 'ACCEPTED' and d50['cells_passed'] == d50['cells'] == 12 and len(t50) == 12
+assert all(v <= 0.95 for v in d50['primary_ratios'].values())
+for r in t50:
+    a, b = r['s1'], r['s2']
+    need += [f"{r['K']}$\\times${r['N']} & {r['M']} & {a['tc_us']:.1f} / {b['tc_us']:.1f} & {a['tc_ladder_us']:.1f} / {b['tc_ladder_us']:.1f} & {a['marlin_us']:.1f} / {b['marlin_us']:.1f} & "
+             f"{a['tc_fraction_of_marlin_speed']:.2f} / {b['tc_fraction_of_marlin_speed']:.2f} & {a['tc_ladder_fraction_of_marlin_speed']:.2f} / {b['tc_ladder_fraction_of_marlin_speed']:.2f} & "
+             f"{a['tc_ladder_over_tc']:.3f} / {b['tc_ladder_over_tc']:.3f} \\\\"]
+T50 = lambda k, M, sh=None: [r[s][k] for r in t50 if r['M'] in M and (sh is None or (r['K'], r['N']) == sh) for s in ('s1', 's2')]
+gn = lambda M, sh: [100 * (1 - x) for x in T50('tc_ladder_over_tc', M, sh)]
+big = (64, 128)
+lf, tf = T50('tc_ladder_fraction_of_marlin_speed', big), T50('tc_fraction_of_marlin_speed', big)
+assert all(f < 1 for f in lf)  # still slower than Marlin in every M>=64 cell
+need += [f"The final rung is {pc(gn(big, (4096, 11008)))} faster than E044's kernel on $4096\\times11008$, {pc(gn(big, (11008, 4096)))} on $11008\\times4096$, "
+         f"{pc(gn((64,), (4096, 4096)))} at $M=64$ and {f2(*rng(gn((128,), (4096, 4096))), d=1)}\\% at $M=128$ on $4096\\times4096$",
+         f"At $M \\ge 64$ it reaches {pcs(lf)} of Marlin's speed against {pcs(tf)} for E044's kernel in the same cells ({pcs([f for sh in ((4096, 11008), (11008, 4096)) for f in T50('tc_ladder_fraction_of_marlin_speed', big, sh)])} against {pcs([f for sh in ((4096, 11008), (11008, 4096)) for f in T50('tc_fraction_of_marlin_speed', big, sh)])} on the two rectangles)",
+         f"(83--87\\% on the two shapes where E044's kernel reached {pcs(hi)}; 88--95\\% at $M=4$, unchanged)",
+         f"and ties it (ratio {f2(*rng(T50('tc_ladder_over_tc', (4, 16))), d=3)})",
+         f"{pc(gn(big, None))} faster than our Tensor Core kernel in all 12 primary cells and lifts our best kernel to {pcs(lf)} of Marlin's speed at $M \\ge 64$",
+         f"is {pc(gn(big, None))} faster than E044's kernel in all 12 primary cells and lifts our best kernel to {pcs(lf)} of corrected Marlin's speed at $M \\ge 64$, with 88--95\\% at $M=4$ unchanged",
+         f"Accepted, 12/12 primary cells (post hoc threshold, fresh seeds 7--10); {pcs(lf)} of Marlin's speed at $M \\ge 64$"]
+assert pcs(cell(4, 'fraction_of_marlin_speed')) == '88--95\\%'  # headline M=4 is E045's, unchanged by E050
+assert pcs([f for sh in ((4096, 11008), (11008, 4096)) for f in T50('tc_ladder_fraction_of_marlin_speed', big, sh)]) == '83--87\\%'  # abstract "83--87% on the two shapes"
+assert max(abs(x - 1) for x in T50('tc_ladder_over_tc', (4, 16))) < 0.01  # "ties"
+# hypothesis 13-17% holds on the rectangles; square M64 below it but above 5%
+assert all(12.5 < g < 17.5 for sh in ((4096, 11008), (11008, 4096)) for g in gn(big, sh)) and all(5 < g < 12.5 for g in gn((64,), (4096, 4096)))
+sqm = [(r['s1']['marlin_us'], r['s2']['marlin_us']) for r in t50 if r['K'] == r['N'] and r['M'] in (4, 16)]
+need += [f"Marlin's own medians differ by {pc([100 * abs(x - y) / ((x + y) / 2) for x, y in sqm])} of their mean between the two series",
+         f"$M \\le 16$ moved {pc([100 * abs(x - y) / ((x + y) / 2) for x, y in sqm])} between series"]
+s16 = next(r for r in t50 if r['K'] == r['N'] and r['M'] == 16)
+need += [f"series 1's {s16['s1']['tc_ladder_fraction_of_marlin_speed']:.2f} at $M=16$",
+         f"(series 2: {f2(*rng([s16['s2'][k] for k in ('tc_fraction_of_marlin_speed', 'tc_ladder_fraction_of_marlin_speed')]))})"]
+d49 = {(r['K'], r['N'], r['M']): r for r in t49}
+dr = max(abs(r[s][k] / d49[(r['K'], r['N'], r['M'])][s][k] - 1) for r in t50 if (r['K'], r['N'], r['M']) in d49 for s in ('s1', 's2') for k in ('tc_us', 'marlin_us'))
+need += [f"reproduce E049's medians on seeds 3--6 within {100 * dr:.1f}\\%"]
+sq = {r['M']: r for r in t50 if r['K'] == r['N']}
+for M in big:
+    r = sq[M]
+    need += [f"E050 & E044 $\\to$ 32-row tile at $M \\ge 64$, cyclic & {M} & --- & {f2(*rng(T50('tc_us', (M,), (4096, 4096))), d=1)} $\\to$ "
+             f"{f2(*rng(T50('tc_ladder_us', (M,), (4096, 4096))), d=1)} & --- / {f2(*rng([r[s]['tc_us'] / r[s]['tc_ladder_us'] for s in ('s1', 's2')]))} \\\\"]
+
 # ---- Roofline (numbers.json, from E045) ----
 ro = n['roofline']
 assert ro['source'] == 'E045'
@@ -310,6 +353,11 @@ need += [f"cuBLAS sits at {ai('cuBLAS', 4):.1f} FLOP/byte and Marlin at {ai('Mar
          f"Marlin ({ai('Marlin', 64):.0f}--{ai('Marlin', 128):.0f} FLOP/byte) is right of the ridge at {fr('Marlin', (64, 128))} of the nominal compute roof, "
          f"cuBLAS at $M=128$ ({ai('cuBLAS', 128):.0f} FLOP/byte) at {fr('cuBLAS', (128,))}, and our kernel at {fr('ours', (64, 128))}"]
 assert all(p['frac_roof'] <= 1.0001 for p in pts) and len(pts) == 48  # "No point exceeds either roof"
+e50p = ro['e050_points']
+assert len(e50p) == 8 and all(p['frac_roof'] <= 1.0001 for p in e50p) and {p['M'] for p in e50p} == {64, 128}
+need += [f"the final rung (E050, separate job) at {pc([100 * p['frac_roof'] for p in e50p])}"]
+assert {(p['K'], p['M'], p['series'], round(p['tflops'], 6)) for p in e50p} == {(r['K'], r['M'], s, round(2 * r['M'] * r['N'] * r['K'] / (r[f's{s}']['tc_ladder_us'] * 1e-6) / 1e12, 6))
+                                                                               for r in t50 if r['M'] >= 64 and r['K'] != r['N'] for s in (1, 2)}
 assert ai('cuBLAS', 4) < ro['ridge_flop_per_byte'] and ai('Marlin', 4) < ro['ridge_flop_per_byte'] < ai('Marlin', 64)
 
 # ---- Model-level background ----

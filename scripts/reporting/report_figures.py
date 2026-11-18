@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Figures and numbers for the ACM report (report/figs/). report_figures.py E041_RUN_DIR
 
-Inputs are read-only: E041 CSVs, E045 summary.json (roofline: tc, corrected Marlin, cuBLAS), E027 analysis,
+Inputs are read-only: E041 CSVs, E045 summary.json (roofline: tc, corrected Marlin, cuBLAS), E050 summary.json (tc_ladder at M64/128), E027 analysis,
 E032/E039/E040 quality JSON. Writes report/figs/*.pdf and report/figs/numbers.json (every number the report quotes
 from these figures). Roofline ceilings: 448 GB/s GDDR7 (NVIDIA RTX 5060 Ti specification) and 47.4 TFLOP/s dense
 FP16 Tensor with FP32 accumulation (36 SM x 2.572 GHz boost x 512 FLOP/clk/SM, third-party listing); traffic is the
@@ -93,6 +93,19 @@ for r in json.load(open(ROOT / 'results/e045_20261117/summary.json'))['table']:
             assert perf <= roof * 1.0001, ('above roof', r)
             pts.append(dict(kernel=name, M=M, K=K, N=N, series=s, ai=ai, tflops=perf / 1e12, frac_roof=perf / roof))
 num['roofline']['points'] = pts
+# E050 top rung tc_ladder (= tc_m32 at M>=64) at M64/128 on the two rectangles: different job/node (c8) and fresh seeds 7-10
+e50 = []
+for r in json.load(open(ROOT / 'results/e050_20261118/summary.json'))['timing']:
+    M, N, K = r['M'], r['N'], r['K']
+    if M < 64 or K == N:
+        continue
+    fl, b = 2 * M * N * K, K * N // 2 + (K // 128) * N * 2 + M * K * 2 + M * N * 2
+    for s in (1, 2):
+        t = r[f's{s}']['tc_ladder_us']
+        ai, perf = fl / b, fl / (t * 1e-6)
+        assert perf <= min(PEAK, ai * BW) * 1.0001, ('above roof', r)
+        e50.append(dict(kernel='ours: tc_ladder (E050)', M=M, K=K, N=N, series=s, ai=ai, tflops=perf / 1e12, frac_roof=perf / min(PEAK, ai * BW)))
+num['roofline']['e050_points'] = e50
 fig, ax = plt.subplots(figsize=(W1, 2.6))
 xs = [v / 10 for v in range(5, 10001)]
 ax.plot(xs, [min(PEAK, v * BW) / 1e12 for v in xs], color='k', lw=1)
@@ -107,6 +120,9 @@ for i, name in enumerate(dict.fromkeys(p['kernel'] for p in pts)):
             for p in q:
                 ax.annotate(f"M{p['M']}", (p['ai'], p['tflops']), fontsize=5.5, color=C[i],
                             xytext=(5, -7) if i == 0 else (-14, 4), textcoords='offset points')
+for mk, (K, N) in zip('^v', ((4096, 11008), (11008, 4096))):
+    q = [p for p in e50 if p['K'] == K and p['series'] == 1]
+    ax.scatter([p['ai'] for p in q], [p['tflops'] for p in q], marker=mk, s=14, color=C[3], zorder=3, label=f'ours: tc_ladder (E050), K{K}×N{N}')
 ax.set(xscale='log', yscale='log', xlabel='arithmetic intensity (FLOP/byte, modelled)', ylabel='TFLOP/s', xlim=(0.5, 1000), ylim=(0.05, 80))
 ax.legend(frameon=False, fontsize=5, loc='lower right')
 save(fig, 'roofline')
