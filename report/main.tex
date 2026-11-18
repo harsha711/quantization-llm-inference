@@ -96,7 +96,7 @@ Each rung was timed against the unchanged previous one in the same executable. A
 
 \paragraph{Rung 3 (E044).} \emph{Bought:} against the four-row kernel on five nodes and in both series it is 55--57\% faster at $M=8$, 80\% at $M=32$ and 85\% at $M=128$ with L2 flushed (71--87\% without), and faster at every tested $M$ and held-out shape. It beats cuBLAS (default math mode) on the reconstructed FP16 weights up to $M=64$ with L2 flushed, and at $M=128$ the gap shrinks from 7.7--8.5$\times$ to 1.10--1.20$\times$; all sampled outputs pass the FP64 check. The fast unpack alone is worth 1.10--1.44$\times$ at $M \le 8$ and 1.00--1.12$\times$ above. \emph{Cost:} bitwise agreement with the earlier rungs is given up (FP64 tolerance only), the kernel needs $K$ and the group size divisible by 64 and $N$ by 32, and the remaining gap at $M=128$ is unprofiled. Our own reading is that at $M=128$ eight independent 16-row tiles each reload and unpack every weight, an untested hypothesis.
 
-\paragraph{Against the ceiling.} \textbf{[E045 pending: tc vs Marlin under the four-matrix cycle]}
+\paragraph{Against the ceiling (E045).} In E010's four-matrix cycle (both layer shapes, mode-16 cuBLAS, two reversed series, every output row checked against FP64, one node), our Tensor Core kernel reaches 88--95\% of corrected Marlin's speed at $M=4$, 87--90\% at $M=16$, 71--73\% at $M=64$ and 74--75\% at $M=128$ (amortized time per GEMM). It is slower than Marlin in every cell, but 3.1--4.2$\times$ faster than cuBLAS on reconstructed FP16 weights at $M \le 16$; at $M=128$ cuBLAS is 1.12--1.32$\times$ faster than ours. The gap to Marlin is largest at $M=64$, not at $M=128$ as we predicted; that peak is unprofiled.
 
 \subsection{The ceiling: compressed versus FP16 execution, and the roofline}
 \label{sec:ceiling}
@@ -148,7 +148,7 @@ All timed results above use plain round-to-nearest weights, which raise WikiText
 \end{itemize}
 
 \section{Conclusion and limitations}
-Our own ladder climbs a long way: from a 16-core CPU baseline, through scalar kernels that after wider loads reach 0.56 of the memory roof at $M=1$, to a Tensor Core kernel within 1.10--1.20$\times$ of cuBLAS at $M=128$ on one repeated matrix; how it compares with Marlin under weight cycling is pending (E045). The maintained Marlin ceiling delivers the roofline-predicted gain where it should, about 4$\times$ for small batches when weights do not stay in cache, shrinking to nothing once the product becomes compute-bound, at 75--99\% of the roofs. In a full model the benefit survives against our own FP16 path once launch overhead is removed, but it is smaller than production stacks achieve, rests on a post hoc third validation gate, and costs 5--13\% perplexity on a 1.5B model. Limitations: one model, one GPU type, batch 1, 64 generated tokens, one quality metric and corpus; the CPU baseline is untuned; our kernels are not in the model path; proposed FP64/FP32 cuBLAS context runs were not done. The kernels are CUDA C++; Python drives the model-level measurements and analysis. Code, raw results and the per-experiment record (E001--E045) accompany this report.
+Our own ladder climbs a long way: from a 16-core CPU baseline, through scalar kernels that after wider loads reach 0.56 of the memory roof at $M=1$, to a Tensor Core kernel within 1.10--1.20$\times$ of cuBLAS at $M=128$ on one repeated matrix; under weight cycling it reaches 88--95\% of corrected Marlin's speed at $M=4$ and 71--75\% at $M \ge 64$ (E045). The maintained Marlin ceiling delivers the roofline-predicted gain where it should, about 4$\times$ for small batches when weights do not stay in cache, shrinking to nothing once the product becomes compute-bound, at 75--99\% of the roofs. In a full model the benefit survives against our own FP16 path once launch overhead is removed, but it is smaller than production stacks achieve, rests on a post hoc third validation gate, and costs 5--13\% perplexity on a 1.5B model. Limitations: one model, one GPU type, batch 1, 64 generated tokens, one quality metric and corpus; the CPU baseline is untuned; our kernels are not in the model path; proposed FP64/FP32 cuBLAS context runs were not done. The kernels are CUDA C++; Python drives the model-level measurements and analysis. Code, raw results and the per-experiment record (E001--E045) accompany this report.
 
 \appendix
 \section{Experiment index}
@@ -171,7 +171,7 @@ E041 & Serial baseline and OpenMP scaling. Descriptive. \\
 E042 & Per-type/per-block quality sensitivity. Cost spread, not concentrated. \\
 E043 & Wider operand loads in our kernels. Accepted on five nodes: 16--38\% at $M \le 4$. \\
 E044 & Our Tensor Core kernel. Accepted on five nodes: 51--87\% at $M \ge 8$; 1.10--1.20$\times$ cuBLAS at $M=128$. \\
-E045 & Our Tensor Core kernel vs Marlin vs cuBLAS in E010's four-matrix cycle. Descriptive; pending. \\
+E045 & Our Tensor Core kernel vs Marlin vs cuBLAS in E010's four-matrix cycle. Descriptive: 71--95\% of Marlin's speed; predicted ordering not confirmed. \\
 \bottomrule
 \end{tabular}
 \end{table}

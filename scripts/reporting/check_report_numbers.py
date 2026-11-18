@@ -58,6 +58,14 @@ need += [f"it is {tg(8, ['flush'])} faster at $M=8$, {tg(32, ['flush'])} at $M=3
          f"to {c128[0]:.2f}--{c128[1]:.2f}$\\times$"]
 assert all(c['vs_cublas_dq'] < 1 for c in ws if c['kernel'] == 'tc' and c['M'] <= 64 and c['policy'] == 'flush')  # "faster than cuBLAS up to M=64 flushed"
 assert min(c['gain_pct'] for nd in w['nodes'].values() for c in nd['cells'] if c['kernel'] == 'tc') > 0  # "faster at every tested M"
+t45 = json.loads((root / 'results/e045_20261117/summary.json').read_text())['table']
+cell = lambda M, k: [r[x][k] for r in t45 if r['M'] == M for x in ('s1', 's2')]
+pc = lambda v: f"{r0(100 * min(v))}--{r0(100 * max(v))}\\%"
+need += [f"{pc(cell(4, 'fraction_of_marlin_speed'))} of corrected Marlin's speed at $M=4$, {pc(cell(16, 'fraction_of_marlin_speed'))} at $M=16$, "
+         f"{pc(cell(64, 'fraction_of_marlin_speed'))} at $M=64$ and {pc(cell(128, 'fraction_of_marlin_speed'))} at $M=128$",
+         f"{1 / max(cell(4, 'tc_over_cublas') + cell(16, 'tc_over_cublas')):.1f}--{1 / min(cell(4, 'tc_over_cublas') + cell(16, 'tc_over_cublas')):.1f}$\\times$ faster than cuBLAS",
+         f"cuBLAS is {min(cell(128, 'tc_over_cublas')):.2f}--{max(cell(128, 'tc_over_cublas')):.2f}$\\times$ faster than ours"]
+assert all(f < 1 for M in (4, 16, 64, 128) for f in cell(M, 'fraction_of_marlin_speed'))  # "slower than Marlin in every cell"
 missing = [s for s in need if s not in tex]
 assert not missing, missing
 print('report numbers ok:', len(need))
