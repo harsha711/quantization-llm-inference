@@ -16,7 +16,7 @@ done
 for M in 1 2 3 4 5 7; do
   for K in 136 137; do
     "$B" --M "$M" --N 33 --K "$K" --group 128 --seed 7 --warmup 1 --iters 2 \
-      --kernels naive,inblock_specialized,inblock_m2,inblock_m4,dequant
+      --kernels naive,inblock_specialized,inblock_m2,inblock_m4,inblock_vec,inblock_m4_vec,dequant
   done
 done
 
@@ -25,8 +25,14 @@ if command -v compute-sanitizer >/dev/null 2>&1; then
     for K in 3 136 137; do
       compute-sanitizer --tool "$tool" --error-exitcode 99 \
         "$B" --M 5 --N 33 --K "$K" --group 128 --seed 1 --warmup 0 --iters 1 \
-        --kernels naive,inblock,inblock_specialized,inblock_m2,inblock_m4,dequant --no-flush-l2
+        --kernels naive,inblock,inblock_specialized,inblock_m2,inblock_m4,inblock_vec,inblock_m4_vec,dequant --no-flush-l2
     done
+  done
+  # E043: racecheck on the vector kernels (aligned and K-tail fallback)
+  for K in 3 136; do
+    compute-sanitizer --tool racecheck --error-exitcode 99 \
+      "$B" --M 5 --N 33 --K "$K" --group 128 --seed 1 --warmup 0 --iters 1 \
+      --kernels inblock_vec,inblock_m4_vec --no-flush-l2
   done
 else
   echo 'Compute Sanitizer unavailable; memory/synchronization checks not run.' >&2

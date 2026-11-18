@@ -13,6 +13,30 @@ A clone from GitHub therefore lacks these two files, and hash checks over those 
 
 Second rewrite (same day, same user choice). The second push was rejected too: an independent read-only review found eight more paths holding one 158,110,075-byte blob, byte-identical to the memcheck_0 file above (sha256 c0b9cbe4…c96c9, recorded for `..._M2048_0-outputs.npz` in `results/e017_20261109/model-arc/retrieval.sha256`): `operator_model.layers.0.mlp.gate_proj_M2048{_0,_1,_2,-memcheck_1,-memcheck_2,-synccheck_0,-synccheck_1,-synccheck_2}-outputs.npz` in the same directory. They were removed the same way from the 117 unpushed commits (tree diff against `backup/pre-drop-large-npz-2`: those eight files only), kept in the working copy with that hash and added to `.gitignore`; no tracked blob over 100 MB remains. Commit IDs from `Record E017 full-model numerical gate failure` onward changed again; the cited IDs were remapped the same way (same subjects, same order), and every commit ID cited in the docs resolves on the branch. Ten raw files are therefore missing from a GitHub clone.
 
+## E043 — Do wider operand loads bring our own scalar kernels closer to the memory roof at small M?
+
+Predeclared 2026-11-17 at the user's request ("go", after I pointed out that our own E001–E003 kernels were frozen after E003, never compared with the memory roof, and have headroom at M = 1/4: about 38 µs and 59 µs at K = N = 4096 against a modelled ≈19 µs to stream the 8.65 MB of codes and scales at 448 GB/s). One optimization, our kernels only: no Marlin, model-path, dispatch, layout or contract change.
+
+Evidence and hypothesis. In `inblock_specialized` (E002) and `inblock_m4` (E003) every thread, for each packed word (8 weights), issues one 4-byte code load, one scale load, and 8 separate 2-byte activation loads per row (8 at M = 1, 32 for the four-row tile), although the scale changes only every 16 words and the 8 activations are contiguous. Hypothesis: at small M these kernels are limited by load-instruction issue, not by DRAM bytes; loading the 8 activations of each row as one 16-byte vector and the scale once per group cuts global load instructions per word from 10 to about 2 (M = 1) and from 34 to about 5 (four rows) and lowers latency.
+
+Design. New `src/cuda/w4a16_inblock_vec.cu`: `inblock_vec` (from E002) and `inblock_m4_vec` (from E003's four-row tile). The launch mapping, eight K slices and their word ranges, per-row FP32 FMA order, FP16 reconstruction, shared partial layout and eight-partial summation are unchanged; only how operands are fetched changes. Therefore every output must be bitwise equal to its parent. The vector path requires K % 8 == 0 and a 16-byte-aligned A; otherwise the launcher calls the unchanged parent (tails keep exact parent behaviour).
+
+Checks (before any timing; all must pass):
+- unchanged FP64 tolerance (CONTRACT §2) at every timed point;
+- full-output bitwise equality, every M·N output, with the parent (`inblock_vec` vs `inblock_specialized`, `inblock_m4_vec` vs `inblock_m4`), outside timing, at every timed point and in `check_inblock.sh` (K tails, N tails, M tails 1–7);
+- Compute Sanitizer memcheck, synccheck and racecheck on the new kernels at small shapes;
+- SASS: global load instruction counts and registers of parent and candidate recorded (`cuobjdump`), to test the mechanism, not as a criterion.
+
+Measurement (one ARC RTX 5060 Ti node, one job, same executable): K = N = 4096, G128, seed 1, M ∈ {1, 4, 8, 32, 128}, kernels inblock_specialized, inblock_vec, inblock_m4, inblock_m4_vec, cublas_dq (context only), both cache policies (store flush and no flush), 10 warm-ups, 100 timed iterations, two series with the kernel order reversed. Held-out: seed 2, K4096/N11008 and K11008/N4096 at M = 1 and 4, same method and both series.
+
+Success criterion, fixed now: `inblock_vec` median at least 5% below `inblock_specialized` at M = 1, and `inblock_m4_vec` at least 5% below `inblock_m4` at M = 4, in both cache policies and both series (8 cells). Accept only if all 8 pass. Held-out cells and the other M are reported, including any regression, but do not change the decision. Also reported: modelled fraction of the 448 GB/s memory roof (`eff_gbps`, logical bytes, not measured DRAM traffic) and the gap to cublas_dq. No profile is planned; any claim about the cause beyond load-instruction counts stays a hypothesis.
+
+Limits fixed now: one GPU type, synthetic weights, kernel-level only (our kernels are not in the model path and this does not put them there); a pass does not make our kernels competitive with Marlin, which stays upstream.
+
+Process: prerequisite job (build, ctest, check_inblock.sh with sanitizers, SASS counts, M = 4 smoke of both series) inspected before the full job.
+
+Amendment before any job ran (user: "run a bunch of jobs on all the available gpus", "parallelize the work how much ever we can"): the full job runs once on EVERY idle RTX 5060 Ti node at submission (c7, c8, c9, c10, c58 on 2026-11-17), each job independent, one process per node, held by `afterok` on the prerequisite. Timings on one GPU stay sequential (concurrent kernels would contaminate each other). Decision tightened accordingly: accept only if all 8 primary cells pass on every node whose job completes; a node that fails a check is reported, not dropped silently. Other GPU types (other partitions) are out of scope.
+
 ## E042 — Where does the plain-rounding block cost sit? (per-type and per-block sensitivity)
 
 Predeclared 2026-11-17 at the user's request ("do it", after I proposed locating the +13.1% block cost; the user clarified that the "mixed precision" restriction covers building a mixed-precision runtime as an enhancement, not analysing quality). Quality only and diagnostic: nothing is timed, gated or added to the runtime; no kernel, contract or default changes.

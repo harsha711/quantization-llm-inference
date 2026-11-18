@@ -206,6 +206,10 @@
 - Predeclared in EXPERIMENTS (user request 2026-11-17). Quality-only diagnostic of the plain-rounding block cost: 7 per-type, 28 per-block, 2 kept-FP16 confirmation arms (selected on validation). The "mixed precision" restriction above covers a mixed-precision runtime or kernel, not this analysis. Nothing timed or gated; a kept-FP16 arm is not a proposed default.
 - E042 is complete (c58, job 342883): cost spread, hypothesis NOT confirmed (three worst blocks FP16 recover 28%, all down projections 32%). Down projection largest type (+3.59%), value projections most sensitive per weight (+1.57% at 0.8%), last block +1.67%. Single-subset rises sum to 88–91% of 13.12%. Never call it a cause attribution or a mixed-precision proposal.
 
+## E043 wider operand loads in our own kernels
+
+- Predeclared in EXPERIMENTS (user request 2026-11-17, "go"). `inblock_vec`/`inblock_m4_vec` change only operand fetches of E002/E003 (16-byte activation loads, scale once per group); outputs must be bitwise equal to the parents. Criterion: ≥5% lower median at M1 (vs inblock_specialized) and M4 (vs inblock_m4), both cache policies, both series, on every node run (c7/c8/c9/c10/c58). Kernel-level only: not in the model path, no Marlin/dispatch/contract change, never "competitive with Marlin".
+
 ## Rooflines, if requested
 
 - Recompute all ceilings, ridge points, arithmetic intensities, and performance coordinates from specifications/data. Keep the primary full-machine roof distinct from core-count, ISA, NUMA, and memory-domain sensitivity roofs.
