@@ -36,5 +36,5 @@ echo "$TARSHA  $S/source.tar.gz" | sha256sum -c
 tar xzf "$S/source.tar.gz" -C "$SRC"
 export OMPI_MCA_hwloc_base_binding_policy=none  # E041 attempt 1: mpirun bound the one rank to core 0
 prun bash "$SRC/scripts/e046/inner.sh" "$MODE" "$SRC" "$S" > "$S/inner.log" 2>&1
-(cd "$S" && sha256sum $(ls | grep -v -E '^(FINISHED|RETRIEVED|driver\.(log|exit))$') > all.sha256)
+(cd "$S" && find . -type f ! -name FINISHED ! -name RETRIEVED ! -name 'driver.*' ! -name all.sha256 | sort | xargs sha256sum > all.sha256)  # attempt 2 (343122): ncu/ is a directory
 EOF2
