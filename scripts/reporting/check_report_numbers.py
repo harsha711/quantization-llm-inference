@@ -42,6 +42,22 @@ roof = [c for c in cs if c['primary'] and c['M'] == 1 and c['policy'] == 'flush'
 need += [f"{1 / max(small):.1f}--{1 / min(small):.1f}$\\times$ faster than cuBLAS", f"still {big[0]:.1f}--{big[1]:.1f}$\\times$ slower",
          f"from {min(c['parent_roof_frac'] for c in roof):.2f} to {max(c['roof_frac'] for c in roof):.2f} of the modelled memory roof"]
 assert min(c['gain_pct'] for c in cs) > 0  # "no regression"
+w = json.loads((root / 'results/e044_20261117/summary.json').read_text())
+assert w['decision'] == 'accepted' and len(w['nodes']) == 5
+ws = [c for nd in w['nodes'].values() for c in nd['cells'] if c['split'] == 'main']
+r0 = lambda x: int(x + 0.5)
+def tg(M, pol, k='tc'):
+    g = [c['gain_pct'] for c in ws if c['kernel'] == k and c['M'] == M and c['policy'] in pol]
+    lo, hi = r0(min(g)), r0(max(g))
+    return f"{lo}\\%" if lo == hi else f"{lo}--{hi}\\%"
+c128 = rng([c['vs_cublas_dq'] for c in ws if c['kernel'] == 'tc' and c['M'] == 128])
+big8 = [c['gain_pct'] for c in ws + [c for nd in w['nodes'].values() for c in nd['cells'] if c['split'] == 'held'] if c['kernel'] == 'tc' and c['M'] >= 8]
+need += [f"it is {tg(8, ['flush'])} faster at $M=8$, {tg(32, ['flush'])} at $M=32$ and {tg(128, ['flush'])} at $M=128$ with L2 flushed",
+         f"{r0(min(c['gain_pct'] for c in ws if c['kernel']=='tc' and c['M']>=8 and c['policy']=='noflush'))}--{r0(max(big8))}\\% without",
+         f"{r0(min(big8))}--{r0(max(big8))}\\% faster at $M \\ge 8$ on Tensor Cores",
+         f"to {c128[0]:.2f}--{c128[1]:.2f}$\\times$"]
+assert all(c['vs_cublas_dq'] < 1 for c in ws if c['kernel'] == 'tc' and c['M'] <= 64 and c['policy'] == 'flush')  # "faster than cuBLAS up to M=64 flushed"
+assert min(c['gain_pct'] for nd in w['nodes'].values() for c in nd['cells'] if c['kernel'] == 'tc') > 0  # "faster at every tested M"
 missing = [s for s in need if s not in tex]
 assert not missing, missing
 print('report numbers ok:', len(need))

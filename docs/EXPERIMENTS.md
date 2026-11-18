@@ -32,6 +32,31 @@ Success criterion, fixed now: `tc` median at least 5% below `inblock_m4_vec` at 
 
 Prerequisite 343102 on c58 passed (first compile of the kernel): unpack self-test 0 mismatches; ctest; check_inblock.sh 199 bitwise comparisons 0 differing, every Tensor Core shape (M 1/5/8/16/17/33/9/20, group 64, 17 chunks over 8 warps) and fallback passes FP64; memcheck/synccheck 0 errors, racecheck 0 hazards (Tensor Core path included). SASS: 32 HMMA and 32 LDG per tc kernel variant; registers 64–76, 17 KB static shared. M = 8 smoke (10 iterations, not a result): tc 34.8 / 18.5 µs, tc_cvt 49.2 / 22.1, inblock_m4_vec 79.9 / 69.2, cublas_dq 86.0 / 52.8 (flush / no flush). Full jobs 343103–343107 (c7, c8, c9, c10, c58) released by it.
 
+### Result (jobs 343103–343107, one per node c7/c8/c9/c10/c58, all exit 0, 2026-11-17)
+
+Every node: build, ctest, unpack self-test 0 mismatches, check_inblock.sh (151 full-output bitwise comparisons of the scalar kernels, 0 differing; every Tensor Core shape and fallback passes FP64), memcheck/synccheck 0 errors, racecheck 0 hazards; every timed point passes FP64. SASS per tc variant: 32 HMMA, 32 LDG, 64–76 registers, 17,408 B static shared. Drivers 610.57.04 (c7–c10) and 615.71.09 (c58). `scripts/e044/analyze.py results/e044_20261117` → `analysis.txt`, `summary.json`.
+
+Primary cells (K = N = 4096, range over 5 nodes × 2 series, median µs):
+
+| M | Policy | inblock_m4_vec | tc | Gain |
+|---:|---|---:|---:|---:|
+| 8 | flush | 78.1–79.5 | 34.5–35.2 | 55.0–56.6% |
+| 8 | no flush | 66.8–69.2 | 17.7–20.0 | 70.5–73.5% |
+| 32 | flush | 241.3–248.1 | 47.5–49.2 | 79.8–80.5% |
+| 32 | no flush | 222.8–227.9 | 34.1–34.4 | 84.7–84.9% |
+| 128 | flush | 879.4–900.8 | 135.1–137.5 | 84.5–84.7% |
+| 128 | no flush | 863.8–887.4 | 114.3–120.4 | 86.2–86.9% |
+
+All 60 primary cells (12 per node) pass 5%. Decision: ACCEPTED.
+
+Reported, not part of the decision:
+- `tc` is faster than `inblock_m4_vec` in every cell, including M1 (37–40% flush, 56–57% no flush) and M4 (32–37% / 46–51%); held-out seed-2 rectangles 4096×11008 and 11008×4096 at M 8/32/128: 51–87%. (`inblock_vec`, the M1 kernel of E043, was not in this job; no M1 claim against it.)
+- Unpack cost: `tc_cvt` (per-weight FP32 multiply and conversion) takes 1.21–1.42× `tc`'s median at M ≤ 8, falling to 1.05–1.12× at M ≥ 32, where the MMA and activation work per weight grows.
+- Against cuBLAS on pre-reconstructed FP16 Ŵ (same job, single repeated matrix, not E009's cycle): `tc` takes 0.34–0.45 of its time at M 1–16 and 0.55–0.88 at M 32/64 under flush; at M128 it is 1.16–1.20× slower (flush) and 1.10–1.18× (no flush); no-flush M32/64 also 1.13–1.19× slower. Before E044 our best kernel was 7.7–8.5× slower than cuBLAS at M128. cuBLAS reads four times the weight bytes.
+- Modelled roof fraction under flush (logical bytes): M1 0.58–0.60, M8 0.56–0.57, M128 0.17–0.18. No-flush fractions above about 0.8 (up to 1.30 held-out) are cache-served, not memory-roof fractions.
+
+Interpretation: replacing scalar FMAs with Tensor Core MMAs removes most of the M ≥ 8 cost, consistent with the hypothesis that scalar arithmetic and unpacking, not weight bytes, limited E043's kernels there; the fast unpack matters most at small M. No profile was taken, so the remaining M128 gap to cuBLAS is unattributed (candidates, not measured: no shared-memory staging or software pipelining of operands, one 16-row tile per block). Limits: synthetic weights, one GPU type (five nodes, two drivers), kernel level only, not in the model path, single repeated matrix: never compare these numbers with E009's cyclic Marlin result. Not a dispatch or default change. Retrieved to `results/e044_20261117/full-<node>-<job>/`.
+
 ## E043 — Do wider operand loads bring our own scalar kernels closer to the memory roof at small M?
 
 Predeclared 2026-11-17 at the user's request ("go", after I pointed out that our own E001–E003 kernels were frozen after E003, never compared with the memory roof, and have headroom at M = 1/4: about 38 µs and 59 µs at K = N = 4096 against a modelled ≈19 µs to stream the 8.65 MB of codes and scales at 448 GB/s). One optimization, our kernels only: no Marlin, model-path, dispatch, layout or contract change.
