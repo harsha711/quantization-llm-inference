@@ -1,0 +1,179 @@
+{
+ "table": [
+  {
+   "K": 4096,
+   "N": 11008,
+   "M": 4,
+   "s1": {
+    "tc_us": 64.40000236034393,
+    "marlin_us": 61.264000833034515,
+    "cublas_us": 268.94399523735046,
+    "tc_over_marlin": 1.0511883240511193,
+    "tc_over_cublas": 0.23945506685698323,
+    "fraction_of_marlin_speed": 0.9513043258948621
+   },
+   "s2": {
+    "tc_us": 63.88799846172333,
+    "marlin_us": 60.944000259041786,
+    "cublas_us": 269.19999718666077,
+    "tc_over_marlin": 1.0483066124666598,
+    "tc_over_cublas": 0.2373254053841018,
+    "fraction_of_marlin_speed": 0.9539193859008535
+   }
+  },
+  {
+   "K": 4096,
+   "N": 11008,
+   "M": 16,
+   "s1": {
+    "tc_us": 71.59999758005142,
+    "marlin_us": 64.30400162935257,
+    "cublas_us": 247.69599735736847,
+    "tc_over_marlin": 1.1134609941190423,
+    "tc_over_cublas": 0.28906400726673454,
+    "fraction_of_marlin_speed": 0.8981006117696909
+   },
+   "s2": {
+    "tc_us": 71.05600088834763,
+    "marlin_us": 63.79999965429306,
+    "cublas_us": 246.676005423069,
+    "tc_over_marlin": 1.1137304274823192,
+    "tc_over_cublas": 0.2880539627941555,
+    "fraction_of_marlin_speed": 0.8978833435130112
+   }
+  },
+  {
+   "K": 4096,
+   "N": 11008,
+   "M": 64,
+   "s1": {
+    "tc_us": 184.4639927148819,
+    "marlin_us": 131.2040016055107,
+    "cublas_us": 245.77999860048294,
+    "tc_over_marlin": 1.405932673223697,
+    "tc_over_cublas": 0.7505248342633827,
+    "fraction_of_marlin_speed": 0.7112716128198913
+   },
+   "s2": {
+    "tc_us": 184.2159926891327,
+    "marlin_us": 131.84800744056702,
+    "cublas_us": 243.35599690675735,
+    "tc_over_marlin": 1.3971845025581562,
+    "tc_over_cublas": 0.7569815210254122,
+    "fraction_of_marlin_speed": 0.715725087251586
+   }
+  },
+  {
+   "K": 4096,
+   "N": 11008,
+   "M": 128,
+   "s1": {
+    "tc_us": 338.19200098514557,
+    "marlin_us": 250.668004155159,
+    "cublas_us": 257.1679949760437,
+    "tc_over_marlin": 1.3491630179327185,
+    "tc_over_cublas": 1.3150625567409724,
+    "fraction_of_marlin_speed": 0.741200275065551
+   },
+   "s2": {
+    "tc_us": 337.8240019083023,
+    "marlin_us": 250.88798999786377,
+    "cublas_us": 256.0559958219528,
+    "tc_over_marlin": 1.346513246453841,
+    "tc_over_cublas": 1.3193364241437504,
+    "fraction_of_marlin_speed": 0.7426588655058437
+   }
+  },
+  {
+   "K": 11008,
+   "N": 4096,
+   "M": 4,
+   "s1": {
+    "tc_us": 67.22800061106682,
+    "marlin_us": 59.20799821615219,
+    "cublas_us": 214.91999924182892,
+    "tc_over_marlin": 1.1354547128182884,
+    "tc_over_cublas": 0.3128047685102659,
+    "fraction_of_marlin_speed": 0.8807044338368378
+   },
+   "s2": {
+    "tc_us": 67.46000051498413,
+    "marlin_us": 59.172000735998154,
+    "cublas_us": 214.92800116539001,
+    "tc_over_marlin": 1.1400662420722214,
+    "tc_over_cublas": 0.3138725533629876,
+    "fraction_of_marlin_speed": 0.8771420142941585
+   }
+  },
+  {
+   "K": 11008,
+   "N": 4096,
+   "M": 16,
+   "s1": {
+    "tc_us": 69.48799639940262,
+    "marlin_us": 61.25599890947342,
+    "cublas_us": 215.68800508975983,
+    "tc_over_marlin": 1.1343867969910144,
+    "tc_over_cublas": 0.3221690347151423,
+    "fraction_of_marlin_speed": 0.8815335321713209
+   },
+   "s2": {
+    "tc_us": 70.52800059318542,
+    "marlin_us": 61.216000467538834,
+    "cublas_us": 215.69600701332092,
+    "tc_over_marlin": 1.1521170944610224,
+    "tc_over_cublas": 0.3269787028965713,
+    "fraction_of_marlin_speed": 0.8679673314523773
+   }
+  },
+  {
+   "K": 11008,
+   "N": 4096,
+   "M": 64,
+   "s1": {
+    "tc_us": 177.5519996881485,
+    "marlin_us": 129.5199990272522,
+    "cublas_us": 223.88799488544464,
+    "tc_over_marlin": 1.3708462092467275,
+    "tc_over_cublas": 0.793039393554779,
+    "fraction_of_marlin_speed": 0.7294764308751268
+   },
+   "s2": {
+    "tc_us": 178.60399931669235,
+    "marlin_us": 129.57999855279922,
+    "cublas_us": 224.06400740146637,
+    "tc_over_marlin": 1.3783299993163498,
+    "tc_over_cublas": 0.7971115101796733,
+    "fraction_of_marlin_speed": 0.7255156606153816
+   }
+  },
+  {
+   "K": 11008,
+   "N": 4096,
+   "M": 128,
+   "s1": {
+    "tc_us": 326.54398679733276,
+    "marlin_us": 245.5199956893921,
+    "cublas_us": 290.692001581192,
+    "tc_over_marlin": 1.330009744747814,
+    "tc_over_cublas": 1.123333235937443,
+    "fraction_of_marlin_speed": 0.7518741903576144
+   },
+   "s2": {
+    "tc_us": 327.57599651813507,
+    "marlin_us": 244.56000328063965,
+    "cublas_us": 293.78800094127655,
+    "tc_over_marlin": 1.3394504094041584,
+    "tc_over_cublas": 1.1150080856556568,
+    "fraction_of_marlin_speed": 0.7465748585980428
+   }
+  }
+ ],
+ "hypothesis": "not confirmed",
+ "failures": [
+  "K4096/N11008 series 1: tc/Marlin ratio not smallest at M4 and largest at M128",
+  "K4096/N11008 series 2: tc/Marlin ratio not smallest at M4 and largest at M128",
+  "K11008/N4096 series 1: tc/Marlin ratio not smallest at M4 and largest at M128",
+  "K11008/N4096 series 2: tc/Marlin ratio not smallest at M4 and largest at M128"
+ ]
+}

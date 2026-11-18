@@ -226,6 +226,7 @@
 ## E045 our kernel versus Marlin under cyclic weights
 
 - Predeclared in EXPERIMENTS (user request 2026-11-17). Descriptive: `tc` (E044 source unchanged), corrected Marlin A and cuBLAS Ŵ in E010's four-matrix cycle, M 4/16/64/128, both rectangles, two reversed series. Report "fraction of Marlin speed"; no acceptance gate, nothing adopted. New files only (`scripts/e045/`, `results/e045_20261117/`); E009/E010 harnesses and results stay untouched.
+- E045 is complete (c7, jobs 343113 prerequisite / 343147 full): hypothesis NOT confirmed. `tc` slower than Marlin in all 16 cell-series; fraction of Marlin speed 0.95/0.88 at M4, 0.87–0.90 at M16, 0.71–0.73 at M64, 0.74–0.75 at M128 (gap peaks at M64, unprofiled, do not attribute). Versus cuBLAS Ŵ: faster to M64, 1.12–1.32× slower at M128. Say amortized per-GEMM time under cyclic reuse; kernel level, not in the model path, one GPU type, synthetic weights, unprofiled; never "competitive with Marlin".
 - Course-requirement note: the course deck's report requirements (serial baseline, Sp/strong/weak scaling plot, roofline, profiler-found fix) are covered by E041, the roofline section and E003; the "unresolved" wording in the reporting checkpoint above is historical.
 
 ## E046 first profile of our Tensor Core kernel
