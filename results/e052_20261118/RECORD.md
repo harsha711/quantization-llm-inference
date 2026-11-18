@@ -10,3 +10,4 @@
   Gate at 128: eager E021 form ACCEPTED both passages (rel L2 0.00208/0.00209; held-out first token difference at step 47, control margin 0.0156, near-tie rule; compared 48 steps);
   graph E026 form ACCEPTED (0.00210/0.00195, tokens equal F64). Marlin control ACCEPTED (0.00210/0.00200).
   Smoke cells (not results): heldout 128 s1 GTA 315.0 ms, GQA 326.4 ms.
+- Submitted on c10: core 343363 (afterok prereq), long 343364 (afterok core), head 343365 (afterok core, afterany long), ext 343366 (afterok core, afterany head).
