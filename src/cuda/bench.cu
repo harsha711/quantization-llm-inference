@@ -1,7 +1,7 @@
 // Correctness check and timing for one GEMM shape.
 //
 //   w4a16_bench --M 16 --N 4096 --K 4096 [--group 128] [--seed 1] [--warmup 10]
-//               [--iters 100] [--kernels naive,inblock,inblock_specialized,inblock_m2,inblock_m4,inblock_vec,inblock_m4_vec,cublas,cublas_dq,dequant,unfused]
+//               [--iters 100] [--kernels naive,inblock,inblock_specialized,inblock_m2,inblock_m4,inblock_vec,inblock_m4_vec,tc,tc_cvt,cublas,cublas_dq,dequant,unfused]
 //               [--no-flush-l2] [--check-rows 64] [--nocheck] [--csv results/out.csv]
 //
 // Kernels
@@ -61,6 +61,7 @@ struct Options {
   bool flush_l2 = true;
   bool nocheck = false;
   bool zero_weights = false;
+  bool unpack_selftest = false;
   std::vector<std::string> kernels = {"naive", "inblock", "inblock_specialized", "inblock_m2", "inblock_m4", "cublas", "cublas_dq", "dequant", "unfused"};
   std::string csv;
 };
@@ -68,7 +69,7 @@ struct Options {
 [[noreturn]] void usage(const char* prog) {
   std::fprintf(stderr,
                "usage: %s [--M m] [--N n] [--K k] [--group g] [--seed s] [--warmup w]\n"
-               "          [--iters i] [--kernels naive,inblock,inblock_specialized,inblock_m2,inblock_m4,inblock_vec,inblock_m4_vec,cublas,cublas_dq,dequant,unfused]\n"
+               "          [--iters i] [--kernels naive,inblock,inblock_specialized,inblock_m2,inblock_m4,inblock_vec,inblock_m4_vec,tc,tc_cvt,cublas,cublas_dq,dequant,unfused]\n"
                "          [--no-flush-l2] [--check-rows r] [--nocheck] [--zero-weights] [--csv path]\n",
                prog);
   std::exit(EXIT_FAILURE);
@@ -93,6 +94,7 @@ Options parse(int argc, char** argv) {
     else if (a == "--no-flush-l2") o.flush_l2 = false;
     else if (a == "--nocheck") o.nocheck = true;
     else if (a == "--zero-weights") o.zero_weights = true;
+    else if (a == "--unpack-selftest") o.unpack_selftest = true;
     else if (a == "--csv") o.csv = val();
     else if (a == "--kernels") {
       o.kernels.clear();
@@ -159,7 +161,7 @@ double logical_bytes(const std::string& name, int M, int N, int K, int group) {
   const double w16 = static_cast<double>(fp16_bytes(K, N));
   const double qw = static_cast<double>(qweight_bytes(K, N));
   const double sc = static_cast<double>(scales_bytes(K, N, group));
-  if (name == "naive" || name == "inblock" || name == "inblock_specialized" || name == "inblock_m2" || name == "inblock_m4" || name == "inblock_vec" || name == "inblock_m4_vec") return a + c + qw + sc;
+  if (name == "naive" || name == "inblock" || name == "inblock_specialized" || name == "inblock_m2" || name == "inblock_m4" || name == "inblock_vec" || name == "inblock_m4_vec" || name == "tc" || name == "tc_cvt") return a + c + qw + sc;
   if (name == "cublas" || name == "cublas_dq") return a + c + w16;
   if (name == "dequant") return qw + sc + w16;
   if (name == "unfused") return a + c + qw + sc + w16;
@@ -170,6 +172,11 @@ double logical_bytes(const std::string& name, int M, int N, int K, int group) {
 
 int main(int argc, char** argv) {
   Options o = parse(argc, argv);
+  if (o.unpack_selftest) {
+    const unsigned long long bad = w4a16_tc_unpack_selftest();
+    std::printf("unpack self-test (all finite FP16 scales x 16 codes x 4 nibble pairs): %llu mismatches\n", bad);
+    return bad ? EXIT_FAILURE : EXIT_SUCCESS;
+  }
 
   int dev = 0;
   CUDA_CHECK(cudaGetDevice(&dev));
@@ -339,6 +346,12 @@ int main(int argc, char** argv) {
       ref = &ref_quant;
     } else if (name == "inblock_m4_vec") {
       launch = [&] { launch_w4a16_inblock_m4_vec(dA, dQ, dS, dC, o.M, o.N, o.K, o.group, 0); };
+      ref = &ref_quant;
+    } else if (name == "tc") {
+      launch = [&] { launch_w4a16_tc(dA, dQ, dS, dC, o.M, o.N, o.K, o.group, 0); };
+      ref = &ref_quant;
+    } else if (name == "tc_cvt") {
+      launch = [&] { launch_w4a16_tc_cvt(dA, dQ, dS, dC, o.M, o.N, o.K, o.group, 0); };
       ref = &ref_quant;
     } else if (name == "cublas") {
       launch = [&] { launch_cublas_fp16(handle, dA, dW, dC, o.M, o.N, o.K); };

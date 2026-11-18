@@ -49,6 +49,13 @@ void launch_w4a16_inblock_vec(const __half* A, const uint32_t* qweight, const __
 void launch_w4a16_inblock_m4_vec(const __half* A, const uint32_t* qweight, const __half* scales,
                                  __half* C, int M, int N, int K, int group_size, cudaStream_t stream);
 
+// E044: our Tensor Core W4A16 GEMM (fast and contract-formula unpack); exhaustive unpack self-test.
+void launch_w4a16_tc(const __half* A, const uint32_t* qweight, const __half* scales, __half* C,
+                     int M, int N, int K, int group_size, cudaStream_t stream);
+void launch_w4a16_tc_cvt(const __half* A, const uint32_t* qweight, const __half* scales, __half* C,
+                         int M, int N, int K, int group_size, cudaStream_t stream);
+unsigned long long w4a16_tc_unpack_selftest();
+
 void launch_dequant_w4a16(const uint32_t* qweight, const __half* scales, __half* W, int N, int K,
                           int group_size, cudaStream_t stream);
 

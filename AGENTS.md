@@ -211,6 +211,10 @@
 - Predeclared in EXPERIMENTS (user request 2026-11-17, "go"). `inblock_vec`/`inblock_m4_vec` change only operand fetches of E002/E003 (16-byte activation loads, scale once per group); outputs must be bitwise equal to the parents. Criterion: ≥5% lower median at M1 (vs inblock_specialized) and M4 (vs inblock_m4), both cache policies, both series, on every node run (c7/c8/c9/c10/c58). Kernel-level only: not in the model path, no Marlin/dispatch/contract change, never "competitive with Marlin".
 - E043 is complete (jobs 343095–343099): ACCEPTED, 40/40 primary cells on five nodes; M1 31–33% / 16–22%, M4 18–21% / 36–38% (flush / no flush); every other cell 13–41%, no regression. No-flush roof fractions above about 0.8 are cache-served, never call them memory-roof efficiency. Single-matrix cuBLAS ratios are not comparable with E009 cyclic Marlin. No profile: load-issue is supported by SASS counts, not proven as the stall cause.
 
+## E044 our Tensor Core kernel
+
+- Predeclared in EXPERIMENTS (user request 2026-11-17, "first finish what is left"). `tc`/`tc_cvt` in `src/cuda/w4a16_tc.cu`: our own mma.sync m16n8k16 kernel from the PTX ISA layouts (not Marlin source); FP64 tolerance, not bitwise (addition order changes); fast unpack must pass the exhaustive self-test. Criterion: `tc` ≥5% below `inblock_m4_vec` at M 8/32/128, both policies, both series, every node. Single repeated matrix: never compare its numbers with E009 cyclic Marlin.
+
 ## Rooflines, if requested
 
 - Recompute all ceilings, ridge points, arithmetic intensities, and performance coordinates from specifications/data. Keep the primary full-machine roof distinct from core-count, ISA, NUMA, and memory-domain sensitivity roofs.

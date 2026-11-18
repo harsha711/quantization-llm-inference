@@ -13,6 +13,23 @@ A clone from GitHub therefore lacks these two files, and hash checks over those 
 
 Second rewrite (same day, same user choice). The second push was rejected too: an independent read-only review found eight more paths holding one 158,110,075-byte blob, byte-identical to the memcheck_0 file above (sha256 c0b9cbe4…c96c9, recorded for `..._M2048_0-outputs.npz` in `results/e017_20261109/model-arc/retrieval.sha256`): `operator_model.layers.0.mlp.gate_proj_M2048{_0,_1,_2,-memcheck_1,-memcheck_2,-synccheck_0,-synccheck_1,-synccheck_2}-outputs.npz` in the same directory. They were removed the same way from the 117 unpushed commits (tree diff against `backup/pre-drop-large-npz-2`: those eight files only), kept in the working copy with that hash and added to `.gitignore`; no tracked blob over 100 MB remains. Commit IDs from `Record E017 full-model numerical gate failure` onward changed again; the cited IDs were remapped the same way (same subjects, same order), and every commit ID cited in the docs resolves on the branch. Ten raw files are therefore missing from a GitHub clone.
 
+## E044 — Can our own kernel use Tensor Cores at M ≥ 8?
+
+Predeclared 2026-11-17 at the user's request ("first finish what is left": after E043, our best scalar kernel is still 1.3–8.5× slower than cuBLAS from M = 8 to 128, where scalar FP32 FMAs and per-weight unpacking, not weight bytes, set the cost). Our kernels only; no Marlin, model-path, dispatch, layout or contract change. Written by us from the PTX ISA's documented `mma.sync.m16n8k16` fragment layouts, not from Marlin's source.
+
+Hypothesis: replacing the scalar FMAs with FP16 Tensor Core MMAs (FP32 accumulate) lowers latency at M ≥ 8 against `inblock_m4_vec`.
+
+Design, `src/cuda/w4a16_tc.cu`: block = 8 warps, tile 16 rows × 32 columns; the 8 warps split K into chunks of 64 (as E001 split K) and reduce FP32 partials in shared memory in fixed warp order. Each thread owns two adjacent packed words of its column per chunk and the matching 32 contiguous activation bytes per row (two 16-byte loads); inside a chunk K is visited in a thread-consistent order that both fragments share, so the dot product is unchanged but the FP32 addition order differs from E001–E043: outputs are checked against FP64 under the unchanged tolerance, not bitwise. Rows beyond M are zero and never stored. Two variants differ only in unpacking, to attribute its cost:
+- `tc_cvt`: per weight FP32 (q−8)·s rounded to FP16 (the contract's formula, as in E001–E043);
+- `tc`: two codes per instruction via the FP16 magic-number trick: (1024+q) − 1032 = q−8 exactly, then an FP16 multiply by s, which is the correctly rounded product, i.e. the same FP16 bits as the contract's formula (the FP32 product is exact). A new exhaustive self-test compares both unpack paths bitwise for every finite FP16 scale and every code at every nibble position before any timing.
+Requires K % 64 == 0, group % 64 == 0, N % 32 == 0, 16-byte-aligned A; otherwise the launcher calls `inblock_m4_vec` (exact fallback).
+
+Checks before timing: unpack self-test 0 mismatches; FP64 check at every timed point; check_inblock.sh extended with shapes that take the Tensor Core path (M tails, two M tiles, group 64) and the fallbacks; memcheck/synccheck/racecheck on those shapes; SASS (HMMA count, registers) recorded.
+
+Measurement (E043's harness and method; every idle RTX 5060 Ti node, one job each, held by a prerequisite): K = N = 4096, G128, seed 1, M ∈ {1, 4, 8, 16, 32, 64, 128}, kernels inblock_m4_vec, tc_cvt, tc, cublas_dq, both cache policies, 10 warm-ups, 100 iterations, two series with reversed kernel order. Held-out: seed 2, 4096×11008 and 11008×4096 at M = 8, 32, 128.
+
+Success criterion, fixed now: `tc` median at least 5% below `inblock_m4_vec` at M = 8, 32 and 128, in both cache policies and both series, on every node (12 cells per node). Accept only if all pass. Reported, not gating: M = 1, 4, 16, 64, held-out cells, `tc` vs `tc_cvt` (unpack cost), and every cuBLAS ratio. Limits fixed now: one GPU type, synthetic weights, kernel level only, single repeated matrix (not E009's cycle, so not comparable with Marlin); no profile planned.
+
 ## E043 — Do wider operand loads bring our own scalar kernels closer to the memory roof at small M?
 
 Predeclared 2026-11-17 at the user's request ("go", after I pointed out that our own E001–E003 kernels were frozen after E003, never compared with the memory roof, and have headroom at M = 1/4: about 38 µs and 59 µs at K = N = 4096 against a modelled ≈19 µs to stream the 8.65 MB of codes and scales at 448 GB/s). One optimization, our kernels only: no Marlin, model-path, dispatch, layout or contract change.
