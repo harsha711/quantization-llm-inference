@@ -47,6 +47,7 @@ if(CMAKE_CUDA_COMPILER)
     src/cuda/w4a16_inblock_vec.cu
     src/cuda/w4a16_tc.cu
     src/cuda/w4a16_tc_splitk.cu
+    src/cuda/w4a16_tc_m32.cu
     src/cuda/dequant.cu
     src/cuda/cublas_gemm.cu)
   target_include_directories(w4a16_bench PRIVATE src/cuda)

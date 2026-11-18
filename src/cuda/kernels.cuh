@@ -62,6 +62,10 @@ void launch_w4a16_tc_splitk(const __half* A, const uint32_t* qweight, const __ha
 int w4a16_tc_splitk_factor(const __half* A, const __half* C, int M, int N, int K, int group_size);
 unsigned long long w4a16_tc_splitk_unpack_selftest();
 
+// E048: tc with a 32-row M tile (two m16 tiles per warp share each unpacked weight) for M >= 32.
+void launch_w4a16_tc_m32(const __half* A, const uint32_t* qweight, const __half* scales, __half* C,
+                         int M, int N, int K, int group_size, cudaStream_t stream);
+
 void launch_dequant_w4a16(const uint32_t* qweight, const __half* scales, __half* W, int N, int K,
                           int group_size, cudaStream_t stream);
 
