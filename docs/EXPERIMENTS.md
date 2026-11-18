@@ -30,6 +30,8 @@ Measurement (E043's harness and method; every idle RTX 5060 Ti node, one job eac
 
 Success criterion, fixed now: `tc` median at least 5% below `inblock_m4_vec` at M = 8, 32 and 128, in both cache policies and both series, on every node (12 cells per node). Accept only if all pass. Reported, not gating: M = 1, 4, 16, 64, held-out cells, `tc` vs `tc_cvt` (unpack cost), and every cuBLAS ratio. Limits fixed now: one GPU type, synthetic weights, kernel level only, single repeated matrix (not E009's cycle, so not comparable with Marlin); no profile planned.
 
+Prerequisite 343102 on c58 passed (first compile of the kernel): unpack self-test 0 mismatches; ctest; check_inblock.sh 199 bitwise comparisons 0 differing, every Tensor Core shape (M 1/5/8/16/17/33/9/20, group 64, 17 chunks over 8 warps) and fallback passes FP64; memcheck/synccheck 0 errors, racecheck 0 hazards (Tensor Core path included). SASS: 32 HMMA and 32 LDG per tc kernel variant; registers 64–76, 17 KB static shared. M = 8 smoke (10 iterations, not a result): tc 34.8 / 18.5 µs, tc_cvt 49.2 / 22.1, inblock_m4_vec 79.9 / 69.2, cublas_dq 86.0 / 52.8 (flush / no flush). Full jobs 343103–343107 (c7, c8, c9, c10, c58) released by it.
+
 ## E043 — Do wider operand loads bring our own scalar kernels closer to the memory roof at small M?
 
 Predeclared 2026-11-17 at the user's request ("go", after I pointed out that our own E001–E003 kernels were frozen after E003, never compared with the memory roof, and have headroom at M = 1/4: about 38 µs and 59 µs at K = N = 4096 against a modelled ≈19 µs to stream the 8.65 MB of codes and scales at 448 GB/s). One optimization, our kernels only: no Marlin, model-path, dispatch, layout or contract change.
