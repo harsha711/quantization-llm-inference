@@ -242,6 +242,7 @@
 ## E048 32-row M tile (rung after `tc`)
 
 - Predeclared in EXPERIMENTS (standing ladder scope, after E047 was rejected; parent `tc`). `tc_m32` (`src/cuda/w4a16_tc_m32.cu`): each warp's two m16 tiles share every unpacked weight fragment; M >= 32 uses it, M < 32 calls `tc`. Every output must be bitwise equal to `tc` (same MMA sequence per 16-row tile and same reduction order) plus all-row FP64. Criterion: >=5% below `tc` at M 32/64/128, K=N=4096, both policies, both series, every node. E046 caps the gain near 17% at M128. Single repeated matrix: never compare with cyclic Marlin numbers.
+- E048 is complete (jobs 343171–343175, c7/c8/c9/c10/c58; prerequisite 343169): REJECTED, 35/60 primary cells. Outputs bitwise equal to `tc` everywhere. M128 4.5–10.2% faster, held-out rectangles at M>=32 4–20% faster, but K=N=4096 M32 flushed 8–13% slower and M64 flushed a tie (114 registers: 2 blocks/SM vs 3). A grid-size dispatch chosen from this data would be post hoc: needs a new predeclared rung on fresh data. Unprofiled. Parent stays `tc`.
 
 ## Rooflines, if requested
 

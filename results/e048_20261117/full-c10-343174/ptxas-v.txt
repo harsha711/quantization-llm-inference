@@ -1,0 +1,11 @@
+ptxas info    : 0 bytes gmem
+ptxas info    : Compiling entry function '_ZN48_GLOBAL__N__2be3d61b_15_w4a16_tc_m32_cu_935f40ed19w4a16_tc_m32_kernelILb1EEEvPK6__halfPKjS3_PS1_iiii' for 'sm_120'
+ptxas info    : Function properties for _ZN48_GLOBAL__N__2be3d61b_15_w4a16_tc_m32_cu_935f40ed19w4a16_tc_m32_kernelILb1EEEvPK6__halfPKjS3_PS1_iiii
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 114 registers, used 1 barriers, 32768 bytes smem
+ptxas info    : Compile time = 37.281 ms
+ptxas info    : Compiling entry function '_ZN48_GLOBAL__N__2be3d61b_15_w4a16_tc_m32_cu_935f40ed19w4a16_tc_m32_kernelILb0EEEvPK6__halfPKjS3_PS1_iiii' for 'sm_120'
+ptxas info    : Function properties for _ZN48_GLOBAL__N__2be3d61b_15_w4a16_tc_m32_cu_935f40ed19w4a16_tc_m32_kernelILb0EEEvPK6__halfPKjS3_PS1_iiii
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 114 registers, used 1 barriers, 32768 bytes smem
+ptxas info    : Compile time = 33.100 ms

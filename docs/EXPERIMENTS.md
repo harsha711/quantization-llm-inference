@@ -31,6 +31,36 @@ Measurement (E044/E047 harness and method): prerequisite on c58 inspected first,
 
 Success criterion, fixed now: `tc_m32` median at least 5% below `tc` at M = 32, 64 and 128 (K = N = 4096), both cache policies, both series, on every node whose job completes (12 cells per node). Accept only if all pass. Reported, not gating: M 1–16 (`tc` itself by the dispatch: ~0% expected, a measure of median spread), held-out cells, roof fractions, cuBLAS ratios. Limits: single repeated matrix (never compared with cyclic Marlin numbers; the E045 cyclic measurement is not part of this rung), one GPU type, synthetic weights, kernel level only, not in the model path, no profile. Scripts `scripts/e048/`, results `results/e048_20261117/`.
 
+Prerequisite 343169 (c58, driver 615.71.09, commit `a52a7c6`) passed first time, inspected before the full jobs: ctest 2/2; unpack self-test 0 mismatches; `check_inblock.sh` unchanged (0 differing, memcheck/synccheck 0 errors, racecheck 0 hazards); `scripts/e048/check.sh`: every shape full-output bitwise equal to `tc` (16 comparisons, 0 differing) and all-row FP64 pass; memcheck/synccheck 0 errors, racecheck 0 hazards on `tc_m32`. Resources: REG 114 both instantiations, 0 spills, 0 local, 33,792 B shared (`tc`: 64–76 registers, 17,408 B): 2 resident blocks per SM by registers (114 × 256 = 29,184 of 65,536), against 3 for `tc`. SASS per kernel: 64 HMMA, 40 LDG (a two-chunk loop body: per chunk 16 HMMA × 2 tiles, 8 activation + 8 code + 4 scale loads, against `tc`'s 16 HMMA and 16 LDG per chunk). Smoke (10 iterations, not a result): M128 137.2 → 129.0 µs flushed, 120.4/118.6 → 108.1/110.1 unflushed; M32 48.1/49.2 → 53.2 flushed (slower), 36.4/34.8 → 32.3 unflushed. Full jobs 343171–343175 (c7, c8, c9, c10, c58) submitted `afterok:343169`.
+
+### Result (jobs 343171–343175, one per node c7/c8/c9/c10/c58, all exit 0, `all.sha256` verified after retrieval, 2026-11-17)
+
+Every node: build, ctest, unpack self-test 0 mismatches, `check_inblock.sh` and `scripts/e048/check.sh` (0 differing outputs, memcheck/synccheck 0 errors, racecheck 0 hazards). Every timed point passes FP64 on every output row (`check_rows` 4096 ≥ M) and full-output bitwise equality with `tc` (0 differing everywhere, main and held-out). Drivers 610.57.04 (c7–c10), 615.71.09 (c58). `python3 scripts/e048/analyze.py results/e048_20261117` → `analysis.txt`, `summary.json`.
+
+Primary cells (K = N = 4096, range over 5 nodes × 2 series, median µs, `tc` → `tc_m32`):
+
+| M | Policy | tc | tc_m32 | Gain | Cells ≥ 5% |
+|---:|---|---:|---:|---:|---:|
+| 32 | flush | 46.8–49.5 | 52.8–53.6 | −7.7 to −13.1% | 0/10 |
+| 32 | no flush | 34.1–34.4 | 32.0–32.3 | 5.2–6.9% | 10/10 |
+| 64 | flush | 75.4–78.2 | 75.5–78.2 | −2.7 to +0.5% | 0/10 |
+| 64 | no flush | 62.8–63.0 | 58.9–60.7 | 3.8–6.5% | 8/10 |
+| 128 | flush | 134.8–137.6 | 126.6–131.4 | 4.5–7.9% | 7/10 |
+| 128 | no flush | 116.3–120.4 | 108.0–109.8 | 7.0–10.2% | 10/10 |
+
+35 of 60 primary cells pass; every node fails at least the M32 and M64 flushed cells. Decision: REJECTED. The parent stays `tc`.
+
+Reported, not part of the decision:
+- M 1–16 run `tc` by the dispatch: −3.8 to +0.3% (median spread of the same kernel).
+- Held-out (seed 2), both rectangles: M32 18.6–20.1% flushed, 7.4–12.2% unflushed; M64 14.0–16.9% / 4.3–12.8%; M128 12.7–15.8% / 8.4–14.2%; M8 (dispatch to `tc`) −1.9 to +1.3%. 74 of 80 held-out M ≥ 32 cells are ≥ 5% (the six misses: 11008×4096 M64 unflushed).
+- Modelled roof fraction under flush (logical bytes / 448 GB/s): M128 0.17–0.18 → 0.18–0.19; held-out M32 0.37–0.38 → 0.46.
+- Against cuBLAS on pre-reconstructed FP16 Ŵ (cuBLAS default math mode, same job, single repeated matrix): at M128 `tc` is 1.18–1.19× slower flushed and 1.12–1.18× unflushed, `tc_m32` 1.10–1.13× and 1.04–1.06×; on the held-out M128 rectangles 1.29–1.31× → 1.10–1.13× flushed. At M32 unflushed 1.13–1.14× → 1.06–1.07×; at M32 flushed `tc_m32` is slower than `tc` (0.54–0.57 → 0.61–0.62 of cuBLAS's time).
+- Resources: REG 114 (0 spills) and 33,792 B shared against `tc`'s 64–76 and 17,408 B; 64 HMMA / 40 LDG per kernel (two-chunk body).
+
+Interpretation (unprofiled). Observed: sharing each unpacked weight across 32 rows helps where there are many 32-row blocks per SM and long work per block (M128 at K = N = 4096: 4.5–10.2%; every held-out rectangle at M ≥ 32: 4–20%), inside E046's ~17% bound, but at K = N = 4096 M32 the grid is only 128 blocks and the kernel holds 2 resident blocks per SM instead of 3 (registers 114 vs ≤ 76), and flushed M32 regresses 8–13%; flushed M64 (256 blocks) is a tie. Hypothesis, untested: the lost occupancy and the halved block count at small grids offset the reduced reloads; the held-out shapes have 2.7× more blocks (N = 11008) or 2.7× longer K per block. A dispatch threshold at M ≥ 128 or by grid size would pass the M128 cells here, but choosing it from this data would be post hoc and it is not part of the predeclared variant.
+
+Revisit condition: a new predeclared rung (e.g. the 32-row tile dispatched only where the grid has enough blocks, fixed before timing on fresh data, or a lower-register 32-row kernel), or E045-style cyclic measurement. Not authorized by this result. Limits: single repeated matrix (never compare with E045/E009 cyclic Marlin numbers), one GPU type (five nodes, two drivers), synthetic weights, kernel level only, not in the model path, no profile.
+
 ## E047 — Does splitting K across blocks fill the GPU at small M? (rung after `tc`)
 
 Predeclared 2026-11-17 under the standing kernel-ladder scope (AGENTS.md "Project scope"; coordinator request), before any GPU run of the new code. Parent: E044's `tc` (source `src/cuda/w4a16_tc.cu` unchanged). Chosen by E046: at M ≤ 16 the `tc` grid is 128 blocks for 108 resident slots (36 SMs × 3) = 1.19 waves, SMs active 82% of elapsed, DRAM 75% of peak; the equal-byte 3.19-wave rectangle reaches 84%.
