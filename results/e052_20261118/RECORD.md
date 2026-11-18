@@ -12,3 +12,6 @@
   Smoke cells (not results): heldout 128 s1 GTA 315.0 ms, GQA 326.4 ms.
 - Submitted on c10: core 343363 (afterok prereq), long 343364 (afterok core), head 343365 (afterok core, afterany long), ext 343366 (afterok core, afterany head).
 - llama.cpp venv absent on c10: ext job 343367 pinned to c5 (E028's llama node), afterok core; same ext arms, stacks used only if their venvs are present there.
+- Core 343363 (c10, 14:16-15:09 EST) exit 0. Gate: all 20 T cases ACCEPTED (eager E021 form rel L2 0.00207-0.00231, one near-tie flip at 128 held-out step 47; graph E026 form 0.00195-0.00227, tokens equal F64 in all). Marlin control 4/4 accepted.
+  64 cells. Decode medians (4 cells): 128 GQA 326.9-327.0, GTA 315.3-315.8, GRA 597.7-598.1; 2048 GQA 375.5-376.1, GTA 363.6-363.8, GRA 651.7-651.8 ms.
+  H1 passes both contexts (GTA 47.2-47.3% / 44.2% below GRA). H2 decode GTA vs GQA: comparable (3.4-3.6% / 3.2-3.3% lower); prefill: slower (T 7.6-7.9% / 8.8-9.0% longer ttft; 16.1 vs 15.0 ms, 215 vs 198 ms).
