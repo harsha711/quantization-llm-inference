@@ -21,6 +21,7 @@ ncu --query-metrics > "$S/ncu-query-metrics.txt" 2>&1
 while read -r m; do [[ -z $m ]] && continue
   if grep -q "^${m%%.*}[[:space:]]" "$S/ncu-query-metrics.txt"; then keep+=("$m"); else echo "$m" >> "$S/metrics-dropped.txt"; fi
 done < scripts/e046/metrics.txt
+[[ ! -s $S/metrics-dropped.txt ]]  # attempt 1 (343121): three names differed on this ncu; now every metric must exist
 MET=$(IFS=,; echo "${keep[*]}"); echo "$MET" > "$S/metrics-used.txt"
 mkdir "$S/ncu"
 # label kernel M K N seed
@@ -43,8 +44,8 @@ while read -r L KER M K N SEED; do
   ncu --set full --metrics "$MET" --import-source yes --cache-control all --clock-control none --replay-mode kernel \
     --export "$R" build/w4a16_bench --M $M --K $K --N $N --group 128 --seed $SEED --warmup 0 --iters 1 \
     --no-flush-l2 --kernels $KER --csv "$R.bench.csv" > "$R.log" 2>&1
-  ncu --import "$R.ncu-rep" --page raw --csv --print-units base > "$R.raw.csv"
-  ncu --import "$R.ncu-rep" --page details --csv --print-units base > "$R.details.csv"
-  ncu --import "$R.ncu-rep" --page source --print-source sass --csv --print-units base > "$R.source.csv" 2> "$R.source.err" || echo "source export failed rc=$?" >> "$R.source.err"
+  ncu --import "$R.ncu-repz" --page raw --csv --print-units base > "$R.raw.csv"
+  ncu --import "$R.ncu-repz" --page details --csv --print-units base > "$R.details.csv"
+  ncu --import "$R.ncu-repz" --page source --print-source sass --csv --print-units base > "$R.source.csv" 2> "$R.source.err" || echo "source export failed rc=$?" >> "$R.source.err"
 done <<< "$CASES"
 echo INNER-OK
