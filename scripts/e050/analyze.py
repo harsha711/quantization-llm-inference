@@ -96,7 +96,7 @@ def prereq(d):
         if name == 'marlin': assert ks[0].startswith('void e005_marlin::Marlin<')
         elif name == 'tc' or (name == 'tc_ladder' and m < 64): assert 'w4a16_tc_kernel<true' in ks[0], ks
         elif name == 'tc_ladder': assert 'w4a16_tc_m32_kernel<false>' in ks[0], ks
-        if name == 'tc_ladder': traced[f"{r['K']}x{r['N']} M{m}"] = ks[0].split('(')[0]
+        if name == 'tc_ladder': traced[f"{r['K']}x{r['N']} M{m}"] = ks[0]
     for tool in ['memcheck','synccheck']:
         check_untimed(d/f'{tool}.jsonl',SHAPES,NAMES)
         assert 'ERROR SUMMARY: 0 errors' in (d/f'{tool}.log').read_text(), tool
