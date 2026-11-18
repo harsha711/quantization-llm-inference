@@ -228,6 +228,10 @@
 - Predeclared in EXPERIMENTS (user request 2026-11-17). Descriptive: `tc` (E044 source unchanged), corrected Marlin A and cuBLAS Ŵ in E010's four-matrix cycle, M 4/16/64/128, both rectangles, two reversed series. Report "fraction of Marlin speed"; no acceptance gate, nothing adopted. New files only (`scripts/e045/`, `results/e045_20261117/`); E009/E010 harnesses and results stay untouched.
 - Course-requirement note: the course deck's report requirements (serial baseline, Sp/strong/weak scaling plot, roofline, profiler-found fix) are covered by E041, the roofline section and E003; the "unresolved" wording in the reporting checkpoint above is historical.
 
+## E046 first profile of our Tensor Core kernel
+
+- Predeclared in EXPERIMENTS (standing ladder scope, 2026-11-17). Diagnostic only: Nsight Compute of `tc` through the unchanged E044 `w4a16_bench` (K=N=4096 M1/16/128; both rectangles M4/128) plus `inblock_m4_vec`/`cublas_dq` references at M1/M128, one node, profiler cache flush, clocks unlocked. No kernel change, no gate. Profiler durations are replay values, not production latency; isolated single-matrix replay is not the cyclic regime. Outputs: counter table, verdicts on hypotheses (a) M1 load-latency/coalescing and (b) M128 repeated weight loading, one ranked E047 recommendation. Status: predeclared, not yet run.
+
 ## Rooflines, if requested
 
 - Recompute all ceilings, ridge points, arithmetic intensities, and performance coordinates from specifications/data. Keep the primary full-machine roof distinct from core-count, ISA, NUMA, and memory-domain sensitivity roofs.
