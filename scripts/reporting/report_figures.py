@@ -128,6 +128,7 @@ ppl = lambda d, a: d[a]['test']['perplexity']
 q = {'FP16 original': ppl(e039, 'O'), 'round-to-nearest': ppl(e039, 'RTN'), 'our GPTQ (E037)': ppl(e039, 'AT15'),
      'upstream GPTQ': ppl(e039, 'L'), 'AWQ+GPTQ': ppl(e040, 'AWQG'), 'AWQ asym.': ppl(e040, 'AWQa')}
 num['quality_test_ppl'] = q
+E032_RTN = q['round-to-nearest']
 num['quality_rise_pct'] = {k: 100 * (v / q['FP16 original'] - 1) for k, v in q.items()}
 fig, ax = plt.subplots(figsize=(W1, 1.9))
 ax.barh(range(len(q))[::-1], list(q.values()), color=[C[4]] + [C[1]] + [C[0]] * 2 + [C[2]] * 2)
@@ -137,6 +138,26 @@ ax.axvline(q['FP16 original'] * 1.05, ls='--', color='k', lw=0.8)
 ax.text(q['FP16 original'] * 1.05 + 0.02, len(q) - 0.6, '+5% bar', fontsize=6)
 ax.set(yticks=range(len(q))[::-1], yticklabels=list(q), xlabel='WikiText-2 test perplexity (lower is better)', xlim=(8.3, 10.6))
 save(fig, 'quality')
+
+# ---- E042: where the plain-rounding block cost sits (test split; selection was on validation) ----
+s = json.load(open(ROOT / 'results/e042_20261117/full-342883/quality.json'))
+rp, fr = s['rise_pct'], {a: v['quantized_param_fraction'] for a, v in s['arms'].items()}
+assert abs(s['arms']['RTN']['test']['perplexity'] / E032_RTN - 1) < 1e-5
+types = ['q_proj', 'k_proj', 'v_proj', 'o_proj', 'gate_proj', 'up_proj', 'down_proj']
+nblk = sum(a.startswith('B:') for a in rp)
+num['e042'] = dict(selection=s['selection'], summary=s['summary'], type_rise_pct={t: rp[f'T:{t}']['test'] for t in types},
+                   type_param_fraction={t: fr[f'T:{t}'] for t in types}, block_rise_pct=[rp[f'B:{b}']['test'] for b in range(nblk)])
+fig, (a1, a2) = plt.subplots(2, 1, figsize=(W1, 3.2), gridspec_kw=dict(height_ratios=(1, 1.1)))
+a1.bar(range(7), [rp[f'T:{t}']['test'] for t in types], color=C[0])
+for i, t in enumerate(types):
+    a1.text(i, rp[f'T:{t}']['test'] + 0.1, f"{100 * fr[f'T:{t}']:.1f}%", ha='center', fontsize=5.5, color=C[4])
+a1.set(xticks=range(7), xticklabels=[t[:-5] for t in types], ylabel='perplexity rise (%)', ylim=(0, 4.4))
+a1.set_title('(a) one projection type, all blocks (label: share of weights)', fontsize=7)
+a2.bar(range(nblk), [rp[f'B:{b}']['test'] for b in range(nblk)], color=[C[1] if b in s['selection']['worst_blocks'] else C[0] for b in range(nblk)])
+a2.set(xlabel='block', ylabel='perplexity rise (%)', xticks=range(0, nblk, 3), xlim=(-0.8, nblk - 0.2))
+a2.set_title('(b) one block, all types (orange: kept FP16 in KB3)', fontsize=7)
+fig.subplots_adjust(hspace=0.55)
+save(fig, 'e042_sensitivity')
 
 (FIGS / 'numbers.json').write_text(json.dumps(num, indent=1, default=str))
 print('ok', sorted(p.name for p in FIGS.iterdir()))

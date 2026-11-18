@@ -18,6 +18,15 @@ need += [f"+{q['round-to-nearest']:.1f}\\%" .replace('+', '') , f"+{q['our GPTQ 
 pts = n['roofline']['points']
 ai = lambda k, M: next(p['ai'] for p in pts if p['kernel'].startswith(k) and p['M'] == M)
 need += [f"cuBLAS sits at {ai('cuBLAS', 4):.1f} FLOP/byte and Marlin at {ai('Marlin', 4):.1f}"]
+g = n['e042']
+ty, bl, sm = g['type_rise_pct'], g['block_rise_pct'], g['summary']['test']
+need += [f"(+{ty['down_proj']:.2f}\\%)", f"cost +{ty['v_proj']:.2f}\\%", f"hold {100 * g['type_param_fraction']['v_proj']:.1f}\\%",
+         f"last block (+{bl[-1]:.2f}\\%)", f"block 1 (+{bl[1]:.2f}\\%)",
+         f"{100 * sm['sum_single_block_rise_pct'] / sm['rtn_rise_pct']:.0f}--{100 * sm['sum_single_type_rise_pct'] / sm['rtn_rise_pct']:.0f}\\%",
+         f"recovers {100 * sm['KB3_recovered_fraction']:.0f}\\%", f"recovers {100 * sm['KT1_recovered_fraction']:.0f}\\%",
+         f"({100 * g['type_param_fraction']['down_proj']:.0f}\\% of the weights)"]
+assert g['selection']['worst_type'] == 'down_proj' and sorted(g['selection']['worst_blocks']) == [1, 26, 27]
+assert sorted(bl)[0] >= 0.1 and sorted(bl)[-4] <= 0.5 + 0.02  # "most cost 0.1--0.5%"
 missing = [s for s in need if s not in tex]
 assert not missing, missing
 print('report numbers ok:', len(need))

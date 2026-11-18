@@ -17,7 +17,7 @@
 \affiliation{\institution{North Carolina State University}\city{Raleigh}\state{NC}\country{USA}}
 
 \begin{abstract}
-Generating text with a large language model at batch size one is dominated by multiplying a few activation rows by large weight matrices, so it is limited by the bytes of weights read. W4A16 stores weights as 4-bit integers with one 16-bit scale per group of 128 and keeps activations in FP16, cutting weight traffic about fourfold. We built and measured this operation end to end on an NVIDIA RTX~5060~Ti: a serial C++ baseline and its OpenMP scaling (12.3--13.1$\times$ on 16 cores), three fused CUDA kernels of our own (up to 3.85$\times$ over our naive kernel), and the maintained Marlin kernel, in which we found and fixed a shared-memory race. Under four cycled weight matrices Marlin is 3.6--4.4$\times$ faster than cuBLAS on the reconstructed FP16 weights at four rows; a roofline analysis shows why: both kernels run at 75--94\% of the memory roof, and 4-bit weights raise the arithmetic intensity 3.9$\times$. The lead shrinks to 2--17\% at 128 rows, where both reach the compute roof. Inside Qwen2.5-1.5B, Marlin with CUDA-graph replay and a rewritten decode-attention step decodes 45.5\%/42.5\% faster than our own FP16 path given the same attention (contexts 128/2048), yet it stays 37--51\% slower than vLLM running the identical 4-bit weights, and the 4-bit blocks cost 13.1\% WikiText-2 perplexity with plain rounding and still 5.2--5.9\% with upstream GPTQ or AWQ. We report the failures that shaped these results as carefully as the successes.
+Generating text with a large language model at batch size one is dominated by multiplying a few activation rows by large weight matrices, so it is limited by the bytes of weights read. W4A16 stores weights as 4-bit integers with one 16-bit scale per group of 128 and keeps activations in FP16, cutting weight traffic about fourfold. We built and measured this operation end to end on an NVIDIA RTX~5060~Ti: a serial C++ baseline and its OpenMP scaling (12.3--13.1$\times$ on 16 cores), three fused CUDA kernels of our own (up to 3.85$\times$ over our naive kernel), and the maintained Marlin kernel, in which we found and fixed a shared-memory race. When the benchmark alternates between four different weight matrices, together too large to stay in the 32\,MiB L2 cache, as in a real model, Marlin is 3.6--4.4$\times$ faster than cuBLAS on the reconstructed FP16 weights at $M=4$; a roofline analysis shows why: both kernels run at 75--94\% of the memory roof, and 4-bit weights raise the arithmetic intensity 3.9$\times$. The lead shrinks to 2--17\% at 128 rows, where both reach the compute roof. Inside Qwen2.5-1.5B, Marlin with CUDA-graph replay and a rewritten decode-attention step decodes 45.5\%/42.5\% faster than our own FP16 path given the same attention (contexts 128/2048), yet it stays 37--51\% slower than vLLM running the identical 4-bit weights, and the 4-bit blocks cost 13.1\% WikiText-2 perplexity with plain rounding and still 5.2--5.9\% with upstream GPTQ or AWQ. We report the failures that shaped these results as carefully as the successes.
 \end{abstract}
 
 \maketitle
@@ -28,7 +28,20 @@ During autoregressive decoding a transformer produces one token per step, so eve
 \paragraph{Contributions.} Ours: (1) a numerical contract with an FP64 reference and a fixed tolerance used for every result; (2) a serial CPU baseline with strong and weak scaling; (3) three CUDA kernels, each measured against the previous one; (4) a race fix in Marlin and a controlled characterization of when compressed execution wins (weight reuse, batch size, roofline); (5) integration into a 1.5B-parameter model with a validation gate, graph replay and a decode-attention rewrite; (6) external comparison and quality measurements. Upstream, credited throughout: Marlin~\cite{marlin} and vLLM~\cite{vllm} (kernel, runtime), GPTQ~\cite{gptq}, AWQ~\cite{awq} and llm-compressor~\cite{llmcompressor} (quantizers), PyTorch CUDA graphs~\cite{cudagraphs}.
 
 \section{Format and numerical contract}
-$W$ is split into groups of $g=128$ consecutive rows along $K$. Each (group, column) stores an FP16 scale $s = \mathrm{fp16}(\max|w|/7)$; each weight stores $q = \mathrm{clamp}(\mathrm{rne}(w/s), -7, 7) + 8$ in a nibble, eight per 32-bit word. The kernel reconstructs $\hat w = \mathrm{fp16}((q-8)s)$, accumulates in FP32 and writes FP16. Every kernel output is checked against an FP64 CPU product with the reconstructed weights, requiring $|C - C_{\mathrm{ref}}| \le 10^{-3}|C_{\mathrm{ref}}| + 10^{-3}\,\mathrm{rms}(C_{\mathrm{ref}})$ elementwise; the tolerance was never relaxed. Kernels that claim to preserve arithmetic order are additionally checked bit for bit against their predecessor on every output.
+Every result in this report uses the same 4-bit format and the same correctness check.
+
+\paragraph{Storing the weights.} The weight matrix $W$ ($K \times N$) is cut into groups of $g=128$ consecutive rows along $K$.
+\begin{itemize}
+\item \emph{Scale:} each group of each column gets one FP16 scale, $s = \mathrm{fp16}(\max|w|/7)$, the largest magnitude in the group divided by 7.
+\item \emph{Code:} each weight is divided by its scale, rounded to the nearest integer (ties to even) and clipped to $[-7,7]$; we store that integer plus 8, a 4-bit code $q$ from 1 to 15, eight codes per 32-bit word.
+\end{itemize}
+A group of 128 weights thus takes 64 bytes of codes and 2 bytes of scale instead of 256 bytes in FP16.
+
+\paragraph{Computing with them.} A kernel rebuilds each weight as $\hat w = \mathrm{fp16}((q-8)\,s)$, multiplies it by the FP16 activations, adds the products in FP32 and writes FP16 results.
+
+\paragraph{Checking the result.} The CPU computes the same product in FP64 from the rebuilt weights $\hat w$, so the check measures the kernel's arithmetic, not the quantization error. Each checked output must satisfy
+\[ |C - C_{\mathrm{ref}}| \le 10^{-3}\,|C_{\mathrm{ref}}| + 10^{-3}\,\mathrm{rms}(C_{\mathrm{ref}}), \]
+that is, 0.1\% of its own value plus 0.1\% of the typical output size, so that outputs near zero do not fail on tiny absolute errors. All rows are checked up to $M=64$, and 64 sampled rows above that. We never relaxed this tolerance. A kernel meant to keep its predecessor's order of additions must also match it bit for bit on every output.
 
 \section{Baseline and parallel design}
 \paragraph{Serial and OpenMP baseline (E041).} The CPU kernel processes 64-column blocks; for each group it builds a 16-entry table of reconstructed weights per column, fills a per-thread tile, and accumulates FP32 in ascending $k$. OpenMP distributes the independent column blocks statically, so every output has identical arithmetic at any thread count; we verified bitwise-equal outputs across all thread counts. It is plain C++ with no intrinsics (FP16 conversion in software) and is a correctness-first baseline, not a tuned BLAS.
@@ -99,6 +112,13 @@ Against production stacks the path is slower (Fig.~\ref{fig:model}). vLLM~v0.33.
 \end{figure}
 All timed results above use plain round-to-nearest weights, which raise WikiText-2~\cite{wikitext} perplexity by 13.1\% (E032, Fig.~\ref{fig:quality}). A GPTQ-style calibrated quantizer we implemented in the same format, calibrated on C4~\cite{c4}, reduces this to +5.62\% (E037) and runs at the same speed (within 0.3\%, E038), but still fails our 5\% bar. To find out whether that residue is our bug or the model, we ran upstream llm-compressor GPTQ: +5.15\%, within 0.5 points of ours, and the standard 16-level grid changes ours by only 0.35 points (E039). Activation-aware AWQ~\cite{awq}, designed for the outlier channels this model has, does not help: +5.72\% to +10.21\% across three recipes (E040). For this 1.5B model and metric, about 5\% is the cost of 4-bit group-128 weights with standard post-training methods; untested recipes or larger models may do better.
 
+\begin{figure}[t]
+\includegraphics[width=\linewidth]{figs/e042_sensitivity.pdf}
+\caption{Where the plain-rounding cost sits (E042): WikiText-2 test perplexity rise over FP16 when only (a) one projection type in all 28 blocks or (b) one block's seven projections are quantized, everything else FP16.}
+\label{fig:sens}
+\end{figure}
+\paragraph{Where the cost sits (E042).} To locate the 13.1\%, we quantized one subset at a time and left the rest in FP16 (Fig.~\ref{fig:sens}). By projection type, the MLP down projection costs most (+3.59\%), but per weight the small attention value projections are far more sensitive: they hold 0.8\% of the block weights and cost +1.57\%. By block, most cost 0.1--0.5\%; the last block (+1.67\%) and block 1 (+1.01\%) stand out. The single-subset rises add up to 88--91\% of the full rise, so layers interact only mildly. We had predicted the cost would be concentrated, meaning that keeping the three worst blocks in FP16 (chosen on the validation split) recovers at least half of it; it recovers 28\%, and keeping every down projection (29\% of the weights) in FP16 recovers 32\%. The cost is spread across the whole model, so no small set of FP16 layers removes it; this is a quality measurement, not a proposed runtime.
+
 \section{Failures and lessons}
 \begin{itemize}
 \item \textbf{Fix the gate before timing.} Two failed numerical gates (E017, E019) and a compiler-mode failure (E014) taught us that ``same tokens'' and ``passes elementwise'' are different claims; our accepted speedups carry the disclosure that the gate came third.
@@ -108,7 +128,7 @@ All timed results above use plain round-to-nearest weights, which raise WikiText
 \end{itemize}
 
 \section{Conclusion and limitations}
-Compressed 4-bit execution delivers the roofline-predicted gain where it should: about 4$\times$ for small batches, when weights do not stay in cache, shrinking to nothing once the product becomes compute-bound. Our own scalar kernels reach a fraction of that; the maintained Tensor Core kernel reaches 75--99\% of the roofs. In a full model the gain is real against our own FP16 path but smaller than production stacks achieve, and it costs 5--13\% perplexity on a 1.5B model. Limitations: one model, one GPU type, batch 1, 64 generated tokens, one quality metric and corpus; the CPU baseline is untuned; the model speedups rely on a post hoc third validation gate; proposed FP64/FP32 cuBLAS context runs were not done. The kernels are CUDA C++; Python drives the model-level measurements and analysis. Code, raw results and the per-experiment record (E001--E041) accompany this report.
+Compressed 4-bit execution delivers the roofline-predicted gain where it should: about 4$\times$ for small batches, when weights do not stay in cache, shrinking to nothing once the product becomes compute-bound. Our own scalar kernels reach a fraction of that; the maintained Tensor Core kernel reaches 75--99\% of the roofs. In a full model the gain is real against our own FP16 path but smaller than production stacks achieve, and it costs 5--13\% perplexity on a 1.5B model. Limitations: one model, one GPU type, batch 1, 64 generated tokens, one quality metric and corpus; the CPU baseline is untuned; the model speedups rely on a post hoc third validation gate; proposed FP64/FP32 cuBLAS context runs were not done. The kernels are CUDA C++; Python drives the model-level measurements and analysis. Code, raw results and the per-experiment record (E001--E042) accompany this report.
 
 \appendix
 \section{Experiment index}
@@ -128,6 +148,7 @@ E027--E030 & vLLM, llama.cpp, ORT comparison; gap trace. Ours slower. \\
 E031--E035 & Output-head precision (4-/8-bit). Faster, changes outputs. \\
 E036--E040 & Calibrated quantizers, upstream GPTQ, AWQ. All $>$5\% perplexity. \\
 E041 & Serial baseline and OpenMP scaling. Descriptive. \\
+E042 & Per-type/per-block quality sensitivity. Cost spread, not concentrated. \\
 \bottomrule
 \end{tabular}
 \end{table}

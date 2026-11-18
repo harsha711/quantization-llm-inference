@@ -1,0 +1,45 @@
++ prun timeout 16200 /tmp/e017-hpuvvad-20261109/bin/python /mnt/beegfs/hpuvvad/csc548-w4a16-e042-20261117/full-c58-342883/sens.py /mnt/beegfs/hpuvvad/csc548-w4a16-e042-20261117/full-c58-342883 /mnt/beegfs/hpuvvad/csc548-w4a16-e037-20261111/wikitext2-test.txt /mnt/beegfs/hpuvvad/csc548-w4a16-e037-20261111/wikitext2-valid.txt b3481cea6dd697b8b741ec35d375975d4c48c85d456c884fd314fe6860a7128d
+[prun] Master compute host = c58
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun timeout 16200 /tmp/e017-hpuvvad-20261109/bin/python /mnt/beegfs/hpuvvad/csc548-w4a16-e042-20261117/full-c58-342883/sens.py /mnt/beegfs/hpuvvad/csc548-w4a16-e042-20261117/full-c58-342883 /mnt/beegfs/hpuvvad/csc548-w4a16-e037-20261111/wikitext2-test.txt /mnt/beegfs/hpuvvad/csc548-w4a16-e037-20261111/wikitext2-valid.txt b3481cea6dd697b8b741ec35d375975d4c48c85d456c884fd314fe6860a7128d (family=openmpi4)
+Token indices sequence length is longer than the specified maximum sequence length for this model (270674 > 131072). Running this sequence through the model will result in indexing errors
+ARM O {'valid': 8.9684, 'test': 8.6058}
+ARM RTN {'valid': 10.2168, 'test': 9.735}
+ARM T:q_proj {'valid': 8.9911, 'test': 8.6297}
+ARM T:k_proj {'valid': 9.0071, 'test': 8.6411}
+ARM T:v_proj {'valid': 9.1152, 'test': 8.7406}
+ARM T:o_proj {'valid': 9.0946, 'test': 8.7237}
+ARM T:gate_proj {'valid': 9.1628, 'test': 8.783}
+ARM T:up_proj {'valid': 9.2256, 'test': 8.8389}
+ARM T:down_proj {'valid': 9.3091, 'test': 8.9144}
+ARM B:0 {'valid': 9.0079, 'test': 8.642}
+ARM B:1 {'valid': 9.0553, 'test': 8.6924}
+ARM B:2 {'valid': 9.0117, 'test': 8.6428}
+ARM B:3 {'valid': 8.9837, 'test': 8.617}
+ARM B:4 {'valid': 8.9902, 'test': 8.6314}
+ARM B:5 {'valid': 8.9954, 'test': 8.6328}
+ARM B:6 {'valid': 8.9887, 'test': 8.6247}
+ARM B:7 {'valid': 8.9937, 'test': 8.6291}
+ARM B:8 {'valid': 8.9931, 'test': 8.6291}
+ARM B:9 {'valid': 8.9993, 'test': 8.6341}
+ARM B:10 {'valid': 9.0041, 'test': 8.6363}
+ARM B:11 {'valid': 8.9957, 'test': 8.6306}
+ARM B:12 {'valid': 8.9984, 'test': 8.6355}
+ARM B:13 {'valid': 8.9904, 'test': 8.6263}
+ARM B:14 {'valid': 8.9883, 'test': 8.6251}
+ARM B:15 {'valid': 8.9894, 'test': 8.6231}
+ARM B:16 {'valid': 9.0006, 'test': 8.6378}
+ARM B:17 {'valid': 9.0004, 'test': 8.6327}
+ARM B:18 {'valid': 8.9982, 'test': 8.6311}
+ARM B:19 {'valid': 9.0156, 'test': 8.6493}
+ARM B:20 {'valid': 9.0029, 'test': 8.6389}
+ARM B:21 {'valid': 9.008, 'test': 8.6442}
+ARM B:22 {'valid': 9.0043, 'test': 8.6402}
+ARM B:23 {'valid': 9.0067, 'test': 8.641}
+ARM B:24 {'valid': 9.0144, 'test': 8.6482}
+ARM B:25 {'valid': 9.0042, 'test': 8.6354}
+ARM B:26 {'valid': 9.026, 'test': 8.6579}
+ARM B:27 {'valid': 9.136, 'test': 8.7492}
+ARM KB3 {'valid': 9.8628, 'test': 9.4203}
+ARM KT1 {'valid': 9.8062, 'test': 9.368}
+DONE {"selection": {"split": "valid", "worst_blocks": [27, 1, 26], "worst_type": "down_proj"}, "summary": {"valid": {"rtn_rise_pct": 13.919327565875527, "sum_single_type_rise_pct": 12.561290217194387, "sum_single_block_rise_pct": 12.113226307994854, "KB3_rise_pct": 9.971893158982548, "KB3_recovered_fraction": 0.28359375754404015, "KT1_rise_pct": 9.3416970286613, "KT1_recovered_fraction": 0.328868655152329}, "test": {"rtn_rise_pct": 13.12105535371957, "sum_single_type_rise_pct": 11.977247711801176, "sum_single_block_rise_pct": 11.56865280398267, "KB3_rise_pct": 9.464516353807205, "KB3_recovered_fraction": 0.27867720250687034, "KT1_rise_pct": 8.856968553962119, "KT1_recovered_fraction": 0.32498047487839177}}}

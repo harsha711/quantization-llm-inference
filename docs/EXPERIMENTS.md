@@ -30,6 +30,21 @@ Process: prerequisite job (2 windows per split, all 39 arms, no E032 assertion) 
 
 Prerequisite 342882 on c58 passed (2:09): environment, binary, source and text hashes verified, head-hash check passed, all 39 arms scored finite, selection ran (2-window values are not results). Retrieved to `results/e042_20261117/prereq-342882/`.
 
+### Result (full job 342883, c58, 46 min, 2026-11-17)
+
+Controls reproduce E032 (O 8.6058, RTN 9.7350 test; +13.12% test, +13.92% valid). All 39 arms finite. Test perplexity rise over O (valid within 0.2 points of test in every arm; full table in `quality.json`):
+
+| Type (all 28 blocks) | q | k | v | o | gate | up | down |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| Share of block weights | 5.0% | 0.8% | 0.8% | 5.0% | 29.4% | 29.4% | 29.4% |
+| Rise | 0.28% | 0.41% | 1.57% | 1.37% | 2.06% | 2.71% | 3.59% |
+
+One block (3.6% of block weights each): 0.13–0.51% for 25 of 28 blocks; block 27 (last) 1.67%, block 1 1.01%, block 26 0.61%.
+Additivity: single-type rises sum to 11.98% (91% of 13.12%), single-block rises to 11.57% (88%).
+Confirmation (selected on validation: blocks 27, 1, 26; type down_proj): KB3 +9.46% test (recovers 28%), KT1 +8.86% (recovers 32%, 29.4% of weights FP16).
+
+Decision: the hypothesis is NOT confirmed (KB3 recovers 28%, below the predeclared half). The plain-rounding cost is spread across all blocks and types, not concentrated. Observations: the MLP down projection is the largest single type; per weight, value and key projections (0.8% each) are the most sensitive (v: 1.57%); the last block and block 1 are the outliers by block. No cause is attributed (activation outliers and grouped-query value heads are hypotheses, unmeasured). Limits as predeclared: plain rounding only, one model/corpus/metric, quality only; a kept-FP16 arm is not a proposed runtime. Retrieved to `results/e042_20261117/full-342883/`.
+
 ## E041 — Serial CPU baseline and worker scaling for the course report
 
 Predeclared 2026-11-17 at the user's request (report plan: the course deck, pp.22–24, asks for a timed serial baseline, Sp = T1/Tp and a strong/weak scaling plot against ideal; PROJECT_SYNTHESIS §5.2 records that the project had neither). A descriptive measurement: no optimization, no change to any GPU kernel, Marlin, the model path or the numerical contract.
