@@ -100,6 +100,21 @@ __global__ void __launch_bounds__(kWarps * 32)
   if (threadIdx.x == 0) counters[tile] = 0;  // ready for the next launch on this stream
 }
 
+// Covers the header's unpack used by every tc_common variant. Every finite FP16 scale x every code at every nibble position: fast unpack == contract formula.
+__global__ void unpack_selftest_kernel(unsigned long long* bad) {
+  const int sb = blockIdx.x * blockDim.x + threadIdx.x;
+  if (sb >= 65536) return;
+  const __half sh = __ushort_as_half(static_cast<unsigned short>(sb));
+  if (__hisinf(sh) || __hisnan(sh)) return;
+  const float s = __half2float(sh);
+  const __half2 s2 = __half2half2(sh);
+  for (uint32_t q = 0; q < 16; ++q) {
+    const uint32_t word = (q | ((15u - q) << 4)) * 0x01010101u;
+    for (int j = 0; j < 4; ++j)
+      if (unpack2<true>(word, j, s2, s) != unpack2<false>(word, j, s2, s)) atomicAdd(bad, 1ull);
+  }
+}
+
 // shortcut: one process-wide workspace, grown on demand (cudaMalloc synchronizes, so the first launch
 // of a larger shape must be outside timing) and shared by all launches: concurrent launches on
 // different streams would race on it; give each stream its own workspace if that is ever needed.
@@ -161,7 +176,7 @@ unsigned long long w4a16_tc_splitk_unpack_selftest() {
   unsigned long long h = 0;
   CUDA_CHECK(cudaMalloc(&d, sizeof(h)));
   CUDA_CHECK(cudaMemset(d, 0, sizeof(h)));
-  tc_common::unpack_selftest_kernel<<<256, 256>>>(d);
+  unpack_selftest_kernel<<<256, 256>>>(d);
   CUDA_CHECK(cudaGetLastError());
   CUDA_CHECK(cudaMemcpy(&h, d, sizeof(h), cudaMemcpyDeviceToHost));
   CUDA_CHECK(cudaFree(d));

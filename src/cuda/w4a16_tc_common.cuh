@@ -40,21 +40,4 @@ __device__ __forceinline__ void mma16816(float (&c)[4], uint32_t a0, uint32_t a1
       : "r"(a0), "r"(a1), "r"(a2), "r"(a3), "r"(b0), "r"(b1));
 }
 
-namespace {  // internal linkage: each including file gets its own copy
-// Every finite FP16 scale x every code at every nibble position: fast unpack == contract formula.
-__global__ void unpack_selftest_kernel(unsigned long long* bad) {
-  const int sb = blockIdx.x * blockDim.x + threadIdx.x;
-  if (sb >= 65536) return;
-  const __half sh = __ushort_as_half(static_cast<unsigned short>(sb));
-  if (__hisinf(sh) || __hisnan(sh)) return;
-  const float s = __half2float(sh);
-  const __half2 s2 = __half2half2(sh);
-  for (uint32_t q = 0; q < 16; ++q) {
-    const uint32_t word = (q | ((15u - q) << 4)) * 0x01010101u;
-    for (int j = 0; j < 4; ++j)
-      if (unpack2<true>(word, j, s2, s) != unpack2<false>(word, j, s2, s)) atomicAdd(bad, 1ull);
-  }
-}
-}  // namespace
-
 }  // namespace tc_common
