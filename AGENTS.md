@@ -216,6 +216,11 @@
 - Predeclared in EXPERIMENTS (user request 2026-11-17, "first finish what is left"). `tc`/`tc_cvt` in `src/cuda/w4a16_tc.cu`: our own mma.sync m16n8k16 kernel from the PTX ISA layouts (not Marlin source); FP64 tolerance, not bitwise (addition order changes); fast unpack must pass the exhaustive self-test. Criterion: `tc` ≥5% below `inblock_m4_vec` at M 8/32/128, both policies, both series, every node. Single repeated matrix: never compare its numbers with E009 cyclic Marlin.
 - E044 is complete (jobs 343103–343107): ACCEPTED, 60/60 primary cells on five nodes; tc 55–57% / 71–74% below inblock_m4_vec at M8, 80% / 85% at M32, 85% / 86–87% at M128 (flush / no flush); faster in every cell. Versus cuBLAS on FP16 Ŵ: faster up to M64 flushed, 1.10–1.20× slower at M128. The M128 gap is unprofiled; do not attribute it. Not in the model path; still never "competitive with Marlin".
 
+## E045 our kernel versus Marlin under cyclic weights
+
+- Predeclared in EXPERIMENTS (user request 2026-11-17). Descriptive: `tc` (E044 source unchanged), corrected Marlin A and cuBLAS Ŵ in E010's four-matrix cycle, M 4/16/64/128, both rectangles, two reversed series. Report "fraction of Marlin speed"; no acceptance gate, nothing adopted. New files only (`scripts/e045/`, `results/e045_20261117/`); E009/E010 harnesses and results stay untouched.
+- Course-requirement note: the course deck's report requirements (serial baseline, Sp/strong/weak scaling plot, roofline, profiler-found fix) are covered by E041, the roofline section and E003; the "unresolved" wording in the reporting checkpoint above is historical.
+
 ## Rooflines, if requested
 
 - Recompute all ceilings, ridge points, arithmetic intensities, and performance coordinates from specifications/data. Keep the primary full-machine roof distinct from core-count, ISA, NUMA, and memory-domain sensitivity roofs.
