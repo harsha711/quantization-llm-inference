@@ -37,6 +37,8 @@ Process: prerequisite job (build, ctest, check_inblock.sh with sanitizers, SASS 
 
 Amendment before any job ran (user: "run a bunch of jobs on all the available gpus", "parallelize the work how much ever we can"): the full job runs once on EVERY idle RTX 5060 Ti node at submission (c7, c8, c9, c10, c58 on 2026-11-17), each job independent, one process per node, held by `afterok` on the prerequisite. Timings on one GPU stay sequential (concurrent kernels would contaminate each other). Decision tightened accordingly: accept only if all 8 primary cells pass on every node whose job completes; a node that fails a check is reported, not dropped silently. Other GPU types (other partitions) are out of scope.
 
+Prerequisite 343094 on c58 passed (about 2 min): build and ctest; check_inblock.sh with all 182 bitwise comparisons at 0 differing outputs (vector kernels equal their parents, including K/N/M tails and fallbacks); memcheck/synccheck 0 errors, racecheck 0 hazards; SASS global loads per kernel 10 → 7 (inblock_vec) and 34 → 6 (inblock_m4_vec), registers 37 and 46/44. M = 4 smoke (10 iterations, not a result): m4_vec 51.2 vs 65.5 µs flush, 36.4 vs 58.9 µs no flush. Retrieved to `results/e043_20261117/prereq-343094/`. Full jobs 343095–343099 (c7, c8, c9, c10, c58) released by it.
+
 ## E042 — Where does the plain-rounding block cost sit? (per-type and per-block sensitivity)
 
 Predeclared 2026-11-17 at the user's request ("do it", after I proposed locating the +13.1% block cost; the user clarified that the "mixed precision" restriction covers building a mixed-precision runtime as an enhancement, not analysing quality). Quality only and diagnostic: nothing is timed, gated or added to the runtime; no kernel, contract or default changes.
