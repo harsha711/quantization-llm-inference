@@ -29,6 +29,52 @@ Pre-stated hypotheses (fixed now; each judged confirmed, rejected or inconclusiv
 
 Limits stated now: profiler durations are kernel-replay measurements under profiler cache control, not production latency; isolated single-matrix replay is not the cyclic four-matrix regime of E009/E010/E045 and says nothing about Marlin's gap directly; one node, one GPU type, synthetic weights; stall samples are proportions of sampled warp states, not wall time. Reported: per-case counter table, a verdict per hypothesis, and ONE ranked recommendation for E047 with the expected effect and supporting counter. Scripts `scripts/e046/`, results `results/e046_20261117/`.
 
+Attempts (all on c58, driver 615.71.09, CUDA 13.4, Nsight Compute 2026.3.1.0, RTX 5060 Ti 36 SMs; retrieved to `results/e046_20261117/<mode>-c58-<job>/`):
+- Prerequisite attempt 1, job 343121, exit 1: build, ctest, check_inblock.sh and the tc M1 capture ran, but this ncu writes `.ncu-repz` (the export step looked for `.ncu-rep`), and three metric names differ on this version (`dram__bytes_read` → `dram__bytes_op_read`, the tensor-pipe names → `sm__pipe_tensor_subpipe_hmma_cycles_active`, `sm__inst_executed_pipe_tensor_subpipe_hmma`). Fixed (`scripts/e046`), and the inner script now refuses to run with any dropped metric.
+- Prerequisite attempt 2, job 343122, exit 1: everything passed (INNER-OK, both captures and exports) and failed only at the outer hash step (`sha256sum` on the `ncu/` directory). Hash step made recursive.
+- Prerequisite 343124 passed (exit 0): ctest 2/2, unpack self-test 0 mismatches, check_inblock.sh (bitwise and FP64 checks pass; memcheck/synccheck 0 errors, racecheck 0 hazards), metric query recorded (`ncu-sets.txt`, `ncu-sections.txt`, `ncu-query-metrics.txt`), no metric dropped, tc and cublas_dq M1 captures and all three exports present and inspected. Full job 343125 ran behind it (`afterok`), exit 0, `all.sha256` verified after retrieval.
+
+### Result (job 343125, c58, 2026-11-17)
+
+Every case's checked rows pass FP64 (the profiled process runs the bench's normal check launch; `inblock_m4_vec` also 0 bitwise differences from `inblock_m4`). Two launches per case were profiled; the timed (second) launch is reported, the first agrees within 1.5% in duration. `python3 scripts/e046/analyze.py results/e046_20261117/full-c58-343125` → `results/e046_20261117/analysis.txt`, `summary.json`. All reports are below 4 MB (in git).
+
+Durations below are Nsight Compute kernel-replay values with the profiler's cache flush (cold L2) and unlocked clocks: not production latency, and isolated single-matrix replay, not the four-matrix cyclic regime of E045/E010. DRAM % is ncu's `dram__throughput` against its own peak (the measured 331 GB/s at 75.0% implies ≈441 GB/s); stall shares are proportions of sampled warp states (SourceCounters), not wall time.
+
+| Case | Replay µs | DRAM rd MB | DRAM % | L2 MB (L2/DRAM) | L2 hit % | Occ. ach/theo % | Regs | Waves | Issue % | HMMA pipe % | Top stalls |
+|---|---:|---:|---:|---:|---:|---|---:|---:|---:|---:|---|
+| tc M1 4096² | 26.2 | 8.67 | 75.0 | 9.5 (1.10) | 8.5 | 42.0/50 | 68 | 1.19 | 36.7 | 55.8 | long_sb 63%, math 10% |
+| tc M16 4096² | 27.0 | 8.80 | 74.0 | 25.5 (2.90) | 65.6 | 41.5/50 | 73 | 1.19 | 33.0 | 53.1 | long_sb 34%, lg_throttle 28% |
+| tc M128 4096² | 132.1 | 9.71 | 16.7 | 206.9 (21.3) | 95.1 | 48.5/50 | 73 | 9.48 | 48.2 | 82.8 | math 33%, long_sb 22%, lg 13% |
+| tc M4 K4096×N11008 | 62.8 | 23.30 | 84.1 | 34.2 (1.47) | 31.9 | 47.0/50 | 68 | 3.19 | 38.0 | 57.3 | long_sb 48%, lg 16% |
+| tc M4 K11008×N4096 | 68.8 | 23.35 | 77.1 | 33.6 (1.44) | 30.2 | 43.9/50 | 68 | 1.19 | 36.6 | 55.9 | long_sb 54%, lg 14% |
+| tc M128 K4096×N11008 | 350.0 | 24.32 | 15.9 | 557.9 (22.9) | 95.5 | 49.0/50 | 73 | 25.5 | 47.1 | 80.5 | math 29%, long_sb 23%, lg 16% |
+| tc M128 K11008×N4096 | 345.9 | 26.11 | 17.3 | 556.9 (21.3) | 95.3 | 48.7/50 | 73 | 9.48 | 46.5 | 82.3 | math 30%, long_sb 24%, lg 18% |
+| inblock_m4_vec M1 | 43.7 | 8.67 | 44.9 | 9.0 (1.04) | 4.0 | 56.3/83.3 | 44 | 0.71 | 75.3 | 0 | long_sb 47%, not_selected 15% |
+| inblock_m4_vec M128 | 889.3 | 9.71 | 2.5 | 362.1 (37.3) | 97.2 | 81.7/83.3 | 46 | 22.8 | 88.4 | 0 | not_selected 46%, math 24% |
+| cublas_dq M1 (gemv) | 84.5 | 33.60 | 94.0 | 34.0 (1.01) | 1.2 | 16.5/16.7 | 166 | 0.89 | 12.8 | 0 | long_sb 32%, misc 32% |
+| cublas_dq M128 | 112.7 | 34.64 | 72.8 | 136.1 (3.93) | 73.7 | 15.1/16.7 | 96 | 1.78 | 15.5 | 96.9 | math 61%, wait 15% |
+
+Instruction mix and loads (warp-level executed instructions, SourceCounters per SASS site):
+- `tc` M1 and M16 execute the same instructions (131,072 HMMA, 131,072 LDG, 807–816 k LOP3, 262,144 each HADD2/HMUL2); M1 pays for 16 MMA rows. M128: 1,048,576 HMMA (exactly cuBLAS's count), 1,048,576 LDG, 6.53 M LOP3, 2.10 M each HADD2/HMUL2, 1.53 M IMAD: about 11.6 non-MMA instructions per HMMA.
+- qweight loads (`LDG.E.CONSTANT`, 16 sites): 4 L1 requests and 4 L2 sectors per warp instruction, L2 theoretical sectors = ideal (0 excess) in every case: every fetched 32-byte sector is fully used. Activation loads (`LDG.E.128.CONSTANT`): 2× the ideal sectors (each instruction uses half of each sector; the next instruction uses the other half), which is what lowers the aggregate bytes-per-sector to 60% (M ≥ 16) and 86% (M1).
+- M128 L2 reads: 6.42 M sectors (205 MB) = qweight 2.10 M (67 MB, 8 × the 8.4 MB of codes: one read per 16-row tile, as predicted) + scales 0.26 M + about 4.06 M by difference for activations (≈ the 4.19 M ideal: the 128 KB × 8 tiles of A are re-read by every one of the 128 32-column blocks). L2 throughput 67.8% of peak (not saturated).
+- Tensor-pipe busy time (pipe % × duration): tc M128 0.828 × 132.1 = 109 µs; cuBLAS 0.969 × 112.7 = 109 µs. Both issue the same 1,048,576 HMMA.16816.F32.
+- Small-M grids: 128 blocks over 36 SMs × 3 resident blocks (register-limited: 68–73 regs × 256 threads) = 1.19 waves; SM active cycles average 82% of elapsed (min SM 69%) at M1. With the same weight bytes, the K4096×N11008 rectangle (344 blocks, 3.19 waves) reaches 84.1% DRAM and 62.8 µs, the K11008×N4096 one (128 blocks, 1.19 waves) 77.1% and 68.8 µs.
+
+Verdicts:
+- (a) M1 load-latency/coalescing: REJECTED as stated. Long-scoreboard is the dominant stall (63%), as predicted, but DRAM throughput is 75% of peak (not < 60%), and the qweight loads are not uncoalesced in the sense that costs bandwidth: 0 excess sectors, every sector fully used (the 4 sectors per request are 4 fully used 32-byte rows). The M1 kernel is near the DRAM roof with a remaining gap of about 20% to the 94% cuBLAS's gemv reaches on this GPU.
+- (b) M128 repeated weight loading/unpacking: REJECTED. Weight traffic is indeed 8× (67 MB of L2 code reads), but the tensor pipe is 82.8% busy (not < 30%), the top stall is math-pipe throttle (33%), and activation re-reads (about 130 MB) exceed the weight re-reads in L2. M128 is mainly tensor-pipe bound: its HMMA busy time equals cuBLAS's (109 µs).
+- 32-row M tile for M128 (reviewer): WEAKLY supported. It would halve the qweight L2 reads and the per-HMMA unpack instructions, but cannot cut the 1,048,576 HMMAs; the counters bound its gain at about 17% (132 → 109 µs of tensor-pipe busy time), likely less.
+- Offline repack + cp.async for M1: NOT supported as a first step. There is no coalescing waste for a repack to remove; deeper prefetch could raise bytes in flight, but the counters point first to grid under-fill.
+Observation, not predeclared: at M ≤ 16 the 128-block grid (1.19 waves, SMs idle 18% on average) is the clearest inefficiency.
+
+Recommended next rung (E047), ranked:
+1. Fill the GPU at small M: split K across blocks (or a stream-K style schedule) so the M ≤ 16 grid covers all 36 SMs × resident blocks evenly, with a fixed-order FP32 reduction of the K-split partials (tolerance unchanged; FP32 addition order changes as in E044). Expected: M1/M4/M16 at K = N = 4096 from 75% toward the 84% DRAM the 3.19-wave rectangle reaches, i.e. about 10% lower latency (26.2 → about 23.4 µs replay); supporting counters: `launch__waves_per_multiprocessor` 1.19, `sm__cycles_active.avg` 82% of elapsed (min 69%), and the 77.1% vs 84.1% DRAM of the two equal-byte M4 rectangles. 5% criterion against `tc`, measured in E045's cyclic harness.
+2. 32-row M tile for M ≥ 32: expected ≤ 17% at M128 (tensor-pipe busy time bound).
+3. cp.async prefetch / repack at M1: not supported until (1) is measured.
+
+Limits: one node, one GPU type, synthetic weights, single-matrix replay with profiler cache control, kernel-level only; the wave/imbalance link to latency is an inference from counters and a two-shape comparison (the rectangles also differ in K per block), to be tested by E047, not a measured cause. No source was changed. Unprofiled: warm-L2 (no-flush) replay, M 32/64.
+
 ## E045 — How close is our Tensor Core kernel to Marlin under cyclic weights?
 
 Predeclared 2026-11-17 at the user's request (after E044; "get both codex and claude subagents to finish the remaining work"). Descriptive comparison: no kernel, Marlin, dispatch or contract change. E044's `tc` is timed only on one repeated matrix, so its numbers cannot be set against E009/E010 Marlin; this places it in E010's four-matrix cycle.

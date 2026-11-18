@@ -1,0 +1,2 @@
+gpu,sm,sms,driver,runtime,kernel,M,N,K,group,seed,flush_l2,warmup,iters,check_rows,l2_mib,flush_mib,logical_bytes,median_us,min_us,max_us,p90_us,tflops,eff_gbps,pass,max_abs_err,rel_l2_err,rel_l2_vs_fp16,w_hat_mismatches,w_rel_l2,w_rel_l2_uniform_pred
+"NVIDIA GeForce RTX 5060 Ti",120,36,13040,13040,tc,128,11008,4096,128,2,0,0,1,64,32.0000,0.0000,27115520,948641.541,948641.541,948641.541,948641.541,0.0122,0.03,1,1.9436e-03,2.0705e-04,1.1711e-01,0,1.172536e-01,1.177006e-01

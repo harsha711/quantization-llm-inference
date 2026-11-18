@@ -1,0 +1,5 @@
+dram__bytes_read.sum
+dram__bytes_write.sum
+sm__pipe_tensor_op_hmma_cycles_active.avg.pct_of_peak_sustained_active
+sm__inst_executed_pipe_tensor_op_hmma.sum
+sm__inst_executed_pipe_fp16.avg.pct_of_peak_sustained_active

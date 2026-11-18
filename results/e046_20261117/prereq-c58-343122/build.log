@@ -1,0 +1,48 @@
+Building CUDA targets for sm_120
+-- The CXX compiler identification is GNU 12.4.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /opt/ohpc/pub/compiler/gcc/12.4.0/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Found OpenMP_CXX: -fopenmp (found version "4.5") 
+-- Found OpenMP: TRUE (found version "4.5")  
+-- Looking for a CUDA compiler
+-- Looking for a CUDA compiler - /usr/local/cuda/bin/nvcc
+-- The CUDA compiler identification is NVIDIA 13.4.92
+-- Detecting CUDA compiler ABI info
+-- Detecting CUDA compiler ABI info - done
+-- Check for working CUDA compiler: /usr/local/cuda/bin/nvcc - skipped
+-- Detecting CUDA compile features
+-- Detecting CUDA compile features - done
+-- Found CUDAToolkit: /usr/local/cuda/include (found version "13.4.92") 
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Failed
+-- Looking for pthread_create in pthreads
+-- Looking for pthread_create in pthreads - not found
+-- Looking for pthread_create in pthread
+-- Looking for pthread_create in pthread - found
+-- Found Threads: TRUE  
+-- Configuring done (3.1s)
+-- Generating done (0.0s)
+-- Build files have been written to: /tmp/e046-src-343122/build
+[ 10%] Building CXX object CMakeFiles/w4a16_host.dir/src/reference.cpp.o
+[ 21%] Building CXX object CMakeFiles/w4a16_host.dir/src/cpu_gemm.cpp.o
+
+[ 26%] Linking CXX static library libw4a16_host.a
+[ 26%] Built target w4a16_host
+[ 36%] Building CXX object CMakeFiles/test_cpu.dir/tests/test_cpu.cpp.o
+[ 47%] Building CUDA object CMakeFiles/w4a16_bench.dir/src/cuda/w4a16_inblock.cu.o
+[ 63%] Building CUDA object CMakeFiles/w4a16_bench.dir/src/cuda/w4a16_naive.cu.o
+cialized.cu.o
+[ 57%] Building CUDA object CMakeFiles/w4a16_bench.dir/src/cuda/w4a16_tc.cu.o
+[ 73%] Building CUDA object CMakeFiles/w4a16_bench.dir/src/cuda/cublas_gemm.cu.o
+.cu.o
+[ 78%] Building CUDA object CMakeFiles/w4a16_bench.dir/src/cuda/w4a16_inblock_rows.cu.o
+[ 84%] Building CUDA object CMakeFiles/w4a16_bench.dir/src/cuda/dequant.cu.o
+[ 42%] Building CXX object CMakeFiles/cpu_bench.dir/tools/cpu_bench.cpp.o
+[ 89%] Built target test_cpu
+[ 94%] Linking CXX executable cpu_bench
+[ 94%] Built target cpu_bench
+[100%] Linking CXX executable w4a16_bench
+[100%] Built target w4a16_bench
