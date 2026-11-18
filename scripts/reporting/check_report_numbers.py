@@ -260,6 +260,41 @@ el = col('sm__cycles_elapsed.avg')
 need += [f"active on average {r0(100 * col('sm__cycles_active.avg') / el)}\\% of the elapsed cycles (the least busy {r0(100 * col('sm__cycles_active.min') / el)}\\%)"]
 assert raw[-1][raw[0].index('launch__waves_per_multiprocessor')] == f"{t1['grid'] / SLOTS:.2f}"
 
+# ---- E049 (summary.json) ----
+s49 = J('e049_20261117/summary.json')
+p49, v49, t49 = s49['profiles'], list(s49['verdicts'].values()), s49['timing']
+for shp in ('K4096_N11008', 'K11008_N4096'):
+    for M in (4, 64):
+        for impl, lab in (('tc', 'ours (tc)'), ('marlin', 'Marlin')):
+            d = p49[f'{impl}_M{M}_{shp}']
+            need += [f"{lab}, {M} & {d['dur_us']:.1f} & {d['dram_rd_over_unique']:.2f} & {d['dram_pct']:.1f} & {d['hmma_pct']:.1f} & "
+                     f"{d['inst'] / 1e6:.2f} & {r0(d['stall_share']['long_scoreboard'])} \\\\"]
+P49 = lambda impl, M: [d for k, d in p49.items() if k.startswith(f'{impl}_M{M}_')]
+t64, m64 = P49('tc', 64), P49('marlin', 64)
+assert [v[x]['verdict'] for v in v49 for x in 'abc'] == ['REJECTED', 'PARTIAL', 'CONFIRMED'] * 2
+assert {d['hmma'] for d in t64 + m64} == {1409024} and all(d['occ'] > 0.4 * 100 for d in t64)
+ir = [v['c']['inst_ratio'] for v in v49]
+assert {f"{x:.1f}" for x in ir} == {'5.2'}
+oth = lambda ds: [(d['inst'] - d['hmma']) / d['hmma'] for d in ds]
+need += [f"we read {f2(*rng([d['dram_rd_over_unique'] for d in t64]))}\\,$U$ from DRAM (Marlin {f2(*rng([d['dram_rd_over_unique'] for d in m64]))}\\,$U$)",
+         f"hit L2 ({f2(*rng([d['l2_tex_hit_pct'] for d in t64]), d=1)}\\% of SM reads), and the extra DRAM bytes explain {f2(*rng([100 * v['a']['share'] for v in v49]), d=1)}\\% of the profiled gap",
+         f"our long-scoreboard share of {pc([d['stall_share']['long_scoreboard'] for d in t64])} is more than ten times Marlin's {pc([d['stall_share']['long_scoreboard'] for d in m64])}",
+         f"same 1,409,024 MMA instructions, but we issue 5.2$\\times$ Marlin's warp instructions ({f2(*rng(oth(t64)), d=1)} against {f2(*rng(oth(m64)), d=1)} other instructions per MMA) at {pc([d['issue_pct'] for d in t64])} issue active",
+         f"we keep {pc([d['occ'] for d in t64])} of warp slots resident against Marlin's {pc([d['occ'] for d in m64])}",
+         f"Marlin is tensor-pipe bound ({pc([d['hmma_pct'] for d in m64])} busy, math-pipe throttle {pc([d['stall_share']['math_pipe_throttle'] for d in m64])} of stalls); ours is {pc([d['hmma_pct'] for d in t64])} busy",
+         f"DRAM-bound (ours at {pcu([d['dram_pct'] for d in P49('tc', 4)])}, Marlin at {pcu([d['dram_pct'] for d in P49('marlin', 4)])} of peak), and on $11008\\times4096$ our {p49['tc_M4_K11008_N4096']['grid']:.0f} blocks fill only {p49['tc_M4_K11008_N4096']['waves']:.2f} waves",
+         "5.2$\\times$ Marlin's instructions"]
+assert all(v['b']['tc_long_sb_share'] < 30 and v['b']['tc_long_sb_share'] > 10 * v['b']['marlin_long_sb_share'] for v in v49)
+assert all(d['dram_rd_over_unique'] < 1.2 for d in t64) and all(d['dram_rd_over_unique'] > 0.99 for d in P49('tc', 4) + P49('marlin', 4))
+T49 = lambda M, k: [r[s][k] for r in t49 if r['M'] in M for s in ('s1', 's2')]
+need += [f"reaches {f2(*rng(T49((64,), 'tc_m32_fraction_of_marlin_speed')))} of Marlin's speed at $M=64$ and {f2(*rng(T49((128,), 'tc_m32_fraction_of_marlin_speed')))} at $M=128$ "
+         f"(ours: {f2(*rng(T49((64, 128), 'tc_fraction_of_marlin_speed')))}), {f2(*rng([100 * (1 - x) for x in T49((64, 128), 'tc_m32_over_tc')]), d=1)}\\% faster than our kernel there"]
+assert all(f < 1 for M in (4, 16, 64, 128) for k in ('tc', 'tc_m32') for f in T49((M,), f'{k}_fraction_of_marlin_speed'))
+drift = max(abs(x[s][k] / y[s][k2] - 1) for x, y in zip(t49, t45) for s in ('s1', 's2')
+            for k, k2 in (('tc_us', 'tc_us'), ('marlin_us', 'marlin_us'), ('cublas_dq_us', 'cublas_us')) if (x['K'], x['N'], x['M']) == (y['K'], y['N'], y['M']))
+assert drift < 0.01  # "reproduce E045's medians within 1%"
+need += ["reproduce E045's medians within 1\\%"]
+
 # ---- Roofline (numbers.json, from E045) ----
 ro = n['roofline']
 assert ro['source'] == 'E045'
