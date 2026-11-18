@@ -1,0 +1,16 @@
+ptxas info    : 0 bytes gmem
+ptxas info    : Compiling entry function '_ZN51_GLOBAL__N__15d92776_18_w4a16_tc_splitk_cu_6bf79c6222w4a16_tc_splitk_kernelILb1EEEvPK6__halfPKjS3_PS1_iiiiPfPj' for 'sm_120'
+ptxas info    : Function properties for _ZN51_GLOBAL__N__15d92776_18_w4a16_tc_splitk_cu_6bf79c6222w4a16_tc_splitk_kernelILb1EEEvPK6__halfPKjS3_PS1_iiiiPfPj
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 74 registers, used 1 barriers, 16385 bytes smem
+ptxas info    : Compile time = 23.538 ms
+ptxas info    : Compiling entry function '_ZN51_GLOBAL__N__15d92776_18_w4a16_tc_splitk_cu_6bf79c6222w4a16_tc_splitk_kernelILb0EEEvPK6__halfPKjS3_PS1_iiiiPfPj' for 'sm_120'
+ptxas info    : Function properties for _ZN51_GLOBAL__N__15d92776_18_w4a16_tc_splitk_cu_6bf79c6222w4a16_tc_splitk_kernelILb0EEEvPK6__halfPKjS3_PS1_iiiiPfPj
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 76 registers, used 1 barriers, 16385 bytes smem
+ptxas info    : Compile time = 21.165 ms
+ptxas info    : Compiling entry function '_ZN51_GLOBAL__N__15d92776_18_w4a16_tc_splitk_cu_6bf79c6222unpack_selftest_kernelEPy' for 'sm_120'
+ptxas info    : Function properties for _ZN51_GLOBAL__N__15d92776_18_w4a16_tc_splitk_cu_6bf79c6222unpack_selftest_kernelEPy
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 22 registers, used 0 barriers
+ptxas info    : Compile time = 7.398 ms

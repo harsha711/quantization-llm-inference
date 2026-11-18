@@ -1,0 +1,252 @@
+device: NVIDIA GeForce RTX 5060 Ti (sm_120, 36 SMs, L2 32.00 MiB from cudaDeviceProp, 15.57 GiB)
+software: driver API 13040, runtime 13040
+shape: M=1 N=4096 K=4096 group=128 seed=1 flush_l2=1 warmup=10 iters=100 check_rows=4096
+footprint: FP16 weights 32.0000 MiB, packed INT4 8.0000 MiB, FP16 scales 0.2500 MiB
+launch: naive grid=((N+255)/256, M)=(16, 1) block=256; dequant grid=(16, 512) block=256
+launch: inblock/inblock_specialized grid=(128, 1) block=(32, 8), shared partials=1024 bytes
+launch: inblock_m2 grid=(128, 1), inblock_m4 grid=(128, 1), block=(32, 8), shared partials=2048/4096 bytes
+weight quant: rel_l2(W_hat, W)=1.1722e-01  uniform-step prediction sqrt(mean(s^2/12)/mean(w^2))=1.1767e-01
+  (prediction assumes independent Uniform[-s/2,s/2] error per weight using that group's s)
+cache: intended cold-L2, flush buffer 64.00 MiB (2x L2), store kernel (not memset)
+W_hat GPU vs CPU: 0 / 16777216 FP16 bits differ (bit-exact)
+kernel                median_us     min_us     p90_us  TFLOP/s  eff_GB/s  pass    max_abs     rel_l2  rel_l2_fp16
+tc                        33.12      30.72      33.18    1.013     261.7   yes  9.720e-04  2.074e-04    1.202e-01
+tc_splitk path split=4 (0 vec fallback, 1 tc); repeat launch: 0 / 4096 FP16 outputs differ
+tc_splitk                 45.06      43.01      47.10    0.745     192.4   yes  9.720e-04  2.074e-04    1.202e-01
+cublas_dq                 94.24      88.06      96.26    0.356     356.2   yes  9.720e-04  2.075e-04    1.202e-01
+checked 1 of 1 rows against the FP64 CPU reference (reconstructed W_hat for naive/inblock/inblock_specialized/inblock_m2/inblock_m4/cublas_dq/unfused; original W for cublas)
+checked row indices: 0
+device: NVIDIA GeForce RTX 5060 Ti (sm_120, 36 SMs, L2 32.00 MiB from cudaDeviceProp, 15.57 GiB)
+software: driver API 13040, runtime 13040
+shape: M=1 N=4096 K=4096 group=128 seed=1 flush_l2=0 warmup=10 iters=100 check_rows=4096
+footprint: FP16 weights 32.0000 MiB, packed INT4 8.0000 MiB, FP16 scales 0.2500 MiB
+launch: naive grid=((N+255)/256, M)=(16, 1) block=256; dequant grid=(16, 512) block=256
+launch: inblock/inblock_specialized grid=(128, 1) block=(32, 8), shared partials=1024 bytes
+launch: inblock_m2 grid=(128, 1), inblock_m4 grid=(128, 1), block=(32, 8), shared partials=2048/4096 bytes
+weight quant: rel_l2(W_hat, W)=1.1722e-01  uniform-step prediction sqrt(mean(s^2/12)/mean(w^2))=1.1767e-01
+  (prediction assumes independent Uniform[-s/2,s/2] error per weight using that group's s)
+cache: warm/reused inputs, no flush between launches
+W_hat GPU vs CPU: 0 / 16777216 FP16 bits differ (bit-exact)
+kernel                median_us     min_us     p90_us  TFLOP/s  eff_GB/s  pass    max_abs     rel_l2  rel_l2_fp16
+tc                        19.70      17.70      19.71    1.704     440.0   yes  9.720e-04  2.074e-04    1.202e-01
+tc_splitk path split=4 (0 vec fallback, 1 tc); repeat launch: 0 / 4096 FP16 outputs differ
+tc_splitk                 21.95      20.03      22.11    1.529     394.8   yes  9.720e-04  2.074e-04    1.202e-01
+cublas_dq                 77.38      76.83      79.17    0.434     433.9   yes  9.720e-04  2.075e-04    1.202e-01
+checked 1 of 1 rows against the FP64 CPU reference (reconstructed W_hat for naive/inblock/inblock_specialized/inblock_m2/inblock_m4/cublas_dq/unfused; original W for cublas)
+checked row indices: 0
+device: NVIDIA GeForce RTX 5060 Ti (sm_120, 36 SMs, L2 32.00 MiB from cudaDeviceProp, 15.57 GiB)
+software: driver API 13040, runtime 13040
+shape: M=4 N=4096 K=4096 group=128 seed=1 flush_l2=1 warmup=10 iters=100 check_rows=4096
+footprint: FP16 weights 32.0000 MiB, packed INT4 8.0000 MiB, FP16 scales 0.2500 MiB
+launch: naive grid=((N+255)/256, M)=(16, 4) block=256; dequant grid=(16, 512) block=256
+launch: inblock/inblock_specialized grid=(128, 4) block=(32, 8), shared partials=1024 bytes
+launch: inblock_m2 grid=(128, 2), inblock_m4 grid=(128, 1), block=(32, 8), shared partials=2048/4096 bytes
+weight quant: rel_l2(W_hat, W)=1.1722e-01  uniform-step prediction sqrt(mean(s^2/12)/mean(w^2))=1.1767e-01
+  (prediction assumes independent Uniform[-s/2,s/2] error per weight using that group's s)
+cache: intended cold-L2, flush buffer 64.00 MiB (2x L2), store kernel (not memset)
+W_hat GPU vs CPU: 0 / 16777216 FP16 bits differ (bit-exact)
+kernel                median_us     min_us     p90_us  TFLOP/s  eff_GB/s  pass    max_abs     rel_l2  rel_l2_fp16
+tc                        33.12      32.61      35.17    4.052     263.2   yes  9.986e-04  2.033e-04    1.163e-01
+tc_splitk path split=4 (0 vec fallback, 1 tc); repeat launch: 0 / 16384 FP16 outputs differ
+tc_splitk                 45.17      43.01      47.14    2.972     193.0   yes  9.986e-04  2.033e-04    1.163e-01
+cublas_dq                 86.02      85.70      88.06    1.560     390.9   yes  9.986e-04  2.034e-04    1.163e-01
+checked 4 of 4 rows against the FP64 CPU reference (reconstructed W_hat for naive/inblock/inblock_specialized/inblock_m2/inblock_m4/cublas_dq/unfused; original W for cublas)
+checked row indices: 0 1 2 3
+device: NVIDIA GeForce RTX 5060 Ti (sm_120, 36 SMs, L2 32.00 MiB from cudaDeviceProp, 15.57 GiB)
+software: driver API 13040, runtime 13040
+shape: M=4 N=4096 K=4096 group=128 seed=1 flush_l2=0 warmup=10 iters=100 check_rows=4096
+footprint: FP16 weights 32.0000 MiB, packed INT4 8.0000 MiB, FP16 scales 0.2500 MiB
+launch: naive grid=((N+255)/256, M)=(16, 4) block=256; dequant grid=(16, 512) block=256
+launch: inblock/inblock_specialized grid=(128, 4) block=(32, 8), shared partials=1024 bytes
+launch: inblock_m2 grid=(128, 2), inblock_m4 grid=(128, 1), block=(32, 8), shared partials=2048/4096 bytes
+weight quant: rel_l2(W_hat, W)=1.1722e-01  uniform-step prediction sqrt(mean(s^2/12)/mean(w^2))=1.1767e-01
+  (prediction assumes independent Uniform[-s/2,s/2] error per weight using that group's s)
+cache: warm/reused inputs, no flush between launches
+W_hat GPU vs CPU: 0 / 16777216 FP16 bits differ (bit-exact)
+kernel                median_us     min_us     p90_us  TFLOP/s  eff_GB/s  pass    max_abs     rel_l2  rel_l2_fp16
+tc                        19.71      17.76      19.71    6.809     442.2   yes  9.986e-04  2.033e-04    1.163e-01
+tc_splitk path split=4 (0 vec fallback, 1 tc); repeat launch: 0 / 16384 FP16 outputs differ
+tc_splitk                 21.98      21.15      22.11    6.105     396.5   yes  9.986e-04  2.033e-04    1.163e-01
+cublas_dq                 52.83      52.45      54.50    2.540     636.4   yes  9.986e-04  2.034e-04    1.163e-01
+checked 4 of 4 rows against the FP64 CPU reference (reconstructed W_hat for naive/inblock/inblock_specialized/inblock_m2/inblock_m4/cublas_dq/unfused; original W for cublas)
+checked row indices: 0 1 2 3
+device: NVIDIA GeForce RTX 5060 Ti (sm_120, 36 SMs, L2 32.00 MiB from cudaDeviceProp, 15.57 GiB)
+software: driver API 13040, runtime 13040
+shape: M=8 N=4096 K=4096 group=128 seed=1 flush_l2=1 warmup=10 iters=100 check_rows=4096
+footprint: FP16 weights 32.0000 MiB, packed INT4 8.0000 MiB, FP16 scales 0.2500 MiB
+launch: naive grid=((N+255)/256, M)=(16, 8) block=256; dequant grid=(16, 512) block=256
+launch: inblock/inblock_specialized grid=(128, 8) block=(32, 8), shared partials=1024 bytes
+launch: inblock_m2 grid=(128, 4), inblock_m4 grid=(128, 2), block=(32, 8), shared partials=2048/4096 bytes
+weight quant: rel_l2(W_hat, W)=1.1722e-01  uniform-step prediction sqrt(mean(s^2/12)/mean(w^2))=1.1767e-01
+  (prediction assumes independent Uniform[-s/2,s/2] error per weight using that group's s)
+cache: intended cold-L2, flush buffer 64.00 MiB (2x L2), store kernel (not memset)
+W_hat GPU vs CPU: 0 / 16777216 FP16 bits differ (bit-exact)
+kernel                median_us     min_us     p90_us  TFLOP/s  eff_GB/s  pass    max_abs     rel_l2  rel_l2_fp16
+tc                        35.17      32.77      36.86    7.633     249.7   yes  9.986e-04  2.068e-04    1.162e-01
+tc_splitk path split=4 (0 vec fallback, 1 tc); repeat launch: 0 / 32768 FP16 outputs differ
+tc_splitk                 47.14      46.66      49.15    5.695     186.3   yes  9.986e-04  2.068e-04    1.162e-01
+cublas_dq                 86.02      85.54      88.06    3.121     391.6   yes  9.986e-04  2.069e-04    1.162e-01
+checked 8 of 8 rows against the FP64 CPU reference (reconstructed W_hat for naive/inblock/inblock_specialized/inblock_m2/inblock_m4/cublas_dq/unfused; original W for cublas)
+checked row indices: 0 1 2 3 4 5 6 7
+device: NVIDIA GeForce RTX 5060 Ti (sm_120, 36 SMs, L2 32.00 MiB from cudaDeviceProp, 15.57 GiB)
+software: driver API 13040, runtime 13040
+shape: M=8 N=4096 K=4096 group=128 seed=1 flush_l2=0 warmup=10 iters=100 check_rows=4096
+footprint: FP16 weights 32.0000 MiB, packed INT4 8.0000 MiB, FP16 scales 0.2500 MiB
+launch: naive grid=((N+255)/256, M)=(16, 8) block=256; dequant grid=(16, 512) block=256
+launch: inblock/inblock_specialized grid=(128, 8) block=(32, 8), shared partials=1024 bytes
+launch: inblock_m2 grid=(128, 4), inblock_m4 grid=(128, 2), block=(32, 8), shared partials=2048/4096 bytes
+weight quant: rel_l2(W_hat, W)=1.1722e-01  uniform-step prediction sqrt(mean(s^2/12)/mean(w^2))=1.1767e-01
+  (prediction assumes independent Uniform[-s/2,s/2] error per weight using that group's s)
+cache: warm/reused inputs, no flush between launches
+W_hat GPU vs CPU: 0 / 16777216 FP16 bits differ (bit-exact)
+kernel                median_us     min_us     p90_us  TFLOP/s  eff_GB/s  pass    max_abs     rel_l2  rel_l2_fp16
+tc                        19.71      17.79      19.71   13.618     445.5   yes  9.986e-04  2.068e-04    1.162e-01
+tc_splitk path split=4 (0 vec fallback, 1 tc); repeat launch: 0 / 32768 FP16 outputs differ
+tc_splitk                 21.98      21.06      22.11   12.210     399.5   yes  9.986e-04  2.068e-04    1.162e-01
+cublas_dq                 52.94      52.45      54.78    5.070     636.2   yes  9.986e-04  2.069e-04    1.162e-01
+checked 8 of 8 rows against the FP64 CPU reference (reconstructed W_hat for naive/inblock/inblock_specialized/inblock_m2/inblock_m4/cublas_dq/unfused; original W for cublas)
+checked row indices: 0 1 2 3 4 5 6 7
+device: NVIDIA GeForce RTX 5060 Ti (sm_120, 36 SMs, L2 32.00 MiB from cudaDeviceProp, 15.57 GiB)
+software: driver API 13040, runtime 13040
+shape: M=16 N=4096 K=4096 group=128 seed=1 flush_l2=1 warmup=10 iters=100 check_rows=4096
+footprint: FP16 weights 32.0000 MiB, packed INT4 8.0000 MiB, FP16 scales 0.2500 MiB
+launch: naive grid=((N+255)/256, M)=(16, 16) block=256; dequant grid=(16, 512) block=256
+launch: inblock/inblock_specialized grid=(128, 16) block=(32, 8), shared partials=1024 bytes
+launch: inblock_m2 grid=(128, 8), inblock_m4 grid=(128, 4), block=(32, 8), shared partials=2048/4096 bytes
+weight quant: rel_l2(W_hat, W)=1.1722e-01  uniform-step prediction sqrt(mean(s^2/12)/mean(w^2))=1.1767e-01
+  (prediction assumes independent Uniform[-s/2,s/2] error per weight using that group's s)
+cache: intended cold-L2, flush buffer 64.00 MiB (2x L2), store kernel (not memset)
+W_hat GPU vs CPU: 0 / 16777216 FP16 bits differ (bit-exact)
+kernel                median_us     min_us     p90_us  TFLOP/s  eff_GB/s  pass    max_abs     rel_l2  rel_l2_fp16
+tc                        38.48      36.42      38.88   13.952     231.6   yes  1.868e-03  2.079e-04    1.165e-01
+tc_splitk path split=4 (0 vec fallback, 1 tc); repeat launch: 0 / 65536 FP16 outputs differ
+tc_splitk                 49.15      47.07      51.20   10.923     181.3   yes  1.868e-03  2.079e-04    1.165e-01
+cublas_dq                 88.06      85.89      88.10    6.096     384.0   yes  1.868e-03  2.080e-04    1.165e-01
+checked 16 of 16 rows against the FP64 CPU reference (reconstructed W_hat for naive/inblock/inblock_specialized/inblock_m2/inblock_m4/cublas_dq/unfused; original W for cublas)
+checked row indices: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+device: NVIDIA GeForce RTX 5060 Ti (sm_120, 36 SMs, L2 32.00 MiB from cudaDeviceProp, 15.57 GiB)
+software: driver API 13040, runtime 13040
+shape: M=16 N=4096 K=4096 group=128 seed=1 flush_l2=0 warmup=10 iters=100 check_rows=4096
+footprint: FP16 weights 32.0000 MiB, packed INT4 8.0000 MiB, FP16 scales 0.2500 MiB
+launch: naive grid=((N+255)/256, M)=(16, 16) block=256; dequant grid=(16, 512) block=256
+launch: inblock/inblock_specialized grid=(128, 16) block=(32, 8), shared partials=1024 bytes
+launch: inblock_m2 grid=(128, 8), inblock_m4 grid=(128, 4), block=(32, 8), shared partials=2048/4096 bytes
+weight quant: rel_l2(W_hat, W)=1.1722e-01  uniform-step prediction sqrt(mean(s^2/12)/mean(w^2))=1.1767e-01
+  (prediction assumes independent Uniform[-s/2,s/2] error per weight using that group's s)
+cache: warm/reused inputs, no flush between launches
+W_hat GPU vs CPU: 0 / 16777216 FP16 bits differ (bit-exact)
+kernel                median_us     min_us     p90_us  TFLOP/s  eff_GB/s  pass    max_abs     rel_l2  rel_l2_fp16
+tc                        20.03      19.23      20.10   26.801     444.9   yes  1.868e-03  2.079e-04    1.165e-01
+tc_splitk path split=4 (0 vec fallback, 1 tc); repeat launch: 0 / 65536 FP16 outputs differ
+tc_splitk                 22.08      21.60      23.78   24.315     403.7   yes  1.868e-03  2.079e-04    1.165e-01
+cublas_dq                 54.50      52.74      54.88    9.852     620.5   yes  1.868e-03  2.080e-04    1.165e-01
+checked 16 of 16 rows against the FP64 CPU reference (reconstructed W_hat for naive/inblock/inblock_specialized/inblock_m2/inblock_m4/cublas_dq/unfused; original W for cublas)
+checked row indices: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+device: NVIDIA GeForce RTX 5060 Ti (sm_120, 36 SMs, L2 32.00 MiB from cudaDeviceProp, 15.57 GiB)
+software: driver API 13040, runtime 13040
+shape: M=32 N=4096 K=4096 group=128 seed=1 flush_l2=1 warmup=10 iters=100 check_rows=4096
+footprint: FP16 weights 32.0000 MiB, packed INT4 8.0000 MiB, FP16 scales 0.2500 MiB
+launch: naive grid=((N+255)/256, M)=(16, 32) block=256; dequant grid=(16, 512) block=256
+launch: inblock/inblock_specialized grid=(128, 32) block=(32, 8), shared partials=1024 bytes
+launch: inblock_m2 grid=(128, 16), inblock_m4 grid=(128, 8), block=(32, 8), shared partials=2048/4096 bytes
+weight quant: rel_l2(W_hat, W)=1.1722e-01  uniform-step prediction sqrt(mean(s^2/12)/mean(w^2))=1.1767e-01
+  (prediction assumes independent Uniform[-s/2,s/2] error per weight using that group's s)
+cache: intended cold-L2, flush buffer 64.00 MiB (2x L2), store kernel (not memset)
+W_hat GPU vs CPU: 0 / 16777216 FP16 bits differ (bit-exact)
+kernel                median_us     min_us     p90_us  TFLOP/s  eff_GB/s  pass    max_abs     rel_l2  rel_l2_fp16
+tc                        48.80      46.62      49.15   22.003     188.0   yes  1.868e-03  2.075e-04    1.168e-01
+tc_splitk path split=4 (0 vec fallback, 1 tc); repeat launch: 0 / 131072 FP16 outputs differ
+tc_splitk                 61.44      61.28      63.49   17.476     149.3   yes  1.868e-03  2.075e-04    1.168e-01
+cublas_dq                 86.34      86.02      88.38   12.437     394.7   yes  1.868e-03  2.075e-04    1.168e-01
+checked 32 of 32 rows against the FP64 CPU reference (reconstructed W_hat for naive/inblock/inblock_specialized/inblock_m2/inblock_m4/cublas_dq/unfused; original W for cublas)
+checked row indices: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31
+device: NVIDIA GeForce RTX 5060 Ti (sm_120, 36 SMs, L2 32.00 MiB from cudaDeviceProp, 15.57 GiB)
+software: driver API 13040, runtime 13040
+shape: M=32 N=4096 K=4096 group=128 seed=1 flush_l2=0 warmup=10 iters=100 check_rows=4096
+footprint: FP16 weights 32.0000 MiB, packed INT4 8.0000 MiB, FP16 scales 0.2500 MiB
+launch: naive grid=((N+255)/256, M)=(16, 32) block=256; dequant grid=(16, 512) block=256
+launch: inblock/inblock_specialized grid=(128, 32) block=(32, 8), shared partials=1024 bytes
+launch: inblock_m2 grid=(128, 16), inblock_m4 grid=(128, 8), block=(32, 8), shared partials=2048/4096 bytes
+weight quant: rel_l2(W_hat, W)=1.1722e-01  uniform-step prediction sqrt(mean(s^2/12)/mean(w^2))=1.1767e-01
+  (prediction assumes independent Uniform[-s/2,s/2] error per weight using that group's s)
+cache: warm/reused inputs, no flush between launches
+W_hat GPU vs CPU: 0 / 16777216 FP16 bits differ (bit-exact)
+kernel                median_us     min_us     p90_us  TFLOP/s  eff_GB/s  pass    max_abs     rel_l2  rel_l2_fp16
+tc                        34.37      34.02      36.42   31.242     267.0   yes  1.868e-03  2.075e-04    1.168e-01
+tc_splitk path split=4 (0 vec fallback, 1 tc); repeat launch: 0 / 131072 FP16 outputs differ
+tc_splitk                 40.42      38.46      40.58   26.567     227.0   yes  1.868e-03  2.075e-04    1.168e-01
+cublas_dq                 30.27      29.92      31.78   35.470    1125.8   yes  1.868e-03  2.075e-04    1.168e-01
+checked 32 of 32 rows against the FP64 CPU reference (reconstructed W_hat for naive/inblock/inblock_specialized/inblock_m2/inblock_m4/cublas_dq/unfused; original W for cublas)
+checked row indices: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31
+device: NVIDIA GeForce RTX 5060 Ti (sm_120, 36 SMs, L2 32.00 MiB from cudaDeviceProp, 15.57 GiB)
+software: driver API 13040, runtime 13040
+shape: M=64 N=4096 K=4096 group=128 seed=1 flush_l2=1 warmup=10 iters=100 check_rows=4096
+footprint: FP16 weights 32.0000 MiB, packed INT4 8.0000 MiB, FP16 scales 0.2500 MiB
+launch: naive grid=((N+255)/256, M)=(16, 64) block=256; dequant grid=(16, 512) block=256
+launch: inblock/inblock_specialized grid=(128, 64) block=(32, 8), shared partials=1024 bytes
+launch: inblock_m2 grid=(128, 32), inblock_m4 grid=(128, 16), block=(32, 8), shared partials=2048/4096 bytes
+weight quant: rel_l2(W_hat, W)=1.1722e-01  uniform-step prediction sqrt(mean(s^2/12)/mean(w^2))=1.1767e-01
+  (prediction assumes independent Uniform[-s/2,s/2] error per weight using that group's s)
+cache: intended cold-L2, flush buffer 64.00 MiB (2x L2), store kernel (not memset)
+W_hat GPU vs CPU: 0 / 16777216 FP16 bits differ (bit-exact)
+kernel                median_us     min_us     p90_us  TFLOP/s  eff_GB/s  pass    max_abs     rel_l2  rel_l2_fp16
+tc                        77.47      75.30      79.52   27.719     125.2   yes  1.868e-03  2.077e-04    1.171e-01
+tc_splitk path split=1 (0 vec fallback, 1 tc); repeat launch: 0 / 262144 FP16 outputs differ
+tc_splitk                 77.47      75.42      77.82   27.719     125.2   yes  1.868e-03  2.077e-04    1.171e-01
+cublas_dq                 88.06      87.04      90.11   24.385     392.9   yes  1.868e-03  2.077e-04    1.171e-01
+checked 64 of 64 rows against the FP64 CPU reference (reconstructed W_hat for naive/inblock/inblock_specialized/inblock_m2/inblock_m4/cublas_dq/unfused; original W for cublas)
+checked row indices: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63
+device: NVIDIA GeForce RTX 5060 Ti (sm_120, 36 SMs, L2 32.00 MiB from cudaDeviceProp, 15.57 GiB)
+software: driver API 13040, runtime 13040
+shape: M=64 N=4096 K=4096 group=128 seed=1 flush_l2=0 warmup=10 iters=100 check_rows=4096
+footprint: FP16 weights 32.0000 MiB, packed INT4 8.0000 MiB, FP16 scales 0.2500 MiB
+launch: naive grid=((N+255)/256, M)=(16, 64) block=256; dequant grid=(16, 512) block=256
+launch: inblock/inblock_specialized grid=(128, 64) block=(32, 8), shared partials=1024 bytes
+launch: inblock_m2 grid=(128, 32), inblock_m4 grid=(128, 16), block=(32, 8), shared partials=2048/4096 bytes
+weight quant: rel_l2(W_hat, W)=1.1722e-01  uniform-step prediction sqrt(mean(s^2/12)/mean(w^2))=1.1767e-01
+  (prediction assumes independent Uniform[-s/2,s/2] error per weight using that group's s)
+cache: warm/reused inputs, no flush between launches
+W_hat GPU vs CPU: 0 / 16777216 FP16 bits differ (bit-exact)
+kernel                median_us     min_us     p90_us  TFLOP/s  eff_GB/s  pass    max_abs     rel_l2  rel_l2_fp16
+tc                        63.04      62.02      64.90   34.065     153.9   yes  1.868e-03  2.077e-04    1.171e-01
+tc_splitk path split=1 (0 vec fallback, 1 tc); repeat launch: 0 / 262144 FP16 outputs differ
+tc_splitk                 63.04      62.02      64.80   34.065     153.9   yes  1.868e-03  2.077e-04    1.171e-01
+cublas_dq                 54.85      52.70      54.85   39.153     630.9   yes  1.868e-03  2.077e-04    1.171e-01
+checked 64 of 64 rows against the FP64 CPU reference (reconstructed W_hat for naive/inblock/inblock_specialized/inblock_m2/inblock_m4/cublas_dq/unfused; original W for cublas)
+checked row indices: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63
+device: NVIDIA GeForce RTX 5060 Ti (sm_120, 36 SMs, L2 32.00 MiB from cudaDeviceProp, 15.57 GiB)
+software: driver API 13040, runtime 13040
+shape: M=128 N=4096 K=4096 group=128 seed=1 flush_l2=1 warmup=10 iters=100 check_rows=4096
+footprint: FP16 weights 32.0000 MiB, packed INT4 8.0000 MiB, FP16 scales 0.2500 MiB
+launch: naive grid=((N+255)/256, M)=(16, 128) block=256; dequant grid=(16, 512) block=256
+launch: inblock/inblock_specialized grid=(128, 128) block=(32, 8), shared partials=1024 bytes
+launch: inblock_m2 grid=(128, 64), inblock_m4 grid=(128, 32), block=(32, 8), shared partials=2048/4096 bytes
+weight quant: rel_l2(W_hat, W)=1.1722e-01  uniform-step prediction sqrt(mean(s^2/12)/mean(w^2))=1.1767e-01
+  (prediction assumes independent Uniform[-s/2,s/2] error per weight using that group's s)
+cache: intended cold-L2, flush buffer 64.00 MiB (2x L2), store kernel (not memset)
+W_hat GPU vs CPU: 0 / 16777216 FP16 bits differ (bit-exact)
+kernel                median_us     min_us     p90_us  TFLOP/s  eff_GB/s  pass    max_abs     rel_l2  rel_l2_fp16
+tc                       136.90     135.17     138.94   31.374      78.5   yes  1.946e-03  2.076e-04    1.172e-01
+tc_splitk path split=1 (0 vec fallback, 1 tc); repeat launch: 0 / 524288 FP16 outputs differ
+tc_splitk                136.86     134.78     138.91   31.381      78.5   yes  1.946e-03  2.076e-04    1.172e-01
+cublas_dq                116.74     114.69     118.75   36.792     305.4   yes  1.946e-03  2.077e-04    1.172e-01
+checked 128 of 128 rows against the FP64 CPU reference (reconstructed W_hat for naive/inblock/inblock_specialized/inblock_m2/inblock_m4/cublas_dq/unfused; original W for cublas)
+checked row indices: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98 99 100 101 102 103 104 105 106 107 108 109 110 111 112 113 114 115 116 117 118 119 120 121 122 123 124 125 126 127
+device: NVIDIA GeForce RTX 5060 Ti (sm_120, 36 SMs, L2 32.00 MiB from cudaDeviceProp, 15.57 GiB)
+software: driver API 13040, runtime 13040
+shape: M=128 N=4096 K=4096 group=128 seed=1 flush_l2=0 warmup=10 iters=100 check_rows=4096
+footprint: FP16 weights 32.0000 MiB, packed INT4 8.0000 MiB, FP16 scales 0.2500 MiB
+launch: naive grid=((N+255)/256, M)=(16, 128) block=256; dequant grid=(16, 512) block=256
+launch: inblock/inblock_specialized grid=(128, 128) block=(32, 8), shared partials=1024 bytes
+launch: inblock_m2 grid=(128, 64), inblock_m4 grid=(128, 32), block=(32, 8), shared partials=2048/4096 bytes
+weight quant: rel_l2(W_hat, W)=1.1722e-01  uniform-step prediction sqrt(mean(s^2/12)/mean(w^2))=1.1767e-01
+  (prediction assumes independent Uniform[-s/2,s/2] error per weight using that group's s)
+cache: warm/reused inputs, no flush between launches
+W_hat GPU vs CPU: 0 / 16777216 FP16 bits differ (bit-exact)
+kernel                median_us     min_us     p90_us  TFLOP/s  eff_GB/s  pass    max_abs     rel_l2  rel_l2_fp16
+tc                       120.35     118.21     120.38   35.687      89.3   yes  1.946e-03  2.076e-04    1.172e-01
+tc_splitk path split=1 (0 vec fallback, 1 tc); repeat launch: 0 / 524288 FP16 outputs differ
+tc_splitk                118.32     116.19     120.38   36.300      90.8   yes  1.946e-03  2.076e-04    1.172e-01
+cublas_dq                106.05     103.97     108.03   40.500     336.2   yes  1.946e-03  2.077e-04    1.172e-01
+checked 128 of 128 rows against the FP64 CPU reference (reconstructed W_hat for naive/inblock/inblock_specialized/inblock_m2/inblock_m4/cublas_dq/unfused; original W for cublas)
+checked row indices: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98 99 100 101 102 103 104 105 106 107 108 109 110 111 112 113 114 115 116 117 118 119 120 121 122 123 124 125 126 127

@@ -31,6 +31,37 @@ Measurement (E044's harness and method): one job per idle RTX 5060 Ti node (c7, 
 
 Success criterion, fixed now: `tc_splitk` median at least 5% below `tc` at M = 1, 4 and 16 (K = N = 4096), both cache policies, both series, on every node whose job completes (12 cells per node). Accept only if all pass. Reported, not gating: M 8/32/64/128 (M64/128 are `tc` itself by the rule, so ~0% expected), held-out cells, modelled roof fractions (logical bytes / 448 GB/s; workspace bytes not counted), cuBLAS ratios. Limits fixed now: single repeated matrix (never compared with E045/E009 cyclic Marlin numbers); measurement in E045's cyclic harness is not part of this rung (E045 is owned elsewhere; the scope's cyclic step is deferred and stated as such); one GPU type, synthetic weights, kernel level only, not in the model path, no profile. Scripts `scripts/e047/`, results `results/e047_20261117/`.
 
+Attempts (retrieved to `results/e047_20261117/<mode>-<node>-<job>/`):
+- Prerequisite attempt 1, job 343150 (c58), exit 2: compile error in `w4a16_tc_splitk.cu`: the self-test kernel sat in an anonymous namespace nested inside `tc_common` in the shared header, and nvcc's generated stub could not disambiguate it from the file's own anonymous namespace (`reference to '_GLOBAL__N_…' is ambiguous`). Fixed in `4072326` by moving the self-test kernel into the .cu file (it still tests the header's unpack, which every `tc_common` variant uses). No GPU code ran.
+- Prerequisite 343152 (c58, driver 615.71.09) passed, inspected before the full jobs: ctest 2/2; unpack self-test 0 mismatches (both copies); `check_inblock.sh` unchanged (199 comparison lines, 0 differing; memcheck/synccheck 0 errors; racecheck 0 hazards); `scripts/e047/check.sh`: every split shape (M 1/5/16/17/33 at K 2048, M9 G64 33 chunks, M20 K4096) and fallback (K256 → `tc`, N33 → vec, M128 → `tc`) passes all-row FP64 and the repeat-launch bitwise check (0 differing); memcheck/synccheck 0 errors, racecheck 0 hazards on `tc_splitk`. Resources (`cuobjdump -res-usage`, `-Xptxas -v`): REG 74 (`<true>`) / 76 (`<false>`), 0 spills, 0 local, 17,409 B shared (`tc`: 64–76, 17,408 B). SASS per split kernel: 16 HMMA, 49 LDG (16 per chunk in the main loop + the z-reduction loads), 3 STG, 1 atomic, 2 MEMBAR.SC.GPU; `tc`'s kernels have 32 HMMA / 32 LDG because the compiler gave `tc`'s chunk loop a two-chunk body, while the split kernel's loop body is one chunk. Smoke (10 iterations, M 1/16): `tc_splitk` already slower than `tc` (45.1 vs 32.8 µs flushed at M1); per the protocol the predeclared design was measured unchanged. Full jobs 343160–343164 (c7, c8, c9, c10, c58) submitted `afterok:343152`.
+
+### Result (jobs 343160–343164, one per node c7/c8/c9/c10/c58, all exit 0, `all.sha256` verified after retrieval, 2026-11-17)
+
+Every node: build, ctest, unpack self-test 0 mismatches, `check_inblock.sh` and `scripts/e047/check.sh` as in the prerequisite (all comparisons 0 differing, memcheck/synccheck 0 errors, racecheck 0 hazards). Every timed point passes FP64 on EVERY output row (`check_rows` 4096 ≥ M) and the repeat-launch bitwise check; the path taken matches the predeclared rule everywhere (S = 4 at K = N = 4096 M 1–32 and 11008×4096 M 1–32; `tc` at M64/128 and on 4096×11008). Drivers 610.57.04 (c7–c10), 615.71.09 (c58). `python3 scripts/e047/analyze.py results/e047_20261117` → `analysis.txt`, `summary.json`.
+
+Primary cells (K = N = 4096, range over 5 nodes × 2 series, median µs, `tc` → `tc_splitk`):
+
+| M | Policy | tc | tc_splitk | Gain |
+|---:|---|---:|---:|---:|
+| 1 | flush | 32.4–33.1 | 45.1 | −36.0 to −39.0% |
+| 1 | no flush | 18.0–19.7 | 21.4–22.0 | −11.5 to −21.0% |
+| 4 | flush | 32.4–33.1 | 45.1–47.1 | −36.4 to −42.1% |
+| 4 | no flush | 17.7–19.7 | 21.7–22.0 | −11.5 to −23.6% |
+| 16 | flush | 37.4–39.0 | 49.2 | −26.2 to −31.6% |
+| 16 | no flush | 19.7–20.0 | 22.0–22.1 | −9.6 to −12.0% |
+
+0 of 60 primary cells pass; `tc_splitk` is slower than `tc` in every one. Decision: REJECTED. The parent stays `tc`; E048's parent is `tc`.
+
+Reported, not part of the decision:
+- Other split cells (K = N = 4096): M8 −34.0 to −36.8% flush, −10.6 to −22.6% no flush; M32 −25.0 to −29.5% / −17.6 to −18.4%. Rule-selected `tc` cells (M64, M128, all of 4096×11008) differ by −5.1 to +4.2% (same kernel: this is the run-to-run spread of the medians).
+- Held-out 11008×4096 (S = 4, 172 chunks: 5–6 chunks per warp instead of 2): M1 −10.7 to −13.4% flush, −0.4 to +4.0% no flush; M8 −11.7 to −14.6% / −1.4 to 0.0%; M32 +12.1 to +12.9% flush (144.5–145.8 → 127.0 µs), +0.1 to +4.5% no flush.
+- Modelled roof fraction under flush (logical bytes / 448 GB/s, workspace not counted): M1 0.58–0.60 (`tc`) → 0.43 (`tc_splitk`); M16 0.51–0.53 → 0.40. No-flush fractions near or above 1 are cache-served, not roof fractions.
+- Against cuBLAS on pre-reconstructed FP16 Ŵ (cuBLAS default math mode; same job, single repeated matrix): `tc` takes 0.34–0.35 of its time at M1 flushed, `tc_splitk` 0.48; at M16 0.42–0.44 vs 0.56.
+
+Interpretation (not profiled; observations and hypotheses kept apart). Observed: filling the grid by splitting K four ways costs time at K = 4096 instead of saving it, the loss is largest under flush, and the only gain is at the longer K (11008, M32 flush), where each warp keeps 5–6 chunks. Hypotheses, untested: (1) with 16 chunks per split each warp has only 2 chunks, and the split kernel's loop body is one chunk (16 HMMA) where `tc`'s is two (32 HMMA), so each warp has half as many loads in flight and the latency is exposed (E046: M1 is long-scoreboard bound at 75% of DRAM peak); (2) the fence, atomic and serial last-block reduction add a tail per tile; (3) the 1 MiB FP32 workspace (M ≤ 16) adds L2 traffic. Which of these dominates is unattributed. E046's estimate (about 10% from grid fill) is not borne out by this implementation: grid fill alone, with less work per warp, does not help here.
+
+Revisit condition: only a new predeclared rung that keeps at least `tc`'s per-warp chunk depth while filling the grid (e.g., fewer warps per block or a two-chunk body in the split kernel), or a profile of `tc_splitk` showing which of (1)–(3) dominates. Not authorized by this result. Limits: single repeated matrix (never compare with E045/E009 cyclic Marlin numbers), one GPU type (five nodes, two drivers), synthetic weights, kernel level only, not in the model path; the E045 cyclic measurement of this rung was not run (a rejected rung is not carried forward).
+
 ## E046 — Where does our Tensor Core kernel spend its time? (first profile of the kernel ladder)
 
 Predeclared 2026-11-17 under the standing kernel-ladder scope (AGENTS.md "Project scope"; coordinator request). DIAGNOSTIC: no kernel, layout, dispatch or contract change and no acceptance gate. Question: where does E044's `tc` spend its time at small and large M, and which single change is most supported for the next rung (E047)?

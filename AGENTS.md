@@ -236,7 +236,8 @@
 
 ## E047 split-K grid fill (rung after `tc`)
 
-- Predeclared in EXPERIMENTS (standing ladder scope, 2026-11-17). `tc_splitk` (`src/cuda/w4a16_tc_splitk.cu`, helpers copied into `w4a16_tc_common.cuh`; `tc` source unchanged): same tile/warps/unpack, grid z of S=4 K-splits when the `tc` grid is below 3 waves and K/64 >= 32, else `tc`; deterministic last-block reduction in fixed z order (one launch, repeat launches bitwise equal). Criterion: >=5% below `tc` at M 1/4/16, K=N=4096, both policies, both series, every node. All rows FP64-checked at timed points. Single repeated matrix: never compare with cyclic Marlin numbers. Status: predeclared.
+- Predeclared in EXPERIMENTS (standing ladder scope, 2026-11-17). `tc_splitk` (`src/cuda/w4a16_tc_splitk.cu`, helpers copied into `w4a16_tc_common.cuh`; `tc` source unchanged): same tile/warps/unpack, grid z of S=4 K-splits when the `tc` grid is below 3 waves and K/64 >= 32, else `tc`; deterministic last-block reduction in fixed z order (one launch, repeat launches bitwise equal). Criterion: >=5% below `tc` at M 1/4/16, K=N=4096, both policies, both series, every node. All rows FP64-checked at timed points. Single repeated matrix: never compare with cyclic Marlin numbers.
+- E047 is complete (jobs 343160–343164, c7/c8/c9/c10/c58; prerequisite 343152 after compile failure 343150): REJECTED, 0/60 primary cells; `tc_splitk` is 26–42% slower flushed and 10–24% slower unflushed at M 1/4/16 (K=N=4096); only 11008×4096 M32 flushed gains (12–13%). Unprofiled; split kernel's loop body is one chunk (16 HMMA) vs `tc`'s two (32), with 2 chunks per warp: a hypothesis, not a cause. Parent stays `tc`. Do not retry split-K unless its revisit condition (keep per-warp chunk depth, or a profile) is met.
 
 ## Rooflines, if requested
 
