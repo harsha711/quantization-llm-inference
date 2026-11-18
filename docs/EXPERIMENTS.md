@@ -69,7 +69,7 @@ Primary cells (K = N = 4096, range over 5 nodes × 2 series, median µs, `tc` �
 
 Reported, not part of the decision:
 - M 1–16 run `tc` by the dispatch: −3.8 to +0.3% (median spread of the same kernel).
-- Held-out (seed 2), both rectangles: M32 18.6–20.1% flushed, 7.4–12.2% unflushed; M64 14.0–16.9% / 4.3–12.8%; M128 12.7–15.8% / 8.4–14.2%; M8 (dispatch to `tc`) −1.9 to +1.3%. 74 of 80 held-out M ≥ 32 cells are ≥ 5% (the six misses: 11008×4096 M64 unflushed).
+- Held-out (seed 2), both rectangles: M32 18.6–20.1% flushed, 7.4–12.2% unflushed; M64 14.0–16.9% / 4.3–12.8%; M128 12.7–15.8% / 8.4–14.2%; M8 (dispatch to `tc`) −1.9 to +1.3%. 117 of 120 held-out M ≥ 32 cells are ≥ 5% (the three misses, 4.35–4.90%: 11008×4096 M64 unflushed; corrected 2026-11-18 from "74 of 80, six misses" by recount from summary.json).
 - Modelled roof fraction under flush (logical bytes / 448 GB/s): M128 0.17–0.18 → 0.18–0.19; held-out M32 0.37–0.38 → 0.46.
 - Against cuBLAS on pre-reconstructed FP16 Ŵ (cuBLAS default math mode, same job, single repeated matrix): at M128 `tc` is 1.18–1.19× slower flushed and 1.12–1.18× unflushed, `tc_m32` 1.10–1.13× and 1.04–1.06×; on the held-out M128 rectangles 1.29–1.31× → 1.10–1.13× flushed. At M32 unflushed 1.13–1.14× → 1.06–1.07×; at M32 flushed `tc_m32` is slower than `tc` (0.54–0.57 → 0.61–0.62 of cuBLAS's time).
 - Resources: REG 114 (0 spills) and 33,792 B shared against `tc`'s 64–76 and 17,408 B; 64 HMMA / 40 LDG per kernel (two-chunk body).
