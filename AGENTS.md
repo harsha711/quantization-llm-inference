@@ -1,5 +1,12 @@
 # W4A16 CSC 548 continuation rules
 
+## Project scope (pivot, user decision 2026-11-17)
+
+- The project is now: improve OUR OWN W4A16 kernels step by step toward corrected Marlin A as the ceiling (beyond it only where measured, cell by cell). The kernel ladder is E041 (CPU T1) → E001–E003 (scalar fused) → E043 (wide loads) → E044 (Tensor Cores) → E045 (gap to Marlin, same cyclic harness) → profile-led rungs from E046 on.
+- Each rung: profile first (Nsight Compute/Systems, SASS counts), predeclare one change chosen from that evidence with a 5% criterion against the previous rung, measure in E045's four-matrix cyclic harness next to Marlin and cuBLAS (single-matrix numbers alone never count as "reaching Marlin"), record rejected rungs as ladder results. This standing scope authorizes predeclaring the next rung without a separate request; still one main change at a time.
+- Goal wording: "close the gap at small M; beat Marlin only where measured". Never claim "competitive with/faster than Marlin" beyond the measured cells. Marlin/vLLM stay upstream credit. Model-level work (E014–E042) is background/motivation in the report; it is frozen, not extended.
+- Weight-layout changes (offline lossless repack, as Marlin does) are allowed only with a documented CONTRACT.md amendment in the rung's predeclaration; the reconstruction FP16((q-8)*s), tolerance and scales stay unchanged.
+
 ## Every session
 
 - Reporting checkpoint: [PROJECT_SYNTHESIS.md](docs/PROJECT_SYNTHESIS.md) and [offline figures](scripts/reporting/README.md) synthesize completed E001–E012. Read them before preparing the final report. Keep upstream performance separate from our contributions, practical 5% gates separate from winner reversals, and batch scaling separate from worker scaling. Next task is the ACM report draft and resolution of the saved course requirements. This checkpoint authorizes no new GPU run or E012 retry. Historical manifests stay immutable. Reporting inputs/outputs have their own manifest.
