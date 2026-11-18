@@ -49,6 +49,61 @@ Parts (one node, jobs chained with `afterok`; `scripts/e052/submit.sh MODE`):
 
 Limits fixed now: one model (Qwen2.5-1.5B), batch 1, 64 tokens, RTX 5060 Ti, one node per part; no sanitizer at model prefill sizes beyond the operator checks; `tc_ladder`'s M ≥ 64 threshold is E049's post hoc choice (E050). Never "competitive with Marlin/vLLM"; 4-bit block speeds carry +13.1% perplexity (plain rounding). Not a repository default. Outputs: `results/e052_20261118/`, BeeGFS `csc548-w4a16-e052-20261118`.
 
+Attempts (retrieved to `results/e051_20261118/<mode>-<node>-<job>/`):
+- Prerequisite 343333 (c8, commit `a09e3d8`): submitted with a 2:00 limit; it waited because c4–c10/c50–c58 were planned for a 16-node job starting 15:14. DEVIATION (operational): limit lowered to 1:20 with `scontrol` so it backfilled; ran 13:48–14:09, exit 0, PREREQ PASS, `all.sha256` verified. Venv present (empty dependency diff, E010 inputs pass); build/ctest/unpack self-test/check_inblock/E048 check exit 0; tc/tc_m32 SASS in both libraries identical to the bench; tc_ladder == tc bitwise in 6 selector checks (M 1/5/63/64/65/128) and 4 smoke runs; 24 cycle validation rows; cycle memcheck/synccheck 0 errors, racecheck 0 hazards, bench memcheck M128 0 errors; no metric dropped; window calibration selects the final add_; first profile one `w4a16_tc_m32_kernel`, 18 passes.
+- Full 343361 (c8, commit `397e309`, `afterok:343333`, 14:10–15:35): all measurements completed (every step exit 0: (a) 14:10–14:13, (c) 14:13–14:14, (b) 14:14–14:16, six profiles 14:16–15:20), but the in-job analyzer FAILED (job exit 1): it required all-row FP64 checks for the (c) GPU rows, which by predeclaration use E041's unchanged command (bench default: 64 sampled rows, CONTRACT §2). Analyzer bug, not a data or correctness failure. Because the job script stops on the analyzer failure, `all.sha256` was not written and the RETRIEVED wait never ran. The directory was retrieved by a 10-minute job (343428, c4) that tarred it from BeeGFS to home (tar sha256 de649beb…4d12, identical after copy; per-file hashes in `full-c8-343361.retrieved.sha256`). Fix: `bench_csv(..., check_rows=64)` for (c) only (`scripts/e051/analyze.py`); rerun locally on the retrieved data: pass. No measurement was repeated.
+
+### Result (job 343361, c8, 2026-11-18): complete, every correctness/completeness criterion met (descriptive)
+
+Analyzer: every row present (a: 168 main + 80 held-out rows per series; b: 24 rows per series, 100 samples each; c: 6 CPU + 30 GPU rows; d: 6 profiles, one kernel each, 18 passes), all FP64 checks pass, tc_ladder == tc bitwise in all 72 bench processes and all cycle matrices. SM clock 2805 MHz P0 after the series (P8 idle before). Same-node E041 CPU reproduction: T1 26.3/31.5/241.4 ms at M1/4/128 (E041 on c58: 26.6/31.3/241.2).
+
+(a) Single matrix, K = N = 4096, seed 1, median µs (series 1 / 2, flush; no flush in brackets):
+
+| M | inblock_specialized | inblock_m4_vec | tc | tc_m32 | tc_ladder | cuBLAS Ŵ | tc_ladder / tc |
+|---|---|---|---|---|---|---|---|
+| 1 | 50.8 / 50.8 (28.2) | 53.6 / 53.2 (40.3) | 32.4 / 33.1 (18.0 / 17.7) | same as tc | 32.4 / 33.1 (18.0 / 17.7) | 94.2 (83.5 / 64.8) | 1.000 |
+| 5 | 120.5 / 120.8 (106.0) | 87.4 / 87.7 (77.1 / 77.4) | 32.8 / 34.3 (18.0) | 33.9 / 34.4 | 34.4 / 34.4 (18.0) | 86.0 (52.8) | 1.050 / 1.003 (1.000) |
+| 8 | 181.3 / 182.0 | 78.2 / 77.5 (66.9 / 67.1) | 34.5 (18.0) | 34.5 | 34.5 (18.0) | 86.0 (52.8) | 1.000 |
+| 32 | 659.8 / 659.1 | 241.3 (226.8 / 222.8) | 49.4 / 48.8 (34.1 / 34.4) | 52.9 (32.3) | 47.1 / 47.5 (34.4 / 34.1) | 86.4 (30.3) | 0.953 / 0.973 (1.008 / 0.992) |
+| 64 | 1293.7 / 1298.8 | 453.2 / 454.8 (437.8 / 433.7) | 76.1 (60.7 / 62.9) | 77.5 / 78.1 (58.9) | 77.5 / 78.1 (58.9) | 88.1 (52.8) | 1.018 / 1.026 (0.970 / 0.937) |
+| 128 | 2573.7 / 2573.6 | 888.5 / 885.1 (874.0 / 869.8) | 135.5 (116.0 / 114.2) | 126.7 / 127.4 (108.1 / 106.0) | 126.7 / 129.3 (108.1 / 107.9) | 114.7 (104.0 / 102.0) | 0.935 / 0.954 (0.932 / 0.944) |
+
+Below M64 tc_ladder runs tc (differences are noise, largest 5.0% at M5 flushed series 1 only). At M64 it is tc_m32: flushed 1.8–2.6% SLOWER than tc (E048's 2-blocks/SM tie), unflushed 3–6% faster; M128 4.6–6.8% faster. Versus cuBLAS on Ŵ: faster to M32 flushed and M8 unflushed, 0.88× at M64 flushed, 1.10–1.13× slower at M128 flushed and 1.04–1.06× unflushed. Held-out rectangles (seed 2): tc_ladder/tc 0.84–0.86 at M64 and M128 flushed, 0.89–0.96 unflushed, tie at M8/M32; versus cuBLAS Ŵ 0.15–0.80× time up to M64, 1.02–1.12× slower at M128. Full table in `full-c8-343361/analysis.txt`.
+
+(b) E009 cycle, M = 4, per-matrix median µs (series 1 / 2); tc_ladder runs tc here:
+
+| K×N | matrices | Marlin A | tc_ladder | cuBLAS Ŵ | dequant+cuBLAS | fraction of Marlin speed | cuBLAS Ŵ / tc_ladder | unfused / tc_ladder |
+|---|---|---|---|---|---|---|---|---|
+| 4096×11008 | 1 | 27.9 / 27.9 | 40.1 / 40.0 | 271.6 / 269.9 | 573.0 / 572.2 | 0.696 / 0.696 | 6.78 / 6.74 | 14.3 / 14.3 |
+| 4096×11008 | 2 | 62.2 / 62.0 | 65.0 / 64.4 | 270.8 / 269.7 | 571.6 / 570.7 | 0.957 / 0.963 | 4.17 / 4.19 | 8.79 / 8.87 |
+| 4096×11008 | 4 | 61.3 / 61.2 | 64.6 / 64.4 | 268.9 / 269.5 | 570.4 / 569.8 | 0.948 / 0.950 | 4.16 / 4.18 | 8.82 / 8.85 |
+| 11008×4096 | 1 | 26.2 / 25.8 | 44.2 / 44.2 | 216.3 / 216.3 | 476.7 / 476.7 | 0.593 / 0.585 | 4.90 / 4.90 | 10.8 / 10.8 |
+| 11008×4096 | 2 | 59.9 / 59.9 | 68.2 / 68.2 | 215.8 / 215.8 | 478.2 / 477.0 | 0.879 / 0.878 | 3.17 / 3.17 | 7.02 / 6.99 |
+| 11008×4096 | 4 | 59.6 / 59.3 | 67.4 / 67.3 | 214.8 / 215.0 | 477.5 / 477.3 | 0.885 / 0.880 | 3.19 / 3.19 | 7.08 / 7.09 |
+
+Slower than Marlin in every cell; the single repeated matrix (1) is where Marlin gains most (fraction 0.59–0.70), with 2/4 matrices 0.88–0.96 (consistent with E045's M4 0.88–0.95). Faster than cuBLAS Ŵ (3.2–6.8×) and timed dequant+cuBLAS (7.0–14.3×) in every cell.
+
+(c) Same-node E041 row (c8), K = N = 4096: CPU T1 26.33 / 31.48 / 241.42 ms and T16 2.09 / 2.46 / 19.83 ms (Sp16 12.6 / 12.8 / 12.2) at M 1/4/128, equal output hashes across thread counts. tc_ladder 33.1 / 33.2 / 129.3 µs flushed (17.7 / 17.7 / 107.8 unflushed), so T1/GPU processor ratios 795 / 949 / 1866 flushed (1488 / 1777 / 2239 unflushed); same job cuBLAS 94.2 / 86.0 / 116.7 µs (279 / 366 / 2068), inblock_m4 61.8 / 63.2 / 1480.0 µs (426 / 498 / 163). Processor ratios, not parallel speedups; GPU rows use E041's 64 sampled check rows.
+
+(d) Cyclic profiles (fourth GEMM of the last of 100 cycles, application replay; durations are replay values, not production latency). tc_ladder at M64/M128 is `w4a16_tc_m32_kernel<0>`, 114 registers, theoretical occupancy 33.3%:
+
+| K×N | case | replay µs | warp inst (M) | HMMA | HMMA pipe % | long-scoreboard % of stalls | DRAM read / unique |
+|---|---|---|---|---|---|---|---|
+| 4096×11008 | tc M64 (E049) | 196.4 | — | 1,409,024 | 70.7 | 23.8 | 0.96 |
+| 4096×11008 | tc_ladder M64 | 164.9 | 17.34 | 1,409,024 | 83.1 | 20.0 | 0.93 |
+| 4096×11008 | Marlin M64 (E049) | 137.8 | 5.61 | 1,409,024 | 90.8 | 2.3 | — |
+| 4096×11008 | tc_ladder M128 | 310.2 | 34.69 | 2,818,048 | 86.1 | 17.5 | 0.88 |
+| 4096×11008 | Marlin M128 | 260.1 | 10.96 | 2,818,048 | 93.0 | 1.8 | 0.87 |
+| 11008×4096 | tc M64 (E049) | 193.0 | — | 1,409,024 | 75.1 | 24.7 | 0.94 |
+| 11008×4096 | tc_ladder M64 | 168.2 | 16.68 | 1,409,024 | 88.4 | 21.0 | 0.93 |
+| 11008×4096 | Marlin M64 (E049) | 136.1 | 5.46 | 1,409,024 | 91.6 | 2.0 | — |
+| 11008×4096 | tc_ladder M128 | 305.6 | 33.37 | 2,818,048 | 91.8 | 18.8 | 0.93 |
+| 11008×4096 | Marlin M128 | 251.4 | 10.70 | 2,818,048 | 94.3 | 1.6 | 0.87 |
+
+The 32-row tile cuts warp instructions to 0.59× tc's at M64 (expected ~0.5×), leaving 3.06–3.17× Marlin's for equal HMMAs at M64 and M128 (E049's tc: 5.2×); the tensor pipe rises from 71–75% to 83–92%; math-pipe throttle is now the top stall (36–46%), long-scoreboard 17–21% versus Marlin's 2%. DRAM reads stay at or below unique bytes. Replay gap to Marlin: 17–20% (M128) and 24% (M64) of tc_ladder's time. Observations only: no cause is attributed.
+
+Decision: descriptive, nothing adopted, no next rung implied by this record. Report placement: (a) as a tc_ladder column beside the E043/E044 sweep; (b) as a tc_ladder row beside the E009 table (cyclic, never mixed with single-matrix numbers); (c) as a tc_ladder row in the E041 processor-ratio table; (d) in the E050 subsection, closing its "no profile of tc_m32 in the cycle". Limits: one node (c8), one GPU type, synthetic weights, kernel level, unprofiled outside (d); never "competitive with Marlin".
+
 ## E050 — Does dispatching `tc_m32` at M ≥ 64 (`tc_ladder`) cut `tc`'s amortized time under cyclic weights? (dispatch rung after `tc`)
 
 Predeclared 2026-11-18 under the standing kernel-ladder scope (coordinator request, user-approved rung), before any GPU run. Parent: `tc` (E044). One main change: a host dispatch rule. `tc_ladder` runs the unchanged E048 `tc_m32` launcher when M ≥ 64 and the unchanged E044 `tc` launcher when M < 64. No device code changes (`src/cuda/w4a16_tc.cu`, `w4a16_tc_m32.cu`, `w4a16_tc_common.cuh` untouched); the rule lives only in the new bridge `scripts/e050/tc_bridge.cu` (`e050_tc_ladder`). Because E048 showed `tc_m32` reproduces `tc`'s output bits, `tc_ladder` outputs must be bitwise equal to `tc`'s in every cell. No contract, layout, Marlin, cuBLAS or model change.

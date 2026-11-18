@@ -25,7 +25,7 @@ CNAMES, COUNTS = ['marlin','tc_ladder','cublas_dq','unfused'], [1,2,4]
 PROFILES = [f'{i}_M{m}_K{k}_N{n}' for k,n in SHAPES for i,m in (('tc_ladder',64),('tc_ladder',128),('marlin',128))]
 
 
-def bench_csv(path,kernels,ms,shapes,seed):
+def bench_csv(path,kernels,ms,shapes,seed,check_rows=None):
     """Complete single-matrix rows: every kernel x M x shape x policy once, all checked and passing."""
     rs = list(csv.DictReader(path.open()))
     key = lambda r: (int(r['K']),int(r['N']),int(r['M']),int(r['flush_l2']),r['kernel'])
@@ -34,7 +34,8 @@ def bench_csv(path,kernels,ms,shapes,seed):
     for r in rs:
         assert r['pass'] == '1' and int(r['seed']) == seed and int(r['group']) == 128, r
         assert int(r['warmup']) == 10 and int(r['iters']) == 100, r
-        if r['kernel'] != 'dequant': assert int(r['check_rows']) >= int(r['M']), r
+        if check_rows: assert int(r['check_rows']) == check_rows, r  # E041 GPU command: default 64 sampled rows
+        elif r['kernel'] != 'dequant': assert int(r['check_rows']) >= int(r['M']), r
     return {key(r): float(r['median_us']) for r in rs}
 
 
@@ -160,7 +161,7 @@ def full(d,out):
     assert sorted((int(r['M']),int(r['threads'])) for r in cpu) == sorted((m,p) for m in MC for p in (1,16))
     for r in cpu: assert r['fp64_pass'] == '1' and int(r['reps']) == 10, r
     for m in MC: assert len({r['fnv1a'] for r in cpu if int(r['M']) == m}) == 1, m
-    g = bench_csv(d/'c-gpu.csv',['naive','inblock','inblock_m4','cublas','tc_ladder'],MC,[(4096,4096)],1)
+    g = bench_csv(d/'c-gpu.csv',['naive','inblock','inblock_m4','cublas','tc_ladder'],MC,[(4096,4096)],1,check_rows=64)
     bitwise_logs(d,'c-gpu-M*-*.log',6)
     c_tab = []
     for m in MC:

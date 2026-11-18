@@ -266,6 +266,7 @@
 ## E052 `tc_ladder` in the model path (latest-kernel replay)
 
 - Predeclared in EXPERIMENTS (parts a–g, 2026-11-18). `scripts/e052/t.py` swaps only the E017 bridge's `Operator`/`Linear` for `tc_ladder` (exact E050 library, project-layout codes/scales, no repack, preconditions asserted: no silent fallback); all gate/timing scripts unchanged. Gate (E021 eager + E026 graph, contexts 128–2048, all 20 cases) before any timing; a rejection stops E052 without gate edits. Marlin/FP16/external arms re-run in the same jobs. Third-gate, +13.1%/+8.6% and "never competitive with Marlin/vLLM" disclosures apply.
+- E051 is complete (c8, prerequisite 343333, full 343361, retrieval 343428): every row present, tc_ladder bitwise equal to tc everywhere, descriptive only. Single matrix: tc below M64, M64 flushed 2% slower / unflushed 3–6% faster than tc, M128 5–7% faster, still 1.04–1.13× slower than cuBLAS Ŵ at M128. E009 cycle M4: 0.88–0.96 of Marlin speed at 2/4 matrices, 0.59–0.70 for one repeated matrix; 3.2–6.8× faster than cuBLAS Ŵ. E041 row: processor ratios 795/949/1866 (M1/4/128 flushed), never parallel speedups. Profile: 3.1× Marlin's warp instructions (tc 5.2×), no cause attributed. The full job's exit 1 was an analyzer bug (E041 GPU rows use 64 sampled rows), fixed offline; record it, never call the job a measurement failure.
 
 ## Rooflines, if requested
 

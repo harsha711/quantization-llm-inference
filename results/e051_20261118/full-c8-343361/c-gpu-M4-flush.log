@@ -1,0 +1,22 @@
++ timeout 5400 /mnt/beegfs/hpuvvad/csc548-w4a16-e051-20261118/prereq-c8-343333/w4a16_bench --M 4 --N 4096 --K 4096 --group 128 --seed 1 --warmup 10 --iters 100 --kernels naive,inblock,inblock_m4,cublas,tc_ladder --csv /mnt/beegfs/hpuvvad/csc548-w4a16-e051-20261118/full-c8-343361/c-gpu.csv
+device: NVIDIA GeForce RTX 5060 Ti (sm_120, 36 SMs, L2 32.00 MiB from cudaDeviceProp, 15.52 GiB)
+software: driver API 13030, runtime 13040
+shape: M=4 N=4096 K=4096 group=128 seed=1 flush_l2=1 warmup=10 iters=100 check_rows=64
+footprint: FP16 weights 32.0000 MiB, packed INT4 8.0000 MiB, FP16 scales 0.2500 MiB
+launch: naive grid=((N+255)/256, M)=(16, 4) block=256; dequant grid=(16, 512) block=256
+launch: inblock/inblock_specialized grid=(128, 4) block=(32, 8), shared partials=1024 bytes
+launch: inblock_m2 grid=(128, 2), inblock_m4 grid=(128, 1), block=(32, 8), shared partials=2048/4096 bytes
+weight quant: rel_l2(W_hat, W)=1.1722e-01  uniform-step prediction sqrt(mean(s^2/12)/mean(w^2))=1.1767e-01
+  (prediction assumes independent Uniform[-s/2,s/2] error per weight using that group's s)
+cache: intended cold-L2, flush buffer 64.00 MiB (2x L2), store kernel (not memset)
+W_hat GPU vs CPU: 0 / 16777216 FP16 bits differ (bit-exact)
+kernel                median_us     min_us     p90_us  TFLOP/s  eff_GB/s  pass    max_abs     rel_l2  rel_l2_fp16
+naive                    200.70     197.98     201.06    0.669      43.4   yes  9.986e-04  2.033e-04    1.163e-01
+inblock                  128.66     126.46     128.70    1.043      67.7   yes  9.986e-04  2.033e-04    1.163e-01
+inblock_m4 vs inblock_specialized: 0 / 16384 FP16 outputs differ
+inblock_m4                63.17      61.15      63.52    2.125     138.0   yes  9.986e-04  2.033e-04    1.163e-01
+cublas                    86.02      85.60      88.06    1.560     390.9   yes  9.899e-04  2.081e-04    2.081e-04
+tc_ladder vs tc: 0 / 16384 FP16 outputs differ
+tc_ladder                 33.17      31.07      35.17    4.047     262.8   yes  9.986e-04  2.033e-04    1.163e-01
+checked 4 of 4 rows against the FP64 CPU reference (reconstructed W_hat for naive/inblock/inblock_specialized/inblock_m2/inblock_m4/cublas_dq/unfused; original W for cublas)
+checked row indices: 0 1 2 3

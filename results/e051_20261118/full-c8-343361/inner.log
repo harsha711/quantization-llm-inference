@@ -1,0 +1,25 @@
+[prun] Master compute host = c8
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun bash /tmp/e051-src-343361/scripts/e051/inner.sh full /tmp/e051-src-343361 /mnt/beegfs/hpuvvad/csc548-w4a16-e051-20261118/full-c8-343361 /mnt/beegfs/hpuvvad/csc548-w4a16-e051-20261118/prereq-c8-343333 (family=openmpi4)
+Traceback (most recent call last):
+  File "/tmp/e051-src-343361/scripts/e051/analyze.py", line 277, in <module>
+    else: full(a.dir,a.out or a.dir)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/e051-src-343361/scripts/e051/analyze.py", line 163, in full
+    g = bench_csv(d/'c-gpu.csv',['naive','inblock','inblock_m4','cublas','tc_ladder'],MC,[(4096,4096)],1)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/e051-src-343361/scripts/e051/analyze.py", line 37, in bench_csv
+    if r['kernel'] != 'dequant': assert int(r['check_rows']) >= int(r['M']), r
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: {'gpu': 'NVIDIA GeForce RTX 5060 Ti', 'sm': '120', 'sms': '36', 'driver': '13030', 'runtime': '13040', 'kernel': 'naive', 'M': '128', 'N': '4096', 'K': '4096', 'group': '128', 'seed': '1', 'flush_l2': '1', 'warmup': '10', 'iters': '100', 'check_rows': '64', 'l2_mib': '32.0000', 'flush_mib': '64.0000', 'logical_bytes': '10747904', 'median_us': '2554.528', 'min_us': '2530.304', 'max_us': '2565.120', 'p90_us': '2560.992', 'tflops': '1.6813', 'eff_gbps': '4.21', 'pass': '1', 'max_abs_err': '1.9462e-03', 'rel_l2_err': '2.0750e-04', 'rel_l2_vs_fp16': '1.1735e-01', 'w_hat_mismatches': '0', 'w_rel_l2': '1.172167e-01', 'w_rel_l2_uniform_pred': '1.176700e-01'}
+--------------------------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code. Per user-direction, the job has been aborted.
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+mpirun detected that one or more processes exited with non-zero status, thus causing
+the job to be terminated. The first process to do so was:
+
+  Process name: [[24731,1],0]
+  Exit code:    1
+--------------------------------------------------------------------------
