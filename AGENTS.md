@@ -244,6 +244,10 @@
 - Predeclared in EXPERIMENTS (standing ladder scope, after E047 was rejected; parent `tc`). `tc_m32` (`src/cuda/w4a16_tc_m32.cu`): each warp's two m16 tiles share every unpacked weight fragment; M >= 32 uses it, M < 32 calls `tc`. Every output must be bitwise equal to `tc` (same MMA sequence per 16-row tile and same reduction order) plus all-row FP64. Criterion: >=5% below `tc` at M 32/64/128, K=N=4096, both policies, both series, every node. E046 caps the gain near 17% at M128. Single repeated matrix: never compare with cyclic Marlin numbers.
 - E048 is complete (jobs 343171–343175, c7/c8/c9/c10/c58; prerequisite 343169): REJECTED, 35/60 primary cells. Outputs bitwise equal to `tc` everywhere. M128 4.5–10.2% faster, held-out rectangles at M>=32 4–20% faster, but K=N=4096 M32 flushed 8–13% slower and M64 flushed a tie (114 registers: 2 blocks/SM vs 3). A grid-size dispatch chosen from this data would be post hoc: needs a new predeclared rung on fresh data. Unprofiled. Parent stays `tc`.
 
+## E049 cyclic profile of `tc` versus Marlin (diagnostic) and descriptive `tc_m32` timing
+
+- Predeclared in EXPERIMENTS (standing ladder scope, 2026-11-17). Nsight Compute application replay in E045's four-matrix cycle (E011 method: fourth GEMM of the last of 100 graph cycles, skip 399 count 1, no cache/clock control), `tc` and Marlin A at M4/M64 on both rectangles; verdicts on (a) DRAM weight re-reads, (b) exposed load latency vs cp.async, (c) tile shape/occupancy by fixed rules. Plus `tc`/`tc_m32`/Marlin/cuBLAS timed in a copy of E045's harness (`scripts/e049/`), two reversed series: descriptive only, never an acceptance of `tc_m32`. No kernel change; one E050 recommendation, not implemented. Status: predeclared.
+
 ## Rooflines, if requested
 
 - Recompute all ceilings, ridge points, arithmetic intensities, and performance coordinates from specifications/data. Keep the primary full-machine roof distinct from core-count, ISA, NUMA, and memory-domain sensitivity roofs.
