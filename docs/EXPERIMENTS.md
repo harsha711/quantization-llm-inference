@@ -88,7 +88,7 @@ All 60 primary cells (12 per node) pass 5%. Decision: ACCEPTED.
 
 Reported, not part of the decision:
 - `tc` is faster than `inblock_m4_vec` in every cell, including M1 (37–40% flush, 56–57% no flush) and M4 (32–37% / 46–51%); held-out seed-2 rectangles 4096×11008 and 11008×4096 at M 8/32/128: 51–87%. (`inblock_vec`, the M1 kernel of E043, was not in this job; no M1 claim against it.)
-- Unpack cost: `tc_cvt` (per-weight FP32 multiply and conversion) takes 1.21–1.42× `tc`'s median at M ≤ 8, falling to 1.05–1.12× at M ≥ 32, where the MMA and activation work per weight grows.
+- Unpack cost: `tc_cvt` (per-weight FP32 multiply and conversion) takes 1.10–1.44× `tc`'s median at M ≤ 8 (corrected 2026-11-17 from 1.21–1.42 after the Codex review; recomputed over both policies), falling to 1.00–1.12× at M ≥ 32, where the MMA and activation work per weight grows.
 - Against cuBLAS on pre-reconstructed FP16 Ŵ (same job, single repeated matrix, not E009's cycle): `tc` takes 0.34–0.45 of its time at M 1–16 and 0.55–0.88 at M 32/64 under flush; at M128 it is 1.16–1.20× slower (flush) and 1.10–1.18× (no flush); no-flush M32/64 also 1.13–1.19× slower. Before E044 our best kernel was 7.7–8.5× slower than cuBLAS at M128. cuBLAS reads four times the weight bytes.
 - Modelled roof fraction under flush (logical bytes): M1 0.58–0.60, M8 0.56–0.57, M128 0.17–0.18. No-flush fractions above about 0.8 (up to 1.30 held-out) are cache-served, not memory-roof fractions.
 
