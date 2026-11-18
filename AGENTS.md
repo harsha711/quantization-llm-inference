@@ -209,6 +209,7 @@
 ## E043 wider operand loads in our own kernels
 
 - Predeclared in EXPERIMENTS (user request 2026-11-17, "go"). `inblock_vec`/`inblock_m4_vec` change only operand fetches of E002/E003 (16-byte activation loads, scale once per group); outputs must be bitwise equal to the parents. Criterion: ≥5% lower median at M1 (vs inblock_specialized) and M4 (vs inblock_m4), both cache policies, both series, on every node run (c7/c8/c9/c10/c58). Kernel-level only: not in the model path, no Marlin/dispatch/contract change, never "competitive with Marlin".
+- E043 is complete (jobs 343095–343099): ACCEPTED, 40/40 primary cells on five nodes; M1 31–33% / 16–22%, M4 18–21% / 36–38% (flush / no flush); every other cell 13–41%, no regression. No-flush roof fractions above about 0.8 are cache-served, never call them memory-roof efficiency. Single-matrix cuBLAS ratios are not comparable with E009 cyclic Marlin. No profile: load-issue is supported by SASS counts, not proven as the stall cause.
 
 ## Rooflines, if requested
 

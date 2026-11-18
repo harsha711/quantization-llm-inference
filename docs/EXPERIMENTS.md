@@ -39,6 +39,25 @@ Amendment before any job ran (user: "run a bunch of jobs on all the available gp
 
 Prerequisite 343094 on c58 passed (about 2 min): build and ctest; check_inblock.sh with all 182 bitwise comparisons at 0 differing outputs (vector kernels equal their parents, including K/N/M tails and fallbacks); memcheck/synccheck 0 errors, racecheck 0 hazards; SASS global loads per kernel 10 → 7 (inblock_vec) and 34 → 6 (inblock_m4_vec), registers 37 and 46/44. M = 4 smoke (10 iterations, not a result): m4_vec 51.2 vs 65.5 µs flush, 36.4 vs 58.9 µs no flush. Retrieved to `results/e043_20261117/prereq-343094/`. Full jobs 343095–343099 (c7, c8, c9, c10, c58) released by it.
 
+### Result (jobs 343095–343099, one per node c7/c8/c9/c10/c58, all exit 0, 2026-11-17)
+
+Every node: build, ctest, check_inblock.sh (182 bitwise comparisons, 0 differing outputs), memcheck/synccheck 0 errors, racecheck 0 hazards; every timed point passes FP64 and full-output bitwise equality with its parent. Drivers 610.57.04 (c7–c10) and 615.71.09 (c58). `scripts/e043/analyze.py results/e043_20261117` → `analysis.txt`, `summary.json`.
+
+Primary cells (K = N = 4096, range over 5 nodes × 2 series, median µs parent → candidate):
+
+| Kernel | M | Policy | Parent | Candidate | Gain |
+|---|---:|---|---:|---:|---:|
+| inblock_vec vs inblock_specialized | 1 | flush | 50.8–51.5 | 34.5–35.2 | 30.8–33.0% |
+| inblock_vec vs inblock_specialized | 1 | no flush | 28.2–30.0 | 22.1–24.1 | 15.5–21.8% |
+| inblock_m4_vec vs inblock_m4 | 4 | flush | 63.1–65.9 | 51.2–52.2 | 18.4–21.5% |
+| inblock_m4_vec vs inblock_m4 | 4 | no flush | 56.6–58.9 | 36.1–36.4 | 36.2–38.2% |
+
+All 40 primary cells (8 per node) pass 5%. Decision: ACCEPTED.
+
+Reported, not part of the decision: every other cell also improves, with no regression anywhere: inblock_vec 16–24% at M 4–128; inblock_m4_vec 13–41% at M 1–128 (largest at M ≥ 32); held-out seed 2 rectangles 4096×11008 and 11008×4096 at M 1/4: 15–40%. Modelled fraction of the 448 GB/s roof under flush (logical bytes, not measured DRAM): M1 0.38 → 0.55–0.56, M4 (m4_vec) 0.30–0.31 → 0.37–0.38. No-flush fractions reach 0.80–1.07, above the DRAM roof in one held-out cell, which shows those inputs are partly cache-served: they are not memory-roof fractions. Against cuBLAS on pre-reconstructed FP16 Ŵ (same job, single repeated matrix, not E009's four-matrix cycle): inblock_vec at M1 takes 0.29–0.37 of its time, inblock_m4_vec at M4 0.60–0.69; at M8 m4_vec is 0.91–0.92 (flush) and 1.27–1.31 (no flush); from M32 cuBLAS (Tensor Cores) is 2.8–8.5× faster.
+
+Interpretation: global load instructions per kernel fall 10 → 7 and 34 → 6 (SASS), consistent with the load-issue hypothesis; no profile was taken, so stall attribution remains a hypothesis. Limits: synthetic weights, one GPU type (five nodes, two drivers), kernel level only; our kernels are still not in the model path, and these single-matrix numbers are not comparable with E009's cyclic Marlin result. Not a dispatch or default change. Retrieved to `results/e043_20261117/full-<node>-<job>/`.
+
 ## E042 — Where does the plain-rounding block cost sit? (per-type and per-block sensitivity)
 
 Predeclared 2026-11-17 at the user's request ("do it", after I proposed locating the +13.1% block cost; the user clarified that the "mixed precision" restriction covers building a mixed-precision runtime as an enhancement, not analysing quality). Quality only and diagnostic: nothing is timed, gated or added to the runtime; no kernel, contract or default changes.

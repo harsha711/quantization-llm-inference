@@ -1,0 +1,4 @@
+[prun] Master compute host = c8
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun bash /tmp/e043-src-343096/scripts/e043/inner.sh full /tmp/e043-src-343096 /mnt/beegfs/hpuvvad/csc548-w4a16-e043-20261117/full-c8-343096 (family=openmpi4)
+INNER-OK
