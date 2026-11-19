@@ -81,6 +81,8 @@ def main(args):
                             call(case)
                     kernels = []
                     if args.trace:
+                        # First-use workspace initialization is setup, outside the traced steady-state call.
+                        call(cases[0]); torch.cuda.synchronize()
                         with torch.profiler.profile(activities=[torch.profiler.ProfilerActivity.CPU,
                                 torch.profiler.ProfilerActivity.CUDA]) as prof:
                             call(cases[0])

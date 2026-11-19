@@ -18,7 +18,9 @@ Validation: actual one-rank prun launch, absolute exported PROJECT_ROOT, live al
 
 ARC discovery 2026-11-19: official ARC page rechecked, sbatch for unattended jobs and prun inside allocations, no srun. `arc.csc.ncsu.edu` failed DNS in both sandbox and approved network execution. Configured `arc-off-network` (152.14.199.180) reaches login2 as hpuvvad. At discovery no user jobs were active, c5/c7/c8/c9/c10 were idle in rtx5060ti16g. This is historical discovery, not a standing allocation. Every job must record its own actual state. No compute on gateway.
 
-Status: predeclared, baseline prerequisite tooling being prepared. No candidate implemented or measured yet. Revisit after rejection only on a separately requested change supported by new counters, not an unchanged retry.
+Baseline attempt 1, job 343808 on c8: CUDA build, CTest, full project GPU gate, original v3 checks and all recorded sanitizers pass. The small cyclic smoke stopped at its trace assertion: v3's first-use workspace allocation adds a device memset before the first kernel. tc_ladder, corrected Marlin and cuBLAS smoke rows passed, but the incomplete smoke is not a complete gate. Preserve `baseline-c8-343808/` including exit 1 and the full trace diagnostic. Correction is host harness only: perform the first untimed call before tracing steady-state execution, as the existing v3 comparison did before capture. No device code, numerical bound or timing condition changes. Repeat only the cheap baseline prerequisite before any candidate work.
+
+Status: baseline attempt 1 stopped on the first-use trace assertion, corrected cheap prerequisite pending. No candidate implemented or measured yet. Revisit after rejection only on a separately requested change supported by new counters, not an unchanged retry.
 
 ## Repository note — raw files over GitHub's 100 MB limit kept out of git (2026-11-15)
 
