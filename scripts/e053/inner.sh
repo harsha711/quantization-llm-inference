@@ -3,6 +3,7 @@ set -euo pipefail
 MODE=$1 SRC=$2 S=$3 PRE=${4:-}
 [[ $SRC == /* && -f $SRC/CMakeLists.txt && $PROJECT_ROOT == "$SRC" ]]
 cd "$SRC"
+unset W4A16_V1_SPLITS W4A16_V2_SPLITS
 export PATH=/usr/local/cuda/bin:$PATH PYTHONDONTWRITEBYTECODE=1 OMP_NUM_THREADS=16 OMP_PROC_BIND=close OMP_PLACES=cores
 PY=/tmp/e005-r2-hpuvvad-20261106/bin/python
 E004=/home/hpuvvad/csc548-w4a16-e004-20261106

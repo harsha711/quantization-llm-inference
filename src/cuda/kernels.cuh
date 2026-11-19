@@ -82,6 +82,9 @@ void launch_w4a16_v2(const __half* A, const uint32_t* qweight, const __half* sca
                      int M, int N, int K, int group_size, cudaStream_t stream);
 void launch_w4a16_v3(const __half* A, const uint32_t* qweight, const __half* scales, __half* C,
                      int M, int N, int K, int group_size, cudaStream_t stream);
+// E053: two-row reuse, bitwise equal to v3 at the same split rule.
+void launch_w4a16_v3_m2(const __half* A, const uint32_t* qweight, const __half* scales,
+                        __half* C, int M, int N, int K, int group_size, cudaStream_t stream);
 bool w4a16_v2_fast_path(const __half* A, const uint32_t* qweight, const __half* scales,
                         const __half* C, int N, int K);
 int w4a16_v2_splits(int M, int N, int K);  // K-splits v2 and v3 launch for this shape

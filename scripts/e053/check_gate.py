@@ -28,10 +28,15 @@ def inspect(root, stage, baseline=None):
         assert (root/(tag+'.exit')).read_text().strip() == '0', tag
     for tag in ('project-gpu','v3-check'):
         log = (root/(tag+'.log')).read_text()
-        assert 'ERROR SUMMARY: 0 errors' in log and 'RACECHECK SUMMARY: 0 hazards' in log, tag
+        if tag == 'project-gpu':
+            assert 'ERROR SUMMARY: 0 errors' in log and 'RACECHECK SUMMARY: 0 hazards' in log, tag
+        else:
+            # Original check.sh hides tool stdout but propagates --error-exitcode 99 through set -e.
+            assert all('== compute-sanitizer '+tool in log for tool in ('memcheck','racecheck','synccheck'))
+            assert 'PASS: v3' in log
         assert 'NOT run' not in log and 'unavailable' not in log, tag
     bench, lib = blocks(root/'sass-bench.txt'), blocks(root/'sass-library.txt')
-    selected = {k:v for k,v in lib.items() if 'w4a16_v3_kernel' in k or 'w4a16_tc_kernel' in k}
+    selected = {k:v for k,v in lib.items() if 'w4a16_v3_' in k or 'w4a16_tc_kernel' in k}
     assert selected and all(k in bench and v == bench[k] for k,v in selected.items()), 'bench/library SASS mismatch'
     rows = [json.loads(x) for x in (root/'smoke.jsonl').read_text().splitlines()]
     expected = {'v3','tc_ladder','marlin','cublas_dq'} | ({'v3_m2'} if stage == 'validation' else set())
@@ -57,9 +62,17 @@ def inspect(root, stage, baseline=None):
             assert (root/(tag+'.exit')).read_text().strip() == '0', tag
         rows = [json.loads(x) for x in (root/'validation.jsonl').read_text().splitlines()]
         assert len(rows) == 75 and all(v['num_bad'] == 0 and v['checked'] == r['M']*r['N'] for r in rows for v in r['validation'])
+        by = {(r['K'],r['N'],r['M'],r['config']):r for r in rows}
+        assert len(by) == 75
+        for (k,n,m,name),row in by.items():
+            if name == 'v3_m2':
+                assert [v['output_sha256'] for v in row['validation']] == [v['output_sha256'] for v in by[k,n,m,'v3']['validation']]
+        log = (root/'candidate-check.log').read_text()
+        assert 'ERROR SUMMARY: 0 errors' in log and 'RACECHECK SUMMARY: 0 hazards' in log
         if baseline:
             old = blocks(baseline/'sass-library.txt')
             for k,v in selected.items():
+                if 'w4a16_v3_m2_kernel' in k: continue
                 assert old[k] == v, 'retained control device code changed'
         print('VALIDATION PASS: complete all-row/parent-bitwise checks, sanitizers and retained-control SASS')
 
