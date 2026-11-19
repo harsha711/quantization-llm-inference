@@ -1,3 +1,7 @@
+# E053 in progress, 2026-11-19
+
+User-authorized bounded v3 two-row reuse experiment, isolated branch `experiment/v3-rowreuse`. Original v3 and final tc_ladder remain controls. Predeclaration: EXPERIMENTS E053. No candidate timing or speedup exists yet. Baseline prerequisite/profile comes first, candidate correctness/sanitizers second, dependent fresh cyclic timing last. Original checkout and unrelated changes are preserved. No push.
+
 # Current state, 2026-11-18
 
 - **`tc_ladder` in the earlier kernel-level experiments (E051, c8, jobs 343333/343361): complete, descriptive.** Single matrix K = N = 4096 (seed 1): tc_ladder = tc below M64 (32.4–34.5 µs flushed at M1–M8), M128 126.7–129.3 µs flushed vs tc 135.5 and cuBLAS Ŵ 114.7; M64 flushed 1.8–2.6% slower than tc. E009 cycle M4: fraction of Marlin speed 0.88–0.96 at 2/4 matrices, 0.59–0.70 for one repeated matrix; 3.2–6.8× faster than cuBLAS Ŵ, 7.0–14.3× than dequant+cuBLAS. Same-node E041 row: CPU T1 26.3/31.5/241.4 ms, tc_ladder 33.1/33.2/129.3 µs (processor ratios 795/949/1866). Cyclic profile: tc_m32 issues 0.59× tc's warp instructions, still 3.1× Marlin's for equal HMMAs; tensor pipe 83–92% vs Marlin 91–94%. Bitwise equal to tc everywhere; in-job analyzer bug (sampled-row rule for the E041 GPU rows) fixed and rerun on the retrieved data.
