@@ -44,6 +44,8 @@ if(CMAKE_CUDA_COMPILER)
     src/cuda/cublas_gemm.cu
     src/cuda/ours_v0.cu
     src/cuda/ours_v1.cu
+    src/cuda/ours_v2.cu
+    src/cuda/ours_v3.cu
     src/cuda/flush_read.cu)
   target_include_directories(w4a16_bench PRIVATE src/cuda)
   target_link_libraries(w4a16_bench PRIVATE w4a16_host CUDA::cudart CUDA::cublas)

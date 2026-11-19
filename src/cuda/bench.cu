@@ -71,7 +71,7 @@ struct Options {
                "usage: %s [--M m] [--N n] [--K k] [--group g] [--seed s] [--warmup w]\n"
                "          [--iters i] [--kernels naive,inblock,inblock_specialized,inblock_m2,inblock_m4,cublas,cublas_dq,dequant,unfused]\n"
                "          [--no-flush-l2] [--check-rows r] [--nocheck] [--zero-weights] [--csv path]\n"
-               "          [--peak-gbps g] [--flush-read]   (also accepts kernels v0, v1)\n",
+               "          [--peak-gbps g] [--flush-read]   (also accepts kernels v0, v1, v2, v3)\n",
                prog);
   std::exit(EXIT_FAILURE);
 }
@@ -169,7 +169,8 @@ double logical_bytes(const std::string& name, int M, int N, int K, int group) {
   if (name == "naive" || name == "inblock" || name == "inblock_specialized" || name == "inblock_m2" || name == "inblock_m4") return a + c + qw + sc;
   // v1's split-K FP32 partials (splits * M * N * 4 B, written + read once) are small
   // next to the weights and are left out of the logical-bytes model.
-  if (name == "v0" || name == "v1" || name == "v1_interleaved" || name == "v1_runtime_tail")
+  if (name == "v0" || name == "v1" || name == "v1_interleaved" || name == "v1_runtime_tail" ||
+      name == "v2" || name == "v3")
     return a + c + qw + sc;
   if (name == "cublas" || name == "cublas_dq") return a + c + w16;
   if (name == "dequant") return qw + sc + w16;
@@ -362,6 +363,19 @@ int main(int argc, char** argv) {
       ref = &ref_quant;
       std::printf("launch: v1 grid=(%d, %d, %d) block=(32, 8)\n", (o.N + 31) / 32, o.M,
                   w4a16_v1_splits(o.M, o.N, o.K));
+    } else if (name == "v2" || name == "v3") {
+      const bool v3 = name == "v3";
+      launch = [&, v3] {
+        if (v3) launch_w4a16_v3(dA, dQ, dS, dC, o.M, o.N, o.K, o.group, 0);
+        else launch_w4a16_v2(dA, dQ, dS, dC, o.M, o.N, o.K, o.group, 0);
+      };
+      ref = &ref_quant;
+      if (w4a16_v2_fast_path(dA, dQ, dS, dC, o.N, o.K))
+        std::printf("launch: %s grid=(%d, %d, %d) block=(32, 8), 4 columns per lane\n",
+                    name.c_str(), (o.N + 127) / 128, o.M, w4a16_v2_splits(o.M, o.N, o.K));
+      else
+        std::printf("launch: %s falls back to v1 (needs N %% 4 == 0 and K %% 8 == 0)\n",
+                    name.c_str());
     } else if (name == "v1_interleaved") {  // ablation: every 8th word per warp
       launch = [&] {
         launch_w4a16_v1_variant(dA, dQ, dS, dC, o.M, o.N, o.K, o.group, 0, false, true);
@@ -403,6 +417,22 @@ int main(int argc, char** argv) {
       st = compare_rows(hC.data(), *ref, rows, o.N, rtol, atol_frac);
       vs16 = compare_rows(hC.data(), ref_fp16, rows, o.N, rtol, atol_frac);
       pass = st.pass();
+      if (name == "v3") {
+        // v3 changes only how W_hat is computed and keeps v2's FMA order and grid, so
+        // its output must match v2 bit for bit (docs/OURS.md, v3).
+        launch_w4a16_v2(dA, dQ, dS, dC, o.M, o.N, o.K, o.group, 0);
+        CUDA_CHECK(cudaDeviceSynchronize());
+        std::vector<uint16_t> v2_out(c_elems);
+        CUDA_CHECK(cudaMemcpy(v2_out.data(), dC, c_elems * sizeof(__half), cudaMemcpyDeviceToHost));
+        size_t mismatches = 0;
+        for (size_t i = 0; i < c_elems; ++i) mismatches += hC[i] != v2_out[i];
+        std::printf("v3 vs v2: %zu / %zu FP16 outputs differ\n", mismatches, c_elems);
+        if (mismatches) {
+          std::fprintf(stderr, "v3 bitwise comparison with v2 failed; stopping before timing\n");
+          if (csv) std::fclose(csv);
+          return EXIT_FAILURE;
+        }
+      }
       if (name == "inblock_specialized" || name == "inblock_m2" || name == "inblock_m4") {
         const bool row_reuse = name != "inblock_specialized";
         if (row_reuse)

@@ -54,6 +54,16 @@ int w4a16_v1_splits(int M, int N, int K);  // K-splits v1 will launch for this s
 void launch_w4a16_v1_variant(const __half* A, const uint32_t* qweight, const __half* scales,
                              __half* C, int M, int N, int K, int group_size, cudaStream_t stream,
                              bool contiguous, bool specialize_tail);
+// v2: 128-bit loads (4 columns per lane). v3: v2 + magic-number FP16 unpack.
+// Both need N % 4 == 0, K % 8 == 0 and aligned pointers; otherwise they run v1.
+void launch_w4a16_v2(const __half* A, const uint32_t* qweight, const __half* scales, __half* C,
+                     int M, int N, int K, int group_size, cudaStream_t stream);
+void launch_w4a16_v3(const __half* A, const uint32_t* qweight, const __half* scales, __half* C,
+                     int M, int N, int K, int group_size, cudaStream_t stream);
+bool w4a16_v2_fast_path(const __half* A, const uint32_t* qweight, const __half* scales,
+                        const __half* C, int N, int K);
+int w4a16_v2_splits(int M, int N, int K);  // K-splits v2 and v3 launch for this shape
+void w4a16_v2_workspace(int M, int N, int splits, float** partials, unsigned** counters);
 
 void launch_dequant_w4a16(const uint32_t* qweight, const __half* scales, __half* W, int N, int K,
                           int group_size, cudaStream_t stream);
