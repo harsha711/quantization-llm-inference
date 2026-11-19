@@ -29,22 +29,36 @@ profile() {
   ncu --import "$S/ncu/$name.ncu-repz" --page raw --csv --print-units base > "$S/ncu/$name.raw.csv"
 }
 if [[ $MODE != full ]]; then
-  run project-build bash scripts/build.sh
-  run project-ctest ctest --test-dir build --output-on-failure
-  run project-gpu bash scripts/check_inblock.sh
-  run v3-check env KERNELS=v3 bash scripts/ours/check.sh
-  files=(src/cuda/ours_v1.cu src/cuda/ours_v2.cu src/cuda/ours_v3.cu src/cuda/w4a16_tc.cu src/cuda/w4a16_tc_m32.cu src/cuda/w4a16_inblock_vec.cu src/cuda/w4a16_inblock_rows.cu src/cuda/w4a16_inblock_specialized.cu)
-  defs=()
-  [[ $MODE == baseline ]] || { defs=(-DE053_CANDIDATE); files+=(src/cuda/ours_v3_m2.cu); }
-  LIB=$S/libe053.so
-  run library-build nvcc -O3 -DNDEBUG -std=c++17 -lineinfo '--generate-code=arch=compute_120,code=[compute_120,sm_120]' \
-    -shared -Xcompiler=-fPIC -Isrc/cuda "${defs[@]}" scripts/e053/bridge.cu "${files[@]}" -o "$LIB"
-  cp build/w4a16_bench "$S/w4a16_bench"
-  cp build/CMakeFiles/w4a16_bench.dir/flags.make "$S/bench-flags.make"
-  sha256sum "$LIB" "$S/w4a16_bench" src/cuda/*.cu src/cuda/*.cuh scripts/e053/* > "$S/binaries.sha256"
-  cuobjdump -sass "$LIB" > "$S/sass-library.txt"
-  cuobjdump -sass "$S/w4a16_bench" > "$S/sass-bench.txt"
-  cuobjdump -res-usage "$LIB" > "$S/resources.txt"
+  if [[ $MODE == baseline && -n $PRE ]]; then
+    [[ -e $PRE/BUILD_REUSE_INSPECTED ]]
+    (cd "$PRE" && sha256sum -c binaries.sha256 --ignore-missing) > "$S/build-reuse-check.log"
+    grep -q "$PRE/libe053.so: OK" "$S/build-reuse-check.log"
+    printf 'Reused exact checked binaries and gates from %s; prior driver failure was Python import shadowing.\n' "$PRE" > "$S/build-reuse.txt"
+    for tag in project-build project-ctest project-gpu v3-check library-build; do
+      [[ $(cat "$PRE/$tag.exit") == 0 ]]
+      cp "$PRE/$tag.log" "$PRE/$tag.exit" "$S/"
+    done
+    for file in libe053.so w4a16_bench bench-flags.make sass-library.txt sass-bench.txt resources.txt; do cp "$PRE/$file" "$S/"; done
+    LIB=$S/libe053.so
+    sha256sum "$LIB" "$S/w4a16_bench" src/cuda/*.cu src/cuda/*.cuh scripts/e053/* > "$S/binaries.sha256"
+  else
+    run project-build bash scripts/build.sh
+    run project-ctest ctest --test-dir build --output-on-failure
+    run project-gpu bash scripts/check_inblock.sh
+    run v3-check env KERNELS=v3 bash scripts/ours/check.sh
+    files=(src/cuda/ours_v1.cu src/cuda/ours_v2.cu src/cuda/ours_v3.cu src/cuda/w4a16_tc.cu src/cuda/w4a16_tc_m32.cu src/cuda/w4a16_inblock_vec.cu src/cuda/w4a16_inblock_rows.cu src/cuda/w4a16_inblock_specialized.cu)
+    defs=()
+    [[ $MODE == baseline ]] || { defs=(-DE053_CANDIDATE); files+=(src/cuda/ours_v3_m2.cu); }
+    LIB=$S/libe053.so
+    run library-build nvcc -O3 -DNDEBUG -std=c++17 -lineinfo '--generate-code=arch=compute_120,code=[compute_120,sm_120]' \
+      -shared -Xcompiler=-fPIC -Isrc/cuda "${defs[@]}" scripts/e053/bridge.cu "${files[@]}" -o "$LIB"
+    cp build/w4a16_bench "$S/w4a16_bench"
+    cp build/CMakeFiles/w4a16_bench.dir/flags.make "$S/bench-flags.make"
+    sha256sum "$LIB" "$S/w4a16_bench" src/cuda/*.cu src/cuda/*.cuh scripts/e053/* > "$S/binaries.sha256"
+    cuobjdump -sass "$LIB" > "$S/sass-library.txt"
+    cuobjdump -sass "$S/w4a16_bench" > "$S/sass-bench.txt"
+    cuobjdump -res-usage "$LIB" > "$S/resources.txt"
+  fi
   paths=(v3 tc_ladder marlin cublas_dq)
   [[ $MODE == baseline ]] || paths=(v3 v3_m2 tc_ladder marlin cublas_dq)
   run smoke "${base[@]}" --tc "$LIB" --out "$S/smoke.jsonl" --implementations "${paths[@]}" --shapes 256,256 --ms 4 --trace --warmup 0 --iters 0
