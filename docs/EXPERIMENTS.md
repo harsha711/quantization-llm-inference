@@ -28,7 +28,9 @@ Fresh baseline observations (counter replay, not production latency): 128 blocks
 
 Implementation after inspection: new `src/cuda/ours_v3_m2.cu`, two compile-time row-tail variants, exact copied v3 unpack helper, two rows sharing Q/S/unpack and four-column mapping, original split rule and per-row accumulation/reduction order. New explicit selector/bridge only, no default or baseline-device edit. M1/fallback calls v3. `scripts/e053/check.sh` covers full parent bits, row/column/group tails, forced splits, zero weights and raw memcheck/racecheck/synccheck on parent and candidate. Same-job cyclic validation and final controls are next. Baseline control remains frozen. No candidate performance result exists yet.
 
-Status: baseline prerequisite/profile inspected and passed; candidate implemented, validation pending. Revisit after rejection only on a separately requested change supported by new counters, not an unchanged retry.
+Validation job 343823 on c8 passes: fresh CUDA build/CTest/project GPU gate, original v3 checks, E053 native all-row FP64/full-parent-bitwise/tail/forced-split/zero-weight cases and raw memcheck/racecheck/synccheck; 75 traced full cyclic validation rows (three shapes x five M x five paths), plus the three composed-cycle sanitizer subsets. Local all.sha256 verification and check_gate.py pass. All seven native-benchmark/library v3/v3_m2/TC SASS functions match, and the five retained v3/TC functions match the earlier baseline. No numerical or sanitizer relaxation. Candidate performance remains unmeasured.
+
+Status: candidate validation inspected and passed. Full timing is authorized only as afterok:343823, using that exact native executable/shared library and frozen measured-source hashes. Secondary single-matrix series reverse kernel/M order, while shape/policy order is fixed (not perfectly balanced). No winner or speedup is claimed yet. Revisit after rejection only on a separately requested change supported by new counters, not an unchanged retry.
 
 ## Repository note — raw files over GitHub's 100 MB limit kept out of git (2026-11-15)
 

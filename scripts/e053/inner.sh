@@ -81,6 +81,8 @@ else
   [[ -e $PRE/INSPECTED && $(cat "$PRE/driver.exit") == 0 ]]
   (cd "$PRE" && sha256sum -c binaries.sha256 --ignore-missing) > "$S/prereq-binary-check.log"
   grep -q "$PRE/libe053.so: OK" "$S/prereq-binary-check.log"
+  awk '$2 ~ /^src\/cuda\// || $2 ~ /^scripts\/e053\/(bench.py|bridge.cu)$/ {print}' "$PRE/binaries.sha256" > "$S/measured-source.sha256"
+  sha256sum -c "$S/measured-source.sha256" > "$S/measured-source-check.log"
   LIB=$PRE/libe053.so
   clock > "$S/clocks-before.csv"
   run series1 "${base[@]}" --tc "$LIB" --out "$S/series1.jsonl"

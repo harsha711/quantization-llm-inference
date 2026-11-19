@@ -70,9 +70,28 @@ def analyze(root):
     primary = [v for v in comparisons if v['primary']]
     assert len(primary) == 12
     passed = sum(v['v3_m2_us'] <= .95*v['v3_us'] for v in primary)
+    secondary = []
+    single_shapes = [(4096,4096),(1536,1536),(1536,8960),(8960,1536)]
+    for series in (1,2):
+        rows = list(csv.DictReader((root/f'single-s{series}.csv').open()))
+        expected = {(k,n,m,p,c) for k,n in single_shapes for m in MS for p in (0,2)
+                    for c in ('v3','v3_m2','tc_ladder')}
+        assert len(rows) == len(expected) == 120
+        keyed = {(int(r['K']),int(r['N']),int(r['M']),int(r['flush_l2']),r['kernel']):r for r in rows}
+        assert set(keyed) == expected
+        for r in rows:
+            assert r['pass'] == '1' and r['w_hat_mismatches'] == '0'
+            assert int(r['check_rows']) >= int(r['M']) and r['iters'] == '200' and r['warmup'] == '10'
+        for k,n in single_shapes:
+            for m in MS:
+                for policy in (0,2):
+                    times = {c:float(keyed[k,n,m,policy,c]['median_us']) for c in ('v3','v3_m2','tc_ladder')}
+                    secondary.append(dict(series=series,K=k,N=n,M=m,policy='read_flush' if policy == 2 else 'reused',
+                                          **times,gain_pct=100*(1-times['v3_m2']/times['v3'])))
     result = dict(decision='ACCEPTED' if passed == 12 else 'REJECTED',primary_passes=passed,
                   primary_cells=12,timing_rows=150,cycle_samples=15000,parent_bitwise_cells=30,
-                  kernel_library_sha256=next(iter(libraries)),comparisons=comparisons)
+                  secondary_rows=240,kernel_library_sha256=next(iter(libraries)),comparisons=comparisons,
+                  secondary=secondary)
     return result
 
 
@@ -112,4 +131,4 @@ if __name__ == '__main__':
         with (args.root/'comparisons.csv').open('w',newline='') as f:
             w = csv.DictWriter(f,fieldnames=list(result['comparisons'][0]),lineterminator='\n')
             w.writeheader(); w.writerows(result['comparisons'])
-        print(json.dumps({k:v for k,v in result.items() if k != 'comparisons'},indent=2))
+        print(json.dumps({k:v for k,v in result.items() if k not in ('comparisons','secondary')},indent=2))

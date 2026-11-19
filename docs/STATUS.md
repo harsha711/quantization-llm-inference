@@ -1,6 +1,6 @@
 # E053 in progress, 2026-11-19
 
-User-authorized bounded v3 two-row reuse experiment, isolated branch `experiment/v3-rowreuse`. Original v3 and final tc_ladder remain controls. Predeclaration: EXPERIMENTS E053. Baseline/profile job 343819 passes after preserved tooling failures 343808/343816. Fresh counters support the bounded reuse test. Candidate v3_m2 is implemented with unchanged parent/split rule and M1 fallback, pending validation. No candidate timing or speedup exists yet. Candidate correctness/sanitizers precede dependent fresh cyclic timing. Original checkout and unrelated changes are preserved. No push.
+User-authorized bounded v3 two-row reuse experiment, isolated branch `experiment/v3-rowreuse`. Original v3 and final tc_ladder remain controls. Predeclaration: EXPERIMENTS E053. Baseline/profile job 343819 passes after preserved tooling failures 343808/343816. Fresh counters support the bounded reuse test. Candidate v3_m2 passes numerical/bitwise/sanitizer validation job 343823 and local SASS/manifest checks. Parent/split rule and M1 fallback are unchanged. No candidate timing or speedup exists yet. Candidate correctness/sanitizers precede dependent fresh cyclic timing. Original checkout and unrelated changes are preserved. No push.
 
 # Current state, 2026-11-18
 
