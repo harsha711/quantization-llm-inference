@@ -1,0 +1,10 @@
++ timeout 2100 /tmp/e005-r2-hpuvvad-20261106/bin/python scripts/e053/bench.py --source /home/hpuvvad/csc548-w4a16-e005-20261106/external/pinned --local /home/hpuvvad/csc548-w4a16-e006-20261106/results/e006_20261106/patched/libe005.so --wheel /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/vllm/_C_stable_libtorch.abi3.so --bridge /home/hpuvvad/csc548-w4a16-e004-20261106/results/e004_20261106/libe004.so --tc /mnt/beegfs/hpuvvad/csc548-w4a16-e053-20261119/baseline-c8-343816/libe053.so --out /mnt/beegfs/hpuvvad/csc548-w4a16-e053-20261119/baseline-c8-343816/smoke.jsonl --implementations v3 tc_ladder marlin cublas_dq --shapes 256,256 --ms 4 --trace --warmup 0 --iters 0
+Traceback (most recent call last):
+  File "/mnt/beegfs/hpuvvad/csc548-w4a16-e053-20261119/source-baseline-d7f02b0/scripts/e053/bench.py", line 10, in <module>
+    import torch
+  File "/tmp/e005-r2-hpuvvad-20261106/lib64/python3.11/site-packages/torch/__init__.py", line 24, in <module>
+    import typing_extensions
+  File "/tmp/e005-r2-hpuvvad-20261106/lib64/python3.11/site-packages/typing_extensions.py", line 1154, in <module>
+    _TAKES_MODULE = "module" in inspect.signature(typing._type_check).parameters
+                                ^^^^^^^^^^^^^^^^^
+AttributeError: module 'inspect' has no attribute 'signature'

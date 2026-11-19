@@ -1,0 +1,10 @@
+{
+  "decision": "ACCEPTED",
+  "primary_passes": 12,
+  "primary_cells": 12,
+  "timing_rows": 150,
+  "cycle_samples": 15000,
+  "parent_bitwise_cells": 30,
+  "secondary_rows": 240,
+  "kernel_library_sha256": "c373c18e67142f53c438294f9cc936805afe89d49324e390fc3b808c6b849b4e"
+}

@@ -30,7 +30,37 @@ Implementation after inspection: new `src/cuda/ours_v3_m2.cu`, two compile-time 
 
 Validation job 343823 on c8 passes: fresh CUDA build/CTest/project GPU gate, original v3 checks, E053 native all-row FP64/full-parent-bitwise/tail/forced-split/zero-weight cases and raw memcheck/racecheck/synccheck; 75 traced full cyclic validation rows (three shapes x five M x five paths), plus the three composed-cycle sanitizer subsets. Local all.sha256 verification and check_gate.py pass. All seven native-benchmark/library v3/v3_m2/TC SASS functions match, and the five retained v3/TC functions match the earlier baseline. No numerical or sanitizer relaxation. Candidate performance remains unmeasured.
 
-Status: candidate validation inspected and passed. Full timing is authorized only as afterok:343823, using that exact native executable/shared library and frozen measured-source hashes. Secondary single-matrix series reverse kernel/M order, while shape/policy order is fixed (not perfectly balanced). No winner or speedup is claimed yet. Revisit after rejection only on a separately requested change supported by new counters, not an unchanged retry.
+Status: COMPLETE, ACCEPTED against v3 under the 12-cell primary criterion. See the final result below. No further optimization is authorized by this result.
+
+### E053 result — ACCEPTED, all 12 primary cells (2026-11-19, c8)
+
+Full job 343828 completed exit 0, dependent on inspected validation 343823, using its exact native benchmark and libe053.so (SHA256 c373c18e67142f53c438294f9cc936805afe89d49324e390fc3b808c6b849b4e). Measured source/harness hashes and fresh pinned dependency/binary checks pass. Source snapshot is 2aec26a; candidate device code was built from 13b29bd. Hardware/environment: c8 RTX 5060 Ti, UUID GPU-a2aa0491-62c7-f289-6ed1-00a6eb3ea767, driver 610.57.04, CUDA 13.4.92, Nsight Compute 2026.3.1.0, EPYC 9115/16 cores, one rank, OMP_NUM_THREADS=16/close/cores, portable host flags. Clocks observed, not locked.
+
+Both reversed cyclic series are complete: 150 rows/15,000 finite positive raw cycle samples. Every pre/post-timing all-output FP64 check passes, and v3_m2 reproduces v3 bits in all 30 shape/M/series cells. Raw medians/min/max/p90 recompute exactly. The 240 secondary native single-matrix rows are complete and all numerical/parent checks pass. Source/native/shared-library SASS and all three representative parent/candidate sanitizer tools pass. Retrieved all.sha256 checks pass. Offline analyzer and temporary-copy corruption checker accept real data and reject missing rows, negative samples, altered medians, parent bits and operand identities. A final analyzer extension verifies the two complete four-pass profiles, target kernels/grids, identical operands/library/output bits and post-replay checks. No measurement rerun was needed.
+
+Primary result: 21.881–36.532% lower complete-cycle median at M4/M8 across all three shapes and both series, exceeding the predeclared 5% criterion in all 12 cells. ACCEPT this explicit two-row variant against v3 within that scope. The table reports complete-cycle median divided by four in microseconds per GEMM, not independently timed GEMMs.
+
+| K×N | M | v3 µs/GEMM, S1 / S2 | v3_m2 µs/GEMM, S1 / S2 | Lower latency, S1 / S2 | tc_ladder µs/GEMM, S1 / S2 |
+|---|---:|---:|---:|---:|---:|
+| 4096×4096 | 4 | 49.032 / 49.480 | 32.544 / 32.116 | 33.63% / 35.09% | 18.832 / 19.312 |
+| 4096×4096 | 8 | 92.544 / 91.728 | 58.736 / 58.864 | 36.53% / 35.83% | 19.252 / 19.344 |
+| 4096×11008 | 4 | 117.512 / 116.428 | 90.512 / 90.952 | 22.98% / 21.88% | 64.400 / 63.888 |
+| 4096×11008 | 8 | 222.288 / 224.140 | 142.700 / 142.912 | 35.80% / 36.24% | 66.672 / 66.448 |
+| 11008×4096 | 4 | 134.944 / 133.960 | 88.496 / 88.872 | 34.42% / 33.66% | 67.472 / 67.468 |
+| 11008×4096 | 8 | 246.672 / 247.260 | 157.040 / 157.100 | 36.34% / 36.46% | 68.984 / 69.008 |
+
+Other cyclic points are descriptive. At M2 the square gains 16.52/16.84%, K11008/N4096 gains 6.92/6.21%, but K4096/N11008 is essentially tied (+0.007%/−0.870%). M16 gains 32.51–35.43%. M1 calls original v3 and varies only −0.24% to +0.07%. Preserve those limits rather than claim a universal 5% gain. No automatic replacement/default or M2 dispatch is selected.
+
+Fresh matched comparison with the user's final tc_ladder: original v3 has 6.62–11.23% lower M1 medians across these three cyclic shapes/both series (descriptive, this one node only). tc_ladder remains faster than v3_m2 at EVERY M>=4 point, as does corrected Marlin. This result neither replaces the Tensor Core ladder nor establishes model-level speed. At square M1, Marlin varies 14.660 to 17.744 us between series while v3 stays 16.720/16.756 us, reversing their ordering. Do not claim a reproducible v3 win over Marlin there. On the rectangles M1 v3/Marlin are within 5%; no v3 superiority claim over Marlin follows.
+
+Secondary single-matrix results (read-flush/reused-input policies, 10 warmup/200 launches, seed 1, four earlier v3 shapes): read-flush M4 gains 16.45–31.58%, M8 30.00–43.48%, M16 30.97–40.23%. Reused-input M4 gains 3.59–33.74%, M8 24.19–36.88%, M16 29.52–36.98%. Some small-M changes are below 5% (M2 reused reaches −1.08%). M1 read-flush medians tie. These are retained native event-timer summaries, not raw per-launch samples or cyclic measurements. Timer quantization limits tiny comparisons. Kernel/M order is reversed, shape/policy order fixed. Do not splice these values into the primary cyclic series.
+
+Matched M4/4096-square application-replay profile of the fourth GEMM in cycle 100 (four counter passes each, no profiler flushing or clock locking): warp instructions 11,565,056 → 7,032,640 (−39.191%), global-load warp instructions 196,608 → 131,072 (−33.333%), L2 bytes 36,122,848 → 17,952,960 (−50.300%). DRAM reads INCREASE 5,969,664 → 6,595,584 bytes (+10.485%). Registers rise 43→60 with zero spills/local memory; blocks halve 128→64; observed active warps fall 49.68%→29.55%. Resource reports give static/shared totals 5121→9217 bytes (including tool/runtime accounting); source partial arrays are 4096→8192 bytes. Replay duration 52.256→33.696 us is NOT application latency.
+
+Interpretation: lower repeated load/unpack work and L2 traffic are consistent with the latency gain despite higher registers and lower observed occupancy. It is not a DRAM-traffic reduction. Independent accumulator parallelism, block count, scheduling and resource pressure also change, so no unique critical-path cause is established. Every operation still computes the same reconstructed FP16 weights, and no numerical tolerance was changed.
+
+Decision and limits: retain v3_m2 as an explicit experimental selector. Original v3, tc_ladder, corrected Marlin A, formats and defaults remain unchanged. One node/GPU type, synthetic GEMMs, fixed dimensions/M/seeds and timing policies. No full-model integration, latency-tail stability, other hardware, additional tile/split tuning, scale hoist or software pipeline is measured. Stop after this experiment. Any next optimization needs a separately chosen question and predeclaration. All failed attempts/diagnostics remain in results/e053_20261119, and all jobs are terminal after normal retrieval acknowledgement (verify scheduler status rather than reuse these IDs).
+
 
 ## Repository note — raw files over GitHub's 100 MB limit kept out of git (2026-11-15)
 

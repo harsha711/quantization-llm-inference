@@ -239,3 +239,24 @@ Nsight Compute, M=1 (`ncu_v123.txt`, cold caches, base clocks):
 - **With warm weights (no flush), Marlin is 15–18% faster at M=1** (4096²: 13.8 vs 16.3 µs). Once memory isn't the limit, Marlin's compute path is leaner. The M=1 tie exists only because both kernels hit the same DRAM wall.
 - **Both reach the same ~77% of the floor at M=1.** Marlin's 4-stage `cp.async` pipeline keeps several loads in flight per thread, yet doesn't beat v3 there. So the "more loads in flight" idea from the v3 section may buy little at M=1. *Inference, not tested:* the remaining ~23% could be fixed costs (launch, ramp-up, wave tail) that a 20 µs kernel can't amortize.
 - On 1536² v3 is faster (8.1 vs 9.2 µs), but this shape is dominated by fixed costs (floor 2.9 µs), so it says more about launch overhead than about either kernel.
+
+## E053: two-row reuse after v3 (2026-11-19)
+
+User-requested bounded continuation, isolated on `experiment/v3-rowreuse`. `v3_m2` shares each packed-weight load/unpack across two activation rows while keeping v3's split rule and per-row arithmetic. Original v3 is retained. M1 and unsupported inputs use v3. No pipeline or scale-hoisting change.
+
+**Accepted:** 21.9–36.5% lower cyclic M4/M8 latency, all 12 predeclared cells. Full-output bitwise v3 agreement, FP64 checks and representative memcheck/racecheck/synccheck pass. Two reversed series retain 150 rows/15,000 raw complete-cycle samples, with fresh tc_ladder/corrected-Marlin/cuBLAS controls on c8. Values below are cycle medians divided by four, separate from this document's earlier single-matrix read-flush series.
+
+| K×N | M | v3 µs/GEMM, S1 / S2 | v3_m2 µs/GEMM, S1 / S2 | Lower latency, S1 / S2 | tc_ladder µs/GEMM, S1 / S2 |
+|---|---:|---:|---:|---:|---:|
+| 4096×4096 | 4 | 49.032 / 49.480 | 32.544 / 32.116 | 33.63% / 35.09% | 18.832 / 19.312 |
+| 4096×4096 | 8 | 92.544 / 91.728 | 58.736 / 58.864 | 36.53% / 35.83% | 19.252 / 19.344 |
+| 4096×11008 | 4 | 117.512 / 116.428 | 90.512 / 90.952 | 22.98% / 21.88% | 64.400 / 63.888 |
+| 4096×11008 | 8 | 222.288 / 224.140 | 142.700 / 142.912 | 35.80% / 36.24% | 66.672 / 66.448 |
+| 11008×4096 | 4 | 134.944 / 133.960 | 88.496 / 88.872 | 34.42% / 33.66% | 67.472 / 67.468 |
+| 11008×4096 | 8 | 246.672 / 247.260 | 157.040 / 157.100 | 36.34% / 36.46% | 68.984 / 69.008 |
+
+The gain remains bounded: M2 on K4096/N11008 ties, and M1 runs unchanged v3. Your final tc_ladder is faster than this scalar candidate at every measured M>=4 cyclic point. Conversely, retained v3's M1 median is 6.6–11.2% lower than tc_ladder in these six matched cells, one node/workload only. There is no reproducible square-M1 win over Marlin (its series ordering reverses).
+
+The M4 matched replay shows 39.2% fewer warp instructions and 50.3% fewer L2 bytes, while DRAM reads rise 10.5%. Registers 43→60 and lower observed occupancy do not erase the gain. These counters support reduced repeated work, without isolating one critical-path cause. Profile duration is separate from production timing. Secondary single-matrix sweeps also improve M4–M16, with smaller-M/subthreshold exceptions retained in the full table.
+
+[Complete design, failures, results and limits](EXPERIMENTS.md#e053--two-row-weight-reuse-in-v3-one-bounded-scalar-kernel-experiment), [tooling](../scripts/e053/README.md), [raw/derived evidence](../results/e053_20261119/). Defaults remain unchanged. No model-level run or further optimization follows automatically.

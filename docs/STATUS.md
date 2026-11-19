@@ -1,6 +1,9 @@
-# E053 in progress, 2026-11-19
+# E053 complete, 2026-11-19
 
-User-authorized bounded v3 two-row reuse experiment, isolated branch `experiment/v3-rowreuse`. Original v3 and final tc_ladder remain controls. Predeclaration: EXPERIMENTS E053. Baseline/profile job 343819 passes after preserved tooling failures 343808/343816. Fresh counters support the bounded reuse test. Candidate v3_m2 passes numerical/bitwise/sanitizer validation job 343823 and local SASS/manifest checks. Parent/split rule and M1 fallback are unchanged. No candidate timing or speedup exists yet. Candidate correctness/sanitizers precede dependent fresh cyclic timing. Original checkout and unrelated changes are preserved. No push.
+- **v3 two-row reuse accepted:** v3_m2 lowers cyclic M4/M8 latency 21.9–36.5%, all 12 primary cells on c8, two reversed series. 150 rows/15,000 raw cycle samples plus 240 secondary native rows are complete. Every active output passes FP64 and matches parent v3 bits; representative memcheck/racecheck/synccheck and retained-control SASS checks pass. Full job 343828, validation 343823 and successful baseline 343819 are historical after normal completion. Preserve failed prerequisites 343808/343816.
+- **Limits retained:** M1 uses unchanged v3; M2 on K4096/N11008 ties. Final tc_ladder remains faster than v3_m2 at every cyclic M>=4 point. Original v3 is 6.6–11.2% lower than tc_ladder at M1 in this matched one-node workload, not a general/model claim. Square-M1 Marlin varies enough between series to reverse ordering, so no v3 win over it is established.
+- **Profile:** M4 warp instructions −39.2%, L2 bytes −50.3%, DRAM reads +10.5%, registers 43→60. Lower occupancy does not erase the measured gain. No unique cause or DRAM-reduction claim. Replay durations are not application latency.
+- **Evidence and decision:** `results/e053_20261119/`, `scripts/e053/README.md`, EXPERIMENTS E053 and OURS E053. Offline sample/identity/completeness/negative checks pass. Branch `experiment/v3-rowreuse`, isolated worktree `/tmp/w4a16-v3-rowreuse`; original checkout/unrelated changes preserved, no push. Keep explicit selectors/defaults. No model run, pipeline, scale hoist, further tuning or next experiment is authorized by this result.
 
 # Current state, 2026-11-18
 

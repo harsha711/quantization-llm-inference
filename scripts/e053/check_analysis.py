@@ -14,6 +14,9 @@ with tempfile.TemporaryDirectory(prefix='e053-negative-') as directory:
     root = Path(directory)
     for name in ('series1.jsonl','series2.jsonl','single-s1.csv','single-s2.csv'):
         shutil.copyfile(source/name,root/name)
+    shutil.copytree(source/'ncu',root/'ncu')
+    for name in ('final-v3.exit','final-v3-m2.exit'):
+        shutil.copyfile(source/name,root/name)
     analyze.analyze(root)
     path = root/'series2.jsonl'
     original = path.read_text()

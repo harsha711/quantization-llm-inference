@@ -1,0 +1,157 @@
++ timeout 2100 /tmp/e005-r2-hpuvvad-20261106/bin/python scripts/e053/bench.py --source /home/hpuvvad/csc548-w4a16-e005-20261106/external/pinned --local /home/hpuvvad/csc548-w4a16-e006-20261106/results/e006_20261106/patched/libe005.so --wheel /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/vllm/_C_stable_libtorch.abi3.so --bridge /home/hpuvvad/csc548-w4a16-e004-20261106/results/e004_20261106/libe004.so --tc /mnt/beegfs/hpuvvad/csc548-w4a16-e053-20261119/validation-c8-343823/libe053.so --out /mnt/beegfs/hpuvvad/csc548-w4a16-e053-20261119/full-c8-343828/series1.jsonl
+ENV {"body_sha256": "e4eca5e30436c547358a9c8125d69526c6bb3318da034afd54ada6744181e2b7", "kernels_sha256": "c373c18e67142f53c438294f9cc936805afe89d49324e390fc3b808c6b849b4e", "torch": "2.14.0+cu130", "cuda": "13.0", "gpu": "NVIDIA GeForce RTX 5060 Ti", "stream": 94504913656256}
+OPERATOR_SCHEMA _C::marlin_gemm(Tensor a, Tensor? c_or_none, Tensor b_q_weight, Tensor? b_bias_or_none, Tensor b_scales, Tensor? a_scales, Tensor? global_scale, Tensor? b_zeros_or_none, Tensor workspace, int b_type_id, SymInt size_m, SymInt size_n, SymInt size_k, bool use_atomic_add, bool use_fp32_reduce, bool is_zp_float) -> Tensor
+OPERATOR_SCHEMA _C::marlin_gemm(Tensor a, Tensor? c_or_none, Tensor b_q_weight, Tensor? b_bias_or_none, Tensor b_scales, Tensor? a_scales, Tensor? global_scale, Tensor? b_zeros_or_none, Tensor workspace, int b_type_id, SymInt size_m, SymInt size_n, SymInt size_k, bool use_atomic_add, bool use_fp32_reduce, bool is_zp_float) -> Tensor
+OPERATOR_SCHEMA _C::marlin_gemm(Tensor a, Tensor? c_or_none, Tensor b_q_weight, Tensor? b_bias_or_none, Tensor b_scales, Tensor? a_scales, Tensor? global_scale, Tensor? b_zeros_or_none, Tensor workspace, int b_type_id, SymInt size_m, SymInt size_n, SymInt size_k, bool use_atomic_add, bool use_fp32_reduce, bool is_zp_float) -> Tensor
+OPERATOR_SCHEMA _C::marlin_gemm(Tensor a, Tensor? c_or_none, Tensor b_q_weight, Tensor? b_bias_or_none, Tensor b_scales, Tensor? a_scales, Tensor? global_scale, Tensor? b_zeros_or_none, Tensor workspace, int b_type_id, SymInt size_m, SymInt size_n, SymInt size_k, bool use_atomic_add, bool use_fp32_reduce, bool is_zp_float) -> Tensor
+PASS 1 4096 4096 v3 66.880002617836
+PASS 1 4096 4096 v3_m2 67.03999638557434
+PASS 1 4096 4096 tc_ladder 73.27999919652939
+PASS 1 4096 4096 marlin 58.639999479055405
+PASS 1 4096 4096 cublas_dq 330.54399490356445
+PASS 2 4096 4096 v3_m2 88.52799981832504
+PASS 2 4096 4096 tc_ladder 75.19999891519547
+PASS 2 4096 4096 marlin 58.639999479055405
+PASS 2 4096 4096 cublas_dq 327.1999955177307
+PASS 2 4096 4096 v3 106.04800283908844
+PASS 4 4096 4096 tc_ladder 75.32799988985062
+PASS 4 4096 4096 marlin 58.88000130653381
+PASS 4 4096 4096 cublas_dq 327.2320032119751
+PASS 4 4096 4096 v3 196.1279958486557
+PASS 4 4096 4096 v3_m2 130.17599284648895
+PASS 8 4096 4096 marlin 60.736000537872314
+PASS 8 4096 4096 cublas_dq 326.84800028800964
+PASS 8 4096 4096 v3 370.1759874820709
+PASS 8 4096 4096 v3_m2 234.94400084018707
+PASS 8 4096 4096 tc_ladder 77.00799778103828
+PASS 16 4096 4096 cublas_dq 328.8959860801697
+PASS 16 4096 4096 v3 663.0719900131226
+PASS 16 4096 4096 v3_m2 445.98400592803955
+PASS 16 4096 4096 tc_ladder 83.52000266313553
+PASS 16 4096 4096 marlin 77.16799899935722
+OPERATOR_SCHEMA _C::marlin_gemm(Tensor a, Tensor? c_or_none, Tensor b_q_weight, Tensor? b_bias_or_none, Tensor b_scales, Tensor? a_scales, Tensor? global_scale, Tensor? b_zeros_or_none, Tensor workspace, int b_type_id, SymInt size_m, SymInt size_n, SymInt size_k, bool use_atomic_add, bool use_fp32_reduce, bool is_zp_float) -> Tensor
+OPERATOR_SCHEMA _C::marlin_gemm(Tensor a, Tensor? c_or_none, Tensor b_q_weight, Tensor? b_bias_or_none, Tensor b_scales, Tensor? a_scales, Tensor? global_scale, Tensor? b_zeros_or_none, Tensor workspace, int b_type_id, SymInt size_m, SymInt size_n, SymInt size_k, bool use_atomic_add, bool use_fp32_reduce, bool is_zp_float) -> Tensor
+OPERATOR_SCHEMA _C::marlin_gemm(Tensor a, Tensor? c_or_none, Tensor b_q_weight, Tensor? b_bias_or_none, Tensor b_scales, Tensor? a_scales, Tensor? global_scale, Tensor? b_zeros_or_none, Tensor workspace, int b_type_id, SymInt size_m, SymInt size_n, SymInt size_k, bool use_atomic_add, bool use_fp32_reduce, bool is_zp_float) -> Tensor
+OPERATOR_SCHEMA _C::marlin_gemm(Tensor a, Tensor? c_or_none, Tensor b_q_weight, Tensor? b_bias_or_none, Tensor b_scales, Tensor? a_scales, Tensor? global_scale, Tensor? b_zeros_or_none, Tensor workspace, int b_type_id, SymInt size_m, SymInt size_n, SymInt size_k, bool use_atomic_add, bool use_fp32_reduce, bool is_zp_float) -> Tensor
+PASS 1 4096 11008 v3_m2 234.81599986553192
+PASS 1 4096 11008 tc_ladder 251.50400400161743
+PASS 1 4096 11008 marlin 242.8479939699173
+PASS 1 4096 11008 cublas_dq 935.5039894580841
+PASS 1 4096 11008 v3 234.72000658512115
+PASS 2 4096 11008 tc_ladder 253.50400805473328
+PASS 2 4096 11008 marlin 242.91199445724487
+PASS 2 4096 11008 cublas_dq 1052.224040031433
+PASS 2 4096 11008 v3 241.18399620056152
+PASS 2 4096 11008 v3_m2 241.16799980401993
+PASS 4 4096 11008 marlin 243.00800263881683
+PASS 4 4096 11008 cublas_dq 1075.32799243927
+PASS 4 4096 11008 v3 470.0480103492737
+PASS 4 4096 11008 v3_m2 362.0480000972748
+PASS 4 4096 11008 tc_ladder 257.60000944137573
+PASS 8 4096 11008 cublas_dq 975.2960205078125
+PASS 8 4096 11008 v3 889.1519904136658
+PASS 8 4096 11008 v3_m2 570.7999765872955
+PASS 8 4096 11008 tc_ladder 266.6879892349243
+PASS 8 4096 11008 marlin 243.99999529123306
+PASS 16 4096 11008 v3 1708.6080312728882
+PASS 16 4096 11008 v3_m2 1114.2719984054565
+PASS 16 4096 11008 tc_ladder 285.3119969367981
+PASS 16 4096 11008 marlin 255.23200631141663
+PASS 16 4096 11008 cublas_dq 988.7359738349915
+OPERATOR_SCHEMA _C::marlin_gemm(Tensor a, Tensor? c_or_none, Tensor b_q_weight, Tensor? b_bias_or_none, Tensor b_scales, Tensor? a_scales, Tensor? global_scale, Tensor? b_zeros_or_none, Tensor workspace, int b_type_id, SymInt size_m, SymInt size_n, SymInt size_k, bool use_atomic_add, bool use_fp32_reduce, bool is_zp_float) -> Tensor
+OPERATOR_SCHEMA _C::marlin_gemm(Tensor a, Tensor? c_or_none, Tensor b_q_weight, Tensor? b_bias_or_none, Tensor b_scales, Tensor? a_scales, Tensor? global_scale, Tensor? b_zeros_or_none, Tensor workspace, int b_type_id, SymInt size_m, SymInt size_n, SymInt size_k, bool use_atomic_add, bool use_fp32_reduce, bool is_zp_float) -> Tensor
+OPERATOR_SCHEMA _C::marlin_gemm(Tensor a, Tensor? c_or_none, Tensor b_q_weight, Tensor? b_bias_or_none, Tensor b_scales, Tensor? a_scales, Tensor? global_scale, Tensor? b_zeros_or_none, Tensor workspace, int b_type_id, SymInt size_m, SymInt size_n, SymInt size_k, bool use_atomic_add, bool use_fp32_reduce, bool is_zp_float) -> Tensor
+OPERATOR_SCHEMA _C::marlin_gemm(Tensor a, Tensor? c_or_none, Tensor b_q_weight, Tensor? b_bias_or_none, Tensor b_scales, Tensor? a_scales, Tensor? global_scale, Tensor? b_zeros_or_none, Tensor workspace, int b_type_id, SymInt size_m, SymInt size_n, SymInt size_k, bool use_atomic_add, bool use_fp32_reduce, bool is_zp_float) -> Tensor
+PASS 1 11008 4096 tc_ladder 266.81599020957947
+PASS 1 11008 4096 marlin 236.735999584198
+PASS 1 11008 4096 cublas_dq 867.904007434845
+PASS 1 11008 4096 v3 236.84799671173096
+PASS 1 11008 4096 v3_m2 236.67199909687042
+PASS 2 11008 4096 marlin 236.80000007152557
+PASS 2 11008 4096 cublas_dq 857.2800159454346
+PASS 2 11008 4096 v3 265.76000452041626
+PASS 2 11008 4096 v3_m2 247.3760023713112
+PASS 2 11008 4096 tc_ladder 269.8880136013031
+PASS 4 11008 4096 cublas_dq 859.4079911708832
+PASS 4 11008 4096 v3 539.7760272026062
+PASS 4 11008 4096 v3_m2 353.983998298645
+PASS 4 11008 4096 tc_ladder 269.8880136013031
+PASS 4 11008 4096 marlin 236.84799671173096
+PASS 8 11008 4096 v3 986.6880178451538
+PASS 8 11008 4096 v3_m2 628.1599998474121
+PASS 8 11008 4096 tc_ladder 275.9360074996948
+PASS 8 11008 4096 marlin 236.86400055885315
+PASS 8 11008 4096 cublas_dq 861.2479865550995
+PASS 16 11008 4096 v3_m2 1205.79195022583
+PASS 16 11008 4096 tc_ladder 280.12800216674805
+PASS 16 11008 4096 marlin 244.91199851036072
+PASS 16 11008 4096 cublas_dq 862.7200126647949
+PASS 16 11008 4096 v3 1799.5359897613525
+MAPPED_LIBRARIES 7fc637200000-7fc63739a000 r--p 00000000 103:03 6294378                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/vllm/_C_stable_libtorch.abi3.so
+7fc63739a000-7fc637fb7000 r-xp 0019a000 103:03 6294378                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/vllm/_C_stable_libtorch.abi3.so
+7fc637fb7000-7fc63bd9b000 r--p 00db7000 103:03 6294378                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/vllm/_C_stable_libtorch.abi3.so
+7fc63bd9b000-7fc63bda1000 r--p 04b9b000 103:03 6294378                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/vllm/_C_stable_libtorch.abi3.so
+7fc63bda1000-7fc63bda7000 rw-p 04ba1000 103:03 6294378                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/vllm/_C_stable_libtorch.abi3.so
+7fc6502d5000-7fc6507f7000 r-xp 00000000 00:33 30326173126                /home/hpuvvad/csc548-w4a16-e006-20261106/results/e006_20261106/patched/libe005.so
+7fc6507f7000-7fc6509f7000 ---p 00522000 00:33 30326173126                /home/hpuvvad/csc548-w4a16-e006-20261106/results/e006_20261106/patched/libe005.so
+7fc6509f7000-7fc6509fc000 r--p 00522000 00:33 30326173126                /home/hpuvvad/csc548-w4a16-e006-20261106/results/e006_20261106/patched/libe005.so
+7fc6509fc000-7fc6509fd000 rw-p 00527000 00:33 30326173126                /home/hpuvvad/csc548-w4a16-e006-20261106/results/e006_20261106/patched/libe005.so
+7fc860095000-7fc8602a6000 r-xp 00000000 00:31 15335877916127550539       /mnt/beegfs/hpuvvad/csc548-w4a16-e053-20261119/validation-c8-343823/libe053.so
+7fc8602a6000-7fc8604a6000 ---p 00211000 00:31 15335877916127550539       /mnt/beegfs/hpuvvad/csc548-w4a16-e053-20261119/validation-c8-343823/libe053.so
+7fc8604a6000-7fc8604ab000 r--p 00211000 00:31 15335877916127550539       /mnt/beegfs/hpuvvad/csc548-w4a16-e053-20261119/validation-c8-343823/libe053.so
+7fc8604ab000-7fc8604ac000 rw-p 00216000 00:31 15335877916127550539       /mnt/beegfs/hpuvvad/csc548-w4a16-e053-20261119/validation-c8-343823/libe053.so
+7fc8630d2000-7fc8631f8000 r-xp 00000000 00:33 131285276635               /home/hpuvvad/csc548-w4a16-e004-20261106/results/e004_20261106/libe004.so
+7fc8631f8000-7fc8633f8000 ---p 00126000 00:33 131285276635               /home/hpuvvad/csc548-w4a16-e004-20261106/results/e004_20261106/libe004.so
+7fc8633f8000-7fc8633fd000 r--p 00126000 00:33 131285276635               /home/hpuvvad/csc548-w4a16-e004-20261106/results/e004_20261106/libe004.so
+7fc8633fd000-7fc8633fe000 rw-p 0012b000 00:33 131285276635               /home/hpuvvad/csc548-w4a16-e004-20261106/results/e004_20261106/libe004.so
+7fc86c600000-7fc86c614000 r--p 00000000 103:03 6695426                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_nvshmem.so
+7fc86c614000-7fc86c63f000 r-xp 00014000 103:03 6695426                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_nvshmem.so
+7fc86c63f000-7fc86c9b7000 r--p 0003f000 103:03 6695426                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_nvshmem.so
+7fc86c9b7000-7fc86c9b9000 r--p 003b6000 103:03 6695426                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_nvshmem.so
+7fc86c9b9000-7fc86c9ba000 rw-p 003b8000 103:03 6695426                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_nvshmem.so
+7fc86c9bd000-7fc86c9c9000 rw-p 003d2000 103:03 6695426                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_nvshmem.so
+7fc86ca00000-7fc86d06d000 r--p 00000000 103:03 6695423                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_cuda.so
+7fc86d06d000-7fc870bf5000 r-xp 0066d000 103:03 6695423                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_cuda.so
+7fc870bf5000-7fc885afd000 r--p 041f5000 103:03 6695423                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_cuda.so
+7fc885afd000-7fc885b5b000 r--p 190fc000 103:03 6695423                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_cuda.so
+7fc885b5b000-7fc885b7c000 rw-p 1915a000 103:03 6695423                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_cuda.so
+7fc886957000-7fc886dcf000 rw-p 1db15000 103:03 6695423                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_cuda.so
+7fc886e00000-7fc887d78000 r--p 00000000 103:03 6695422                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_cpu.so
+7fc887d78000-7fc898db8000 r-xp 00f78000 103:03 6695422                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_cpu.so
+7fc898db8000-7fc89b87f000 r--p 11fb8000 103:03 6695422                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_cpu.so
+7fc89b87f000-7fc89bb2b000 r--p 14a7e000 103:03 6695422                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_cpu.so
+7fc89bb2b000-7fc89bb97000 rw-p 14d2a000 103:03 6695422                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_cpu.so
+7fc89bcab000-7fc89c219000 rw-p 1a436000 103:03 6695422                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_cpu.so
+7fc89c400000-7fc89c5ac000 r--p 00000000 103:03 6695427                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_python.so
+7fc89c5ac000-7fc89d515000 r-xp 001ac000 103:03 6695427                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_python.so
+7fc89d515000-7fc89da0c000 r--p 01115000 103:03 6695427                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_python.so
+7fc89da0c000-7fc89da35000 r--p 0160c000 103:03 6695427                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_python.so
+7fc89da35000-7fc89da9f000 rw-p 01635000 103:03 6695427                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_python.so
+7fc89db14000-7fc89dbad000 rw-p 0202b000 103:03 6695427                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_python.so
+7fc8f6e00000-7fc8fa198000 r-xp 00000000 103:03 9175526                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcublas.so.13
+7fc8fa198000-7fc8fa398000 ---p 03398000 103:03 9175526                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcublas.so.13
+7fc8fa398000-7fc8fa3a4000 r--p 03398000 103:03 9175526                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcublas.so.13
+7fc8fa3a4000-7fc8fa3ab000 rw-p 033a4000 103:03 9175526                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcublas.so.13
+7fc901200000-7fc91a6ea000 r-xp 00000000 103:03 9175527                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcublasLt.so.13
+7fc91a6ea000-7fc91a8ea000 ---p 194ea000 103:03 9175527                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcublasLt.so.13
+7fc91a8ea000-7fc91abd7000 r--p 194ea000 103:03 9175527                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcublasLt.so.13
+7fc91abd7000-7fc91b22b000 rw-p 197d7000 103:03 9175527                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcublasLt.so.13
+7fc920666000-7fc920865000 ---p 1f466000 103:03 9175527                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcublasLt.so.13
+7fc920865000-7fc9212b9000 r--p 19e65000 103:03 9175527                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcublasLt.so.13
+7fc9212b9000-7fc9214b8000 ---p 200b9000 103:03 9175527                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcublasLt.so.13
+7fc9214b8000-7fc927084000 rw-p 1a8b8000 103:03 9175527                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcublasLt.so.13
+7fc927c00000-7fc927ca6000 r-xp 00000000 103:03 9175427                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcudart.so.13
+7fc927ca6000-7fc927ea6000 ---p 000a6000 103:03 9175427                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcudart.so.13
+7fc927ea6000-7fc927eab000 r--p 000a6000 103:03 9175427                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcudart.so.13
+7fc927eab000-7fc927eac000 rw-p 000ab000 103:03 9175427                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcudart.so.13
+7fc93064c000-7fc930652000 r--p 00000000 103:03 6695421                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch.so
+7fc930652000-7fc930660000 r-xp 00006000 103:03 6695421                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch.so
+7fc930660000-7fc930664000 r--p 00014000 103:03 6695421                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch.so
+7fc930664000-7fc930665000 r--p 00018000 103:03 6695421                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch.so
+7fc930665000-7fc930666000 rw-p 00019000 103:03 6695421                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch.so
+7fc930666000-7fc93066a000 rw-p 00020000 103:03 6695421                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch.so
+7fc930670000-7fc930671000 r--p 00000000 103:03 6695425                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_global_deps.so
+7fc930671000-7fc930672000 r-xp 00001000 103:03 6695425                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_global_deps.so
+7fc930672000-7fc930673000 r--p 00002000 103:03 6695425                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_global_deps.so
+7fc930673000-7fc930674000 r--p 00002000 103:03 6695425                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_global_deps.so
+7fc930674000-7fc930676000 rw-p 00003000 103:03 6695425                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_global_deps.so

@@ -88,10 +88,31 @@ def analyze(root):
                     times = {c:float(keyed[k,n,m,policy,c]['median_us']) for c in ('v3','v3_m2','tc_ladder')}
                     secondary.append(dict(series=series,K=k,N=n,M=m,policy='read_flush' if policy == 2 else 'reused',
                                           **times,gain_pct=100*(1-times['v3_m2']/times['v3'])))
+    profiles = []
+    for tag,name,grid,regs in [('final-v3','v3',128,43),('final-v3-m2','v3_m2',64,60)]:
+        assert (root/(tag+'.exit')).read_text().strip() == '0'
+        raw = list(csv.reader((root/f'ncu/{tag}.raw.csv').open()))
+        assert len(raw) == 3 and len(raw[0]) == len(raw[2])
+        values,units = dict(zip(raw[0],raw[2])),dict(zip(raw[0],raw[1]))
+        assert values['CC'] == '12.0' and ('w4a16_v3_m2_kernel' if name == 'v3_m2' else 'w4a16_v3_kernel') in values['Kernel Name']
+        rows = [json.loads(x) for x in (root/f'ncu/{tag}.jsonl').read_text().splitlines()]
+        assert len(rows) == int(values['profiler__replayer_passes']) == 4
+        for r in rows:
+            assert (r['config'],r['M'],r['K'],r['N']) == (name,4,4096,4096)
+            assert r['kernels_sha256'] in libraries and r['launch_skip'] == 399 and r['launch_count'] == 1
+            assert r['profile_cycles'] == 100 and r['profile_warmup'] == 10
+            assert r['post_profile_validation'] == r['validation']
+            assert [v['output_sha256'] for v in r['validation']] == [v['output_sha256'] for v in by[1,4096,4096,4,name]['validation']]
+            assert ([a['operand_sha256'] for a in r['allocations']],r['activation_prefix_sha256']) == identity[4096,4096,4]
+        metrics = {m:float(values[m].replace(',','')) for m in Path(__file__).with_name('metrics.txt').read_text().splitlines()}
+        assert metrics['launch__grid_size'] == grid and metrics['launch__registers_per_thread'] == regs
+        assert all(math.isfinite(v) and v >= 0 for v in metrics.values())
+        profiles.append(dict(config=name,replay_passes=4,kernel=values['Kernel Name'],metrics=metrics,
+                             units={m:units[m] for m in metrics}))
     result = dict(decision='ACCEPTED' if passed == 12 else 'REJECTED',primary_passes=passed,
                   primary_cells=12,timing_rows=150,cycle_samples=15000,parent_bitwise_cells=30,
                   secondary_rows=240,kernel_library_sha256=next(iter(libraries)),comparisons=comparisons,
-                  secondary=secondary)
+                  secondary=secondary,profiles=profiles)
     return result
 
 
@@ -131,4 +152,4 @@ if __name__ == '__main__':
         with (args.root/'comparisons.csv').open('w',newline='') as f:
             w = csv.DictWriter(f,fieldnames=list(result['comparisons'][0]),lineterminator='\n')
             w.writeheader(); w.writerows(result['comparisons'])
-        print(json.dumps({k:v for k,v in result.items() if k not in ('comparisons','secondary')},indent=2))
+        print(json.dumps({k:v for k,v in result.items() if k not in ('comparisons','secondary','profiles')},indent=2))
