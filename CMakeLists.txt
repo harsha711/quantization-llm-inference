@@ -49,11 +49,21 @@ if(CMAKE_CUDA_COMPILER)
     src/cuda/w4a16_tc_splitk.cu
     src/cuda/w4a16_tc_m32.cu
     src/cuda/dequant.cu
-    src/cuda/cublas_gemm.cu)
+    src/cuda/cublas_gemm.cu
+    src/cuda/ours_v0.cu
+    src/cuda/ours_v1.cu
+    src/cuda/ours_v2.cu
+    src/cuda/ours_v3.cu
+    src/cuda/flush_read.cu)
   target_include_directories(w4a16_bench PRIVATE src/cuda)
   target_link_libraries(w4a16_bench PRIVATE w4a16_host CUDA::cudart CUDA::cublas)
   # -lineinfo maps SASS back to source lines in Nsight Compute without disabling optimization.
   target_compile_options(w4a16_bench PRIVATE $<$<COMPILE_LANGUAGE:CUDA>:-lineinfo>)
+
+  # Achievable DRAM read bandwidth: the ceiling for the bench's pct_floor column.
+  add_executable(w4a16_bwprobe src/cuda/bw_probe.cu)
+  target_include_directories(w4a16_bwprobe PRIVATE src/cuda)
+  target_link_libraries(w4a16_bwprobe PRIVATE CUDA::cudart)
 else()
   message(STATUS "No CUDA compiler found: building host-only targets (test_cpu).")
 endif()

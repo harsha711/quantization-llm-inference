@@ -1,0 +1,11 @@
+date=2026-11-17T01:16:16-05:00
+host=c7
+git=none dirty=0
+kernels=naive,inblock_specialized,v0,cublas
+Ms=1 2 4 8 16
+iters=200
+flush=read
+name, compute_cap, driver_version, clocks.max.sm [MHz], clocks.max.memory [MHz]
+NVIDIA GeForce RTX 5060 Ti, 12.0, 610.57.04, 3090 MHz, 14001 MHz
+Build cuda_13.4.r13.4/compiler.38855100_0
+peak_gbps=427.4

@@ -58,10 +58,11 @@ struct Options {
   int M = 16, N = 4096, K = 4096, group = 128;
   uint64_t seed = 1;
   int warmup = 10, iters = 100, check_rows = 64;
-  bool flush_l2 = true;
+  int flush_l2 = 1;  // 0 none, 1 store flush (default), 2 read-only flush (--flush-read)
   bool nocheck = false;
   bool zero_weights = false;
   bool unpack_selftest = false;
+  double peak_gbps = 0;  // > 0 adds floor_us/pct_floor (output and CSV); see docs/OURS.md
   std::vector<std::string> kernels = {"naive", "inblock", "inblock_specialized", "inblock_m2", "inblock_m4", "cublas", "cublas_dq", "dequant", "unfused"};
   std::string csv;
 };
@@ -70,7 +71,8 @@ struct Options {
   std::fprintf(stderr,
                "usage: %s [--M m] [--N n] [--K k] [--group g] [--seed s] [--warmup w]\n"
                "          [--iters i] [--kernels naive,inblock,inblock_specialized,inblock_m2,inblock_m4,inblock_vec,inblock_m4_vec,tc,tc_cvt,tc_splitk,tc_m32,tc_ladder,cublas,cublas_dq,dequant,unfused]\n"
-               "          [--no-flush-l2] [--check-rows r] [--nocheck] [--zero-weights] [--csv path]\n",
+               "          [--no-flush-l2] [--check-rows r] [--nocheck] [--zero-weights] [--csv path]\n"
+               "          [--peak-gbps g] [--flush-read]   (also accepts kernels v0, v1, v2, v3)\n",
                prog);
   std::exit(EXIT_FAILURE);
 }
@@ -91,11 +93,13 @@ Options parse(int argc, char** argv) {
     else if (a == "--warmup") o.warmup = std::stoi(val());
     else if (a == "--iters") o.iters = std::stoi(val());
     else if (a == "--check-rows") o.check_rows = std::stoi(val());
-    else if (a == "--no-flush-l2") o.flush_l2 = false;
+    else if (a == "--no-flush-l2") o.flush_l2 = 0;
+    else if (a == "--flush-read") o.flush_l2 = 2;
     else if (a == "--nocheck") o.nocheck = true;
     else if (a == "--zero-weights") o.zero_weights = true;
     else if (a == "--unpack-selftest") o.unpack_selftest = true;
     else if (a == "--csv") o.csv = val();
+    else if (a == "--peak-gbps") o.peak_gbps = std::stod(val());
     else if (a == "--kernels") {
       o.kernels.clear();
       std::stringstream ss(val());
@@ -118,10 +122,11 @@ T* to_device(const std::vector<T>& h) {
 
 struct Timing {
   double median_us = 0, min_us = 0, max_us = 0, p90_us = 0;
+  double mean_us = 0;  // event timer ticks are ~2 us on c7; the mean resolves below a tick
 };
 
 Timing time_kernel(const std::function<void()>& launch, int warmup, int iters, void* flush_buf,
-                   size_t flush_bytes) {
+                   size_t flush_bytes, int flush_mode = 1, uint32_t* flush_sink = nullptr) {
   for (int i = 0; i < warmup; ++i) launch();
   CUDA_CHECK(cudaDeviceSynchronize());
 
@@ -131,7 +136,8 @@ Timing time_kernel(const std::function<void()>& launch, int warmup, int iters, v
     CUDA_CHECK(cudaEventCreate(&stop[i]));
   }
   for (int i = 0; i < iters; ++i) {
-    if (flush_buf) launch_l2_flush(flush_buf, flush_bytes, 0);
+    if (flush_buf && flush_mode == 2) launch_l2_flush_read(flush_buf, flush_bytes, flush_sink, 0);
+    else if (flush_buf) launch_l2_flush(flush_buf, flush_bytes, 0);
     CUDA_CHECK(cudaEventRecord(start[i]));
     launch();
     CUDA_CHECK(cudaEventRecord(stop[i]));
@@ -152,6 +158,7 @@ Timing time_kernel(const std::function<void()>& launch, int warmup, int iters, v
   t.max_us = us.back();
   t.median_us = iters % 2 ? us[iters / 2] : 0.5 * (us[iters / 2 - 1] + us[iters / 2]);
   t.p90_us = us[static_cast<size_t>(0.9 * (iters - 1))];
+  for (double v : us) t.mean_us += v / iters;
   return t;
 }
 
@@ -162,6 +169,11 @@ double logical_bytes(const std::string& name, int M, int N, int K, int group) {
   const double qw = static_cast<double>(qweight_bytes(K, N));
   const double sc = static_cast<double>(scales_bytes(K, N, group));
   if (name == "naive" || name == "inblock" || name == "inblock_specialized" || name == "inblock_m2" || name == "inblock_m4" || name == "inblock_vec" || name == "inblock_m4_vec" || name == "tc" || name == "tc_cvt" || name == "tc_splitk" || name == "tc_m32" || name == "tc_ladder") return a + c + qw + sc;
+  // v1's split-K FP32 partials (splits * M * N * 4 B, written + read once) are small
+  // next to the weights and are left out of the logical-bytes model.
+  if (name == "v0" || name == "v1" || name == "v1_interleaved" || name == "v1_runtime_tail" ||
+      name == "v2" || name == "v3")
+    return a + c + qw + sc;
   if (name == "cublas" || name == "cublas_dq") return a + c + w16;
   if (name == "dequant") return qw + sc + w16;
   if (name == "unfused") return a + c + qw + sc + w16;
@@ -260,7 +272,12 @@ int main(int argc, char** argv) {
     flush_bytes = 2 * static_cast<size_t>(prop.l2CacheSize);
     CUDA_CHECK(cudaMalloc(&flush_buf, flush_bytes));
   }
-  if (o.flush_l2)
+  uint32_t* flush_sink = nullptr;
+  if (o.flush_l2 == 2) CUDA_CHECK(cudaMalloc(&flush_sink, sizeof(uint32_t)));
+  if (o.flush_l2 == 2)
+    std::printf("cache: intended cold-L2, flush buffer %.2f MiB (2x L2), read-only kernel (no dirty lines)\n",
+                flush_bytes / 1048576.0);
+  else if (o.flush_l2)
     std::printf("cache: intended cold-L2, flush buffer %.2f MiB (2x L2), store kernel (not memset)\n",
                 flush_bytes / 1048576.0);
   else
@@ -316,8 +333,12 @@ int main(int argc, char** argv) {
                    "gpu,sm,sms,driver,runtime,kernel,M,N,K,group,seed,flush_l2,warmup,iters,"
                    "check_rows,l2_mib,flush_mib,logical_bytes,median_us,min_us,max_us,p90_us,"
                    "tflops,eff_gbps,pass,max_abs_err,rel_l2_err,rel_l2_vs_fp16,w_hat_mismatches,"
-                   "w_rel_l2,w_rel_l2_uniform_pred\n");
+                   "w_rel_l2,w_rel_l2_uniform_pred%s\n",
+                   o.peak_gbps > 0 ? ",peak_gbps,floor_us,pct_floor,mean_us" : "");
   }
+  if (o.peak_gbps > 0)
+    std::printf("floor: logical_bytes / %.1f GB/s; pct_floor = floor_us / median_us * 100\n",
+                o.peak_gbps);
 
   bool all_pass = what_mismatch == 0;
   std::printf("%-20s %10s %10s %10s %8s %9s %5s %10s %10s %12s\n", "kernel", "median_us", "min_us",
@@ -362,6 +383,37 @@ int main(int argc, char** argv) {
     } else if (name == "tc_ladder") {
       // E050 rung, dispatch only (same rule as scripts/e050/tc_bridge.cu): tc_m32 at M >= 64, else tc.
       launch = [&] { (o.M >= 64 ? launch_w4a16_tc_m32 : launch_w4a16_tc)(dA, dQ, dS, dC, o.M, o.N, o.K, o.group, 0); };
+      ref = &ref_quant;
+    } else if (name == "v0") {
+      launch = [&] { launch_w4a16_v0(dA, dQ, dS, dC, o.M, o.N, o.K, o.group, 0); };
+      ref = &ref_quant;
+    } else if (name == "v1") {
+      launch = [&] { launch_w4a16_v1(dA, dQ, dS, dC, o.M, o.N, o.K, o.group, 0); };
+      ref = &ref_quant;
+      std::printf("launch: v1 grid=(%d, %d, %d) block=(32, 8)\n", (o.N + 31) / 32, o.M,
+                  w4a16_v1_splits(o.M, o.N, o.K));
+    } else if (name == "v2" || name == "v3") {
+      const bool v3 = name == "v3";
+      launch = [&, v3] {
+        if (v3) launch_w4a16_v3(dA, dQ, dS, dC, o.M, o.N, o.K, o.group, 0);
+        else launch_w4a16_v2(dA, dQ, dS, dC, o.M, o.N, o.K, o.group, 0);
+      };
+      ref = &ref_quant;
+      if (w4a16_v2_fast_path(dA, dQ, dS, dC, o.N, o.K))
+        std::printf("launch: %s grid=(%d, %d, %d) block=(32, 8), 4 columns per lane\n",
+                    name.c_str(), (o.N + 127) / 128, o.M, w4a16_v2_splits(o.M, o.N, o.K));
+      else
+        std::printf("launch: %s falls back to v1 (needs N %% 4 == 0 and K %% 8 == 0)\n",
+                    name.c_str());
+    } else if (name == "v1_interleaved") {  // ablation: every 8th word per warp
+      launch = [&] {
+        launch_w4a16_v1_variant(dA, dQ, dS, dC, o.M, o.N, o.K, o.group, 0, false, true);
+      };
+      ref = &ref_quant;
+    } else if (name == "v1_runtime_tail") {  // ablation: first measured v1
+      launch = [&] {
+        launch_w4a16_v1_variant(dA, dQ, dS, dC, o.M, o.N, o.K, o.group, 0, false, false);
+      };
       ref = &ref_quant;
     } else if (name == "cublas") {
       launch = [&] { launch_cublas_fp16(handle, dA, dW, dC, o.M, o.N, o.K); };
@@ -411,6 +463,22 @@ int main(int argc, char** argv) {
           return EXIT_FAILURE;
         }
       }
+      if (name == "v3") {
+        // v3 changes only how W_hat is computed and keeps v2's FMA order and grid, so
+        // its output must match v2 bit for bit (docs/OURS.md, v3).
+        launch_w4a16_v2(dA, dQ, dS, dC, o.M, o.N, o.K, o.group, 0);
+        CUDA_CHECK(cudaDeviceSynchronize());
+        std::vector<uint16_t> v2_out(c_elems);
+        CUDA_CHECK(cudaMemcpy(v2_out.data(), dC, c_elems * sizeof(__half), cudaMemcpyDeviceToHost));
+        size_t mismatches = 0;
+        for (size_t i = 0; i < c_elems; ++i) mismatches += hC[i] != v2_out[i];
+        std::printf("v3 vs v2: %zu / %zu FP16 outputs differ\n", mismatches, c_elems);
+        if (mismatches) {
+          std::fprintf(stderr, "v3 bitwise comparison with v2 failed; stopping before timing\n");
+          if (csv) std::fclose(csv);
+          return EXIT_FAILURE;
+        }
+      }
       if (name == "inblock_specialized" || name == "inblock_m2" || name == "inblock_m4" ||
           name == "inblock_vec" || name == "inblock_m4_vec" || name == "tc_m32" || name == "tc_ladder") {
         // Parent of each candidate: E002<-E001, E003<-E002, E043 vec<-E002, m4_vec<-E003 m4,
@@ -455,7 +523,8 @@ int main(int argc, char** argv) {
       return EXIT_FAILURE;
     }
 
-    const Timing t = time_kernel(launch, o.warmup, o.iters, flush_buf, flush_bytes);
+    const Timing t = time_kernel(launch, o.warmup, o.iters, flush_buf, flush_bytes, o.flush_l2,
+                                 flush_sink);
     const double bytes = logical_bytes(name, o.M, o.N, o.K, o.group);
     const double tflops = is_gemm ? flops / (t.median_us * 1e-6) / 1e12 : 0.0;
     const double gbps = bytes / (t.median_us * 1e-6) / 1e9;
@@ -465,15 +534,25 @@ int main(int argc, char** argv) {
     if (is_gemm && !o.nocheck && !pass)
       std::printf("  %zu of %zu checked outputs outside |err| <= %.0e*|ref| + %.3e\n", st.num_bad,
                   st.count, rtol, st.atol);
+    const double floor_us = o.peak_gbps > 0 ? bytes / (o.peak_gbps * 1e9) * 1e6 : 0.0;
+    const double pct_floor = floor_us > 0 ? floor_us / t.median_us * 100.0 : 0.0;
+    if (o.peak_gbps > 0)
+      std::printf("%-20s floor_us=%.2f pct_floor=%.1f%% mean_us=%.3f\n", "", floor_us, pct_floor,
+                  t.mean_us);
     if (csv)
       std::fprintf(csv,
                    "\"%s\",%d%d,%d,%d,%d,%s,%d,%d,%d,%d,%llu,%d,%d,%d,%d,%.4f,%.4f,%.0f,"
-                   "%.3f,%.3f,%.3f,%.3f,%.4f,%.2f,%d,%.4e,%.4e,%.4e,%zu,%.6e,%.6e\n",
+                   "%.3f,%.3f,%.3f,%.3f,%.4f,%.2f,%d,%.4e,%.4e,%.4e,%zu,%.6e,%.6e",
                    prop.name, prop.major, prop.minor, prop.multiProcessorCount, driver, runtime,
                    name.c_str(), o.M, o.N, o.K, o.group, static_cast<unsigned long long>(o.seed),
                    o.flush_l2, o.warmup, o.iters, o.check_rows, l2_mib, flush_bytes / 1048576.0,
                    bytes, t.median_us, t.min_us, t.max_us, t.p90_us, tflops, gbps, pass ? 1 : 0,
                    st.max_abs, st.rel_l2, vs16.rel_l2, what_mismatch, w_rel_l2, pred_rel);
+    if (csv) {
+      if (o.peak_gbps > 0)
+        std::fprintf(csv, ",%.1f,%.3f,%.2f,%.3f", o.peak_gbps, floor_us, pct_floor, t.mean_us);
+      std::fprintf(csv, "\n");
+    }
   }
   if (!o.nocheck)
     std::printf("checked %zu of %d rows against the FP64 CPU reference (reconstructed W_hat for "
@@ -490,7 +569,7 @@ int main(int argc, char** argv) {
   CUBLAS_CHECK(cublasDestroy(handle));
   for (void* ptr : {static_cast<void*>(dA), static_cast<void*>(dW), static_cast<void*>(dQ),
                     static_cast<void*>(dS), static_cast<void*>(dW_hat), static_cast<void*>(dC),
-                    flush_buf})
+                    flush_buf, static_cast<void*>(flush_sink)})
     if (ptr) CUDA_CHECK(cudaFree(ptr));
   return all_pass ? EXIT_SUCCESS : EXIT_FAILURE;
 }

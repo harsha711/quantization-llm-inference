@@ -1,0 +1,9 @@
+device: NVIDIA GeForce RTX 5060 Ti (sm_120, 36 SMs, L2 32.0 MiB)
+     MiB  unroll   blocks       GB/s
+     256       1      216      425.3
+     256       4      216      426.0
+     256       8      216      426.0
+    1024       1      216      426.4
+    1024       4      216      427.1
+    1024       8      216      427.4
+ceiling_gbps=427.4

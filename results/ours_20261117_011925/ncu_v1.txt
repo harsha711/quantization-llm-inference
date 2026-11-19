@@ -1,0 +1,304 @@
+==== kernel=v1 M=1 K=4096 N=4096
+==PROF== Connected to process 2939024 (./build/w4a16_bench)
+==PROF== Profiling "w4a16_v1_kernel": 0%....50%....100% - 17 passes
+device: NVIDIA GeForce RTX 5060 Ti (sm_120, 36 SMs, L2 32.00 MiB from cudaDeviceProp, 15.52 GiB)
+software: driver API 13030, runtime 13040
+shape: M=1 N=4096 K=4096 group=128 seed=1 flush_l2=0 warmup=0 iters=1 check_rows=64
+footprint: FP16 weights 32.0000 MiB, packed INT4 8.0000 MiB, FP16 scales 0.2500 MiB
+launch: naive grid=((N+255)/256, M)=(16, 1) block=256; dequant grid=(16, 512) block=256
+launch: inblock/inblock_specialized grid=(128, 1) block=(32, 8), shared partials=1024 bytes
+launch: inblock_m2 grid=(128, 1), inblock_m4 grid=(128, 1), block=(32, 8), shared partials=2048/4096 bytes
+weight quant: rel_l2(W_hat, W)=1.1722e-01  uniform-step prediction sqrt(mean(s^2/12)/mean(w^2))=1.1767e-01
+  (prediction assumes independent Uniform[-s/2,s/2] error per weight using that group's s)
+cache: warm/reused inputs, no flush between launches
+W_hat GPU vs CPU: skipped (not needed for this kernel list)
+kernel                median_us     min_us     p90_us  TFLOP/s  eff_GB/s  pass    max_abs     rel_l2  rel_l2_fp16
+launch: v1 grid=(128, 1, 2) block=(32, 8)
+v1                    708614.87  708614.87  708614.87    0.000       0.0   yes  0.000e+00  0.000e+00    0.000e+00
+==PROF== Disconnected from process 2939024
+[2939024] w4a16_bench@127.0.0.1
+  <unnamed>::w4a16_v1_kernel(const __half *, const unsigned int *, const __half *, __half *, float *, unsigned int *, int, int, int, int, int) (128, 1, 2)x(32, 8, 1), Context 1, Stream 7, Device 0, CC 12.0
+    Section: GPU Speed Of Light Throughput
+    ----------------------- ----------- ------------
+    Metric Name             Metric Unit Metric Value
+    ----------------------- ----------- ------------
+    DRAM Frequency                  Ghz        13.78
+    SM Frequency                    Ghz         2.32
+    Elapsed Cycles                cycle      109,908
+    Memory Throughput                 %        41.64
+    DRAM Throughput                   %        41.64
+    Duration                         us        47.23
+    L1/TEX Cache Throughput           %        38.07
+    L2 Cache Throughput               %        16.95
+    SM Active Cycles              cycle    98,333.94
+    Compute (SM) Throughput           %        59.05
+    ----------------------- ----------- ------------
+
+    OPT   This workload exhibits low compute throughput and memory bandwidth utilization relative to the peak           
+          performance of this device. Achieved compute throughput and/or memory bandwidth below 60.0% of peak           
+          typically indicate latency issues. Look at Scheduler Statistics and Warp State Statistics for potential       
+          reasons.                                                                                                      
+
+    Section: Memory Workload Analysis
+    --------------------------------------- ----------- ------------
+    Metric Name                             Metric Unit Metric Value
+    --------------------------------------- ----------- ------------
+    Local Memory Spilling Requests                                 0
+    Local Memory Spilling Request Overhead            %            0
+    L2 Sector Promotion Misses                        %            0
+    Shared Memory Spilling Requests                                0
+    Shared Memory Spilling Request Overhead           %            0
+    Memory Throughput                           Gbyte/s       183.67
+    Mem Busy                                          %        17.39
+    Max Bandwidth                                     %        41.64
+    L1/TEX Hit Rate                                   %        68.02
+    L2 Persisting Size                            Mbyte         6.29
+    L2 Compression Success Rate                       %            0
+    L2 Compression Ratio                                           0
+    L2 Compression Input Sectors                 sector            0
+    L2 Hit Rate                                       %        10.29
+    Mem Pipes Busy                                    %        34.19
+    --------------------------------------- ----------- ------------
+
+    Section: Warp State Statistics
+    ---------------------------------------- ----------- ------------
+    Metric Name                              Metric Unit Metric Value
+    ---------------------------------------- ----------- ------------
+    Warp Cycles Per Issued Instruction             cycle        13.29
+    Warp Cycles Per Executed Instruction           cycle        13.29
+    Avg. Active Threads Per Warp                                31.98
+    Avg. Not Predicated Off Threads Per Warp                    30.58
+    ---------------------------------------- ----------- ------------
+
+    WRN   The optional metric smsp__pcsamp_sample_count could not be found. Collecting it as an additional metric could 
+          enable the rule to provide more guidance.                                                                     
+    ----- --------------------------------------------------------------------------------------------------------------
+    OPT   Est. Local Speedup: 35.76%                                                                                    
+          On average, each warp of this workload spends 4.8 cycles being stalled waiting for a scoreboard dependency on 
+          a L1TEX (local, global, surface, texture) operation. Find the instruction producing the data being waited     
+          upon to identify the culprit. To reduce the number of cycles waiting on L1TEX data accesses verify the        
+          memory access patterns are optimal for the target architecture, attempt to increase cache hit rates by        
+          increasing data locality (coalescing), or by changing the cache configuration. Consider moving frequently     
+          used data to shared memory. Stall samples are reported on the consumer instruction waiting for the result,    
+          not necessarily on the producer. When this reason dominates, the kernel is memory-latency-bound, which is     
+          not necessarily memory-bandwidth-bound; prefer latency-hiding changes such as ILP, unrolling, or pipelining   
+          when bandwidth is not saturated. This stall type represents about 35.8% of the total average of 13.3 cycles   
+          between issuing two instructions.                                                                             
+    ----- --------------------------------------------------------------------------------------------------------------
+    INF   Check the Warp Stall Sampling (All Samples) table for the top stall locations in your source based on         
+          sampling data. The Profiling Guide                                                                            
+          (https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html#metrics-reference) provides more details    
+          on each stall reason.                                                                                         
+
+    Section: Launch Statistics
+    -------------------------------- --------------- ---------------
+    Metric Name                          Metric Unit    Metric Value
+    -------------------------------- --------------- ---------------
+    Block Size                                                   256
+    Cluster Scheduling Policy                           PolicySpread
+    Cluster Size                                                   0
+    Function Cache Configuration                     CachePreferNone
+    Grid Size                                                    256
+    Preferred Cluster Size                                         0
+    Registers Per Thread             register/thread              40
+    Shared Memory Configuration Size           Kbyte           32.77
+    Driver Shared Memory Per Block       Kbyte/block            1.02
+    Dynamic Shared Memory Per Block       byte/block               0
+    Static Shared Memory Per Block       Kbyte/block            1.02
+    # SMs                                         SM              36
+    Stack Size                                                 1,024
+    Threads                                   thread          65,536
+    # TPCs                                                        18
+    Enabled TPC IDs                                              all
+    Uses Green Context                                             0
+    Waves Per SM                                                1.19
+    -------------------------------- --------------- ---------------
+
+    OPT   Est. Speedup: 50%                                                                                             
+          A wave of thread blocks is defined as the maximum number of blocks that can be executed in parallel on the    
+          target GPU. The number of blocks in a wave depends on the number of multiprocessors and the theoretical       
+          occupancy of the kernel. This kernel launch results in 1 full waves and a partial wave of 40 thread blocks.   
+          Under the assumption of a uniform execution duration of all thread blocks, this partial wave may account for  
+          up to 50.0% of the total runtime of this kernel. Try launching a grid with no partial wave. The overall       
+          impact of this tail effect also lessens with the number of full waves executed for a grid. See the Hardware   
+          Model (https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html#metrics-hw-model) description for     
+          more details on launch configurations.                                                                        
+
+    Section: Occupancy
+    ------------------------------- ----------- ------------
+    Metric Name                     Metric Unit Metric Value
+    ------------------------------- ----------- ------------
+    Max Active Clusters                 cluster            0
+    Max Cluster Size                      block            8
+    Overall GPU Occupancy                     %            0
+    Cluster Occupancy                         %            0
+    Block Limit Barriers                  block           24
+    Block Limit SM                        block           24
+    Block Limit Registers                 block            6
+    Block Limit Shared Mem                block           15
+    Block Limit Warps                     block            6
+    Theoretical Active Warps per SM        warp           48
+    Theoretical Occupancy                     %          100
+    Achieved Occupancy                        %        72.54
+    Achieved Active Warps Per SM           warp        34.82
+    ------------------------------- ----------- ------------
+
+    OPT   Est. Local Speedup: 27.46%                                                                                    
+          The difference between calculated theoretical (100.0%) and measured achieved occupancy (72.5%) can be the     
+          result of warp scheduling overheads or workload imbalances during the kernel execution. Load imbalances can   
+          occur between warps within a block as well as across blocks of the same kernel. See the CUDA Best Practices   
+          Guide (https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html#occupancy) for more details on     
+          optimizing occupancy.                                                                                         
+
+==== kernel=v1 M=1 K=8960 N=1536
+==PROF== Connected to process 2939123 (./build/w4a16_bench)
+==PROF== Profiling "w4a16_v1_kernel": 0%....50%....100% - 17 passes
+device: NVIDIA GeForce RTX 5060 Ti (sm_120, 36 SMs, L2 32.00 MiB from cudaDeviceProp, 15.52 GiB)
+software: driver API 13030, runtime 13040
+shape: M=1 N=1536 K=8960 group=128 seed=1 flush_l2=0 warmup=0 iters=1 check_rows=64
+footprint: FP16 weights 26.2500 MiB, packed INT4 6.5625 MiB, FP16 scales 0.2051 MiB
+launch: naive grid=((N+255)/256, M)=(6, 1) block=256; dequant grid=(6, 1120) block=256
+launch: inblock/inblock_specialized grid=(48, 1) block=(32, 8), shared partials=1024 bytes
+launch: inblock_m2 grid=(48, 1), inblock_m4 grid=(48, 1), block=(32, 8), shared partials=2048/4096 bytes
+weight quant: rel_l2(W_hat, W)=1.1722e-01  uniform-step prediction sqrt(mean(s^2/12)/mean(w^2))=1.1767e-01
+  (prediction assumes independent Uniform[-s/2,s/2] error per weight using that group's s)
+cache: warm/reused inputs, no flush between launches
+W_hat GPU vs CPU: skipped (not needed for this kernel list)
+kernel                median_us     min_us     p90_us  TFLOP/s  eff_GB/s  pass    max_abs     rel_l2  rel_l2_fp16
+launch: v1 grid=(48, 1, 5) block=(32, 8)
+v1                    675229.68  675229.68  675229.68    0.000       0.0   yes  0.000e+00  0.000e+00    0.000e+00
+==PROF== Disconnected from process 2939123
+[2939123] w4a16_bench@127.0.0.1
+  <unnamed>::w4a16_v1_kernel(const __half *, const unsigned int *, const __half *, __half *, float *, unsigned int *, int, int, int, int, int) (48, 1, 5)x(32, 8, 1), Context 1, Stream 7, Device 0, CC 12.0
+    Section: GPU Speed Of Light Throughput
+    ----------------------- ----------- ------------
+    Metric Name             Metric Unit Metric Value
+    ----------------------- ----------- ------------
+    DRAM Frequency                  Ghz        13.77
+    SM Frequency                    Ghz         2.33
+    Elapsed Cycles                cycle       94,033
+    Memory Throughput                 %        40.20
+    DRAM Throughput                   %        40.20
+    Duration                         us        40.26
+    L1/TEX Cache Throughput           %        36.93
+    L2 Cache Throughput               %        16.41
+    SM Active Cycles              cycle    83,279.78
+    Compute (SM) Throughput           %        56.89
+    ----------------------- ----------- ------------
+
+    OPT   This workload exhibits low compute throughput and memory bandwidth utilization relative to the peak           
+          performance of this device. Achieved compute throughput and/or memory bandwidth below 60.0% of peak           
+          typically indicate latency issues. Look at Scheduler Statistics and Warp State Statistics for potential       
+          reasons.                                                                                                      
+
+    Section: Memory Workload Analysis
+    --------------------------------------- ----------- ------------
+    Metric Name                             Metric Unit Metric Value
+    --------------------------------------- ----------- ------------
+    Local Memory Spilling Requests                                 0
+    Local Memory Spilling Request Overhead            %            0
+    L2 Sector Promotion Misses                        %            0
+    Shared Memory Spilling Requests                                0
+    Shared Memory Spilling Request Overhead           %            0
+    Memory Throughput                           Gbyte/s       177.13
+    Mem Busy                                          %        16.70
+    Max Bandwidth                                     %        40.20
+    L1/TEX Hit Rate                                   %        66.94
+    L2 Persisting Size                            Mbyte         6.29
+    L2 Compression Success Rate                       %            0
+    L2 Compression Ratio                                           0
+    L2 Compression Input Sectors                 sector            0
+    L2 Hit Rate                                       %        13.05
+    Mem Pipes Busy                                    %        32.85
+    --------------------------------------- ----------- ------------
+
+    Section: Warp State Statistics
+    ---------------------------------------- ----------- ------------
+    Metric Name                              Metric Unit Metric Value
+    ---------------------------------------- ----------- ------------
+    Warp Cycles Per Issued Instruction             cycle        13.46
+    Warp Cycles Per Executed Instruction           cycle        13.46
+    Avg. Active Threads Per Warp                                31.98
+    Avg. Not Predicated Off Threads Per Warp                    30.59
+    ---------------------------------------- ----------- ------------
+
+    WRN   The optional metric smsp__pcsamp_sample_count could not be found. Collecting it as an additional metric could 
+          enable the rule to provide more guidance.                                                                     
+    ----- --------------------------------------------------------------------------------------------------------------
+    OPT   Est. Local Speedup: 36.85%                                                                                    
+          On average, each warp of this workload spends 5.0 cycles being stalled waiting for a scoreboard dependency on 
+          a L1TEX (local, global, surface, texture) operation. Find the instruction producing the data being waited     
+          upon to identify the culprit. To reduce the number of cycles waiting on L1TEX data accesses verify the        
+          memory access patterns are optimal for the target architecture, attempt to increase cache hit rates by        
+          increasing data locality (coalescing), or by changing the cache configuration. Consider moving frequently     
+          used data to shared memory. Stall samples are reported on the consumer instruction waiting for the result,    
+          not necessarily on the producer. When this reason dominates, the kernel is memory-latency-bound, which is     
+          not necessarily memory-bandwidth-bound; prefer latency-hiding changes such as ILP, unrolling, or pipelining   
+          when bandwidth is not saturated. This stall type represents about 36.9% of the total average of 13.5 cycles   
+          between issuing two instructions.                                                                             
+    ----- --------------------------------------------------------------------------------------------------------------
+    INF   Check the Warp Stall Sampling (All Samples) table for the top stall locations in your source based on         
+          sampling data. The Profiling Guide                                                                            
+          (https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html#metrics-reference) provides more details    
+          on each stall reason.                                                                                         
+
+    Section: Launch Statistics
+    -------------------------------- --------------- ---------------
+    Metric Name                          Metric Unit    Metric Value
+    -------------------------------- --------------- ---------------
+    Block Size                                                   256
+    Cluster Scheduling Policy                           PolicySpread
+    Cluster Size                                                   0
+    Function Cache Configuration                     CachePreferNone
+    Grid Size                                                    240
+    Preferred Cluster Size                                         0
+    Registers Per Thread             register/thread              40
+    Shared Memory Configuration Size           Kbyte           32.77
+    Driver Shared Memory Per Block       Kbyte/block            1.02
+    Dynamic Shared Memory Per Block       byte/block               0
+    Static Shared Memory Per Block       Kbyte/block            1.02
+    # SMs                                         SM              36
+    Stack Size                                                 1,024
+    Threads                                   thread          61,440
+    # TPCs                                                        18
+    Enabled TPC IDs                                              all
+    Uses Green Context                                             0
+    Waves Per SM                                                1.11
+    -------------------------------- --------------- ---------------
+
+    OPT   Est. Speedup: 50%                                                                                             
+          A wave of thread blocks is defined as the maximum number of blocks that can be executed in parallel on the    
+          target GPU. The number of blocks in a wave depends on the number of multiprocessors and the theoretical       
+          occupancy of the kernel. This kernel launch results in 1 full waves and a partial wave of 25 thread blocks.   
+          Under the assumption of a uniform execution duration of all thread blocks, this partial wave may account for  
+          up to 50.0% of the total runtime of this kernel. Try launching a grid with no partial wave. The overall       
+          impact of this tail effect also lessens with the number of full waves executed for a grid. See the Hardware   
+          Model (https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html#metrics-hw-model) description for     
+          more details on launch configurations.                                                                        
+
+    Section: Occupancy
+    ------------------------------- ----------- ------------
+    Metric Name                     Metric Unit Metric Value
+    ------------------------------- ----------- ------------
+    Max Active Clusters                 cluster            0
+    Max Cluster Size                      block            8
+    Overall GPU Occupancy                     %            0
+    Cluster Occupancy                         %            0
+    Block Limit Barriers                  block           24
+    Block Limit SM                        block           24
+    Block Limit Registers                 block            6
+    Block Limit Shared Mem                block           15
+    Block Limit Warps                     block            6
+    Theoretical Active Warps per SM        warp           48
+    Theoretical Occupancy                     %          100
+    Achieved Occupancy                        %        71.89
+    Achieved Active Warps Per SM           warp        34.51
+    ------------------------------- ----------- ------------
+
+    OPT   Est. Local Speedup: 28.11%                                                                                    
+          The difference between calculated theoretical (100.0%) and measured achieved occupancy (71.9%) can be the     
+          result of warp scheduling overheads or workload imbalances during the kernel execution. Load imbalances can   
+          occur between warps within a block as well as across blocks of the same kernel. See the CUDA Best Practices   
+          Guide (https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html#occupancy) for more details on     
+          optimizing occupancy.                                                                                         
+
