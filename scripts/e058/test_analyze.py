@@ -356,6 +356,55 @@ class CellsIntegrity(unittest.TestCase):
             an.cells(d)
 
 
+class OutputLocation(unittest.TestCase):
+    """Review 3: the analyzer never writes into a retrieved (sealed: all.sha256 present) job directory, and the
+    summary stores repo-relative paths only."""
+
+    def make(self, root):
+        import pathlib
+        d = pathlib.Path(root)/'full-c8-0'
+        d.mkdir()
+        rows = {1: CellsUsesFileOrder.series(1, [4, 8, 16], [4, 16, 64, 128]),
+                2: CellsUsesFileOrder.series(2, [16, 8, 4], [128, 64, 16, 4])}
+        for s_, rs in rows.items():
+            (d/f'series{s_}.jsonl').write_text(''.join(json.dumps(r)+'\n' for r in rs))
+        (d/'all.sha256').write_text('sealed\n')
+        return d
+
+    @staticmethod
+    def snapshot(d):
+        import hashlib
+        return {p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(d.iterdir())}
+
+    def test_sealed_dir_untouched_with_out(self):
+        import contextlib, io, pathlib, tempfile
+        with tempfile.TemporaryDirectory() as root:
+            d = self.make(root)
+            before = self.snapshot(d)
+            out = pathlib.Path(root)/'analysis'; out.mkdir()
+            with contextlib.redirect_stdout(io.StringIO()):
+                an.full(d, out)
+            self.assertEqual(self.snapshot(d), before)                   # input directory unchanged
+            self.assertTrue((out/'summary.json').exists())
+
+    def test_sealed_dir_refused_without_out(self):
+        import tempfile
+        with tempfile.TemporaryDirectory() as root:
+            d = self.make(root)
+            before = self.snapshot(d)
+            with self.assertRaises(AssertionError):
+                an.full(d, None)                                         # would default into the sealed dir
+            with self.assertRaises(AssertionError):
+                an.full(d, d)                                            # explicit, still refused
+            self.assertEqual(self.snapshot(d), before)
+
+    def test_summary_paths_repo_relative(self):
+        # the stored E050 reference is 'results/e050_20261118/summary.json', never an absolute home path
+        sm = an.summarize(Review2().med())
+        self.assertEqual(sm['e050_summary'], 'results/e050_20261118/summary.json')
+        self.assertNotIn('/home/', json.dumps(sm))
+
+
 class Summarize(unittest.TestCase):
     """Hand-computed fractions and validity marks at 16 matrices."""
 

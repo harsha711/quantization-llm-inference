@@ -41,6 +41,9 @@ MUTANTS = {
     'no same_bits in cells': ("        assert same_bits(rs) == 12\n    return out", "    return out"),
     'no post-timing equality': ("            assert r['post_timing_validation'] == r['validation']\n", ""),
     'no series field check': ("assert r['series'] == s and r['iters']", "assert r['iters']"),
+    # third review
+    'writes into sealed dir': ("    assert not (sealed and Path(out).resolve().is_relative_to(Path(d).resolve())), \\\n", "    assert True or (sealed and Path(out).resolve().is_relative_to(Path(d).resolve())), \\\n"),
+    'absolute E050 path in summary': ("e050_summary=E050_SUMMARY.relative_to(REPO).as_posix() if e050", "e050_summary=str(E050_SUMMARY) if e050"),
     'calibration note on BELOW_STRICT': (" and \\\n        fc.BELOW_STRICT not in (v['status_8'],v['status_16'])", ""),
 }
 
@@ -55,7 +58,7 @@ def run(path):
 def main():
     src = open(os.path.join(ROOT, 'scripts/e058/analyze.py')).read()
     src = src.replace("Path(__file__).resolve().parents[1]/'checks'", repr(os.path.join(ROOT, 'scripts/checks')))
-    src = src.replace("Path(__file__).resolve().parents[2]/'results", f"Path({ROOT!r})/'results")
+    src = src.replace("REPO = Path(__file__).resolve().parents[2]", f"REPO = Path({ROOT!r})")
     survivors = []
     with tempfile.TemporaryDirectory() as d:
         base = os.path.join(d, 'unmutated.py'); open(base, 'w').write(src)

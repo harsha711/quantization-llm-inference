@@ -967,5 +967,5 @@
  "cells": 32,
  "read_gbps": 427.2,
  "convergence_tol": 0.03,
- "e050_summary": "/home/harsha/Documents/ncsu/sem 3/548/project/proj/results/e050_20261118/summary.json"
+ "e050_summary": "results/e050_20261118/summary.json"
 }

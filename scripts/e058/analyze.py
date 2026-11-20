@@ -31,7 +31,8 @@ CONVERGENCE_TOL = 0.03              # predeclared |t8/t16 - 1| bound
 LABEL_VALID = 'converged, working-set-insensitive (8 vs 16)'
 NOTE_FLOOR_CALIBRATION = ('floor calibration: cuBLAS BELOW_MEASURED with a 268-537 MB working set (8-16 x L2); '
                           'a calibration issue of the 427.2 GB/s floor, not caching')
-E050_SUMMARY = Path(__file__).resolve().parents[2]/'results/e050_20261118/summary.json'
+REPO = Path(__file__).resolve().parents[2]
+E050_SUMMARY = REPO/'results/e050_20261118/summary.json'
 
 
 def kind(name):
@@ -244,7 +245,7 @@ def summarize(med):
     nvalid = sum(v['valid'] for v in val.values())
     return dict(timing=table,validity={f'{x} M{m} s{s}': v for (x,m,s),v in val.items()},
                 valid_cells=nvalid,cells=len(val),read_gbps=READ_GBPS,convergence_tol=CONVERGENCE_TOL,
-                e050_summary=str(E050_SUMMARY) if e050 else None)
+                e050_summary=E050_SUMMARY.relative_to(REPO).as_posix() if e050 else None)
 
 
 def text(summary):
@@ -282,6 +283,13 @@ def text(summary):
 
 
 def full(d,out):
+    """Writes summary.json only to `out`. A retrieved job directory is sealed by its all.sha256 and is never written:
+    then `out` must be given and lie outside it (on the node the analysis runs before all.sha256 exists)."""
+    if out is None:
+        out = d
+    sealed = (Path(d)/'all.sha256').exists()
+    assert not (sealed and Path(out).resolve().is_relative_to(Path(d).resolve())), \
+        f'refusing to write into the sealed job directory {d}; pass --out (e.g. results/e058_20261120/analysis)'
     med = cells({s: rows(d/f'series{s}.jsonl') for s in (1,2)})
     summary = summarize(med)
     (out/'summary.json').write_text(json.dumps(summary,indent=1)+'\n')
@@ -307,4 +315,4 @@ if __name__ == '__main__':
     a = ap.parse_args()
     if a.self_test: self_test()
     elif a.stage == 'prereq': prereq(a.dir)
-    else: full(a.dir,a.out or a.dir)
+    else: full(a.dir,a.out)
