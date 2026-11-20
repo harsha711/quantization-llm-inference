@@ -1,0 +1,14 @@
+STEP metadata 2026-11-19T21:01:58-05:00
+/mnt/beegfs/hpuvvad/csc548-w4a16-e054-20261119/full-c48-343981/diagnose.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e054-20261119/full-c48-343981/validate.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e054-20261119/full-c48-343981/run.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e054-20261119/full-c48-343981/att.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e054-20261119/full-c48-343981/gprofile.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e054-20261119/full-c48-343981/t.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e054-20261119/full-c48-343981/opcheck.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e054-20261119/full-c48-343981/eqcheck.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e054-20261119/full-c48-343981/analyze.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e054-20261119/full-c48-343981/torchcheck.py: OK
+STEP timing 2026-11-19T21:01:58-05:00
+STEP profile 2026-11-19T22:19:11-05:00
+STAGE-OK

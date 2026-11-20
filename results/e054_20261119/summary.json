@@ -1,0 +1,1142 @@
+{
+ "NVIDIA GeForce RTX 5060 Ti": {
+  "nodes": [
+   "full-c10-343955",
+   "full-c5-343951",
+   "full-c7-343952",
+   "full-c8-343953",
+   "full-c9-343954"
+  ],
+  "rows": [
+   {
+    "node": "full-c10-343955",
+    "context": 128,
+    "decode_pct_ours_below_marlin": [
+     3.343,
+     3.575
+    ],
+    "R1": "comparable",
+    "R2": true,
+    "stock_pct": [
+     3.004,
+     3.281
+    ],
+    "H1": true,
+    "ours_below_fp16_pct": [
+     47.165,
+     47.278
+    ],
+    "prefill_pct_ours_below_marlin": [
+     -8.09,
+     -7.479
+    ],
+    "prefill": "slower",
+    "median_ms": {
+     "GRA": 598.227,
+     "GQ": 344.282,
+     "GQA": 326.962,
+     "GT": 333.889,
+     "GTA": 315.931
+    },
+    "gemm_diff_us": 177.6463035714046,
+    "decode_diff_us": 175.0952380952382,
+    "other_diff_us": -0.7516428573148914,
+    "attribution_within_25pct": true
+   },
+   {
+    "node": "full-c10-343955",
+    "context": 512,
+    "decode_pct_ours_below_marlin": [
+     3.243,
+     3.391
+    ],
+    "R1": "comparable",
+    "R2": true,
+    "stock_pct": [
+     2.552,
+     2.738
+    ],
+    "H1": true,
+    "ours_below_fp16_pct": [
+     46.527,
+     46.61
+    ],
+    "prefill_pct_ours_below_marlin": [
+     -12.242,
+     -11.644
+    ],
+    "prefill": "slower",
+    "median_ms": {
+     "GRA": 608.518,
+     "GQ": 402.811,
+     "GQA": 336.363,
+     "GT": 392.169,
+     "GTA": 325.241
+    },
+    "gemm_diff_us": null,
+    "decode_diff_us": null,
+    "other_diff_us": null,
+    "attribution_within_25pct": null
+   },
+   {
+    "node": "full-c10-343955",
+    "context": 2048,
+    "decode_pct_ours_below_marlin": [
+     3.181,
+     3.275
+    ],
+    "R1": "comparable",
+    "R2": true,
+    "stock_pct": [
+     0.573,
+     0.723
+    ],
+    "H1": true,
+    "ours_below_fp16_pct": [
+     44.126,
+     44.18
+    ],
+    "prefill_pct_ours_below_marlin": [
+     -9.301,
+     -9.136
+    ],
+    "prefill": "slower",
+    "median_ms": {
+     "GRA": 651.805,
+     "GQ": 639.935,
+     "GQA": 376.119,
+     "GT": 635.364,
+     "GTA": 364.023
+    },
+    "gemm_diff_us": 179.45875000003934,
+    "decode_diff_us": 192.00000000000006,
+    "other_diff_us": 1.024660714133006,
+    "attribution_within_25pct": true
+   },
+   {
+    "node": "full-c5-343951",
+    "context": 128,
+    "decode_pct_ours_below_marlin": [
+     3.436,
+     3.676
+    ],
+    "R1": "comparable",
+    "R2": true,
+    "stock_pct": [
+     3.124,
+     3.351
+    ],
+    "H1": true,
+    "ours_below_fp16_pct": [
+     47.232,
+     47.361
+    ],
+    "prefill_pct_ours_below_marlin": [
+     -7.803,
+     -7.478
+    ],
+    "prefill": "slower",
+    "median_ms": {
+     "GRA": 597.478,
+     "GQ": 343.806,
+     "GQA": 326.504,
+     "GT": 332.653,
+     "GTA": 314.815
+    },
+    "gemm_diff_us": 181.66376785714374,
+    "decode_diff_us": 185.5396825396829,
+    "other_diff_us": 2.020267857183626,
+    "attribution_within_25pct": true
+   },
+   {
+    "node": "full-c5-343951",
+    "context": 512,
+    "decode_pct_ours_below_marlin": [
+     3.371,
+     3.559
+    ],
+    "R1": "comparable",
+    "R2": true,
+    "stock_pct": [
+     2.662,
+     2.882
+    ],
+    "H1": true,
+    "ours_below_fp16_pct": [
+     46.659,
+     46.754
+    ],
+    "prefill_pct_ours_below_marlin": [
+     -11.166,
+     -10.886
+    ],
+    "prefill": "slower",
+    "median_ms": {
+     "GRA": 608.0,
+     "GQ": 401.582,
+     "GQA": 335.596,
+     "GT": 390.602,
+     "GTA": 324.262
+    },
+    "gemm_diff_us": null,
+    "decode_diff_us": null,
+    "other_diff_us": null,
+    "attribution_within_25pct": null
+   },
+   {
+    "node": "full-c5-343951",
+    "context": 2048,
+    "decode_pct_ours_below_marlin": [
+     3.15,
+     3.335
+    ],
+    "R1": "comparable",
+    "R2": true,
+    "stock_pct": [
+     0.511,
+     0.755
+    ],
+    "H1": true,
+    "ours_below_fp16_pct": [
+     44.207,
+     44.258
+    ],
+    "prefill_pct_ours_below_marlin": [
+     -8.724,
+     -8.666
+    ],
+    "prefill": "slower",
+    "median_ms": {
+     "GRA": 651.454,
+     "GQ": 638.272,
+     "GQA": 375.666,
+     "GT": 633.532,
+     "GTA": 363.177
+    },
+    "gemm_diff_us": 179.65162499987446,
+    "decode_diff_us": 198.23809523809487,
+    "other_diff_us": 7.422089286068058,
+    "attribution_within_25pct": true
+   },
+   {
+    "node": "full-c7-343952",
+    "context": 128,
+    "decode_pct_ours_below_marlin": [
+     3.85,
+     3.93
+    ],
+    "R1": "comparable",
+    "R2": true,
+    "stock_pct": [
+     3.539,
+     3.615
+    ],
+    "H1": true,
+    "ours_below_fp16_pct": [
+     47.507,
+     47.605
+    ],
+    "prefill_pct_ours_below_marlin": [
+     -7.559,
+     -7.298
+    ],
+    "prefill": "slower",
+    "median_ms": {
+     "GRA": 596.829,
+     "GQ": 343.046,
+     "GQA": 325.838,
+     "GT": 330.88,
+     "GTA": 313.2
+    },
+    "gemm_diff_us": 191.47887500005936,
+    "decode_diff_us": 200.60317460317512,
+    "other_diff_us": 1.9836428572639306,
+    "attribution_within_25pct": true
+   },
+   {
+    "node": "full-c7-343952",
+    "context": 512,
+    "decode_pct_ours_below_marlin": [
+     3.629,
+     3.776
+    ],
+    "R1": "comparable",
+    "R2": true,
+    "stock_pct": [
+     2.799,
+     3.007
+    ],
+    "H1": true,
+    "ours_below_fp16_pct": [
+     46.896,
+     46.942
+    ],
+    "prefill_pct_ours_below_marlin": [
+     -11.808,
+     -11.523
+    ],
+    "prefill": "slower",
+    "median_ms": {
+     "GRA": 606.969,
+     "GQ": 400.603,
+     "GQA": 334.734,
+     "GT": 388.588,
+     "GTA": 322.141
+    },
+    "gemm_diff_us": null,
+    "decode_diff_us": null,
+    "other_diff_us": null,
+    "attribution_within_25pct": null
+   },
+   {
+    "node": "full-c7-343952",
+    "context": 2048,
+    "decode_pct_ours_below_marlin": [
+     3.428,
+     3.482
+    ],
+    "R1": "comparable",
+    "R2": true,
+    "stock_pct": [
+     0.839,
+     0.879
+    ],
+    "H1": true,
+    "ours_below_fp16_pct": [
+     44.443,
+     44.475
+    ],
+    "prefill_pct_ours_below_marlin": [
+     -9.156,
+     -9.007
+    ],
+    "prefill": "slower",
+    "median_ms": {
+     "GRA": 650.104,
+     "GQ": 633.977,
+     "GQA": 373.978,
+     "GT": 628.488,
+     "GTA": 361.049
+    },
+    "gemm_diff_us": 207.3590178570471,
+    "decode_diff_us": 205.2222222222227,
+    "other_diff_us": 14.557607142806319,
+    "attribution_within_25pct": true
+   },
+   {
+    "node": "full-c8-343953",
+    "context": 128,
+    "decode_pct_ours_below_marlin": [
+     3.547,
+     3.777
+    ],
+    "R1": "comparable",
+    "R2": true,
+    "stock_pct": [
+     3.207,
+     3.421
+    ],
+    "H1": true,
+    "ours_below_fp16_pct": [
+     47.382,
+     47.494
+    ],
+    "prefill_pct_ours_below_marlin": [
+     -8.175,
+     -7.561
+    ],
+    "prefill": "slower",
+    "median_ms": {
+     "GRA": 596.867,
+     "GQ": 342.738,
+     "GQA": 325.579,
+     "GT": 331.663,
+     "GTA": 313.976
+    },
+    "gemm_diff_us": 184.90439285720095,
+    "decode_diff_us": 184.1746031746033,
+    "other_diff_us": 0.4978749998990679,
+    "attribution_within_25pct": true
+   },
+   {
+    "node": "full-c8-343953",
+    "context": 512,
+    "decode_pct_ours_below_marlin": [
+     3.438,
+     3.559
+    ],
+    "R1": "comparable",
+    "R2": true,
+    "stock_pct": [
+     2.744,
+     2.898
+    ],
+    "H1": true,
+    "ours_below_fp16_pct": [
+     46.756,
+     46.831
+    ],
+    "prefill_pct_ours_below_marlin": [
+     -12.187,
+     -11.666
+    ],
+    "prefill": "slower",
+    "median_ms": {
+     "GRA": 607.051,
+     "GQ": 400.286,
+     "GQA": 334.693,
+     "GT": 389.055,
+     "GTA": 322.992
+    },
+    "gemm_diff_us": null,
+    "decode_diff_us": null,
+    "other_diff_us": null,
+    "attribution_within_25pct": null
+   },
+   {
+    "node": "full-c8-343953",
+    "context": 2048,
+    "decode_pct_ours_below_marlin": [
+     3.305,
+     3.362
+    ],
+    "R1": "comparable",
+    "R2": true,
+    "stock_pct": [
+     0.609,
+     0.791
+    ],
+    "H1": true,
+    "ours_below_fp16_pct": [
+     44.378,
+     44.419
+    ],
+    "prefill_pct_ours_below_marlin": [
+     -9.22,
+     -9.013
+    ],
+    "prefill": "slower",
+    "median_ms": {
+     "GRA": 650.332,
+     "GQ": 635.199,
+     "GQA": 374.081,
+     "GT": 630.232,
+     "GTA": 361.529
+    },
+    "gemm_diff_us": 189.1107321429149,
+    "decode_diff_us": 199.23809523809558,
+    "other_diff_us": 3.634446428638057,
+    "attribution_within_25pct": true
+   },
+   {
+    "node": "full-c9-343954",
+    "context": 128,
+    "decode_pct_ours_below_marlin": [
+     3.377,
+     3.52
+    ],
+    "R1": "comparable",
+    "R2": true,
+    "stock_pct": [
+     2.99,
+     3.202
+    ],
+    "H1": true,
+    "ours_below_fp16_pct": [
+     47.162,
+     47.243
+    ],
+    "prefill_pct_ours_below_marlin": [
+     -8.109,
+     -7.578
+    ],
+    "prefill": "slower",
+    "median_ms": {
+     "GRA": 598.127,
+     "GQ": 344.233,
+     "GQA": 326.945,
+     "GT": 333.915,
+     "GTA": 315.882
+    },
+    "gemm_diff_us": 178.25303571426457,
+    "decode_diff_us": 175.60317460317444,
+    "other_diff_us": 0.7805535714692269,
+    "attribution_within_25pct": true
+   },
+   {
+    "node": "full-c9-343954",
+    "context": 512,
+    "decode_pct_ours_below_marlin": [
+     3.238,
+     3.367
+    ],
+    "R1": "comparable",
+    "R2": true,
+    "stock_pct": [
+     2.522,
+     2.719
+    ],
+    "H1": true,
+    "ours_below_fp16_pct": [
+     46.528,
+     46.601
+    ],
+    "prefill_pct_ours_below_marlin": [
+     -12.304,
+     -11.886
+    ],
+    "prefill": "slower",
+    "median_ms": {
+     "GRA": 608.421,
+     "GQ": 402.823,
+     "GQA": 336.306,
+     "GT": 392.195,
+     "GTA": 325.155
+    },
+    "gemm_diff_us": null,
+    "decode_diff_us": null,
+    "other_diff_us": null,
+    "attribution_within_25pct": null
+   },
+   {
+    "node": "full-c9-343954",
+    "context": 2048,
+    "decode_pct_ours_below_marlin": [
+     3.149,
+     3.195
+    ],
+    "R1": "comparable",
+    "R2": true,
+    "stock_pct": [
+     0.484,
+     0.67
+    ],
+    "H1": true,
+    "ours_below_fp16_pct": [
+     44.116,
+     44.141
+    ],
+    "prefill_pct_ours_below_marlin": [
+     -9.247,
+     -9.117
+    ],
+    "prefill": "slower",
+    "median_ms": {
+     "GRA": 651.774,
+     "GQ": 640.175,
+     "GQA": 376.066,
+     "GT": 635.962,
+     "GTA": 364.139
+    },
+    "gemm_diff_us": 182.03801785707356,
+    "decode_diff_us": 189.31746031745973,
+    "other_diff_us": -1.6307678569296513,
+    "attribution_within_25pct": true
+   }
+  ],
+  "R1_replicated": true,
+  "R1_faster_anywhere": false,
+  "R2_holds": "15/15",
+  "H1_all": true,
+  "decode_pct_range": [
+   3.149,
+   3.93
+  ],
+  "node_spread_pct_points": {
+   "128": 0.505,
+   "512": 0.456,
+   "2048": 0.286
+  }
+ },
+ "NVIDIA GeForce RTX 4060 Ti": {
+  "nodes": [
+   "full-c20-343983",
+   "full-c55-343982"
+  ],
+  "rows": [
+   {
+    "node": "full-c20-343983",
+    "context": 128,
+    "decode_pct_ours_below_marlin": [
+     3.93,
+     4.005
+    ],
+    "R1": "comparable",
+    "R2": true,
+    "stock_pct": [
+     3.806,
+     3.876
+    ],
+    "H1": true,
+    "ours_below_fp16_pct": [
+     52.84,
+     52.859
+    ],
+    "prefill_pct_ours_below_marlin": [
+     3.225,
+     4.169
+    ],
+    "prefill": "comparable",
+    "median_ms": {
+     "GRA": 821.773,
+     "GQ": 411.926,
+     "GQA": 403.545,
+     "GT": 396.03,
+     "GTA": 387.425
+    },
+    "gemm_diff_us": 244.40880357137303,
+    "decode_diff_us": 255.87301587301593,
+    "other_diff_us": 5.7773035713089484,
+    "attribution_within_25pct": true
+   },
+   {
+    "node": "full-c20-343983",
+    "context": 512,
+    "decode_pct_ours_below_marlin": [
+     3.713,
+     3.738
+    ],
+    "R1": "comparable",
+    "R2": true,
+    "stock_pct": [
+     2.931,
+     3.117
+    ],
+    "H1": true,
+    "ours_below_fp16_pct": [
+     52.247,
+     52.302
+    ],
+    "prefill_pct_ours_below_marlin": [
+     -14.588,
+     -14.03
+    ],
+    "prefill": "slower",
+    "median_ms": {
+     "GRA": 835.131,
+     "GQ": 454.744,
+     "GQA": 414.12,
+     "GT": 440.663,
+     "GTA": 398.676
+    },
+    "gemm_diff_us": null,
+    "decode_diff_us": null,
+    "other_diff_us": null,
+    "attribution_within_25pct": null
+   },
+   {
+    "node": "full-c20-343983",
+    "context": 2048,
+    "decode_pct_ours_below_marlin": [
+     3.374,
+     3.394
+    ],
+    "R1": "comparable",
+    "R2": true,
+    "stock_pct": [
+     0.917,
+     0.934
+    ],
+    "H1": true,
+    "ours_below_fp16_pct": [
+     49.956,
+     49.967
+    ],
+    "prefill_pct_ours_below_marlin": [
+     -16.157,
+     -15.708
+    ],
+    "prefill": "slower",
+    "median_ms": {
+     "GRA": 875.213,
+     "GQ": 644.224,
+     "GQA": 453.31,
+     "GT": 638.261,
+     "GTA": 437.955
+    },
+    "gemm_diff_us": 223.4340714285836,
+    "decode_diff_us": 243.73015873015902,
+    "other_diff_us": -11.684464285837294,
+    "attribution_within_25pct": true
+   },
+   {
+    "node": "full-c55-343982",
+    "context": 128,
+    "decode_pct_ours_below_marlin": [
+     3.906,
+     4.038
+    ],
+    "R1": "comparable",
+    "R2": true,
+    "stock_pct": [
+     3.852,
+     3.91
+    ],
+    "H1": true,
+    "ours_below_fp16_pct": [
+     52.918,
+     52.959
+    ],
+    "prefill_pct_ours_below_marlin": [
+     -5.031,
+     -4.417
+    ],
+    "prefill": "mixed",
+    "median_ms": {
+     "GRA": 820.739,
+     "GQ": 410.176,
+     "GQA": 402.32,
+     "GT": 394.221,
+     "GTA": 386.153
+    },
+    "gemm_diff_us": 245.4333392857411,
+    "decode_diff_us": 256.6190476190472,
+    "other_diff_us": 12.381553571447967,
+    "attribution_within_25pct": true
+   },
+   {
+    "node": "full-c55-343982",
+    "context": 512,
+    "decode_pct_ours_below_marlin": [
+     3.674,
+     3.835
+    ],
+    "R1": "comparable",
+    "R2": true,
+    "stock_pct": [
+     3.387,
+     3.492
+    ],
+    "H1": true,
+    "ours_below_fp16_pct": [
+     52.339,
+     52.424
+    ],
+    "prefill_pct_ours_below_marlin": [
+     -14.748,
+     -14.043
+    ],
+    "prefill": "slower",
+    "median_ms": {
+     "GRA": 833.449,
+     "GQ": 452.205,
+     "GQA": 412.331,
+     "GT": 436.693,
+     "GTA": 396.623
+    },
+    "gemm_diff_us": null,
+    "decode_diff_us": null,
+    "other_diff_us": null,
+    "attribution_within_25pct": null
+   },
+   {
+    "node": "full-c55-343982",
+    "context": 2048,
+    "decode_pct_ours_below_marlin": [
+     3.372,
+     3.531
+    ],
+    "R1": "comparable",
+    "R2": true,
+    "stock_pct": [
+     0.877,
+     1.071
+    ],
+    "H1": true,
+    "ours_below_fp16_pct": [
+     50.011,
+     50.052
+    ],
+    "prefill_pct_ours_below_marlin": [
+     -15.224,
+     -14.815
+    ],
+    "prefill": "slower",
+    "median_ms": {
+     "GRA": 873.394,
+     "GQ": 638.823,
+     "GQA": 452.087,
+     "GT": 633.048,
+     "GTA": 436.526
+    },
+    "gemm_diff_us": 234.57483928546617,
+    "decode_diff_us": 246.99999999999966,
+    "other_diff_us": 9.405249999880198,
+    "attribution_within_25pct": true
+   }
+  ],
+  "R1_replicated": true,
+  "R1_faster_anywhere": false,
+  "R2_holds": "6/6",
+  "H1_all": true,
+  "decode_pct_range": [
+   3.372,
+   4.038
+  ],
+  "node_spread_pct_points": {
+   "128": 0.024,
+   "512": 0.08,
+   "2048": 0.055
+  }
+ },
+ "NVIDIA RTX A6000": {
+  "nodes": [
+   "full-c30-343980"
+  ],
+  "rows": [
+   {
+    "node": "full-c30-343980",
+    "context": 128,
+    "decode_pct_ours_below_marlin": [
+     4.142,
+     4.361
+    ],
+    "R1": "comparable",
+    "R2": true,
+    "stock_pct": [
+     4.117,
+     4.371
+    ],
+    "H1": true,
+    "ours_below_fp16_pct": [
+     33.971,
+     34.026
+    ],
+    "prefill_pct_ours_below_marlin": [
+     3.901,
+     8.016
+    ],
+    "prefill": "mixed",
+    "median_ms": {
+     "GRA": 450.544,
+     "GQ": 315.05,
+     "GQA": 310.823,
+     "GT": 301.497,
+     "GTA": 297.37
+    },
+    "gemm_diff_us": 278.9184642857024,
+    "decode_diff_us": 213.53968253968213,
+    "other_diff_us": -41.443589285782764,
+    "attribution_within_25pct": false
+   },
+   {
+    "node": "full-c30-343980",
+    "context": 512,
+    "decode_pct_ours_below_marlin": [
+     0.09,
+     0.375
+    ],
+    "R1": "comparable",
+    "R2": false,
+    "stock_pct": [
+     -0.834,
+     -0.305
+    ],
+    "H1": true,
+    "ours_below_fp16_pct": [
+     29.522,
+     29.857
+    ],
+    "prefill_pct_ours_below_marlin": [
+     -41.253,
+     -35.018
+    ],
+    "prefill": "slower",
+    "median_ms": {
+     "GRA": 470.006,
+     "GQ": 362.213,
+     "GQA": 330.969,
+     "GT": 363.755,
+     "GTA": 330.207
+    },
+    "gemm_diff_us": null,
+    "decode_diff_us": null,
+    "other_diff_us": null,
+    "attribution_within_25pct": null
+   },
+   {
+    "node": "full-c30-343980",
+    "context": 2048,
+    "decode_pct_ours_below_marlin": [
+     1.812,
+     2.378
+    ],
+    "R1": "comparable",
+    "R2": true,
+    "stock_pct": [
+     0.724,
+     1.281
+    ],
+    "H1": true,
+    "ours_below_fp16_pct": [
+     28.423,
+     28.751
+    ],
+    "prefill_pct_ours_below_marlin": [
+     -95.542,
+     -87.543
+    ],
+    "prefill": "slower",
+    "median_ms": {
+     "GRA": 513.98,
+     "GQ": 529.792,
+     "GQA": 374.889,
+     "GT": 523.544,
+     "GTA": 366.694
+    },
+    "gemm_diff_us": 292.85132142862426,
+    "decode_diff_us": 130.07936507936498,
+    "other_diff_us": -20.58842857129639,
+    "attribution_within_25pct": false
+   }
+  ],
+  "R1_replicated": true,
+  "R1_faster_anywhere": false,
+  "R2_holds": "2/3",
+  "H1_all": true,
+  "decode_pct_range": [
+   0.09,
+   4.361
+  ]
+ },
+ "NVIDIA A100 80GB PCIe": {
+  "nodes": [
+   "full-c33-343979"
+  ],
+  "rows": [
+   {
+    "node": "full-c33-343979",
+    "context": 128,
+    "decode_pct_ours_below_marlin": [
+     4.353,
+     4.395
+    ],
+    "R1": "comparable",
+    "R2": true,
+    "stock_pct": [
+     4.218,
+     4.255
+    ],
+    "H1": true,
+    "ours_below_fp16_pct": [
+     8.464,
+     8.504
+    ],
+    "prefill_pct_ours_below_marlin": [
+     3.984,
+     5.344
+    ],
+    "prefill": "mixed",
+    "median_ms": {
+     "GRA": 369.202,
+     "GQ": 347.829,
+     "GQA": 353.322,
+     "GT": 333.129,
+     "GTA": 337.892
+    },
+    "gemm_diff_us": 244.76219642846308,
+    "decode_diff_us": 244.92063492063502,
+    "other_diff_us": 7.60501785695169,
+    "attribution_within_25pct": true
+   },
+   {
+    "node": "full-c33-343979",
+    "context": 512,
+    "decode_pct_ours_below_marlin": [
+     4.305,
+     4.357
+    ],
+    "R1": "comparable",
+    "R2": true,
+    "stock_pct": [
+     3.594,
+     3.649
+    ],
+    "H1": true,
+    "ours_below_fp16_pct": [
+     7.834,
+     7.861
+    ],
+    "prefill_pct_ours_below_marlin": [
+     3.409,
+     4.624
+    ],
+    "prefill": "comparable",
+    "median_ms": {
+     "GRA": 386.187,
+     "GQ": 387.4,
+     "GQA": 372.05,
+     "GT": 373.383,
+     "GTA": 355.899
+    },
+    "gemm_diff_us": null,
+    "decode_diff_us": null,
+    "other_diff_us": null,
+    "attribution_within_25pct": null
+   },
+   {
+    "node": "full-c33-343979",
+    "context": 2048,
+    "decode_pct_ours_below_marlin": [
+     2.996,
+     3.071
+    ],
+    "R1": "comparable",
+    "R2": true,
+    "stock_pct": [
+     2.597,
+     2.678
+    ],
+    "H1": true,
+    "ours_below_fp16_pct": [
+     7.219,
+     7.285
+    ],
+    "prefill_pct_ours_below_marlin": [
+     -47.421,
+     -46.747
+    ],
+    "prefill": "slower",
+    "median_ms": {
+     "GRA": 437.143,
+     "GQ": 557.059,
+     "GQA": 418.14,
+     "GT": 542.446,
+     "GTA": 405.516
+    },
+    "gemm_diff_us": 239.20878571429557,
+    "decode_diff_us": 200.38095238095187,
+    "other_diff_us": -0.8358571430080701,
+    "attribution_within_25pct": true
+   }
+  ],
+  "R1_replicated": true,
+  "R1_faster_anywhere": false,
+  "R2_holds": "3/3",
+  "H1_all": true,
+  "decode_pct_range": [
+   2.996,
+   4.395
+  ]
+ },
+ "NVIDIA GeForce RTX 3060 Ti": {
+  "nodes": [
+   "full-c48-343981"
+  ],
+  "rows": [
+   {
+    "node": "full-c48-343981",
+    "context": 128,
+    "decode_pct_ours_below_marlin": [
+     0.878,
+     1.186
+    ],
+    "R1": "comparable",
+    "R2": true,
+    "stock_pct": [
+     0.949,
+     1.65
+    ],
+    "H1": true,
+    "ours_below_fp16_pct": [
+     42.66,
+     42.968
+    ],
+    "prefill_pct_ours_below_marlin": [
+     3.235,
+     4.351
+    ],
+    "prefill": "comparable",
+    "median_ms": {
+     "GRA": 622.489,
+     "GQ": 375.212,
+     "GQA": 360.218,
+     "GT": 370.996,
+     "GTA": 356.198
+    },
+    "gemm_diff_us": 34.037160714246966,
+    "decode_diff_us": 63.80952380952442,
+    "other_diff_us": 1.8626607143069123,
+    "attribution_within_25pct": false
+   },
+   {
+    "node": "full-c48-343981",
+    "context": 512,
+    "decode_pct_ours_below_marlin": [
+     -0.103,
+     0.31
+    ],
+    "R1": "comparable",
+    "R2": false,
+    "stock_pct": [
+     -0.102,
+     0.388
+    ],
+    "H1": true,
+    "ours_below_fp16_pct": [
+     41.007,
+     41.258
+    ],
+    "prefill_pct_ours_below_marlin": [
+     -15.727,
+     -14.631
+    ],
+    "prefill": "slower",
+    "median_ms": {
+     "GRA": 636.766,
+     "GQ": 436.168,
+     "GQA": 375.178,
+     "GT": 434.888,
+     "GTA": 374.259
+    },
+    "gemm_diff_us": null,
+    "decode_diff_us": null,
+    "other_diff_us": null,
+    "attribution_within_25pct": null
+   },
+   {
+    "node": "full-c48-343981",
+    "context": 2048,
+    "decode_pct_ours_below_marlin": [
+     0.362,
+     0.563
+    ],
+    "R1": "comparable",
+    "R2": true,
+    "stock_pct": [
+     -0.214,
+     0.197
+    ],
+    "H1": true,
+    "ours_below_fp16_pct": [
+     37.543,
+     37.679
+    ],
+    "prefill_pct_ours_below_marlin": [
+     -19.18,
+     -18.686
+    ],
+    "prefill": "slower",
+    "median_ms": {
+     "GRA": 697.369,
+     "GQ": 667.921,
+     "GQA": 437.107,
+     "GT": 667.938,
+     "GTA": 434.832
+    },
+    "gemm_diff_us": -22.53587499999321,
+    "decode_diff_us": 36.111111111111654,
+    "other_diff_us": -11.204178571056218,
+    "attribution_within_25pct": false
+   }
+  ],
+  "R1_replicated": true,
+  "R1_faster_anywhere": false,
+  "R2_holds": "2/3",
+  "H1_all": true,
+  "decode_pct_range": [
+   -0.103,
+   1.186
+  ]
+ }
+}

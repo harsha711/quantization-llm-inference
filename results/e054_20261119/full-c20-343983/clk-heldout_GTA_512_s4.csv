@@ -1,0 +1,2 @@
+timestamp, name, uuid, driver_version, pstate, clocks.current.sm [MHz], clocks.current.memory [MHz], temperature.gpu, power.draw [W], memory.used [MiB]
+2026/11/19 22:09:00.793, NVIDIA GeForce RTX 4060 Ti, GPU-f9386be1-26ac-0d53-7fe0-7f3bc64c3fc7, 610.43.02, P0, 2565 MHz, 9001 MHz, 47, 30.76 W, 2 MiB

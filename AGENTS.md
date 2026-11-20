@@ -273,6 +273,8 @@
 
 - Predeclared in EXPERIMENTS (user request 2026-11-19, "perform robust tests to confirm this … try out different gpus"). Descriptive: GTA vs GQA (and GT vs GQ, GTA vs GRA) on every available RTX 5060 Ti node and one node per other sm_80+ GPU type, contexts 128/512/2048, four series, per-cell bootstrap intervals (R1 E027 rule, R2 direction), plus E030 per-step kernel attribution. Both operators rebuilt multi-arch from unchanged sources; sm_120 SASS and outputs must equal the originals before anything else. Per node: operator checks, sanitizers, unchanged gate before timing; a failing node is recorded, not timed. No pooling across GPU types; "faster than Marlin" only under R1 "faster" everywhere; never "competitive with Marlin/vLLM".
 
+- E054 is complete (10 nodes, 6 GPU types, 1,200 cells; H100 unavailable): decode "comparable" replicated everywhere, never "faster than Marlin". Ours 3.2–3.9% below Marlin on five 5060 Ti nodes, 3.4–4.0% on both 4060 Ti, 3.0–4.4% A100, 0.1–4.4% A6000, −0.1–1.2% 3060 Ti; direction holds in 28/30 node/contexts (not A6000/3060 Ti at 512). Gap = GEMM-kernel device time on 5060 Ti/4060 Ti/A100 (within 25%), unexplained on A6000/3060 Ti. Prefill slower everywhere at long prompts, 47% (A100) and 88–96% (A6000) at 2048. Amendment 1 (scoped device-name guard) disclosed.
+
 ## Rooflines, if requested
 
 - Recompute all ceilings, ridge points, arithmetic intensities, and performance coordinates from specifications/data. Keep the primary full-machine roof distinct from core-count, ISA, NUMA, and memory-domain sensitivity roofs.

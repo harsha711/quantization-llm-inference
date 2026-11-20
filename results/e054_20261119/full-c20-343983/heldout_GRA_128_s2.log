@@ -1,0 +1,5 @@
++ prun timeout 9000 /tmp/e017-hpuvvad-20261109/bin/python /mnt/beegfs/hpuvvad/csc548-w4a16-e054-20261119/full-c20-343983/t.py --marlin att.py time /mnt/beegfs/hpuvvad/csc548-w4a16-e054-20261119/full-c20-343983/out GRA 128 heldout 2 /mnt/beegfs/hpuvvad/csc548-w4a16-e054-20261119/probe-c20-343960/ref
+[prun] Master compute host = c20
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun timeout 9000 /tmp/e017-hpuvvad-20261109/bin/python /mnt/beegfs/hpuvvad/csc548-w4a16-e054-20261119/full-c20-343983/t.py --marlin att.py time /mnt/beegfs/hpuvvad/csc548-w4a16-e054-20261119/full-c20-343983/out GRA 128 heldout 2 /mnt/beegfs/hpuvvad/csc548-w4a16-e054-20261119/probe-c20-343960/ref (family=openmpi4)
+DONE heldout GRA 128 2 0.8217885124031454

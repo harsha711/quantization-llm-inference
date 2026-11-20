@@ -39,6 +39,34 @@ Amendment 1 (2026-11-19, after the first non-5060-Ti probes and before any timin
 
 Expectation (not a result): 5060 Ti nodes replicate E052 (comparable, GTA lower). On other GPUs nothing is predicted: our kernel and its M ≥ 64 threshold were tuned on the 5060 Ti only, while Marlin was designed on A100-class GPUs; Marlin may well be faster there, and that would be reported as such. Limits: one model (Qwen2.5-1.5B), batch 1, 64 tokens, plain-rounded weights (+13.1% blocks), E021 third gate, no head/long/external arms (E052 covers them on the 5060 Ti); never "competitive with Marlin/vLLM". New files only: `scripts/e054/`, `results/e054_20261119/`, BeeGFS `csc548-w4a16-e054-20261119`.
 
+Attempts (details in `results/e054_20261119/RECORD.md`): build 343904 failed on the SASS comparator (anonymous-namespace tags; code identical); build 343919 passed; probes 343920–343924 failed on a quoted `python -c` under prun; 343925–343930 cancelled; renumbered E053 → E054 and rebuilt (343934, passed: sm_120 SASS identical, tc 20/20 and Marlin 16/16 functions; eqcheck 98/98 cases bitwise equal to the original libraries); probes 343935–343939 (5060 Ti) passed; 343940–343944 failed at the E014 loader's device-name guard → amendment 1, probes 343956–343960 passed; H100 probes 343945/343961 never started (node held by another user) and were cancelled at the user's request: H100 UNAVAILABLE. Full jobs 343951–343955 (5060 Ti c5/c7/c8/c9/c10), 343979 (A100 c33), 343980 (A6000 c30, a four-GPU node; the job used device 0), 343981 (3060 Ti c48), 343982 (4060 Ti 16 GB c55), 343983 (4060 Ti 8 GB c20): all exit 0, 120 cells each, every request token-checked, `all.sha256` verified after retrieval (jobs 343976 and a second tar job on `normal` nodes, `*.npz` left on BeeGFS).
+
+### Result (10 nodes, 6 GPU types, 1,200 timed cells, 2026-11-19): E052's "comparable" REPLICATED on every GPU type; never "faster"; the decode difference is GEMM-kernel time
+
+Prerequisites on every node: opcheck tc_ladder 65 cases and Marlin 56 cases, 0 elements outside the bound, repeat and graph bitwise, Marlin workspace intact; memcheck and racecheck of both kernels 0 errors / 0 hazards (first sanitizer evidence for the corrected Marlin body on sm_80/86/89); gate 20/20 accepted (5060 Ti values identical to E052; on the other GPUs the FP64 control has an exact tie at 128 held-out step 47, margin 0.0, accepted by the near-tie rule).
+
+Decode, GTA (ours) vs GQA (Marlin), percent by which ours is lower, range over the 8 cells (2 passages × 4 series), `summary.json`:
+
+| GPU (nodes) | 128 | 512 | 2048 | R1 | R2 holds | H1 (ours ≥ 5% below FP16) |
+|---|---|---|---|---|---|---|
+| RTX 5060 Ti (c5, c7, c8, c9, c10) | 3.34–3.93 | 3.24–3.78 | 3.15–3.48 | comparable on all 15 | 15/15 | all |
+| RTX 4060 Ti 16 GB (c55) | 3.91–4.04 | 3.67–3.83 | 3.37–3.53 | comparable | 3/3 | all |
+| RTX 4060 Ti 8 GB (c20) | 3.93–4.00 | 3.71–3.74 | 3.37–3.39 | comparable | 3/3 | all |
+| A100 80 GB PCIe (c33) | 4.35–4.39 | 4.30–4.36 | 3.00–3.07 | comparable | 3/3 | all |
+| RTX A6000 (c30) | 4.14–4.36 | 0.09–0.38 | 1.81–2.38 | comparable | 2/3 (512: every interval contains 1) | all |
+| RTX 3060 Ti (c48) | 0.88–1.19 | −0.10–0.31 | 0.36–0.56 | comparable | 2/3 (512 fails) | all |
+
+- R1: comparable in all 30 node/contexts; "faster" (≥ 5% in every cell) nowhere, so R3 forbids "faster than Marlin" on every GPU type. "Slower" nowhere.
+- R2: the direction (ours lower, every per-cell 95% bootstrap interval below 1) holds in 28/30 node/contexts; the exceptions are A6000 and 3060 Ti at context 512.
+- Spread: across the five 5060 Ti nodes the per-node median lead varies by 0.51 / 0.46 / 0.29 percentage points (128 / 512 / 2048); the two 4060 Ti nodes (different memory size and driver) agree within 0.08 points.
+- Stock attention (GT vs GQ) shows the same sign, smaller at long context (5060 Ti 0.5–0.9% at 2048).
+- Prefill (GTA vs GQA): slower on the 5060 Ti (7–12%) and 4060 Ti (14–16% at 512/2048); much slower on Ampere at long prompts: A100 47% longer at 2048 (comparable/mixed at 128/512), A6000 35–41% at 512 and 88–96% at 2048, 3060 Ti 15–19% at 512/2048. Our M ≥ 64 path (`tc_m32`, tuned on the 5060 Ti only) does not carry to these GPUs; unprofiled.
+- FP16 context: on the A100, 4-bit decode is only 8–9% below FP16 (338 vs 369 ms at 128); on the 4060 Ti 53%; on the 5060 Ti 47%. Different bandwidth/compute balance; not analysed further.
+
+Attribution (E030 profiler, per decode step, GQA form): GEMM kernels are 196 calls per step for both. Ours minus Marlin GEMM device time: 5060 Ti −178 to −207 µs, A100 −239/−245 µs, 4060 Ti −223 to −245 µs, A6000 −279/−293 µs, 3060 Ti −34/+23 µs; all other kernels differ by at most 41 µs. On the 5060 Ti, 4060 Ti and A100 the GEMM difference matches the decode-median difference per step within 25% at both contexts (e.g. 5060 Ti c8: 185 vs 184 µs, 189 vs 199 µs): the decode lead is our kernel's shorter device time at the model's M = 1 shapes, not integration overhead around Marlin. On the A6000 (279 vs 214, 293 vs 130 µs) and the 3060 Ti (34 vs 64, −23 vs 36 µs) arithmetic agreement fails: there the profiled kernel difference does not explain the wall-time difference (unresolved; not attributed).
+
+Decision: E052's verdict "comparable" (ours within ±5% of Marlin in decode, lower by a small margin) is replicated on six GPU types and ten nodes; the lead is 3–4.4% where it is consistent and near zero on the RTX 3060 Ti and on the A6000 at context 512. "Faster than Marlin" is not supported anywhere. Prefill is slower everywhere at long prompts, severely on Ampere. Limits: one model, batch 1, 64 tokens, plain-rounded weights (+13.1% perplexity), E021 third gate, amendment 1 on non-5060-Ti GPUs, one node per non-5060-Ti type, no H100, profiler times are not wall time; never "competitive with Marlin/vLLM". Analyzer: `scripts/e054/analyze.py` per node (in-job), `scripts/e054/summary.py results/e054_20261119` across nodes.
+
 ## E051 — `tc_ladder` replayed in the earlier kernel-level experiments (descriptive)
 
 Predeclared 2026-11-18 (user request 2026-11-18, "Latest-kernel replay" in AGENTS.md), before any GPU run. Descriptive replays only: no new optimization, no device-code change, no acceptance gate. `tc_ladder` is the E050 rung (unchanged E048 `tc_m32` launcher at M ≥ 64, unchanged E044 `tc` launcher below). Model path is E052 (other agent), not touched here.

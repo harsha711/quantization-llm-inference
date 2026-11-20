@@ -1,0 +1,14 @@
++ prun timeout 9000 /tmp/e017-hpuvvad-20261109/bin/python /mnt/beegfs/hpuvvad/csc548-w4a16-e054-20261119/full-c8-343953/t.py --marlin gprofile.py /mnt/beegfs/hpuvvad/csc548-w4a16-e054-20261119/full-c8-343953/prof-M 128 2048
+[prun] Master compute host = c8
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun timeout 9000 /tmp/e017-hpuvvad-20261109/bin/python /mnt/beegfs/hpuvvad/csc548-w4a16-e054-20261119/full-c8-343953/t.py --marlin gprofile.py /mnt/beegfs/hpuvvad/csc548-w4a16-e054-20261119/full-c8-343953/prof-M 128 2048 (family=openmpi4)
+USDT:2026-11-19 21:40:50 1812386:1812386 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 21:40:50 1812386:1812386 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-11-19 21:40:51 1812386:1812386 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 21:40:51 1812386:1812386 SyncActivityProfilerHandler.cpp:46] profiler_stop
+PROFILED 128 5168.4771428570675
+USDT:2026-11-19 21:40:57 1812386:1812386 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 21:40:57 1812386:1812386 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-11-19 21:40:57 1812386:1812386 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 21:40:58 1812386:1812386 SyncActivityProfilerHandler.cpp:46] profiler_stop
+PROFILED 2048 5932.171035714318

@@ -1,0 +1,2 @@
+timestamp, name, uuid, driver_version, pstate, clocks.current.sm [MHz], clocks.current.memory [MHz], temperature.gpu, power.draw [W], memory.used [MiB]
+2026/11/19 21:54:49.804, NVIDIA GeForce RTX 3060 Ti, GPU-3bbaaa4b-38d0-fc5f-a96d-341327953300, 580.82.07, P0, 1710 MHz, 7001 MHz, 61, 62.65 W, 1 MiB

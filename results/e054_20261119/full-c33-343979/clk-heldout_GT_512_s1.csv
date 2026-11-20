@@ -1,0 +1,2 @@
+timestamp, name, uuid, driver_version, pstate, clocks.current.sm [MHz], clocks.current.memory [MHz], temperature.gpu, power.draw [W], memory.used [MiB]
+2026/11/19 21:11:59.882, NVIDIA A100 80GB PCIe, GPU-ad222fa6-2ed8-9aa7-97a7-7c8491d49757, 580.82.07, P0, 1410 MHz, 1512 MHz, 52, 80.28 W, 0 MiB
