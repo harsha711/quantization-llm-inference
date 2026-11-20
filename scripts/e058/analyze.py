@@ -2,16 +2,20 @@
 """E058 analyzer. analyze.py DIR --stage prereq|full [--out OUTDIR]; analyze.py --self-test.
 
 prereq: library identity (E050 hash), project checks, traced FP64 validation of every path at every matrix count,
-sanitizers, the smoke timing at M = 4 (4/8/16 matrices) against the DRAM floor (inspection only, not a result).
-full: both series; per-GEMM tables at 4/8/16 matrices; the predeclared validity check per cell
-(path x M x series): (1) per-GEMM medians at 8 AND 16 matrices >= the DRAM floor (byte model / 427.2 GB/s);
-(2) |t8/t16 - 1| <= 3%. A cell failing either is reported as still cache-affected, not as a result.
+sanitizers, the smoke timing at M = 4 (4/8/16 matrices) against the floor (inspection only, not a result).
+full: both series; per-GEMM tables at 4/8/16 matrices; the validity check per cell (path x M x series), amendment 1:
+(1) scripts/checks/floorcheck.classify == OK at 8 AND 16 matrices (time >= max(bytes/427.2 GB/s, 2MNK/51.84 TFLOP/s),
+working set >= 2 x L2); (2) |t8/t16 - 1| <= 3%. Unit tests: scripts/e058/test_analyze.py. A cell failing either is reported as still cache-affected, not as a result.
 Descriptive quantities (fraction of Marlin speed, tc_ladder/tc, cuBLAS fraction) use the 16-matrix medians;
 comparison with E050's 4096^2 numbers (results/e050_20261118/summary.json)."""
 import argparse
 import json
 import statistics
+import sys
 from pathlib import Path
+
+sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'checks'))
+import floorcheck as fc  # noqa: E402  shared DRAM/compute floor and working-set check (scripts/checks)
 
 K = N = 4096
 MS = [4,16,64,128]
@@ -19,20 +23,32 @@ COUNTS = [4,8,16]
 NAMES = ['marlin','tc','tc_ladder','cublas_dq']
 SEEDS = list(range(11,27))
 E050_TC_SHA = 'a24a78fad127230f04a867e4a78e7a2a0453a6d4f0db95ea35900c7adaa971fe'
-READ_GBPS = 427.2         # E057 measured read-only bandwidth, c8 (job 344144)
-CONVERGENCE_TOL = 0.03    # predeclared |t8/t16 - 1| bound
+READ_GBPS = fc.BW_BYTES_PER_S/1e9   # E057 measured read-only bandwidth, c8 (job 344144)
+CONVERGENCE_TOL = 0.03              # predeclared |t8/t16 - 1| bound
 E050_SUMMARY = Path(__file__).resolve().parents[2]/'results/e050_20261118/summary.json'
 
 
-def floor_bytes(name,m,k=K,n=N):
-    """Predeclared byte model per GEMM (LATEST_RESULTS rule): weights + FP16 scales (4-bit paths) or FP16 W_hat
-    (cuBLAS), plus FP16 activation rows read and FP16 output rows written."""
-    weights = 2*k*n if name == 'cublas_dq' else k*n//2 + (k//128)*n*2
-    return weights + 2*m*k + 2*m*n
-
-
 def floor_us(name,m):
-    return floor_bytes(name,m)/(READ_GBPS*1e3)
+    """floorcheck's floor: max(byte model / 427.2 GB/s, 2MNK / 51.84 TFLOP/s); FP16 W_hat bytes for cuBLAS."""
+    return fc.floor_us(K,N,m,fp16_weights=name == 'cublas_dq')
+
+
+def per_gemm_us(row):
+    """Per-GEMM time = median of the cycle samples / number of matrices in the cycle."""
+    return statistics.median(row['samples_us'])/row['matrices']
+
+
+def cell_status(name,m,t,count):
+    return fc.classify(K,N,m,t,matrices=count,fp16_weights=name == 'cublas_dq')
+
+
+def cell_valid(name,m,t8,t16):
+    """Predeclared per cell: floorcheck OK (>= floor, working set >= 2 x L2) at 8 AND 16 matrices, |t8/t16-1| <= 3%."""
+    conv = t8/t16 - 1
+    v = dict(floor_us=floor_us(name,m),t8=t8,t16=t16,status_8=cell_status(name,m,t8,8),
+             status_16=cell_status(name,m,t16,16),t8_over_t16_minus_1=conv,converged=abs(conv) <= CONVERGENCE_TOL)
+    v['valid'] = v['status_8'] == fc.OK and v['status_16'] == fc.OK and v['converged']
+    return v
 
 
 def rows(path):
@@ -84,12 +100,13 @@ def expect_kernel(r):
 
 def smoke_table(rs):
     L = ['Smoke timing (prerequisite, series 1, inspection only, NOT a result): per-GEMM us at M=4 vs DRAM floor',
-         'path        count  per-GEMM  floor   time/floor']
+         'path        count  per-GEMM  floor   time/floor  floorcheck']
     out = {}
     for r in sorted(rs,key=lambda r: (NAMES.index(r['config']),r['matrices'])):
-        t = r['median_us']/r['matrices']; f = floor_us(r['config'],r['M'])
-        out[f"{r['config']} c{r['matrices']}"] = dict(per_gemm_us=t,floor_us=f,ratio=t/f)
-        L.append(f"{r['config']:<11} {r['matrices']:>5}  {t:8.2f}  {f:6.2f}  {t/f:6.3f}")
+        t = per_gemm_us(r); f = floor_us(r['config'],r['M'])
+        st = cell_status(r['config'],r['M'],t,r['matrices'])
+        out[f"{r['config']} c{r['matrices']}"] = dict(per_gemm_us=t,floor_us=f,ratio=t/f,status=st)
+        L.append(f"{r['config']:<11} {r['matrices']:>5}  {t:8.2f}  {f:6.2f}  {t/f:6.3f}  {st}")
     return out,'\n'.join(L)
 
 
@@ -139,22 +156,19 @@ def cells(series_rows):
             assert r['order'] == order(r['matrices'],r['M'],s).index(r['config'])
             check_validation(r); check_validation(r,'post_timing_validation')
             assert r['post_timing_validation'] == r['validation']
-            out[(r['matrices'],r['M'],r['config'],s)] = r['median_us']/r['matrices']
+            out[(r['matrices'],r['M'],r['config'],s)] = per_gemm_us(r)
         assert same_bits(rs) == 12
     return out
 
 
 def validity(med):
-    """Predeclared per (path, M, series): floor at 8 and 16 matrices, and 8-vs-16 convergence within 3%."""
+    """Per (path, M, series): cell_valid at 8/16 matrices; the 4-matrix control is reported, never validated."""
     out = {}
     for x in NAMES:
         for m in MS:
             for s in (1,2):
-                f = floor_us(x,m); t8, t16 = med[(8,m,x,s)], med[(16,m,x,s)]
-                conv = t8/t16 - 1
-                v = dict(floor_us=f,t4=med[(4,m,x,s)],t8=t8,t16=t16,above_floor_8=t8 >= f,above_floor_16=t16 >= f,
-                         t4_below_floor=med[(4,m,x,s)] < f,t8_over_t16_minus_1=conv,converged=abs(conv) <= CONVERGENCE_TOL)
-                v['valid'] = v['above_floor_8'] and v['above_floor_16'] and v['converged']
+                v = cell_valid(x,m,med[(8,m,x,s)],med[(16,m,x,s)])
+                v.update(t4=med[(4,m,x,s)],status_4=cell_status(x,m,med[(4,m,x,s)],4))
                 out[(x,m,s)] = v
     return out
 
@@ -197,13 +211,14 @@ def summarize(med):
 
 
 def text(summary):
-    L = [f"E058 per-GEMM cycle medians (us; cycle median / matrices), K=N=4096; DRAM floor at {READ_GBPS} GB/s",
-         '', 'Validity (per path, M, series): t8 and t16 >= floor, |t8/t16-1| <= 3%',
-         'path        M    s  floor    t4      t8      t16     t8/t16-1  valid']
+    L = [f"E058 per-GEMM cycle medians (us; cycle median / matrices), K=N=4096; floor = scripts/checks/floorcheck.py "
+         f"(max(bytes/{READ_GBPS} GB/s, 2MNK/51.84 TFLOP/s); working set >= 2 x 32 MiB L2)",
+         '', 'Validity (per path, M, series): floorcheck OK at 8 and 16 matrices, |t8/t16-1| <= 3%; 4-matrix status reported only',
+         'path        M    s  floor    t4      t8      t16     t8/t16-1  status4      valid']
     for key,v in summary['validity'].items():
         x,m,s = key.split()
         L.append(f"{x:<11} {m[1:]:<4} {s[1:]}  {v['floor_us']:6.2f}  {v['t4']:6.2f}  {v['t8']:6.2f}  {v['t16']:6.2f}  "
-                 f"{v['t8_over_t16_minus_1']:+7.3%}  {'VALID' if v['valid'] else 'CACHE-AFFECTED'}")
+                 f"{v['t8_over_t16_minus_1']:+7.3%}  {v['status_4']:<11}  {'VALID' if v['valid'] else 'CACHE-AFFECTED ('+v['status_8']+'/'+v['status_16']+')'}")
     L += ['',f"Valid cells: {summary['valid_cells']}/{summary['cells']}",'',
           'Ratios at 16 matrices (fraction = Marlin/path; * = not a DRAM-regime result, a cell failed validity)',
           'M    s  tc frac   ladder frac  cuBLAS frac  ladder/tc']
@@ -232,24 +247,12 @@ def full(d,out):
 
 
 def self_test():
+    """Order rule only; the floor/convergence/divide logic is covered by scripts/e058/test_analyze.py."""
     for c in COUNTS:
         for m in MS:
             assert order(c,m,2) == order(c,m,1)[::-1] and sorted(order(c,m,1)) == sorted(NAMES)
     offsets = [((COUNTS.index(c)+MS.index(m)) % 4) for c in COUNTS for m in MS]
     assert sorted(offsets) == [0]*3+[1]*3+[2]*3+[3]*3
-    assert floor_bytes('tc',4) == 8716288 and abs(floor_us('tc',4)-20.403) < 1e-3   # LATEST_RESULTS: 20.4 us
-    assert abs(floor_us('tc',16)-20.863) < 1e-3                                      # 20.9 us
-    assert floor_bytes('cublas_dq',4) == 33619968
-    med = {(c,m,x,s): 2*floor_us(x,m) for c in COUNTS for m in MS for x in NAMES for s in (1,2)}
-    assert validity(med)[('tc',4,1)]['valid'] and sum(v['valid'] for v in validity(med).values()) == 32
-    med[(8,4,'tc',1)] = 2*floor_us('tc',4)*1.031          # convergence fails
-    med[(16,4,'marlin',2)] = 0.99*floor_us('marlin',4)    # floor fails (and convergence)
-    v = validity(med)
-    assert not v[('tc',4,1)]['valid'] and not v[('tc',4,1)]['converged'] and v[('tc',4,1)]['above_floor_8']
-    assert not v[('marlin',4,2)]['valid'] and not v[('marlin',4,2)]['above_floor_16']
-    assert sum(x['valid'] for x in v.values()) == 30
-    med[(8,4,'tc',1)] = 2*floor_us('tc',4)*1.029
-    assert validity(med)[('tc',4,1)]['valid']
     print('SELF-TEST PASS')
 
 

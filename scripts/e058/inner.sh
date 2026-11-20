@@ -61,6 +61,8 @@ else
   [[ $(sha256sum "$PRE/libe050_tc.so" | cut -d' ' -f1) == "$E050SHA" ]]
   cp "$PRE/binaries.sha256" "$S/prereq-binaries.sha256"
   base+=(--tc "$PRE/libe050_tc.so")
+  # Amendment 1: the analyzer's unit tests (hand-derived expectations) must pass on the node before any timing.
+  run unit-tests "$PY" -m unittest -v scripts/e058/test_analyze.py
   clock > "$S/series1-clocks-before.csv"
   run series1 "${base[@]}" --out "$S/series1.jsonl"
   clock > "$S/series1-clocks-after.csv"

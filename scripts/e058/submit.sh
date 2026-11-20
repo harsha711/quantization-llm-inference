@@ -10,7 +10,8 @@ mode=${1:?prereq or full}; pre=${2:-}; note=${3:-}; [[ $mode == prereq || ( $mod
 root=$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)
 paths=(CMakeLists.txt include src tests tools scripts/build.sh scripts/check_inblock.sh scripts/e004 scripts/e005 scripts/e008
        scripts/e010 scripts/e058 results/e010_c4_20261107/verified-inputs.sha256 results/e050_20261118/summary.json
-       results/e050_20261118/prereq-c8-343302/binaries.sha256)
+       results/e050_20261118/prereq-c8-343302/binaries.sha256 results/e050_20261118/full-c8-343308/series2.jsonl
+       scripts/checks/floorcheck.py)
 cat <<HDR
 #!/usr/bin/env bash
 #SBATCH --job-name=w4a16-e058-$mode
