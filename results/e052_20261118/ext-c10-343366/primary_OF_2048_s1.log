@@ -1,0 +1,5 @@
++ prun timeout 6000 /tmp/e028-ort-hpuvvad-20261110/bin/python /mnt/beegfs/hpuvvad/csc548-w4a16-e052-20261118/ext-c10-343366/obench.py /mnt/beegfs/hpuvvad/csc548-w4a16-e028-20261110/ort/fp16 /mnt/beegfs/hpuvvad/csc548-w4a16-e052-20261118/ext-c10-343366/ref /mnt/beegfs/hpuvvad/csc548-w4a16-e052-20261118/ext-c10-343366/outX OF 2048 primary 1
+[prun] Master compute host = c10
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun timeout 6000 /tmp/e028-ort-hpuvvad-20261110/bin/python /mnt/beegfs/hpuvvad/csc548-w4a16-e052-20261118/ext-c10-343366/obench.py /mnt/beegfs/hpuvvad/csc548-w4a16-e028-20261110/ort/fp16 /mnt/beegfs/hpuvvad/csc548-w4a16-e052-20261118/ext-c10-343366/ref /mnt/beegfs/hpuvvad/csc548-w4a16-e052-20261118/ext-c10-343366/outX OF 2048 primary 1 (family=openmpi4)
+DONE primary OF 2048 1 0.5391110845375806 64

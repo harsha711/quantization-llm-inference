@@ -1,0 +1,14 @@
+/mnt/beegfs/hpuvvad/csc548-w4a16-e052-20261118/prereq-c10-343334/diagnose.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e052-20261118/prereq-c10-343334/validate.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e052-20261118/prereq-c10-343334/run.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e052-20261118/prereq-c10-343334/att.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e052-20261118/prereq-c10-343334/long.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e052-20261118/prereq-c10-343334/head.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e052-20261118/prereq-c10-343334/ckpt.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e052-20261118/prereq-c10-343334/vbench.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e052-20261118/prereq-c10-343334/obench.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e052-20261118/prereq-c10-343334/lbench.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e052-20261118/prereq-c10-343334/t.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e052-20261118/prereq-c10-343334/opcheck.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e052-20261118/prereq-c10-343334/analyze.py: OK
+STAGE-OK

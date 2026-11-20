@@ -1,0 +1,4 @@
+PRESENT /tmp/e017-hpuvvad-20261109 
+ABSENT /tmp/e027-vllm-hpuvvad-20261110
+ABSENT /tmp/e028-ort-hpuvvad-20261110
+PRESENT /tmp/e028-llama-hpuvvad-20261110 -rw-r--r-- 1 hpuvvad ncsu 0 2026-11-10 14:53:32.684837219 -0500 /tmp/e028-llama-hpuvvad-20261110/INSTALLED

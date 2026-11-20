@@ -1,0 +1,101 @@
+{
+  "generated": 64,
+  "gpu": "GPU-38a74fc5-9f81-89d1-4ad5-3f5796d39bf2, 610.57.04",
+  "cases": {
+    "256-primary": {
+      "compared_steps": 64,
+      "flip": null,
+      "q_vs_f64_rel_l2": 0.0020721144072673348,
+      "reported": {
+        "r_vs_f64_rel_l2_same_steps": 0.002070897823360727,
+        "f32_vs_f64_rel_l2_same_steps": 0.002001057971856674,
+        "q_vs_r_rel_l2_all": 0.002061659957160162,
+        "old_gate_q_vs_r_bad": 32,
+        "tokens_equal_F64": {
+          "R": true,
+          "Q": true,
+          "Q2": true,
+          "F32": true,
+          "F64": true,
+          "P": true
+        },
+        "R_prefix": [
+          64,
+          true,
+          null
+        ],
+        "F32_prefix": [
+          64,
+          true,
+          null
+        ],
+        "R_bad_calls": 0,
+        "Q_max_rel_l2": 0.00036860504831197637,
+        "checked": 205793280,
+        "max_gpu_vs_cpu_fp64_rel": 0.0
+      },
+      "failing": [],
+      "workspace": {
+        "stateless_no_workspace": true
+      },
+      "criteria": {
+        "finite": true,
+        "tokens": true,
+        "deterministic": true,
+        "operators": true,
+        "workspace": true,
+        "rel_l2_vs_F64": true,
+        "state": true
+      },
+      "accepted": true
+    },
+    "256-heldout": {
+      "compared_steps": 64,
+      "flip": null,
+      "q_vs_f64_rel_l2": 0.0022254863740017094,
+      "reported": {
+        "r_vs_f64_rel_l2_same_steps": 0.0021193180414096472,
+        "f32_vs_f64_rel_l2_same_steps": 0.0021540611172744055,
+        "q_vs_r_rel_l2_all": 0.002048665001925906,
+        "old_gate_q_vs_r_bad": 92,
+        "tokens_equal_F64": {
+          "R": true,
+          "Q": true,
+          "Q2": true,
+          "F32": true,
+          "F64": true,
+          "P": true
+        },
+        "R_prefix": [
+          64,
+          true,
+          null
+        ],
+        "F32_prefix": [
+          64,
+          true,
+          null
+        ],
+        "R_bad_calls": 0,
+        "Q_max_rel_l2": 0.00041610584858559486,
+        "checked": 205793280,
+        "max_gpu_vs_cpu_fp64_rel": 0.0
+      },
+      "failing": [],
+      "workspace": {
+        "stateless_no_workspace": true
+      },
+      "criteria": {
+        "finite": true,
+        "tokens": true,
+        "deterministic": true,
+        "operators": true,
+        "workspace": true,
+        "rel_l2_vs_F64": true,
+        "state": true
+      },
+      "accepted": true
+    }
+  },
+  "accepted": true
+}

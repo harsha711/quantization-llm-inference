@@ -1,0 +1,29 @@
+{
+  "hash": "1166b1d8404d8d8e0ca18b2167d6f356",
+  "modelinfo": {
+    "architecture": "Qwen2ForCausalLM",
+    "is_text_generation_model": true,
+    "is_pooling_model": false,
+    "attn_type": "decoder",
+    "default_seq_pooling_type": "LAST",
+    "default_tok_pooling_type": "ALL",
+    "score_type": "bi-encoder",
+    "supports_multimodal": false,
+    "supports_multimodal_raw_input_only": false,
+    "requires_raw_input_tokens": false,
+    "supports_multimodal_encoder_tp_data": false,
+    "supports_pp": true,
+    "supports_lora": true,
+    "supports_hc_sp": false,
+    "has_inner_state": false,
+    "is_attention_free": false,
+    "is_hybrid": false,
+    "has_noops": false,
+    "supports_replayssm": false,
+    "supports_transcription": false,
+    "supports_transcription_only": false,
+    "supports_kv_cache_grouping": false,
+    "supported_video_pruning_methods": [],
+    "supports_mm_device_do_normalize": false
+  }
+}

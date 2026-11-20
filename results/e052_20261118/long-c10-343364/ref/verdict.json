@@ -1,0 +1,216 @@
+{
+  "gpu": "GPU-38a74fc5-9f81-89d1-4ad5-3f5796d39bf2, 610.57.04",
+  "cases": {
+    "4096-primary": {
+      "compared_steps": 64,
+      "flip": null,
+      "gqa_vs_f64_rel_l2": 0.002082724160655137,
+      "workspace": {
+        "locks_zero": true,
+        "lock_guards": true,
+        "scratch_guards": true
+      },
+      "reported": {
+        "gq_vs_f64_rel_l2": 0.00206342067409819,
+        "gra_vs_f64_rel_l2": 0.002115932816870869,
+        "gqa_vs_gq_rel_l2": 0.001790420694546441,
+        "gra_vs_gr_rel_l2": 0.0018388104633375573,
+        "tokens_equal_f64": {
+          "F64": true,
+          "GR": true,
+          "GQ": true,
+          "AQ": true,
+          "GRA": true,
+          "GQA": true,
+          "GQA2": true
+        }
+      },
+      "criteria": {
+        "finite": true,
+        "tokens": true,
+        "rel_l2_vs_F64": true,
+        "graph_bitwise_eager": true,
+        "repeat_bitwise": true,
+        "workspace": true,
+        "state": true
+      },
+      "accepted": true
+    },
+    "4096-heldout": {
+      "compared_steps": 64,
+      "flip": null,
+      "gqa_vs_f64_rel_l2": 0.0020985882018834745,
+      "workspace": {
+        "locks_zero": true,
+        "lock_guards": true,
+        "scratch_guards": true
+      },
+      "reported": {
+        "gq_vs_f64_rel_l2": 0.0021766369745537645,
+        "gra_vs_f64_rel_l2": 0.0021417196350075078,
+        "gqa_vs_gq_rel_l2": 0.0019982962355888432,
+        "gra_vs_gr_rel_l2": 0.0018752756856262782,
+        "tokens_equal_f64": {
+          "F64": true,
+          "GR": true,
+          "GQ": true,
+          "AQ": true,
+          "GRA": true,
+          "GQA": true,
+          "GQA2": true
+        }
+      },
+      "criteria": {
+        "finite": true,
+        "tokens": true,
+        "rel_l2_vs_F64": true,
+        "graph_bitwise_eager": true,
+        "repeat_bitwise": true,
+        "workspace": true,
+        "state": true
+      },
+      "accepted": true
+    },
+    "8192-primary": {
+      "compared_steps": 64,
+      "flip": null,
+      "gqa_vs_f64_rel_l2": 0.0021266488156469836,
+      "workspace": {
+        "locks_zero": true,
+        "lock_guards": true,
+        "scratch_guards": true
+      },
+      "reported": {
+        "gq_vs_f64_rel_l2": 0.0021416599580856687,
+        "gra_vs_f64_rel_l2": 0.0020115793129613863,
+        "gqa_vs_gq_rel_l2": 0.0017936488673266683,
+        "gra_vs_gr_rel_l2": 0.0018419667441353,
+        "tokens_equal_f64": {
+          "F64": true,
+          "GR": true,
+          "GQ": true,
+          "AQ": true,
+          "GRA": true,
+          "GQA": true,
+          "GQA2": true
+        }
+      },
+      "criteria": {
+        "finite": true,
+        "tokens": true,
+        "rel_l2_vs_F64": true,
+        "graph_bitwise_eager": true,
+        "repeat_bitwise": true,
+        "workspace": true,
+        "state": true
+      },
+      "accepted": true
+    },
+    "8192-heldout": {
+      "compared_steps": 64,
+      "flip": null,
+      "gqa_vs_f64_rel_l2": 0.002237065557313104,
+      "workspace": {
+        "locks_zero": true,
+        "lock_guards": true,
+        "scratch_guards": true
+      },
+      "reported": {
+        "gq_vs_f64_rel_l2": 0.002119819003967533,
+        "gra_vs_f64_rel_l2": 0.002217453682217244,
+        "gqa_vs_gq_rel_l2": 0.001734463119562982,
+        "gra_vs_gr_rel_l2": 0.0018555496990960245,
+        "tokens_equal_f64": {
+          "F64": true,
+          "GR": true,
+          "GQ": true,
+          "AQ": true,
+          "GRA": true,
+          "GQA": true,
+          "GQA2": true
+        }
+      },
+      "criteria": {
+        "finite": true,
+        "tokens": true,
+        "rel_l2_vs_F64": true,
+        "graph_bitwise_eager": true,
+        "repeat_bitwise": true,
+        "workspace": true,
+        "state": true
+      },
+      "accepted": true
+    },
+    "16384-primary": {
+      "compared_steps": 64,
+      "flip": null,
+      "gqa_vs_f64_rel_l2": 0.002102742481940494,
+      "workspace": {
+        "locks_zero": true,
+        "lock_guards": true,
+        "scratch_guards": true
+      },
+      "reported": {
+        "gq_vs_f64_rel_l2": 0.0020626416050697834,
+        "gra_vs_f64_rel_l2": 0.00198636279988971,
+        "gqa_vs_gq_rel_l2": 0.0019333283987298332,
+        "gra_vs_gr_rel_l2": 0.0017781998793797728,
+        "tokens_equal_f64": {
+          "F64": true,
+          "GR": true,
+          "GQ": true,
+          "AQ": true,
+          "GRA": true,
+          "GQA": true,
+          "GQA2": true
+        }
+      },
+      "criteria": {
+        "finite": true,
+        "tokens": true,
+        "rel_l2_vs_F64": true,
+        "graph_bitwise_eager": true,
+        "repeat_bitwise": true,
+        "workspace": true,
+        "state": true
+      },
+      "accepted": true
+    },
+    "16384-heldout": {
+      "compared_steps": 64,
+      "flip": null,
+      "gqa_vs_f64_rel_l2": 0.0020984204299451183,
+      "workspace": {
+        "locks_zero": true,
+        "lock_guards": true,
+        "scratch_guards": true
+      },
+      "reported": {
+        "gq_vs_f64_rel_l2": 0.001978678397416006,
+        "gra_vs_f64_rel_l2": 0.0021115298285961396,
+        "gqa_vs_gq_rel_l2": 0.0019571581540215282,
+        "gra_vs_gr_rel_l2": 0.0018261111464155325,
+        "tokens_equal_f64": {
+          "F64": true,
+          "GR": true,
+          "GQ": true,
+          "AQ": true,
+          "GRA": true,
+          "GQA": true,
+          "GQA2": true
+        }
+      },
+      "criteria": {
+        "finite": true,
+        "tokens": true,
+        "rel_l2_vs_F64": true,
+        "graph_bitwise_eager": true,
+        "repeat_bitwise": true,
+        "workspace": true,
+        "state": true
+      },
+      "accepted": true
+    }
+  },
+  "accepted": true
+}

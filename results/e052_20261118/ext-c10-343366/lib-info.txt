@@ -1,0 +1,11 @@
+	linux-vdso.so.1 (0x00007ffc37bed000)
+	librt.so.1 => /lib64/librt.so.1 (0x00007f44ba200000)
+	libpthread.so.0 => /lib64/libpthread.so.0 (0x00007f44b9e00000)
+	libdl.so.2 => /lib64/libdl.so.2 (0x00007f44b9a00000)
+	libstdc++.so.6 => /opt/ohpc/pub/compiler/gcc/12.4.0/lib64/libstdc++.so.6 (0x00007f44b95d8000)
+	libm.so.6 => /lib64/libm.so.6 (0x00007f44b9200000)
+	libgcc_s.so.1 => /opt/ohpc/pub/compiler/gcc/12.4.0/lib64/libgcc_s.so.1 (0x00007f44b8fe1000)
+	libc.so.6 => /lib64/libc.so.6 (0x00007f44b8c00000)
+	/lib64/ld-linux-x86-64.so.2 (0x00007f44ba800000)
+0000000000009ae0 T e050_tc
+0000000000009b00 T e050_tc_ladder

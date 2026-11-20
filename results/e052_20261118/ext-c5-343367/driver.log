@@ -1,0 +1,16 @@
+/mnt/beegfs/hpuvvad/csc548-w4a16-e052-20261118/ext-c5-343367/diagnose.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e052-20261118/ext-c5-343367/validate.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e052-20261118/ext-c5-343367/run.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e052-20261118/ext-c5-343367/att.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e052-20261118/ext-c5-343367/long.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e052-20261118/ext-c5-343367/head.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e052-20261118/ext-c5-343367/ckpt.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e052-20261118/ext-c5-343367/vbench.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e052-20261118/ext-c5-343367/obench.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e052-20261118/ext-c5-343367/lbench.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e052-20261118/ext-c5-343367/t.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e052-20261118/ext-c5-343367/opcheck.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e052-20261118/ext-c5-343367/analyze.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e052-20261118/prereq-c10-343334/INSPECTED
+/mnt/beegfs/hpuvvad/csc548-w4a16-e017-20261109/external/vllm-0.33.0-cp38-abi3-manylinux_2_28_x86_64.whl: OK
+STAGE-OK
