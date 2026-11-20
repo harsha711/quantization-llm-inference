@@ -96,7 +96,8 @@ def funcs(p):
     out, cur = {}, None
     for line in Path(p).read_text().splitlines():
         m = re.match(r'\s*Function : (\S+)', line)
-        if m: cur = m.group(1); out[cur] = []; continue
+        # anonymous-namespace tags (_GLOBAL__N__<hash>_<len>_<file>_cu_<hash>) depend on the build path, not the code
+        if m: cur = re.sub(r'_GLOBAL__N__[0-9a-f]+_\d+_(\w+?)_cu_[0-9a-f]+', r'ANON_\1', m.group(1)); out[cur] = []; continue
         if cur and re.match(r'\s*/\*[0-9a-f]{4,}\*/|\s*/\* 0x', line): out[cur].append(line.strip())
     return out
 res = {}
