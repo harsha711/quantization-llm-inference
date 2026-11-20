@@ -293,6 +293,10 @@
 - Predeclared in EXPERIMENTS (user request 2026-11-20, slide values). E041's unchanged CPU kernel under user-mode `perf stat`/`perf record` (per-call counts by differencing R_hi vs 2 calls), clock = cycles ÷ task-clock per p, midterm STREAM; GPU microbenchmarks in `scripts/e057/` (D2D copy, read-only kernel, `mma.sync` m16n8k16 f32 only). Ran on c8, not c58 (held by another user's 7-day job): disclose with every CPU number.
 - E057 is complete (c8, prerequisite 344143, full 344144; first submission never reached Slurm: submit.sh not executable). CPU T1: IPC 5.1–6.2 at 4.14 GHz, 32.5/10.1/2.9 instructions per multiply-add (M1/4/128); unpack + FP16 conversion 72–82% of GEMM samples at M1/M4, FMA loop 76% at M128; clock 4.14 → 3.25–3.65 GHz at p = 16; Triad 45 GB/s (p1) to 126 GB/s (p16). LLC counters UNAVAILABLE; `cache-references/misses` are generic events, never call them LLC/DRAM. GPU: read-only 427 GB/s (95% of 448), copy 386 GB/s (86%), tensor 51.8 TFLOP/s = 512 FLOP/clk/SM at 2812 MHz (109% of nominal 47.4): say "measured lower bound at the observed clock"; fractions of 47.4 overstate efficiency by ~9% on this node.
 
+## E058 4096² cyclic cells with a working set above L2
+
+- Predeclared in EXPERIMENTS (2026-11-20, after LATEST_RESULTS "Invalid: E050 4096² cyclic cells"). E050's exact library/harness at K = N = 4096 with 4/8/16 matrices per cycle (fresh nested seeds 11–26, activation seed 11), two reversed series, c8. Per cell: valid only if per-GEMM medians at 8 and 16 matrices are ≥ the DRAM floor (byte model ÷ 427.2 GB/s) and agree within 3%; otherwise "still cache-affected". Descriptive, no gate; never "faster than/competitive with Marlin". Status: predeclared.
+
 ## Rooflines, if requested
 
 - Recompute all ceilings, ridge points, arithmetic intensities, and performance coordinates from specifications/data. Keep the primary full-machine roof distinct from core-count, ISA, NUMA, and memory-domain sensitivity roofs.
