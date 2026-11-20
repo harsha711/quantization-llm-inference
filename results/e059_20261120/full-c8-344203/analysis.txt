@@ -1,0 +1,1013 @@
+E059 full analysis: per-GEMM us = cycle median / matrices (cyclic, no artificial flush), series 1 / series 2;
+frac = Marlin median / path median (fraction of Marlin speed); floor = byte model / 427.2 GB/s;
+rf = the teammate's read-flush single-matrix median (their method, side by side). * = floorcheck status not OK (below a floor or working set < 2 x L2: cache-affected).
+
+K1536xN8960 M1 (10 matrices)  floor 4-bit 16.66 us, FP16 64.48 us
+  marlin     cyc       21.0/20.8  frac 1.000/1.000   rf       22.5/22.5  frac 1.000/1.000   cyc/rf 0.934/0.925
+  tc_ladder  cyc       20.2/20.2  frac 1.040/1.029   rf       22.5/22.5  frac 1.001/1.000   cyc/rf 0.899/0.899
+  v3         cyc       20.0/20.0  frac 1.051/1.041   rf       22.5/22.5  frac 1.000/1.000   cyc/rf 0.889/0.889
+  cublas_dq  cyc       68.4/68.4  frac 0.308/0.305   rf       71.7/71.7  frac 0.314/0.314   cyc/rf 0.954/0.954
+K1536xN8960 M4 (10 matrices)  floor 4-bit 16.81 us, FP16 64.63 us
+  marlin     cyc       21.1/20.8  frac 1.000/1.000   rf       22.5/22.5  frac 1.000/1.000   cyc/rf 0.938/0.925
+  tc_ladder  cyc       20.8/20.6  frac 1.016/1.010   rf       22.5/22.5  frac 1.000/1.000   cyc/rf 0.923/0.917
+  v3         cyc       38.0/37.8  frac 0.556/0.552   rf       38.9/38.9  frac 0.579/0.579   cyc/rf 0.976/0.971
+  cublas_dq  cyc       67.7/67.7  frac 0.312/0.308   rf       69.6/69.6  frac 0.324/0.324   cyc/rf 0.973/0.972
+K1536xN8960 M16 (10 matrices)  floor 4-bit 17.40 us, FP16 65.22 us
+  marlin     cyc       22.6/22.2  frac 1.000/1.000   rf       24.6/24.6  frac 1.000/1.000   cyc/rf 0.921/0.905
+  tc_ladder  cyc       23.5/23.7  frac 0.962/0.939   rf       24.6/24.6  frac 1.000/1.000   cyc/rf 0.957/0.964
+  v3         cyc     133.5/134.2  frac 0.169/0.166   rf     139.3/139.3  frac 0.176/0.176   cyc/rf 0.959/0.963
+  cublas_dq  cyc       68.6/68.6  frac 0.330/0.324   rf       69.6/69.6  frac 0.353/0.353   cyc/rf 0.985/0.985
+K8960xN1536 M1 (10 matrices)  floor 4-bit 16.66 us, FP16 64.48 us
+  marlin     cyc       21.4/21.6  frac 1.000/1.000   rf       22.5/24.5  frac 1.000/1.000   cyc/rf 0.951/0.881
+  tc_ladder  cyc       22.5/22.7  frac 0.953/0.954   rf       24.6/24.6  frac 0.917/0.999   cyc/rf 0.915/0.923
+  v3         cyc       20.6/20.6  frac 1.041/1.050   rf       22.5/22.5  frac 1.000/1.089   cyc/rf 0.914/0.914
+  cublas_dq  cyc       70.5/70.6  frac 0.304/0.306   rf       71.7/71.7  frac 0.314/0.342   cyc/rf 0.983/0.985
+  splitk_s1  cyc       27.2/27.2  frac 0.788/0.794   rf       28.7/28.7  frac 0.785/0.856   cyc/rf 0.947/0.950
+  splitk_s2  cyc       23.7/23.3  frac 0.904/0.928   rf       26.6/26.6  frac 0.846/0.922   cyc/rf 0.891/0.875
+  splitk_s3  cyc       24.7/25.0  frac 0.866/0.867   rf       26.6/26.6  frac 0.846/0.922   cyc/rf 0.929/0.937
+  splitk_s4  cyc       23.3/23.3  frac 0.920/0.929   rf       24.6/24.6  frac 0.917/0.999   cyc/rf 0.948/0.948
+  splitk_s8  cyc       25.8/25.7  frac 0.832/0.841   rf       28.7/28.7  frac 0.786/0.856   cyc/rf 0.898/0.897
+K8960xN1536 M4 (10 matrices)  floor 4-bit 16.81 us, FP16 64.63 us
+  marlin     cyc       21.4/21.6  frac 1.000/1.000   rf       22.5/24.6  frac 1.000/1.000   cyc/rf 0.951/0.881
+  tc_ladder  cyc       22.6/22.7  frac 0.949/0.956   rf       24.6/24.6  frac 0.917/1.000   cyc/rf 0.919/0.922
+  v3         cyc       37.6/37.6  frac 0.570/0.576   rf       41.0/41.0  frac 0.550/0.600   cyc/rf 0.918/0.918
+  cublas_dq  cyc       68.8/68.8  frac 0.311/0.315   rf       71.7/71.7  frac 0.314/0.343   cyc/rf 0.960/0.959
+  splitk_s1  cyc       27.4/27.4  frac 0.782/0.790   rf       28.7/28.7  frac 0.785/0.857   cyc/rf 0.954/0.956
+  splitk_s2  cyc       25.4/24.9  frac 0.845/0.868   rf       28.7/28.7  frac 0.786/0.857   cyc/rf 0.884/0.869
+  splitk_s3  cyc       24.8/24.9  frac 0.863/0.868   rf       26.6/26.6  frac 0.846/0.923   cyc/rf 0.933/0.937
+  splitk_s4  cyc       23.9/23.8  frac 0.896/0.908   rf       26.6/26.6  frac 0.847/0.924   cyc/rf 0.899/0.897
+  splitk_s8  cyc       25.6/25.5  frac 0.839/0.848   rf       28.7/28.7  frac 0.786/0.857   cyc/rf 0.891/0.891
+K8960xN1536 M16 (10 matrices)  floor 4-bit 17.40 us, FP16 65.22 us
+  marlin     cyc       22.6/22.8  frac 1.000/1.000   rf       24.6/24.6  frac 1.000/1.000   cyc/rf 0.921/0.929
+  tc_ladder  cyc       27.4/27.4  frac 0.826/0.834   rf       28.7/30.7  frac 0.856/0.801   cyc/rf 0.955/0.893
+  v3         cyc     176.6/176.6  frac 0.128/0.129   rf     178.1/178.1  frac 0.138/0.138   cyc/rf 0.991/0.991
+  cublas_dq  cyc       69.0/69.0  frac 0.328/0.331   rf       71.7/71.7  frac 0.343/0.343   cyc/rf 0.963/0.963
+  splitk_s1  cyc       28.4/28.3  frac 0.797/0.807   rf       30.7/30.7  frac 0.800/0.800   cyc/rf 0.925/0.922
+  splitk_s2  cyc       25.6/25.6  frac 0.886/0.894   rf       28.7/28.7  frac 0.857/0.857   cyc/rf 0.891/0.891
+  splitk_s3  cyc       23.9/23.9  frac 0.946/0.955   rf       26.6/26.6  frac 0.923/0.923   cyc/rf 0.898/0.898
+  splitk_s4  cyc       24.3/24.5  frac 0.930/0.932   rf       26.6/26.6  frac 0.923/0.923   cyc/rf 0.914/0.921
+  splitk_s8  cyc       23.5/23.5  frac 0.963/0.972   rf       26.6/26.6  frac 0.923/0.923   cyc/rf 0.883/0.883
+K1536xN1536 M1 (56 matrices)  floor 4-bit 2.86 us, FP16 11.06 us
+  marlin     cyc         7.0/7.0  frac 1.000/1.000   rf       10.1/10.0  frac 1.000/1.000   cyc/rf 0.694/0.702
+  tc_ladder  cyc         5.3/5.3  frac 1.313/1.315   rf         8.2/8.2  frac 1.234/1.221   cyc/rf 0.652/0.652
+  v3         cyc         5.7/5.7  frac 1.221/1.222   rf         8.2/8.2  frac 1.234/1.221   cyc/rf 0.701/0.701
+  cublas_dq  cyc       12.8/12.8  frac 0.547/0.547   rf       14.3/14.3  frac 0.705/0.698   cyc/rf 0.895/0.896
+K1536xN1536 M4 (56 matrices)  floor 4-bit 2.91 us, FP16 11.10 us
+  marlin     cyc         7.0/7.0  frac 1.000/1.000   rf        10.1/8.4  frac 1.000/1.000   cyc/rf 0.697/0.838
+  tc_ladder  cyc         5.3/5.4  frac 1.315/1.306   rf         8.2/8.2  frac 1.235/1.023   cyc/rf 0.655/0.657
+  v3         cyc         8.6/8.6  frac 0.821/0.818   rf       10.4/10.5  frac 0.972/0.801   cyc/rf 0.826/0.821
+  cublas_dq  cyc       15.1/15.1  frac 0.465/0.466   rf       16.4/16.4  frac 0.615/0.511   cyc/rf 0.921/0.918
+K1536xN1536 M16 (56 matrices)  floor 4-bit 3.08 us, FP16 11.28 us
+  marlin     cyc         8.0/8.0  frac 1.000/1.000   rf       10.2/10.2  frac 1.000/1.000   cyc/rf 0.779/0.780
+  tc_ladder  cyc         6.2/6.1  frac 1.293/1.306   rf         8.2/8.2  frac 1.250/1.255   cyc/rf 0.753/0.749
+  v3         cyc       30.7/30.8  frac 0.259/0.259   rf       34.5/33.1  frac 0.297/0.309   cyc/rf 0.890/0.930
+  cublas_dq  cyc       15.9/15.8  frac 0.503/0.504   rf       18.3/18.4  frac 0.560/0.556   cyc/rf 0.868/0.859
+K4096xN11008 M1 (4 matrices)  floor 4-bit 54.49 us, FP16 211.16 us
+  marlin     cyc       61.2/61.2  frac 1.000/1.000   rf       61.4/63.5  frac 1.000/1.000   cyc/rf 0.997/0.965
+  tc_ladder  cyc       63.4/62.7  frac 0.966/0.977   rf       65.5/63.5  frac 0.937/0.999   cyc/rf 0.967/0.987
+  v3         cyc       58.7/58.7  frac 1.043/1.044   rf       59.4/59.4  frac 1.034/1.068   cyc/rf 0.988/0.987
+  cublas_dq  cyc     235.4/236.6  frac 0.260/0.259   rf     235.5/239.5  frac 0.261/0.265   cyc/rf 1.000/0.988
+  splitk_s1  cyc       71.6/71.0  frac 0.856/0.862   rf       73.7/72.5  frac 0.833/0.876   cyc/rf 0.971/0.980
+  splitk_s2  cyc       71.0/73.0  frac 0.863/0.839   rf       73.7/73.7  frac 0.833/0.861   cyc/rf 0.963/0.990
+  splitk_s4  cyc       74.0/74.5  frac 0.828/0.822   rf       75.8/77.8  frac 0.811/0.816   cyc/rf 0.976/0.958
+  splitk_s8  cyc       86.1/86.8  frac 0.712/0.706   rf       90.2/92.2  frac 0.681/0.689   cyc/rf 0.954/0.942
+K4096xN11008 M4 (4 matrices)  floor 4-bit 54.70 us, FP16 211.37 us
+  marlin     cyc       61.5/61.7  frac 1.000/1.000   rf       63.5/63.5  frac 1.000/1.000   cyc/rf 0.969/0.972
+  tc_ladder  cyc       64.4/63.9  frac 0.955/0.966   rf       65.5/63.6  frac 0.968/0.997   cyc/rf 0.983/1.004
+  v3         cyc     117.5/116.8  frac 0.523/0.528   rf     122.9/122.8  frac 0.516/0.517   cyc/rf 0.956/0.952
+  cublas_dq  cyc     268.9/269.7  frac 0.229/0.229   rf     266.2/270.3  frac 0.238/0.235   cyc/rf 1.010/0.998
+  splitk_s1  cyc       71.6/70.6  frac 0.859/0.874   rf       73.7/71.7  frac 0.861/0.886   cyc/rf 0.971/0.985
+  splitk_s2  cyc       70.5/72.4  frac 0.872/0.851   rf       73.7/73.6  frac 0.861/0.863   cyc/rf 0.957/0.985
+  splitk_s4  cyc       73.1/73.8  frac 0.841/0.836   rf       75.8/75.8  frac 0.837/0.838   cyc/rf 0.965/0.974
+  splitk_s8  cyc       84.3/84.8  frac 0.730/0.727   rf       90.1/92.1  frac 0.704/0.690   cyc/rf 0.935/0.921
+K4096xN11008 M16 (4 matrices)  floor 4-bit 55.55 us, FP16 212.22 us
+  marlin     cyc       64.3/64.7  frac 1.000/1.000   rf       65.5/65.7  frac 1.000/1.000   cyc/rf 0.981/0.985
+  tc_ladder  cyc       72.6/72.1  frac 0.886/0.898   rf       71.7/71.7  frac 0.914/0.916   cyc/rf 1.012/1.006
+  v3         cyc     427.5/427.6  frac 0.150/0.151   rf     430.1/431.1  frac 0.152/0.152   cyc/rf 0.994/0.992
+  cublas_dq  cyc     247.7/249.2  frac 0.260/0.260   rf     247.8/254.0  frac 0.264/0.259   cyc/rf 1.000/0.981
+  splitk_s1  cyc       74.5/74.3  frac 0.863/0.870   rf       73.7/73.7  frac 0.889/0.891   cyc/rf 1.011/1.009
+  splitk_s2  cyc       70.3/72.4  frac 0.915/0.893   rf       71.7/69.6  frac 0.914/0.943   cyc/rf 0.980/1.040
+  splitk_s4  cyc       72.1/72.6  frac 0.892/0.892   rf       73.8/75.7  frac 0.888/0.867   cyc/rf 0.976/0.958
+  splitk_s8  cyc       81.8/81.7  frac 0.786/0.792   rf       90.1/90.1  frac 0.727/0.729   cyc/rf 0.908/0.907
+K11008xN4096 M1 (4 matrices)  floor 4-bit 54.49 us, FP16 211.16 us
+  marlin     cyc       59.2/59.2  frac 1.000/1.000   rf       59.4/59.4  frac 1.000/1.000   cyc/rf 0.997/0.997
+  tc_ladder  cyc       68.0/67.5  frac 0.871/0.878   rf       67.7/67.6  frac 0.877/0.879   cyc/rf 1.004/0.998
+  v3         cyc       59.2/59.2  frac 1.000/1.001   rf       61.4/61.4  frac 0.967/0.967   cyc/rf 0.964/0.964
+  cublas_dq  cyc     217.0/217.2  frac 0.273/0.273   rf     215.1/216.1  frac 0.276/0.275   cyc/rf 1.009/1.005
+  splitk_s1  cyc       76.1/75.4  frac 0.779/0.785   rf       77.7/77.2  frac 0.764/0.769   cyc/rf 0.979/0.976
+  splitk_s2  cyc       68.0/69.1  frac 0.871/0.856   rf       69.7/71.6  frac 0.852/0.830   cyc/rf 0.975/0.966
+  splitk_s4  cyc       65.4/65.6  frac 0.905/0.902   rf       67.6/67.6  frac 0.879/0.879   cyc/rf 0.968/0.971
+  splitk_s7  cyc       67.5/67.4  frac 0.878/0.878   rf       69.6/69.6  frac 0.853/0.853   cyc/rf 0.969/0.969
+  splitk_s8  cyc       66.4/66.5  frac 0.891/0.891   rf       67.6/69.5  frac 0.878/0.854   cyc/rf 0.982/0.956
+K11008xN4096 M4 (4 matrices)  floor 4-bit 54.70 us, FP16 211.37 us
+  marlin     cyc       59.4/59.2  frac 1.000/1.000   rf       61.4/59.6  frac 1.000/1.000   cyc/rf 0.967/0.993
+  tc_ladder  cyc       67.5/67.5  frac 0.880/0.878   rf       69.6/69.5  frac 0.882/0.858   cyc/rf 0.969/0.971
+  v3         cyc     134.6/134.5  frac 0.441/0.440   rf     137.2/137.2  frac 0.448/0.435   cyc/rf 0.981/0.981
+  cublas_dq  cyc     214.8/214.8  frac 0.276/0.276   rf     217.1/216.9  frac 0.283/0.275   cyc/rf 0.990/0.991
+  splitk_s1  cyc       78.7/78.1  frac 0.754/0.758   rf       79.9/81.8  frac 0.769/0.730   cyc/rf 0.986/0.955
+  splitk_s2  cyc       69.6/71.7  frac 0.853/0.826   rf       71.7/73.6  frac 0.856/0.811   cyc/rf 0.971/0.974
+  splitk_s4  cyc       66.4/66.7  frac 0.894/0.888   rf       67.6/67.7  frac 0.908/0.881   cyc/rf 0.983/0.984
+  splitk_s7  cyc       67.4/67.1  frac 0.881/0.883   rf       69.6/69.6  frac 0.882/0.857   cyc/rf 0.968/0.963
+  splitk_s8  cyc       66.4/66.4  frac 0.895/0.891   rf       69.6/69.6  frac 0.883/0.857   cyc/rf 0.954/0.954
+K11008xN4096 M16 (4 matrices)  floor 4-bit 55.55 us, FP16 212.22 us
+  marlin     cyc       61.6/61.2  frac 1.000/1.000   rf       63.4/61.9  frac 1.000/1.000   cyc/rf 0.971/0.990
+  tc_ladder  cyc       70.0/69.5  frac 0.880/0.881   rf       73.6/71.7  frac 0.861/0.863   cyc/rf 0.951/0.970
+  v3         cyc     446.5/446.6  frac 0.138/0.137   rf     450.5/450.5  frac 0.141/0.137   cyc/rf 0.991/0.991
+  cublas_dq  cyc     215.6/215.8  frac 0.286/0.284   rf     217.1/217.0  frac 0.292/0.285   cyc/rf 0.993/0.994
+  splitk_s1  cyc       71.5/71.0  frac 0.861/0.862   rf       73.7/73.7  frac 0.860/0.840   cyc/rf 0.970/0.964
+  splitk_s2  cyc       74.6/78.2  frac 0.826/0.783   rf       79.9/81.9  frac 0.794/0.755   cyc/rf 0.933/0.954
+  splitk_s4  cyc       66.4/66.2  frac 0.928/0.925   rf       69.6/67.6  frac 0.911/0.916   cyc/rf 0.954/0.980
+  splitk_s7  cyc       64.8/64.8  frac 0.951/0.946   rf       67.6/67.6  frac 0.938/0.916   cyc/rf 0.958/0.958
+  splitk_s8  cyc       63.9/63.9  frac 0.964/0.959   rf       65.5/65.5  frac 0.968/0.944   cyc/rf 0.975/0.974
+K4096xN4096 M1 (8 matrices)  floor 4-bit 20.29 us, FP16 78.58 us
+  marlin     cyc       24.2/24.2  frac 1.000/1.000   rf       26.6/26.6  frac 1.000/1.000   cyc/rf 0.910/0.911
+  tc_ladder  cyc       25.7/25.8  frac 0.941/0.940   rf       26.7/26.8  frac 0.999/0.993   cyc/rf 0.965/0.963
+  v3         cyc       23.8/23.8  frac 1.020/1.019   rf       26.6/26.5  frac 1.000/1.003   cyc/rf 0.892/0.897
+  cublas_dq  cyc       82.2/82.2  frac 0.295/0.294   rf       83.9/83.9  frac 0.317/0.317   cyc/rf 0.979/0.980
+K4096xN4096 M4 (8 matrices)  floor 4-bit 20.40 us, FP16 78.70 us
+  marlin     cyc       24.2/24.2  frac 1.000/1.000   rf       26.6/26.6  frac 1.000/1.000   cyc/rf 0.910/0.910
+  tc_ladder  cyc       26.3/26.2  frac 0.922/0.923   rf       28.7/28.6  frac 0.929/0.931   cyc/rf 0.916/0.918
+  v3         cyc       49.6/49.8  frac 0.488/0.486   rf       53.3/53.2  frac 0.500/0.500   cyc/rf 0.931/0.936
+  cublas_dq  cyc       81.3/81.4  frac 0.298/0.297   rf       84.0/84.0  frac 0.317/0.317   cyc/rf 0.968/0.970
+K4096xN4096 M16 (8 matrices)  floor 4-bit 20.86 us, FP16 79.16 us
+  marlin     cyc       25.5/25.6  frac 1.000/1.000   rf       26.6/26.6  frac 1.000/1.000   cyc/rf 0.959/0.962
+  tc_ladder  cyc       26.5/26.5  frac 0.964/0.965   rf       28.7/28.7  frac 0.929/0.929   cyc/rf 0.924/0.925
+  v3         cyc     165.8/165.8  frac 0.154/0.154   rf     172.0/172.0  frac 0.155/0.155   cyc/rf 0.964/0.964
+  cublas_dq  cyc       81.8/81.8  frac 0.312/0.313   rf       84.0/84.0  frac 0.317/0.317   cyc/rf 0.974/0.975
+
+splitk_s1 vs tc_ladder output-bit mismatches (series, K, N, M; recorded, not fatal): none
+cyclic cells not OK by floorcheck (cache-affected, not results): none
+read-flush cells not OK by floorcheck: none
+
+{
+ "cyclic": {
+  "C1a": {
+   "1536x8960": {
+    "v3_vs_marlin": "comparable",
+    "verdict": "holds"
+   },
+   "8960x1536": {
+    "v3_vs_marlin": "comparable",
+    "verdict": "holds"
+   },
+   "1536x1536": {
+    "v3_vs_marlin": "faster",
+    "verdict": "descriptive (not claimed)"
+   },
+   "4096x11008": {
+    "v3_vs_marlin": "comparable",
+    "verdict": "holds"
+   },
+   "11008x4096": {
+    "v3_vs_marlin": "comparable",
+    "verdict": "holds"
+   },
+   "4096x4096": {
+    "v3_vs_marlin": "comparable",
+    "verdict": "holds"
+   }
+  },
+  "C1b": {
+   "1536x8960": {
+    "v3_vs_tc_ladder": "comparable",
+    "claimed": "comparable",
+    "verdict": "holds"
+   },
+   "8960x1536": {
+    "v3_vs_tc_ladder": "faster",
+    "claimed": "faster",
+    "verdict": "holds"
+   },
+   "1536x1536": {
+    "v3_vs_tc_ladder": "slower",
+    "claimed": "comparable",
+    "verdict": "fails"
+   },
+   "4096x11008": {
+    "v3_vs_tc_ladder": "faster",
+    "claimed": "faster",
+    "verdict": "holds"
+   },
+   "11008x4096": {
+    "v3_vs_tc_ladder": "faster",
+    "claimed": "faster",
+    "verdict": "holds"
+   },
+   "4096x4096": {
+    "v3_vs_tc_ladder": "faster",
+    "claimed": "faster",
+    "verdict": "holds"
+   }
+  },
+  "C2_tall_tc_vs_v3": {
+   "1": {
+    "tc_over_v3": {
+     "1536x8960": [
+      1.010388407065519,
+      1.0110258589341
+     ],
+     "8960x1536": [
+      1.0915022637056482,
+      1.1011340809378218
+     ],
+     "1536x1536": [
+      0.9301168542282182,
+      0.9297399067204802
+     ],
+     "4096x11008": [
+      1.079675560526446,
+      1.0680299696675801
+     ],
+     "11008x4096": [
+      1.148155670428324,
+      1.140133857865684
+     ],
+     "4096x4096": [
+      1.0829403679084877,
+      1.0841609317928862
+     ]
+    },
+    "verdict": "supported"
+   },
+   "4": {
+    "tc_over_v3": {
+     "1536x8960": [
+      0.547254030076416,
+      0.546405283293915
+     ],
+     "8960x1536": [
+      0.6005703121983834,
+      0.6023056177040355
+     ],
+     "1536x1536": [
+      0.6241951096072792,
+      0.6263809230729183
+     ],
+     "4096x11008": [
+      0.5481652711093967,
+      0.5467118154005253
+     ],
+     "11008x4096": [
+      0.5013225960115909,
+      0.5014865277195555
+     ],
+     "4096x4096": [
+      0.5295113687888736,
+      0.526666400812989
+     ]
+    },
+    "verdict": "not supported"
+   },
+   "16": {
+    "tc_over_v3": {
+     "1536x8960": [
+      0.17612662612355284,
+      0.1765140794695396
+     ],
+     "8960x1536": [
+      0.15514521996135047,
+      0.15510898770553663
+     ],
+     "1536x1536": [
+      0.20063191462234103,
+      0.19858373072805036
+     ],
+     "4096x11008": [
+      0.16979472389137218,
+      0.1686094429692027
+     ],
+     "11008x4096": [
+      0.15685220662233337,
+      0.1556664125282986
+     ],
+     "4096x4096": [
+      0.15980027985055348,
+      0.15999662295422085
+     ]
+    },
+    "verdict": "not supported"
+   }
+  },
+  "C2_tall_fraction": {
+   "1": {
+    "fractions": {
+     "1536x8960": [
+      1.0404934536362827,
+      1.0293978220122884
+     ],
+     "8960x1536": [
+      0.9533162294823379,
+      0.9538656982383444
+     ],
+     "1536x1536": [
+      1.3127272651209436,
+      1.314793116680208
+     ],
+     "4096x11008": [
+      0.9664793830894723,
+      0.977278534934731
+     ],
+     "11008x4096": [
+      0.8710797456544033,
+      0.877623575834648
+     ],
+     "4096x4096": [
+      0.9414509044151722,
+      0.9398385635220275
+     ]
+    },
+    "verdict": "not supported"
+   },
+   "4": {
+    "fractions": {
+     "1536x8960": [
+      1.0159304614375897,
+      1.0095311719913589
+     ],
+     "8960x1536": [
+      0.949330270768622,
+      0.9556465764029012
+     ],
+     "1536x1536": [
+      1.3145544575550077,
+      1.306257939544776
+     ],
+     "4096x11008": [
+      0.9549180645469477,
+      0.9655604824356169
+     ],
+     "11008x4096": [
+      0.8801873002898981,
+      0.8775194930089525
+     ],
+     "4096x4096": [
+      0.9221105440337812,
+      0.9227369514784072
+     ]
+    },
+    "verdict": "not supported"
+   },
+   "16": {
+    "fractions": {
+     "1536x8960": [
+      0.9623103592102126,
+      0.9394594389826081
+     ],
+     "8960x1536": [
+      0.8261504722366982,
+      0.8339369159514015
+     ],
+     "1536x1536": [
+      1.2932376318507317,
+      1.3057904959918352
+     ],
+     "4096x11008": [
+      0.8860480504576916,
+      0.8975198440227182
+     ],
+     "11008x4096": [
+      0.8798263552583873,
+      0.880897608526414
+     ],
+     "4096x4096": [
+      0.9639245694776841,
+      0.9653117986966752
+     ]
+    },
+    "verdict": "supported"
+   }
+  },
+  "C2_split": {
+   "11008x4096 M1": {
+    "balance_S": 7,
+    "balance_vs_tc": "comparable",
+    "balance_vs_v3": "slower",
+    "tc_vs_v3": "slower",
+    "balance_fraction_of_marlin": [
+     0.877638089214161,
+     0.8778317670909316
+    ],
+    "tc_fraction_of_marlin": [
+     0.8710797456544033,
+     0.877623575834648
+    ],
+    "control_tc_fraction": [
+     0.9664793830894723,
+     0.977278534934731
+    ],
+    "balance_reaches_control": false,
+    "verdict": "does not help",
+    "sweep_vs_tc": {
+     "S1": "slower",
+     "S2": "comparable",
+     "S4": "comparable",
+     "S7": "comparable",
+     "S8": "comparable"
+    },
+    "best_S_POST_HOC": 4,
+    "best_fraction_POST_HOC": [
+     0.9051112388354893,
+     0.9024508625436746
+    ]
+   },
+   "8960x1536 M1": {
+    "balance_S": 3,
+    "balance_vs_tc": "slower",
+    "balance_vs_v3": "slower",
+    "tc_vs_v3": "slower",
+    "balance_fraction_of_marlin": [
+     0.8664941290233541,
+     0.8670172124492201
+    ],
+    "tc_fraction_of_marlin": [
+     0.9533162294823379,
+     0.9538656982383444
+    ],
+    "control_tc_fraction": [
+     0.9664793830894723,
+     0.977278534934731
+    ],
+    "balance_reaches_control": false,
+    "verdict": "does not help",
+    "sweep_vs_tc": {
+     "S1": "slower",
+     "S2": "mixed",
+     "S3": "slower",
+     "S4": "comparable",
+     "S8": "slower"
+    },
+    "best_S_POST_HOC": 4,
+    "best_fraction_POST_HOC": [
+     0.9201813411390937,
+     0.9287087922543642
+    ]
+   },
+   "11008x4096 M4": {
+    "balance_S": 7,
+    "balance_vs_tc": "comparable",
+    "balance_vs_v3": "faster",
+    "tc_vs_v3": "faster",
+    "balance_fraction_of_marlin": [
+     0.8812322136346113,
+     0.8827001767285769
+    ],
+    "tc_fraction_of_marlin": [
+     0.8801873002898981,
+     0.8775194930089525
+    ],
+    "control_tc_fraction": [
+     0.9549180645469477,
+     0.9655604824356169
+    ],
+    "balance_reaches_control": false,
+    "verdict": "does not help",
+    "sweep_vs_tc": {
+     "S1": "slower",
+     "S2": "mixed",
+     "S4": "comparable",
+     "S7": "comparable",
+     "S8": "comparable"
+    },
+    "best_S_POST_HOC": 8,
+    "best_fraction_POST_HOC": [
+     0.8946131832203233,
+     0.8911498676860341
+    ]
+   },
+   "8960x1536 M4": {
+    "balance_S": 3,
+    "balance_vs_tc": "slower",
+    "balance_vs_v3": "faster",
+    "tc_vs_v3": "faster",
+    "balance_fraction_of_marlin": [
+     0.8629219028064942,
+     0.8680394871679669
+    ],
+    "tc_fraction_of_marlin": [
+     0.949330270768622,
+     0.9556465764029012
+    ],
+    "control_tc_fraction": [
+     0.9549180645469477,
+     0.9655604824356169
+    ],
+    "balance_reaches_control": false,
+    "verdict": "does not help",
+    "sweep_vs_tc": {
+     "S1": "slower",
+     "S2": "slower",
+     "S3": "slower",
+     "S4": "mixed",
+     "S8": "slower"
+    },
+    "best_S_POST_HOC": 4,
+    "best_fraction_POST_HOC": [
+     0.8964732397610609,
+     0.9078770806661332
+    ]
+   },
+   "11008x4096 M16": {
+    "balance_S": 7,
+    "balance_vs_tc": "faster",
+    "balance_vs_v3": "faster",
+    "tc_vs_v3": "faster",
+    "balance_fraction_of_marlin": [
+     0.9512164473145429,
+     0.9455286164269378
+    ],
+    "tc_fraction_of_marlin": [
+     0.8798263552583873,
+     0.880897608526414
+    ],
+    "control_tc_fraction": [
+     0.8860480504576916,
+     0.8975198440227182
+    ],
+    "balance_reaches_control": true,
+    "verdict": "fixes",
+    "sweep_vs_tc": {
+     "S1": "comparable",
+     "S2": "slower",
+     "S4": "mixed",
+     "S7": "faster",
+     "S8": "faster"
+    },
+    "best_S_POST_HOC": 8,
+    "best_fraction_POST_HOC": [
+     0.9644377859945221,
+     0.9590929245618763
+    ]
+   },
+   "8960x1536 M16": {
+    "balance_S": 3,
+    "balance_vs_tc": "faster",
+    "balance_vs_v3": "faster",
+    "tc_vs_v3": "faster",
+    "balance_fraction_of_marlin": [
+     0.9464142181080433,
+     0.9551110375368226
+    ],
+    "tc_fraction_of_marlin": [
+     0.8261504722366982,
+     0.8339369159514015
+    ],
+    "control_tc_fraction": [
+     0.8860480504576916,
+     0.8975198440227182
+    ],
+    "balance_reaches_control": true,
+    "verdict": "fixes",
+    "sweep_vs_tc": {
+     "S1": "comparable",
+     "S2": "faster",
+     "S3": "faster",
+     "S4": "faster",
+     "S8": "faster"
+    },
+    "best_S_POST_HOC": 8,
+    "best_fraction_POST_HOC": [
+     0.9629049695364591,
+     0.9717533262991813
+    ]
+   }
+  },
+  "C1a_verdict": "supported",
+  "C1b_verdict": "partly supported (shape-dependent)",
+  "C1_verdict": "partly supported (C1a supported, C1b partly supported (shape-dependent))"
+ },
+ "readflush_their_method": {
+  "C1a": {
+   "1536x8960": {
+    "v3_vs_marlin": "comparable",
+    "verdict": "holds"
+   },
+   "8960x1536": {
+    "v3_vs_marlin": "mixed",
+    "verdict": "fails"
+   },
+   "1536x1536": {
+    "v3_vs_marlin": "faster",
+    "verdict": "descriptive (not claimed)"
+   },
+   "4096x11008": {
+    "v3_vs_marlin": "mixed",
+    "verdict": "fails"
+   },
+   "11008x4096": {
+    "v3_vs_marlin": "comparable",
+    "verdict": "holds"
+   },
+   "4096x4096": {
+    "v3_vs_marlin": "comparable",
+    "verdict": "holds"
+   }
+  },
+  "C1b": {
+   "1536x8960": {
+    "v3_vs_tc_ladder": "comparable",
+    "claimed": "comparable",
+    "verdict": "holds"
+   },
+   "8960x1536": {
+    "v3_vs_tc_ladder": "faster",
+    "claimed": "faster",
+    "verdict": "holds"
+   },
+   "1536x1536": {
+    "v3_vs_tc_ladder": "comparable",
+    "claimed": "comparable",
+    "verdict": "holds"
+   },
+   "4096x11008": {
+    "v3_vs_tc_ladder": "faster",
+    "claimed": "faster",
+    "verdict": "holds"
+   },
+   "11008x4096": {
+    "v3_vs_tc_ladder": "faster",
+    "claimed": "faster",
+    "verdict": "holds"
+   },
+   "4096x4096": {
+    "v3_vs_tc_ladder": "comparable",
+    "claimed": "faster",
+    "verdict": "fails"
+   }
+  },
+  "C2_tall_tc_vs_v3": {
+   "1": {
+    "tc_over_v3": {
+     "1536x8960": [
+      0.9985795346495981,
+      1.0
+     ],
+     "8960x1536": [
+      1.0909091209750312,
+      1.0909091209750312
+     ],
+     "1536x1536": [
+      1.0,
+      1.0
+     ],
+     "4096x11008": [
+      1.103448245581628,
+      1.0689283377516197
+     ],
+     "11008x4096": [
+      1.1026576908974741,
+      1.1005732559965116
+     ],
+     "4096x4096": [
+      1.001201932242504,
+      1.0096618388052752
+     ]
+    },
+    "verdict": "not supported"
+   },
+   "4": {
+    "tc_over_v3": {
+     "1536x8960": [
+      0.5789473986535648,
+      0.5789473986535648
+     ],
+     "8960x1536": [
+      0.6000000363797889,
+      0.6000000363797889
+     ],
+     "1536x1536": [
+      0.7870370278880275,
+      0.7828746468601594
+     ],
+     "4096x11008": [
+      0.5333333454599296,
+      0.518373717140813
+     ],
+     "11008x4096": [
+      0.5074626889984264,
+      0.5064132407223397
+     ],
+     "4096x4096": [
+      0.5381381491194283,
+      0.5369591366124722
+     ]
+    },
+    "verdict": "not supported"
+   },
+   "16": {
+    "tc_over_v3": {
+     "1536x8960": [
+      0.17647059138233456,
+      0.17647059138233456
+     ],
+     "8960x1536": [
+      0.16114255580835402,
+      0.1721753296370962
+     ],
+     "1536x1536": [
+      0.23725672945865578,
+      0.2464958930540956
+     ],
+     "4096x11008": [
+      0.16667906570930238,
+      0.16627078659841207
+     ],
+     "11008x4096": [
+      0.16345232199011875,
+      0.15912481415890797
+     ],
+     "4096x4096": [
+      0.16666667027577264,
+      0.16666667027577264
+     ]
+    },
+    "verdict": "not supported"
+   }
+  },
+  "C2_tall_fraction": {
+   "1": {
+    "fractions": {
+     "1536x8960": [
+      1.0014224859423944,
+      1.0
+     ],
+     "8960x1536": [
+      0.9166666414029259,
+      0.998697906798018
+     ],
+     "1536x1536": [
+      1.23437496624922,
+      1.220703100797138
+     ],
+     "4096x11008": [
+      0.9374999786837179,
+      0.9994962178215732
+     ],
+     "11008x4096": [
+      0.8771266564563023,
+      0.878787893820849
+     ],
+     "4096x4096": [
+      0.9987995106643353,
+      0.9934210027021304
+     ]
+    },
+    "verdict": "not supported"
+   },
+   "4": {
+    "fractions": {
+     "1536x8960": [
+      1.0,
+      1.0
+     ],
+     "8960x1536": [
+      0.9166666414029259,
+      1.0
+     ],
+     "1536x1536": [
+      1.2352942049249847,
+      1.0234374511501867
+     ],
+     "4096x11008": [
+      0.9682617043726118,
+      0.9974861548294507
+     ],
+     "11008x4096": [
+      0.881893341097208,
+      0.8583928102240477
+     ],
+     "4096x4096": [
+      0.9285714053700335,
+      0.9311695544550425
+     ]
+    },
+    "verdict": "not supported"
+   },
+   "16": {
+    "fractions": {
+     "1536x8960": [
+      1.0,
+      1.0
+     ],
+     "8960x1536": [
+      0.8561873022553749,
+      0.801251965685112
+     ],
+     "1536x1536": [
+      1.2499999715782906,
+      1.2549019697358959
+     ],
+     "4096x11008": [
+      0.9140816499269527,
+      0.9160714153930363
+     ],
+     "11008x4096": [
+      0.861364583839267,
+      0.8633928600198301
+     ],
+     "4096x4096": [
+      0.9285714053700335,
+      0.9285714053700335
+     ]
+    },
+    "verdict": "supported"
+   }
+  },
+  "C2_split": {
+   "11008x4096 M1": {
+    "balance_S": 7,
+    "balance_vs_tc": "comparable",
+    "balance_vs_v3": "slower",
+    "tc_vs_v3": "slower",
+    "balance_fraction_of_marlin": [
+     0.8529411827646691,
+     0.8529411827646691
+    ],
+    "tc_fraction_of_marlin": [
+     0.8771266564563023,
+     0.878787893820849
+    ],
+    "control_tc_fraction": [
+     0.9374999786837179,
+     0.9994962178215732
+    ],
+    "balance_reaches_control": false,
+    "verdict": "does not help",
+    "sweep_vs_tc": {
+     "S1": "slower",
+     "S2": "mixed",
+     "S4": "comparable",
+     "S7": "comparable",
+     "S8": "comparable"
+    },
+    "best_S_POST_HOC": 4,
+    "best_fraction_POST_HOC": [
+     0.878787893820849,
+     0.878787893820849
+    ]
+   },
+   "8960x1536 M1": {
+    "balance_S": 3,
+    "balance_vs_tc": "slower",
+    "balance_vs_v3": "slower",
+    "tc_vs_v3": "slower",
+    "balance_fraction_of_marlin": [
+     0.8461538622987227,
+     0.9218750338874232
+    ],
+    "tc_fraction_of_marlin": [
+     0.9166666414029259,
+     0.998697906798018
+    ],
+    "control_tc_fraction": [
+     0.9374999786837179,
+     0.9994962178215732
+    ],
+    "balance_reaches_control": false,
+    "verdict": "does not help",
+    "sweep_vs_tc": {
+     "S1": "slower",
+     "S2": "slower",
+     "S3": "slower",
+     "S4": "comparable",
+     "S8": "slower"
+    },
+    "best_S_POST_HOC": 4,
+    "best_fraction_POST_HOC": [
+     0.9166666414029259,
+     0.998697906798018
+    ]
+   },
+   "11008x4096 M4": {
+    "balance_S": 7,
+    "balance_vs_tc": "comparable",
+    "balance_vs_v3": "faster",
+    "tc_vs_v3": "faster",
+    "balance_fraction_of_marlin": [
+     0.881893341097208,
+     0.8566176277832008
+    ],
+    "tc_fraction_of_marlin": [
+     0.881893341097208,
+     0.8583928102240477
+    ],
+    "control_tc_fraction": [
+     0.9682617043726118,
+     0.9974861548294507
+    ],
+    "balance_reaches_control": false,
+    "verdict": "does not help",
+    "sweep_vs_tc": {
+     "S1": "slower",
+     "S2": "mixed",
+     "S4": "comparable",
+     "S7": "comparable",
+     "S8": "comparable"
+    },
+    "best_S_POST_HOC": 4,
+    "best_fraction_POST_HOC": [
+     0.9081873743425262,
+     0.8809073484804555
+    ]
+   },
+   "8960x1536 M4": {
+    "balance_S": 3,
+    "balance_vs_tc": "slower",
+    "balance_vs_v3": "faster",
+    "tc_vs_v3": "faster",
+    "balance_fraction_of_marlin": [
+     0.8461538622987227,
+     0.9230769661299272
+    ],
+    "tc_fraction_of_marlin": [
+     0.9166666414029259,
+     1.0
+    ],
+    "control_tc_fraction": [
+     0.9682617043726118,
+     0.9974861548294507
+    ],
+    "balance_reaches_control": false,
+    "verdict": "does not help",
+    "sweep_vs_tc": {
+     "S1": "slower",
+     "S2": "slower",
+     "S3": "slower",
+     "S4": "slower",
+     "S8": "slower"
+    },
+    "best_S_POST_HOC": 4,
+    "best_fraction_POST_HOC": [
+     0.8471721057675948,
+     0.924187777217493
+    ]
+   },
+   "11008x4096 M16": {
+    "balance_S": 7,
+    "balance_vs_tc": "faster",
+    "balance_vs_v3": "faster",
+    "tc_vs_v3": "faster",
+    "balance_fraction_of_marlin": [
+     0.9384469424497113,
+     0.9157197173268441
+    ],
+    "tc_fraction_of_marlin": [
+     0.861364583839267,
+     0.8633928600198301
+    ],
+    "control_tc_fraction": [
+     0.9140816499269527,
+     0.9160714153930363
+    ],
+    "balance_reaches_control": false,
+    "verdict": "helps, does not close",
+    "sweep_vs_tc": {
+     "S1": "comparable",
+     "S2": "slower",
+     "S4": "faster",
+     "S7": "faster",
+     "S8": "faster"
+    },
+    "best_S_POST_HOC": 8,
+    "best_fraction_POST_HOC": [
+     0.9677734194033647,
+     0.9443359682531779
+    ]
+   },
+   "8960x1536 M16": {
+    "balance_S": 3,
+    "balance_vs_tc": "faster",
+    "balance_vs_v3": "faster",
+    "tc_vs_v3": "faster",
+    "balance_fraction_of_marlin": [
+     0.9230769661299272,
+     0.9230769661299272
+    ],
+    "tc_fraction_of_marlin": [
+     0.8561873022553749,
+     0.801251965685112
+    ],
+    "control_tc_fraction": [
+     0.9140816499269527,
+     0.9160714153930363
+    ],
+    "balance_reaches_control": true,
+    "verdict": "fixes",
+    "sweep_vs_tc": {
+     "S1": "mixed",
+     "S2": "mixed",
+     "S3": "faster",
+     "S4": "faster",
+     "S8": "faster"
+    },
+    "best_S_POST_HOC": 3,
+    "best_fraction_POST_HOC": [
+     0.9230769661299272,
+     0.9230769661299272
+    ]
+   }
+  },
+  "C1a_verdict": "partly supported (shape-dependent)",
+  "C1b_verdict": "partly supported (shape-dependent)",
+  "C1_verdict": "partly supported (shape-dependent)"
+ }
+}

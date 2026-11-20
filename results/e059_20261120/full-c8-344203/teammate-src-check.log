@@ -1,0 +1,5 @@
+scripts/e059/teammate_src/ours_v1.cu: OK
+scripts/e059/teammate_src/ours_v2.cu: OK
+scripts/e059/teammate_src/ours_v3.cu: OK
+scripts/e059/teammate_src/kernels.cuh: OK
+scripts/e059/teammate_src/flush_read.cu: OK
