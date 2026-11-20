@@ -1,0 +1,5 @@
++ prun timeout 600 /tmp/e017-hpuvvad-20261109/bin/python /mnt/beegfs/hpuvvad/csc548-w4a16-e054-20261119/probe-c20-343944/torchcheck.py
+[prun] Master compute host = c20
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun timeout 600 /tmp/e017-hpuvvad-20261109/bin/python /mnt/beegfs/hpuvvad/csc548-w4a16-e054-20261119/probe-c20-343944/torchcheck.py (family=openmpi4)
+NVIDIA GeForce RTX 4060 Ti (8, 9) 13.0 844890.75

@@ -1,0 +1,33 @@
++ prun timeout 9000 /tmp/e017-hpuvvad-20261109/bin/python /mnt/beegfs/hpuvvad/csc548-w4a16-e054-20261119/probe-c33-343940/t.py validate.py /mnt/beegfs/hpuvvad/csc548-w4a16-e054-20261119/probe-c33-343940/gateE-128 64 128
+[prun] Master compute host = c33
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun timeout 9000 /tmp/e017-hpuvvad-20261109/bin/python /mnt/beegfs/hpuvvad/csc548-w4a16-e054-20261119/probe-c33-343940/t.py validate.py /mnt/beegfs/hpuvvad/csc548-w4a16-e054-20261119/probe-c33-343940/gateE-128 64 128 (family=openmpi4)
+Traceback (most recent call last):
+  File "/mnt/beegfs/hpuvvad/csc548-w4a16-e054-20261119/probe-c33-343940/t.py", line 92, in <module>
+    runpy.run_path(str(script), run_name='__main__')
+  File "<frozen runpy>", line 291, in run_path
+  File "<frozen runpy>", line 98, in _run_module_code
+  File "<frozen runpy>", line 88, in _run_code
+  File "/mnt/beegfs/hpuvvad/csc548-w4a16-e054-20261119/probe-c33-343940/validate.py", line 110, in <module>
+    main()
+  File "/mnt/beegfs/hpuvvad/csc548-w4a16-e054-20261119/probe-c33-343940/validate.py", line 50, in main
+    work = I.Workload(results, 'R')
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/beegfs/hpuvvad/csc548-w4a16-e017-r2-20261109/scripts/e017/integration.py", line 166, in __init__
+    start=time.perf_counter();super().__init__(results)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/beegfs/hpuvvad/csc548-w4a16-e017-r2-20261109/scripts/e014/model.py", line 37, in __init__
+    assert torch.cuda.get_device_name() == 'NVIDIA GeForce RTX 5060 Ti'
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+--------------------------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code. Per user-direction, the job has been aborted.
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+mpirun detected that one or more processes exited with non-zero status, thus causing
+the job to be terminated. The first process to do so was:
+
+  Process name: [[2481,1],0]
+  Exit code:    1
+--------------------------------------------------------------------------

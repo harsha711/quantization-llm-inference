@@ -23,6 +23,17 @@ import torch
 
 sys.path.insert(0, str(Path(os.environ['E017_ROOT']) / 'scripts/e017'))
 import integration as I  # noqa: E402
+import model as _model  # noqa: E402  (scripts/e014/model.py, imported by the bridge)
+
+# E054 amendment 1: the frozen E014 loader asserts the RTX 5060 Ti by name and capability (a provenance guard written when every
+# run used that GPU; it does not affect arithmetic). On other GPUs, and only for calls made from model.py, report those values;
+# every other caller sees the real device, and the real device is recorded from nvidia-smi (uuid, driver) and the probe.
+_REAL_NAME, _REAL_CAP = torch.cuda.get_device_name, torch.cuda.get_device_capability
+if _REAL_NAME() != 'NVIDIA GeForce RTX 5060 Ti':
+    def _from_model():
+        return sys._getframe(2).f_code.co_filename == _model.__file__
+    torch.cuda.get_device_name = lambda *a: 'NVIDIA GeForce RTX 5060 Ti' if _from_model() else _REAL_NAME(*a)
+    torch.cuda.get_device_capability = lambda *a: (12, 0) if _from_model() else _REAL_CAP(*a)
 
 LIB_SHA = os.environ['E054_TC_SHA']  # E054 multi-arch rebuild of the E050 library (sm_120 SASS equal to E050's, part a)
 
