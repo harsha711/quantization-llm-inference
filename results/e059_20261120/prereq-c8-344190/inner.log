@@ -1,0 +1,22 @@
+[prun] Master compute host = c8
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun bash /tmp/e059-src-344190/scripts/e059/inner.sh prereq /tmp/e059-src-344190 /mnt/beegfs/hpuvvad/csc548-w4a16-e059-20261120/prereq-c8-344190  (family=openmpi4)
+Traceback (most recent call last):
+  File "/tmp/e059-src-344190/scripts/e059/analyze.py", line 218, in <module>
+    if a.stage == 'prereq': prereq(a.dir)
+                            ^^^^^^^^^^^^^
+  File "/tmp/e059-src-344190/scripts/e059/analyze.py", line 81, in prereq
+    assert len(sl) == 2 and sl == sb and all(sl.values()), sorted(sl)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ['_ZN49_GLOBAL__N__16_splitk_forced_cu_6bf79c6222w4a16_tc_splitk_kernelILb0EEEvPK6__halfPKjS3_PS1_iiiiPfPj', '_ZN49_GLOBAL__N__16_splitk_forced_cu_6bf79c6222w4a16_tc_splitk_kernelILb1EEEvPK6__halfPKjS3_PS1_iiiiPfPj']
+--------------------------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code. Per user-direction, the job has been aborted.
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+mpirun detected that one or more processes exited with non-zero status, thus causing
+the job to be terminated. The first process to do so was:
+
+  Process name: [[28751,1],0]
+  Exit code:    1
+--------------------------------------------------------------------------

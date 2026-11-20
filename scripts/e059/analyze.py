@@ -50,11 +50,17 @@ def expect_kernel(r):
     else: assert ks, ks          # cuBLAS: one GEMM, possibly plus a split-K reduction (E011)
 
 
+def sass_name(name):
+    """Kernel name without its anonymous-namespace prefix, which embeds the compiling file's name and a hash
+    (the E059 launcher compiles E047's kernel inside splitk_forced.cu; prerequisite 344190)."""
+    return re.sub(r'_ZN\d+_GLOBAL__N__[0-9a-f]{8}_\d+_[A-Za-z0-9_]+?_cu_[0-9a-f]{8}','_ZN_ANON_',name)
+
+
 def sass_blocks(path):
     blocks, name = {}, None
     for line in path.read_text().splitlines():
         if 'Function :' in line:
-            name = re.sub(r'_GLOBAL__N__[0-9a-f]+_','_GLOBAL__N__',line.split()[-1]); blocks[name] = []
+            name = sass_name(line.split()[-1]); blocks[name] = []
         elif name and re.match(r'\s*/\*([0-9a-f]{4,}\*/| 0x)',line):
             blocks[name].append(line.strip())
     return blocks

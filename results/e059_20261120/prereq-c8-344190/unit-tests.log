@@ -1,0 +1,42 @@
++ timeout 9000 /tmp/e005-r2-hpuvvad-20261106/bin/python -m unittest scripts/e059/test_e059.py -v
+test_flags_below_floor_and_divides (scripts.e059.test_e059.AnalyzerEndToEnd.test_flags_below_floor_and_divides) ... ok
+test_1536sq (scripts.e059.test_e059.CycleSizing.test_1536sq) ... ok
+test_predeclared_counts (scripts.e059.test_e059.CycleSizing.test_predeclared_counts) ... ok
+test_rectangles_minimum_four (scripts.e059.test_e059.CycleSizing.test_rectangles_minimum_four) ... ok
+test_square_4096 (scripts.e059.test_e059.CycleSizing.test_square_4096) ... ok
+test_tall_and_wide_model (scripts.e059.test_e059.CycleSizing.test_tall_and_wide_model) ... ok
+test_4bit_path_not_fp16_model (scripts.e059.test_e059.Floor.test_4bit_path_not_fp16_model) ... ok
+test_cublas_ok (scripts.e059.test_e059.Floor.test_cublas_ok) ... ok
+test_cublas_uses_fp16_bytes (scripts.e059.test_e059.Floor.test_cublas_uses_fp16_bytes) ... ok
+test_readflush_below_floor_flagged (scripts.e059.test_e059.Floor.test_readflush_below_floor_flagged) ... ok
+test_readflush_ok (scripts.e059.test_e059.Floor.test_readflush_ok) ... ok
+test_single_4096sq_m1_below_floor (scripts.e059.test_e059.Floor.test_single_4096sq_m1_below_floor) ... ok
+test_small_cycle_flagged (scripts.e059.test_e059.Floor.test_small_cycle_flagged) ... ok
+test_v3_tall_ok (scripts.e059.test_e059.Floor.test_v3_tall_ok) ... ok
+test_each_s_forced (scripts.e059.test_e059.ForcedS.test_each_s_forced) ... ok
+test_launcher_ignoring_s_detected (scripts.e059.test_e059.ForcedS.test_launcher_ignoring_s_detected) ... ok
+test_fraction (scripts.e059.test_e059.PerGemmAndFraction.test_fraction) ... ok
+test_per_gemm_even (scripts.e059.test_e059.PerGemmAndFraction.test_per_gemm_even) ... ok
+test_per_gemm_odd (scripts.e059.test_e059.PerGemmAndFraction.test_per_gemm_odd) ... ok
+test_c1_contradicted (scripts.e059.test_e059.Readings.test_c1_contradicted) ... ok
+test_c1_open_cell_not_counted (scripts.e059.test_e059.Readings.test_c1_open_cell_not_counted) ... ok
+test_c1_supported (scripts.e059.test_e059.Readings.test_c1_supported) ... ok
+test_c2 (scripts.e059.test_e059.Readings.test_c2) ... ok
+test_bad_rows (scripts.e059.test_e059.RowCheck.test_bad_rows) ... ok
+test_good_row (scripts.e059.test_e059.RowCheck.test_good_row) ... ok
+test_rule (scripts.e059.test_e059.Rule.test_rule) ... ok
+test_bytes_1536sq_m1 (scripts.e059.test_e059.SharedCheckerOnE059Shapes.test_bytes_1536sq_m1) ... ok
+test_bytes_1536x8960_m1 (scripts.e059.test_e059.SharedCheckerOnE059Shapes.test_bytes_1536x8960_m1) ... ok
+test_bytes_8960x1536_m1 (scripts.e059.test_e059.SharedCheckerOnE059Shapes.test_bytes_8960x1536_m1) ... ok
+test_floors (scripts.e059.test_e059.SharedCheckerOnE059Shapes.test_floors) ... ok
+test_groups_integral (scripts.e059.test_e059.SharedCheckerOnE059Shapes.test_groups_integral) ... ok
+test_balance_rule (scripts.e059.test_e059.Splits.test_balance_rule) ... ok
+test_paths_and_order (scripts.e059.test_e059.Splits.test_paths_and_order) ... ok
+test_split_s (scripts.e059.test_e059.Splits.test_split_s) ... ok
+test_bad (scripts.e059.test_e059.Tolerance.test_bad) ... ok
+test_good (scripts.e059.test_e059.Tolerance.test_good) ... ok
+
+----------------------------------------------------------------------
+Ran 36 tests in 0.022s
+
+OK

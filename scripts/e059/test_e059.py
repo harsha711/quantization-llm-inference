@@ -344,5 +344,24 @@ class AnalyzerEndToEnd(unittest.TestCase):
             self.assertTrue(out['readings']['cyclic']['C1']['1536x1536'].startswith('open'))
 
 
+class SassNames(unittest.TestCase):
+    """Prerequisite 344190 found the splitk SASS check comparing names that embed the translation unit's file name
+    (the E059 launcher includes E047's .cu, so its anonymous namespace is named after splitk_forced.cu)."""
+
+    def test_same_kernel_different_tu(self):
+        import analyze
+        bench = '_ZN51_GLOBAL__N__84022bb0_18_w4a16_tc_splitk_cu_6bf79c6222w4a16_tc_splitk_kernelILb1EEEvPK6__halfPKjS3_PS1_iiiiPfPj'
+        lib = '_ZN49_GLOBAL__N__e5a3fbd6_16_splitk_forced_cu_6bf79c6222w4a16_tc_splitk_kernelILb1EEEvPK6__halfPKjS3_PS1_iiiiPfPj'
+        self.assertEqual(analyze.sass_name(bench), analyze.sass_name(lib))
+
+    def test_different_kernels_stay_different(self):
+        import analyze
+        t0 = '_ZN51_GLOBAL__N__84022bb0_18_w4a16_tc_splitk_cu_6bf79c6222w4a16_tc_splitk_kernelILb0EEEvPK6__halfPKjS3_PS1_iiiiPfPj'
+        t1 = '_ZN51_GLOBAL__N__84022bb0_18_w4a16_tc_splitk_cu_6bf79c6222w4a16_tc_splitk_kernelILb1EEEvPK6__halfPKjS3_PS1_iiiiPfPj'
+        tc = '_ZN44_GLOBAL__N__a9541ffe_11_w4a16_tc_cu_599bad6515w4a16_tc_kernelILb1ELb1EEEvPK6__halfPKjS3_PS1_iiii'
+        m32 = '_ZN48_GLOBAL__N__80b228c8_15_w4a16_tc_m32_cu_935f40ed19w4a16_tc_m32_kernelILb1EEEvPK6__halfPKjS3_PS1_iiii'
+        self.assertEqual(len({analyze.sass_name(x) for x in (t0, t1, tc, m32)}), 4)
+
+
 if __name__ == '__main__':
     unittest.main()
