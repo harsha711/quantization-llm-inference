@@ -1,0 +1,72 @@
+{
+  "gpu": "GPU-38a74fc5-9f81-89d1-4ad5-3f5796d39bf2, 610.57.04",
+  "cases": {
+    "128-primary": {
+      "compared_steps": 64,
+      "flip": null,
+      "gqa_vs_f64_rel_l2": 0.0021013148705442465,
+      "workspace": {
+        "stateless_no_workspace": true
+      },
+      "reported": {
+        "gq_vs_f64_rel_l2": 0.0020761952654841835,
+        "gra_vs_f64_rel_l2": 0.002085037171830066,
+        "gqa_vs_gq_rel_l2": 0.001810887601992101,
+        "gra_vs_gr_rel_l2": 0.0018049862410829988,
+        "tokens_equal_f64": {
+          "F64": true,
+          "GR": true,
+          "GQ": true,
+          "AQ": true,
+          "GRA": true,
+          "GQA": true,
+          "GQA2": true
+        }
+      },
+      "criteria": {
+        "finite": true,
+        "tokens": true,
+        "rel_l2_vs_F64": true,
+        "graph_bitwise_eager": true,
+        "repeat_bitwise": true,
+        "workspace": true,
+        "state": true
+      },
+      "accepted": true
+    },
+    "128-heldout": {
+      "compared_steps": 64,
+      "flip": null,
+      "gqa_vs_f64_rel_l2": 0.0019506160387087184,
+      "workspace": {
+        "stateless_no_workspace": true
+      },
+      "reported": {
+        "gq_vs_f64_rel_l2": 0.3756970335595031,
+        "gra_vs_f64_rel_l2": 0.3757746330639549,
+        "gqa_vs_gq_rel_l2": 0.37434651530154484,
+        "gra_vs_gr_rel_l2": 0.0016868245614846792,
+        "tokens_equal_f64": {
+          "F64": true,
+          "GR": false,
+          "GQ": false,
+          "AQ": true,
+          "GRA": false,
+          "GQA": true,
+          "GQA2": true
+        }
+      },
+      "criteria": {
+        "finite": true,
+        "tokens": true,
+        "rel_l2_vs_F64": true,
+        "graph_bitwise_eager": true,
+        "repeat_bitwise": true,
+        "workspace": true,
+        "state": true
+      },
+      "accepted": true
+    }
+  },
+  "accepted": true
+}

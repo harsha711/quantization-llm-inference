@@ -1,0 +1,411 @@
+{
+ "128": {
+  "input_ids": [
+   32,
+   6366,
+   1849,
+   51435,
+   11221,
+   323,
+   10797,
+   821,
+   1948,
+   36586,
+   323,
+   4938,
+   13,
+   20651,
+   21595,
+   6761,
+   389,
+   279,
+   53596,
+   11,
+   6500,
+   1584,
+   11,
+   323,
+   279,
+   22711,
+   315,
+   279,
+   9021,
+   13,
+   1527,
+   9342,
+   1265,
+   21129,
+   279,
+   4024,
+   23722,
+   323,
+   9429,
+   13578,
+   975,
+   13,
+   81917,
+   1246,
+   16585,
+   18662,
+   8609,
+   264,
+   47788,
+   3535,
+   279,
+   7709,
+   315,
+   264,
+   1849,
+   13,
+   362,
+   6366,
+   1849,
+   51435,
+   11221,
+   323,
+   10797,
+   821,
+   1948,
+   36586,
+   323,
+   4938,
+   13,
+   20651,
+   21595,
+   6761,
+   389,
+   279,
+   53596,
+   11,
+   6500,
+   1584,
+   11,
+   323,
+   279,
+   22711,
+   315,
+   279,
+   9021,
+   13,
+   1527,
+   9342,
+   1265,
+   21129,
+   279,
+   4024,
+   23722,
+   323,
+   9429,
+   13578,
+   975,
+   13,
+   81917,
+   1246,
+   16585,
+   18662,
+   8609,
+   264,
+   47788,
+   3535,
+   279,
+   7709,
+   315,
+   264,
+   1849,
+   13,
+   362,
+   6366,
+   1849,
+   51435,
+   11221,
+   323,
+   10797,
+   821,
+   1948,
+   36586,
+   323,
+   4938,
+   13,
+   20651,
+   21595,
+   6761
+  ],
+  "output_ids": [
+   389,
+   279,
+   53596,
+   11,
+   6500,
+   1584,
+   11,
+   323,
+   279,
+   22711,
+   315,
+   279,
+   9021,
+   13,
+   1527,
+   9342,
+   1265,
+   21129,
+   279,
+   4024,
+   23722,
+   323,
+   9429,
+   13578,
+   975,
+   13,
+   81917,
+   1246,
+   16585,
+   18662,
+   8609,
+   264,
+   47788,
+   3535,
+   279,
+   7709,
+   315,
+   264,
+   1849,
+   13,
+   362,
+   6366,
+   1849,
+   51435,
+   11221,
+   323,
+   10797,
+   821,
+   1948,
+   36586,
+   323,
+   4938,
+   13,
+   20651,
+   21595,
+   6761,
+   389,
+   279,
+   53596,
+   11,
+   6500,
+   1584,
+   11,
+   323
+  ],
+  "device_us_per_step": 4998.926375000059,
+  "kernel_us_and_calls_per_step": {
+   "void (anonymous namespace)::w4a16_tc_kernel<true, true>(__half const*, unsigned int const*, __half const*, __half*, int,": [
+    2250.1059642857267,
+    196.0
+   ],
+   "std::enable_if<!(false), void>::type internal::gemvx::kernel<int, int, __half, __half, __half, float, false, true, true,": [
+    1169.5892321428619,
+    1.0
+   ],
+   "void at::native::unrolled_elementwise_kernel<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}:": [
+    312.5367678571757,
+    170.0
+   ],
+   "void at::native::vectorized_elementwise_kernel<4, at::native::CUDAFunctor_add<c10::Half>, std::array<char*, 3ul>, false>": [
+    186.6034642856869,
+    196.0
+   ],
+   "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl_nocast<at::native::BinaryFunctor<c10::Half, c10:": [
+    139.29400000001064,
+    112.0
+   ],
+   "void at::native::vectorized_elementwise_kernel<4, at::native::BinaryFunctor<c10::Half, c10::Half, c10::Half, at::native:": [
+    106.7598035714589,
+    85.0
+   ],
+   "void at::native::reduce_kernel<512, 1, at::native::ReduceOp<float, at::native::MeanOps<float, float, float, float>, unsi": [
+    90.25062500000101,
+    57.0
+   ],
+   "void at::native::(anonymous namespace)::CatArrayBatchedCopy<at::native::(anonymous namespace)::OpaqueType<2u>, unsigned ": [
+    83.41107142858381,
+    56.0
+   ],
+   "void at::native::vectorized_elementwise_kernel<4, at::native::float16_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda": [
+    75.13678571428427,
+    87.0
+   ],
+   "void at::native::index_elementwise_kernel<128, 4, at::native::index_copy_kernel_impl<at::native::OpaqueType<2> >(at::Ten": [
+    72.71382142858683,
+    56.0
+   ],
+   "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl_nocast<at::native::neg_kernel_cuda(at::TensorIte": [
+    65.93846428568989,
+    56.0
+   ],
+   "void gemmSN_NN_kernel<float, 256, 4, 2, 8, 3, 4, false, cublasGemvTensorStridedBatched<float const>, cublasGemvTensorStr": [
+    62.395178571413844,
+    28.0
+   ],
+   "void at::native::elementwise_kernel<128, 2, at::native::gpu_kernel_impl_nocast<at::native::BinaryFunctor<float, float, f": [
+    58.56337499999632,
+    57.0
+   ],
+   "void gemmSN_TN_kernel<float, 128, 16, 2, 4, 6, 7, false, cublasGemvTensorStridedBatched<float const>, cublasGemvTensorSt": [
+    53.16657142856717,
+    28.0
+   ],
+   "void at::native::vectorized_elementwise_kernel<4, at::native::rsqrt_kernel_cuda(at::TensorIteratorBase&)::{lambda()#2}::": [
+    50.08567857143008,
+    57.0
+   ],
+   "void at::native::vectorized_elementwise_kernel<4, at::native::CUDAFunctorOnSelf_add<float>, std::array<char*, 2ul>, fals": [
+    49.21489285713794,
+    57.0
+   ],
+   "void at::native::vectorized_elementwise_kernel<4, at::native::(anonymous namespace)::pow_tensor_scalar_kernel_impl<float": [
+    48.16073214286087,
+    57.0
+   ],
+   "void at::native::vectorized_elementwise_kernel<4, at::native::(anonymous namespace)::silu_kernel(at::TensorIteratorBase&": [
+    34.88301785716427,
+    28.0
+   ],
+   "void (anonymous namespace)::softmax_warp_forward<float, float, float, 8, false, false, 32>(float*, float const*, int, in": [
+    34.70219642857949,
+    28.0
+   ],
+   "void at::native::elementwise_kernel<128, 2, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::T": [
+    29.719285714268867,
+    28.0
+   ],
+   "Memcpy DtoD (Device -> Device)": [
+    6.365767857137342,
+    7.0
+   ],
+   "void at::native::reduce_kernel<512, 1, at::native::ReduceOp<c10::Half, at::native::ArgMaxOps<float>, unsigned int, long,": [
+    4.678857142852264,
+    1.0
+   ],
+   "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl_nocast<at::native::(anonymous namespace)::Compar": [
+    2.0078928571448875,
+    1.0
+   ],
+   "void at::native::vectorized_elementwise_kernel<4, at::native::AUnaryFunctor<float, float, float, at::native::binary_inte": [
+    1.6804107142838072,
+    2.0
+   ],
+   "void at::native::(anonymous namespace)::indexSelectSmallIndex<c10::Half, long, unsigned int, 2, 2, -2>(at::cuda::detail:": [
+    1.5079285714309663,
+    1.0
+   ],
+   "void at::native::vectorized_elementwise_kernel<4, at::native::cos_kernel_cuda(at::TensorIteratorBase&)::{lambda()#2}::op": [
+    1.4303214285731494,
+    1.0
+   ],
+   "void at::native::vectorized_elementwise_kernel<4, at::native::sin_kernel_cuda(at::TensorIteratorBase&)::{lambda()#2}::op": [
+    1.3542857142867726,
+    1.0
+   ],
+   "void at::native::vectorized_elementwise_kernel<4, at::native::BinaryFunctor<c10::Half, c10::Half, bool, at::native::(ano": [
+    1.272625000005194,
+    0.0
+   ],
+   "_bmm_outer_product_kernel": [
+    1.0444107142809165,
+    1.0
+   ],
+   "void at::native::vectorized_elementwise_kernel<4, at::native::(anonymous namespace)::masked_fill_kernel(at::TensorIterat": [
+    0.945160714289435,
+    1.0
+   ],
+   "void at::native::(anonymous namespace)::CatArrayBatchedCopy_vectorized<at::native::(anonymous namespace)::OpaqueType<4u>": [
+    0.8256607142869014,
+    1.0
+   ],
+   "void at::native::vectorized_elementwise_kernel<4, at::native::AbsFunctor<c10::Half>, std::array<char*, 2ul>, false>(int,": [
+    0.7846250000040007,
+    0.0
+   ],
+   "void at::native::vectorized_elementwise_kernel<4, at::native::FillFunctor<c10::Half>, std::array<char*, 1ul>, false>(int": [
+    0.7646249999970962,
+    1.0
+   ],
+   "void at::native::vectorized_elementwise_kernel<2, at::native::FillFunctor<long>, std::array<char*, 1ul>, false>(int, at:": [
+    0.7525714285734385,
+    1.0
+   ],
+   "void (anonymous namespace)::elementwise_kernel_with_index<int, at::native::arange_cuda_out(c10::Scalar const&, c10::Scal": [
+    0.6749821428585554,
+    1.0
+   ],
+   "void at::native::vectorized_elementwise_kernel<4, at::native::BinaryFunctor<bool, bool, bool, at::native::binary_interna": [
+    0.6720535714276983,
+    0.0
+   ],
+   "void (anonymous namespace)::w4a16_tc_m32_kernel<false>(__half const*, unsigned int const*, __half const*, __half*, int, ": [
+    0.6623214285715936,
+    0.0
+   ],
+   "void at::native::vectorized_elementwise_kernel<4, at::native::AUnaryFunctor<c10::Half, c10::Half, bool, at::native::(ano": [
+    0.301678571430626,
+    0.0
+   ],
+   "Memset (Device)": [
+    0.2531249999996622,
+    1.0
+   ],
+   "void at::native::reduce_kernel<512, 1, at::native::ReduceOp<bool, at::native::func_wrapper_t<bool, at::native::and_kerne": [
+    0.10135714286129119,
+    0.0
+   ],
+   "Memcpy DtoH (Device -> Pageable)": [
+    0.009142857144330005,
+    0.0
+   ],
+   "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl_nocast<at::native::CUDAFunctor_add<c10::Half> >(": [
+    0.008553571428259537,
+    0.0
+   ],
+   "Memcpy DtoH (Device -> Pinned)": [
+    0.006803571431906416,
+    0.0
+   ],
+   "void at::native::vectorized_gather_kernel<16, long>(char*, char*, long*, int, long, long, long, long, bool)": [
+    0.0011428571428544793,
+    0.0
+   ],
+   "void at::native::(anonymous namespace)::CatArrayBatchedCopy<at::native::(anonymous namespace)::OpaqueType<4u>, unsigned ": [
+    0.0005714285714231794,
+    0.0
+   ],
+   "Memcpy HtoD (Pageable -> Device)": [
+    0.0,
+    0.0
+   ],
+   "void at::native::reduce_kernel<512, 1, at::native::ReduceOp<c10::Half, at::native::func_wrapper_t<bool, at::native::or_k": [
+    -0.001124999999904373,
+    0.0
+   ],
+   "void at::native::vectorized_elementwise_kernel<4, at::native::AUnaryFunctor<long, long, bool, at::native::(anonymous nam": [
+    -0.002285714285713019,
+    0.0
+   ],
+   "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::T": [
+    -0.004500000000088481,
+    0.0
+   ],
+   "fmha_cutlassF_f16_aligned_64x128_rf_sm80(PyTorchMemEffAttention::AttentionKernel<cutlass::half_t, cutlass::arch::Sm80, t": [
+    -0.007946428571472097,
+    0.0
+   ],
+   "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl_nocast<at::native::AUnaryFunctor<c10::Half, c10:": [
+    -0.8052142857165693,
+    0.0
+   ],
+   "void at::native::reduce_kernel<512, 1, at::native::ReduceOp<long, at::native::func_wrapper_t<long, at::native::sum_funct": [
+    -1.5903571428635814,
+    0.0
+   ]
+  }
+ }
+}

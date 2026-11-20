@@ -1,0 +1,693 @@
+{
+ "contexts": {
+  "128": {
+   "tokens_equal_T_M": true,
+   "tokens_equal_V_M": "asserted in vprofile.py",
+   "arms": {
+    "GTA": {
+     "total_us": 5007.4,
+     "launches": 1461.0,
+     "gemm": {
+      "us": 2254.58,
+      "calls": 196.0,
+      "top": [
+       [
+        2253.9,
+        196.0,
+        "void (anonymous namespace)::w4a16_tc_kernel<true, true>(__half const*, unsigned int const*, __half c"
+       ],
+       [
+        0.7,
+        0.0,
+        "void (anonymous namespace)::w4a16_tc_m32_kernel<false>(__half const*, unsigned int const*, __half co"
+       ]
+      ]
+     },
+     "head": {
+      "us": 1169.63,
+      "calls": 1.0,
+      "top": [
+       [
+        1169.6,
+        1.0,
+        "std::enable_if<!(false), void>::type internal::gemvx::kernel<int, int, __half, __half, __half, float"
+       ]
+      ]
+     },
+     "attention": {
+      "us": 223.48,
+      "calls": 140.0,
+      "top": [
+       [
+        72.9,
+        56.0,
+        "void at::native::index_elementwise_kernel<128, 4, at::native::index_copy_kernel_impl<at::native::Opa"
+       ],
+       [
+        62.6,
+        28.0,
+        "void gemmSN_NN_kernel<float, 256, 4, 2, 8, 3, 4, false, cublasGemvTensorStridedBatched<float const>,"
+       ],
+       [
+        53.3,
+        28.0,
+        "void gemmSN_TN_kernel<float, 128, 16, 2, 4, 6, 7, false, cublasGemvTensorStridedBatched<float const>"
+       ],
+       [
+        34.7,
+        28.0,
+        "void (anonymous namespace)::softmax_warp_forward<float, float, float, 8, false, false, 32>(float*, f"
+       ],
+       [
+        -0.0,
+        0.0,
+        "fmha_cutlassF_f16_aligned_64x128_rf_sm80(PyTorchMemEffAttention::AttentionKernel<cutlass::half_t, cu"
+       ]
+      ]
+     },
+     "other": {
+      "us": 1359.75,
+      "calls": 1124.0,
+      "top": [
+       [
+        313.4,
+        170.0,
+        "void at::native::unrolled_elementwise_kernel<at::native::direct_copy_kernel_cuda(at::TensorIteratorB"
+       ],
+       [
+        187.2,
+        196.0,
+        "void at::native::vectorized_elementwise_kernel<4, at::native::CUDAFunctor_add<c10::Half>, std::array"
+       ],
+       [
+        139.9,
+        112.0,
+        "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl_nocast<at::native::BinaryFun"
+       ],
+       [
+        107.2,
+        85.0,
+        "void at::native::vectorized_elementwise_kernel<4, at::native::BinaryFunctor<c10::Half, c10::Half, c1"
+       ],
+       [
+        90.6,
+        57.0,
+        "void at::native::reduce_kernel<512, 1, at::native::ReduceOp<float, at::native::MeanOps<float, float,"
+       ],
+       [
+        83.6,
+        56.0,
+        "void at::native::(anonymous namespace)::CatArrayBatchedCopy<at::native::(anonymous namespace)::Opaqu"
+       ]
+      ]
+     }
+    },
+    "GQA": {
+     "total_us": 5184.6,
+     "launches": 1461.0,
+     "gemm": {
+      "us": 2433.85,
+      "calls": 196.0,
+      "top": [
+       [
+        2106.3,
+        140.0,
+        "void e005_marlin::Marlin<1125899906910725l, 1125899907892224l, 1125899906910725l, 1125899906910725l,"
+       ],
+       [
+        327.5,
+        56.0,
+        "void e005_marlin::Marlin<1125899906910725l, 1125899907892224l, 1125899906910725l, 1125899906910725l,"
+       ],
+       [
+        0.1,
+        0.0,
+        "void e005_marlin::Marlin<1125899906910725l, 1125899907892224l, 1125899906910725l, 1125899906910725l,"
+       ],
+       [
+        -0.0,
+        0.0,
+        "void e005_marlin::Marlin<1125899906910725l, 1125899907892224l, 1125899906910725l, 1125899906910725l,"
+       ]
+      ]
+     },
+     "head": {
+      "us": 1169.02,
+      "calls": 1.0,
+      "top": [
+       [
+        1169.0,
+        1.0,
+        "std::enable_if<!(false), void>::type internal::gemvx::kernel<int, int, __half, __half, __half, float"
+       ]
+      ]
+     },
+     "attention": {
+      "us": 224.62,
+      "calls": 140.0,
+      "top": [
+       [
+        73.0,
+        56.0,
+        "void at::native::index_elementwise_kernel<128, 4, at::native::index_copy_kernel_impl<at::native::Opa"
+       ],
+       [
+        62.8,
+        28.0,
+        "void gemmSN_NN_kernel<float, 256, 4, 2, 8, 3, 4, false, cublasGemvTensorStridedBatched<float const>,"
+       ],
+       [
+        54.1,
+        28.0,
+        "void gemmSN_TN_kernel<float, 128, 16, 2, 4, 6, 7, false, cublasGemvTensorStridedBatched<float const>"
+       ],
+       [
+        34.7,
+        28.0,
+        "void (anonymous namespace)::softmax_warp_forward<float, float, float, 8, false, false, 32>(float*, f"
+       ],
+       [
+        -0.0,
+        0.0,
+        "fmha_cutlassF_f16_aligned_64x128_rf_sm80(PyTorchMemEffAttention::AttentionKernel<cutlass::half_t, cu"
+       ]
+      ]
+     },
+     "other": {
+      "us": 1357.11,
+      "calls": 1124.0,
+      "top": [
+       [
+        319.8,
+        170.0,
+        "void at::native::unrolled_elementwise_kernel<at::native::direct_copy_kernel_cuda(at::TensorIteratorB"
+       ],
+       [
+        184.3,
+        196.0,
+        "void at::native::vectorized_elementwise_kernel<4, at::native::CUDAFunctor_add<c10::Half>, std::array"
+       ],
+       [
+        138.8,
+        112.0,
+        "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl_nocast<at::native::BinaryFun"
+       ],
+       [
+        105.8,
+        85.0,
+        "void at::native::vectorized_elementwise_kernel<4, at::native::BinaryFunctor<c10::Half, c10::Half, c1"
+       ],
+       [
+        89.7,
+        57.0,
+        "void at::native::reduce_kernel<512, 1, at::native::ReduceOp<float, at::native::MeanOps<float, float,"
+       ],
+       [
+        83.3,
+        56.0,
+        "void at::native::(anonymous namespace)::CatArrayBatchedCopy<at::native::(anonymous namespace)::Opaqu"
+       ]
+      ]
+     }
+    },
+    "V": {
+     "total_us": 3774.2,
+     "launches": 389.11,
+     "gemm": {
+      "us": 2044.53,
+      "calls": 112.0,
+      "top": [
+       [
+        2044.6,
+        112.0,
+        "void marlin::Marlin<1125899906910725l, 1125899907892224l, 1125899906910725l, 1125899906910725l, 256,"
+       ],
+       [
+        -0.0,
+        0.0,
+        "void marlin::Marlin<1125899906910725l, 1125899907892224l, 1125899906910725l, 1125899906910725l, 256,"
+       ]
+      ]
+     },
+     "head": {
+      "us": 1169.19,
+      "calls": 1.0,
+      "top": [
+       [
+        1169.2,
+        1.0,
+        "std::enable_if<!(false), void>::type internal::gemvx::kernel<int, int, __half, __half, __half, float"
+       ]
+      ]
+     },
+     "attention": {
+      "us": 342.93,
+      "calls": 84.0,
+      "top": [
+       [
+        168.7,
+        28.0,
+        "void flash::flash_fwd_splitkv_kernel<Flash_fwd_kernel_traits<128, 64, 128, 4, false, false, cutlass:"
+       ],
+       [
+        135.0,
+        28.0,
+        "void flash::flash_fwd_splitkv_combine_kernel<Flash_fwd_kernel_traits<128, 64, 128, 4, false, false, "
+       ],
+       [
+        39.3,
+        28.0,
+        "void vllm::reshape_and_cache_flash_kernel<unsigned short, unsigned short, (vllm::Fp8KVCacheDataType)"
+       ]
+      ]
+     },
+     "other": {
+      "us": 217.5,
+      "calls": 192.11,
+      "top": [
+       [
+        45.0,
+        28.0,
+        "triton_red_fused_fused_add_rms_norm_2"
+       ],
+       [
+        34.9,
+        28.0,
+        "triton_red_fused_fused_add_rms_norm_0"
+       ],
+       [
+        26.5,
+        27.0,
+        "triton_poi_fused_add_cat_index_select_mul_split_split_with_sizes_sub_unsqueeze_view_4"
+       ],
+       [
+        26.5,
+        27.0,
+        "triton_poi_fused_add_cat_index_select_mul_split_split_with_sizes_sub_unsqueeze_view_3"
+       ],
+       [
+        19.8,
+        28.0,
+        "triton_poi_fused_mul_silu_slice_1"
+       ],
+       [
+        19.6,
+        29.0,
+        "memcpy32_post"
+       ]
+      ]
+     }
+    }
+   },
+   "gap": {
+    "GTA-V": {
+     "total_us": 1233.2,
+     "by_group_us": {
+      "gemm": 210.0,
+      "head": 0.4,
+      "attention": -119.5,
+      "other": 1142.2
+     },
+     "share": {
+      "gemm": 0.17,
+      "head": 0.0,
+      "attention": -0.097,
+      "other": 0.926
+     }
+    },
+    "GQA-V": {
+     "total_us": 1410.4,
+     "by_group_us": {
+      "gemm": 389.3,
+      "head": -0.2,
+      "attention": -118.3,
+      "other": 1139.6
+     },
+     "share": {
+      "gemm": 0.276,
+      "head": -0.0,
+      "attention": -0.084,
+      "other": 0.808
+     }
+    },
+    "GTA-GQA": {
+     "total_us": -177.2,
+     "by_group_us": {
+      "gemm": -179.3,
+      "head": 0.6,
+      "attention": -1.1,
+      "other": 2.6
+     },
+     "share": {
+      "gemm": 1.012,
+      "head": -0.003,
+      "attention": 0.006,
+      "other": -0.015
+     }
+    }
+   }
+  },
+  "2048": {
+   "tokens_equal_T_M": true,
+   "tokens_equal_V_M": "asserted in vprofile.py",
+   "arms": {
+    "GTA": {
+     "total_us": 5770.2,
+     "launches": 1461.0,
+     "gemm": {
+      "us": 2246.58,
+      "calls": 196.0,
+      "top": [
+       [
+        2247.0,
+        196.0,
+        "void (anonymous namespace)::w4a16_tc_kernel<true, true>(__half const*, unsigned int const*, __half c"
+       ],
+       [
+        -0.4,
+        0.0,
+        "void (anonymous namespace)::w4a16_tc_m32_kernel<false>(__half const*, unsigned int const*, __half co"
+       ]
+      ]
+     },
+     "head": {
+      "us": 1169.55,
+      "calls": 1.0,
+      "top": [
+       [
+        1169.6,
+        1.0,
+        "std::enable_if<!(false), void>::type internal::gemvx::kernel<int, int, __half, __half, __half, float"
+       ]
+      ]
+     },
+     "attention": {
+      "us": 737.03,
+      "calls": 140.0,
+      "top": [
+       [
+        410.9,
+        28.0,
+        "void gemmSN_NN_kernel<float, 256, 4, 2, 8, 3, 4, false, cublasGemvTensorStridedBatched<float const>,"
+       ],
+       [
+        198.2,
+        28.0,
+        "void gemmSN_TN_kernel<float, 128, 16, 2, 4, 6, 7, false, cublasGemvTensorStridedBatched<float const>"
+       ],
+       [
+        72.9,
+        56.0,
+        "void at::native::index_elementwise_kernel<128, 4, at::native::index_copy_kernel_impl<at::native::Opa"
+       ],
+       [
+        56.5,
+        28.0,
+        "void at::native::(anonymous namespace)::cunn_SoftMaxForwardReg<float, float, float, at::native::(ano"
+       ],
+       [
+        -1.5,
+        0.0,
+        "fmha_cutlassF_f16_aligned_64x128_rf_sm80(PyTorchMemEffAttention::AttentionKernel<cutlass::half_t, cu"
+       ]
+      ]
+     },
+     "other": {
+      "us": 1617.0,
+      "calls": 1124.0,
+      "top": [
+       [
+        573.2,
+        170.0,
+        "void at::native::unrolled_elementwise_kernel<at::native::direct_copy_kernel_cuda(at::TensorIteratorB"
+       ],
+       [
+        186.2,
+        196.0,
+        "void at::native::vectorized_elementwise_kernel<4, at::native::CUDAFunctor_add<c10::Half>, std::array"
+       ],
+       [
+        140.3,
+        112.0,
+        "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl_nocast<at::native::BinaryFun"
+       ],
+       [
+        106.4,
+        85.0,
+        "void at::native::vectorized_elementwise_kernel<4, at::native::BinaryFunctor<c10::Half, c10::Half, c1"
+       ],
+       [
+        89.9,
+        57.0,
+        "void at::native::reduce_kernel<512, 1, at::native::ReduceOp<float, at::native::MeanOps<float, float,"
+       ],
+       [
+        83.6,
+        56.0,
+        "void at::native::(anonymous namespace)::CatArrayBatchedCopy<at::native::(anonymous namespace)::Opaqu"
+       ]
+      ]
+     }
+    },
+    "GQA": {
+     "total_us": 5964.0,
+     "launches": 1461.0,
+     "gemm": {
+      "us": 2432.43,
+      "calls": 196.0,
+      "top": [
+       [
+        2104.8,
+        140.0,
+        "void e005_marlin::Marlin<1125899906910725l, 1125899907892224l, 1125899906910725l, 1125899906910725l,"
+       ],
+       [
+        329.6,
+        56.0,
+        "void e005_marlin::Marlin<1125899906910725l, 1125899907892224l, 1125899906910725l, 1125899906910725l,"
+       ],
+       [
+        -1.9,
+        0.0,
+        "void e005_marlin::Marlin<1125899906910725l, 1125899907892224l, 1125899906910725l, 1125899906910725l,"
+       ]
+      ]
+     },
+     "head": {
+      "us": 1169.45,
+      "calls": 1.0,
+      "top": [
+       [
+        1169.5,
+        1.0,
+        "std::enable_if<!(false), void>::type internal::gemvx::kernel<int, int, __half, __half, __half, float"
+       ]
+      ]
+     },
+     "attention": {
+      "us": 739.92,
+      "calls": 140.0,
+      "top": [
+       [
+        410.7,
+        28.0,
+        "void gemmSN_NN_kernel<float, 256, 4, 2, 8, 3, 4, false, cublasGemvTensorStridedBatched<float const>,"
+       ],
+       [
+        200.1,
+        28.0,
+        "void gemmSN_TN_kernel<float, 128, 16, 2, 4, 6, 7, false, cublasGemvTensorStridedBatched<float const>"
+       ],
+       [
+        73.6,
+        56.0,
+        "void at::native::index_elementwise_kernel<128, 4, at::native::index_copy_kernel_impl<at::native::Opa"
+       ],
+       [
+        56.9,
+        28.0,
+        "void at::native::(anonymous namespace)::cunn_SoftMaxForwardReg<float, float, float, at::native::(ano"
+       ],
+       [
+        -1.3,
+        0.0,
+        "fmha_cutlassF_f16_aligned_64x128_rf_sm80(PyTorchMemEffAttention::AttentionKernel<cutlass::half_t, cu"
+       ]
+      ]
+     },
+     "other": {
+      "us": 1622.18,
+      "calls": 1124.0,
+      "top": [
+       [
+        576.7,
+        170.0,
+        "void at::native::unrolled_elementwise_kernel<at::native::direct_copy_kernel_cuda(at::TensorIteratorB"
+       ],
+       [
+        184.7,
+        196.0,
+        "void at::native::vectorized_elementwise_kernel<4, at::native::CUDAFunctor_add<c10::Half>, std::array"
+       ],
+       [
+        141.2,
+        112.0,
+        "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl_nocast<at::native::BinaryFun"
+       ],
+       [
+        105.7,
+        85.0,
+        "void at::native::vectorized_elementwise_kernel<4, at::native::BinaryFunctor<c10::Half, c10::Half, c1"
+       ],
+       [
+        90.1,
+        57.0,
+        "void at::native::reduce_kernel<512, 1, at::native::ReduceOp<float, at::native::MeanOps<float, float,"
+       ],
+       [
+        83.7,
+        56.0,
+        "void at::native::(anonymous namespace)::CatArrayBatchedCopy<at::native::(anonymous namespace)::Opaqu"
+       ]
+      ]
+     }
+    },
+    "V": {
+     "total_us": 3898.9,
+     "launches": 389.11,
+     "gemm": {
+      "us": 2046.47,
+      "calls": 112.0,
+      "top": [
+       [
+        2048.6,
+        112.0,
+        "void marlin::Marlin<1125899906910725l, 1125899907892224l, 1125899906910725l, 1125899906910725l, 256,"
+       ],
+       [
+        -2.1,
+        0.0,
+        "void marlin::Marlin<1125899906910725l, 1125899907892224l, 1125899906910725l, 1125899906910725l, 256,"
+       ]
+      ]
+     },
+     "head": {
+      "us": 1169.74,
+      "calls": 1.0,
+      "top": [
+       [
+        1169.7,
+        1.0,
+        "std::enable_if<!(false), void>::type internal::gemvx::kernel<int, int, __half, __half, __half, float"
+       ]
+      ]
+     },
+     "attention": {
+      "us": 427.29,
+      "calls": 84.0,
+      "top": [
+       [
+        253.6,
+        28.0,
+        "void flash::flash_fwd_splitkv_kernel<Flash_fwd_kernel_traits<128, 64, 128, 4, false, false, cutlass:"
+       ],
+       [
+        134.4,
+        28.0,
+        "void flash::flash_fwd_splitkv_combine_kernel<Flash_fwd_kernel_traits<128, 64, 128, 4, false, false, "
+       ],
+       [
+        39.3,
+        28.0,
+        "void vllm::reshape_and_cache_flash_kernel<unsigned short, unsigned short, (vllm::Fp8KVCacheDataType)"
+       ]
+      ]
+     },
+     "other": {
+      "us": 255.43,
+      "calls": 192.11,
+      "top": [
+       [
+        45.1,
+        28.0,
+        "triton_red_fused_fused_add_rms_norm_2"
+       ],
+       [
+        40.8,
+        1.0,
+        "_bias_kernel"
+       ],
+       [
+        35.0,
+        28.0,
+        "triton_red_fused_fused_add_rms_norm_0"
+       ],
+       [
+        26.5,
+        27.0,
+        "triton_poi_fused_add_cat_index_select_mul_split_split_with_sizes_sub_unsqueeze_view_4"
+       ],
+       [
+        26.5,
+        27.0,
+        "triton_poi_fused_add_cat_index_select_mul_split_split_with_sizes_sub_unsqueeze_view_3"
+       ],
+       [
+        20.0,
+        28.0,
+        "triton_poi_fused_mul_silu_slice_1"
+       ]
+      ]
+     }
+    }
+   },
+   "gap": {
+    "GTA-V": {
+     "total_us": 1871.3,
+     "by_group_us": {
+      "gemm": 200.1,
+      "head": -0.2,
+      "attention": 309.7,
+      "other": 1361.6
+     },
+     "share": {
+      "gemm": 0.107,
+      "head": -0.0,
+      "attention": 0.165,
+      "other": 0.728
+     }
+    },
+    "GQA-V": {
+     "total_us": 2065.1,
+     "by_group_us": {
+      "gemm": 386.0,
+      "head": -0.3,
+      "attention": 312.6,
+      "other": 1366.8
+     },
+     "share": {
+      "gemm": 0.187,
+      "head": -0.0,
+      "attention": 0.151,
+      "other": 0.662
+     }
+    },
+    "GTA-GQA": {
+     "total_us": -193.8,
+     "by_group_us": {
+      "gemm": -185.8,
+      "head": 0.1,
+      "attention": -2.9,
+      "other": -5.2
+     },
+     "share": {
+      "gemm": 0.959,
+      "head": -0.001,
+      "attention": 0.015,
+      "other": 0.027
+     }
+    }
+   }
+  }
+ }
+}

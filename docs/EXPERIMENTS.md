@@ -31,6 +31,41 @@ Criteria (completeness and correctness only): every arm profiled at both context
 
 Limits fixed now: profiler device time is not wall time and excludes host and idle gaps (a host-side gap would appear as "unexplained", not be located); the profiler perturbs wall time, so no wall-clock number is taken from these runs; in-process vLLM is not the configuration timed in E027/E052; one profile per arm/context, one passage, one RTX 5060 Ti node; grouping by kernel name. Disclosures carried: our path is accepted only under E021's third, post hoc gate (E017/E019 failed); 4-bit blocks cost +13.1% WikiText-2 perplexity (plain rounding, FP16 head); never "competitive with Marlin/vLLM"; Marlin and vLLM are upstream. ARC: one RTX 5060 Ti node with the vLLM venv present at E052 (c10 preferred), one prerequisite job (environment, vLLM restore check, gate and all three profiles at context 128 only) inspected before the full job (contexts 128 and 2048) with `afterok`; `scripts/e056/submit.sh prereq|full`. New files only: `scripts/e056/`, `results/e056_20261119/`, BeeGFS `csc548-w4a16-e056-20261119`.
 
+Attempts: prerequisite 344128 (c10, 2026-11-19 23:39–23:43 EST, commit `3e5a908`, exit 0, first attempt) inspected before the full job: gate at 128 accepted 4/4 (T and Marlin, both passages), vLLM venv present on c10 (E027 freeze diff empty, model hashes OK), GTA/GQA/V profiled at 128, tokens equal, analyzer complete. Full 344130 (c10, `afterok:344128`, 23:44–23:49, exit 0, first attempt). No failed attempt. Each job tarred its BeeGFS directory (without `*.npz` and vLLM's compile cache) to ARC home; tars copied with `scp`, hashes identical (`results/e056_20261119/retrieval-tgz.sha256`), every file matches its job-written `all.sha256`. Driver 610.57.04, SM 2610–2617 MHz P0 during the profiles.
+
+### Result (job 344130, c10, 2026-11-19): E030's explanation still holds with our kernel; the remaining gap to vLLM is mostly the ~1000 extra small unfused kernels, not the GEMM
+
+`results/e056_20261119/full-c10-344130/` (`analysis.json`, `analysis.txt`, `prof-{T,M,V}/`). Gate (att.py validate, 128/2048, both passages): 10 ACCEPTED, 0 REJECTED (T and Marlin control; E021 third gate). Tokens: GTA's input and 64 output tokens equal GQA's at both contexts, and vLLM's equal GQA's (asserted in `vprofile.py` before and during profiling): all three arms generate identical tokens.
+
+Device time per decode step, µs, (64-token − 8-token)/56, primary passage (calls per step in brackets):
+
+| per step | GTA 128 | GQA 128 | V 128 | GTA 2048 | GQA 2048 | V 2048 |
+|---|---:|---:|---:|---:|---:|---:|
+| total device time | 5007 | 5185 | 3774 | 5770 | 5964 | 3899 |
+| all launches | 1461 | 1461 | 389 | 1461 | 1461 | 389 |
+| GEMM (ours `w4a16_tc` / Marlin) | 2255 (196) | 2434 (196) | 2045 (112) | 2247 (196) | 2432 (196) | 2047 (112) |
+| FP16 output head (`gemvx`) | 1170 (1) | 1169 (1) | 1169 (1) | 1170 (1) | 1170 (1) | 1170 (1) |
+| attention (named kernels) | 224 (140) | 225 (140) | 343 (84) | 737 (140) | 740 (140) | 427 (84) |
+| other | 1360 (1124) | 1357 (1124) | 218 (192) | 1617 (1124) | 1622 (1124) | 255 (192) |
+
+Gap to vLLM per step, split by group (µs, share of the gap):
+
+| | 128 total | GEMM | head | attention | other | 2048 total | GEMM | head | attention | other |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| GTA − V | 1233 | 210 (17%) | 0 | −120 (−10%) | 1142 (93%) | 1871 | 200 (11%) | 0 | 310 (17%) | 1362 (73%) |
+| GQA − V | 1410 | 389 (28%) | 0 | −118 (−8%) | 1140 (81%) | 2065 | 386 (19%) | 0 | 313 (15%) | 1367 (66%) |
+| GTA − GQA | −177 | −179 | +1 | −1 | +3 | −194 | −186 | 0 | −3 | −5 |
+
+Observations:
+- Structure unchanged by our kernel: 196 GEMM calls per step for ours and Marlin against vLLM's 112 (merged q/k/v and gate/up); 1264 non-GEMM, non-head launches for ours (attention 140 + other 1124, as E030's 1264) against vLLM's 276 (84 + 192, as E030's 276); the FP16 head costs the same 1169–1170 µs in all three.
+- GEMM: our 196 calls take 2255/2247 µs, 10% (210/200 µs) more than vLLM's 112 merged Marlin calls and 179/186 µs less than unmerged Marlin; per call 11.5 µs ours vs 12.4 µs Marlin unmerged vs 18.3 µs vLLM merged. With our kernel, GEMM is 17% (128) / 11% (2048) of the gap to vLLM (Marlin path: 28% / 19%).
+- The GTA − GQA difference is GEMM time alone (−179/−186 µs of −177/−194), reproducing E054's attribution on c10.
+- "Other" (unfused elementwise/normalization/rotary/copies: 1124 launches vs 192 fused Triton and runtime kernels) is the largest part of the gap: 1142 µs (93%) at 128, 1362 µs (73%) at 2048. It grows with context in our path (1360 → 1617 µs) because our attention's FP16→FP32 copies of keys/values use the generic copy kernel (313 → 573 µs), which the predeclared name rule counts as "other"; vLLM's "other" is near constant (218/255 µs; its 2048 value includes a one-off 41 µs `_bias_kernel`, 3.5 µs in E030).
+- Attention by name: our two cuBLAS batched GEMVs + softmax + cache index copies are 120 µs cheaper than FlashAttention's split-KV + combine + cache write at 128, and 310 µs dearer at 2048 (gemmSN_NN 411 µs alone); adding the context-dependent copies, our attention-related cost at 2048 is about 1000 µs against vLLM's 427 µs.
+- Device totals match the wall-clock steps of E052's timed runs (GTA 315.5/363.7 ms per 63 steps = 5.01/5.77 ms; V 237.6–249.7 ms ≈ 3.8–4.0 ms; different jobs), so the step is device-bound in all three paths and host gaps do not explain the gap (as E030). Run-to-run variation of single profiles: vLLM's attention at 128 is 284 µs in the prerequisite and 343 µs in the full job (E030: 331 µs); GEMM, head and our groups agree within 1%.
+
+Decision: E030's structural explanations still hold with our latest kernel. Our kernel narrows the GEMM part of the gap to vLLM to 200–210 µs per step (from 386–389 µs with unmerged Marlin), so most of what separates our path from vLLM now lies outside the GEMM: about 1000 extra unfused small kernels (73–93% of the gap) and, at long context, unfused attention. Closing it would need merged projections (removing 84 calls; the GEMM excess is only ~10%) and fused elementwise/normalization/attention kernels, i.e. what vLLM's model code and compiler provide; nothing is implemented or authorized by this diagnostic. Limits as predeclared: profiler device time, not wall time, and it excludes host and idle gaps; in-process vLLM; one profile per arm/context, one passage, one node (c10); grouping by kernel name (attention copies counted in "other"). Disclosures: E021 third gate; 4-bit blocks +13.1% perplexity; never "competitive with Marlin/vLLM"; Marlin and vLLM are upstream.
+
 ## E055 — Does the GEMM kernel change model quality? WikiText-2 perplexity through our `tc_ladder` and through corrected Marlin
 
 Predeclared 2026-11-19 at the user's request ("now we gotta test the quality of inference"; chosen: WikiText-2 perplexity, RTX 5060 Ti only), before any E055 job. Gap it fills: E032–E042 measured quality with PyTorch FP16 arithmetic on reconstructed weights (`scripts/e032/quality.py`, variant R); no perplexity was ever computed through Marlin or our kernel, whose accumulation order and rounding differ (FP64 tolerance, not bitwise). The E021-style gate checks only 64 generated tokens on two passages per context.

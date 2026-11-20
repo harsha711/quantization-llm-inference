@@ -1,0 +1,6 @@
+  128 GTA  total  4998.9 launches  1461.0 | gemm  2250.8 us  196.0 | head  1169.6 us    1.0 | attention   223.0 us  140.0 | other  1355.6 us 1124.0
+  128 GQA  total  5180.7 launches  1461.0 | gemm  2432.6 us  196.0 | head  1169.0 us    1.0 | attention   224.4 us  140.0 | other  1354.7 us 1124.0
+  128 V    total  3714.0 launches   389.1 | gemm  2040.4 us  112.0 | head  1169.6 us    1.0 | attention   283.7 us   84.0 | other   220.3 us  192.1
+  128 gap GTA-V: 1284.9 us, {'gemm': 210.4, 'head': 0.0, 'attention': -60.7, 'other': 1135.2}
+  128 gap GQA-V: 1466.7 us, {'gemm': 392.2, 'head': -0.6, 'attention': -59.3, 'other': 1134.3}
+  128 gap GTA-GQA: -181.8 us, {'gemm': -181.8, 'head': 0.6, 'attention': -1.4, 'other': 0.9}

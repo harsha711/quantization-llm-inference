@@ -283,6 +283,11 @@
 
 - E055 is complete (c8, job 344064): WikiText-2 perplexity R 9.7350 (E032 reproduced), Marlin 9.7349, ours 9.7349: kernel effect ≤ 0.0013% ("negligible"), ours vs Marlin −0.0006% with 99.8% top-1 agreement ("no quality difference between the kernels"). +13.1% vs original holds through both kernels. Prefill path (M = 2048) only.
 
+## E056 per-step gap to vLLM with our kernel (diagnostic)
+
+- E056 is complete (c10, prerequisite 344128, full 344130): E030's profiler replayed with `tc_ladder` (GTA), Marlin (GQA) and vLLM in-process (V) in one job; gate 10/10 accepted, all three arms give identical tokens. Per step: GTA 5007/5770 µs, GQA 5185/5964, V 3774/3899 at 128/2048; GEMM calls 196 vs vLLM 112, other launches 1264 vs 276, FP16 head 1170 µs in all.
+- Our GEMM is 10% (200–210 µs) above vLLM's merged Marlin = 11–17% of the gap; the ~1000 extra unfused small kernels are 73–93% of it, plus unfused attention at 2048. Say "E030's structural explanation still holds"; profiler device time excludes host gaps, one profile per arm, attention copies counted in "other" by the predeclared name rule. Diagnostic only, nothing authorized; E021 third gate, +13.1%, never "competitive with Marlin/vLLM".
+
 ## Rooflines, if requested
 
 - Recompute all ceilings, ridge points, arithmetic intensities, and performance coordinates from specifications/data. Keep the primary full-machine roof distinct from core-count, ISA, NUMA, and memory-domain sensitivity roofs.

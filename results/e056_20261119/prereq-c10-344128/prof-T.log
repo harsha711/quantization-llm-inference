@@ -1,0 +1,9 @@
++ prun timeout 9000 /tmp/e017-hpuvvad-20261109/bin/python /mnt/beegfs/hpuvvad/csc548-w4a16-e056-20261119/prereq-c10-344128/t.py gprofile.py /mnt/beegfs/hpuvvad/csc548-w4a16-e056-20261119/prereq-c10-344128/prof-T 128
+[prun] Master compute host = c10
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun timeout 9000 /tmp/e017-hpuvvad-20261109/bin/python /mnt/beegfs/hpuvvad/csc548-w4a16-e056-20261119/prereq-c10-344128/t.py gprofile.py /mnt/beegfs/hpuvvad/csc548-w4a16-e056-20261119/prereq-c10-344128/prof-T 128 (family=openmpi4)
+USDT:2026-11-19 23:41:51 2888084:2888084 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 23:41:51 2888084:2888084 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-11-19 23:41:51 2888084:2888084 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 23:41:52 2888084:2888084 SyncActivityProfilerHandler.cpp:46] profiler_stop
+PROFILED 128 4998.926375000059

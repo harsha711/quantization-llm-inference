@@ -1,0 +1,12 @@
+  128 GTA  total  5007.4 launches  1461.0 | gemm  2254.6 us  196.0 | head  1169.6 us    1.0 | attention   223.5 us  140.0 | other  1359.8 us 1124.0
+  128 GQA  total  5184.6 launches  1461.0 | gemm  2433.8 us  196.0 | head  1169.0 us    1.0 | attention   224.6 us  140.0 | other  1357.1 us 1124.0
+  128 V    total  3774.2 launches   389.1 | gemm  2044.5 us  112.0 | head  1169.2 us    1.0 | attention   342.9 us   84.0 | other   217.5 us  192.1
+  128 gap GTA-V: 1233.2 us, {'gemm': 210.0, 'head': 0.4, 'attention': -119.5, 'other': 1142.2}
+  128 gap GQA-V: 1410.4 us, {'gemm': 389.3, 'head': -0.2, 'attention': -118.3, 'other': 1139.6}
+  128 gap GTA-GQA: -177.2 us, {'gemm': -179.3, 'head': 0.6, 'attention': -1.1, 'other': 2.6}
+ 2048 GTA  total  5770.2 launches  1461.0 | gemm  2246.6 us  196.0 | head  1169.5 us    1.0 | attention   737.0 us  140.0 | other  1617.0 us 1124.0
+ 2048 GQA  total  5964.0 launches  1461.0 | gemm  2432.4 us  196.0 | head  1169.5 us    1.0 | attention   739.9 us  140.0 | other  1622.2 us 1124.0
+ 2048 V    total  3898.9 launches   389.1 | gemm  2046.5 us  112.0 | head  1169.7 us    1.0 | attention   427.3 us   84.0 | other   255.4 us  192.1
+ 2048 gap GTA-V: 1871.3 us, {'gemm': 200.1, 'head': -0.2, 'attention': 309.7, 'other': 1361.6}
+ 2048 gap GQA-V: 2065.1 us, {'gemm': 386.0, 'head': -0.3, 'attention': 312.6, 'other': 1366.8}
+ 2048 gap GTA-GQA: -193.8 us, {'gemm': -185.8, 'head': 0.1, 'attention': -2.9, 'other': -5.2}
