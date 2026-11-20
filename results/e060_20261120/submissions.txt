@@ -1,2 +1,3 @@
 344200 prereq c8 submitted 2026-11-20T11:26:56-05:00 commit ae0b584: bash scripts/e060/submit.sh prereq | ssh arc-off-network sbatch --parsable --nodelist=c8
 344200 prereq c8 COMPLETED exit 0 (11:26:56, 12 min 37 s), INNER-OK; retrieved via ~/e060-prereq-c8-344200.tgz (sha256 aec76f92...6710 identical after scp), all.sha256 verified; inspected locally. Full job NOT submitted (stop requested by coordinator).
+344204 full c8 submitted 2026-11-20T11:48:48-05:00 commit 80c81e8 after user approval (go) and independent review SAFE; --dependency=afterany:344203 only to serialize after the E059 full job on c8; in-job prereq guards unchanged
