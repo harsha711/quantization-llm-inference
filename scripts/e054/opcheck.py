@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""E053 operator prerequisite on one GPU: tc_ladder (t.py's Operator) or corrected Marlin (E017 bridge, --marlin) on the model's
+"""E054 operator prerequisite on one GPU: tc_ladder (t.py's Operator) or corrected Marlin (E017 bridge, --marlin) on the model's
 real codes/scales, same input, FP64 reference. E052's opcheck.py with a Marlin mode added.
 
 opcheck.py OUT [--quick] [--marlin]
@@ -25,7 +25,7 @@ out.mkdir(parents=True, exist_ok=False)
 results = Path(I.__file__).resolve().parents[2] / 'results/e017_20261109'
 manifest = json.loads((results / 'artifacts/manifest.json').read_text())
 if marlin:
-    I.BODY = os.environ['E053_MARLIN_SHA']
+    I.BODY = os.environ['E054_MARLIN_SHA']
     op, Linear = I.Operator(), I.Linear
 else:
     op, Linear = t.Operator(), t.Linear

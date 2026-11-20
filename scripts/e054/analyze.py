@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""E053 per-node analysis (criteria predeclared in docs/EXPERIMENTS.md E053): analyze.py S
+"""E054 per-node analysis (criteria predeclared in docs/EXPERIMENTS.md E054): analyze.py S
 Reads S/cells.jsonl (one row per timed cell) and S/prof-{T,M}/ours.json (E030 gprofile output). Writes JSON to stdout.
 Cells per node/context: 2 passages x 4 series = 8. Decode = median of the 20 per-request 63-step decode times."""
 import json

@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# Local helper: emits one E053 batch script (tooling embedded, as E052). MODE: build | probe | full.
-#   scripts/e053/submit.sh build | ssh arc-off-network sbatch --parsable --partition=rtx5060ti16g --nodelist=c8
-#   scripts/e053/submit.sh probe BUILD_DIR | ssh arc-off-network sbatch --parsable --partition=P --nodelist=cN
-#   scripts/e053/submit.sh full BUILD_DIR PROBE_DIR "inspection note" | ssh ... --dependency=afterok:PROBE_JOB
-# Ours (tc_ladder) runs through t.py; Marlin and FP16 arms through t.py --marlin. Both operators are E053's multi-arch rebuilds.
+# Local helper: emits one E054 batch script (tooling embedded, as E052). MODE: build | probe | full.
+#   scripts/e054/submit.sh build | ssh arc-off-network sbatch --parsable --partition=rtx5060ti16g --nodelist=c8
+#   scripts/e054/submit.sh probe BUILD_DIR | ssh arc-off-network sbatch --parsable --partition=P --nodelist=cN
+#   scripts/e054/submit.sh full BUILD_DIR PROBE_DIR "inspection note" | ssh ... --dependency=afterok:PROBE_JOB
+# Ours (tc_ladder) runs through t.py; Marlin and FP16 arms through t.py --marlin. Both operators are E054's multi-arch rebuilds.
 set -euo pipefail
 mode=$1 build=${2:-} pre=${3:-} note=${4:-}
 case $mode in build) ;; probe) [[ -n $build ]];; full) [[ -n $build && -n $pre && -n $note ]];; *) exit 2;; esac
@@ -11,19 +11,19 @@ here=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd); root=$(cd "$here/../.." && p
 embed() { printf 'cat > "$S/%s" <<'"'"'PYEOF'"'"'\n' "$(basename "$1")"; cat "$1"; printf 'PYEOF\necho "%s  $S/%s" | sha256sum -c\n' "$(sha256sum < "$1" | cut -d' ' -f1)" "$(basename "$1")"; }
 cat <<EOF
 #!/usr/bin/env bash
-#SBATCH --job-name=w4a16-e053-$mode
+#SBATCH --job-name=w4a16-e054-$mode
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --exclusive
 #SBATCH --time=$(case $mode in build) echo 03:00:00;; probe) echo 05:00:00;; full) echo 12:00:00;; esac)
-#SBATCH --output=/tmp/e053-$mode-%j.log
+#SBATCH --output=/tmp/e054-$mode-%j.log
 MODE=$mode BUILD_NAME=$build PRE_NAME=$pre
 NOTE="$note"
 EOF
 cat <<'EOF'
 set -euo pipefail
 export E017_ROOT=/mnt/beegfs/hpuvvad/csc548-w4a16-e017-r2-20261109
-OUT=/mnt/beegfs/hpuvvad/csc548-w4a16-e053-20261119
+OUT=/mnt/beegfs/hpuvvad/csc548-w4a16-e054-20261119
 VENV=/tmp/e017-hpuvvad-20261109
 OLD_TC=/mnt/beegfs/hpuvvad/csc548-w4a16-e050-20261118/prereq-c8-343302/libe050_tc.so
 OLD_TC_SHA=a24a78fad127230f04a867e4a78e7a2a0453a6d4f0db95ea35900c7adaa971fe
@@ -45,7 +45,7 @@ grep -q 'UserId=hpuvvad' "$S/allocation.txt"; grep -q 'JobState=RUNNING' "$S/all
 T=/mnt/beegfs/hpuvvad/csc548-w4a16-e024-20261110/runtime.tar
 if [[ ! -e "$VENV/bin/python" ]]; then echo restored > "$S/runtime-restored.txt"; sha256sum -c "$T.sha256"; tar xf "$T" -C /tmp; fi
 EOF
-for f in ../e018/diagnose.py ../e021/validate.py ../e023/run.py ../e026/att.py ../e030/gprofile.py t.py opcheck.py eqcheck.py analyze.py; do embed "$here/$f"; done
+for f in ../e018/diagnose.py ../e021/validate.py ../e023/run.py ../e026/att.py ../e030/gprofile.py t.py opcheck.py eqcheck.py analyze.py torchcheck.py; do embed "$here/$f"; done
 cat <<'EOF'
 export PROJECT_ROOT=$E017_ROOT
 set +u; source "$E017_ROOT/scripts/e017/env_arc.sh"; set -u
@@ -70,7 +70,7 @@ B64
  # tc: E050's exact command (scripts/e050/inner.sh) plus SASS for sm_80/86/89/90
  (cd "$S/src" && set -x && prun timeout 3600 nvcc -O3 -DNDEBUG -std=c++17 -lineinfo "${ARCHS[@]}" "--generate-code=arch=compute_120,code=[compute_120,sm_120]" \
    -shared -Xcompiler=-fPIC -Isrc/cuda scripts/e050/tc_bridge.cu src/cuda/w4a16_tc.cu src/cuda/w4a16_tc_m32.cu \
-   src/cuda/w4a16_inblock_vec.cu src/cuda/w4a16_inblock_rows.cu src/cuda/w4a16_inblock_specialized.cu -o "$S/libe053_tc.so") > "$S/tc-build.log" 2>&1
+   src/cuda/w4a16_inblock_vec.cu src/cuda/w4a16_inblock_rows.cu src/cuda/w4a16_inblock_specialized.cu -o "$S/libe054_tc.so") > "$S/tc-build.log" 2>&1
  # Marlin: E006's exact patched source and flags (scripts/e006/build_arc.sh) plus SASS for sm_80/86/89/90; E017 runtime's torch headers
  tar xzf "$E006/results/e006_20261106/matched-source.tar.gz" -C "$S/m"
  grep ' external/patched/' "$E006/results/e006_20261106/patched/build-source.sha256" > "$S/marlin-source.sha256"
@@ -81,13 +81,13 @@ B64
  (cd "$S/m" && set -x && prun timeout 7200 nvcc -DUSE_CUDA -O3 -DNDEBUG -std=c++17 -lineinfo "${ARCHS[@]}" -gencode "arch=compute_120,code=[sm_120,compute_120]" \
    --expt-relaxed-constexpr -shared -Xcompiler=-fPIC -Xptxas=-v -Iexternal/patched/csrc/quantization/marlin -Iexternal/patched/csrc \
    -I"$TORCH_ROOT/include" -I"$TORCH_ROOT/include/torch/csrc/api/include" scripts/e005/local.cu -L"$TORCH_ROOT/lib" \
-   -ltorch -ltorch_cpu -ltorch_cuda -lc10 -lc10_cuda -Xlinker=-rpath -Xlinker="$TORCH_ROOT/lib" -o "$S/libe053_marlin.so") > "$S/marlin-build.log" 2>&1
- (cd "$S" && sha256sum libe053_tc.so libe053_marlin.so > lib.sha256)
- for x in "$S/libe053_tc.so" "$S/libe053_marlin.so" "$OLD_TC" "$OLD_M"; do echo "== $x"; cuobjdump -lelf "$x"; done > "$S/elf-list.txt" 2>&1
- cuobjdump -res-usage "$S/libe053_tc.so" > "$S/res-usage-tc.txt" 2>&1; cuobjdump -res-usage "$S/libe053_marlin.so" > "$S/res-usage-marlin.txt" 2>&1
+   -ltorch -ltorch_cpu -ltorch_cuda -lc10 -lc10_cuda -Xlinker=-rpath -Xlinker="$TORCH_ROOT/lib" -o "$S/libe054_marlin.so") > "$S/marlin-build.log" 2>&1
+ (cd "$S" && sha256sum libe054_tc.so libe054_marlin.so > lib.sha256)
+ for x in "$S/libe054_tc.so" "$S/libe054_marlin.so" "$OLD_TC" "$OLD_M"; do echo "== $x"; cuobjdump -lelf "$x"; done > "$S/elf-list.txt" 2>&1
+ cuobjdump -res-usage "$S/libe054_tc.so" > "$S/res-usage-tc.txt" 2>&1; cuobjdump -res-usage "$S/libe054_marlin.so" > "$S/res-usage-marlin.txt" 2>&1
  # sm_120 SASS of the rebuilds must equal the originals, function by function
- cuobjdump -sass -arch sm_120 "$S/libe053_tc.so" > "$S/sass120-tc-new.txt"; cuobjdump -sass -arch sm_120 "$OLD_TC" > "$S/sass120-tc-old.txt"
- cuobjdump -sass -arch sm_120 "$S/libe053_marlin.so" > "$S/sass120-marlin-new.txt"; cuobjdump -sass -arch sm_120 "$OLD_M" > "$S/sass120-marlin-old.txt"
+ cuobjdump -sass -arch sm_120 "$S/libe054_tc.so" > "$S/sass120-tc-new.txt"; cuobjdump -sass -arch sm_120 "$OLD_TC" > "$S/sass120-tc-old.txt"
+ cuobjdump -sass -arch sm_120 "$S/libe054_marlin.so" > "$S/sass120-marlin-new.txt"; cuobjdump -sass -arch sm_120 "$OLD_M" > "$S/sass120-marlin-old.txt"
  python3 - "$S" > "$S/sass-compare.json" <<'PY'
 import json, re, sys
 from pathlib import Path
@@ -108,14 +108,14 @@ for k in ('tc', 'marlin'):
 print(json.dumps(res, indent=1))
 assert all(v['identical'] for v in res.values()), res
 PY
- export E052_LIB="$S/libe053_tc.so" E053_TC_SHA=$(sha256sum < "$S/libe053_tc.so" | cut -d' ' -f1)
- export E017_LOCAL="$S/libe053_marlin.so" E053_MARLIN_SHA=$(sha256sum < "$S/libe053_marlin.so" | cut -d' ' -f1)
+ export E052_LIB="$S/libe054_tc.so" E054_TC_SHA=$(sha256sum < "$S/libe054_tc.so" | cut -d' ' -f1)
+ export E017_LOCAL="$S/libe054_marlin.so" E054_MARLIN_SHA=$(sha256sum < "$S/libe054_marlin.so" | cut -d' ' -f1)
  step eqcheck
  (set -x; prun timeout 3600 "$E017_PYTHON" "$S/eqcheck.py" "$S/eq" "$OLD_TC" "$OLD_TC_SHA" "$OLD_M" "$OLD_M_SHA") > "$S/eqcheck.log" 2>&1
 else
  (cd "$L" && sha256sum -c lib.sha256) > "$S/lib-check.log"
- export E052_LIB="$L/libe053_tc.so" E053_TC_SHA=$(grep libe053_tc.so "$L/lib.sha256" | cut -d' ' -f1)
- export E017_LOCAL="$L/libe053_marlin.so" E053_MARLIN_SHA=$(grep libe053_marlin.so "$L/lib.sha256" | cut -d' ' -f1)
+ export E052_LIB="$L/libe054_tc.so" E054_TC_SHA=$(grep libe054_tc.so "$L/lib.sha256" | cut -d' ' -f1)
+ export E017_LOCAL="$L/libe054_marlin.so" E054_MARLIN_SHA=$(grep libe054_marlin.so "$L/lib.sha256" | cut -d' ' -f1)
  { ldd "$E052_LIB"; ldd "$E017_LOCAL"; } > "$S/lib-info.txt" 2>&1
 fi
 # t KERNEL LABEL SCRIPT ARGS: KERNEL T = tc_ladder, M = corrected Marlin
@@ -131,7 +131,7 @@ case $MODE in
 build) ;;
 probe)
  step opcheck
- (set -x; prun timeout 600 "$E017_PYTHON" -c 'import torch; a=torch.randn(256,256,device="cuda").half(); print(torch.cuda.get_device_name(0), torch.cuda.get_device_capability(0), torch.version.cuda, float((a@a).float().abs().sum()))') > "$S/torch-check.log" 2>&1
+ (set -x; prun timeout 600 "$E017_PYTHON" "$S/torchcheck.py") > "$S/torch-check.log" 2>&1
  t T opcheck-tc opcheck.py "$S/opcheck-tc"
  t M opcheck-marlin opcheck.py "$S/opcheck-marlin" --marlin   # --marlin in t.py: bridge left unpatched
  step sanitizers

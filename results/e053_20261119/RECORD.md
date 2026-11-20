@@ -1,4 +1,0 @@
-# E053 working record (final result goes to docs/EXPERIMENTS.md)
-
-- 2026-11-19: predeclared, commit a70d512.
-- Build attempt 1, job 343904 (c8, 20:21-20:24 EST): FAILED (exit 1) at the sm_120 SASS comparison. Marlin: 16/16 functions identical. tc: 20/20 functions reported different, because the comparator keyed functions by mangled name and the anonymous-namespace tags (`_GLOBAL__N__<hash>_..._cu_<hash>`) encode the build path (the rebuild compiled in a different directory than E050). Offline check on the retrieved dumps with the tags normalized: 20/20 functions, 21,136 instruction/encoding lines, all identical. Comparator bug, not a code difference. eqcheck never ran. The 11 dependent probes (343905-343915) were cancelled (DependencyNeverSatisfied). Fix: normalize the tags in the comparator (`scripts/e053/submit.sh`); build rerun as a new job, nothing else changed.

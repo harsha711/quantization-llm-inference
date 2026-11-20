@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""E053 (copy of E052's t.py; library hashes from the environment): run an existing model script with the 196 block projections (and any head the script builds through
+"""E054 (copy of E052's t.py; library hashes from the environment): run an existing model script with the 196 block projections (and any head the script builds through
 `integration.Linear(..., 'Q', op)`) executed by our `tc_ladder` (E050) instead of corrected Marlin A.
 
 t.py [--marlin] SCRIPT ARGS...           runs SCRIPT (E021 validate.py, E026 att.py, E029 long.py, E031 head.py, E038 ckpt.py) unchanged
@@ -24,13 +24,13 @@ import torch
 sys.path.insert(0, str(Path(os.environ['E017_ROOT']) / 'scripts/e017'))
 import integration as I  # noqa: E402
 
-LIB_SHA = os.environ['E053_TC_SHA']  # E053 multi-arch rebuild of the E050 library (sm_120 SASS equal to E050's, part a)
+LIB_SHA = os.environ['E054_TC_SHA']  # E054 multi-arch rebuild of the E050 library (sm_120 SASS equal to E050's, part a)
 
 
 class Operator:
     """tc_ladder: M >= 64 -> tc_m32 launcher, else tc launcher (E050 bridge, unchanged). Stateless."""
 
-    def __init__(self, maxm=None, path=None, sha=None):  # maxm kept for E029 long.py; path/sha for E053 eqcheck (old library)
+    def __init__(self, maxm=None, path=None, sha=None):  # maxm kept for E029 long.py; path/sha for E054 eqcheck (old library)
         path = Path(path or os.environ['E052_LIB'])
         assert hashlib.sha256(path.read_bytes()).hexdigest() == (sha or LIB_SHA)
         self.lib = ct.CDLL(str(path))
@@ -71,7 +71,7 @@ if __name__ == '__main__':
     args = sys.argv[1:]
     if args[0] == '--marlin':
         args = args[1:]
-        I.BODY = os.environ['E053_MARLIN_SHA']  # E053 multi-arch rebuild of the corrected E006 body (E017_LOCAL points at it)
+        I.BODY = os.environ['E054_MARLIN_SHA']  # E054 multi-arch rebuild of the corrected E006 body (E017_LOCAL points at it)
     else:
         I.Operator, I.Linear, I.BODY = Operator, Linear, 'tc_ladder:' + LIB_SHA
     if args[0] == '--eager':

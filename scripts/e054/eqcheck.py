@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""E053 part a: the multi-arch rebuilds give outputs bitwise equal to the original sm_120 libraries on this GPU.
+"""E054 part a: the multi-arch rebuilds give outputs bitwise equal to the original sm_120 libraries on this GPU.
 
 eqcheck.py OUT OLD_TC OLD_TC_SHA OLD_MARLIN OLD_MARLIN_SHA
-New libraries come from the environment (E052_LIB/E053_TC_SHA, E017_LOCAL/E053_MARLIN_SHA). Seven real projection shapes,
+New libraries come from the environment (E052_LIB/E054_TC_SHA, E017_LOCAL/E054_MARLIN_SHA). Seven real projection shapes,
 M in {1, 2, 16, 64, 65, 128, 2048}, same random input for old and new, every output bit compared.
 """
 import json
@@ -23,7 +23,7 @@ results = Path(I.__file__).resolve().parents[2] / 'results/e017_20261109'
 manifest = json.loads((results / 'artifacts/manifest.json').read_text())
 
 ops = {('tc', 'new'): t.Operator(), ('tc', 'old'): t.Operator(path=old_tc, sha=old_tc_sha)}
-new_m, new_m_sha = os.environ['E017_LOCAL'], os.environ['E053_MARLIN_SHA']
+new_m, new_m_sha = os.environ['E017_LOCAL'], os.environ['E054_MARLIN_SHA']
 for label, path, sha in (('new', new_m, new_m_sha), ('old', old_m, old_m_sha)):
     os.environ['E017_LOCAL'], I.BODY = path, sha
     ops[('marlin', label)] = I.Operator()
