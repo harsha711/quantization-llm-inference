@@ -1,0 +1,4 @@
+bin/cpu_bench: OK
+bin/cpu_bench_g: OK
+bin/e057_gpu: OK
+bin/stream: OK

@@ -1,0 +1,25 @@
+sample_ms 31.475889
+sample_ms 31.530489
+sample_ms 31.650439
+sample_ms 31.222527
+sample_ms 31.250018
+sample_ms 31.554599
+sample_ms 31.329098
+sample_ms 30.793446
+sample_ms 31.725649
+sample_ms 31.658259
+sample_ms 31.591559
+sample_ms 31.780830
+sample_ms 31.255008
+sample_ms 31.739769
+sample_ms 31.381708
+sample_ms 31.462949
+sample_ms 32.412111
+sample_ms 31.736520
+sample_ms 31.398688
+sample_ms 31.450019
+sample_ms 31.474588
+sample_ms 31.595999
+1,4,4096,4096,128,1,22,31.503189,30.793446,32.412111,1,0,2.033272e-04,9.986075e-04,4035c1298a59e5bf
+[ perf record: Woken up 1 times to write data ]
+[ perf record: Captured and wrote 0.138 MB /mnt/beegfs/hpuvvad/csc548-w4a16-e057-20261120/full-c8-344144/perf/rec-M4.data (3560 samples) ]

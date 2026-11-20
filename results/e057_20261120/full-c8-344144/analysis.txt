@@ -1,0 +1,92 @@
+A4 re-time (median ms, 10 reps in full) vs E041 c58 job 342501:
+  M1   p1     26.407 ms  E041    26.566  ratio 0.994
+  M1   p16     2.089 ms  E041     2.024  ratio 1.032
+  M4   p1     31.635 ms  E041    31.286  ratio 1.011
+  M4   p16     2.462 ms  E041     2.536  ratio 0.971
+  M128 p1    242.637 ms  E041   241.245  ratio 1.006
+  M128 p16    20.065 ms  E041    19.654  ratio 1.021
+
+A1 perf stat, T1, per GEMM call = (counts at R=hi - counts at R=2) / (hi - 2), user mode, mean of 3 runs each:
+  M1   task-clock/call 26.096 ms, cycles 1.08e+08, instr 5.456e+08, IPC 5.052, clock 4.139 GHz
+       per multiply-add: cycles 6.437, instructions 32.52, L1-dcache-loads 4.015, L1-dcache-load-misses 0.1919, cache-references 0.5385, cache-misses 0.0002072, stalled-cycles-frontend 0.01589, stalled-cycles-backend 0.3012
+       ratios: L1_miss_ratio 0.0478, cache_miss_ratio 0.0004; unsupported: LLC-loads, LLC-load-misses
+  M4   task-clock/call 31.510 ms, cycles 1.304e+08, instr 6.782e+08, IPC 5.202, clock 4.138 GHz
+       per multiply-add: cycles 1.943, instructions 10.11, L1-dcache-loads 1.606, L1-dcache-load-misses 0.04865, cache-references 0.1279, cache-misses 0.0001707, stalled-cycles-frontend 0.004738, stalled-cycles-backend 0.07712
+       ratios: L1_miss_ratio 0.0303, cache_miss_ratio 0.0013; unsupported: LLC-loads, LLC-load-misses
+  M128 task-clock/call 241.908 ms, cycles 1.001e+09, instr 6.159e+09, IPC 6.153, clock 4.137 GHz
+       per multiply-add: cycles 0.4661, instructions 2.868, L1-dcache-loads 0.8246, L1-dcache-load-misses 0.003636, cache-references 0.00885, cache-misses 0.0001235, stalled-cycles-frontend 0.0006428, stalled-cycles-backend 0.002561
+       ratios: L1_miss_ratio 0.0044, cache_miss_ratio 0.0140; unsupported: LLC-loads, LLC-load-misses
+
+hotspot M1 (cycles:u samples, -g twin, whole process incl. setup/check):
+    36.98%  w4a16::cpu_w4a16_gemm
+    17.02%  w4a16::make_problem
+     5.48%  w4a16::dequantize_all_fp16
+     5.28%  w4a16::quantize_int4_groupwise
+     2.04%  w4a16::dequantize_all
+     2.02%  0x000000000007eee9
+   GEMM function 36.97% of samples; within it:
+      57.9%  4-bit unpack + LUT gather into tile (lines 29-33)
+      24.0%  FP16<->FP32 software conversion (fp16_host.h, inlined at lines 26/28/39/47)
+       9.5%  GEMM, other source (stl_vector.h)
+       6.0%  FMA loop c[n] += av*w[n] (line 41)
+       2.5%  per-group LUT build (lines 24-28, non-inlined part)
+       0.2%  activation convert / loop control (lines 37-40)
+
+hotspot M4 (cycles:u samples, -g twin, whole process incl. setup/check):
+    40.80%  w4a16::cpu_w4a16_gemm
+    16.33%  w4a16::make_problem
+     5.06%  w4a16::dequantize_all_fp16
+     4.93%  w4a16::quantize_int4_groupwise
+     2.13%  0x000000000007eee9
+     1.89%  w4a16::dequantize_all
+   GEMM function 40.83% of samples; within it:
+      49.6%  4-bit unpack + LUT gather into tile (lines 29-33)
+      22.2%  FP16<->FP32 software conversion (fp16_host.h, inlined at lines 26/28/39/47)
+      17.5%  FMA loop c[n] += av*w[n] (line 41)
+       8.4%  GEMM, other source (stl_vector.h)
+       1.7%  per-group LUT build (lines 24-28, non-inlined part)
+       0.3%  GEMM other lines (init/store/loops)
+       0.3%  activation convert / loop control (lines 37-40)
+
+hotspot M128 (cycles:u samples, -g twin, whole process incl. setup/check):
+    59.40%  w4a16::cpu_w4a16_gemm
+     8.98%  w4a16::make_problem
+     7.42%  w4a16::reference_gemm_rows
+     2.82%  w4a16::dequantize_all_fp16
+     2.67%  w4a16::quantize_int4_groupwise
+     1.05%  w4a16::dequantize_all
+   GEMM function 59.39% of samples; within it:
+      75.5%  FMA loop c[n] += av*w[n] (line 41)
+      13.4%  FP16<->FP32 software conversion (fp16_host.h, inlined at lines 26/28/39/47)
+       6.7%  4-bit unpack + LUT gather into tile (lines 29-33)
+       2.5%  activation convert / loop control (lines 37-40)
+       0.9%  GEMM, other source (stl_vector.h)
+       0.7%  GEMM other lines (init/store/loops)
+       0.4%  per-group LUT build (lines 24-28, non-inlined part)
+
+A2 average clock while computing = delta cycles:u / delta task-clock (GHz), and effective CPUs = task-clock / wall:
+  M1   p1 4.140 GHz (cpus 1.0)  p2 4.136 GHz (cpus 2.0)  p4 4.129 GHz (cpus 4.0)  p8 3.898 GHz (cpus 8.0)  p12 3.825 GHz (cpus 12.0)  p16 3.647 GHz (cpus 16.2)
+  M4   p1 4.141 GHz (cpus 1.0)  p2 4.137 GHz (cpus 2.0)  p4 4.128 GHz (cpus 4.0)  p8 3.832 GHz (cpus 8.0)  p12 3.754 GHz (cpus 12.0)  p16 3.597 GHz (cpus 16.2)
+  M128 p1 4.138 GHz (cpus 1.0)  p2 4.135 GHz (cpus 2.0)  p4 3.937 GHz (cpus 4.0)  p8 3.466 GHz (cpus 8.0)  p12 3.384 GHz (cpus 11.7)  p16 3.246 GHz (cpus 16.1)
+
+A3 STREAM (midterm source, 64M doubles = 512 MB per array; per run best of 10; median over runs), GB/s:
+  p1  Copy 46.3 [45.9-46.4]  Scale 46.2 [46.1-46.3]  Add 47.1 [47.1-47.1]  Triad 45.2 [45.1-45.5]
+  p2  Copy 66.2 [66.1-66.3]  Scale 66.2 [66.1-66.3]  Add 71.7 [71.6-71.8]  Triad 71.7 [71.5-71.9]
+  p4  Copy 66.6 [66.5-66.8]  Scale 66.4 [66.3-66.5]  Add 72.2 [72.1-72.3]  Triad 72.3 [72.2-72.4]
+  p8  Copy 67.0 [67.0-67.1]  Scale 66.8 [66.7-66.9]  Add 72.9 [72.9-72.9]  Triad 73.1 [73.1-73.2]
+  p12 Copy 91.9 [91.7-92.1]  Scale 91.2 [91.2-91.4]  Add 100.7 [100.5-101.0]  Triad 101.1 [101.0-101.2]
+  p16 Copy 113.7 [113.6-113.7]  Scale 112.5 [112.5-112.6]  Add 125.9 [125.9-126.1]  Triad 126.1 [126.0-126.2]
+
+B GPU (device,NVIDIA GeForce RTX 5060 Ti,sm_120,SMs=36,L2=33554432,attr_clock_khz=2617000,attr_mem_clock_khz=14001000,bus_bits=128,driver=13030,runtime=13040,mode=full)
+  D2D cudaMemcpy 1073741824 B (read+write counted): median 5.565 ms -> 385.9 GB/s = 86.1% of 448 GB/s spec
+  read-only kernel, best of 12 configs (max of medians): 427.2 GB/s = 95.4% of spec (unroll 4, 4 blocks/SM); range 425.5-427.2
+  mma.m16n8k16 f32.f16.f16.f32 best of 32 configs: 51.84 TFLOP/s = 109.3% of 47.4 nominal (nacc 4, 8 warps/block, 4 blocks/SM)
+  confirmation run (200 launches): 51.84 TFLOP/s = 109.4% of nominal
+  SM clock during confirmation: median 2812 MHz (min 2812, max 2812, 38 samples) -> 512 FLOP/clk/SM; 512 FLOP/clk/SM at that clock = 51.83 TFLOP/s
+  clocks during copy        SM median 180 [180-2812] MHz, mem median 405 MHz, power median 4.68 W, pstate P1,P8, n=6
+  clocks during read        SM median 2805 [2805-2812] MHz, mem median 13801 MHz, power median 83.37 W, pstate P1, n=31
+  clocks during mma         SM median 2812 [2805-2812] MHz, mem median 13801 MHz, power median 45.28 W, pstate P1, n=202
+  clocks during mma_confirm SM median 2812 [2812-2812] MHz, mem median 13801 MHz, power median 44.72 W, pstate P1, n=38
+  SASS HMMA forms: 440 HMMA.16816.F32
+
+failures: 0

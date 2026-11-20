@@ -1,0 +1,4 @@
+(none) prereq c8 submission failed 2026-11-20T00:31:28-05:00: submit.sh not executable (Permission denied), sbatch got an empty script and rejected it; no job created; resubmitted with 'bash scripts/e057/submit.sh'
+344143 prereq c8 submitted 2026-11-20T00:31:29-05:00 from commit 0151a50
+344143 prereq c8 finished 00:33 EST exit 0, inspected; retrieved via ~/e057-prereq-c8-344143.tgz (sha256 68d9d81c...1749 identical after scp)
+344144 full c8 afterok:344143 submitted 2026-11-20T00:34:18-05:00 from commit 295396b (prereq inspected)

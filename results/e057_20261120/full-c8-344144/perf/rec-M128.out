@@ -1,0 +1,10 @@
+sample_ms 237.374532
+sample_ms 240.110109
+sample_ms 235.927924
+sample_ms 235.957283
+sample_ms 240.871284
+sample_ms 238.885302
+sample_ms 237.038360
+1,128,4096,4096,128,1,7,237.374532,235.927924,240.871284,1,0,2.075036e-04,1.946221e-03,df892185f2df8f2a
+[ perf record: Woken up 1 times to write data ]
+[ perf record: Captured and wrote 0.247 MB /mnt/beegfs/hpuvvad/csc548-w4a16-e057-20261120/full-c8-344144/perf/rec-M128.data (6417 samples) ]

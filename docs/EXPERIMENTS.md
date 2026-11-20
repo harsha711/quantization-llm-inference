@@ -35,6 +35,76 @@ Checks (outside timing; criteria are completeness and correctness only): E041 so
 
 Limits fixed now: descriptive measurements on one node; the CPU numbers are for E041's untuned portable kernel; generic perf events map to model-specific PMU events (recorded) and differ in meaning from the midterm's Intel node; whole-process sampling includes setup; read-only and copy bandwidths are achieved values of these kernels (lower bounds on the device's bandwidth), and the tensor rate is a lower bound for this one instruction shape at the clocks the GPU chose; maxima over a configuration sweep are mildly biased upward (hence the confirmation run); no CPU compute roof is derived here. ARC: one inspected prerequisite (build, checks, perf probe, short versions of every part, memcheck) then one full job with `afterok`, both `--nodelist=c8 --exclusive`; `scripts/e057/submit.sh prereq|full`. New files only: `scripts/e057/`, `results/e057_20261120/`, BeeGFS `csc548-w4a16-e057-20261120`.
 
+Attempts: submission 1 (2026-11-20 00:31, commit `0151a50`) never reached Slurm: `scripts/e057/submit.sh` is not executable, so the pipe gave `sbatch` an empty script ("Batch script is empty!"); no job was created; resubmitted as `bash scripts/e057/submit.sh` (`results/e057_20261120/submissions.txt`). Prerequisite 344143 (c8, 00:31–00:33 EST, commit `0151a50`, exit 0) inspected before the full job: build, CTest 2/2, `check_inblock.sh` (racecheck 0 hazards), `-g` twin disassembly IDENTICAL to the production `cpu_bench`, memcheck of the tiny microbenchmark 0 errors, perf present (`perf` 4.18.0-553, `perf_event_paranoid` 2, user-mode counting works; LLC-loads/LLC-load-misses "not supported by the kernel"), every check passed. The inspection found one analyzer bug: in perf's `symbol,srcline` table the last column is IPC, not the source line, so the within-GEMM grouping was empty; fixed in `295396b` (parsing only; no measurement or binary changed). Full 344144 (c8, `afterok:344143`, 00:34–00:41, commit `295396b`, exit 0, first attempt) used the prerequisite's binaries (hashes checked; sources hash-equal). Each job tarred its BeeGFS directory to ARC home; tars copied with `scp`, hashes identical (`results/e057_20261120/retrieval-tgz.sha256`: job-written lines first, local lines after), every file matches its job-written `all.sha256`. No measurement failed.
+
+### Result (job 344144, c8, 2026-11-20): measured roofs — CPU STREAM Triad 126 GB/s at 16 threads, 45 GB/s at 1; GPU 427 GB/s read-only (95% of 448), 386 GB/s copy (86%), 51.8 TFLOP/s `mma.sync` (109% of the nominal 47.4, = 512 FLOP/clk/SM at the observed 2812 MHz)
+
+`results/e057_20261120/full-c8-344144/` (`analysis.txt`, `analysis.json`, `perf/`, `stream/`, `b-gpu.txt`, `b-clk-*.csv`). Node c8 (substituted for c58, see predeclaration): AMD EPYC 9115 16-core, 1 NUMA node, 32 MiB L3, governor `performance` on all 16 cores, boost on; RTX 5060 Ti, driver 610.57.04 (driver API 13.3), CUDA runtime/nvcc 13.4, GCC 12.4.0. All criteria met: every `cpu_bench` run passes the FP64 check with output hashes equal to E041's at every p and M; copy mismatches 0; all 12 read sums exact; one-tile MMA max |err| 2.2e−7 (6.8e−8 of Σ|terms|); all 33 timed MMA runs exact; SASS 440 `HMMA.16816.F32`; analyzer 0 failures.
+
+A4 — re-time vs E041 (c58, job 342501), median of 10, ms (measured; ratio = calculation): M1 T1 26.41 (E041 26.57, 0.994), T16 2.089 (2.024, 1.032); M4 T1 31.63 (31.29, 1.011), T16 2.462 (2.536, 0.971); M128 T1 242.64 (241.24, 1.006), T16 20.07 (19.65, 1.021). T1 within 1.1%, T16 within 3.2%: the c8 substitution reproduces E041.
+
+A1 — perf stat at T1, per GEMM call (Δ of R_hi vs 2 calls, user mode, mean of 3 runs per count; measured counts, per-multiply-add = calculation with M·N·K = 16.8 M / 67.1 M / 2.15 G):
+
+| per call | M1 | M4 | M128 |
+|---|---:|---:|---:|
+| task-clock (ms) | 26.10 | 31.51 | 241.9 |
+| cycles | 1.080e8 | 1.304e8 | 1.001e9 |
+| instructions | 5.456e8 | 6.782e8 | 6.159e9 |
+| IPC | 5.05 | 5.20 | 6.15 |
+| clock (cycles ÷ task-clock) | 4.139 GHz | 4.138 GHz | 4.137 GHz |
+| cycles / multiply-add | 6.44 | 1.94 | 0.466 |
+| instructions / multiply-add | 32.5 | 10.1 | 2.87 |
+| L1-dcache-loads / multiply-add | 4.02 | 1.61 | 0.825 |
+| L1-dcache-load-misses / multiply-add (miss ratio) | 0.192 (4.8%) | 0.049 (3.0%) | 0.0036 (0.44%) |
+| cache-references / multiply-add | 0.539 | 0.128 | 0.0089 |
+| cache-misses / multiply-add | 0.00021 | 0.00017 | 0.00012 |
+| stalled-cycles-backend / multiply-add | 0.30 | 0.077 | 0.0026 |
+| cycles per weight element (calc., ×M) | 6.44 | 7.77 | 59.7 |
+
+LLC-loads/LLC-load-misses: UNAVAILABLE (kernel: "not supported"; AMD's L3 counters are an uncore PMU that needs system-wide access, not permitted at paranoid 2). `cache-references`/`cache-misses` are Linux generic events (config 0x2/0x3, `perf/event-mapping.txt`); which Zen 5 cache level they count on this 4.18 kernel was not resolved, so they are reported as generic events, never as LLC or DRAM traffic. Stalled-cycles-frontend is near zero/noisy (0.016/0.005/0.0006 per multiply-add).
+
+Hotspot (perf record cycles:u, `-g` twin, T1, whole process): the GEMM function is 37.0% / 40.8% / 59.4% of samples at M1/M4/M128 (the rest is operand generation, quantization and the FP64 check, which A1 removes by differencing). Inside `cpu_w4a16_gemm`, by the predeclared source-line groups:
+
+| share of GEMM samples | M1 | M4 | M128 |
+|---|---:|---:|---:|
+| 4-bit unpack + LUT gather into tile (lines 29–33) | 57.9% | 49.6% | 6.7% |
+| inlined FP16↔FP32 software conversion (`fp16_host.h`) | 24.0% | 22.2% | 13.4% |
+| FMA loop `c[n] += av*w[n]` (line 41) | 6.0% | 17.5% | 75.5% |
+| `std::vector` / `std::fill` code (stl_vector.h) | 9.5% | 8.4% | 0.9% |
+| LUT build (lines 24–28, non-inlined) | 2.5% | 1.7% | 0.4% |
+| activation conversion/loop (lines 37–40) + other lines | 0.2% | 0.6% | 3.2% |
+
+A2 — average clock while computing (Δcycles:u ÷ Δtask-clock, GHz; measured counts, ratio = calculation), effective CPUs 1.0–16.2 (= p within differencing noise):
+
+| p | 1 | 2 | 4 | 8 | 12 | 16 |
+|---|---:|---:|---:|---:|---:|---:|
+| M1 | 4.140 | 4.136 | 4.129 | 3.898 | 3.825 | 3.647 |
+| M4 | 4.141 | 4.137 | 4.128 | 3.832 | 3.754 | 3.597 |
+| M128 | 4.138 | 4.135 | 3.937 | 3.466 | 3.384 | 3.246 |
+
+A3 — STREAM (midterm source; median of 5 runs of best-of-10, GB/s; run-to-run range ≤ 0.5 GB/s):
+
+| p | 1 | 2 | 4 | 8 | 12 | 16 |
+|---|---:|---:|---:|---:|---:|---:|
+| Copy | 46.3 | 66.2 | 66.6 | 67.0 | 91.9 | 113.7 |
+| Scale | 46.2 | 66.2 | 66.4 | 66.8 | 91.2 | 112.5 |
+| Add | 47.1 | 71.7 | 72.2 | 72.9 | 100.7 | 125.9 |
+| Triad | 45.2 | 71.7 | 72.3 | 73.1 | 101.1 | 126.1 |
+
+Part B — GPU (CUDA events, medians; GB/s = 10^9 B/s; % = calculation):
+- Copy: `cudaMemcpyAsync` D2D 1 GiB, 100 copies, median 5.565 ms → 385.9 GB/s counted read + write = 86.1% of 448.
+- Read-only kernel, 1 GiB, 12 configurations × 100 launches: 425.5–427.2 GB/s (insensitive to unroll/blocks); maximum of medians 427.2 GB/s (unroll 4, 4 blocks/SM) = 95.4% of 448. Memory clock during the read phase was 13801 MHz (P1) rather than the 14001 MHz maximum; at 13801 MHz the bus would give 441.6 GB/s (calculation), of which 427.2 is 96.7%.
+- Tensor rate, `mma.sync.m16n8k16.row.col.f32.f16.f16.f32` only: 32 configurations 48.18–51.84 TFLOP/s (only NACC = 1 with 4 warps/block and ≤ 2 blocks/SM is below 51); maximum 51.84 TFLOP/s (NACC 4, 8 warps/block, 4 blocks/SM); 200-launch confirmation 51.84 TFLOP/s = 109.4% of the nominal 47.4. SM clock during the confirmation 2812 MHz in all 38 samples (P1, about 45 W of 180 W); 51.84 TFLOP/s ÷ (36 × 2.812 GHz) = 512.0 FLOP/clk/SM (calculation). So the 47.4 figure's 512 FLOP/clk/SM is confirmed as this instruction's rate, and the gap is the clock: 2.572 GHz nominal boost against 2.812 GHz observed (`clocks.max.sm` 3090 MHz). Label: measured lower bound on the dense FP16-input/FP32-accumulate tensor rate, at the clock the GPU chose.
+- Clocks: before Part B P8 180/405 MHz (idle); read phase SM 2805–2812 MHz, memory 13801 MHz, ~83 W; MMA phases SM 2805–2812 MHz; after P0 2812/14001 MHz. The copy phase's six samples mostly show idle clocks (180 MHz, P8 → P1): the 0.6 s phase started from idle and 100 ms `nvidia-smi` samples lag the GPU, so no clock is quoted for the copy.
+
+Observations (interpretation, not measured causes):
+- The CPU kernel is compute/instruction-bound, not bandwidth-bound, consistent with E041: IPC 5.1–6.2 at 4.14 GHz, L1 miss ratios 0.4–4.8%, and E041's M1 p16 weight stream of about 4.3 GB/s is 3.4% of the measured 16-thread Triad (calculation). At M1/M4 most GEMM time is the scalar 4-bit unpack/LUT gather and software FP16 conversion (72–82% of GEMM samples); at M128 the FMA loop dominates (75.5%), as the unpack is amortized over 128 rows. Instructions per multiply-add fall from 32.5 (M1) to 2.87 (M128) for the same reason.
+- The all-core clock drop (4.14 → 3.25–3.65 GHz at p = 16, deeper at M128) is part of E041's E16 loss of 0.77–0.82 (hypothesis; a clock-only correction assumes time scales with clock).
+- STREAM plateaus at 66–73 GB/s from p = 2 to 8 with `OMP_PLACES=cores, close` and rises again at 12 and 16; a plausible reading is that the first eight cores share one chiplet's link to memory (hypothesis: the CCD layout of c8 was not recorded).
+- GPU: the read-only kernel reaches 95% of the 448 GB/s specification and the copy 86%; the tensor instruction runs at its documented per-clock rate at the observed clock, so roofline compute fractions computed against 47.4 TFLOP/s are about 9% too high for this node's clocks.
+
+Limits as predeclared, plus: c8 instead of c58 (same CPU model; A4 reproduces E041 within 3.2%); maxima over configuration sweeps are mildly selection-biased (the confirmation run equals the sweep maximum); per-phase GPU clocks are 100 ms samples. No CPU compute roof is derived. Descriptive only; no kernel or default changes.
+
 ## E056 — Why is our path slower than vLLM, measured with our latest kernel? (E030 per-step kernel profile replayed with `tc_ladder`)
 
 Predeclared 2026-11-19 at the user's request (a fresh run so the record has current values for "why our path is slower than vLLM" with our latest kernel; AGENTS "Latest-kernel replay"), before any E056 job. Diagnostic only: no kernel, model, gate, tolerance or protocol change, no optimization, no acceptance gate. Gap it fills: E030's call counts and per-group device times (vLLM 112 GEMM calls vs our 196, 276 other launches vs our 1264, FP16 head 1169 µs in both) were measured only on the Marlin path (c51, 2026-11-10); E054 part d profiled `tc_ladder` and Marlin with the same script but without vLLM, so no same-job ours-versus-vLLM split exists for our kernel.

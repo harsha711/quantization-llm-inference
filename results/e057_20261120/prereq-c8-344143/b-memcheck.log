@@ -1,0 +1,61 @@
+========= COMPUTE-SANITIZER
+device,NVIDIA GeForce RTX 5060 Ti,sm_120,SMs=36,L2=33554432,attr_clock_khz=2617000,attr_mem_clock_khz=14001000,bus_bits=128,driver=13030,runtime=13040,mode=tiny
+PHASE copy begin 1795152775856
+copy_sample_ms 0.014304
+copy_sample_ms 0.013568
+copy,bytes_per_copy=1048576,counted_bytes=2097152,warm=1,reps=2,median_ms=0.013936,min_ms=0.013568,max_ms=0.014304,GBps=150.485,mismatches=0
+PHASE copy end 1795152775857
+PHASE read begin 1795152775857
+read,bytes=1048576,unroll=2,blocks_per_sm=2,blocks=72,threads=256,warm=1,reps=2,median_ms=0.043248,min_ms=0.042208,max_ms=0.044288,GBps=24.246,sum_ok=1
+read,bytes=1048576,unroll=2,blocks_per_sm=4,blocks=144,threads=256,warm=1,reps=2,median_ms=0.046032,min_ms=0.045280,max_ms=0.046784,GBps=22.779,sum_ok=1
+read,bytes=1048576,unroll=2,blocks_per_sm=8,blocks=288,threads=256,warm=1,reps=2,median_ms=0.044768,min_ms=0.044544,max_ms=0.044992,GBps=23.422,sum_ok=1
+read,bytes=1048576,unroll=2,blocks_per_sm=16,blocks=576,threads=256,warm=1,reps=2,median_ms=0.051200,min_ms=0.050976,max_ms=0.051424,GBps=20.480,sum_ok=1
+read,bytes=1048576,unroll=4,blocks_per_sm=2,blocks=72,threads=256,warm=1,reps=2,median_ms=0.043776,min_ms=0.043360,max_ms=0.044192,GBps=23.953,sum_ok=1
+read,bytes=1048576,unroll=4,blocks_per_sm=4,blocks=144,threads=256,warm=1,reps=2,median_ms=0.045056,min_ms=0.044608,max_ms=0.045504,GBps=23.273,sum_ok=1
+read,bytes=1048576,unroll=4,blocks_per_sm=8,blocks=288,threads=256,warm=1,reps=2,median_ms=0.046176,min_ms=0.045152,max_ms=0.047200,GBps=22.708,sum_ok=1
+read,bytes=1048576,unroll=4,blocks_per_sm=16,blocks=576,threads=256,warm=1,reps=2,median_ms=0.048528,min_ms=0.048352,max_ms=0.048704,GBps=21.608,sum_ok=1
+read,bytes=1048576,unroll=8,blocks_per_sm=2,blocks=72,threads=256,warm=1,reps=2,median_ms=0.042000,min_ms=0.040672,max_ms=0.043328,GBps=24.966,sum_ok=1
+read,bytes=1048576,unroll=8,blocks_per_sm=4,blocks=144,threads=256,warm=1,reps=2,median_ms=0.045536,min_ms=0.045440,max_ms=0.045632,GBps=23.027,sum_ok=1
+read,bytes=1048576,unroll=8,blocks_per_sm=8,blocks=288,threads=256,warm=1,reps=2,median_ms=0.045312,min_ms=0.044160,max_ms=0.046464,GBps=23.141,sum_ok=1
+read,bytes=1048576,unroll=8,blocks_per_sm=16,blocks=576,threads=256,warm=1,reps=2,median_ms=0.049632,min_ms=0.048960,max_ms=0.050304,GBps=21.127,sum_ok=1
+PHASE read end 1795152775860
+mma_tile,max_abs_err=2.235e-07,max_err_over_abs_sum=6.831e-08,pass=1
+PHASE mma begin 1795152775860
+mma,nacc=1,warps_per_block=4,blocks_per_sm=1,blocks=36,iters=694,mma_per_launch=99936,warm=1,reps=2,median_ms=0.044512,min_ms=0.043104,max_ms=0.045920,TFLOPs=9.1961,bad_outputs=0
+mma,nacc=1,warps_per_block=4,blocks_per_sm=2,blocks=72,iters=347,mma_per_launch=99936,warm=1,reps=2,median_ms=0.046928,min_ms=0.046336,max_ms=0.047520,TFLOPs=8.7227,bad_outputs=0
+mma,nacc=1,warps_per_block=4,blocks_per_sm=4,blocks=144,iters=174,mma_per_launch=100224,warm=1,reps=2,median_ms=0.058112,min_ms=0.056672,max_ms=0.059552,TFLOPs=7.0642,bad_outputs=0
+mma,nacc=1,warps_per_block=4,blocks_per_sm=8,blocks=288,iters=87,mma_per_launch=100224,warm=1,reps=2,median_ms=0.089536,min_ms=0.089536,max_ms=0.089536,TFLOPs=4.5849,bad_outputs=0
+mma,nacc=1,warps_per_block=8,blocks_per_sm=1,blocks=36,iters=347,mma_per_launch=99936,warm=1,reps=2,median_ms=0.048384,min_ms=0.048288,max_ms=0.048480,TFLOPs=8.4602,bad_outputs=0
+mma,nacc=1,warps_per_block=8,blocks_per_sm=2,blocks=72,iters=174,mma_per_launch=100224,warm=1,reps=2,median_ms=0.055744,min_ms=0.054688,max_ms=0.056800,TFLOPs=7.3643,bad_outputs=0
+mma,nacc=1,warps_per_block=8,blocks_per_sm=4,blocks=144,iters=87,mma_per_launch=100224,warm=1,reps=2,median_ms=0.087376,min_ms=0.087264,max_ms=0.087488,TFLOPs=4.6983,bad_outputs=0
+mma,nacc=1,warps_per_block=8,blocks_per_sm=8,blocks=288,iters=43,mma_per_launch=99072,warm=1,reps=2,median_ms=0.163056,min_ms=0.160832,max_ms=0.165280,TFLOPs=2.4887,bad_outputs=0
+mma,nacc=2,warps_per_block=4,blocks_per_sm=1,blocks=36,iters=347,mma_per_launch=99936,warm=1,reps=2,median_ms=0.046992,min_ms=0.046560,max_ms=0.047424,TFLOPs=8.7108,bad_outputs=0
+mma,nacc=2,warps_per_block=4,blocks_per_sm=2,blocks=72,iters=174,mma_per_launch=100224,warm=1,reps=2,median_ms=0.055456,min_ms=0.055424,max_ms=0.055488,TFLOPs=7.4026,bad_outputs=0
+mma,nacc=2,warps_per_block=4,blocks_per_sm=4,blocks=144,iters=87,mma_per_launch=100224,warm=1,reps=2,median_ms=0.070304,min_ms=0.069536,max_ms=0.071072,TFLOPs=5.8392,bad_outputs=0
+mma,nacc=2,warps_per_block=4,blocks_per_sm=8,blocks=288,iters=43,mma_per_launch=99072,warm=1,reps=2,median_ms=0.117584,min_ms=0.117216,max_ms=0.117952,TFLOPs=3.4511,bad_outputs=0
+mma,nacc=2,warps_per_block=8,blocks_per_sm=1,blocks=36,iters=174,mma_per_launch=100224,warm=1,reps=2,median_ms=0.056224,min_ms=0.055680,max_ms=0.056768,TFLOPs=7.3015,bad_outputs=0
+mma,nacc=2,warps_per_block=8,blocks_per_sm=2,blocks=72,iters=87,mma_per_launch=100224,warm=1,reps=2,median_ms=0.070512,min_ms=0.070112,max_ms=0.070912,TFLOPs=5.8220,bad_outputs=0
+mma,nacc=2,warps_per_block=8,blocks_per_sm=4,blocks=144,iters=43,mma_per_launch=99072,warm=1,reps=2,median_ms=0.114672,min_ms=0.114176,max_ms=0.115168,TFLOPs=3.5388,bad_outputs=0
+mma,nacc=2,warps_per_block=8,blocks_per_sm=8,blocks=288,iters=22,mma_per_launch=101376,warm=1,reps=2,median_ms=0.221280,min_ms=0.220576,max_ms=0.221984,TFLOPs=1.8765,bad_outputs=0
+mma,nacc=4,warps_per_block=4,blocks_per_sm=1,blocks=36,iters=174,mma_per_launch=100224,warm=1,reps=2,median_ms=0.054864,min_ms=0.052480,max_ms=0.057248,TFLOPs=7.4825,bad_outputs=0
+mma,nacc=4,warps_per_block=4,blocks_per_sm=2,blocks=72,iters=87,mma_per_launch=100224,warm=1,reps=2,median_ms=0.070096,min_ms=0.069056,max_ms=0.071136,TFLOPs=5.8565,bad_outputs=0
+mma,nacc=4,warps_per_block=4,blocks_per_sm=4,blocks=144,iters=43,mma_per_launch=99072,warm=1,reps=2,median_ms=0.096944,min_ms=0.096352,max_ms=0.097536,TFLOPs=4.1859,bad_outputs=0
+mma,nacc=4,warps_per_block=4,blocks_per_sm=8,blocks=288,iters=22,mma_per_launch=101376,warm=1,reps=2,median_ms=0.172800,min_ms=0.172224,max_ms=0.173376,TFLOPs=2.4030,bad_outputs=0
+mma,nacc=4,warps_per_block=8,blocks_per_sm=1,blocks=36,iters=87,mma_per_launch=100224,warm=1,reps=2,median_ms=0.070912,min_ms=0.070688,max_ms=0.071136,TFLOPs=5.7891,bad_outputs=0
+mma,nacc=4,warps_per_block=8,blocks_per_sm=2,blocks=72,iters=43,mma_per_launch=99072,warm=1,reps=2,median_ms=0.096080,min_ms=0.094624,max_ms=0.097536,TFLOPs=4.2236,bad_outputs=0
+mma,nacc=4,warps_per_block=8,blocks_per_sm=4,blocks=144,iters=22,mma_per_launch=101376,warm=1,reps=2,median_ms=0.170288,min_ms=0.169248,max_ms=0.171328,TFLOPs=2.4384,bad_outputs=0
+mma,nacc=4,warps_per_block=8,blocks_per_sm=8,blocks=288,iters=11,mma_per_launch=101376,warm=1,reps=2,median_ms=0.333152,min_ms=0.330944,max_ms=0.335360,TFLOPs=1.2464,bad_outputs=0
+mma,nacc=8,warps_per_block=4,blocks_per_sm=1,blocks=36,iters=87,mma_per_launch=100224,warm=1,reps=2,median_ms=0.081056,min_ms=0.077184,max_ms=0.084928,TFLOPs=5.0646,bad_outputs=0
+mma,nacc=8,warps_per_block=4,blocks_per_sm=2,blocks=72,iters=43,mma_per_launch=99072,warm=1,reps=2,median_ms=0.099680,min_ms=0.098560,max_ms=0.100800,TFLOPs=4.0710,bad_outputs=0
+mma,nacc=8,warps_per_block=4,blocks_per_sm=4,blocks=144,iters=22,mma_per_launch=101376,warm=1,reps=2,median_ms=0.153328,min_ms=0.151872,max_ms=0.154784,TFLOPs=2.7082,bad_outputs=0
+mma,nacc=8,warps_per_block=4,blocks_per_sm=8,blocks=288,iters=11,mma_per_launch=101376,warm=1,reps=2,median_ms=0.283296,min_ms=0.282784,max_ms=0.283808,TFLOPs=1.4657,bad_outputs=0
+mma,nacc=8,warps_per_block=8,blocks_per_sm=1,blocks=36,iters=43,mma_per_launch=99072,warm=1,reps=2,median_ms=0.102720,min_ms=0.101568,max_ms=0.103872,TFLOPs=3.9505,bad_outputs=0
+mma,nacc=8,warps_per_block=8,blocks_per_sm=2,blocks=72,iters=22,mma_per_launch=101376,warm=1,reps=2,median_ms=0.151312,min_ms=0.149920,max_ms=0.152704,TFLOPs=2.7442,bad_outputs=0
+mma,nacc=8,warps_per_block=8,blocks_per_sm=4,blocks=144,iters=11,mma_per_launch=101376,warm=1,reps=2,median_ms=0.280768,min_ms=0.279648,max_ms=0.281888,TFLOPs=1.4789,bad_outputs=0
+mma,nacc=8,warps_per_block=8,blocks_per_sm=8,blocks=288,iters=5,mma_per_launch=92160,warm=1,reps=2,median_ms=0.559360,min_ms=0.558336,max_ms=0.560384,TFLOPs=0.6749,bad_outputs=0
+PHASE mma end 1795152775882
+PHASE mma_confirm begin 1795152775882
+mma_confirm,nacc=1,warps_per_block=4,blocks_per_sm=1,blocks=36,iters=694,mma_per_launch=99936,warm=1,reps=2,median_ms=0.041808,min_ms=0.041408,max_ms=0.042208,TFLOPs=9.7909,bad_outputs=0
+PHASE mma_confirm end 1795152775882
+failures,0
+========= ERROR SUMMARY: 0 errors

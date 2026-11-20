@@ -1,0 +1,4 @@
+# started on Fri Nov 20 00:32:11 2026
+
+36752160,,stalled-cycles-frontend:u,2.71%,1152474378,100.00,,
+27665966,,stalled-cycles-backend:u,0.77%,1152474378,100.00,0.00,backend cycles idle

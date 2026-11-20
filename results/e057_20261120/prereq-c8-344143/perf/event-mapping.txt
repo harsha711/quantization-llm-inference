@@ -1,0 +1,192 @@
+Using CPUID AuthenticAMD-26-2-1
+Control descriptor is not initialized
+------------------------------------------------------------
+perf_event_attr:
+  size                             120
+  sample_type                      IDENTIFIER
+  read_format                      TOTAL_TIME_ENABLED|TOTAL_TIME_RUNNING
+  disabled                         1
+  inherit                          1
+  exclude_kernel                   1
+  exclude_hv                       1
+  enable_on_exec                   1
+  exclude_guest                    1
+------------------------------------------------------------
+sys_perf_event_open: pid 1836482  cpu -1  group_fd -1  flags 0x8 = 3
+------------------------------------------------------------
+perf_event_attr:
+  size                             120
+  config                           0x1
+  sample_type                      IDENTIFIER
+  read_format                      TOTAL_TIME_ENABLED|TOTAL_TIME_RUNNING
+  disabled                         1
+  inherit                          1
+  exclude_kernel                   1
+  exclude_hv                       1
+  enable_on_exec                   1
+  exclude_guest                    1
+------------------------------------------------------------
+sys_perf_event_open: pid 1836482  cpu -1  group_fd -1  flags 0x8 = 4
+------------------------------------------------------------
+perf_event_attr:
+  type                             3
+  size                             120
+  sample_type                      IDENTIFIER
+  read_format                      TOTAL_TIME_ENABLED|TOTAL_TIME_RUNNING
+  disabled                         1
+  inherit                          1
+  exclude_kernel                   1
+  exclude_hv                       1
+  enable_on_exec                   1
+  exclude_guest                    1
+------------------------------------------------------------
+sys_perf_event_open: pid 1836482  cpu -1  group_fd -1  flags 0x8 = 5
+------------------------------------------------------------
+perf_event_attr:
+  type                             3
+  size                             120
+  config                           0x10000
+  sample_type                      IDENTIFIER
+  read_format                      TOTAL_TIME_ENABLED|TOTAL_TIME_RUNNING
+  disabled                         1
+  inherit                          1
+  exclude_kernel                   1
+  exclude_hv                       1
+  enable_on_exec                   1
+  exclude_guest                    1
+------------------------------------------------------------
+sys_perf_event_open: pid 1836482  cpu -1  group_fd -1  flags 0x8 = 7
+------------------------------------------------------------
+perf_event_attr:
+  size                             120
+  config                           0x2
+  sample_type                      IDENTIFIER
+  read_format                      TOTAL_TIME_ENABLED|TOTAL_TIME_RUNNING
+  disabled                         1
+  inherit                          1
+  exclude_kernel                   1
+  exclude_hv                       1
+  enable_on_exec                   1
+  exclude_guest                    1
+------------------------------------------------------------
+sys_perf_event_open: pid 1836482  cpu -1  group_fd -1  flags 0x8 = 8
+------------------------------------------------------------
+perf_event_attr:
+  size                             120
+  config                           0x3
+  sample_type                      IDENTIFIER
+  read_format                      TOTAL_TIME_ENABLED|TOTAL_TIME_RUNNING
+  disabled                         1
+  inherit                          1
+  exclude_kernel                   1
+  exclude_hv                       1
+  enable_on_exec                   1
+  exclude_guest                    1
+------------------------------------------------------------
+sys_perf_event_open: pid 1836482  cpu -1  group_fd -1  flags 0x8 = 9
+------------------------------------------------------------
+perf_event_attr:
+  type                             3
+  size                             120
+  config                           0x2
+  sample_type                      IDENTIFIER
+  read_format                      TOTAL_TIME_ENABLED|TOTAL_TIME_RUNNING
+  disabled                         1
+  inherit                          1
+  exclude_kernel                   1
+  exclude_hv                       1
+  enable_on_exec                   1
+  exclude_guest                    1
+------------------------------------------------------------
+sys_perf_event_open: pid 1836482  cpu -1  group_fd -1  flags 0x8
+sys_perf_event_open failed, error -2
+Warning:
+LLC-loads event is not supported by the kernel.
+------------------------------------------------------------
+perf_event_attr:
+  type                             3
+  size                             120
+  config                           0x10002
+  sample_type                      IDENTIFIER
+  read_format                      TOTAL_TIME_ENABLED|TOTAL_TIME_RUNNING
+  disabled                         1
+  inherit                          1
+  exclude_kernel                   1
+  exclude_hv                       1
+  enable_on_exec                   1
+  exclude_guest                    1
+------------------------------------------------------------
+sys_perf_event_open: pid 1836482  cpu -1  group_fd -1  flags 0x8
+sys_perf_event_open failed, error -2
+Warning:
+LLC-load-misses event is not supported by the kernel.
+------------------------------------------------------------
+perf_event_attr:
+  size                             120
+  config                           0x7
+  sample_type                      IDENTIFIER
+  read_format                      TOTAL_TIME_ENABLED|TOTAL_TIME_RUNNING
+  disabled                         1
+  inherit                          1
+  exclude_kernel                   1
+  exclude_hv                       1
+  enable_on_exec                   1
+  exclude_guest                    1
+------------------------------------------------------------
+sys_perf_event_open: pid 1836482  cpu -1  group_fd -1  flags 0x8 = 10
+------------------------------------------------------------
+perf_event_attr:
+  size                             120
+  config                           0x8
+  sample_type                      IDENTIFIER
+  read_format                      TOTAL_TIME_ENABLED|TOTAL_TIME_RUNNING
+  disabled                         1
+  inherit                          1
+  exclude_kernel                   1
+  exclude_hv                       1
+  enable_on_exec                   1
+  exclude_guest                    1
+------------------------------------------------------------
+sys_perf_event_open: pid 1836482  cpu -1  group_fd -1  flags 0x8 = 11
+cycles:u: 0: 200597 257490 257490
+instructions:u: 0: 246278 257490 257490
+L1-dcache-loads: 0: 110163 257490 257490
+L1-dcache-load-misses: 0: 1317 257490 257490
+cache-references:u: 0: 12337 257490 257490
+cache-misses:u: 0: 0 257490 0
+stalled-cycles-frontend:u: 0: 0 257490 0
+stalled-cycles-backend:u: 0: 0 257490 0
+cycles:u: 200597 257490 257490
+instructions:u: 246278 257490 257490
+L1-dcache-loads: 110163 257490 257490
+L1-dcache-load-misses: 1317 257490 257490
+cache-references:u: 12337 257490 257490
+cache-misses:u: 0 257490 0
+failed to read counter LLC-loads
+failed to read counter LLC-load-misses
+stalled-cycles-frontend:u: 0 257490 0
+stalled-cycles-backend:u: 0 257490 0
+
+ Performance counter stats for 'true':
+
+           200,597      cycles:u                                                    
+           246,278      instructions:u            #    1.23  insn per cycle         
+           110,163      L1-dcache-loads                                             
+             1,317      L1-dcache-load-misses     #    1.20% of all L1-dcache accesses
+            12,337      cache-references:u                                          
+     <not counted>      cache-misses:u                                                (0.00%)
+   <not supported>      LLC-loads                                                   
+   <not supported>      LLC-load-misses                                             
+     <not counted>      stalled-cycles-frontend:u                                     (0.00%)
+     <not counted>      stalled-cycles-backend:u                                      (0.00%)
+
+       0.001099197 seconds time elapsed
+
+       0.000000000 seconds user
+       0.000629000 seconds sys
+
+
+Some events weren't counted. Try disabling the NMI watchdog:
+	echo 0 > /proc/sys/kernel/nmi_watchdog
+	perf stat ...
+	echo 1 > /proc/sys/kernel/nmi_watchdog

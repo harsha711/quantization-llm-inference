@@ -1,0 +1,980 @@
+{
+ "run": "prereq-c8-344143",
+ "mode": "prereq",
+ "A4": [
+  {
+   "M": 4,
+   "threads": 1,
+   "median_ms": 31.515069,
+   "e041_ms": 31.286131,
+   "ratio_to_e041": 1.0073175555008702,
+   "hash_equal_e041": true
+  },
+  {
+   "M": 4,
+   "threads": 16,
+   "median_ms": 3.539413,
+   "e041_ms": 2.535952,
+   "ratio_to_e041": 1.3956940036719938,
+   "hash_equal_e041": true
+  }
+ ],
+ "perf_available": true,
+ "A1": {
+  "4": {
+   "calls_hi": 4,
+   "calls_lo": 2,
+   "macs_per_call": 67108864,
+   "cycles": 132234827.5,
+   "instructions": 678207013.5,
+   "task-clock": 32.065000000000055,
+   "L1-dcache-loads": 115197069.5,
+   "L1-dcache-load-misses": 3191663.5,
+   "cache-references": 13378808.0,
+   "cache-misses": 77538.5,
+   "LLC-loads": "unsupported: <not supported> / <not supported>",
+   "LLC-load-misses": "unsupported: <not supported> / <not supported>",
+   "stalled-cycles-frontend": -1215494.5,
+   "stalled-cycles-backend": 4930875.5,
+   "per_mac": {
+    "cycles": 1.9704524800181389,
+    "instructions": 10.106072030961514,
+    "L1-dcache-loads": 1.7165701016783714,
+    "L1-dcache-load-misses": 0.04755949229001999,
+    "cache-references": 0.19935977458953857,
+    "cache-misses": 0.0011554136872291565,
+    "stalled-cycles-frontend": -0.01811227947473526,
+    "stalled-cycles-backend": 0.07347577065229416
+   },
+   "IPC": 5.128807790821975,
+   "clock_GHz": 4.123961562451264,
+   "cycles_per_weight": 7.8818099200725555,
+   "L1_miss_ratio": 0.0277061171247937,
+   "cache_miss_ratio": 0.005795620955170297
+  }
+ },
+ "hotspot": {
+  "4": {
+   "top_symbols": [
+    [
+     24.33,
+     "w4a16::make_problem                  -      -"
+    ],
+    [
+     12.98,
+     "w4a16::cpu_w4a16_gemm                -      -"
+    ],
+    [
+     7.5,
+     "w4a16::dequantize_all_fp16           -      -"
+    ],
+    [
+     7.14,
+     "w4a16::quantize_int4_groupwise       -      -"
+    ],
+    [
+     2.85,
+     "0x000000000007eee9                   -      -"
+    ],
+    [
+     2.78,
+     "w4a16::dequantize_all                -      -"
+    ],
+    [
+     1.86,
+     "0x0000000000077c0b                   -      -"
+    ],
+    [
+     1.78,
+     "0x0000000000077c75                   -      -"
+    ],
+    [
+     1.69,
+     "0x000000000007eeed                   -      -"
+    ],
+    [
+     1.45,
+     "0x0000000000077ca0                   -      -"
+    ]
+   ],
+   "gemm_groups": {
+    "GEMM, other source (-      -)": 12.969999999999995
+   },
+   "gemm_share_of_samples": 12.969999999999995,
+   "gemm_groups_share_of_gemm": {
+    "GEMM, other source (-      -)": 1.0
+   }
+  }
+ },
+ "A2": {
+  "4": {
+   "1": {
+    "clock_GHz": 4.148601015965167,
+    "task_clock_ms_per_call": 31.004999999999995,
+    "cycles_per_call": 128627374.5,
+    "instructions_per_call": 678207001.5,
+    "wall_median_ms": 31.508288,
+    "effective_cpus": 0.9840268058994508
+   },
+   "16": {
+    "clock_GHz": 3.540515855452058,
+    "task_clock_ms_per_call": 71.3950000000001,
+    "cycles_per_call": 252775129.5,
+    "instructions_per_call": 691264861.0,
+    "wall_median_ms": 3.061191,
+    "effective_cpus": 23.322621816149365
+   }
+  }
+ },
+ "A3": {
+  "1": {
+   "Copy": {
+    "median": 45.9,
+    "min": 45.9,
+    "max": 45.9,
+    "n": 1
+   },
+   "Scale": {
+    "median": 46.0,
+    "min": 46.0,
+    "max": 46.0,
+    "n": 1
+   },
+   "Add": {
+    "median": 47.1,
+    "min": 47.1,
+    "max": 47.1,
+    "n": 1
+   },
+   "Triad": {
+    "median": 45.2,
+    "min": 45.2,
+    "max": 45.2,
+    "n": 1
+   }
+  },
+  "16": {
+   "Copy": {
+    "median": 113.3,
+    "min": 113.3,
+    "max": 113.3,
+    "n": 1
+   },
+   "Scale": {
+    "median": 112.3,
+    "min": 112.3,
+    "max": 112.3,
+    "n": 1
+   },
+   "Add": {
+    "median": 125.3,
+    "min": 125.3,
+    "max": 125.3,
+    "n": 1
+   },
+   "Triad": {
+    "median": 125.9,
+    "min": 125.9,
+    "max": 125.9,
+    "n": 1
+   }
+  }
+ },
+ "B": {
+  "copy": {
+   "bytes_per_copy": 268435456.0,
+   "counted_bytes": 536870912.0,
+   "warm": 5.0,
+   "reps": 20.0,
+   "median_ms": 1.385792,
+   "min_ms": 1.38336,
+   "max_ms": 1.39264,
+   "GBps": 387.411,
+   "mismatches": 0.0
+  },
+  "read": [
+   {
+    "bytes": 268435456.0,
+    "unroll": 2.0,
+    "blocks_per_sm": 2.0,
+    "blocks": 72.0,
+    "threads": 256.0,
+    "warm": 5.0,
+    "reps": 20.0,
+    "median_ms": 0.634992,
+    "min_ms": 0.632896,
+    "max_ms": 0.635904,
+    "GBps": 422.738,
+    "sum_ok": 1.0
+   },
+   {
+    "bytes": 268435456.0,
+    "unroll": 2.0,
+    "blocks_per_sm": 4.0,
+    "blocks": 144.0,
+    "threads": 256.0,
+    "warm": 5.0,
+    "reps": 20.0,
+    "median_ms": 0.631056,
+    "min_ms": 0.630816,
+    "max_ms": 0.634912,
+    "GBps": 425.375,
+    "sum_ok": 1.0
+   },
+   {
+    "bytes": 268435456.0,
+    "unroll": 2.0,
+    "blocks_per_sm": 8.0,
+    "blocks": 288.0,
+    "threads": 256.0,
+    "warm": 5.0,
+    "reps": 20.0,
+    "median_ms": 0.633088,
+    "min_ms": 0.632736,
+    "max_ms": 0.635168,
+    "GBps": 424.01,
+    "sum_ok": 1.0
+   },
+   {
+    "bytes": 268435456.0,
+    "unroll": 2.0,
+    "blocks_per_sm": 16.0,
+    "blocks": 576.0,
+    "threads": 256.0,
+    "warm": 5.0,
+    "reps": 20.0,
+    "median_ms": 0.633008,
+    "min_ms": 0.632448,
+    "max_ms": 0.634976,
+    "GBps": 424.063,
+    "sum_ok": 1.0
+   },
+   {
+    "bytes": 268435456.0,
+    "unroll": 4.0,
+    "blocks_per_sm": 2.0,
+    "blocks": 72.0,
+    "threads": 256.0,
+    "warm": 5.0,
+    "reps": 20.0,
+    "median_ms": 0.633056,
+    "min_ms": 0.631008,
+    "max_ms": 0.633472,
+    "GBps": 424.031,
+    "sum_ok": 1.0
+   },
+   {
+    "bytes": 268435456.0,
+    "unroll": 4.0,
+    "blocks_per_sm": 4.0,
+    "blocks": 144.0,
+    "threads": 256.0,
+    "warm": 5.0,
+    "reps": 20.0,
+    "median_ms": 0.631136,
+    "min_ms": 0.630912,
+    "max_ms": 0.633632,
+    "GBps": 425.321,
+    "sum_ok": 1.0
+   },
+   {
+    "bytes": 268435456.0,
+    "unroll": 4.0,
+    "blocks_per_sm": 8.0,
+    "blocks": 288.0,
+    "threads": 256.0,
+    "warm": 5.0,
+    "reps": 20.0,
+    "median_ms": 0.63312,
+    "min_ms": 0.63232,
+    "max_ms": 0.633408,
+    "GBps": 423.988,
+    "sum_ok": 1.0
+   },
+   {
+    "bytes": 268435456.0,
+    "unroll": 4.0,
+    "blocks_per_sm": 16.0,
+    "blocks": 576.0,
+    "threads": 256.0,
+    "warm": 5.0,
+    "reps": 20.0,
+    "median_ms": 0.63112,
+    "min_ms": 0.630912,
+    "max_ms": 0.63344,
+    "GBps": 425.332,
+    "sum_ok": 1.0
+   },
+   {
+    "bytes": 268435456.0,
+    "unroll": 8.0,
+    "blocks_per_sm": 2.0,
+    "blocks": 72.0,
+    "threads": 256.0,
+    "warm": 5.0,
+    "reps": 20.0,
+    "median_ms": 0.631104,
+    "min_ms": 0.630848,
+    "max_ms": 0.633152,
+    "GBps": 425.343,
+    "sum_ok": 1.0
+   },
+   {
+    "bytes": 268435456.0,
+    "unroll": 8.0,
+    "blocks_per_sm": 4.0,
+    "blocks": 144.0,
+    "threads": 256.0,
+    "warm": 5.0,
+    "reps": 20.0,
+    "median_ms": 0.631088,
+    "min_ms": 0.630848,
+    "max_ms": 0.634144,
+    "GBps": 425.353,
+    "sum_ok": 1.0
+   },
+   {
+    "bytes": 268435456.0,
+    "unroll": 8.0,
+    "blocks_per_sm": 8.0,
+    "blocks": 288.0,
+    "threads": 256.0,
+    "warm": 5.0,
+    "reps": 20.0,
+    "median_ms": 0.633072,
+    "min_ms": 0.630976,
+    "max_ms": 0.637184,
+    "GBps": 424.02,
+    "sum_ok": 1.0
+   },
+   {
+    "bytes": 268435456.0,
+    "unroll": 8.0,
+    "blocks_per_sm": 16.0,
+    "blocks": 576.0,
+    "threads": 256.0,
+    "warm": 5.0,
+    "reps": 20.0,
+    "median_ms": 0.631104,
+    "min_ms": 0.630848,
+    "max_ms": 0.633184,
+    "GBps": 425.343,
+    "sum_ok": 1.0
+   }
+  ],
+  "mma": [
+   {
+    "nacc": 1.0,
+    "warps_per_block": 4.0,
+    "blocks_per_sm": 1.0,
+    "blocks": 36.0,
+    "iters": 1666667.0,
+    "mma_per_launch": 240000048.0,
+    "warm": 3.0,
+    "reps": 10.0,
+    "median_ms": 20.404143,
+    "min_ms": 20.402081,
+    "max_ms": 20.406048,
+    "TFLOPs": 48.1785,
+    "bad_outputs": 0.0
+   },
+   {
+    "nacc": 1.0,
+    "warps_per_block": 4.0,
+    "blocks_per_sm": 2.0,
+    "blocks": 72.0,
+    "iters": 833333.0,
+    "mma_per_launch": 239999904.0,
+    "warm": 3.0,
+    "reps": 10.0,
+    "median_ms": 19.465056,
+    "min_ms": 19.458015,
+    "max_ms": 19.467873,
+    "TFLOPs": 50.5028,
+    "bad_outputs": 0.0
+   },
+   {
+    "nacc": 1.0,
+    "warps_per_block": 4.0,
+    "blocks_per_sm": 4.0,
+    "blocks": 144.0,
+    "iters": 416667.0,
+    "mma_per_launch": 240000192.0,
+    "warm": 3.0,
+    "reps": 10.0,
+    "median_ms": 19.248816,
+    "min_ms": 19.246977,
+    "max_ms": 19.2512,
+    "TFLOPs": 51.0702,
+    "bad_outputs": 0.0
+   },
+   {
+    "nacc": 1.0,
+    "warps_per_block": 4.0,
+    "blocks_per_sm": 8.0,
+    "blocks": 288.0,
+    "iters": 208333.0,
+    "mma_per_launch": 239999616.0,
+    "warm": 3.0,
+    "reps": 10.0,
+    "median_ms": 19.114656,
+    "min_ms": 19.113504,
+    "max_ms": 19.115969,
+    "TFLOPs": 51.4285,
+    "bad_outputs": 0.0
+   },
+   {
+    "nacc": 1.0,
+    "warps_per_block": 8.0,
+    "blocks_per_sm": 1.0,
+    "blocks": 36.0,
+    "iters": 833333.0,
+    "mma_per_launch": 239999904.0,
+    "warm": 3.0,
+    "reps": 10.0,
+    "median_ms": 19.062736,
+    "min_ms": 19.059711,
+    "max_ms": 19.068384,
+    "TFLOPs": 51.5687,
+    "bad_outputs": 0.0
+   },
+   {
+    "nacc": 1.0,
+    "warps_per_block": 8.0,
+    "blocks_per_sm": 2.0,
+    "blocks": 72.0,
+    "iters": 416667.0,
+    "mma_per_launch": 240000192.0,
+    "warm": 3.0,
+    "reps": 10.0,
+    "median_ms": 19.023408,
+    "min_ms": 19.019585,
+    "max_ms": 19.025791,
+    "TFLOPs": 51.6753,
+    "bad_outputs": 0.0
+   },
+   {
+    "nacc": 1.0,
+    "warps_per_block": 8.0,
+    "blocks_per_sm": 4.0,
+    "blocks": 144.0,
+    "iters": 208333.0,
+    "mma_per_launch": 239999616.0,
+    "warm": 3.0,
+    "reps": 10.0,
+    "median_ms": 19.003088,
+    "min_ms": 19.001217,
+    "max_ms": 19.005377,
+    "TFLOPs": 51.7305,
+    "bad_outputs": 0.0
+   },
+   {
+    "nacc": 1.0,
+    "warps_per_block": 8.0,
+    "blocks_per_sm": 8.0,
+    "blocks": 288.0,
+    "iters": 104167.0,
+    "mma_per_launch": 240000768.0,
+    "warm": 3.0,
+    "reps": 10.0,
+    "median_ms": 18.991904,
+    "min_ms": 18.990175,
+    "max_ms": 18.993055,
+    "TFLOPs": 51.7612,
+    "bad_outputs": 0.0
+   },
+   {
+    "nacc": 2.0,
+    "warps_per_block": 4.0,
+    "blocks_per_sm": 1.0,
+    "blocks": 36.0,
+    "iters": 833333.0,
+    "mma_per_launch": 239999904.0,
+    "warm": 3.0,
+    "reps": 10.0,
+    "median_ms": 19.185488,
+    "min_ms": 19.172768,
+    "max_ms": 19.187679,
+    "TFLOPs": 51.2387,
+    "bad_outputs": 0.0
+   },
+   {
+    "nacc": 2.0,
+    "warps_per_block": 4.0,
+    "blocks_per_sm": 2.0,
+    "blocks": 72.0,
+    "iters": 416667.0,
+    "mma_per_launch": 240000192.0,
+    "warm": 3.0,
+    "reps": 10.0,
+    "median_ms": 19.068656,
+    "min_ms": 19.058559,
+    "max_ms": 19.070881,
+    "TFLOPs": 51.5527,
+    "bad_outputs": 0.0
+   },
+   {
+    "nacc": 2.0,
+    "warps_per_block": 4.0,
+    "blocks_per_sm": 4.0,
+    "blocks": 144.0,
+    "iters": 208333.0,
+    "mma_per_launch": 239999616.0,
+    "warm": 3.0,
+    "reps": 10.0,
+    "median_ms": 19.00528,
+    "min_ms": 19.002913,
+    "max_ms": 19.011105,
+    "TFLOPs": 51.7245,
+    "bad_outputs": 0.0
+   },
+   {
+    "nacc": 2.0,
+    "warps_per_block": 4.0,
+    "blocks_per_sm": 8.0,
+    "blocks": 288.0,
+    "iters": 104167.0,
+    "mma_per_launch": 240000768.0,
+    "warm": 3.0,
+    "reps": 10.0,
+    "median_ms": 18.981328,
+    "min_ms": 18.971392,
+    "max_ms": 18.984575,
+    "TFLOPs": 51.79,
+    "bad_outputs": 0.0
+   },
+   {
+    "nacc": 2.0,
+    "warps_per_block": 8.0,
+    "blocks_per_sm": 1.0,
+    "blocks": 36.0,
+    "iters": 416667.0,
+    "mma_per_launch": 240000192.0,
+    "warm": 3.0,
+    "reps": 10.0,
+    "median_ms": 18.97264,
+    "min_ms": 18.960287,
+    "max_ms": 18.978815,
+    "TFLOPs": 51.8136,
+    "bad_outputs": 0.0
+   },
+   {
+    "nacc": 2.0,
+    "warps_per_block": 8.0,
+    "blocks_per_sm": 2.0,
+    "blocks": 72.0,
+    "iters": 208333.0,
+    "mma_per_launch": 239999616.0,
+    "warm": 3.0,
+    "reps": 10.0,
+    "median_ms": 18.966415,
+    "min_ms": 18.965919,
+    "max_ms": 18.968544,
+    "TFLOPs": 51.8305,
+    "bad_outputs": 0.0
+   },
+   {
+    "nacc": 2.0,
+    "warps_per_block": 8.0,
+    "blocks_per_sm": 4.0,
+    "blocks": 144.0,
+    "iters": 104167.0,
+    "mma_per_launch": 240000768.0,
+    "warm": 3.0,
+    "reps": 10.0,
+    "median_ms": 18.96544,
+    "min_ms": 18.962145,
+    "max_ms": 18.966976,
+    "TFLOPs": 51.8334,
+    "bad_outputs": 0.0
+   },
+   {
+    "nacc": 2.0,
+    "warps_per_block": 8.0,
+    "blocks_per_sm": 8.0,
+    "blocks": 288.0,
+    "iters": 52083.0,
+    "mma_per_launch": 239998464.0,
+    "warm": 3.0,
+    "reps": 10.0,
+    "median_ms": 18.962031,
+    "min_ms": 18.960224,
+    "max_ms": 18.9664,
+    "TFLOPs": 51.8422,
+    "bad_outputs": 0.0
+   },
+   {
+    "nacc": 4.0,
+    "warps_per_block": 4.0,
+    "blocks_per_sm": 1.0,
+    "blocks": 36.0,
+    "iters": 416667.0,
+    "mma_per_launch": 240000192.0,
+    "warm": 3.0,
+    "reps": 10.0,
+    "median_ms": 19.07288,
+    "min_ms": 19.062689,
+    "max_ms": 19.076639,
+    "TFLOPs": 51.5413,
+    "bad_outputs": 0.0
+   },
+   {
+    "nacc": 4.0,
+    "warps_per_block": 4.0,
+    "blocks_per_sm": 2.0,
+    "blocks": 72.0,
+    "iters": 208333.0,
+    "mma_per_launch": 239999616.0,
+    "warm": 3.0,
+    "reps": 10.0,
+    "median_ms": 19.009457,
+    "min_ms": 19.005377,
+    "max_ms": 19.011553,
+    "TFLOPs": 51.7131,
+    "bad_outputs": 0.0
+   },
+   {
+    "nacc": 4.0,
+    "warps_per_block": 4.0,
+    "blocks_per_sm": 4.0,
+    "blocks": 144.0,
+    "iters": 104167.0,
+    "mma_per_launch": 240000768.0,
+    "warm": 3.0,
+    "reps": 10.0,
+    "median_ms": 18.98264,
+    "min_ms": 18.980192,
+    "max_ms": 18.986977,
+    "TFLOPs": 51.7864,
+    "bad_outputs": 0.0
+   },
+   {
+    "nacc": 4.0,
+    "warps_per_block": 4.0,
+    "blocks_per_sm": 8.0,
+    "blocks": 288.0,
+    "iters": 52083.0,
+    "mma_per_launch": 239998464.0,
+    "warm": 3.0,
+    "reps": 10.0,
+    "median_ms": 18.968449,
+    "min_ms": 18.966368,
+    "max_ms": 18.970528,
+    "TFLOPs": 51.8247,
+    "bad_outputs": 0.0
+   },
+   {
+    "nacc": 4.0,
+    "warps_per_block": 8.0,
+    "blocks_per_sm": 1.0,
+    "blocks": 36.0,
+    "iters": 208333.0,
+    "mma_per_launch": 239999616.0,
+    "warm": 3.0,
+    "reps": 10.0,
+    "median_ms": 18.97208,
+    "min_ms": 18.9704,
+    "max_ms": 18.972609,
+    "TFLOPs": 51.815,
+    "bad_outputs": 0.0
+   },
+   {
+    "nacc": 4.0,
+    "warps_per_block": 8.0,
+    "blocks_per_sm": 2.0,
+    "blocks": 72.0,
+    "iters": 104167.0,
+    "mma_per_launch": 240000768.0,
+    "warm": 3.0,
+    "reps": 10.0,
+    "median_ms": 18.965631,
+    "min_ms": 18.964256,
+    "max_ms": 18.966463,
+    "TFLOPs": 51.8329,
+    "bad_outputs": 0.0
+   },
+   {
+    "nacc": 4.0,
+    "warps_per_block": 8.0,
+    "blocks_per_sm": 4.0,
+    "blocks": 144.0,
+    "iters": 52083.0,
+    "mma_per_launch": 239998464.0,
+    "warm": 3.0,
+    "reps": 10.0,
+    "median_ms": 18.965119,
+    "min_ms": 18.9624,
+    "max_ms": 18.968479,
+    "TFLOPs": 51.8338,
+    "bad_outputs": 0.0
+   },
+   {
+    "nacc": 4.0,
+    "warps_per_block": 8.0,
+    "blocks_per_sm": 8.0,
+    "blocks": 288.0,
+    "iters": 26042.0,
+    "mma_per_launch": 240003072.0,
+    "warm": 3.0,
+    "reps": 10.0,
+    "median_ms": 18.964384,
+    "min_ms": 18.963808,
+    "max_ms": 18.966496,
+    "TFLOPs": 51.8368,
+    "bad_outputs": 0.0
+   },
+   {
+    "nacc": 8.0,
+    "warps_per_block": 4.0,
+    "blocks_per_sm": 1.0,
+    "blocks": 36.0,
+    "iters": 208333.0,
+    "mma_per_launch": 239999616.0,
+    "warm": 3.0,
+    "reps": 10.0,
+    "median_ms": 19.017456,
+    "min_ms": 19.013023,
+    "max_ms": 19.01968,
+    "TFLOPs": 51.6914,
+    "bad_outputs": 0.0
+   },
+   {
+    "nacc": 8.0,
+    "warps_per_block": 4.0,
+    "blocks_per_sm": 2.0,
+    "blocks": 72.0,
+    "iters": 104167.0,
+    "mma_per_launch": 240000768.0,
+    "warm": 3.0,
+    "reps": 10.0,
+    "median_ms": 18.985648,
+    "min_ms": 18.984512,
+    "max_ms": 18.98848,
+    "TFLOPs": 51.7782,
+    "bad_outputs": 0.0
+   },
+   {
+    "nacc": 8.0,
+    "warps_per_block": 4.0,
+    "blocks_per_sm": 4.0,
+    "blocks": 144.0,
+    "iters": 52083.0,
+    "mma_per_launch": 239998464.0,
+    "warm": 3.0,
+    "reps": 10.0,
+    "median_ms": 18.97168,
+    "min_ms": 18.970495,
+    "max_ms": 18.974049,
+    "TFLOPs": 51.8158,
+    "bad_outputs": 0.0
+   },
+   {
+    "nacc": 8.0,
+    "warps_per_block": 4.0,
+    "blocks_per_sm": 8.0,
+    "blocks": 288.0,
+    "iters": 26042.0,
+    "mma_per_launch": 240003072.0,
+    "warm": 3.0,
+    "reps": 10.0,
+    "median_ms": 18.96632,
+    "min_ms": 18.964128,
+    "max_ms": 18.968544,
+    "TFLOPs": 51.8315,
+    "bad_outputs": 0.0
+   },
+   {
+    "nacc": 8.0,
+    "warps_per_block": 8.0,
+    "blocks_per_sm": 1.0,
+    "blocks": 36.0,
+    "iters": 104167.0,
+    "mma_per_launch": 240000768.0,
+    "warm": 3.0,
+    "reps": 10.0,
+    "median_ms": 18.968448,
+    "min_ms": 18.968063,
+    "max_ms": 18.970528,
+    "TFLOPs": 51.8252,
+    "bad_outputs": 0.0
+   },
+   {
+    "nacc": 8.0,
+    "warps_per_block": 8.0,
+    "blocks_per_sm": 2.0,
+    "blocks": 72.0,
+    "iters": 52083.0,
+    "mma_per_launch": 239998464.0,
+    "warm": 3.0,
+    "reps": 10.0,
+    "median_ms": 18.970224,
+    "min_ms": 18.968384,
+    "max_ms": 18.970495,
+    "TFLOPs": 51.8198,
+    "bad_outputs": 0.0
+   },
+   {
+    "nacc": 8.0,
+    "warps_per_block": 8.0,
+    "blocks_per_sm": 4.0,
+    "blocks": 144.0,
+    "iters": 26042.0,
+    "mma_per_launch": 240003072.0,
+    "warm": 3.0,
+    "reps": 10.0,
+    "median_ms": 18.969999,
+    "min_ms": 18.968,
+    "max_ms": 18.97056,
+    "TFLOPs": 51.8214,
+    "bad_outputs": 0.0
+   },
+   {
+    "nacc": 8.0,
+    "warps_per_block": 8.0,
+    "blocks_per_sm": 8.0,
+    "blocks": 288.0,
+    "iters": 13021.0,
+    "mma_per_launch": 240003072.0,
+    "warm": 3.0,
+    "reps": 10.0,
+    "median_ms": 18.968432,
+    "min_ms": 18.965984,
+    "max_ms": 18.970465,
+    "TFLOPs": 51.8257,
+    "bad_outputs": 0.0
+   }
+  ],
+  "mma_confirm": {
+   "nacc": 2.0,
+   "warps_per_block": 8.0,
+   "blocks_per_sm": 8.0,
+   "blocks": 288.0,
+   "iters": 52083.0,
+   "mma_per_launch": 239998464.0,
+   "warm": 3.0,
+   "reps": 20.0,
+   "median_ms": 18.962288,
+   "min_ms": 18.957279,
+   "max_ms": 18.966017,
+   "TFLOPs": 51.8415,
+   "bad_outputs": 0.0
+  },
+  "phases": {
+   "copy": {
+    "begin": 1795152776158,
+    "end": 1795152776194
+   },
+   "read": {
+    "begin": 1795152776194,
+    "end": 1795152776386,
+    "n_samples": 2,
+    "sm_MHz": {
+     "median": 1432.0,
+     "min": 1432.0,
+     "max": 1432.0
+    },
+    "mem_MHz": {
+     "median": 14001.0,
+     "min": 14001.0,
+     "max": 14001.0
+    },
+    "power_W": {
+     "median": 7.82,
+     "max": 7.82
+    },
+    "pstates": [
+     "P0"
+    ]
+   },
+   "mma": {
+    "begin": 1795152776387,
+    "end": 1795152784328,
+    "n_samples": 79,
+    "sm_MHz": {
+     "median": 2812.0,
+     "min": 1432.0,
+     "max": 2812.0
+    },
+    "mem_MHz": {
+     "median": 13801.0,
+     "min": 13801.0,
+     "max": 14001.0
+    },
+    "power_W": {
+     "median": 44.65,
+     "max": 49.04
+    },
+    "pstates": [
+     "P0",
+     "P1"
+    ]
+   },
+   "mma_confirm": {
+    "begin": 1795152784328,
+    "end": 1795152784765,
+    "n_samples": 5,
+    "sm_MHz": {
+     "median": 2812.0,
+     "min": 2812.0,
+     "max": 2812.0
+    },
+    "mem_MHz": {
+     "median": 13801.0,
+     "min": 13801.0,
+     "max": 13801.0
+    },
+    "power_W": {
+     "median": 43.67,
+     "max": 44.57
+    },
+    "pstates": [
+     "P1"
+    ]
+   }
+  },
+  "device": "device,NVIDIA GeForce RTX 5060 Ti,sm_120,SMs=36,L2=33554432,attr_clock_khz=2617000,attr_mem_clock_khz=14001000,bus_bits=128,driver=13030,runtime=13040,mode=small",
+  "mma_tile": {
+   "max_abs_err": 2.235e-07,
+   "max_err_over_abs_sum": 6.831e-08,
+   "pass": 1.0
+  },
+  "failures": 0,
+  "sass_hmma": "440 HMMA.16816.F32",
+  "clock_samples": 88,
+  "copy_pct_spec": 86.47566964285714,
+  "read_best": {
+   "bytes": 268435456.0,
+   "unroll": 2.0,
+   "blocks_per_sm": 4.0,
+   "blocks": 144.0,
+   "threads": 256.0,
+   "warm": 5.0,
+   "reps": 20.0,
+   "median_ms": 0.631056,
+   "min_ms": 0.630816,
+   "max_ms": 0.634912,
+   "GBps": 425.375,
+   "sum_ok": 1.0
+  },
+  "read_best_pct_spec": 94.94977678571429,
+  "mma_best": {
+   "nacc": 2.0,
+   "warps_per_block": 8.0,
+   "blocks_per_sm": 8.0,
+   "blocks": 288.0,
+   "iters": 52083.0,
+   "mma_per_launch": 239998464.0,
+   "warm": 3.0,
+   "reps": 10.0,
+   "median_ms": 18.962031,
+   "min_ms": 18.960224,
+   "max_ms": 18.9664,
+   "TFLOPs": 51.8422,
+   "bad_outputs": 0.0
+  },
+  "mma_confirm_pct_nominal": 109.35386392722916,
+  "mma_confirm_flop_per_clk_per_sm": 512.1058558558559,
+  "nominal_at_observed_clock_TF": 51.830784
+ },
+ "failures": []
+}

@@ -1,0 +1,5 @@
+STREAM: 67108864 doubles per array (537 MB), 4 threads, best of 10
+Copy       66.5 GB/s
+Scale      66.3 GB/s
+Add        72.1 GB/s
+Triad      72.2 GB/s

@@ -1,0 +1,1464 @@
+{
+ "run": "full-c8-344144",
+ "mode": "full",
+ "A4": [
+  {
+   "M": 1,
+   "threads": 1,
+   "median_ms": 26.407174,
+   "e041_ms": 26.565784,
+   "ratio_to_e041": 0.9940295381457592,
+   "hash_equal_e041": true
+  },
+  {
+   "M": 1,
+   "threads": 16,
+   "median_ms": 2.089131,
+   "e041_ms": 2.024104,
+   "ratio_to_e041": 1.0321263136676773,
+   "hash_equal_e041": true
+  },
+  {
+   "M": 4,
+   "threads": 1,
+   "median_ms": 31.634658,
+   "e041_ms": 31.286131,
+   "ratio_to_e041": 1.0111399840395734,
+   "hash_equal_e041": true
+  },
+  {
+   "M": 4,
+   "threads": 16,
+   "median_ms": 2.462238,
+   "e041_ms": 2.535952,
+   "ratio_to_e041": 0.9709324151245765,
+   "hash_equal_e041": true
+  },
+  {
+   "M": 128,
+   "threads": 1,
+   "median_ms": 242.636679,
+   "e041_ms": 241.244821,
+   "ratio_to_e041": 1.0057694834410558,
+   "hash_equal_e041": true
+  },
+  {
+   "M": 128,
+   "threads": 16,
+   "median_ms": 20.065286,
+   "e041_ms": 19.654114,
+   "ratio_to_e041": 1.0209204037383726,
+   "hash_equal_e041": true
+  }
+ ],
+ "perf_available": true,
+ "A1": {
+  "1": {
+   "calls_hi": 22,
+   "calls_lo": 2,
+   "macs_per_call": 16777216,
+   "cycles": 107999288.45,
+   "instructions": 545608465.2,
+   "task-clock": 26.095500000000005,
+   "L1-dcache-loads": 67355441.2,
+   "L1-dcache-load-misses": 3219599.6,
+   "cache-references": 9035066.9,
+   "cache-misses": 3475.55,
+   "LLC-loads": "unsupported: <not supported> / <not supported>",
+   "LLC-load-misses": "unsupported: <not supported> / <not supported>",
+   "stalled-cycles-frontend": 266552.55,
+   "stalled-cycles-backend": 5052645.35,
+   "per_mac": {
+    "cycles": 6.437259224057198,
+    "instructions": 32.52079875469208,
+    "L1-dcache-loads": 4.014697146415711,
+    "L1-dcache-load-misses": 0.19190309047698975,
+    "cache-references": 0.5385319530963898,
+    "cache-misses": 0.0002071589231491089,
+    "stalled-cycles-frontend": 0.015887770056724548,
+    "stalled-cycles-backend": 0.3011611312627792
+   },
+   "IPC": 5.051963517820751,
+   "clock_GHz": 4.138617326742158,
+   "cycles_per_weight": 6.437259224057198,
+   "L1_miss_ratio": 0.04780014120076761,
+   "cache_miss_ratio": 0.00038467341066395427
+  },
+  "4": {
+   "calls_hi": 22,
+   "calls_lo": 2,
+   "macs_per_call": 67108864,
+   "cycles": 130378192.9,
+   "instructions": 678206968.7,
+   "task-clock": 31.509500000000003,
+   "L1-dcache-loads": 107766025.0,
+   "L1-dcache-load-misses": 3264859.6,
+   "cache-references": 8584316.35,
+   "cache-misses": 11457.8,
+   "LLC-loads": "unsupported: <not supported> / <not supported>",
+   "LLC-load-misses": "unsupported: <not supported> / <not supported>",
+   "stalled-cycles-frontend": 317935.5,
+   "stalled-cycles-backend": 5175112.05,
+   "per_mac": {
+    "cycles": 1.942786468565464,
+    "instructions": 10.106071363389493,
+    "L1-dcache-loads": 1.6058389097452164,
+    "L1-dcache-load-misses": 0.04865019917488098,
+    "cache-references": 0.12791628167033195,
+    "cache-misses": 0.00017073452472686766,
+    "stalled-cycles-frontend": 0.0047376081347465515,
+    "stalled-cycles-backend": 0.07711517885327339
+   },
+   "IPC": 5.201843602941977,
+   "clock_GHz": 4.137742360240562,
+   "cycles_per_weight": 7.771145874261856,
+   "L1_miss_ratio": 0.030295815401932102,
+   "cache_miss_ratio": 0.0013347364580756625
+  },
+  "128": {
+   "calls_hi": 7,
+   "calls_lo": 2,
+   "macs_per_call": 2147483648,
+   "cycles": 1000870761.8,
+   "instructions": 6158843314.6,
+   "task-clock": 241.908,
+   "L1-dcache-loads": 1770812244.6,
+   "L1-dcache-load-misses": 7807177.4,
+   "cache-references": 19005025.6,
+   "cache-misses": 265204.8,
+   "LLC-loads": "unsupported: <not supported> / <not supported>",
+   "LLC-load-misses": "unsupported: <not supported> / <not supported>",
+   "stalled-cycles-frontend": 1380360.4,
+   "stalled-cycles-backend": 5498994.6,
+   "per_mac": {
+    "cycles": 0.46606676736846564,
+    "instructions": 2.8679349062033,
+    "L1-dcache-loads": 0.8245987094007432,
+    "L1-dcache-load-misses": 0.003635500278323889,
+    "cache-references": 0.00884990468621254,
+    "cache-misses": 0.00012349560856819152,
+    "stalled-cycles-frontend": 0.0006427804008126258,
+    "stalled-cycles-backend": 0.0025606689043343065
+   },
+   "IPC": 6.153485094842543,
+   "clock_GHz": 4.137402491029648,
+   "cycles_per_weight": 59.6565462231636,
+   "L1_miss_ratio": 0.004408811506588337,
+   "cache_miss_ratio": 0.013954456341274277
+  }
+ },
+ "hotspot": {
+  "1": {
+   "top_symbols": [
+    [
+     36.98,
+     "w4a16::cpu_w4a16_gemm"
+    ],
+    [
+     17.02,
+     "w4a16::make_problem"
+    ],
+    [
+     5.48,
+     "w4a16::dequantize_all_fp16"
+    ],
+    [
+     5.28,
+     "w4a16::quantize_int4_groupwise"
+    ],
+    [
+     2.04,
+     "w4a16::dequantize_all"
+    ],
+    [
+     2.02,
+     "0x000000000007eee9"
+    ],
+    [
+     1.55,
+     "0x000000000007eeed"
+    ],
+    [
+     1.46,
+     "0x0000000000077c0b"
+    ],
+    [
+     1.06,
+     "0x0000000000077c88"
+    ],
+    [
+     1.0,
+     "0x0000000000077cb1"
+    ]
+   ],
+   "gemm_groups": {
+    "4-bit unpack + LUT gather into tile (lines 29-33)": 21.39,
+    "GEMM, other source (stl_vector.h)": 3.51,
+    "FMA loop c[n] += av*w[n] (line 41)": 2.21,
+    "FP16<->FP32 software conversion (fp16_host.h, inlined at lines 26/28/39/47)": 8.889999999999999,
+    "per-group LUT build (lines 24-28, non-inlined part)": 0.91,
+    "activation convert / loop control (lines 37-40)": 0.06
+   },
+   "gemm_share_of_samples": 36.96999999999999,
+   "gemm_groups_share_of_gemm": {
+    "4-bit unpack + LUT gather into tile (lines 29-33)": 0.5785772247768463,
+    "GEMM, other source (stl_vector.h)": 0.09494184473897757,
+    "FMA loop c[n] += av*w[n] (line 41)": 0.059778198539356245,
+    "FP16<->FP32 software conversion (fp16_host.h, inlined at lines 26/28/39/47)": 0.24046524208817963,
+    "per-group LUT build (lines 24-28, non-inlined part)": 0.024614552339734926,
+    "activation convert / loop control (lines 37-40)": 0.0016229375169055993
+   }
+  },
+  "4": {
+   "top_symbols": [
+    [
+     40.8,
+     "w4a16::cpu_w4a16_gemm"
+    ],
+    [
+     16.33,
+     "w4a16::make_problem"
+    ],
+    [
+     5.06,
+     "w4a16::dequantize_all_fp16"
+    ],
+    [
+     4.93,
+     "w4a16::quantize_int4_groupwise"
+    ],
+    [
+     2.13,
+     "0x000000000007eee9"
+    ],
+    [
+     1.89,
+     "w4a16::dequantize_all"
+    ],
+    [
+     1.14,
+     "0x0000000000077c0b"
+    ],
+    [
+     1.07,
+     "0x0000000000077c75"
+    ],
+    [
+     1.02,
+     "0x0000000000077c88"
+    ],
+    [
+     0.93,
+     "0x0000000000077d6d"
+    ]
+   ],
+   "gemm_groups": {
+    "4-bit unpack + LUT gather into tile (lines 29-33)": 20.25,
+    "FMA loop c[n] += av*w[n] (line 41)": 7.13,
+    "GEMM, other source (stl_vector.h)": 3.43,
+    "FP16<->FP32 software conversion (fp16_host.h, inlined at lines 26/28/39/47)": 9.059999999999997,
+    "per-group LUT build (lines 24-28, non-inlined part)": 0.68,
+    "GEMM other lines (init/store/loops)": 0.14,
+    "activation convert / loop control (lines 37-40)": 0.14
+   },
+   "gemm_share_of_samples": 40.83000000000001,
+   "gemm_groups_share_of_gemm": {
+    "4-bit unpack + LUT gather into tile (lines 29-33)": 0.4959588537839822,
+    "FMA loop c[n] += av*w[n] (line 41)": 0.17462650012245892,
+    "GEMM, other source (stl_vector.h)": 0.08400685770266958,
+    "FP16<->FP32 software conversion (fp16_host.h, inlined at lines 26/28/39/47)": 0.22189566495224086,
+    "per-group LUT build (lines 24-28, non-inlined part)": 0.016654420769042368,
+    "GEMM other lines (init/store/loops)": 0.0034288513348028405,
+    "activation convert / loop control (lines 37-40)": 0.0034288513348028405
+   }
+  },
+  "128": {
+   "top_symbols": [
+    [
+     59.4,
+     "w4a16::cpu_w4a16_gemm"
+    ],
+    [
+     8.98,
+     "w4a16::make_problem"
+    ],
+    [
+     7.42,
+     "w4a16::reference_gemm_rows"
+    ],
+    [
+     2.82,
+     "w4a16::dequantize_all_fp16"
+    ],
+    [
+     2.67,
+     "w4a16::quantize_int4_groupwise"
+    ],
+    [
+     1.05,
+     "w4a16::dequantize_all"
+    ],
+    [
+     1.02,
+     "0x000000000007eee9"
+    ],
+    [
+     1.02,
+     "0x0000000000077c0b"
+    ],
+    [
+     0.75,
+     "0x0000000000077ca0"
+    ],
+    [
+     0.61,
+     "0x0000000000077c88"
+    ]
+   ],
+   "gemm_groups": {
+    "FMA loop c[n] += av*w[n] (line 41)": 44.82,
+    "FP16<->FP32 software conversion (fp16_host.h, inlined at lines 26/28/39/47)": 7.97,
+    "4-bit unpack + LUT gather into tile (lines 29-33)": 3.98,
+    "activation convert / loop control (lines 37-40)": 1.48,
+    "GEMM, other source (stl_vector.h)": 0.52,
+    "per-group LUT build (lines 24-28, non-inlined part)": 0.22,
+    "GEMM other lines (init/store/loops)": 0.4
+   },
+   "gemm_share_of_samples": 59.390000000000036,
+   "gemm_groups_share_of_gemm": {
+    "FMA loop c[n] += av*w[n] (line 41)": 0.7546725037885161,
+    "FP16<->FP32 software conversion (fp16_host.h, inlined at lines 26/28/39/47)": 0.13419767637649427,
+    "4-bit unpack + LUT gather into tile (lines 29-33)": 0.0670146489307964,
+    "activation convert / loop control (lines 37-40)": 0.024920020205421774,
+    "GEMM, other source (stl_vector.h)": 0.008755682774877921,
+    "per-group LUT build (lines 24-28, non-inlined part)": 0.0037043273278329664,
+    "GEMM other lines (init/store/loops)": 0.006735140596059939
+   }
+  }
+ },
+ "A2": {
+  "1": {
+   "1": {
+    "clock_GHz": 4.140490724786519,
+    "task_clock_ms_per_call": 26.29050000000001,
+    "cycles_per_call": 108855571.4,
+    "instructions_per_call": 545608460.6,
+    "wall_median_ms": 26.254735,
+    "effective_cpus": 1.001362230470047
+   },
+   "2": {
+    "clock_GHz": 4.135676909911605,
+    "task_clock_ms_per_call": 26.585,
+    "cycles_per_call": 109946970.65,
+    "instructions_per_call": 545703876.975,
+    "wall_median_ms": 13.287284,
+    "effective_cpus": 2.000785111539725
+   },
+   "4": {
+    "clock_GHz": 4.128709044210799,
+    "task_clock_ms_per_call": 27.035249999999998,
+    "cycles_per_call": 111620681.1875,
+    "instructions_per_call": 545818094.7625,
+    "wall_median_ms": 6.75529,
+    "effective_cpus": 4.002085772779555
+   },
+   "8": {
+    "clock_GHz": 3.8982213660328644,
+    "task_clock_ms_per_call": 28.853625,
+    "cycles_per_call": 112477817.4625,
+    "instructions_per_call": 545918235.65625,
+    "wall_median_ms": 3.603642,
+    "effective_cpus": 8.006795625092616
+   },
+   "12": {
+    "clock_GHz": 3.824852926934334,
+    "task_clock_ms_per_call": 32.88708333333333,
+    "cycles_per_call": 125788256.94583334,
+    "instructions_per_call": 547363210.5541667,
+    "wall_median_ms": 2.745506,
+    "effective_cpus": 11.978514464486084
+   },
+   "16": {
+    "clock_GHz": 3.6466267025427017,
+    "task_clock_ms_per_call": 31.038593749999997,
+    "cycles_per_call": 113186164.778125,
+    "instructions_per_call": 546023086.478125,
+    "wall_median_ms": 1.911146,
+    "effective_cpus": 16.240828147090802
+   }
+  },
+  "4": {
+   "1": {
+    "clock_GHz": 4.141181769770408,
+    "task_clock_ms_per_call": 31.360000000000003,
+    "cycles_per_call": 129867460.3,
+    "instructions_per_call": 678206968.95,
+    "wall_median_ms": 31.386515,
+    "effective_cpus": 0.9991552104462698
+   },
+   "2": {
+    "clock_GHz": 4.137308040993915,
+    "task_clock_ms_per_call": 32.00475,
+    "cycles_per_call": 132413509.525,
+    "instructions_per_call": 678384139.275,
+    "wall_median_ms": 15.942389,
+    "effective_cpus": 2.0075253464207905
+   },
+   "4": {
+    "clock_GHz": 4.127544496240716,
+    "task_clock_ms_per_call": 32.55275,
+    "cycles_per_call": 134362924.1,
+    "instructions_per_call": 678613068.75,
+    "wall_median_ms": 8.079372,
+    "effective_cpus": 4.029118847355958
+   },
+   "8": {
+    "clock_GHz": 3.831806840558208,
+    "task_clock_ms_per_call": 35.891625,
+    "cycles_per_call": 137529774.19375,
+    "instructions_per_call": 678977556.19375,
+    "wall_median_ms": 4.477621,
+    "effective_cpus": 8.01578003140507
+   },
+   "12": {
+    "clock_GHz": 3.75443520401279,
+    "task_clock_ms_per_call": 40.76133333333333,
+    "cycles_per_call": 153035784.82916668,
+    "instructions_per_call": 680662168.9583334,
+    "wall_median_ms": 3.384302,
+    "effective_cpus": 12.044236398918693
+   },
+   "16": {
+    "clock_GHz": 3.596603925912527,
+    "task_clock_ms_per_call": 39.0450625,
+    "cycles_per_call": 140429625.075,
+    "instructions_per_call": 679314152.0375,
+    "wall_median_ms": 2.413141,
+    "effective_cpus": 16.18018279909877
+   }
+  },
+  "128": {
+   "1": {
+    "clock_GHz": 4.137832756860776,
+    "task_clock_ms_per_call": 239.04000000000002,
+    "cycles_per_call": 989107542.2,
+    "instructions_per_call": 6158843271.2,
+    "wall_median_ms": 241.089128,
+    "effective_cpus": 0.9915005375107584
+   },
+   "2": {
+    "clock_GHz": 4.135175674259954,
+    "task_clock_ms_per_call": 242.45099999999996,
+    "cycles_per_call": 1002577477.4,
+    "instructions_per_call": 6160029762.0,
+    "wall_median_ms": 120.199263,
+    "effective_cpus": 2.0170755955467046
+   },
+   "4": {
+    "clock_GHz": 3.9369682743661785,
+    "task_clock_ms_per_call": 256.7955,
+    "cycles_per_call": 1010995736.5,
+    "instructions_per_call": 6162163612.8,
+    "wall_median_ms": 64.152681,
+    "effective_cpus": 4.002880253749645
+   },
+   "8": {
+    "clock_GHz": 3.465789493173613,
+    "task_clock_ms_per_call": 306.03675000000004,
+    "cycles_per_call": 1060658952.675,
+    "instructions_per_call": 6166799239.6,
+    "wall_median_ms": 38.383065,
+    "effective_cpus": 7.973223347327787
+   },
+   "12": {
+    "clock_GHz": 3.3836059206781353,
+    "task_clock_ms_per_call": 337.0025,
+    "cycles_per_call": 1140283654.2833333,
+    "instructions_per_call": 6176148438.55,
+    "wall_median_ms": 28.691654,
+    "effective_cpus": 11.745663041942441
+   },
+   "16": {
+    "clock_GHz": 3.246372911832397,
+    "task_clock_ms_per_call": 343.36025,
+    "cycles_per_call": 1114675414.6,
+    "instructions_per_call": 6173148092.1125,
+    "wall_median_ms": 21.292065,
+    "effective_cpus": 16.126207110489283
+   }
+  }
+ },
+ "A3": {
+  "1": {
+   "Copy": {
+    "median": 46.3,
+    "min": 45.9,
+    "max": 46.4,
+    "n": 5
+   },
+   "Scale": {
+    "median": 46.2,
+    "min": 46.1,
+    "max": 46.3,
+    "n": 5
+   },
+   "Add": {
+    "median": 47.1,
+    "min": 47.1,
+    "max": 47.1,
+    "n": 5
+   },
+   "Triad": {
+    "median": 45.2,
+    "min": 45.1,
+    "max": 45.5,
+    "n": 5
+   }
+  },
+  "2": {
+   "Copy": {
+    "median": 66.2,
+    "min": 66.1,
+    "max": 66.3,
+    "n": 5
+   },
+   "Scale": {
+    "median": 66.2,
+    "min": 66.1,
+    "max": 66.3,
+    "n": 5
+   },
+   "Add": {
+    "median": 71.7,
+    "min": 71.6,
+    "max": 71.8,
+    "n": 5
+   },
+   "Triad": {
+    "median": 71.7,
+    "min": 71.5,
+    "max": 71.9,
+    "n": 5
+   }
+  },
+  "4": {
+   "Copy": {
+    "median": 66.6,
+    "min": 66.5,
+    "max": 66.8,
+    "n": 5
+   },
+   "Scale": {
+    "median": 66.4,
+    "min": 66.3,
+    "max": 66.5,
+    "n": 5
+   },
+   "Add": {
+    "median": 72.2,
+    "min": 72.1,
+    "max": 72.3,
+    "n": 5
+   },
+   "Triad": {
+    "median": 72.3,
+    "min": 72.2,
+    "max": 72.4,
+    "n": 5
+   }
+  },
+  "8": {
+   "Copy": {
+    "median": 67.0,
+    "min": 67.0,
+    "max": 67.1,
+    "n": 5
+   },
+   "Scale": {
+    "median": 66.8,
+    "min": 66.7,
+    "max": 66.9,
+    "n": 5
+   },
+   "Add": {
+    "median": 72.9,
+    "min": 72.9,
+    "max": 72.9,
+    "n": 5
+   },
+   "Triad": {
+    "median": 73.1,
+    "min": 73.1,
+    "max": 73.2,
+    "n": 5
+   }
+  },
+  "12": {
+   "Copy": {
+    "median": 91.9,
+    "min": 91.7,
+    "max": 92.1,
+    "n": 5
+   },
+   "Scale": {
+    "median": 91.2,
+    "min": 91.2,
+    "max": 91.4,
+    "n": 5
+   },
+   "Add": {
+    "median": 100.7,
+    "min": 100.5,
+    "max": 101.0,
+    "n": 5
+   },
+   "Triad": {
+    "median": 101.1,
+    "min": 101.0,
+    "max": 101.2,
+    "n": 5
+   }
+  },
+  "16": {
+   "Copy": {
+    "median": 113.7,
+    "min": 113.6,
+    "max": 113.7,
+    "n": 5
+   },
+   "Scale": {
+    "median": 112.5,
+    "min": 112.5,
+    "max": 112.6,
+    "n": 5
+   },
+   "Add": {
+    "median": 125.9,
+    "min": 125.9,
+    "max": 126.1,
+    "n": 5
+   },
+   "Triad": {
+    "median": 126.1,
+    "min": 126.0,
+    "max": 126.2,
+    "n": 5
+   }
+  }
+ },
+ "B": {
+  "copy": {
+   "bytes_per_copy": 1073741824.0,
+   "counted_bytes": 2147483648.0,
+   "warm": 5.0,
+   "reps": 100.0,
+   "median_ms": 5.564672,
+   "min_ms": 5.546592,
+   "max_ms": 5.577312,
+   "GBps": 385.914,
+   "mismatches": 0.0
+  },
+  "read": [
+   {
+    "bytes": 1073741824.0,
+    "unroll": 2.0,
+    "blocks_per_sm": 2.0,
+    "blocks": 72.0,
+    "threads": 256.0,
+    "warm": 5.0,
+    "reps": 100.0,
+    "median_ms": 2.523248,
+    "min_ms": 2.518784,
+    "max_ms": 2.529536,
+    "GBps": 425.54,
+    "sum_ok": 1.0
+   },
+   {
+    "bytes": 1073741824.0,
+    "unroll": 2.0,
+    "blocks_per_sm": 4.0,
+    "blocks": 144.0,
+    "threads": 256.0,
+    "warm": 5.0,
+    "reps": 100.0,
+    "median_ms": 2.51704,
+    "min_ms": 2.512864,
+    "max_ms": 2.52336,
+    "GBps": 426.589,
+    "sum_ok": 1.0
+   },
+   {
+    "bytes": 1073741824.0,
+    "unroll": 2.0,
+    "blocks_per_sm": 8.0,
+    "blocks": 288.0,
+    "threads": 256.0,
+    "warm": 5.0,
+    "reps": 100.0,
+    "median_ms": 2.51712,
+    "min_ms": 2.514912,
+    "max_ms": 2.523392,
+    "GBps": 426.576,
+    "sum_ok": 1.0
+   },
+   {
+    "bytes": 1073741824.0,
+    "unroll": 2.0,
+    "blocks_per_sm": 16.0,
+    "blocks": 576.0,
+    "threads": 256.0,
+    "warm": 5.0,
+    "reps": 100.0,
+    "median_ms": 2.5152,
+    "min_ms": 2.514944,
+    "max_ms": 2.519296,
+    "GBps": 426.901,
+    "sum_ok": 1.0
+   },
+   {
+    "bytes": 1073741824.0,
+    "unroll": 4.0,
+    "blocks_per_sm": 2.0,
+    "blocks": 72.0,
+    "threads": 256.0,
+    "warm": 5.0,
+    "reps": 100.0,
+    "median_ms": 2.517152,
+    "min_ms": 2.514912,
+    "max_ms": 2.521408,
+    "GBps": 426.57,
+    "sum_ok": 1.0
+   },
+   {
+    "bytes": 1073741824.0,
+    "unroll": 4.0,
+    "blocks_per_sm": 4.0,
+    "blocks": 144.0,
+    "threads": 256.0,
+    "warm": 5.0,
+    "reps": 100.0,
+    "median_ms": 2.513152,
+    "min_ms": 2.511136,
+    "max_ms": 2.51728,
+    "GBps": 427.249,
+    "sum_ok": 1.0
+   },
+   {
+    "bytes": 1073741824.0,
+    "unroll": 4.0,
+    "blocks_per_sm": 8.0,
+    "blocks": 288.0,
+    "threads": 256.0,
+    "warm": 5.0,
+    "reps": 100.0,
+    "median_ms": 2.515136,
+    "min_ms": 2.512864,
+    "max_ms": 2.521056,
+    "GBps": 426.912,
+    "sum_ok": 1.0
+   },
+   {
+    "bytes": 1073741824.0,
+    "unroll": 4.0,
+    "blocks_per_sm": 16.0,
+    "blocks": 576.0,
+    "threads": 256.0,
+    "warm": 5.0,
+    "reps": 100.0,
+    "median_ms": 2.515072,
+    "min_ms": 2.512928,
+    "max_ms": 2.519328,
+    "GBps": 426.923,
+    "sum_ok": 1.0
+   },
+   {
+    "bytes": 1073741824.0,
+    "unroll": 8.0,
+    "blocks_per_sm": 2.0,
+    "blocks": 72.0,
+    "threads": 256.0,
+    "warm": 5.0,
+    "reps": 100.0,
+    "median_ms": 2.515152,
+    "min_ms": 2.512992,
+    "max_ms": 2.519296,
+    "GBps": 426.909,
+    "sum_ok": 1.0
+   },
+   {
+    "bytes": 1073741824.0,
+    "unroll": 8.0,
+    "blocks_per_sm": 4.0,
+    "blocks": 144.0,
+    "threads": 256.0,
+    "warm": 5.0,
+    "reps": 100.0,
+    "median_ms": 2.514528,
+    "min_ms": 2.512864,
+    "max_ms": 2.519136,
+    "GBps": 427.015,
+    "sum_ok": 1.0
+   },
+   {
+    "bytes": 1073741824.0,
+    "unroll": 8.0,
+    "blocks_per_sm": 8.0,
+    "blocks": 288.0,
+    "threads": 256.0,
+    "warm": 5.0,
+    "reps": 100.0,
+    "median_ms": 2.515168,
+    "min_ms": 2.513152,
+    "max_ms": 2.519232,
+    "GBps": 426.907,
+    "sum_ok": 1.0
+   },
+   {
+    "bytes": 1073741824.0,
+    "unroll": 8.0,
+    "blocks_per_sm": 16.0,
+    "blocks": 576.0,
+    "threads": 256.0,
+    "warm": 5.0,
+    "reps": 100.0,
+    "median_ms": 2.51512,
+    "min_ms": 2.512896,
+    "max_ms": 2.519328,
+    "GBps": 426.915,
+    "sum_ok": 1.0
+   }
+  ],
+  "mma": [
+   {
+    "nacc": 1.0,
+    "warps_per_block": 4.0,
+    "blocks_per_sm": 1.0,
+    "blocks": 36.0,
+    "iters": 1666667.0,
+    "mma_per_launch": 240000048.0,
+    "warm": 3.0,
+    "reps": 30.0,
+    "median_ms": 20.403536,
+    "min_ms": 20.401505,
+    "max_ms": 20.406208,
+    "TFLOPs": 48.1799,
+    "bad_outputs": 0.0
+   },
+   {
+    "nacc": 1.0,
+    "warps_per_block": 4.0,
+    "blocks_per_sm": 2.0,
+    "blocks": 72.0,
+    "iters": 833333.0,
+    "mma_per_launch": 239999904.0,
+    "warm": 3.0,
+    "reps": 30.0,
+    "median_ms": 19.462048,
+    "min_ms": 19.453377,
+    "max_ms": 19.468224,
+    "TFLOPs": 50.5106,
+    "bad_outputs": 0.0
+   },
+   {
+    "nacc": 1.0,
+    "warps_per_block": 4.0,
+    "blocks_per_sm": 4.0,
+    "blocks": 144.0,
+    "iters": 416667.0,
+    "mma_per_launch": 240000192.0,
+    "warm": 3.0,
+    "reps": 30.0,
+    "median_ms": 19.251856,
+    "min_ms": 19.248575,
+    "max_ms": 19.255199,
+    "TFLOPs": 51.0621,
+    "bad_outputs": 0.0
+   },
+   {
+    "nacc": 1.0,
+    "warps_per_block": 4.0,
+    "blocks_per_sm": 8.0,
+    "blocks": 288.0,
+    "iters": 208333.0,
+    "mma_per_launch": 239999616.0,
+    "warm": 3.0,
+    "reps": 30.0,
+    "median_ms": 19.118064,
+    "min_ms": 19.115456,
+    "max_ms": 19.122496,
+    "TFLOPs": 51.4194,
+    "bad_outputs": 0.0
+   },
+   {
+    "nacc": 1.0,
+    "warps_per_block": 8.0,
+    "blocks_per_sm": 1.0,
+    "blocks": 36.0,
+    "iters": 833333.0,
+    "mma_per_launch": 239999904.0,
+    "warm": 3.0,
+    "reps": 30.0,
+    "median_ms": 19.066751,
+    "min_ms": 19.062176,
+    "max_ms": 19.072992,
+    "TFLOPs": 51.5578,
+    "bad_outputs": 0.0
+   },
+   {
+    "nacc": 1.0,
+    "warps_per_block": 8.0,
+    "blocks_per_sm": 2.0,
+    "blocks": 72.0,
+    "iters": 416667.0,
+    "mma_per_launch": 240000192.0,
+    "warm": 3.0,
+    "reps": 30.0,
+    "median_ms": 19.025872,
+    "min_ms": 19.023136,
+    "max_ms": 19.029921,
+    "TFLOPs": 51.6686,
+    "bad_outputs": 0.0
+   },
+   {
+    "nacc": 1.0,
+    "warps_per_block": 8.0,
+    "blocks_per_sm": 4.0,
+    "blocks": 144.0,
+    "iters": 208333.0,
+    "mma_per_launch": 239999616.0,
+    "warm": 3.0,
+    "reps": 30.0,
+    "median_ms": 19.002481,
+    "min_ms": 18.999168,
+    "max_ms": 19.005312,
+    "TFLOPs": 51.7321,
+    "bad_outputs": 0.0
+   },
+   {
+    "nacc": 1.0,
+    "warps_per_block": 8.0,
+    "blocks_per_sm": 8.0,
+    "blocks": 288.0,
+    "iters": 104167.0,
+    "mma_per_launch": 240000768.0,
+    "warm": 3.0,
+    "reps": 30.0,
+    "median_ms": 18.991072,
+    "min_ms": 18.988159,
+    "max_ms": 18.995071,
+    "TFLOPs": 51.7634,
+    "bad_outputs": 0.0
+   },
+   {
+    "nacc": 2.0,
+    "warps_per_block": 4.0,
+    "blocks_per_sm": 1.0,
+    "blocks": 36.0,
+    "iters": 833333.0,
+    "mma_per_launch": 239999904.0,
+    "warm": 3.0,
+    "reps": 30.0,
+    "median_ms": 19.185424,
+    "min_ms": 19.165089,
+    "max_ms": 19.187584,
+    "TFLOPs": 51.2389,
+    "bad_outputs": 0.0
+   },
+   {
+    "nacc": 2.0,
+    "warps_per_block": 4.0,
+    "blocks_per_sm": 2.0,
+    "blocks": 72.0,
+    "iters": 416667.0,
+    "mma_per_launch": 240000192.0,
+    "warm": 3.0,
+    "reps": 30.0,
+    "median_ms": 19.068816,
+    "min_ms": 19.06016,
+    "max_ms": 19.073759,
+    "TFLOPs": 51.5523,
+    "bad_outputs": 0.0
+   },
+   {
+    "nacc": 2.0,
+    "warps_per_block": 4.0,
+    "blocks_per_sm": 4.0,
+    "blocks": 144.0,
+    "iters": 208333.0,
+    "mma_per_launch": 239999616.0,
+    "warm": 3.0,
+    "reps": 30.0,
+    "median_ms": 19.009408,
+    "min_ms": 19.005152,
+    "max_ms": 19.013599,
+    "TFLOPs": 51.7133,
+    "bad_outputs": 0.0
+   },
+   {
+    "nacc": 2.0,
+    "warps_per_block": 4.0,
+    "blocks_per_sm": 8.0,
+    "blocks": 288.0,
+    "iters": 104167.0,
+    "mma_per_launch": 240000768.0,
+    "warm": 3.0,
+    "reps": 30.0,
+    "median_ms": 18.980752,
+    "min_ms": 18.968544,
+    "max_ms": 18.982912,
+    "TFLOPs": 51.7916,
+    "bad_outputs": 0.0
+   },
+   {
+    "nacc": 2.0,
+    "warps_per_block": 8.0,
+    "blocks_per_sm": 1.0,
+    "blocks": 36.0,
+    "iters": 416667.0,
+    "mma_per_launch": 240000192.0,
+    "warm": 3.0,
+    "reps": 30.0,
+    "median_ms": 18.978687,
+    "min_ms": 18.960224,
+    "max_ms": 18.980831,
+    "TFLOPs": 51.7971,
+    "bad_outputs": 0.0
+   },
+   {
+    "nacc": 2.0,
+    "warps_per_block": 8.0,
+    "blocks_per_sm": 2.0,
+    "blocks": 72.0,
+    "iters": 208333.0,
+    "mma_per_launch": 239999616.0,
+    "warm": 3.0,
+    "reps": 30.0,
+    "median_ms": 18.970495,
+    "min_ms": 18.960224,
+    "max_ms": 18.972544,
+    "TFLOPs": 51.8193,
+    "bad_outputs": 0.0
+   },
+   {
+    "nacc": 2.0,
+    "warps_per_block": 8.0,
+    "blocks_per_sm": 4.0,
+    "blocks": 144.0,
+    "iters": 104167.0,
+    "mma_per_launch": 240000768.0,
+    "warm": 3.0,
+    "reps": 30.0,
+    "median_ms": 18.964433,
+    "min_ms": 18.960384,
+    "max_ms": 18.966463,
+    "TFLOPs": 51.8361,
+    "bad_outputs": 0.0
+   },
+   {
+    "nacc": 2.0,
+    "warps_per_block": 8.0,
+    "blocks_per_sm": 8.0,
+    "blocks": 288.0,
+    "iters": 52083.0,
+    "mma_per_launch": 239998464.0,
+    "warm": 3.0,
+    "reps": 30.0,
+    "median_ms": 18.964384,
+    "min_ms": 18.960224,
+    "max_ms": 18.966496,
+    "TFLOPs": 51.8358,
+    "bad_outputs": 0.0
+   },
+   {
+    "nacc": 4.0,
+    "warps_per_block": 4.0,
+    "blocks_per_sm": 1.0,
+    "blocks": 36.0,
+    "iters": 416667.0,
+    "mma_per_launch": 240000192.0,
+    "warm": 3.0,
+    "reps": 30.0,
+    "median_ms": 19.070911,
+    "min_ms": 19.06064,
+    "max_ms": 19.075041,
+    "TFLOPs": 51.5466,
+    "bad_outputs": 0.0
+   },
+   {
+    "nacc": 4.0,
+    "warps_per_block": 4.0,
+    "blocks_per_sm": 2.0,
+    "blocks": 72.0,
+    "iters": 208333.0,
+    "mma_per_launch": 239999616.0,
+    "warm": 3.0,
+    "reps": 30.0,
+    "median_ms": 19.009409,
+    "min_ms": 19.005377,
+    "max_ms": 19.013536,
+    "TFLOPs": 51.7133,
+    "bad_outputs": 0.0
+   },
+   {
+    "nacc": 4.0,
+    "warps_per_block": 4.0,
+    "blocks_per_sm": 4.0,
+    "blocks": 144.0,
+    "iters": 104167.0,
+    "mma_per_launch": 240000768.0,
+    "warm": 3.0,
+    "reps": 30.0,
+    "median_ms": 18.9828,
+    "min_ms": 18.97872,
+    "max_ms": 18.984961,
+    "TFLOPs": 51.786,
+    "bad_outputs": 0.0
+   },
+   {
+    "nacc": 4.0,
+    "warps_per_block": 4.0,
+    "blocks_per_sm": 8.0,
+    "blocks": 288.0,
+    "iters": 52083.0,
+    "mma_per_launch": 239998464.0,
+    "warm": 3.0,
+    "reps": 30.0,
+    "median_ms": 18.968449,
+    "min_ms": 18.96624,
+    "max_ms": 18.972639,
+    "TFLOPs": 51.8247,
+    "bad_outputs": 0.0
+   },
+   {
+    "nacc": 4.0,
+    "warps_per_block": 8.0,
+    "blocks_per_sm": 1.0,
+    "blocks": 36.0,
+    "iters": 208333.0,
+    "mma_per_launch": 239999616.0,
+    "warm": 3.0,
+    "reps": 30.0,
+    "median_ms": 18.968512,
+    "min_ms": 18.961697,
+    "max_ms": 18.972609,
+    "TFLOPs": 51.8248,
+    "bad_outputs": 0.0
+   },
+   {
+    "nacc": 4.0,
+    "warps_per_block": 8.0,
+    "blocks_per_sm": 2.0,
+    "blocks": 72.0,
+    "iters": 104167.0,
+    "mma_per_launch": 240000768.0,
+    "warm": 3.0,
+    "reps": 30.0,
+    "median_ms": 18.966368,
+    "min_ms": 18.962208,
+    "max_ms": 18.968512,
+    "TFLOPs": 51.8309,
+    "bad_outputs": 0.0
+   },
+   {
+    "nacc": 4.0,
+    "warps_per_block": 8.0,
+    "blocks_per_sm": 4.0,
+    "blocks": 144.0,
+    "iters": 52083.0,
+    "mma_per_launch": 239998464.0,
+    "warm": 3.0,
+    "reps": 30.0,
+    "median_ms": 18.963345,
+    "min_ms": 18.962273,
+    "max_ms": 18.968416,
+    "TFLOPs": 51.8386,
+    "bad_outputs": 0.0
+   },
+   {
+    "nacc": 4.0,
+    "warps_per_block": 8.0,
+    "blocks_per_sm": 8.0,
+    "blocks": 288.0,
+    "iters": 26042.0,
+    "mma_per_launch": 240003072.0,
+    "warm": 3.0,
+    "reps": 30.0,
+    "median_ms": 18.964289,
+    "min_ms": 18.96032,
+    "max_ms": 18.966433,
+    "TFLOPs": 51.837,
+    "bad_outputs": 0.0
+   },
+   {
+    "nacc": 8.0,
+    "warps_per_block": 4.0,
+    "blocks_per_sm": 1.0,
+    "blocks": 36.0,
+    "iters": 208333.0,
+    "mma_per_launch": 239999616.0,
+    "warm": 3.0,
+    "reps": 30.0,
+    "median_ms": 19.017648,
+    "min_ms": 19.015425,
+    "max_ms": 19.019712,
+    "TFLOPs": 51.6909,
+    "bad_outputs": 0.0
+   },
+   {
+    "nacc": 8.0,
+    "warps_per_block": 4.0,
+    "blocks_per_sm": 2.0,
+    "blocks": 72.0,
+    "iters": 104167.0,
+    "mma_per_launch": 240000768.0,
+    "warm": 3.0,
+    "reps": 30.0,
+    "median_ms": 18.984848,
+    "min_ms": 18.97872,
+    "max_ms": 18.989023,
+    "TFLOPs": 51.7804,
+    "bad_outputs": 0.0
+   },
+   {
+    "nacc": 8.0,
+    "warps_per_block": 4.0,
+    "blocks_per_sm": 4.0,
+    "blocks": 144.0,
+    "iters": 52083.0,
+    "mma_per_launch": 239998464.0,
+    "warm": 3.0,
+    "reps": 30.0,
+    "median_ms": 18.970495,
+    "min_ms": 18.966368,
+    "max_ms": 18.972609,
+    "TFLOPs": 51.8191,
+    "bad_outputs": 0.0
+   },
+   {
+    "nacc": 8.0,
+    "warps_per_block": 4.0,
+    "blocks_per_sm": 8.0,
+    "blocks": 288.0,
+    "iters": 26042.0,
+    "mma_per_launch": 240003072.0,
+    "warm": 3.0,
+    "reps": 30.0,
+    "median_ms": 18.966463,
+    "min_ms": 18.964352,
+    "max_ms": 18.968576,
+    "TFLOPs": 51.8311,
+    "bad_outputs": 0.0
+   },
+   {
+    "nacc": 8.0,
+    "warps_per_block": 8.0,
+    "blocks_per_sm": 1.0,
+    "blocks": 36.0,
+    "iters": 104167.0,
+    "mma_per_launch": 240000768.0,
+    "warm": 3.0,
+    "reps": 30.0,
+    "median_ms": 18.970448,
+    "min_ms": 18.967903,
+    "max_ms": 18.972639,
+    "TFLOPs": 51.8197,
+    "bad_outputs": 0.0
+   },
+   {
+    "nacc": 8.0,
+    "warps_per_block": 8.0,
+    "blocks_per_sm": 2.0,
+    "blocks": 72.0,
+    "iters": 52083.0,
+    "mma_per_launch": 239998464.0,
+    "warm": 3.0,
+    "reps": 30.0,
+    "median_ms": 18.970464,
+    "min_ms": 18.965887,
+    "max_ms": 18.972193,
+    "TFLOPs": 51.8192,
+    "bad_outputs": 0.0
+   },
+   {
+    "nacc": 8.0,
+    "warps_per_block": 8.0,
+    "blocks_per_sm": 4.0,
+    "blocks": 144.0,
+    "iters": 26042.0,
+    "mma_per_launch": 240003072.0,
+    "warm": 3.0,
+    "reps": 30.0,
+    "median_ms": 18.968479,
+    "min_ms": 18.966272,
+    "max_ms": 18.971519,
+    "TFLOPs": 51.8256,
+    "bad_outputs": 0.0
+   },
+   {
+    "nacc": 8.0,
+    "warps_per_block": 8.0,
+    "blocks_per_sm": 8.0,
+    "blocks": 288.0,
+    "iters": 13021.0,
+    "mma_per_launch": 240003072.0,
+    "warm": 3.0,
+    "reps": 30.0,
+    "median_ms": 18.968464,
+    "min_ms": 18.965824,
+    "max_ms": 18.970528,
+    "TFLOPs": 51.8256,
+    "bad_outputs": 0.0
+   }
+  ],
+  "mma_confirm": {
+   "nacc": 4.0,
+   "warps_per_block": 8.0,
+   "blocks_per_sm": 4.0,
+   "blocks": 144.0,
+   "iters": 52083.0,
+   "mma_per_launch": 239998464.0,
+   "warm": 3.0,
+   "reps": 200.0,
+   "median_ms": 18.962368,
+   "min_ms": 18.958176,
+   "max_ms": 18.967873,
+   "TFLOPs": 51.8413,
+   "bad_outputs": 0.0
+  },
+  "phases": {
+   "copy": {
+    "begin": 1795153245547,
+    "end": 1795153246135,
+    "n_samples": 6,
+    "sm_MHz": {
+     "median": 180.0,
+     "min": 180.0,
+     "max": 2812.0
+    },
+    "mem_MHz": {
+     "median": 405.0,
+     "min": 405.0,
+     "max": 13801.0
+    },
+    "power_W": {
+     "median": 4.68,
+     "max": 28.0
+    },
+    "pstates": [
+     "P1",
+     "P8"
+    ]
+   },
+   "read": {
+    "begin": 1795153246135,
+    "end": 1795153249318,
+    "n_samples": 31,
+    "sm_MHz": {
+     "median": 2805.0,
+     "min": 2805.0,
+     "max": 2812.0
+    },
+    "mem_MHz": {
+     "median": 13801.0,
+     "min": 13801.0,
+     "max": 13801.0
+    },
+    "power_W": {
+     "median": 83.37,
+     "max": 83.89
+    },
+    "pstates": [
+     "P1"
+    ]
+   },
+   "mma": {
+    "begin": 1795153249321,
+    "end": 1795153269469,
+    "n_samples": 202,
+    "sm_MHz": {
+     "median": 2812.0,
+     "min": 2805.0,
+     "max": 2812.0
+    },
+    "mem_MHz": {
+     "median": 13801.0,
+     "min": 13801.0,
+     "max": 13801.0
+    },
+    "power_W": {
+     "median": 45.28,
+     "max": 83.37
+    },
+    "pstates": [
+     "P1"
+    ]
+   },
+   "mma_confirm": {
+    "begin": 1795153269469,
+    "end": 1795153273319,
+    "n_samples": 38,
+    "sm_MHz": {
+     "median": 2812.0,
+     "min": 2812.0,
+     "max": 2812.0
+    },
+    "mem_MHz": {
+     "median": 13801.0,
+     "min": 13801.0,
+     "max": 13801.0
+    },
+    "power_W": {
+     "median": 44.72,
+     "max": 45.3
+    },
+    "pstates": [
+     "P1"
+    ]
+   }
+  },
+  "device": "device,NVIDIA GeForce RTX 5060 Ti,sm_120,SMs=36,L2=33554432,attr_clock_khz=2617000,attr_mem_clock_khz=14001000,bus_bits=128,driver=13030,runtime=13040,mode=full",
+  "mma_tile": {
+   "max_abs_err": 2.235e-07,
+   "max_err_over_abs_sum": 6.831e-08,
+   "pass": 1.0
+  },
+  "failures": 0,
+  "sass_hmma": "440 HMMA.16816.F32",
+  "clock_samples": 281,
+  "copy_pct_spec": 86.14151785714286,
+  "read_best": {
+   "bytes": 1073741824.0,
+   "unroll": 4.0,
+   "blocks_per_sm": 4.0,
+   "blocks": 144.0,
+   "threads": 256.0,
+   "warm": 5.0,
+   "reps": 100.0,
+   "median_ms": 2.513152,
+   "min_ms": 2.511136,
+   "max_ms": 2.51728,
+   "GBps": 427.249,
+   "sum_ok": 1.0
+  },
+  "read_best_pct_spec": 95.36808035714286,
+  "mma_best": {
+   "nacc": 4.0,
+   "warps_per_block": 8.0,
+   "blocks_per_sm": 4.0,
+   "blocks": 144.0,
+   "iters": 52083.0,
+   "mma_per_launch": 239998464.0,
+   "warm": 3.0,
+   "reps": 30.0,
+   "median_ms": 18.963345,
+   "min_ms": 18.962273,
+   "max_ms": 18.968416,
+   "TFLOPs": 51.8386,
+   "bad_outputs": 0.0
+  },
+  "mma_confirm_pct_nominal": 109.35344204952912,
+  "mma_confirm_flop_per_clk_per_sm": 512.1038801959854,
+  "nominal_at_observed_clock_TF": 51.830784
+ },
+ "failures": []
+}

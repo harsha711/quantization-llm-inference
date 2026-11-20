@@ -288,6 +288,11 @@
 - E056 is complete (c10, prerequisite 344128, full 344130): E030's profiler replayed with `tc_ladder` (GTA), Marlin (GQA) and vLLM in-process (V) in one job; gate 10/10 accepted, all three arms give identical tokens. Per step: GTA 5007/5770 µs, GQA 5185/5964, V 3774/3899 at 128/2048; GEMM calls 196 vs vLLM 112, other launches 1264 vs 276, FP16 head 1170 µs in all.
 - Our GEMM is 10% (200–210 µs) above vLLM's merged Marlin = 11–17% of the gap; the ~1000 extra unfused small kernels are 73–93% of it, plus unfused attention at 2048. Say "E030's structural explanation still holds"; profiler device time excludes host gaps, one profile per arm, attention copies counted in "other" by the predeclared name rule. Diagnostic only, nothing authorized; E021 third gate, +13.1%, never "competitive with Marlin/vLLM".
 
+## E057 measured roofs and CPU counters (descriptive)
+
+- Predeclared in EXPERIMENTS (user request 2026-11-20, slide values). E041's unchanged CPU kernel under user-mode `perf stat`/`perf record` (per-call counts by differencing R_hi vs 2 calls), clock = cycles ÷ task-clock per p, midterm STREAM; GPU microbenchmarks in `scripts/e057/` (D2D copy, read-only kernel, `mma.sync` m16n8k16 f32 only). Ran on c8, not c58 (held by another user's 7-day job): disclose with every CPU number.
+- E057 is complete (c8, prerequisite 344143, full 344144; first submission never reached Slurm: submit.sh not executable). CPU T1: IPC 5.1–6.2 at 4.14 GHz, 32.5/10.1/2.9 instructions per multiply-add (M1/4/128); unpack + FP16 conversion 72–82% of GEMM samples at M1/M4, FMA loop 76% at M128; clock 4.14 → 3.25–3.65 GHz at p = 16; Triad 45 GB/s (p1) to 126 GB/s (p16). LLC counters UNAVAILABLE; `cache-references/misses` are generic events, never call them LLC/DRAM. GPU: read-only 427 GB/s (95% of 448), copy 386 GB/s (86%), tensor 51.8 TFLOP/s = 512 FLOP/clk/SM at 2812 MHz (109% of nominal 47.4): say "measured lower bound at the observed clock"; fractions of 47.4 overstate efficiency by ~9% on this node.
+
 ## Rooflines, if requested
 
 - Recompute all ceilings, ridge points, arithmetic intensities, and performance coordinates from specifications/data. Keep the primary full-machine roof distinct from core-count, ISA, NUMA, and memory-domain sensitivity roofs.

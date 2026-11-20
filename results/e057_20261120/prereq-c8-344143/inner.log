@@ -1,0 +1,14 @@
+[prun] Master compute host = c8
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun bash /tmp/e057-src-344143/scripts/e057/inner.sh prereq /tmp/e057-src-344143 /mnt/beegfs/hpuvvad/csc548-w4a16-e057-20261120/prereq-c8-344143  (family=openmpi4)
+STEP metadata 2026-11-20T00:31:30-05:00
+STEP build 2026-11-20T00:31:30-05:00
+STEP perf-probe 2026-11-20T00:31:55-05:00
+STEP A4 2026-11-20T00:31:55-05:00
+STEP A1 2026-11-20T00:31:57-05:00
+STEP A1-record 2026-11-20T00:32:33-05:00
+STEP A2 2026-11-20T00:32:40-05:00
+STEP A3 2026-11-20T00:32:53-05:00
+STEP B 2026-11-20T00:32:55-05:00
+STEP analyze 2026-11-20T00:33:04-05:00
+INNER-OK

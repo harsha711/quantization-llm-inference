@@ -1,0 +1,42 @@
+
+Fatbin elf code:
+================
+arch = sm_120
+code version = [1,8]
+host = linux
+compile_size = 64bit
+
+Resource usage:
+ Common:
+  GLOBAL:0
+
+Fatbin elf code:
+================
+arch = sm_120
+code version = [1,8]
+host = linux
+compile_size = 64bit
+
+Resource usage:
+ Common:
+  GLOBAL:0
+ Function _Z8mma_peakILi8EEvPKjPfi:
+  REG:44 STACK:0 SHARED:0 LOCAL:0 CONSTANT[0]:916 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _Z8mma_peakILi4EEvPKjPfi:
+  REG:28 STACK:0 SHARED:0 LOCAL:0 CONSTANT[0]:916 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _Z8mma_peakILi2EEvPKjPfi:
+  REG:20 STACK:0 SHARED:0 LOCAL:0 CONSTANT[0]:916 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _Z8mma_peakILi1EEvPKjPfi:
+  REG:19 STACK:0 SHARED:0 LOCAL:0 CONSTANT[0]:916 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _Z11read_kernelILi8EEvPK5uint4mPy:
+  REG:40 STACK:0 SHARED:0 LOCAL:0 CONSTANT[0]:920 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _Z11read_kernelILi4EEvPK5uint4mPy:
+  REG:36 STACK:0 SHARED:0 LOCAL:0 CONSTANT[0]:920 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _Z11read_kernelILi2EEvPK5uint4mPy:
+  REG:26 STACK:0 SHARED:0 LOCAL:0 CONSTANT[0]:920 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _Z8mma_tilePKtS0_PKfPf:
+  REG:34 STACK:0 SHARED:0 LOCAL:0 CONSTANT[0]:928 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _Z14count_mismatchPKjmPy:
+  REG:14 STACK:0 SHARED:0 LOCAL:0 CONSTANT[0]:920 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _Z10fill_indexPjm:
+  REG:10 STACK:0 SHARED:0 LOCAL:0 CONSTANT[0]:912 TEXTURE:0 SURFACE:0 SAMPLER:0

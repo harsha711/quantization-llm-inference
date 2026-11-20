@@ -1,0 +1,4 @@
+# started on Fri Nov 20 00:36:36 2026
+
+19116473522,,L1-dcache-loads,0.03%,3202879879,100.00,,
+216022431,,L1-dcache-load-misses,0.36%,3202879879,100.00,1.13,of all L1-dcache accesses

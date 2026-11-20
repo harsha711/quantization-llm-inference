@@ -1,0 +1,39 @@
+A4 re-time (median ms, 10 reps in full) vs E041 c58 job 342501:
+  M4   p1     31.515 ms  E041    31.286  ratio 1.007
+  M4   p16     3.539 ms  E041     2.536  ratio 1.396
+
+A1 perf stat, T1, per GEMM call = (counts at R=hi - counts at R=2) / (hi - 2), user mode, mean of 3 runs each:
+  M4   task-clock/call 32.065 ms, cycles 1.322e+08, instr 6.782e+08, IPC 5.129, clock 4.124 GHz
+       per multiply-add: cycles 1.97, instructions 10.11, L1-dcache-loads 1.717, L1-dcache-load-misses 0.04756, cache-references 0.1994, cache-misses 0.001155, stalled-cycles-frontend -0.01811, stalled-cycles-backend 0.07348
+       ratios: L1_miss_ratio 0.0277, cache_miss_ratio 0.0058; unsupported: LLC-loads, LLC-load-misses
+
+hotspot M4 (cycles:u samples, -g twin, whole process incl. setup/check):
+    24.33%  w4a16::make_problem                  -      -
+    12.98%  w4a16::cpu_w4a16_gemm                -      -
+     7.50%  w4a16::dequantize_all_fp16           -      -
+     7.14%  w4a16::quantize_int4_groupwise       -      -
+     2.85%  0x000000000007eee9                   -      -
+     2.78%  w4a16::dequantize_all                -      -
+   GEMM function 12.97% of samples; within it:
+     100.0%  GEMM, other source (-      -)
+
+A2 average clock while computing = delta cycles:u / delta task-clock (GHz), and effective CPUs = task-clock / wall:
+  M4   p1 4.149 GHz (cpus 1.0)  p16 3.541 GHz (cpus 23.3)
+
+A3 STREAM (midterm source, 64M doubles = 512 MB per array; per run best of 10; median over runs), GB/s:
+  p1  Copy 45.9 [45.9-45.9]  Scale 46.0 [46.0-46.0]  Add 47.1 [47.1-47.1]  Triad 45.2 [45.2-45.2]
+  p16 Copy 113.3 [113.3-113.3]  Scale 112.3 [112.3-112.3]  Add 125.3 [125.3-125.3]  Triad 125.9 [125.9-125.9]
+
+B GPU (device,NVIDIA GeForce RTX 5060 Ti,sm_120,SMs=36,L2=33554432,attr_clock_khz=2617000,attr_mem_clock_khz=14001000,bus_bits=128,driver=13030,runtime=13040,mode=small)
+  D2D cudaMemcpy 268435456 B (read+write counted): median 1.386 ms -> 387.4 GB/s = 86.5% of 448 GB/s spec
+  read-only kernel, best of 12 configs (max of medians): 425.4 GB/s = 94.9% of spec (unroll 2, 4 blocks/SM); range 422.7-425.4
+  mma.m16n8k16 f32.f16.f16.f32 best of 32 configs: 51.84 TFLOP/s = 109.4% of 47.4 nominal (nacc 2, 8 warps/block, 8 blocks/SM)
+  confirmation run (20 launches): 51.84 TFLOP/s = 109.4% of nominal
+  SM clock during confirmation: median 2812 MHz (min 2812, max 2812, 5 samples) -> 512 FLOP/clk/SM; 512 FLOP/clk/SM at that clock = 51.83 TFLOP/s
+  clocks during copy        no samples in window
+  clocks during read        SM median 1432 [1432-1432] MHz, mem median 14001 MHz, power median 7.82 W, pstate P0, n=2
+  clocks during mma         SM median 2812 [1432-2812] MHz, mem median 13801 MHz, power median 44.65 W, pstate P0,P1, n=79
+  clocks during mma_confirm SM median 2812 [2812-2812] MHz, mem median 13801 MHz, power median 43.67 W, pstate P1, n=5
+  SASS HMMA forms: 440 HMMA.16816.F32
+
+failures: 0
