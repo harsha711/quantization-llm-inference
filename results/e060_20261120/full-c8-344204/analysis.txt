@@ -1,0 +1,26 @@
+E060 per-GEMM medians (us; cycle median / matrices); cost = patched / control - 1 (positive = barrier costs time)
+validity: scripts/checks/floorcheck classify(kind w4) == OK per arm and series; else NOT A RESULT
+cell            c  floor   ctl s1   pat s1   ctl s2   pat s2   cost s1   cost s2  label
+4096x4096 M1    16   20.29    24.04    24.04    24.04    24.06    +0.03%    +0.09%  no material cost
+4096x4096 M4    16   20.40    24.07    24.14    24.14    24.14    +0.32%    +0.02%  no material cost
+4096x4096 M16   16   20.86    25.30    25.34    25.30    25.32    +0.17%    +0.05%  no material cost
+4096x4096 M64   16   41.43    55.24    55.30    55.36    55.36    +0.11%    -0.01%  no material cost
+4096x4096 M128  16   82.85    97.76    97.77    97.70    97.71    +0.00%    +0.01%  no material cost
+4096x11008 M1    4   54.49    61.23    61.23    60.71    60.74    -0.01%    +0.06%  no material cost
+4096x11008 M4    4   54.70    61.26    61.50    60.98    61.02    +0.39%    +0.06%  no material cost
+4096x11008 M16   4   55.55    64.33    64.33    64.27    64.05    +0.01%    -0.35%  no material cost
+4096x11008 M64   4  111.33   131.37   131.34   131.38   131.38    -0.02%    +0.01%  no material cost
+4096x11008 M128  4  222.66   250.15   250.14   250.12   250.17    -0.01%    +0.02%  no material cost
+11008x4096 M1    4   54.49    59.22    59.22    59.21    59.21    +0.00%    +0.00%  no material cost
+11008x4096 M4    4   54.70    59.21    59.35    59.21    59.22    +0.24%    +0.01%  no material cost
+11008x4096 M16   4   55.55    61.22    61.26    61.26    61.26    +0.05%    +0.01%  no material cost
+11008x4096 M64   4  111.33   129.35   129.35   129.54   129.32    +0.00%    -0.17%  no material cost
+11008x4096 M128  4  222.66   244.55   244.76   244.77   244.55    +0.08%    -0.09%  no material cost
+
+Overall (predeclared 5% rule, all valid cells, both series): no material cost
+valid cells 15/15; not a result: []; |cost| >= 5% in a series: []
+cost range over valid cells and both series: -0.35% to +0.39% (all within the ~1.5% E058 noise)
+series 1: control and patched outputs bitwise equal in 15 cells; differing: []
+series 2: control and patched outputs bitwise equal in 15 cells; differing: []
+
+control = original E006 body with a reported racecheck hazard (E005/E006): timing it does not validate it; passing FP64 is not race freedom; never a default. One node, one GPU type, synthetic weights, kernel level, unprofiled. Costs below about 1.5% are within E058 run-to-run noise.

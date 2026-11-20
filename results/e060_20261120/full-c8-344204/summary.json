@@ -1,0 +1,539 @@
+{
+ "cells": {
+  "4096x4096 M1": {
+   "K": 4096,
+   "N": 4096,
+   "M": 1,
+   "matrices": 16,
+   "times": {
+    "control s1": 24.035999551415443,
+    "control s2": 24.041999131441116,
+    "patched s1": 24.042999371886253,
+    "patched s2": 24.064000695943832
+   },
+   "status": {
+    "control s1": "OK",
+    "control s2": "OK",
+    "patched s1": "OK",
+    "patched s2": "OK"
+   },
+   "floor_us": 20.288239700374533,
+   "strict_floor_us": 19.309714285714286,
+   "valid_series": {
+    "1": true,
+    "2": true
+   },
+   "cost": {
+    "1": 0.00029122235818968,
+    "2": 0.0009151304091823409
+   },
+   "sides": {
+    "1": "none",
+    "2": "none"
+   },
+   "result": true,
+   "label": "no material cost"
+  },
+  "4096x4096 M4": {
+   "K": 4096,
+   "N": 4096,
+   "M": 4,
+   "matrices": 16,
+   "times": {
+    "control s1": 24.066999554634094,
+    "control s2": 24.13799986243248,
+    "patched s1": 24.143999442458153,
+    "patched s2": 24.143999442458153
+   },
+   "status": {
+    "control s1": "OK",
+    "control s2": "OK",
+    "patched s1": "OK",
+    "patched s2": "OK"
+   },
+   "floor_us": 20.403295880149813,
+   "strict_floor_us": 19.309714285714286,
+   "valid_series": {
+    "1": true,
+    "2": true
+   },
+   "cost": {
+    "1": 0.003199397068556875,
+    "2": 0.00024855332089934734
+   },
+   "sides": {
+    "1": "none",
+    "2": "none"
+   },
+   "result": true,
+   "label": "no material cost"
+  },
+  "4096x4096 M16": {
+   "K": 4096,
+   "N": 4096,
+   "M": 16,
+   "matrices": 16,
+   "times": {
+    "control s1": 25.296000763773918,
+    "control s2": 25.30399989336729,
+    "patched s1": 25.340000167489052,
+    "patched s2": 25.31599998474121
+   },
+   "status": {
+    "control s1": "OK",
+    "control s2": "OK",
+    "patched s1": "OK",
+    "patched s2": "OK"
+   },
+   "floor_us": 20.863520599250936,
+   "strict_floor_us": 19.309714285714286,
+   "valid_series": {
+    "1": true,
+    "2": true
+   },
+   "cost": {
+    "1": 0.0017393818147786178,
+    "2": 0.0004742369358397003
+   },
+   "sides": {
+    "1": "none",
+    "2": "none"
+   },
+   "result": true,
+   "label": "no material cost"
+  },
+  "4096x4096 M64": {
+   "K": 4096,
+   "N": 4096,
+   "M": 64,
+   "matrices": 16,
+   "times": {
+    "control s1": 55.23900128901005,
+    "control s2": 55.36000058054924,
+    "patched s1": 55.30100129544735,
+    "patched s2": 55.35599961876869
+   },
+   "status": {
+    "control s1": "OK",
+    "control s2": "OK",
+    "patched s1": "OK",
+    "patched s2": "OK"
+   },
+   "floor_us": 41.425224691358025,
+   "strict_floor_us": 37.704998202085584,
+   "valid_series": {
+    "1": true,
+    "2": true
+   },
+   "cost": {
+    "1": 0.001122395499384865,
+    "2": -7.227170770573998e-05
+   },
+   "sides": {
+    "1": "none",
+    "2": "none"
+   },
+   "result": true,
+   "label": "no material cost"
+  },
+  "4096x4096 M128": {
+   "K": 4096,
+   "N": 4096,
+   "M": 128,
+   "matrices": 16,
+   "times": {
+    "control s1": 97.7649986743927,
+    "control s2": 97.69999980926514,
+    "patched s1": 97.76599705219269,
+    "patched s2": 97.70599752664566
+   },
+   "status": {
+    "control s1": "OK",
+    "control s2": "OK",
+    "patched s1": "OK",
+    "patched s2": "OK"
+   },
+   "floor_us": 82.85044938271605,
+   "strict_floor_us": 75.40999640417117,
+   "valid_series": {
+    "1": true,
+    "2": true
+   },
+   "cost": {
+    "1": 1.0212016708699423e-05,
+    "2": 6.138912376907335e-05
+   },
+   "sides": {
+    "1": "none",
+    "2": "none"
+   },
+   "result": true,
+   "label": "no material cost"
+  },
+  "4096x11008 M1": {
+   "K": 4096,
+   "N": 11008,
+   "M": 1,
+   "matrices": 4,
+   "times": {
+    "control s1": 61.23200058937073,
+    "control s2": 60.707999393343925,
+    "patched s1": 61.22799962759018,
+    "patched s2": 60.74399873614311
+   },
+   "status": {
+    "control s1": "OK",
+    "control s2": "OK",
+    "patched s1": "OK",
+    "patched s2": "OK"
+   },
+   "floor_us": 54.492284644194754,
+   "strict_floor_us": 51.89485714285714,
+   "valid_series": {
+    "1": true,
+    "2": true
+   },
+   "cost": {
+    "1": -6.534102662070218e-05,
+    "2": 0.000592991749998717
+   },
+   "sides": {
+    "1": "none",
+    "2": "none"
+   },
+   "result": true,
+   "label": "no material cost"
+  },
+  "4096x11008 M4": {
+   "K": 4096,
+   "N": 11008,
+   "M": 4,
+   "matrices": 4,
+   "times": {
+    "control s1": 61.264000833034515,
+    "control s2": 60.98400056362152,
+    "patched s1": 61.49999983608723,
+    "patched s2": 61.01999990642071
+   },
+   "status": {
+    "control s1": "OK",
+    "control s2": "OK",
+    "patched s1": "OK",
+    "patched s2": "OK"
+   },
+   "floor_us": 54.704419475655435,
+   "strict_floor_us": 51.89485714285714,
+   "valid_series": {
+    "1": true,
+    "2": true
+   },
+   "cost": {
+    "1": 0.0038521644006876965,
+    "2": 0.0005903079900708708
+   },
+   "sides": {
+    "1": "none",
+    "2": "none"
+   },
+   "result": true,
+   "label": "no material cost"
+  },
+  "4096x11008 M16": {
+   "K": 4096,
+   "N": 11008,
+   "M": 16,
+   "matrices": 4,
+   "times": {
+    "control s1": 64.32799994945526,
+    "control s2": 64.27200138568878,
+    "patched s1": 64.33200091123581,
+    "patched s2": 64.04799968004227
+   },
+   "status": {
+    "control s1": "OK",
+    "control s2": "OK",
+    "patched s1": "OK",
+    "patched s2": "OK"
+   },
+   "floor_us": 55.55295880149813,
+   "strict_floor_us": 51.89485714285714,
+   "valid_series": {
+    "1": true,
+    "2": true
+   },
+   "cost": {
+    "1": 6.219627197623367e-05,
+    "2": -0.003485214414007509
+   },
+   "sides": {
+    "1": "none",
+    "2": "none"
+   },
+   "result": true,
+   "label": "no material cost"
+  },
+  "4096x11008 M64": {
+   "K": 4096,
+   "N": 11008,
+   "M": 64,
+   "matrices": 4,
+   "times": {
+    "control s1": 131.3679963350296,
+    "control s2": 131.3759982585907,
+    "patched s1": 131.3440054655075,
+    "patched s2": 131.3840001821518
+   },
+   "status": {
+    "control s1": "OK",
+    "control s2": "OK",
+    "patched s1": "OK",
+    "patched s2": "OK"
+   },
+   "floor_us": 111.3302913580247,
+   "strict_floor_us": 101.33218266810499,
+   "valid_series": {
+    "1": true,
+    "2": true
+   },
+   "cost": {
+    "1": -0.0001826233952819667,
+    "2": 6.09085652414354e-05
+   },
+   "sides": {
+    "1": "none",
+    "2": "none"
+   },
+   "result": true,
+   "label": "no material cost"
+  },
+  "4096x11008 M128": {
+   "K": 4096,
+   "N": 11008,
+   "M": 128,
+   "matrices": 4,
+   "times": {
+    "control s1": 250.15199184417725,
+    "control s2": 250.12001395225525,
+    "patched s1": 250.13598799705505,
+    "patched s2": 250.16799569129944
+   },
+   "status": {
+    "control s1": "OK",
+    "control s2": "OK",
+    "patched s1": "OK",
+    "patched s2": "OK"
+   },
+   "floor_us": 222.6605827160494,
+   "strict_floor_us": 202.66436533620998,
+   "valid_series": {
+    "1": true,
+    "2": true
+   },
+   "cost": {
+    "1": -6.397649286826734e-05,
+    "2": 0.00019183486473561828
+   },
+   "sides": {
+    "1": "none",
+    "2": "none"
+   },
+   "result": true,
+   "label": "no material cost"
+  },
+  "11008x4096 M1": {
+   "K": 11008,
+   "N": 4096,
+   "M": 1,
+   "matrices": 4,
+   "times": {
+    "control s1": 59.21600013971329,
+    "control s2": 59.20799821615219,
+    "patched s1": 59.21600013971329,
+    "patched s2": 59.20799821615219
+   },
+   "status": {
+    "control s1": "OK",
+    "control s2": "OK",
+    "patched s1": "OK",
+    "patched s2": "OK"
+   },
+   "floor_us": 54.492284644194754,
+   "strict_floor_us": 51.89485714285714,
+   "valid_series": {
+    "1": true,
+    "2": true
+   },
+   "cost": {
+    "1": 0.0,
+    "2": 0.0
+   },
+   "sides": {
+    "1": "none",
+    "2": "none"
+   },
+   "result": true,
+   "label": "no material cost"
+  },
+  "11008x4096 M4": {
+   "K": 11008,
+   "N": 4096,
+   "M": 4,
+   "matrices": 4,
+   "times": {
+    "control s1": 59.20799821615219,
+    "control s2": 59.20799821615219,
+    "patched s1": 59.34800021350384,
+    "patched s2": 59.21600013971329
+   },
+   "status": {
+    "control s1": "OK",
+    "control s2": "OK",
+    "patched s1": "OK",
+    "patched s2": "OK"
+   },
+   "floor_us": 54.704419475655435,
+   "strict_floor_us": 51.89485714285714,
+   "valid_series": {
+    "1": true,
+    "2": true
+   },
+   "cost": {
+    "1": 0.0023645791374424796,
+    "2": 0.00013514936836545033
+   },
+   "sides": {
+    "1": "none",
+    "2": "none"
+   },
+   "result": true,
+   "label": "no material cost"
+  },
+  "11008x4096 M16": {
+   "K": 11008,
+   "N": 4096,
+   "M": 16,
+   "matrices": 4,
+   "times": {
+    "control s1": 61.22399866580963,
+    "control s2": 61.25999987125397,
+    "patched s1": 61.25599890947342,
+    "patched s2": 61.264000833034515
+   },
+   "status": {
+    "control s1": "OK",
+    "control s2": "OK",
+    "patched s1": "OK",
+    "patched s2": "OK"
+   },
+   "floor_us": 55.55295880149813,
+   "strict_floor_us": 51.89485714285714,
+   "valid_series": {
+    "1": true,
+    "2": true
+   },
+   "cost": {
+    "1": 0.0005226748392972436,
+    "2": 6.53111620789737e-05
+   },
+   "sides": {
+    "1": "none",
+    "2": "none"
+   },
+   "result": true,
+   "label": "no material cost"
+  },
+  "11008x4096 M64": {
+   "K": 11008,
+   "N": 4096,
+   "M": 64,
+   "matrices": 4,
+   "times": {
+    "control s1": 129.35200333595276,
+    "control s2": 129.5360028743744,
+    "patched s1": 129.35200333595276,
+    "patched s2": 129.31599467992783
+   },
+   "status": {
+    "control s1": "OK",
+    "control s2": "OK",
+    "patched s1": "OK",
+    "patched s2": "OK"
+   },
+   "floor_us": 111.3302913580247,
+   "strict_floor_us": 101.33218266810499,
+   "valid_series": {
+    "1": true,
+    "2": true
+   },
+   "cost": {
+    "1": 0.0,
+    "2": -0.0016984327875233518
+   },
+   "sides": {
+    "1": "none",
+    "2": "none"
+   },
+   "result": true,
+   "label": "no material cost"
+  },
+  "11008x4096 M128": {
+   "K": 11008,
+   "N": 4096,
+   "M": 128,
+   "matrices": 4,
+   "times": {
+    "control s1": 244.55200135707855,
+    "control s2": 244.76799368858337,
+    "patched s1": 244.75600570440292,
+    "patched s2": 244.55200135707855
+   },
+   "status": {
+    "control s1": "OK",
+    "control s2": "OK",
+    "patched s1": "OK",
+    "patched s2": "OK"
+   },
+   "floor_us": 222.6605827160494,
+   "strict_floor_us": 202.66436533620998,
+   "valid_series": {
+    "1": true,
+    "2": true
+   },
+   "cost": {
+    "1": 0.0008341961881002113,
+    "2": -0.0008824369896156536
+   },
+   "sides": {
+    "1": "none",
+    "2": "none"
+   },
+   "result": true,
+   "label": "no material cost"
+  }
+ },
+ "overall": {
+  "label": "no material cost",
+  "valid_cells": 15,
+  "cells": 15,
+  "not_result": [],
+  "material": [],
+  "cost_min": -0.003485214414007509,
+  "cost_max": 0.0038521644006876965,
+  "within_noise": true
+ },
+ "rows": 60,
+ "samples": 6000,
+ "bits": {
+  "1": {
+   "equal_cells": 15,
+   "differing": []
+  },
+  "2": {
+   "equal_cells": 15,
+   "differing": []
+  }
+ },
+ "tol": 0.05,
+ "noise": 0.015,
+ "disclosure": "control = original E006 body with a reported racecheck hazard (E005/E006): timing it does not validate it; passing FP64 is not race freedom; never a default. One node, one GPU type, synthetic weights, kernel level, unprofiled. Costs below about 1.5% are within E058 run-to-run noise."
+}
