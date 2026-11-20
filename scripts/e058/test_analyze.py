@@ -1,9 +1,11 @@
 """Tests for scripts/e058/analyze.py, written BEFORE the floorcheck-based implementation (2026-11-20).
 
 Every expected number is derived by hand in the comment next to it, never by calling the code under test.
-The shared checker scripts/checks/floorcheck.py supplies bytes_model/floor_us/classify; E058's own logic
-under test is: per-GEMM time = median(cycle samples) / matrices, cell validity = classify(...) == OK at
-8 AND 16 matrices AND |t8/t16 - 1| <= 3%.
+The shared checker scripts/checks/floorcheck.py (v2: kind=, BELOW_STRICT / BELOW_MEASURED) supplies
+floor_us/strict_floor_us/classify/kind_of; E058's own logic under test is: per-GEMM time = median(cycle samples)
+/ matrices, cell validity = classify(...) == OK at 8 AND 16 matrices AND |t8/t16 - 1| <= 3%; both BELOW_STRICT
+(below weights+scales / 448 GB/s spec or FLOP / 56.95 TFLOP/s at 3090 MHz: physically impossible) and
+BELOW_MEASURED (below the full byte model / 427.2 GB/s or FLOP / 51.84 TFLOP/s: almost certainly cache) are invalid.
 
 Why E058's floor differs from its first draft (predeclaration amendment 1): the draft used the memory floor
 only; floorcheck uses max(memory, compute). At K=N=4096 M64/M128 the compute floor is larger
@@ -39,6 +41,15 @@ class UsesSharedChecker(unittest.TestCase):
         self.assertTrue(hasattr(an, 'fc'))
         self.assertEqual(an.fc.BW_BYTES_PER_S, 427.2e9)
         self.assertEqual(an.fc.L2_BYTES, L2)
+        self.assertEqual(an.fc.STRICT_BW_BYTES_PER_S, 448e9)   # 128-bit GDDR7 at 28 Gb/s spec
+        # 512 FLOP/clk/SM x 36 SMs x 3.090 GHz = 56,954,880,000,000 FLOP/s
+        self.assertAlmostEqual(an.fc.STRICT_PEAK_FLOP_PER_S, 56.95488e12, delta=1e6)
+
+    def test_kind_mapping(self):
+        # cuBLAS rows use FP16 W_hat bytes; Marlin/tc/tc_ladder 4-bit
+        self.assertEqual(an.kind('cublas_dq'), 'fp16')
+        for x in ('marlin', 'tc', 'tc_ladder'):
+            self.assertEqual(an.kind(x), 'w4')
 
 
 class PerGemm(unittest.TestCase):
@@ -61,19 +72,30 @@ class KnownBad(unittest.TestCase):
     def test_e050_marlin_m4_from_raw_file(self):
         # E050 series 2, Marlin, 4096^2, M4: per-GEMM = median(cycle)/4 = 15.13 us (E050 table 15.1).
         # Floor = (8,388,608 weights + 262,144 scales + 32,768 A + 32,768 C) = 8,716,288 B / 427.2e9 = 20.403 us.
-        # 15.13 < 20.40 -> BELOW_FLOOR. Working set 4 x 8,650,752 = 34,603,008 B = 1.031 x L2.
-        r = [json.loads(x) for x in open(E050_S2)]
+        # Strict floor = 8,650,752 B (weights + scales) / 448e9 = 19.31 us; 15.13 < 19.31 -> BELOW_STRICT
+        # (physically impossible from DRAM). Working set 4 x 8,650,752 = 34,603,008 B = 1.031 x L2.
+        with open(E050_S2) as fh:
+            r = [json.loads(x) for x in fh]
         hit = [x for x in r if (x['K'], x['N'], x['M'], x['config']) == (4096, 4096, 4, 'marlin')]
         self.assertEqual(len(hit), 1)
         t = an.per_gemm_us(hit[0])
         self.assertAlmostEqual(t, 15.13, delta=0.01)
-        self.assertEqual(an.cell_status('marlin', 4, t, 4), an.fc.BELOW_FLOOR)
+        self.assertEqual(an.cell_status('marlin', 4, t, 4), an.fc.BELOW_STRICT)
 
     def test_below_floor_at_8_and_16_invalid_even_if_converged(self):
         # Marlin M4 15.13 at 8 and 15.10 at 16: converged (0.2%) but < 20.403 floor -> invalid
         v = an.cell_valid('marlin', 4, 15.13, 15.10)
         self.assertFalse(v['valid'])
         self.assertTrue(v['converged'])
+
+    def test_below_measured_is_invalid(self):
+        # Marlin M16 19.70 us (E050 s2 value) at 8 and 16 matrices: strict floor 8,650,752/448e9 = 19.31 us
+        # < 19.70 < measured floor (8,650,752 + 2*16*4096*2 = 262,144) = 8,912,896/427.2e9 = 20.86 us
+        # -> BELOW_MEASURED at both counts; converged (0%) but invalid.
+        self.assertEqual(an.cell_status('marlin', 16, 19.70, 16), an.fc.BELOW_MEASURED)
+        v = an.cell_valid('marlin', 16, 19.70, 19.70)
+        self.assertTrue(v['converged'])
+        self.assertFalse(v['valid'])
 
     def test_four_matrices_above_floor_is_ws_small(self):
         # 21.0 us >= 20.403 floor, but 4 matrices = 34,603,008 B < 2 x L2 = 67,108,864 B -> WS_SMALL
@@ -93,14 +115,20 @@ class KnownBad(unittest.TestCase):
     def test_compute_floor_m128(self):
         # tc_ladder M128 at 60 us: memory floor (8,650,752 + 2*128*4096*2 = 2,097,152) = 10,747,904 B
         # / 427.2e9 = 25.16 us, but compute floor 2*128*4096*4096 = 4,294,967,296 FLOP / 51.84e12 = 82.85 us.
-        # 60 < 82.85 -> BELOW_FLOOR (the draft's memory-only floor would have passed it).
-        self.assertEqual(an.cell_status('tc_ladder', 128, 60.0, 16), an.fc.BELOW_FLOOR)
+        # Strict compute floor 4,294,967,296 / 56.95488e12 = 75.41 us; 60 < 75.41 -> BELOW_STRICT
+        # (the draft's memory-only floor of 25.16 us would have passed it).
+        self.assertEqual(an.cell_status('tc_ladder', 128, 60.0, 16), an.fc.BELOW_STRICT)
         self.assertFalse(an.cell_valid('tc_ladder', 128, 60.0, 60.5)['valid'])
+        # 80 us: 75.41 < 80 < 82.85 -> BELOW_MEASURED, still invalid
+        self.assertEqual(an.cell_status('tc_ladder', 128, 80.0, 16), an.fc.BELOW_MEASURED)
+        self.assertFalse(an.cell_valid('tc_ladder', 128, 80.0, 80.5)['valid'])
 
     def test_cublas_uses_fp16_bytes(self):
         # cuBLAS M4 at 70 us: FP16 floor (33,554,432 + 32,768 + 32,768) = 33,619,968 B / 427.2e9 = 78.70 us.
-        # 70 < 78.70 -> BELOW_FLOOR (a 4-bit floor of 20.40 us would wrongly accept it).
-        self.assertEqual(an.cell_status('cublas_dq', 4, 70.0, 16), an.fc.BELOW_FLOOR)
+        # Strict: 33,554,432 B / 448e9 = 74.90 us; 70 < 74.90 -> BELOW_STRICT (a 4-bit floor of 20.40 us
+        # would wrongly accept it). 76 us: 74.90 < 76 < 78.70 -> BELOW_MEASURED.
+        self.assertEqual(an.cell_status('cublas_dq', 4, 70.0, 16), an.fc.BELOW_STRICT)
+        self.assertEqual(an.cell_status('cublas_dq', 4, 76.0, 16), an.fc.BELOW_MEASURED)
 
 
 class KnownGood(unittest.TestCase):

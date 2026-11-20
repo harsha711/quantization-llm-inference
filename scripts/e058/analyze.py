@@ -4,8 +4,8 @@
 prereq: library identity (E050 hash), project checks, traced FP64 validation of every path at every matrix count,
 sanitizers, the smoke timing at M = 4 (4/8/16 matrices) against the floor (inspection only, not a result).
 full: both series; per-GEMM tables at 4/8/16 matrices; the validity check per cell (path x M x series), amendment 1:
-(1) scripts/checks/floorcheck.classify == OK at 8 AND 16 matrices (time >= max(bytes/427.2 GB/s, 2MNK/51.84 TFLOP/s),
-working set >= 2 x L2); (2) |t8/t16 - 1| <= 3%. Unit tests: scripts/e058/test_analyze.py. A cell failing either is reported as still cache-affected, not as a result.
+(1) scripts/checks/floorcheck (v2).classify == OK at 8 AND 16 matrices (not BELOW_STRICT / BELOW_MEASURED:
+time >= max(bytes/427.2 GB/s, 2MNK/51.84 TFLOP/s); working set >= 2 x L2); (2) |t8/t16 - 1| <= 3%. Unit tests: scripts/e058/test_analyze.py. A cell failing either is reported as still cache-affected, not as a result.
 Descriptive quantities (fraction of Marlin speed, tc_ladder/tc, cuBLAS fraction) use the 16-matrix medians;
 comparison with E050's 4096^2 numbers (results/e050_20261118/summary.json)."""
 import argparse
@@ -28,9 +28,19 @@ CONVERGENCE_TOL = 0.03              # predeclared |t8/t16 - 1| bound
 E050_SUMMARY = Path(__file__).resolve().parents[2]/'results/e050_20261118/summary.json'
 
 
+def kind(name):
+    """floorcheck v2 byte-model kind: 'fp16' (FP16 W_hat) for cuBLAS, 'w4' for Marlin/tc/tc_ladder."""
+    return fc.kind_of(name)
+
+
 def floor_us(name,m):
-    """floorcheck's floor: max(byte model / 427.2 GB/s, 2MNK / 51.84 TFLOP/s); FP16 W_hat bytes for cuBLAS."""
-    return fc.floor_us(K,N,m,fp16_weights=name == 'cublas_dq')
+    """floorcheck's measured floor: max(byte model / 427.2 GB/s, 2MNK / 51.84 TFLOP/s)."""
+    return fc.floor_us(K,N,m,kind=kind(name))
+
+
+def strict_floor_us(name,m):
+    """floorcheck's strict floor: max(weights(+scales) / 448 GB/s, 2MNK / 56.95 TFLOP/s)."""
+    return fc.strict_floor_us(K,N,m,kind=kind(name))
 
 
 def per_gemm_us(row):
@@ -39,13 +49,14 @@ def per_gemm_us(row):
 
 
 def cell_status(name,m,t,count):
-    return fc.classify(K,N,m,t,matrices=count,fp16_weights=name == 'cublas_dq')
+    return fc.classify(K,N,m,t,matrices=count,kind=kind(name))
 
 
 def cell_valid(name,m,t8,t16):
-    """Predeclared per cell: floorcheck OK (>= floor, working set >= 2 x L2) at 8 AND 16 matrices, |t8/t16-1| <= 3%."""
+    """Per cell: floorcheck OK at 8 AND 16 matrices (BELOW_STRICT, BELOW_MEASURED and WS_SMALL all invalid),
+    and |t8/t16-1| <= 3%."""
     conv = t8/t16 - 1
-    v = dict(floor_us=floor_us(name,m),t8=t8,t16=t16,status_8=cell_status(name,m,t8,8),
+    v = dict(floor_us=floor_us(name,m),strict_floor_us=strict_floor_us(name,m),t8=t8,t16=t16,status_8=cell_status(name,m,t8,8),
              status_16=cell_status(name,m,t16,16),t8_over_t16_minus_1=conv,converged=abs(conv) <= CONVERGENCE_TOL)
     v['valid'] = v['status_8'] == fc.OK and v['status_16'] == fc.OK and v['converged']
     return v
