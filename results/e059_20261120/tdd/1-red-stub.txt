@@ -1,0 +1,313 @@
+EFEEEEEEEEEEEEEEEEEEEEEEE....EEEEEE
+======================================================================
+ERROR: test_1536sq (scripts.e059.test_e059.CycleSizing)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/test_e059.py", line 59, in test_1536sq
+    self.assertEqual(L.matrix_count(1536, 1536), 56)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/e059lib.py", line 3, in _todo
+    def _todo(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_rectangles_minimum_four (scripts.e059.test_e059.CycleSizing)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/test_e059.py", line 68, in test_rectangles_minimum_four
+    self.assertEqual(L.matrix_count(4096, 11008), 4)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/e059lib.py", line 3, in _todo
+    def _todo(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_square_4096 (scripts.e059.test_e059.CycleSizing)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/test_e059.py", line 73, in test_square_4096
+    self.assertEqual(L.matrix_count(4096, 4096), 8)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/e059lib.py", line 3, in _todo
+    def _todo(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_tall_and_wide_model (scripts.e059.test_e059.CycleSizing)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/test_e059.py", line 63, in test_tall_and_wide_model
+    self.assertEqual(L.matrix_count(8960, 1536), 10)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/e059lib.py", line 3, in _todo
+    def _todo(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_4bit_path_not_fp16_model (scripts.e059.test_e059.Floor)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/test_e059.py", line 119, in test_4bit_path_not_fp16_model
+    self.assertEqual(L.status(name, 8960, 1536, 1, 22.5, matrices=10), fc.OK)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/e059lib.py", line 3, in _todo
+    def _todo(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_cublas_ok (scripts.e059.test_e059.Floor)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/test_e059.py", line 114, in test_cublas_ok
+    self.assertEqual(L.status('cublas_dq', 8960, 1536, 1, 70.0, matrices=10), fc.OK)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/e059lib.py", line 3, in _todo
+    def _todo(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_cublas_uses_fp16_bytes (scripts.e059.test_e059.Floor)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/test_e059.py", line 100, in test_cublas_uses_fp16_bytes
+    self.assertEqual(L.status('cublas_dq', 8960, 1536, 1, 60.0, matrices=10), fc.BELOW_FLOOR)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/e059lib.py", line 3, in _todo
+    def _todo(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_readflush_below_floor_flagged (scripts.e059.test_e059.Floor)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/test_e059.py", line 89, in test_readflush_below_floor_flagged
+    self.assertEqual(L.status('v3', 4096, 4096, 1, 17.7, flushed=True), fc.BELOW_FLOOR)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/e059lib.py", line 3, in _todo
+    def _todo(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_readflush_ok (scripts.e059.test_e059.Floor)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/test_e059.py", line 109, in test_readflush_ok
+    self.assertEqual(L.status('marlin', 8960, 1536, 1, 22.5, flushed=True), fc.OK_FLUSHED)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/e059lib.py", line 3, in _todo
+    def _todo(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_single_4096sq_m1_below_floor (scripts.e059.test_e059.Floor)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/test_e059.py", line 85, in test_single_4096sq_m1_below_floor
+    self.assertEqual(L.status('tc_ladder', 4096, 4096, 1, 17.7, matrices=1), fc.BELOW_FLOOR)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/e059lib.py", line 3, in _todo
+    def _todo(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_small_cycle_flagged (scripts.e059.test_e059.Floor)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/test_e059.py", line 93, in test_small_cycle_flagged
+    self.assertEqual(L.status('marlin', 4096, 4096, 4, 25.0, matrices=4), fc.WS_SMALL)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/e059lib.py", line 3, in _todo
+    def _todo(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_v3_tall_ok (scripts.e059.test_e059.Floor)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/test_e059.py", line 105, in test_v3_tall_ok
+    self.assertEqual(L.status('v3', 8960, 1536, 1, 22.5, matrices=10), fc.OK)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/e059lib.py", line 3, in _todo
+    def _todo(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_each_s_forced (scripts.e059.test_e059.ForcedS)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/test_e059.py", line 202, in test_each_s_forced
+    L.launch_splitk(lib, f'splitk_s{s}', self.PTRS, 0)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/e059lib.py", line 3, in _todo
+    def _todo(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_launcher_ignoring_s_detected (scripts.e059.test_e059.ForcedS)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/test_e059.py", line 208, in test_launcher_ignoring_s_detected
+    L.launch_splitk(FakeLib(honour=False), 'splitk_s2', self.PTRS, 0)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/e059lib.py", line 3, in _todo
+    def _todo(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_fraction (scripts.e059.test_e059.PerGemmAndFraction)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/test_e059.py", line 133, in test_fraction
+    self.assertAlmostEqual(L.fraction(61.3, 64.4), 0.95186, places=4)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/e059lib.py", line 3, in _todo
+    def _todo(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_per_gemm_even (scripts.e059.test_e059.PerGemmAndFraction)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/test_e059.py", line 129, in test_per_gemm_even
+    self.assertAlmostEqual(L.per_gemm_us([560, 570, 580, 590], 56), 10.267857, places=5)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/e059lib.py", line 3, in _todo
+    def _todo(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_per_gemm_odd (scripts.e059.test_e059.PerGemmAndFraction)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/test_e059.py", line 125, in test_per_gemm_odd
+    self.assertEqual(L.per_gemm_us([400, 404, 396, 500, 100], 4), 100.0)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/e059lib.py", line 3, in _todo
+    def _todo(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_c1_contradicted (scripts.e059.test_e059.Readings)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/test_e059.py", line 277, in test_c1_contradicted
+    self.assertEqual(L.readings(synthetic(v3=120.0))['C1_verdict'], 'contradicted')
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/test_e059.py", line 258, in synthetic
+    for k, n in L.SHAPES:
+TypeError: 'NoneType' object is not iterable
+
+======================================================================
+ERROR: test_c1_open_cell_not_counted (scripts.e059.test_e059.Readings)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/test_e059.py", line 280, in test_c1_open_cell_not_counted
+    r = L.readings(synthetic(below=(1536, 1536, 1, 'v3')))
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/test_e059.py", line 258, in synthetic
+    for k, n in L.SHAPES:
+TypeError: 'NoneType' object is not iterable
+
+======================================================================
+ERROR: test_c1_supported (scripts.e059.test_e059.Readings)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/test_e059.py", line 273, in test_c1_supported
+    self.assertEqual(L.readings(synthetic())['C1_verdict'], 'supported')
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/test_e059.py", line 258, in synthetic
+    for k, n in L.SHAPES:
+TypeError: 'NoneType' object is not iterable
+
+======================================================================
+ERROR: test_c2 (scripts.e059.test_e059.Readings)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/test_e059.py", line 285, in test_c2
+    r = L.readings(synthetic())
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/test_e059.py", line 258, in synthetic
+    for k, n in L.SHAPES:
+TypeError: 'NoneType' object is not iterable
+
+======================================================================
+ERROR: test_bad_rows (scripts.e059.test_e059.RowCheck)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/test_e059.py", line 253, in test_bad_rows
+    L.check_row(r, timed=True)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/e059lib.py", line 3, in _todo
+    def _todo(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_good_row (scripts.e059.test_e059.RowCheck)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/test_e059.py", line 240, in test_good_row
+    L.check_row(row(), timed=True)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/e059lib.py", line 3, in _todo
+    def _todo(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_rule (scripts.e059.test_e059.Rule)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/test_e059.py", line 142, in test_rule
+    self.assertEqual(L.r1([90, 91], [100, 100]), 'faster')      # 0.90, 0.91 <= 0.95
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/e059lib.py", line 3, in _todo
+    def _todo(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_groups_integral (scripts.e059.test_e059.SharedCheckerOnE059Shapes)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/test_e059.py", line 29, in test_groups_integral
+    L.matrix_count(1600, 1536)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/e059lib.py", line 3, in _todo
+    def _todo(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_balance_rule (scripts.e059.test_e059.Splits)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/test_e059.py", line 154, in test_balance_rule
+    self.assertEqual(L.balance(11008, 4096, 1), 7)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/e059lib.py", line 3, in _todo
+    def _todo(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_paths_and_order (scripts.e059.test_e059.Splits)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/test_e059.py", line 163, in test_paths_and_order
+    self.assertEqual(L.paths(8960, 1536), ['marlin', 'tc_ladder', 'v3', 'cublas_dq', 'splitk_s1', 'splitk_s2',
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/e059lib.py", line 3, in _todo
+    def _todo(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_split_s (scripts.e059.test_e059.Splits)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/test_e059.py", line 176, in test_split_s
+    self.assertEqual(L.split_s('splitk_s7'), 7)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/e059lib.py", line 3, in _todo
+    def _todo(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_bad (scripts.e059.test_e059.Tolerance)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/test_e059.py", line 221, in test_bad
+    self.assertEqual(L.violations([1.003, -2.0, 0.0, 3.0], self.REF), 1)    # 0.003 > 0.0028708
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/e059lib.py", line 3, in _todo
+    def _todo(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_good (scripts.e059.test_e059.Tolerance)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/test_e059.py", line 218, in test_good
+    self.assertEqual(L.violations([1.002, -2.003, 0.0018, 3.004], self.REF), 0)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/e059lib.py", line 3, in _todo
+    def _todo(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+FAIL: test_predeclared_counts (scripts.e059.test_e059.CycleSizing)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/test_e059.py", line 76, in test_predeclared_counts
+    self.assertEqual(L.COUNTS, {(1536, 8960): 10, (8960, 1536): 10, (1536, 1536): 56, (4096, 11008): 4, (11008, 4096): 4})
+AssertionError: None != {(1536, 8960): 10, (8960, 1536): 10, (153[44 chars]): 4}
+
+----------------------------------------------------------------------
+Ran 35 tests in 0.002s
+
+FAILED (failures=1, errors=30)

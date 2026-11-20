@@ -1,0 +1,40 @@
+test_1536sq (scripts.e059.test_e059.CycleSizing) ... ok
+test_predeclared_counts (scripts.e059.test_e059.CycleSizing) ... ok
+test_rectangles_minimum_four (scripts.e059.test_e059.CycleSizing) ... ok
+test_square_4096 (scripts.e059.test_e059.CycleSizing) ... ok
+test_tall_and_wide_model (scripts.e059.test_e059.CycleSizing) ... ok
+test_4bit_path_not_fp16_model (scripts.e059.test_e059.Floor) ... ok
+test_cublas_ok (scripts.e059.test_e059.Floor) ... ok
+test_cublas_uses_fp16_bytes (scripts.e059.test_e059.Floor) ... ok
+test_readflush_below_floor_flagged (scripts.e059.test_e059.Floor) ... ok
+test_readflush_ok (scripts.e059.test_e059.Floor) ... ok
+test_single_4096sq_m1_below_floor (scripts.e059.test_e059.Floor) ... ok
+test_small_cycle_flagged (scripts.e059.test_e059.Floor) ... ok
+test_v3_tall_ok (scripts.e059.test_e059.Floor) ... ok
+test_each_s_forced (scripts.e059.test_e059.ForcedS) ... ok
+test_launcher_ignoring_s_detected (scripts.e059.test_e059.ForcedS) ... ok
+test_fraction (scripts.e059.test_e059.PerGemmAndFraction) ... ok
+test_per_gemm_even (scripts.e059.test_e059.PerGemmAndFraction) ... ok
+test_per_gemm_odd (scripts.e059.test_e059.PerGemmAndFraction) ... ok
+test_c1_contradicted (scripts.e059.test_e059.Readings) ... ok
+test_c1_open_cell_not_counted (scripts.e059.test_e059.Readings) ... ok
+test_c1_supported (scripts.e059.test_e059.Readings) ... ok
+test_c2 (scripts.e059.test_e059.Readings) ... ok
+test_bad_rows (scripts.e059.test_e059.RowCheck) ... ok
+test_good_row (scripts.e059.test_e059.RowCheck) ... ok
+test_rule (scripts.e059.test_e059.Rule) ... ok
+test_bytes_1536sq_m1 (scripts.e059.test_e059.SharedCheckerOnE059Shapes) ... ok
+test_bytes_1536x8960_m1 (scripts.e059.test_e059.SharedCheckerOnE059Shapes) ... ok
+test_bytes_8960x1536_m1 (scripts.e059.test_e059.SharedCheckerOnE059Shapes) ... ok
+test_floors (scripts.e059.test_e059.SharedCheckerOnE059Shapes) ... ok
+test_groups_integral (scripts.e059.test_e059.SharedCheckerOnE059Shapes) ... ok
+test_balance_rule (scripts.e059.test_e059.Splits) ... ok
+test_paths_and_order (scripts.e059.test_e059.Splits) ... ok
+test_split_s (scripts.e059.test_e059.Splits) ... ok
+test_bad (scripts.e059.test_e059.Tolerance) ... ok
+test_good (scripts.e059.test_e059.Tolerance) ... ok
+
+----------------------------------------------------------------------
+Ran 35 tests in 0.003s
+
+OK

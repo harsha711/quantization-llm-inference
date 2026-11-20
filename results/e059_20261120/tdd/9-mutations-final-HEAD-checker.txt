@@ -1,0 +1,18 @@
+checker: results/e059_20261120/tdd/floorcheck-HEAD-e77dffe.py
+CAUGHT  drop floor check                                 -> FAILED (failures=4)
+CAUGHT  wrong byte model: FP16 bytes for every path      -> FAILED (failures=9)
+CAUGHT  wrong byte model: 4-bit bytes for cuBLAS         -> FAILED (failures=2)
+CAUGHT  wrong byte model: scales dropped (shared checker) -> FAILED (failures=7)
+CAUGHT  wrong divide-by-matrices                         -> FAILED (failures=5)
+CAUGHT  cycle sized to 1 x L2                            -> FAILED (failures=4)
+CAUGHT  S not actually forced                            -> FAILED (failures=1)
+CAUGHT  launcher S not verified                          -> FAILED (failures=1)
+CAUGHT  v3 fallback accepted                             -> FAILED (failures=1)
+CAUGHT  contract check: rms term dropped                 -> FAILED (failures=1)
+CAUGHT  contract check: rows not all required            -> FAILED (failures=1)
+CAUGHT  fraction inverted                                -> FAILED (failures=2)
+CAUGHT  analyzer: cycle size ignored in floorcheck       -> FAILED (failures=1)
+CAUGHT  analyzer: series value used as per-GEMM time     -> FAILED (failures=1)
+CAUGHT  rule: 5% boundary                                -> FAILED (failures=1)
+BASELINE (no mutation) -> OK
+15/15 mutations caught

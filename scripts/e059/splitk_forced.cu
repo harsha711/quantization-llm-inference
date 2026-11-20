@@ -6,11 +6,16 @@
 // w4a16_bench build). S = 1 runs the split kernel with one block per tile (not the tc kernel).
 #include "../../src/cuda/w4a16_tc_splitk.cu"
 
+namespace {
+int g_last_s = 0;  // grid z of the last launch issued by e059_tc_splitk (checked by the harness after every call)
+}  // namespace
+
 extern "C" int e059_tc_splitk(const void* A, const void* qweight, const void* scales, void* C, int M,
                               int N, int K, int group_size, int S, void* stream) {
   const __half* a = static_cast<const __half*>(A);
   __half* c = static_cast<__half*>(C);
   // E047's launcher preconditions (factor 0 = inblock_m4_vec fallback): refuse instead of falling back.
+  g_last_s = 0;
   if (S < 1 || w4a16_tc_splitk_factor(a, c, M, N, K, group_size) == 0) return -1;
   const size_t tiles = static_cast<size_t>(N / 32) * ((M + 15) / 16);
   if (tiles * S * 512 > g_ws_floats) {
@@ -25,6 +30,7 @@ extern "C" int e059_tc_splitk(const void* A, const void* qweight, const void* sc
     CUDA_CHECK(cudaMemset(g_counters, 0, g_counter_n * sizeof(unsigned)));
   }
   const dim3 grid(N / 32, (M + 15) / 16, S), block(tc_common::kWarps * 32);
+  g_last_s = static_cast<int>(grid.z);
   cudaStream_t s = static_cast<cudaStream_t>(stream);
   if (M % 16 == 0)
     w4a16_tc_splitk_kernel<false><<<grid, block, 0, s>>>(a, static_cast<const uint32_t*>(qweight),
@@ -44,3 +50,5 @@ extern "C" int e059_tc_splitk_occupancy() {
                                                            tc_common::kWarps * 32, 0));
   return occ;
 }
+
+extern "C" int e059_tc_splitk_last_s() { return g_last_s; }

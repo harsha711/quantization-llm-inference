@@ -17,6 +17,7 @@ import importlib.util
 import json
 import math
 import os
+import sys
 from pathlib import Path
 
 import numpy as np
@@ -27,51 +28,17 @@ e010 = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(e010)
 e008, e005, e004 = e010.e008, e010.e005, e010.e004
 BODY, sha = e010.BODY, e010.sha
+sys.path.insert(0,str(Path(__file__).resolve().parent))
+import e059lib as L  # noqa: E402  (tested pure-Python helpers: sizing, balance rule, paths/order, forced-S call)
 CAPACITY = 16
-MS = [1,4,16]
-SHAPES = [(1536,8960),(8960,1536),(1536,1536),(4096,11008),(11008,4096)]
-SPLIT_SHAPES = [(8960,1536),(11008,4096),(4096,11008)]      # part (b)
-COUNTS = {(1536,8960):10,(8960,1536):10,(1536,1536):56,(4096,11008):4,(11008,4096):4}   # predeclared
-BALANCE = {(8960,1536):3,(11008,4096):7,(4096,11008):1}                                  # predeclared
+MS, SHAPES, COUNTS, BALANCE, SMS = L.MS, L.SHAPES, L.COUNTS, L.BALANCE, L.SMS
 SEED0 = 101
-SMS = 36
-L2 = 33554432
-BASE = ['marlin','tc_ladder','v3','cublas_dq']
+L2 = L.fc.L2_BYTES
+paths, order, balance = L.paths, L.order, L.balance
 
 
 def weight_bytes(k,n):
     return k*n//2 + (k//128)*n*2
-
-
-def count(k,n,l2=L2):
-    return max(4,math.ceil(2*l2/weight_bytes(k,n)))
-
-
-def balance(k,n,m,sms=SMS):
-    """The teammate's v1 balance rule (ours_v1.cu w4a16_v1_splits) applied to tc's grid: tiles = N/32 x ceil(M/16),
-    load(S) = ceil(tiles*S/SMs)/S, S in [2, min(8, chunks/8)] taken only if load <= 0.9 load(1), smallest best S."""
-    tiles = (n//32)*((m+15)//16)
-    load = lambda s: math.ceil(tiles*s/sms)/s
-    cutoff, best, best_load = 0.9*load(1), 1, load(1)
-    for s in range(2,min(8,(k//64)//8)+1):
-        if load(s) <= cutoff+1e-9 and load(s) < best_load-1e-9:
-            best, best_load = s, load(s)
-    return best
-
-
-def splits(k,n):
-    return sorted({1,2,4,8,BALANCE[(k,n)]}) if (k,n) in SPLIT_SHAPES else []
-
-
-def paths(k,n,extra=()):
-    return BASE+[f'splitk_s{s}' for s in splits(k,n)]+list(extra)
-
-
-def order(k,n,m,series,extra=()):
-    names = paths(k,n,extra)
-    shift = ((SHAPES.index((k,n)) if (k,n) in SHAPES else 0)+(MS.index(m) if m in MS else 0)) % len(names)
-    names = names[shift:]+names[:shift]
-    return names if series == 1 else names[::-1]
 
 
 def expect_kernel(name,kernels):
@@ -156,13 +123,14 @@ def main(args):
     assert hashlib.sha256(args.local.read_bytes()).hexdigest() == BODY
     bridge = e004.bridge(args.bridge)
     handle = bridge.e004_handle()
-    assert bridge.e004_l2() == L2 and torch.cuda.get_device_properties(0).multi_processor_count == SMS
+    assert bridge.e004_l2() == L2 == 33554432 and torch.cuda.get_device_properties(0).multi_processor_count == SMS
     lib = ct.CDLL(str(args.lib.resolve()))
     for fn in (lib.e050_tc_ladder,lib.e059_v1,lib.e059_v2,lib.e059_v3):
         fn.argtypes = [ct.c_void_p]*4+[ct.c_int]*4+[ct.c_void_p]
         fn.restype = ct.c_int
     lib.e059_tc_splitk.argtypes = [ct.c_void_p]*4+[ct.c_int]*5+[ct.c_void_p]
     lib.e059_tc_splitk.restype = ct.c_int
+    lib.e059_tc_splitk_last_s.restype = ct.c_int
     lib.e059_v2_fast_path.argtypes = [ct.c_void_p]*4+[ct.c_int]*2
     for fn in (lib.e059_v2_splits,lib.e059_v1_splits):
         fn.argtypes = [ct.c_int]*3
@@ -185,7 +153,7 @@ def main(args):
     failures = []
     with torch.cuda.stream(stream),args.out.open('x') as out:
         for k,n in args.shapes:
-            c = args.count or count(k,n)
+            c = args.count or L.matrix_count(k,n)
             assert args.count or c == COUNTS[(k,n)]
             for m in MS:
                 assert (k,n) not in BALANCE or balance(k,n,m) == BALANCE[(k,n)]
@@ -218,7 +186,8 @@ def main(args):
                                 if name == 'tc_ladder':
                                     rc = lib.e050_tc_ladder(*ptrs,stream.cuda_stream)
                                 elif name.startswith('splitk_s'):
-                                    rc = lib.e059_tc_splitk(*ptrs,int(name[8:]),stream.cuda_stream)
+                                    L.launch_splitk(lib,name,ptrs,stream.cuda_stream)   # asserts grid z == S
+                                    rc = 0
                                 else:
                                     rc = getattr(lib,'e059_'+name)(*ptrs,stream.cuda_stream)
                                 assert rc == 0,(name,rc)
@@ -238,6 +207,12 @@ def main(args):
                             return checks
                         # First call outside any capture (grows the v1-v3 / split-K workspaces before capture).
                         poison(); launch(); torch.cuda.synchronize()
+                        if name.startswith('splitk_s'):
+                            info['last_s'] = lib.e059_tc_splitk_last_s()
+                        # Independent re-check of matrix 0 (all M rows) with the tested pure-Python CONTRACT bound.
+                        info['independent_violations'] = L.violations(cases[0].c[:m].float().cpu().flatten().tolist(),
+                                                                      cases[0].ref[:m].ravel().tolist())
+                        assert info['independent_violations'] == 0,(name,info['independent_violations'])
                         kernels = []
                         if args.trace:
                             with torch.profiler.profile(activities=[torch.profiler.ProfilerActivity.CPU,

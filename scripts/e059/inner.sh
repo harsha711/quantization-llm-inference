@@ -31,6 +31,10 @@ sha256sum scripts/e008/bench.py scripts/e010/bench.py > "$S/harness.sha256"
 grep -q 02f3695023c34db25bc7679f782699e4246d8a4c05b7aaf07db99c28be664759 "$S/harness.sha256"
 grep -q bd3c03fff16ad77cfd20c06ea92e5904473565d4d9def1d4b9c226cffb4fed55 "$S/harness.sha256"
 sha256sum -c scripts/e059/teammate_src.sha256 > "$S/teammate-src-check.log"
+# Test-driven gate (coordinator rule): unit tests and the mutation check must pass before anything runs.
+run unit-tests "$PY" -m unittest scripts/e059/test_e059.py -v
+run mutations "$PY" scripts/e059/mutate.py
+sha256sum scripts/checks/floorcheck.py scripts/e059/e059lib.py scripts/e059/test_e059.py scripts/e059/mutate.py > "$S/tested-code.sha256"
 base=("$PY" scripts/e059/bench.py --source "$SOURCE" --local "$LOCAL" --wheel "$WHEEL" --bridge "$BRIDGE")
 
 if [[ $MODE == prereq ]]; then
