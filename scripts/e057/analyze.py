@@ -176,16 +176,16 @@ if perf_ok:
         for line in open(p):
             m = sym_re.match(line)
             if m:
-                h["top_symbols"].append((float(m.group(1)), m.group(3)))
+                h["top_symbols"].append((float(m.group(1)), re.sub(r"(\s+-)+$", "", m.group(3))))
         h["top_symbols"] = h["top_symbols"][:10]
-        gemm_total = 0.0
+        gemm_total = 0.0  # symbol,srcline table columns: overhead | symbol | source:line | IPC
         p2 = os.path.join(S, "perf", "rec-M%d-symsrc.txt" % M)
         if os.path.exists(p2):
             for line in open(p2):
                 f = [x.strip() for x in line.split("|")]
                 if len(f) >= 3 and f[0].endswith("%") and "cpu_w4a16_gemm" in f[1]:
                     v = float(f[0].rstrip("%")); gemm_total += v
-                    k = group_line(f[-1]); h["gemm_groups"][k] = h["gemm_groups"].get(k, 0.0) + v
+                    k = group_line(f[2]); h["gemm_groups"][k] = h["gemm_groups"].get(k, 0.0) + v
         h["gemm_share_of_samples"] = gemm_total
         h["gemm_groups_share_of_gemm"] = {k: v / gemm_total for k, v in h["gemm_groups"].items()} if gemm_total else {}
         out["hotspot"][M] = h
