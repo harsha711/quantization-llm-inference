@@ -1,0 +1,103 @@
+SASS: 6 tc/tc_m32 kernels == E050 library == same-job bench; 2 tc_splitk kernels == same-job bench {'_ZN_ANON_22w4a16_tc_splitk_kernelILb1EEEvPK6__halfPKjS3_PS1_iiiiPfPj': {'HMMA': 16, 'LDG': 49}, '_ZN_ANON_22w4a16_tc_splitk_kernelILb0EEEvPK6__halfPKjS3_PS1_iiiiPfPj': {'HMMA': 16, 'LDG': 49}}
+teammate kernels in library: {'_ZN_ANON_15w4a16_v1_kernelILb0ELb0EEEvPK6__halfPKjS3_PS1_PfP': {'HMMA': 0, 'LDG': 43, 'n': 1312}, '_ZN_ANON_15w4a16_v1_kernelILb0ELb1EEEvPK6__halfPKjS3_PS1_PfP': {'HMMA': 0, 'LDG': 58, 'n': 1728}, '_ZN_ANON_15w4a16_v1_kernelILb1ELb0EEEvPK6__halfPKjS3_PS1_PfP': {'HMMA': 0, 'LDG': 43, 'n': 1344}, '_ZN_ANON_15w4a16_v1_kernelILb1ELb1EEEvPK6__halfPKjS3_PS1_PfP': {'HMMA': 0, 'LDG': 58, 'n': 1744}, '_ZN_ANON_15w4a16_v2_kernelEPK6__halfPKjS2_PS0_PfPjiiiii': {'HMMA': 0, 'LDG': 36, 'n': 1872}, '_ZN_ANON_15w4a16_v3_kernelEPK6__halfPKjS2_PS0_PfPjiiiii': {'HMMA': 0, 'LDG': 36, 'n': 1648}}
+RES _ZN49_GLOBAL__N__9c7b558f_16_splitk_forced_cu_6bf79c6222w4a16_tc_split REG:74 STACK:0 SHARED:17409 LOCAL:0
+RES _ZN49_GLOBAL__N__9c7b558f_16_splitk_forced_cu_6bf79c6222w4a16_tc_split REG:76 STACK:0 SHARED:17409 LOCAL:0
+RES _ZN43_GLOBAL__N__1d409441_10_ours_v1_cu_de9fc5bf15w4a16_v1_kernelILb0E REG:40 STACK:0 SHARED:2049 LOCAL:0
+RES _ZN43_GLOBAL__N__1d409441_10_ours_v1_cu_de9fc5bf15w4a16_v1_kernelILb0E REG:40 STACK:0 SHARED:2049 LOCAL:0
+RES _ZN43_GLOBAL__N__1d409441_10_ours_v1_cu_de9fc5bf15w4a16_v1_kernelILb1E REG:40 STACK:0 SHARED:2049 LOCAL:0
+RES _ZN43_GLOBAL__N__1d409441_10_ours_v1_cu_de9fc5bf15w4a16_v1_kernelILb1E REG:40 STACK:0 SHARED:2049 LOCAL:0
+RES _ZN43_GLOBAL__N__0ff53baf_10_ours_v2_cu_ed43021815w4a16_v2_kernelEPK6_ REG:44 STACK:0 SHARED:5121 LOCAL:0
+RES _ZN43_GLOBAL__N__b7495cca_10_ours_v3_cu_a84778e815w4a16_v3_kernelEPK6_ REG:43 STACK:0 SHARED:5121 LOCAL:0
+  split K8960xN1536 M1: S with bits different from S = 1: [2, 3, 4, 8]
+  split K8960xN1536 M4: S with bits different from S = 1: [2, 3, 4, 8]
+  split K8960xN1536 M16: S with bits different from S = 1: [2, 3, 4, 8]
+  split K11008xN4096 M1: S with bits different from S = 1: [2, 4, 7, 8]
+  split K11008xN4096 M4: S with bits different from S = 1: [2, 4, 7, 8]
+  split K11008xN4096 M16: S with bits different from S = 1: [2, 4, 7, 8]
+  split K4096xN11008 M1: S with bits different from S = 1: [2, 4, 8]
+  split K4096xN11008 M4: S with bits different from S = 1: [2, 4, 8]
+  split K4096xN11008 M16: S with bits different from S = 1: [2, 4, 8]
+validation: 150 rows, every row of every matrix within the FP64 bound; splitk_s1 == tc bitwise in 9/9 cells; v3 == v2 bitwise in 18/18 cells (teammate claim)
+  v3 K1536xN8960 M1: v2/v3 S=2 v1 S=1 fast=True max_abs=9.752e-04 kernel=(anonymous namespace)::w4a16_v3_kernel(_
+  v1 K1536xN8960 M1: v2/v3 S=2 v1 S=1 fast=True max_abs=9.752e-04 kernel=void (anonymous namespace)::w4a16_v1_ker
+  v2 K1536xN8960 M1: v2/v3 S=2 v1 S=1 fast=True max_abs=9.752e-04 kernel=(anonymous namespace)::w4a16_v2_kernel(_
+  v3 K1536xN8960 M4: v2/v3 S=1 v1 S=1 fast=True max_abs=1.902e-03 kernel=(anonymous namespace)::w4a16_v3_kernel(_
+  v1 K1536xN8960 M4: v2/v3 S=1 v1 S=1 fast=True max_abs=1.902e-03 kernel=void (anonymous namespace)::w4a16_v1_ker
+  v2 K1536xN8960 M4: v2/v3 S=1 v1 S=1 fast=True max_abs=1.902e-03 kernel=(anonymous namespace)::w4a16_v2_kernel(_
+  v3 K1536xN8960 M16: v2/v3 S=1 v1 S=1 fast=True max_abs=1.922e-03 kernel=(anonymous namespace)::w4a16_v3_kernel(_
+  v1 K1536xN8960 M16: v2/v3 S=1 v1 S=1 fast=True max_abs=1.922e-03 kernel=void (anonymous namespace)::w4a16_v1_ker
+  v2 K1536xN8960 M16: v2/v3 S=1 v1 S=1 fast=True max_abs=1.922e-03 kernel=(anonymous namespace)::w4a16_v2_kernel(_
+  v3 K8960xN1536 M1: v2/v3 S=12 v1 S=3 fast=True max_abs=9.650e-04 kernel=(anonymous namespace)::w4a16_v3_kernel(_
+  v1 K8960xN1536 M1: v2/v3 S=12 v1 S=3 fast=True max_abs=9.650e-04 kernel=void (anonymous namespace)::w4a16_v1_ker
+  v2 K8960xN1536 M1: v2/v3 S=12 v1 S=3 fast=True max_abs=9.650e-04 kernel=(anonymous namespace)::w4a16_v2_kernel(_
+  v3 K8960xN1536 M4: v2/v3 S=3 v1 S=3 fast=True max_abs=1.110e-03 kernel=(anonymous namespace)::w4a16_v3_kernel(_
+  v1 K8960xN1536 M4: v2/v3 S=3 v1 S=3 fast=True max_abs=1.110e-03 kernel=void (anonymous namespace)::w4a16_v1_ker
+  v2 K8960xN1536 M4: v2/v3 S=3 v1 S=3 fast=True max_abs=1.110e-03 kernel=(anonymous namespace)::w4a16_v2_kernel(_
+  v1 K8960xN1536 M16: v2/v3 S=1 v1 S=1 fast=True max_abs=1.110e-03 kernel=void (anonymous namespace)::w4a16_v1_ker
+  v2 K8960xN1536 M16: v2/v3 S=1 v1 S=1 fast=True max_abs=1.110e-03 kernel=(anonymous namespace)::w4a16_v2_kernel(_
+  v3 K8960xN1536 M16: v2/v3 S=1 v1 S=1 fast=True max_abs=1.110e-03 kernel=(anonymous namespace)::w4a16_v3_kernel(_
+  v3 K1536xN1536 M1: v2/v3 S=12 v1 S=3 fast=True max_abs=9.664e-04 kernel=(anonymous namespace)::w4a16_v3_kernel(_
+  v1 K1536xN1536 M1: v2/v3 S=12 v1 S=3 fast=True max_abs=9.664e-04 kernel=void (anonymous namespace)::w4a16_v1_ker
+  v2 K1536xN1536 M1: v2/v3 S=12 v1 S=3 fast=True max_abs=9.664e-04 kernel=(anonymous namespace)::w4a16_v2_kernel(_
+  v1 K1536xN1536 M4: v2/v3 S=3 v1 S=3 fast=True max_abs=9.763e-04 kernel=void (anonymous namespace)::w4a16_v1_ker
+  v2 K1536xN1536 M4: v2/v3 S=3 v1 S=3 fast=True max_abs=9.763e-04 kernel=(anonymous namespace)::w4a16_v2_kernel(_
+  v3 K1536xN1536 M4: v2/v3 S=3 v1 S=3 fast=True max_abs=9.763e-04 kernel=(anonymous namespace)::w4a16_v3_kernel(_
+  v1 K1536xN1536 M16: v2/v3 S=1 v1 S=1 fast=True max_abs=1.907e-03 kernel=void (anonymous namespace)::w4a16_v1_ker
+  v2 K1536xN1536 M16: v2/v3 S=1 v1 S=1 fast=True max_abs=1.907e-03 kernel=(anonymous namespace)::w4a16_v2_kernel(_
+  v3 K1536xN1536 M16: v2/v3 S=1 v1 S=1 fast=True max_abs=1.907e-03 kernel=(anonymous namespace)::w4a16_v3_kernel(_
+  v1 K4096xN11008 M1: v2/v3 S=2 v1 S=1 fast=True max_abs=1.036e-03 kernel=void (anonymous namespace)::w4a16_v1_ker
+  v2 K4096xN11008 M1: v2/v3 S=2 v1 S=1 fast=True max_abs=1.036e-03 kernel=(anonymous namespace)::w4a16_v2_kernel(_
+  v3 K4096xN11008 M1: v2/v3 S=2 v1 S=1 fast=True max_abs=1.036e-03 kernel=(anonymous namespace)::w4a16_v3_kernel(_
+  v1 K4096xN11008 M4: v2/v3 S=1 v1 S=1 fast=True max_abs=1.632e-03 kernel=void (anonymous namespace)::w4a16_v1_ker
+  v2 K4096xN11008 M4: v2/v3 S=1 v1 S=1 fast=True max_abs=1.632e-03 kernel=(anonymous namespace)::w4a16_v2_kernel(_
+  v3 K4096xN11008 M4: v2/v3 S=1 v1 S=1 fast=True max_abs=1.632e-03 kernel=(anonymous namespace)::w4a16_v3_kernel(_
+  v1 K4096xN11008 M16: v2/v3 S=1 v1 S=1 fast=True max_abs=1.919e-03 kernel=void (anonymous namespace)::w4a16_v1_ker
+  v2 K4096xN11008 M16: v2/v3 S=1 v1 S=1 fast=True max_abs=1.919e-03 kernel=(anonymous namespace)::w4a16_v2_kernel(_
+  v3 K4096xN11008 M16: v2/v3 S=1 v1 S=1 fast=True max_abs=1.919e-03 kernel=(anonymous namespace)::w4a16_v3_kernel(_
+  v1 K11008xN4096 M1: v2/v3 S=5 v1 S=7 fast=True max_abs=9.758e-04 kernel=void (anonymous namespace)::w4a16_v1_ker
+  v2 K11008xN4096 M1: v2/v3 S=5 v1 S=7 fast=True max_abs=9.758e-04 kernel=(anonymous namespace)::w4a16_v2_kernel(_
+  v3 K11008xN4096 M1: v2/v3 S=5 v1 S=7 fast=True max_abs=9.758e-04 kernel=(anonymous namespace)::w4a16_v3_kernel(_
+  v1 K11008xN4096 M4: v2/v3 S=1 v1 S=1 fast=True max_abs=9.769e-04 kernel=void (anonymous namespace)::w4a16_v1_ker
+  v2 K11008xN4096 M4: v2/v3 S=1 v1 S=1 fast=True max_abs=9.769e-04 kernel=(anonymous namespace)::w4a16_v2_kernel(_
+  v3 K11008xN4096 M4: v2/v3 S=1 v1 S=1 fast=True max_abs=9.769e-04 kernel=(anonymous namespace)::w4a16_v3_kernel(_
+  v1 K11008xN4096 M16: v2/v3 S=1 v1 S=1 fast=True max_abs=1.876e-03 kernel=void (anonymous namespace)::w4a16_v1_ker
+  v2 K11008xN4096 M16: v2/v3 S=1 v1 S=1 fast=True max_abs=1.876e-03 kernel=(anonymous namespace)::w4a16_v2_kernel(_
+  v3 K11008xN4096 M16: v2/v3 S=1 v1 S=1 fast=True max_abs=1.876e-03 kernel=(anonymous namespace)::w4a16_v3_kernel(_
+  v2 K4096xN4096 M1: v2/v3 S=5 v1 S=7 fast=True max_abs=1.734e-03 kernel=(anonymous namespace)::w4a16_v2_kernel(_
+  v3 K4096xN4096 M1: v2/v3 S=5 v1 S=7 fast=True max_abs=1.734e-03 kernel=(anonymous namespace)::w4a16_v3_kernel(_
+  v1 K4096xN4096 M1: v2/v3 S=5 v1 S=7 fast=True max_abs=1.734e-03 kernel=void (anonymous namespace)::w4a16_v1_ker
+  v3 K4096xN4096 M4: v2/v3 S=1 v1 S=1 fast=True max_abs=1.734e-03 kernel=(anonymous namespace)::w4a16_v3_kernel(_
+  v1 K4096xN4096 M4: v2/v3 S=1 v1 S=1 fast=True max_abs=1.734e-03 kernel=void (anonymous namespace)::w4a16_v1_ker
+  v2 K4096xN4096 M4: v2/v3 S=1 v1 S=1 fast=True max_abs=1.734e-03 kernel=(anonymous namespace)::w4a16_v2_kernel(_
+  v3 K4096xN4096 M16: v2/v3 S=1 v1 S=1 fast=True max_abs=1.864e-03 kernel=(anonymous namespace)::w4a16_v3_kernel(_
+  v1 K4096xN4096 M16: v2/v3 S=1 v1 S=1 fast=True max_abs=1.864e-03 kernel=void (anonymous namespace)::w4a16_v1_ker
+  v2 K4096xN4096 M16: v2/v3 S=1 v1 S=1 fast=True max_abs=1.864e-03 kernel=(anonymous namespace)::w4a16_v2_kernel(_
+sanitizers: memcheck/synccheck 0 errors (one timed cycle + one read-flush sample of every path, 2 matrices); racecheck v3 and tc_splitk S 1/2/3/4/8: 0 hazards
+smoke (M = 1, planned counts, 20 samples; inspection only, NOT a result): per-GEMM cyclic / read-flush median us, floor us
+  K11008xN4096 x4 splitk_s1  cyclic    75.60 (OK)  read-flush    79.82 (OK_FLUSHED)  floor  54.49
+  K11008xN4096 x4 splitk_s2  cyclic    68.98 (OK)  read-flush    67.63 (OK_FLUSHED)  floor  54.49
+  K11008xN4096 x4 splitk_s4  cyclic    66.32 (OK)  read-flush    67.58 (OK_FLUSHED)  floor  54.49
+  K11008xN4096 x4 splitk_s7  cyclic    67.01 (OK)  read-flush    69.63 (OK_FLUSHED)  floor  54.49
+  K11008xN4096 x4 splitk_s8  cyclic    66.46 (OK)  read-flush    69.60 (OK_FLUSHED)  floor  54.49
+  K11008xN4096 x4 marlin     cyclic    59.22 (OK)  read-flush    59.39 (OK_FLUSHED)  floor  54.49
+  K11008xN4096 x4 tc_ladder  cyclic    66.99 (OK)  read-flush    67.84 (OK_FLUSHED)  floor  54.49
+  K11008xN4096 x4 v3         cyclic    59.22 (OK)  read-flush    61.36 (OK_FLUSHED)  floor  54.49
+  K11008xN4096 x4 cublas_dq  cyclic   217.43 (OK)  read-flush   215.07 (OK_FLUSHED)  floor 211.16
+  K8960xN1536 x10 tc_ladder  cyclic    22.46 (OK)  read-flush    24.59 (OK_FLUSHED)  floor  16.66
+  K8960xN1536 x10 v3         cyclic    20.63 (OK)  read-flush    22.53 (OK_FLUSHED)  floor  16.66
+  K8960xN1536 x10 cublas_dq  cyclic    70.53 (OK)  read-flush    71.68 (OK_FLUSHED)  floor  64.48
+  K8960xN1536 x10 splitk_s1  cyclic    27.19 (OK)  read-flush    28.67 (OK_FLUSHED)  floor  16.66
+  K8960xN1536 x10 splitk_s2  cyclic    23.71 (OK)  read-flush    26.62 (OK_FLUSHED)  floor  16.66
+  K8960xN1536 x10 splitk_s3  cyclic    24.74 (OK)  read-flush    26.62 (OK_FLUSHED)  floor  16.66
+  K8960xN1536 x10 splitk_s4  cyclic    23.10 (OK)  read-flush    24.59 (OK_FLUSHED)  floor  16.66
+  K8960xN1536 x10 splitk_s8  cyclic    25.71 (OK)  read-flush    28.64 (OK_FLUSHED)  floor  16.66
+  K8960xN1536 x10 marlin     cyclic    21.43 (OK)  read-flush    22.53 (OK_FLUSHED)  floor  16.66
+  K1536xN1536 x56 v3         cyclic     5.73 (OK)  read-flush     8.19 (OK_FLUSHED)  floor   2.86
+  K1536xN1536 x56 cublas_dq  cyclic    12.83 (OK)  read-flush    14.34 (OK_FLUSHED)  floor  11.06
+  K1536xN1536 x56 marlin     cyclic     6.99 (OK)  read-flush    10.14 (OK_FLUSHED)  floor   2.86
+  K1536xN1536 x56 tc_ladder  cyclic     5.34 (OK)  read-flush     8.19 (OK_FLUSHED)  floor   2.86
+  K4096xN4096 x8 tc_ladder  cyclic    25.72 (OK)  read-flush    28.66 (OK_FLUSHED)  floor  20.29
+  K4096xN4096 x8 v3         cyclic    23.75 (OK)  read-flush    24.69 (OK_FLUSHED)  floor  20.29
+  K4096xN4096 x8 cublas_dq  cyclic    82.21 (OK)  read-flush    83.86 (OK_FLUSHED)  floor  78.58
+  K4096xN4096 x8 marlin     cyclic    24.21 (OK)  read-flush    25.62 (OK_FLUSHED)  floor  20.29
+PREREQ PASS
