@@ -1,0 +1,55 @@
+test_4096sq_four_matrix_values_would_be_flagged (scripts.e059.test_e059.AnalyzerEndToEnd) ... ok
+test_below_floor_flagged (scripts.e059.test_e059.AnalyzerEndToEnd) ... ok
+test_good (scripts.e059.test_e059.AnalyzerEndToEnd) ... ok
+test_integrity_failures (scripts.e059.test_e059.AnalyzerEndToEnd) ... ok
+test_s1_mismatch_recorded_not_fatal (scripts.e059.test_e059.AnalyzerEndToEnd) ... ok
+test_1536sq (scripts.e059.test_e059.CycleSizing) ... ok
+test_predeclared_counts (scripts.e059.test_e059.CycleSizing) ... ok
+test_rectangles_minimum_four (scripts.e059.test_e059.CycleSizing) ... ok
+test_square_4096 (scripts.e059.test_e059.CycleSizing) ... ok
+test_tall_and_wide_model (scripts.e059.test_e059.CycleSizing) ... ok
+test_4bit_path_not_fp16_model (scripts.e059.test_e059.Floor) ... ok
+test_cublas_ok (scripts.e059.test_e059.Floor) ... ok
+test_cublas_uses_fp16_bytes (scripts.e059.test_e059.Floor) ... ok
+test_readflush_below_floor_flagged (scripts.e059.test_e059.Floor) ... ok
+test_readflush_ok (scripts.e059.test_e059.Floor) ... ok
+test_single_4096sq_m1_below_floor (scripts.e059.test_e059.Floor) ... ok
+test_small_cycle_flagged (scripts.e059.test_e059.Floor) ... ok
+test_v3_tall_ok (scripts.e059.test_e059.Floor) ... ok
+test_each_s_forced (scripts.e059.test_e059.ForcedS) ... ok
+test_launcher_ignoring_s_detected (scripts.e059.test_e059.ForcedS) ... ok
+test_fraction (scripts.e059.test_e059.PerGemmAndFraction) ... ok
+test_per_gemm_even (scripts.e059.test_e059.PerGemmAndFraction) ... ok
+test_per_gemm_odd (scripts.e059.test_e059.PerGemmAndFraction) ... ok
+test_1536sq_marlin_not_scored (scripts.e059.test_e059.Readings) ... ok
+test_c1_combined_needs_both (scripts.e059.test_e059.Readings) ... ok
+test_c1_open_on_invalid_tc (scripts.e059.test_e059.Readings) ... ok
+test_c1_supported_as_quoted (scripts.e059.test_e059.Readings) ... ok
+test_c1a_series_asymmetric (scripts.e059.test_e059.Readings) ... ok
+test_c1b_claimed_tie_shape_but_v3_faster (scripts.e059.test_e059.Readings) ... ok
+test_c1b_series_asymmetric (scripts.e059.test_e059.Readings) ... ok
+test_c1b_v3_slower_than_tc (scripts.e059.test_e059.Readings) ... ok
+test_c2_open_on_invalid_control (scripts.e059.test_e059.Readings) ... ok
+test_c2_split (scripts.e059.test_e059.Readings) ... ok
+test_c2_split_closes_needs_all_series (scripts.e059.test_e059.Readings) ... ok
+test_c2_tall_both_framings (scripts.e059.test_e059.Readings) ... ok
+test_bad_rows (scripts.e059.test_e059.RowCheck) ... ok
+test_good_row (scripts.e059.test_e059.RowCheck) ... ok
+test_rule (scripts.e059.test_e059.Rule) ... ok
+test_different_kernels_stay_different (scripts.e059.test_e059.SassNames) ... ok
+test_same_kernel_different_tu (scripts.e059.test_e059.SassNames) ... ok
+test_bytes_1536sq_m1 (scripts.e059.test_e059.SharedCheckerOnE059Shapes) ... ok
+test_bytes_1536x8960_m1 (scripts.e059.test_e059.SharedCheckerOnE059Shapes) ... ok
+test_bytes_8960x1536_m1 (scripts.e059.test_e059.SharedCheckerOnE059Shapes) ... ok
+test_floors (scripts.e059.test_e059.SharedCheckerOnE059Shapes) ... ok
+test_groups_integral (scripts.e059.test_e059.SharedCheckerOnE059Shapes) ... ok
+test_balance_rule (scripts.e059.test_e059.Splits) ... ok
+test_paths_and_order (scripts.e059.test_e059.Splits) ... ok
+test_split_s (scripts.e059.test_e059.Splits) ... ok
+test_bad (scripts.e059.test_e059.Tolerance) ... ok
+test_good (scripts.e059.test_e059.Tolerance) ... ok
+
+----------------------------------------------------------------------
+Ran 50 tests in 0.489s
+
+OK

@@ -73,7 +73,9 @@ class CycleSizing(unittest.TestCase):
         self.assertEqual(L.matrix_count(4096, 4096), 8)
 
     def test_predeclared_counts(self):
-        self.assertEqual(L.COUNTS, {(1536, 8960): 10, (8960, 1536): 10, (1536, 1536): 56, (4096, 11008): 4, (11008, 4096): 4})
+        # amendment 2 adds 4096^2 with 8 matrices (69,206,016 B >= 2 x L2; E058: 4 matrices are cache-served)
+        self.assertEqual(L.COUNTS, {(1536, 8960): 10, (8960, 1536): 10, (1536, 1536): 56, (4096, 11008): 4, (11008, 4096): 4,
+                                    (4096, 4096): 8})
         for (k, n), c in L.COUNTS.items():
             self.assertEqual(L.matrix_count(k, n), c)
 
@@ -169,8 +171,9 @@ class Splits(unittest.TestCase):
         o = L.order(8960, 1536, 1, 1)
         self.assertEqual((o[0], o[-1]), ('tc_ladder', 'marlin'))
         self.assertEqual(L.order(8960, 1536, 1, 2), o[::-1])
-        # rows per series: (4+9+4+8+9) paths x 3 M = 102
-        self.assertEqual(sum(len(L.paths(k, n)) for k, n in L.SHAPES) * 3, 102)
+        # rows per series: (4+9+4+8+9+4) paths x 3 M = 38 x 3 = 114 (amendment 2 adds 4096^2 with the four base paths)
+        self.assertEqual(L.paths(4096, 4096), ['marlin', 'tc_ladder', 'v3', 'cublas_dq'])
+        self.assertEqual(sum(len(L.paths(k, n)) for k, n in L.SHAPES) * 3, 114)
 
     def test_split_s(self):
         self.assertEqual(L.split_s('splitk_s7'), 7)
@@ -248,100 +251,232 @@ class RowCheck(unittest.TestCase):
                row(info=dict(fast_path=False)),                                            # v3 fell back to v1
                row(median_per_matrix_us=310.0),                                            # not divided by 10
                row(post_timing_validation=[dict(num_bad=0, checked=6144, output_sha256='y')] * 10),  # bits changed
-               row(cublas_math_mode=0)]
+               row(cublas_math_mode=0),
+               row(seeds=list(range(102, 112))),                                          # wrong seed list
+               row(median_us=305.0, median_per_matrix_us=30.5)]                           # median not of samples
         for r in bad:
             with self.assertRaises(AssertionError, msg=str(r)[:120]):
                 L.check_row(r, timed=True)
 
 
-def synthetic(tall_tc=115.0, bal=100.5, v3=100.0, below=None):
+TIE = {(1536, 8960), (1536, 1536)}   # shapes where the teammate reports v3 and tc "tie" (OURS.md M=1 table)
+
+
+def synthetic(over=None, valid=None):
+    """Per-GEMM medians [series 1, series 2]. Base (C1 and C2 both supported by construction): Marlin 100, v3 100;
+    tc_ladder 108 (v3 7.4% below: 'faster'), 102 on the two claimed-tie shapes ('comparable'), 115 on the tall
+    shapes; split S_bal 100.5 on the tall shapes, other split arms 110; cuBLAS 150. over/valid: {(K,N,M,path): ...}."""
     cell = {}
     for k, n in L.SHAPES:
         for m in L.MS:
             for x in L.paths(k, n):
-                t = {'marlin': 100.0, 'v3': v3, 'cublas_dq': 150.0}.get(x, 108.0)
-                if x == 'tc_ladder' and (k, n) in L.TALL: t = tall_tc
-                if (k, n) in L.TALL and x == 'splitk_s%d' % L.BALANCE[(k, n)]: t = bal
+                t = {'marlin': 100.0, 'v3': 100.0, 'cublas_dq': 150.0}.get(x, 110.0)
+                if x == 'tc_ladder':
+                    t = 115.0 if (k, n) in L.TALL else 102.0 if (k, n) in TIE else 108.0
+                if (k, n) in L.TALL and x == 'splitk_s%d' % L.BALANCE[(k, n)]:
+                    t = 100.5
                 cell[(k, n, m, x)] = dict(cyc=[t, t], rf=[t, t], cyc_valid=True, rf_valid=True)
-    if below:
-        cell[below]['cyc_valid'] = False
+    for key, ts in (over or {}).items():
+        cell[key]['cyc'] = list(ts)
+    for key in (valid or ()):
+        cell[key]['cyc_valid'] = False
     return cell
 
 
 class Readings(unittest.TestCase):
-    def test_c1_supported(self):
-        # v3 = Marlin (100 vs 100: comparable) and v3 100 <= tc_ladder 108/115 on every shape
-        self.assertEqual(L.readings(synthetic())['C1_verdict'], 'supported')
-
-    def test_c1_contradicted(self):
-        # v3 120 vs Marlin 100: Marlin 16.7% below -> 'slower' on every shape
-        self.assertEqual(L.readings(synthetic(v3=120.0))['C1_verdict'], 'contradicted')
-
-    def test_c1_open_cell_not_counted(self):
-        r = L.readings(synthetic(below=(1536, 1536, 1, 'v3')))
-        self.assertTrue(r['C1']['1536x1536'].startswith('open'))
-        self.assertTrue(r['C1_verdict'].startswith('supported') and 'open' in r['C1_verdict'])
-
-    def test_c2(self):
+    def test_c1_supported_as_quoted(self):
         r = L.readings(synthetic())
-        # tall tc 115 -> fraction 0.870 < others 100/108 = 0.926 -> tall shapes lowest
-        self.assertTrue(all(v['verdict'] == 'supported' for v in r['C2_tall'].values()))
-        # S_bal 100.5 vs tc 115: 12.6% below -> faster; fraction 0.995 >= control 0.926 -> fixes
+        self.assertEqual((r['C1a_verdict'], r['C1b_verdict'], r['C1_verdict']), ('supported', 'supported', 'supported'))
+        self.assertEqual(r['C1a']['1536x1536']['verdict'], 'descriptive (not claimed)')
+        self.assertEqual(sorted(L.CLAIM_V3_VS_TC.values()).count('faster'), 4)   # "faster on four shapes"
+
+    def test_1536sq_marlin_not_scored(self):
+        # v3 130 vs Marlin 100 on 1536^2: Marlin 23% below -> 'slower', but the tie was not claimed there
+        r = L.readings(synthetic({(1536, 1536, 1, 'v3'): (130, 130), (1536, 1536, 1, 'tc_ladder'): (130, 130)}))
+        self.assertEqual(r['C1a_verdict'], 'supported')
+        self.assertEqual(r['C1a']['1536x1536']['v3_vs_marlin'], 'slower')
+
+    def test_c1b_series_asymmetric(self):
+        # 4096x11008: v3 100 / 106 vs tc 108 / 108: s1 100 <= 102.6 (faster), s2 106 > 102.6 and 108 > 100.7 -> mixed
+        r = L.readings(synthetic({(4096, 11008, 1, 'v3'): (100, 106), (4096, 11008, 1, 'marlin'): (100, 106)}))
+        self.assertEqual(r['C1b']['4096x11008']['v3_vs_tc_ladder'], 'mixed')
+        self.assertEqual(r['C1b']['4096x11008']['verdict'], 'fails')
+        self.assertTrue(r['C1b_verdict'].startswith('partly'))
+
+    def test_c1b_v3_slower_than_tc(self):
+        # 8960x1536: v3 120 vs tc 115: tc 4.2% below -> comparable, claimed 'faster' -> fails
+        r = L.readings(synthetic({(8960, 1536, 1, 'v3'): (120, 120), (8960, 1536, 1, 'marlin'): (120, 120)}))
+        self.assertEqual(r['C1b']['8960x1536']['verdict'], 'fails')
+        # v3 130 vs tc 115: tc 11.5% below -> 'slower'
+        r = L.readings(synthetic({(8960, 1536, 1, 'v3'): (130, 130), (8960, 1536, 1, 'marlin'): (130, 130)}))
+        self.assertEqual(r['C1b']['8960x1536']['v3_vs_tc_ladder'], 'slower')
+
+    def test_c1b_claimed_tie_shape_but_v3_faster(self):
+        # 1536x8960 claimed tie; tc 108 there -> v3 'faster' -> the claim (comparable) fails on that shape
+        r = L.readings(synthetic({(1536, 8960, 1, 'tc_ladder'): (108, 108)}))
+        self.assertEqual(r['C1b']['1536x8960']['verdict'], 'fails')
+
+    def test_c1a_series_asymmetric(self):
+        # 11008x4096: v3 100 / 110 vs Marlin 100: s2 Marlin 9.1% below -> mixed -> tie fails there
+        r = L.readings(synthetic({(11008, 4096, 1, 'v3'): (100, 110)}))
+        self.assertEqual(r['C1a']['11008x4096']['verdict'], 'fails')
+        self.assertTrue(r['C1a_verdict'].startswith('partly'))
+
+    def test_c1_combined_needs_both(self):
+        # every v3 120 (and tc 130 so C1b keeps its labels on 'faster' shapes): C1a contradicted -> C1 not supported
+        over = {(k, n, 1, 'v3'): (120, 120) for k, n in L.SHAPES}
+        r = L.readings(synthetic(over))
+        self.assertEqual(r['C1a_verdict'], 'contradicted')
+        self.assertNotEqual(r['C1_verdict'], 'supported')
+        # Marlin tie holds everywhere but tc = v3 (100) on the four claimed-'faster' shapes: C1b fails there
+        over = {(k, n, 1, 'tc_ladder'): (100, 100) for (k, n), lab in L.CLAIM_V3_VS_TC.items() if lab == 'faster'}
+        r = L.readings(synthetic(over))
+        self.assertEqual((r['C1a_verdict'], r['C1b_verdict']), ('supported', 'partly supported (shape-dependent)'))
+        self.assertTrue(r['C1_verdict'].startswith('partly'))
+
+    def test_c1_open_on_invalid_tc(self):
+        r = L.readings(synthetic(valid=[(4096, 4096, 1, 'tc_ladder')]))
+        self.assertTrue(r['C1b']['4096x4096'].startswith('open'))
+        self.assertEqual(r['C1a']['4096x4096']['verdict'], 'holds')         # Marlin part still scored
+        self.assertIn('open', r['C1b_verdict'])
+        r = L.readings(synthetic(valid=[(4096, 4096, 1, 'marlin')]))
+        self.assertTrue(r['C1a']['4096x4096'].startswith('open'))
+
+    def test_c2_tall_both_framings(self):
+        r = L.readings(synthetic())
+        # tc/v3: tall 1.15, others 1.08/1.02 -> tall largest; tc fraction of Marlin: tall 0.870 lowest
+        self.assertTrue(all(v['verdict'] == 'supported' for v in r['C2_tall_tc_vs_v3'].values()))
+        self.assertTrue(all(v['verdict'] == 'supported' for v in r['C2_tall_fraction'].values()))
+        # series-asymmetric: 4096x11008 tc 108 / 125 -> in series 2 its tc/v3 1.25 is largest -> not supported
+        r = L.readings(synthetic({(4096, 11008, 1, 'tc_ladder'): (108, 125)}))
+        self.assertEqual(r['C2_tall_tc_vs_v3'][1]['verdict'], 'not supported')
+        self.assertEqual(r['C2_tall_fraction'][1]['verdict'], 'not supported')
+
+    def test_c2_split(self):
+        r = L.readings(synthetic())
+        # S_bal 100.5 vs tc 115: 12.6% below -> faster; fraction 0.995 >= control 100/108 = 0.926 -> fixes
         self.assertTrue(all(v['verdict'] == 'fixes' for v in r['C2_split'].values()))
-        r = L.readings(synthetic(bal=112.0))   # 2.6% below tc: comparable -> does not help
-        self.assertTrue(all(v['verdict'] == 'does not help' for v in r['C2_split'].values()))
-        r = L.readings(synthetic(bal=105.0))   # 8.7% below tc, fraction 0.952 >= 0.926 -> still fixes
-        self.assertTrue(all(v['verdict'] == 'fixes' for v in r['C2_split'].values()))
-        r = L.readings(synthetic(tall_tc=130.0, bal=120.0))  # 7.7% below tc, fraction 0.833 < 0.926
-        self.assertTrue(all(v['verdict'] == 'helps, does not close' for v in r['C2_split'].values()))
+        self.assertEqual(r['C2_split']['8960x1536 M1']['balance_vs_v3'], 'comparable')
+        r = L.readings(synthetic({(8960, 1536, m, 'splitk_s3'): (112, 112) for m in L.MS}))   # 2.6% below tc
+        self.assertEqual(r['C2_split']['8960x1536 M1']['verdict'], 'does not help')
+
+    def test_c2_split_closes_needs_all_series(self):
+        # 8960x1536 S3 100.5 / 112 vs tc 115: s1 12.6%, s2 2.6% below -> mixed -> does not help
+        r = L.readings(synthetic({(8960, 1536, 1, 'splitk_s3'): (100.5, 112)}))
+        self.assertEqual(r['C2_split']['8960x1536 M1']['verdict'], 'does not help')
+        # tc 130/130, S3 100 / 120: faster in both (0.77, 0.92); fraction 1.0 / 0.833 vs control 0.926: closes only s1
+        r = L.readings(synthetic({(8960, 1536, 1, 'tc_ladder'): (130, 130), (8960, 1536, 1, 'splitk_s3'): (100, 120)}))
+        self.assertEqual(r['C2_split']['8960x1536 M1']['verdict'], 'helps, does not close')
+
+    def test_c2_open_on_invalid_control(self):
+        r = L.readings(synthetic(valid=[(4096, 11008, 4, 'tc_ladder')]))
+        self.assertTrue(r['C2_split']['8960x1536 M4'].startswith('open'))
+        r = L.readings(synthetic(valid=[(8960, 1536, 4, 'splitk_s3')]))
+        self.assertTrue(r['C2_split']['8960x1536 M4'].startswith('open'))
+
+
+BODY = 'e4eca5e30436c547358a9c8125d69526c6bb3318da034afd54ada6744181e2b7'
+LIBSHA = 'a' * 64
+
+
+def series_rows(sr):
+    """Rows of one series in the predeclared file order (series 2: shapes, M and each cell's order reversed)."""
+    shapes = L.SHAPES if sr == 1 else L.SHAPES[::-1]
+    ms = L.MS if sr == 1 else L.MS[::-1]
+    out = []
+    for k, n in shapes:
+        c = L.COUNTS[(k, n)]
+        for m in ms:
+            for pos, x in enumerate(L.order(k, n, m, sr)):
+                big = k * n > 20_000_000
+                per = 300.0 if x == 'cublas_dq' else 80.0 if big else 40.0   # above every floor (<= 55.6 / 212.2 us)
+                vals = [dict(num_bad=0, checked=m * n, output_sha256='%s%d' % ('t' if x in ('tc_ladder', 'splitk_s1') else x, i))
+                        for i in range(c)]
+                info = dict(fast_path=True, independent_violations=0)
+                if L.split_s(x):
+                    info.update(S=L.split_s(x), last_s=L.split_s(x))
+                out.append(dict(K=k, N=n, M=m, config=x, series=sr, order=pos, matrices=c, seeds=list(range(101, 101 + c)),
+                    activation_seed=101, validation=vals, post_timing_validation=[dict(v) for v in vals], cublas_math_mode=16,
+                    output_tail_untouched=True, workspace_guards=True, info=info, iters=100, warmup=10,
+                    samples_us=[per * c] * 100, median_us=per * c, median_per_matrix_us=per, body_sha256=BODY, lib_sha256=LIBSHA,
+                    readflush=dict(iters=200, warmup=10, samples_us=[per + 1] * 200, median_us=per + 1, mean_us=per + 1,
+                                   validation=[dict(v) for v in vals[:1]])))
+    return out
+
+
+def run_full(mutate=None):
+    """Write synthetic full-job files, apply mutate(rows1, rows2, d), run analyze.full, return summary.json."""
+    import contextlib, io, json, tempfile
+    from pathlib import Path
+    import analyze
+    with tempfile.TemporaryDirectory() as t:
+        d = Path(t)
+        rs = {1: series_rows(1), 2: series_rows(2)}
+        (d / 'prereq-binaries.sha256').write_text('%s  /x/prereq-c8-1/libe059.so\n' % LIBSHA)
+        (d / 'gpu-identity.txt').write_text('prereq GPU-a2aa0491-62c7-f289-6ed1-00a6eb3ea767 610.57.04 / now '
+                                            'GPU-a2aa0491-62c7-f289-6ed1-00a6eb3ea767 610.57.04\n')
+        if mutate:
+            mutate(rs[1], rs[2], d)
+        for sr in (1, 2):
+            (d / ('series%d.jsonl' % sr)).write_text(''.join(json.dumps(r) + '\n' for r in rs[sr]))
+        with contextlib.redirect_stdout(io.StringIO()):
+            analyze.full(d, d)
+        return json.loads((d / 'summary.json').read_text())
+
+
+def find(rows, k, n, m, x):
+    return next(r for r in rows if (r['K'], r['N'], r['M'], r['config']) == (k, n, m, x))
 
 
 class AnalyzerEndToEnd(unittest.TestCase):
-    """analyze.full() on synthetic series files: per-GEMM = cycle median / matrices, floorcheck flags, readings."""
+    def test_good(self):
+        out = run_full()
+        self.assertEqual(out['invalid_cyclic'], [])
+        self.assertEqual(out['cells']['8960x1536|1|v3']['cyc'], [40.0, 40.0])        # 400/10, not 400
+        self.assertEqual(out['s1_bit_mismatches'], [])
 
-    def write(self, d, below=None):
-        import json
-        for sr in (1, 2):
-            lines = []
-            for k, n in L.SHAPES:
-                c = L.COUNTS[(k, n)]
-                for m in L.MS:
-                    for pos, x in enumerate(L.order(k, n, m, sr)):
-                        per = 40.0 if x != 'cublas_dq' else 300.0    # above every floor (max 4-bit 55.6? see below)
-                        if k * n > 20_000_000:
-                            per = 80.0 if x != 'cublas_dq' else 300.0   # rectangles: 4-bit floor 54.5-55.6 us
-                        if (k, n, m, x) == below:
-                            per = 2.0                                # 1536^2 M1 floor 2.862 us -> must be flagged
-                        cyc = [per * c] * 100                        # every cycle sample = per x matrices
-                        vals = [dict(num_bad=0, checked=m * n, output_sha256='%s%d' % ('t' if x in ('tc_ladder', 'splitk_s1') else x, i),
-                                     max_abs=0.0) for i in range(c)]
-                        info = dict(fast_path=True, independent_violations=0)
-                        if L.split_s(x):
-                            info.update(S=L.split_s(x), last_s=L.split_s(x))
-                        lines.append(json.dumps(dict(K=k, N=n, M=m, config=x, series=sr, order=pos, matrices=c,
-                            seeds=list(range(101, 101 + c)), activation_seed=101, validation=vals, post_timing_validation=vals,
-                            cublas_math_mode=16, output_tail_untouched=True, workspace_guards=True, info=info, iters=100,
-                            warmup=10, samples_us=cyc, median_us=per * c, median_per_matrix_us=per,
-                            readflush=dict(iters=200, warmup=10, median_us=per + 1, mean_us=per + 1, validation=vals[:1]))))
-            (d / ('series%d.jsonl' % sr)).write_text('\n'.join(lines) + '\n')
-            (d / ('series%d.log' % sr)).write_text('BITWISE splitk_s1 == tc_ladder x True\n' * 9)
+    def test_below_floor_flagged(self):
+        def f(r1, r2, d):
+            find(r1, 1536, 1536, 1, 'marlin').update(median_per_matrix_us=2.0, median_us=112.0, samples_us=[112.0] * 100)
+        out = run_full(f)   # 2.0 us < 2.862 us floor in series 1 only: the cell is invalid (all series must pass)
+        self.assertEqual(out['invalid_cyclic'], ['1536x1536 M1 marlin'])
+        self.assertTrue(out['readings']['cyclic']['C1a']['1536x1536'].startswith('open'))
+        self.assertIn('marlin', out['label_lines']['1536x1536 M1 marlin'])
+        self.assertIn('CACHE-AFFECTED', out['label_lines']['1536x1536 M1 marlin'])
+        self.assertNotIn('CACHE-AFFECTED', out['label_lines']['1536x1536 M1 v3'])
 
-    def test_flags_below_floor_and_divides(self):
-        import tempfile
-        from pathlib import Path
-        import analyze
-        with tempfile.TemporaryDirectory() as t:
-            d = Path(t)
-            self.write(d, below=(1536, 1536, 1, 'marlin'))
-            import contextlib, io
-            with contextlib.redirect_stdout(io.StringIO()):
-                analyze.full(d, d)
-            import json
-            out = json.loads((d / 'summary.json').read_text())
-            self.assertEqual(out['invalid_cyclic'], ['1536x1536 M1 marlin'])          # only the planted cell
-            cell = out['cells']['8960x1536|1|v3']
-            self.assertEqual(cell['cyc'], [40.0, 40.0])                              # 400/10, not 400
-            self.assertTrue(out['readings']['cyclic']['C1']['1536x1536'].startswith('open'))
+    def test_4096sq_four_matrix_values_would_be_flagged(self):
+        def f(r1, r2, d):   # E050's cache-served Marlin 15.13 us at M4, here in the 8-matrix cycle: below 20.39 us
+            for r in (r1, r2):
+                find(r, 4096, 4096, 4, 'marlin').update(median_per_matrix_us=15.13, median_us=121.04, samples_us=[121.04] * 100)
+        self.assertIn('4096x4096 M4 marlin', run_full(f)['invalid_cyclic'])
+
+    def test_s1_mismatch_recorded_not_fatal(self):
+        def f(r1, r2, d):
+            find(r1, 8960, 1536, 4, 'splitk_s1')['validation'][0]['output_sha256'] = 'zz'
+            find(r1, 8960, 1536, 4, 'splitk_s1')['post_timing_validation'][0]['output_sha256'] = 'zz'
+            find(r1, 8960, 1536, 4, 'splitk_s1')['readflush']['validation'][0]['output_sha256'] = 'zz'
+        self.assertEqual(run_full(f)['s1_bit_mismatches'], [[1, 8960, 1536, 4]])
+
+    def test_integrity_failures(self):
+        def seeds(r1, r2, d): find(r2, 1536, 8960, 16, 'v3')['seeds'][0] = 99
+        def file_order(r1, r2, d): r1[0], r1[1] = r1[1], r1[0]
+        def cell_order(r1, r2, d): find(r1, 1536, 8960, 1, 'v3')['order'] += 1
+        def rf_validation(r1, r2, d): find(r1, 1536, 8960, 1, 'v3')['readflush']['validation'][0]['output_sha256'] = 'q'
+        def violations(r1, r2, d): find(r1, 1536, 8960, 1, 'v3')['info']['independent_violations'] = 1
+        def rf_iters(r1, r2, d):
+            rf = find(r1, 1536, 8960, 1, 'v3')['readflush']; rf['iters'] = 199; rf['samples_us'] = rf['samples_us'][:199]
+        def rf_median(r1, r2, d): find(r1, 1536, 8960, 1, 'v3')['readflush']['median_us'] = 30.0
+        def median(r1, r2, d): find(r1, 1536, 8960, 1, 'v3')['median_us'] = 399.0
+        def lib(r1, r2, d): find(r2, 1536, 8960, 1, 'v3')['lib_sha256'] = 'b' * 64
+        def body(r1, r2, d): find(r2, 1536, 8960, 1, 'marlin')['body_sha256'] = 'c' * 64
+        def gpu(r1, r2, d): (d / 'gpu-identity.txt').write_text('prereq GPU-a 610.57.04 / now GPU-b 610.57.04\n')
+        def missing(r1, r2, d): r2.pop()
+        def cell_moved(r1, r2, d):   # a whole cell (4 rows of 1536x8960 M1) moved to the end: only the file order changes
+            r1[:] = r1[4:] + r1[:4]
+        for f in (cell_moved, seeds, file_order, cell_order, rf_validation, violations, rf_iters, rf_median, median, lib, body, gpu, missing):
+            with self.assertRaises(AssertionError, msg=f.__name__):
+                run_full(f)
 
 
 class SassNames(unittest.TestCase):

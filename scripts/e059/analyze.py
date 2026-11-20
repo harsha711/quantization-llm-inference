@@ -9,6 +9,7 @@ validity check per cell (cyclic and read flush), the read-flush side-by-side, an
 import argparse
 import json
 import re
+import statistics
 import sys
 from pathlib import Path
 
@@ -119,7 +120,7 @@ def prereq(d):
         log = (d/f'{tool}.log').read_text()
         assert 'ERROR SUMMARY: 0 errors' in log, tool
         rs = rows(d/f'{tool}.jsonl')
-        assert len(rs) == 3*(len(paths(8960,1536))+len(paths(1536,1536))), tool
+        assert len(rs) == 3*(len(paths(8960,1536))+len(paths(1536,1536))+len(paths(4096,4096))), tool
         for r in rs: check_row(r,count=2,timed=True)
     for label,n in (('racecheck-v3',2),('racecheck-splitk',10)):
         log = (d/f'{label}.log').read_text()
@@ -130,7 +131,7 @@ def prereq(d):
           'racecheck v3 and tc_splitk S 1/2/3/4/8: 0 hazards')
     smoke = rows(d/'smoke.jsonl')
     assert sorted((r['K'],r['N'],r['config']) for r in smoke) == sorted(
-        (k,n,x) for k,n in [(11008,4096),(8960,1536),(1536,1536)] for x in paths(k,n))
+        (k,n,x) for k,n in [(11008,4096),(8960,1536),(1536,1536),(4096,4096)] for x in paths(k,n))
     print('smoke (M = 1, planned counts, 20 samples; inspection only, NOT a result): per-GEMM cyclic / read-flush median us, floor us')
     for r in smoke:
         check_row(r,timed=True)
@@ -143,28 +144,43 @@ def prereq(d):
     print('PREREQ PASS')
 
 
+BODY = 'e4eca5e30436c547358a9c8125d69526c6bb3318da034afd54ada6744181e2b7'   # corrected E006 Marlin library
+GPU_UUID, DRIVER = 'GPU-a2aa0491-62c7-f289-6ed1-00a6eb3ea767', '610.57.04'    # c8, as the prerequisite (amendment 2)
+
+
+def expected_file_order(s):
+    """(K, N, M, path) in the order bench.py writes them: series 2 reverses shapes, M and each cell's path order."""
+    shapes, ms = (SHAPES, MS) if s == 1 else (SHAPES[::-1], MS[::-1])
+    return [(k,n,m,x) for k,n in shapes for m in ms for x in order(k,n,m,s)]
+
+
 def series_rows(d):
-    out = {}
+    gpu = (d/'gpu-identity.txt').read_text().split()
+    assert gpu == ['prereq',GPU_UUID,DRIVER,'/','now',GPU_UUID,DRIVER], gpu
+    lib = {line.split()[0] for line in (d/'prereq-binaries.sha256').read_text().splitlines() if line.endswith('/libe059.so')}
+    assert len(lib) == 1, lib
+    out, mismatches = {}, []
     for s in (1,2):
         rs = rows(d/f'series{s}.jsonl')
-        assert len(rs) == sum(len(paths(k,n)) for k,n in SHAPES)*len(MS), (s,len(rs))
+        assert [(r['K'],r['N'],r['M'],r['config']) for r in rs] == expected_file_order(s), ('file order',s)
         cells = {}
         for r in rs:
             assert r['series'] == s
             check_row(r,timed=True)
-            assert r['iters'] == 100 and r['warmup'] == 10 and r['readflush']['iters'] == 200 and r['readflush']['warmup'] == 10
-            assert r['readflush']['validation'] == r['validation'][:1]
+            assert r['body_sha256'] == BODY and r['lib_sha256'] in lib, ('binary identity',r['config'])
+            assert r['iters'] == 100 and r['warmup'] == 10
+            rf = r['readflush']
+            assert rf['iters'] == 200 and rf['warmup'] == 10 and len(rf['samples_us']) == 200
+            assert abs(statistics.median(rf['samples_us'])-rf['median_us']) < 1e-9, 'read-flush median'
+            assert rf['validation'] == r['validation'][:1], 'read-flush output differs'
             cells.setdefault((r['K'],r['N'],r['M']),[]).append(r)
             out[(s,r['K'],r['N'],r['M'],r['config'])] = r
         for (k,n,m),cr in cells.items():
-            assert [r['config'] for r in sorted(cr,key=lambda r: r['order'])] == order(k,n,m,s), (s,k,n,m)
+            assert [(r['order'],r['config']) for r in cr] == list(enumerate(order(k,n,m,s))), ('cell order',s,k,n,m)
             h = {r['config']: [v['output_sha256'] for v in r['validation']] for r in cr}
-            if 'splitk_s1' in h: assert h['splitk_s1'] == h['tc_ladder'], ('S1 bits',s,k,n,m)
-        assert len(out) == len(rs)*s
-    log = '\n'.join((d/f'series{s}.log').read_text() for s in (1,2))
-    assert log.count('BITWISE splitk_s1 == tc_ladder') == 18 and 'False' not in ''.join(
-        x for x in log.splitlines() if x.startswith('BITWISE'))
-    return out
+            if 'splitk_s1' in h and h['splitk_s1'] != h['tc_ladder']:
+                mismatches.append([s,k,n,m])   # predeclared: recorded (e.g. a -0 output), not fatal
+    return out, mismatches
 
 
 def summarize(R):
@@ -187,23 +203,27 @@ def fr(cell,k,n,m,x,key='cyc'):
 
 
 def full(d,out_dir):
-    R = series_rows(d)
+    R, mismatches = series_rows(d)
     cell = summarize(R)
     lines = ['E059 full analysis: per-GEMM us = cycle median / matrices (cyclic, no artificial flush), series 1 / series 2;',
              'frac = Marlin median / path median (fraction of Marlin speed); floor = byte model / 427.2 GB/s;',
              'rf = the teammate\'s read-flush single-matrix median (their method, side by side). * = floorcheck status not OK (below a floor or working set < 2 x L2: cache-affected).','']
+    labels = {}
     star = lambda ts,st: '/'.join(f'{t:.1f}'+('' if L.valid(v) else '*') for t,v in zip(ts,st))
     for k,n in SHAPES:
         for m in MS:
             lines.append(f'K{k}xN{n} M{m} ({COUNTS[(k,n)]} matrices)  floor 4-bit {floor_us("v3",m,k,n):.2f} us, FP16 {floor_us("cublas_dq",m,k,n):.2f} us')
             for x in paths(k,n):
                 c = cell[(k,n,m,x)]
+                labels[f'{k}x{n} M{m} {x}'] = len(lines)
                 lines.append(f'  {x:10s} cyc {star(c["cyc"],c["cyc_status"]):>15s}  frac {"/".join(f"{v:.3f}" for v in fr(cell,k,n,m,x))}'
                              f'   rf {star(c["rf"],c["rf_status"]):>15s}  frac {"/".join(f"{v:.3f}" for v in fr(cell,k,n,m,x,"rf"))}'
-                             f'   cyc/rf {"/".join(f"{a/b:.3f}" for a,b in zip(c["cyc"],c["rf"]))}')
+                             f'   cyc/rf {"/".join(f"{a/b:.3f}" for a,b in zip(c["cyc"],c["rf"]))}'
+                             + ('' if c['cyc_valid'] else f'   CACHE-AFFECTED ({"/".join(c["cyc_status"])}): not a result'))
     invalid = sorted(f'{k}x{n} M{m} {x}' for (k,n,m,x),c in cell.items() if not c['cyc_valid'])
     rinvalid = sorted(f'{k}x{n} M{m} {x}' for (k,n,m,x),c in cell.items() if not c['rf_valid'])
-    lines += ['',f'cyclic cells not OK by floorcheck (cache-affected, not results): {invalid or "none"}',
+    lines += ['',f'splitk_s1 vs tc_ladder output-bit mismatches (series, K, N, M; recorded, not fatal): {mismatches or "none"}',
+              f'cyclic cells not OK by floorcheck (cache-affected, not results): {invalid or "none"}',
               f'read-flush cells not OK by floorcheck: {rinvalid or "none"}','']
     res = dict(cyclic=readings(cell,'cyc'),readflush_their_method=readings(cell,'rf'))
     lines.append(json.dumps(res,indent=1))
@@ -212,7 +232,7 @@ def full(d,out_dir):
     if out_dir:
         (out_dir/'analysis.txt').write_text(text+'\n')
         (out_dir/'summary.json').write_text(json.dumps(dict(floorcheck=L.fc.__file__,cells={f'{k}x{n}|{m}|{x}': v for (k,n,m,x),v in cell.items()},
-            readings=res,invalid_cyclic=invalid,invalid_readflush=rinvalid),indent=1)+'\n')
+            readings=res,s1_bit_mismatches=mismatches,label_lines={k: lines[i] for k,i in labels.items()},invalid_cyclic=invalid,invalid_readflush=rinvalid),indent=1)+'\n')
 
 
 if __name__ == '__main__':

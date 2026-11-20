@@ -62,12 +62,12 @@ if [[ $MODE == prereq ]]; then
   # Contract (FP64, every row) of every path incl. the teammate's v1/v2 on every shape, 2 matrices, traced.
   run validation "${base[@]}" --out "$S/validation.jsonl" --count 2 --extra v1 v2 --trace --iters 0 --rf-iters 0
   # Smoke timing at M = 1 with the planned matrix counts (inspection only, not a result).
-  run smoke "${base[@]}" --out "$S/smoke.jsonl" --shapes 11008,4096 8960,1536 1536,1536 --ms 1 --warmup 2 --iters 20 \
+  run smoke "${base[@]}" --out "$S/smoke.jsonl" --shapes 11008,4096 8960,1536 1536,1536 4096,4096 --ms 1 --warmup 2 --iters 20 \
     --rf-warmup 2 --rf-iters 20
   # One cycle (+ one read-flush sample) of every path under memcheck/synccheck, 2 matrices, a part-(b) and a model shape.
   for tool in memcheck synccheck; do
     run "$tool" compute-sanitizer --tool "$tool" --error-exitcode 99 "${base[@]}" --out "$S/$tool.jsonl" \
-      --shapes 8960,1536 1536,1536 --count 2 --warmup 0 --iters 1 --rf-warmup 0 --rf-iters 1
+      --shapes 8960,1536 1536,1536 4096,4096 --count 2 --warmup 0 --iters 1 --rf-warmup 0 --rf-iters 1
   done
   run racecheck-v3 compute-sanitizer --tool racecheck --error-exitcode 99 --kernel-name kns=w4a16_v3 "${base[@]}" \
     --out "$S/racecheck-v3.jsonl" --shapes 8960,1536 --ms 1 16 --count 1 --implementations v3 --iters 0 --rf-iters 0
@@ -77,6 +77,13 @@ if [[ $MODE == prereq ]]; then
   "$PY" scripts/e059/analyze.py "$S" --stage prereq > "$S/prereq-check.log"
 else
   [[ -e "$PRE/INSPECTED" ]]
+  # Amendment 2 (as E058 amendment 3): same GPU and driver as the inspected prerequisite (its metadata.txt), before
+  # any timing; fails closed.
+  want_uuid=$(awk -F': ' '/^ *GPU UUID/{print $2; exit}' "$PRE/metadata.txt")
+  want_drv=$(awk -F': ' '/^Driver Version/{split($2,a," "); print a[1]; exit}' "$PRE/metadata.txt")
+  read -r got_uuid got_drv < <(nvidia-smi --query-gpu=uuid,driver_version --format=csv,noheader | tr -d ',')
+  echo "prereq $want_uuid $want_drv / now $got_uuid $got_drv" > "$S/gpu-identity.txt"
+  [[ $want_uuid == GPU-a2aa0491-62c7-f289-6ed1-00a6eb3ea767 && $got_uuid == "$want_uuid" && $want_drv == 610.57.04 && $got_drv == "$want_drv" ]]
   (cd "$PRE" && sha256sum -c binaries.sha256 --ignore-missing) > "$S/prereq-binary-check.log"
   grep -q "$PRE/libe059.so: OK" "$S/prereq-binary-check.log"
   cp "$PRE/binaries.sha256" "$S/prereq-binaries.sha256"
@@ -89,7 +96,7 @@ else
   clock > "$S/series1-clocks-before.csv"
   run series1 "${base[@]}" --out "$S/series1.jsonl"
   clock > "$S/series1-clocks-after.csv"
-  run series2 "${base[@]}" --out "$S/series2.jsonl" --shapes 11008,4096 4096,11008 1536,1536 8960,1536 1536,8960 \
+  run series2 "${base[@]}" --out "$S/series2.jsonl" --shapes 4096,4096 11008,4096 4096,11008 1536,1536 8960,1536 1536,8960 \
     --ms 16 4 1 --series 2
   clock > "$S/series2-clocks-after.csv"
   "$PY" scripts/e059/analyze.py "$S" --stage full > "$S/analysis.txt"

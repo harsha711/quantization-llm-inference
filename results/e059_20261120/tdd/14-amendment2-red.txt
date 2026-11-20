@@ -1,0 +1,197 @@
+EEEEF.F................EEEEEEEE.E.E...........F...
+======================================================================
+ERROR: test_4096sq_four_matrix_values_would_be_flagged (scripts.e059.test_e059.AnalyzerEndToEnd)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/test_e059.py", line 444, in test_4096sq_four_matrix_values_would_be_flagged
+    self.assertIn('4096x4096 M4 marlin', run_full(f)['invalid_cyclic'])
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/test_e059.py", line 414, in run_full
+    mutate(rs[1], rs[2], d)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/test_e059.py", line 443, in f
+    find(r, 4096, 4096, 4, 'marlin').update(median_per_matrix_us=15.13, median_us=121.04, samples_us=[121.04] * 100)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/test_e059.py", line 423, in find
+    return next(r for r in rows if (r['K'], r['N'], r['M'], r['config']) == (k, n, m, x))
+StopIteration
+
+======================================================================
+ERROR: test_below_floor_flagged (scripts.e059.test_e059.AnalyzerEndToEnd)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/test_e059.py", line 436, in test_below_floor_flagged
+    out = run_full(f)   # 2.0 us < 2.862 us floor in series 1 only: the cell is invalid (all series must pass)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/test_e059.py", line 418, in run_full
+    analyze.full(d, d)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/analyze.py", line 190, in full
+    R = series_rows(d)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/analyze.py", line 164, in series_rows
+    log = '\n'.join((d/f'series{s}.log').read_text() for s in (1,2))
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/analyze.py", line 164, in <genexpr>
+    log = '\n'.join((d/f'series{s}.log').read_text() for s in (1,2))
+  File "/usr/lib/python3.10/pathlib.py", line 1134, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+  File "/usr/lib/python3.10/pathlib.py", line 1119, in open
+    return self._accessor.open(self, mode, buffering, encoding, errors,
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmpr5zdn0lb/series1.log'
+
+======================================================================
+ERROR: test_good (scripts.e059.test_e059.AnalyzerEndToEnd)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/test_e059.py", line 428, in test_good
+    out = run_full()
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/test_e059.py", line 418, in run_full
+    analyze.full(d, d)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/analyze.py", line 190, in full
+    R = series_rows(d)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/analyze.py", line 164, in series_rows
+    log = '\n'.join((d/f'series{s}.log').read_text() for s in (1,2))
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/analyze.py", line 164, in <genexpr>
+    log = '\n'.join((d/f'series{s}.log').read_text() for s in (1,2))
+  File "/usr/lib/python3.10/pathlib.py", line 1134, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+  File "/usr/lib/python3.10/pathlib.py", line 1119, in open
+    return self._accessor.open(self, mode, buffering, encoding, errors,
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmpuh4bej__/series1.log'
+
+======================================================================
+ERROR: test_integrity_failures (scripts.e059.test_e059.AnalyzerEndToEnd)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/test_e059.py", line 469, in test_integrity_failures
+    run_full(f)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/test_e059.py", line 418, in run_full
+    analyze.full(d, d)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/analyze.py", line 190, in full
+    R = series_rows(d)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/analyze.py", line 164, in series_rows
+    log = '\n'.join((d/f'series{s}.log').read_text() for s in (1,2))
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/analyze.py", line 164, in <genexpr>
+    log = '\n'.join((d/f'series{s}.log').read_text() for s in (1,2))
+  File "/usr/lib/python3.10/pathlib.py", line 1134, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+  File "/usr/lib/python3.10/pathlib.py", line 1119, in open
+    return self._accessor.open(self, mode, buffering, encoding, errors,
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmpcb951f2d/series1.log'
+
+======================================================================
+ERROR: test_1536sq_marlin_not_scored (scripts.e059.test_e059.Readings)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/test_e059.py", line 296, in test_1536sq_marlin_not_scored
+    self.assertEqual(r['C1a_verdict'], 'supported')
+KeyError: 'C1a_verdict'
+
+======================================================================
+ERROR: test_c1_combined_needs_both (scripts.e059.test_e059.Readings)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/test_e059.py", line 329, in test_c1_combined_needs_both
+    self.assertEqual(r['C1a_verdict'], 'contradicted')
+KeyError: 'C1a_verdict'
+
+======================================================================
+ERROR: test_c1_open_on_invalid_tc (scripts.e059.test_e059.Readings)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/test_e059.py", line 333, in test_c1_open_on_invalid_tc
+    r = L.readings(synthetic(valid=[(4096, 4096, 1, 'tc_ladder')]))
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/test_e059.py", line 282, in synthetic
+    cell[key]['cyc_valid'] = False
+KeyError: (4096, 4096, 1, 'tc_ladder')
+
+======================================================================
+ERROR: test_c1_supported_as_quoted (scripts.e059.test_e059.Readings)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/test_e059.py", line 289, in test_c1_supported_as_quoted
+    self.assertEqual((r['C1a_verdict'], r['C1b_verdict'], r['C1_verdict']), ('supported', 'supported', 'supported'))
+KeyError: 'C1a_verdict'
+
+======================================================================
+ERROR: test_c1a_series_asymmetric (scripts.e059.test_e059.Readings)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/test_e059.py", line 322, in test_c1a_series_asymmetric
+    self.assertEqual(r['C1a']['11008x4096']['verdict'], 'fails')
+KeyError: 'C1a'
+
+======================================================================
+ERROR: test_c1b_claimed_tie_shape_but_v3_faster (scripts.e059.test_e059.Readings)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/test_e059.py", line 317, in test_c1b_claimed_tie_shape_but_v3_faster
+    self.assertEqual(r['C1b']['1536x8960']['verdict'], 'fails')
+KeyError: 'C1b'
+
+======================================================================
+ERROR: test_c1b_series_asymmetric (scripts.e059.test_e059.Readings)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/test_e059.py", line 302, in test_c1b_series_asymmetric
+    self.assertEqual(r['C1b']['4096x11008']['v3_vs_tc_ladder'], 'mixed')
+KeyError: 'C1b'
+
+======================================================================
+ERROR: test_c1b_v3_slower_than_tc (scripts.e059.test_e059.Readings)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/test_e059.py", line 309, in test_c1b_v3_slower_than_tc
+    self.assertEqual(r['C1b']['8960x1536']['verdict'], 'fails')
+KeyError: 'C1b'
+
+======================================================================
+ERROR: test_c2_split (scripts.e059.test_e059.Readings)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/test_e059.py", line 354, in test_c2_split
+    self.assertEqual(r['C2_split']['8960x1536 M1']['balance_vs_v3'], 'comparable')
+KeyError: 'balance_vs_v3'
+
+======================================================================
+ERROR: test_c2_tall_both_framings (scripts.e059.test_e059.Readings)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/test_e059.py", line 343, in test_c2_tall_both_framings
+    self.assertTrue(all(v['verdict'] == 'supported' for v in r['C2_tall_tc_vs_v3'].values()))
+KeyError: 'C2_tall_tc_vs_v3'
+
+======================================================================
+FAIL: test_s1_mismatch_recorded_not_fatal (scripts.e059.test_e059.AnalyzerEndToEnd)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/test_e059.py", line 451, in test_s1_mismatch_recorded_not_fatal
+    self.assertEqual(run_full(f)['s1_bit_mismatches'], [[1, 8960, 1536, 4]])
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/test_e059.py", line 418, in run_full
+    analyze.full(d, d)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/analyze.py", line 190, in full
+    R = series_rows(d)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/analyze.py", line 162, in series_rows
+    if 'splitk_s1' in h: assert h['splitk_s1'] == h['tc_ladder'], ('S1 bits',s,k,n,m)
+AssertionError: ('S1 bits', 1, 8960, 1536, 4)
+
+======================================================================
+FAIL: test_predeclared_counts (scripts.e059.test_e059.CycleSizing)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/test_e059.py", line 77, in test_predeclared_counts
+    self.assertEqual(L.COUNTS, {(1536, 8960): 10, (8960, 1536): 10, (1536, 1536): 56, (4096, 11008): 4, (11008, 4096): 4,
+AssertionError: {(153[39 chars]1536): 56, (4096, 11008): 4, (11008, 4096): 4} != {(153[39 chars]1536): 56, (4096, 11008): 4, (11008, 4096): 4, (4096, 4096): 8}
+  {(1536, 1536): 56,
+   (1536, 8960): 10,
++  (4096, 4096): 8,
+   (4096, 11008): 4,
+   (8960, 1536): 10,
+   (11008, 4096): 4}
+
+======================================================================
+FAIL: test_paths_and_order (scripts.e059.test_e059.Splits)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e059/test_e059.py", line 176, in test_paths_and_order
+    self.assertEqual(sum(len(L.paths(k, n)) for k, n in L.SHAPES) * 3, 114)
+AssertionError: 102 != 114
+
+----------------------------------------------------------------------
+Ran 50 tests in 0.199s
+
+FAILED (failures=3, errors=14)

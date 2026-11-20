@@ -12,11 +12,17 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'
 import floorcheck as fc  # noqa: E402
 
 MS = [1, 4, 16]
-SHAPES = [(1536, 8960), (8960, 1536), (1536, 1536), (4096, 11008), (11008, 4096)]
+SHAPES = [(1536, 8960), (8960, 1536), (1536, 1536), (4096, 11008), (11008, 4096), (4096, 4096)]   # 4096^2: amendment 2
 SPLIT_SHAPES = [(8960, 1536), (11008, 4096), (4096, 11008)]
 TALL = [(11008, 4096), (8960, 1536)]
 CONTROL = (4096, 11008)
-COUNTS = {(1536, 8960): 10, (8960, 1536): 10, (1536, 1536): 56, (4096, 11008): 4, (11008, 4096): 4}   # predeclared
+COUNTS = {(1536, 8960): 10, (8960, 1536): 10, (1536, 1536): 56, (4096, 11008): 4, (11008, 4096): 4,
+          (4096, 4096): 8}                                                                          # predeclared
+# C1 as quoted (cd39962 docs/OURS.md, M=1 read-flush tables): v3 "within +-4% of Marlin on the five large shapes";
+# v3 "beats tc by 5-13% on four of six shapes and ties on the other two".
+CLAIM_MARLIN_TIE = [(4096, 11008), (11008, 4096), (4096, 4096), (1536, 8960), (8960, 1536)]
+CLAIM_V3_VS_TC = {(4096, 11008): 'faster', (11008, 4096): 'faster', (4096, 4096): 'faster', (8960, 1536): 'faster',
+                  (1536, 8960): 'comparable', (1536, 1536): 'comparable'}
 BALANCE = {(8960, 1536): 3, (11008, 4096): 7, (4096, 11008): 1}                                      # predeclared
 BASE = ['marlin', 'tc_ladder', 'v3', 'cublas_dq']
 SMS = 36
@@ -153,43 +159,65 @@ def _fr(cell, k, n, m, x, key):
     return [fraction(a, b) for a, b in zip(cell[(k, n, m, 'marlin')][key], cell[(k, n, m, x)][key])]
 
 
+def _verdict(per):
+    """per: {label: dict(verdict='holds'|'fails') or 'open ...'}; claim-level verdict over the scored labels."""
+    h = [v['verdict'] == 'holds' for v in per.values() if isinstance(v, dict) and v['verdict'] in ('holds', 'fails')]
+    opened = [s for s, v in per.items() if not isinstance(v, dict)]
+    out = 'open' if not h else 'supported' if all(h) else 'contradicted' if not any(h) else 'partly supported (shape-dependent)'
+    return out + ('; open on %s' % opened if opened else '')
+
+
+def _largest_two(vals, i, reverse):
+    return set(sorted(vals, key=lambda s: vals[s][i], reverse=reverse)[:2])
+
+
 def readings(cell, key='cyc'):
     """Predeclared C1/C2 readings on one method's per-GEMM medians: cell[(K,N,M,path)] = {key: [s1, s2],
     key+'_valid': bool}. 'cyc' = cyclic (the result), 'rf' = the teammate's read flush (their method)."""
     ok = lambda k, n, m, *xs: all(cell[(k, n, m, x)][key + '_valid'] for x in xs)
     t = lambda k, n, m, x: cell[(k, n, m, x)][key]
-    out = dict(C1={}, C2_tall={}, C2_split={})
-    for k, n in SHAPES:
-        if not ok(k, n, 1, 'v3', 'marlin', 'tc_ladder'):
-            out['C1']['%dx%d' % (k, n)] = 'open (cache-affected cell)'; continue
-        vm = r1(t(k, n, 1, 'v3'), t(k, n, 1, 'marlin'))
-        best = all(a <= b for a, b in zip(t(k, n, 1, 'v3'), t(k, n, 1, 'tc_ladder')))
-        out['C1']['%dx%d' % (k, n)] = dict(v3_vs_marlin=vm, v3_vs_tc_ladder=r1(t(k, n, 1, 'v3'), t(k, n, 1, 'tc_ladder')),
-                                          v3_le_tc_ladder_both_series=best, holds=vm == 'comparable' and best)
-    h = [v['holds'] for v in out['C1'].values() if isinstance(v, dict)]
-    opened = [s for s, v in out['C1'].items() if not isinstance(v, dict)]
-    out['C1_verdict'] = ('open' if not h else 'supported' if all(h) else 'contradicted' if not any(h) else
-                         'partly supported (shape-dependent)') + (' on the valid shapes; open on %s' % opened if opened and h else '')
-    for m in MS:
-        shapes = [s for s in SHAPES if ok(*s, m, 'tc_ladder', 'marlin')]
-        fr = {s: _fr(cell, *s, m, 'tc_ladder', key) for s in shapes}
-        if not all(s in shapes for s in TALL) or len(shapes) < 3:
-            out['C2_tall'][m] = dict(verdict='open (cache-affected cells)')
+    sh = lambda k, n: '%dx%d' % (k, n)
+    out = dict(C1a={}, C1b={}, C2_tall_tc_vs_v3={}, C2_tall_fraction={}, C2_split={})
+    for k, n in SHAPES:                                         # C1 at M = 1
+        if not ok(k, n, 1, 'v3', 'marlin'):
+            out['C1a'][sh(k, n)] = 'open (cache-affected cell)'
         else:
-            lowest = [sorted(shapes, key=lambda s: fr[s][i])[:2] for i in (0, 1)]
-            out['C2_tall'][m] = dict(fractions={'%dx%d' % s: v for s, v in fr.items()},
-                                     verdict='supported' if all(set(x) == set(TALL) for x in lowest) else 'not supported')
+            vm = r1(t(k, n, 1, 'v3'), t(k, n, 1, 'marlin'))
+            out['C1a'][sh(k, n)] = dict(v3_vs_marlin=vm, verdict=('holds' if vm == 'comparable' else 'fails')
+                                        if (k, n) in CLAIM_MARLIN_TIE else 'descriptive (not claimed)')
+        if not ok(k, n, 1, 'v3', 'tc_ladder'):
+            out['C1b'][sh(k, n)] = 'open (cache-affected cell)'
+        else:
+            vt = r1(t(k, n, 1, 'v3'), t(k, n, 1, 'tc_ladder'))
+            out['C1b'][sh(k, n)] = dict(v3_vs_tc_ladder=vt, claimed=CLAIM_V3_VS_TC[(k, n)],
+                                        verdict='holds' if vt == CLAIM_V3_VS_TC[(k, n)] else 'fails')
+    out['C1a_verdict'], out['C1b_verdict'] = _verdict(out['C1a']), _verdict(out['C1b'])
+    a, b = out['C1a_verdict'].split(';')[0], out['C1b_verdict'].split(';')[0]
+    out['C1_verdict'] = a if a == b else 'partly supported (C1a %s, C1b %s)' % (a, b)
+    for m in MS:
+        shapes = [s for s in SHAPES if ok(*s, m, 'tc_ladder', 'marlin', 'v3')]
+        if not all(s in shapes for s in TALL) or len(shapes) < 3:
+            out['C2_tall_tc_vs_v3'][m] = out['C2_tall_fraction'][m] = dict(verdict='open (cache-affected cells)')
+        else:
+            ratio = {s: [a / b for a, b in zip(t(*s, m, 'tc_ladder'), t(*s, m, 'v3'))] for s in shapes}
+            frac = {s: _fr(cell, *s, m, 'tc_ladder', key) for s in shapes}
+            out['C2_tall_tc_vs_v3'][m] = dict(tc_over_v3={sh(*s): v for s, v in ratio.items()}, verdict='supported'
+                                             if all(_largest_two(ratio, i, True) == set(TALL) for i in (0, 1)) else 'not supported')
+            out['C2_tall_fraction'][m] = dict(fractions={sh(*s): v for s, v in frac.items()}, verdict='supported'
+                                             if all(_largest_two(frac, i, False) == set(TALL) for i in (0, 1)) else 'not supported')
         for k, n in TALL:
             sb = 'splitk_s%d' % BALANCE[(k, n)]
             label = '%dx%d M%d' % (k, n, m)
-            if not ok(k, n, m, sb, 'tc_ladder', 'marlin') or not ok(*CONTROL, m, 'tc_ladder', 'marlin'):
+            if not ok(k, n, m, sb, 'tc_ladder', 'marlin', 'v3') or not ok(*CONTROL, m, 'tc_ladder', 'marlin'):
                 out['C2_split'][label] = 'open (cache-affected cell)'; continue
             helps = r1(t(k, n, m, sb), t(k, n, m, 'tc_ladder'))
             closes = all(a >= b for a, b in zip(_fr(cell, k, n, m, sb, key), _fr(cell, *CONTROL, m, 'tc_ladder', key)))
             vs = [s for s in splits(k, n) if ok(k, n, m, 'splitk_s%d' % s)]
             best = min(vs, key=lambda s: sum(t(k, n, m, 'splitk_s%d' % s)))
             out['C2_split'][label] = dict(
-                balance_S=BALANCE[(k, n)], balance_vs_tc=helps, balance_fraction_of_marlin=_fr(cell, k, n, m, sb, key),
+                balance_S=BALANCE[(k, n)], balance_vs_tc=helps, balance_vs_v3=r1(t(k, n, m, sb), t(k, n, m, 'v3')),
+                tc_vs_v3=r1(t(k, n, m, 'tc_ladder'), t(k, n, m, 'v3')),
+                balance_fraction_of_marlin=_fr(cell, k, n, m, sb, key), tc_fraction_of_marlin=_fr(cell, k, n, m, 'tc_ladder', key),
                 control_tc_fraction=_fr(cell, *CONTROL, m, 'tc_ladder', key), balance_reaches_control=closes,
                 verdict='fixes' if helps == 'faster' and closes else 'helps, does not close' if helps == 'faster' else 'does not help',
                 sweep_vs_tc={'S%d' % s: r1(t(k, n, m, 'splitk_s%d' % s), t(k, n, m, 'tc_ladder')) for s in vs},
