@@ -73,6 +73,13 @@ def cell_valid(name,m,t8,t16):
     return v
 
 
+def cell_label(v):
+    """Per-cell text label: VALID, or CACHE-AFFECTED with the 8/16-matrix statuses and convergence."""
+    if v['valid']:
+        return 'VALID'
+    return f"CACHE-AFFECTED ({v['status_8']}/{v['status_16']}, {'converged' if v['converged'] else 'not converged'})"
+
+
 def rows(path):
     return [json.loads(x) for x in path.read_text().splitlines()]
 
@@ -248,7 +255,7 @@ def text(summary):
     for key,v in summary['validity'].items():
         x,m,s = key.split()
         L.append(f"{x:<11} {m[1:]:<4} {s[1:]}  {v['floor_us']:6.2f}  {v['t4']:6.2f}  {v['t8']:6.2f}  {v['t16']:6.2f}  "
-                 f"{v['t8_over_t16_minus_1']:+7.3%}  {v['status_4']:<11}  {'VALID' if v['valid'] else 'CACHE-AFFECTED ('+v['status_8']+'/'+v['status_16']+')'}"
+                 f"{v['t8_over_t16_minus_1']:+7.3%}  {v['status_4']:<11}  {cell_label(v)}"
                  + (f"  NOTE {v['note']}" if v['note'] else ''))
     L += ['',f"Valid cells ({LABEL_VALID}): {summary['valid_cells']}/{summary['cells']}",
           'VALID = ' + LABEL_VALID + '; at M64/M128 the 4-bit floor is the compute floor, so validity there rests on '

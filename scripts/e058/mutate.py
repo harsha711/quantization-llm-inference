@@ -32,6 +32,16 @@ MUTANTS = {
     'no file-order check': ("        check_series_order(rs,s)\n", ""),
     'raw-ratio convergence': (C, "converged=abs(conv) <= CONVERGENCE_TOL)"),
     'no calibration note': ("v['note'] = NOTE_FLOOR_CALIBRATION if calib else None", "v['note'] = None"),
+    # second review
+    'cuBLAS ratio uses tc cell': ("'cublas_fraction': row['valid']['cublas_dq'] and", "'cublas_fraction': row['valid']['tc'] and"),
+    'tc_ladder ratio uses tc cell': ("'tc_ladder_fraction': row['valid']['tc_ladder'] and", "'tc_ladder_fraction': row['valid']['tc'] and"),
+    'label always VALID': ("    if v['valid']:\n        return 'VALID'\n", "    return 'VALID'\n"),
+    'c16_over_e050 from 4 matrices': ("row['c16_over_e050'] = {x: med[(16,m,x,s)]", "row['c16_over_e050'] = {x: med[(4,m,x,s)]"),
+    'no seed check': ("row['seeds'] == SEEDS[:c] and ", ""),
+    'no same_bits in cells': ("        assert same_bits(rs) == 12\n    return out", "    return out"),
+    'no post-timing equality': ("            assert r['post_timing_validation'] == r['validation']\n", ""),
+    'no series field check': ("assert r['series'] == s and r['iters']", "assert r['iters']"),
+    'calibration note on BELOW_STRICT': (" and \\\n        fc.BELOW_STRICT not in (v['status_8'],v['status_16'])", ""),
 }
 
 

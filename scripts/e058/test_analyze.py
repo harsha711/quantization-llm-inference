@@ -254,6 +254,108 @@ class CellsUsesFileOrder(unittest.TestCase):
                       2: self.series(2, [4, 8, 16], [4, 16, 64, 128])})
 
 
+class Review2(unittest.TestCase):
+    """Second-review findings: each case kills a surviving mutant."""
+
+    def med(self, **override):
+        # Same base as Summarize: M4/M16 Marlin 24, tc 30, tc_ladder 30, cuBLAS 96; M64/M128 100/125/110/120
+        # (all above floors, converged). override: {(count, M, path, series): value}
+        med = {}
+        for c in an.COUNTS:
+            for s in (1, 2):
+                for m in an.MS:
+                    v = dict(marlin=24.0, tc=30.0, tc_ladder=30.0, cublas_dq=96.0) if m < 64 else \
+                        dict(marlin=100.0, tc=125.0, tc_ladder=110.0, cublas_dq=120.0)
+                    for x in an.NAMES:
+                        med[(c, m, x, s)] = v[x]
+        med.update(override)
+        return med
+
+    def test_ratio_validity_cublas_own_cell(self):
+        # only cuBLAS M4 s1 invalid (t16 = 70 < 74.90 strict): cuBLAS fraction invalid, tc/tc_ladder fractions valid
+        sm = an.summarize({**self.med(), (16, 4, 'cublas_dq', 1): 70.0})
+        ok = {(r['M'], r['series']): r for r in sm['timing']}[(4, 1)]['c16_ratio_valid']
+        self.assertFalse(ok['cublas_fraction'])
+        self.assertTrue(ok['tc_fraction'])
+        self.assertTrue(ok['tc_ladder_fraction'])
+        self.assertTrue(ok['tc_ladder_over_tc'])
+        self.assertEqual(sm['valid_cells'], 31)
+
+    def test_ratio_validity_tc_ladder_own_cell(self):
+        # only tc_ladder M64 s2 invalid (t8 = 125, t16 = 110: 15/110 = 13.6% > 3%, not converged):
+        # tc_ladder fraction and ladder/tc invalid; tc and cuBLAS fractions valid
+        sm = an.summarize({**self.med(), (8, 64, 'tc_ladder', 2): 125.0})
+        ok = {(r['M'], r['series']): r for r in sm['timing']}[(64, 2)]['c16_ratio_valid']
+        self.assertFalse(ok['tc_ladder_fraction'])
+        self.assertFalse(ok['tc_ladder_over_tc'])
+        self.assertTrue(ok['tc_fraction'])
+        self.assertTrue(ok['cublas_fraction'])
+
+    def test_text_label_non_converged_cell(self):
+        # the tc_ladder M64 s2 line must say CACHE-AFFECTED and "not converged"; a valid line says VALID
+        t = an.text(an.summarize({**self.med(), (8, 64, 'tc_ladder', 2): 125.0}))
+        bad = [l for l in t.splitlines() if l.startswith('tc_ladder   64   2')]
+        good = [l for l in t.splitlines() if l.startswith('tc_ladder   64   1')]
+        self.assertEqual(len(bad), 1)
+        self.assertIn('CACHE-AFFECTED', bad[0])
+        self.assertIn('not converged', bad[0])
+        self.assertNotIn('VALID', bad[0].replace('CACHE-AFFECTED', ''))
+        self.assertIn('VALID', good[0])
+        self.assertNotIn('CACHE-AFFECTED', good[0])
+
+    def test_c16_over_e050_uses_16_matrices(self):
+        # E050 series 1 Marlin 4096^2 M4 = 16.71 us (E050 table 16.7; summary.json 16.712, 4-matrix cycle). With Marlin at 24.0 for
+        # counts 4/8 and 20.9 at 16 (M4 s1), c16_over_e050 = 20.9/E050 and c4_over_e050 = 24.0/E050.
+        sm = an.summarize({**self.med(), (16, 4, 'marlin', 1): 20.9})
+        r = {(x['M'], x['series']): x for x in sm['timing']}[(4, 1)]
+        e = r['e050']['marlin_us']
+        self.assertAlmostEqual(e, 16.71, delta=0.01)
+        self.assertAlmostEqual(r['c16_over_e050']['marlin'], 20.9/e)
+        self.assertAlmostEqual(r['c4_over_e050']['marlin'], 24.0/e)
+
+    def test_calibration_note_excludes_below_strict(self):
+        # cuBLAS t8 77.0 (BELOW_MEASURED) and t16 70.0 (BELOW_STRICT, < 74.90): no calibration note
+        v = an.cell_valid('cublas_dq', 4, 77.0, 70.0)
+        self.assertEqual(v['status_16'], an.fc.BELOW_STRICT)
+        self.assertIsNone(v['note'])
+
+
+class CellsIntegrity(unittest.TestCase):
+    """cells() must reject bad rows (seed list, tc_ladder bits, post-timing validation, series field)."""
+
+    def good(self):
+        return {1: CellsUsesFileOrder.series(1, [4, 8, 16], [4, 16, 64, 128]),
+                2: CellsUsesFileOrder.series(2, [16, 8, 4], [128, 64, 16, 4])}
+
+    def test_good_passes(self):
+        self.assertEqual(len(an.cells(self.good())), 96)
+
+    def test_wrong_seeds_rejected(self):
+        d = self.good(); d[1][0]['seeds'] = list(range(7, 11))   # E050's seeds, not 11-14
+        with self.assertRaises(AssertionError):
+            an.cells(d)
+
+    def test_tc_ladder_bits_differ_rejected(self):
+        d = self.good()
+        r = next(x for x in d[2] if x['config'] == 'tc_ladder' and x['matrices'] == 8 and x['M'] == 64)
+        r['validation'] = [dict(v, output_sha256='different') for v in r['validation']]
+        r['post_timing_validation'] = r['validation']
+        with self.assertRaises(AssertionError):
+            an.cells(d)
+
+    def test_post_timing_validation_differs_rejected(self):
+        d = self.good()
+        r = d[1][5]
+        r['post_timing_validation'] = [dict(v, max_abs=1.0) for v in r['validation']]
+        with self.assertRaises(AssertionError):
+            an.cells(d)
+
+    def test_series_field_mismatch_rejected(self):
+        d = self.good(); d[2][3]['series'] = 1
+        with self.assertRaises(AssertionError):
+            an.cells(d)
+
+
 class Summarize(unittest.TestCase):
     """Hand-computed fractions and validity marks at 16 matrices."""
 
