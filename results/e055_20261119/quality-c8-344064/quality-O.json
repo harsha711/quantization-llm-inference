@@ -1,0 +1,13 @@
+{
+ "variant": "O",
+ "workload_variant": "O",
+ "body": "e4eca5e30436c547358a9c8125d69526c6bb3318da034afd54ada6744181e2b7",
+ "text_sha256": "d790b833ef8cf03a90db7bf1271b7520b83c45ce07ba3c1a9699df81e239eca0",
+ "tokens": 309009,
+ "windows": 150,
+ "scored_tokens": 307050,
+ "nll_sum": 660906.0671386719,
+ "perplexity": 8.605813234340317,
+ "top1_accuracy": 0.5386386581989904,
+ "gpu": "GPU-a2aa0491-62c7-f289-6ed1-00a6eb3ea767, 610.57.04"
+}

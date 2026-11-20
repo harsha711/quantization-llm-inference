@@ -23,6 +23,21 @@ Reported: perplexity and top-1 accuracy of each variant; relative perplexity dif
 
 Criteria, fixed now (E032's labels applied to the kernel effect): kernel effect "negligible" if |ppl(Q)/ppl(R) − 1| ≤ 1%, "modest" ≤ 5%, "substantial" above. Hypothesis: both kernels negligible, and in fact below 0.1% (FP32 accumulation in all three paths; the differences are FP16 output rounding and summation order). Ours versus Marlin: "no quality difference between the kernels" may be said only if |ppl(QT)/ppl(QM) − 1| ≤ 0.1% and the top-1 agreement of QT with QM is at least 99%; otherwise the measured difference is reported as is. Limits: one model, one corpus, teacher-forced perplexity (not a task evaluation), plain-rounded weights (+13.1% vs original stays the quantization cost), one GPU type, FP16 head. New files only: `scripts/e055/`, `results/e055_20261119/`, BeeGFS `csc548-w4a16-e055-20261119`.
 
+### Result (job 344064, c8, 2026-11-19, 3 min 34 s, exit 0, first attempt): the kernel does not change quality; ours and Marlin indistinguishable
+
+`results/e055_20261119/quality-c8-344064/` (`analysis.json`, per-variant JSON, per-position top-1 and per-window NLL in `top1-*.npz`; `all.sha256` verified after retrieval). 150 windows, 307,050 scored positions, text hash as E032. R reproduces E032 (9.734987, printed 9.735).
+
+| variant | perplexity | top-1 accuracy | vs R | top-1 agreement with R |
+|---|---|---|---|---|
+| O original FP16 | 8.6058 | 0.5386 | −11.6% | — |
+| R PyTorch FP16, reconstructed (E032) | 9.7350 | 0.5206 | — | — |
+| QM corrected Marlin | 9.7349 | 0.5207 | −0.0007% (negligible) | 99.80% |
+| QT our `tc_ladder` | 9.7349 | 0.5207 | −0.0013% (negligible) | 99.80% |
+
+QT versus QM: −0.0006% perplexity, top-1 agreement 99.795%, per-window NLL difference mean −0.013 nats per 2047-token window (max |·| 0.80), 79 windows lower / 71 higher: no sign of a systematic effect. Both criteria met: kernel effect negligible (in fact four orders of magnitude below the 1% label), and "no quality difference between the kernels" (|QT/QM − 1| ≤ 0.1% and agreement ≥ 99%). Block quantization cost unchanged through either kernel: +13.12% (R), +13.12% (QM), +13.12% (QT) over O. The ~0.2% of positions whose top-1 differs are FP16 near-ties (each path rounds differently), not errors.
+
+Decision: the quality numbers of E032–E042 (measured in PyTorch FP16) carry over to the real kernels for the prefill path; the +13.1% disclosure applies unchanged to our kernel. Limits: teacher-forced perplexity exercises M = 2048 only (decode M = 1 is covered by the E052/E054 gates and token checks), one model/corpus/GPU, FP16 head. Note: the `body` field in the O/R/QM records is the bridge's Marlin hash constant (O and R do not call any kernel); QT's records the tc_ladder library hash.
+
 ## E054 — Is E052's decode result (ours 0.8–3.6% below Marlin) robust across nodes and GPU types, and where does the gap come from?
 
 Numbering: predeclared as "E053" (commit a70d512) and renumbered E054 before any timing, because the local branch `experiment/v3-rowreuse` (worktree /tmp/w4a16-v3-rowreuse, not merged here) already records a different E053 (v3 two-row reuse) using `results/e054_20261119/` and the same BeeGFS root; nothing else in the design changed. Predeclared 2026-11-19 at the user's request ("perform robust tests to confirm this … try out different gpus … thoroughly validate this one"), before any E053 job. Descriptive robustness study of E052's GTA-versus-GQA decode comparison; no kernel, model, gate, tolerance or protocol change, nothing adopted. E052's verdict ("comparable") stands unless E053 contradicts it on the same GPU type.

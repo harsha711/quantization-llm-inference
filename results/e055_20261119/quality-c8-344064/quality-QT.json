@@ -1,0 +1,13 @@
+{
+ "variant": "QT",
+ "workload_variant": "Q",
+ "body": "tc_ladder:a24a78fad127230f04a867e4a78e7a2a0453a6d4f0db95ea35900c7adaa971fe",
+ "text_sha256": "d790b833ef8cf03a90db7bf1271b7520b83c45ce07ba3c1a9699df81e239eca0",
+ "tokens": 309009,
+ "windows": 150,
+ "scored_tokens": 307050,
+ "nll_sum": 698757.6818847656,
+ "perplexity": 9.734857658055322,
+ "top1_accuracy": 0.5207262660804429,
+ "gpu": "GPU-a2aa0491-62c7-f289-6ed1-00a6eb3ea767, 610.57.04"
+}

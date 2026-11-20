@@ -279,6 +279,8 @@
 
 - Predeclared in EXPERIMENTS: E032's WikiText-2 perplexity protocol run through corrected Marlin (QM) and our `tc_ladder` (QT) next to E032's PyTorch FP16 reference R and original O, one RTX 5060 Ti job, original E050/E006 binaries via E052's t.py. Labels: negligible ≤ 1% vs R; "no quality difference between the kernels" only if QT vs QM ≤ 0.1% and top-1 agreement ≥ 99%. Quality only; perplexity covers the prefill (M = 2048) path, not decode.
 
+- E055 is complete (c8, job 344064): WikiText-2 perplexity R 9.7350 (E032 reproduced), Marlin 9.7349, ours 9.7349: kernel effect ≤ 0.0013% ("negligible"), ours vs Marlin −0.0006% with 99.8% top-1 agreement ("no quality difference between the kernels"). +13.1% vs original holds through both kernels. Prefill path (M = 2048) only.
+
 ## Rooflines, if requested
 
 - Recompute all ceilings, ridge points, arithmetic intensities, and performance coordinates from specifications/data. Keep the primary full-machine roof distinct from core-count, ISA, NUMA, and memory-domain sensitivity roofs.
