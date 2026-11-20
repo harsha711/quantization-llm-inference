@@ -249,5 +249,40 @@ class ReviewGaps(unittest.TestCase):
         self.assertIsNotNone(r[("tc_ladder", 16)]["pct_bw"])  # intensity ~62 < ridge 121
 
 
+class E058(unittest.TestCase):
+    """4096^2 cyclic at 16 matrices (138 MB = 4.1x L2), job 344197. Expected values from
+    E058's own analyzer (analysis.txt) and the independent results review, not anchors.py."""
+
+    def test_fractions_16_matrices(self):
+        f = A["e058"]["tc_ladder_frac_of_marlin"]
+        for M, (s1, s2) in {4: (0.928, 0.930), 16: (0.956, 0.953), 64: (0.923, 0.924), 128: (0.901, 0.900)}.items():
+            self.assertAlmostEqual(f[M][0], s1, delta=0.0006)
+            self.assertAlmostEqual(f[M][1], s2, delta=0.0006)
+
+    def test_marlin_m4_and_ladder_over_tc(self):
+        e = A["e058"]
+        self.assertAlmostEqual(e["us"][("marlin", 4)][0], 24.14, delta=0.006)
+        self.assertAlmostEqual(e["us"][("marlin", 4)][1], 24.16, delta=0.006)
+        r = e["tc_ladder_over_tc"]
+        self.assertAlmostEqual(r[64][0], 0.902, delta=0.0006); self.assertAlmostEqual(r[64][1], 0.900, delta=0.0006)
+        self.assertAlmostEqual(r[128][0], 0.886, delta=0.0006); self.assertAlmostEqual(r[128][1], 0.888, delta=0.0006)
+
+    def test_validity(self):
+        e = A["e058"]
+        self.assertEqual(e["n_valid"], 32)       # predeclared: OK at 8 and 16, |t8-t16| <= 0.03 t16
+        self.assertAlmostEqual(e["max_conv_pct"], 2.945, delta=0.002)   # tc M64 series 1
+        # 4-matrix control at M4: every 4-bit path BELOW_STRICT (cache-served, as in E050)
+        self.assertTrue(all(st == fc.BELOW_STRICT for st in e["control_m4_w4_status"]))
+
+
+class E058Rule(unittest.TestCase):
+    def test_cell_valid(self):
+        v = an.e058_cell_valid
+        self.assertTrue(v(fc.OK, fc.OK, 25.75, 25.0))            # exactly 3.00 % passes
+        self.assertFalse(v(fc.OK, fc.OK, 25.76, 25.0))           # 3.04 % fails
+        self.assertFalse(v(fc.BELOW_MEASURED, fc.OK, 25.0, 25.0))  # only t8 invalid
+        self.assertFalse(v(fc.OK, fc.WS_SMALL, 25.0, 25.0))        # only t16 invalid
+
+
 if __name__ == "__main__":
     unittest.main()

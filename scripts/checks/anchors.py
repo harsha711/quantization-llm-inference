@@ -203,9 +203,34 @@ def standing():
                 source="E052 ext medians; E056 analysis.json arms (profiler device time)")
 
 
+def e058_cell_valid(status8, status16, t8, t16):
+    return status8 == fc.OK and status16 == fc.OK and abs(t8 - t16) <= 0.03 * t16
+
+
+def e058():
+    """4096^2 cyclic, E058 job 344197 (c8, seeds 11-26). Valid cell (predeclared): floorcheck OK at
+    8 and 16 matrices and |t8 - t16| <= 0.03 * t16. Values quoted at 16 matrices."""
+    rows = fc.e050_rows(os.path.join(R, "e058_20261120/full-c8-344197"))
+    t = {(r["config"], r["M"], r["matrices"], r["series"]): r for r in rows}
+    paths, Ms = ("marlin", "tc", "tc_ladder", "cublas_dq"), (4, 16, 64, 128)
+    n_valid, conv = 0, []
+    for p in paths:
+        for M in Ms:
+            for s in (1, 2):
+                a, b = t[(p, M, 8, s)], t[(p, M, 16, s)]
+                conv.append(100 * abs(a["time_us"] - b["time_us"]) / b["time_us"])
+                n_valid += e058_cell_valid(a["status"], b["status"], a["time_us"], b["time_us"])
+    us = {(p, M): [t[(p, M, 16, s)]["time_us"] for s in (1, 2)] for p in paths for M in Ms}
+    return dict(us=us, n_valid=n_valid, max_conv_pct=max(conv),
+                tc_ladder_frac_of_marlin={M: [us[("marlin", M)][i] / us[("tc_ladder", M)][i] for i in (0, 1)] for M in Ms},
+                tc_ladder_over_tc={M: [us[("tc_ladder", M)][i] / us[("tc", M)][i] for i in (0, 1)] for M in Ms},
+                control_m4_w4_status=[t[(p, 4, 4, s)]["status"] for p in ("marlin", "tc", "tc_ladder") for s in (1, 2)],
+                source="E058 series*.jsonl, 16 matrices (138 MB = 4.1x L2); converged within 3%, not pure DRAM")
+
+
 def compute_all():
     return dict(problem=problem(), model=model(), cpu=cpu(), climb=climb(),
-                processor_ratios=processor_ratios(), e050=e050(),
+                processor_ratios=processor_ratios(), e050=e050(), e058=e058(),
                 roofline=roofline(), e054=e054(), quality=quality(), standing=standing())
 
 
