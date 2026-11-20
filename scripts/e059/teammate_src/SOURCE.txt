@@ -1,0 +1,10 @@
+Extracted verbatim with: git show cd39962:src/cuda/<file> > scripts/e059/teammate_src/<file>
+commit cd39962 = cd399628bc428c6a29359f88a0060befaddca8f7 (tip of origin/samarth/bandwidth-roofline, fetched 2026-11-20)
+kernel files last changed in 6048d8d (v2/v3) and 58edf8c (v1, flush_read); kernels.cuh in 6048d8d
+git blob ids:
+  2be700809e178cf73aea527be732ddd99c4370df  src/cuda/ours_v1.cu
+  1fcc9f55c79885e9716205a5dc6803ed2beb9835  src/cuda/ours_v2.cu
+  1d34d288921247f340a4860b43c464cc07a40188  src/cuda/ours_v3.cu
+  b84425a730961dce264826ee83b49821fcb79c70  src/cuda/kernels.cuh
+  68ada81de0e4bf660a34b51b0596248683de682d  src/cuda/flush_read.cu
+Not modified. Compiled into libe059.so; called only through scripts/e059/ours_bridge.cu.
