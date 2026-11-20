@@ -1,0 +1,4 @@
+[prun] Master compute host = c8
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun bash /tmp/e059-src-344192/scripts/e059/inner.sh prereq /tmp/e059-src-344192 /mnt/beegfs/hpuvvad/csc548-w4a16-e059-20261120/prereq-c8-344192  (family=openmpi4)
+INNER-OK
