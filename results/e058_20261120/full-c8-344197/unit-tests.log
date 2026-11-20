@@ -1,0 +1,37 @@
++ timeout 5400 /tmp/e005-r2-hpuvvad-20261106/bin/python -m unittest -v scripts/e058/test_analyze.py
+test_cublas_below_measured_is_floor_calibration (scripts.e058.test_analyze.Amendment3.test_cublas_below_measured_is_floor_calibration) ... ok
+test_exactly_three_percent_passes (scripts.e058.test_analyze.Amendment3.test_exactly_three_percent_passes) ... ok
+test_only_t16_below_floor (scripts.e058.test_analyze.Amendment3.test_only_t16_below_floor) ... ok
+test_only_t8_below_floor (scripts.e058.test_analyze.Amendment3.test_only_t8_below_floor) ... ok
+test_series_order_from_file (scripts.e058.test_analyze.Amendment3.test_series_order_from_file) ... ok
+test_t8_classified_with_eight_matrices (scripts.e058.test_analyze.Amendment3.test_t8_classified_with_eight_matrices) ... ok
+test_good_order_loads (scripts.e058.test_analyze.CellsUsesFileOrder.test_good_order_loads) ... ok
+test_series2_in_series1_block_order_rejected (scripts.e058.test_analyze.CellsUsesFileOrder.test_series2_in_series1_block_order_rejected) ... ok
+test_below_floor_at_8_and_16_invalid_even_if_converged (scripts.e058.test_analyze.KnownBad.test_below_floor_at_8_and_16_invalid_even_if_converged) ... ok
+test_below_measured_is_invalid (scripts.e058.test_analyze.KnownBad.test_below_measured_is_invalid) ... ok
+test_compute_floor_m128 (scripts.e058.test_analyze.KnownBad.test_compute_floor_m128) ... ok
+test_convergence_just_outside (scripts.e058.test_analyze.KnownBad.test_convergence_just_outside) ... ok
+test_cublas_uses_fp16_bytes (scripts.e058.test_analyze.KnownBad.test_cublas_uses_fp16_bytes) ... ok
+test_e050_marlin_m4_from_raw_file (scripts.e058.test_analyze.KnownBad.test_e050_marlin_m4_from_raw_file) ... ok
+test_four_matrices_above_floor_is_ws_small (scripts.e058.test_analyze.KnownBad.test_four_matrices_above_floor_is_ws_small) ... ok
+test_not_converged_invalid (scripts.e058.test_analyze.KnownBad.test_not_converged_invalid) ... ok
+test_convergence_just_inside (scripts.e058.test_analyze.KnownGood.test_convergence_just_inside) ... ok
+test_convergence_symmetric (scripts.e058.test_analyze.KnownGood.test_convergence_symmetric) ... ok
+test_cublas_m4_valid (scripts.e058.test_analyze.KnownGood.test_cublas_m4_valid) ... ok
+test_m128_valid_above_compute_floor (scripts.e058.test_analyze.KnownGood.test_m128_valid_above_compute_floor) ... ok
+test_tc_m4_valid (scripts.e058.test_analyze.KnownGood.test_tc_m4_valid) ... ok
+test_divides_by_matrices_16 (scripts.e058.test_analyze.PerGemm.test_divides_by_matrices_16) ... ok
+test_divides_by_matrices_8 (scripts.e058.test_analyze.PerGemm.test_divides_by_matrices_8) ... ok
+test_uses_median_not_mean (scripts.e058.test_analyze.PerGemm.test_uses_median_not_mean) ... ok
+test_fractions (scripts.e058.test_analyze.Summarize.test_fractions) ... ok
+test_t4_is_the_four_matrix_median (scripts.e058.test_analyze.Summarize.test_t4_is_the_four_matrix_median) ... ok
+test_validity_marks (scripts.e058.test_analyze.Summarize.test_validity_marks) ... ok
+test_wording (scripts.e058.test_analyze.Summarize.test_wording) ... ok
+test_validity_counts (scripts.e058.test_analyze.TableLevel.test_validity_counts) ... ok
+test_floorcheck_is_the_floor (scripts.e058.test_analyze.UsesSharedChecker.test_floorcheck_is_the_floor) ... ok
+test_kind_mapping (scripts.e058.test_analyze.UsesSharedChecker.test_kind_mapping) ... ok
+
+----------------------------------------------------------------------
+Ran 31 tests in 0.007s
+
+OK
