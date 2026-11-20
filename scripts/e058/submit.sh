@@ -4,7 +4,9 @@
 #   ssh arc-off-network mkdir -p csc548-w4a16-e058-20261120
 #   scp results/e050_20261118/prereq-c8-343302/libe050_tc.so arc-off-network:csc548-w4a16-e058-20261120/
 #   bash scripts/e058/submit.sh prereq | ssh arc-off-network sbatch --parsable --nodelist=c8
-#   bash scripts/e058/submit.sh full PREREQ_DIR_NAME "inspection note" | ssh arc-off-network sbatch --parsable --nodelist=c8 --dependency=afterok:JOB
+#   bash scripts/e058/submit.sh full PREREQ_DIR_NAME "inspection note" | ssh arc-off-network sbatch --parsable --nodelist=c8 [--dependency=afterok:JOB]
+# Amendment 3: drop --dependency when the prerequisite is already purged from Slurm (MinJobAge 300 s); the job then
+# relies on its own guards: prerequisite driver.exit == 0, INSPECTED written, library hash, same GPU UUID/driver.
 set -euo pipefail
 mode=${1:?prereq or full}; pre=${2:-}; note=${3:-}; [[ $mode == prereq || ( $mode == full && -n $pre && -n $note ) ]]
 root=$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)

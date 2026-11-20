@@ -57,6 +57,12 @@ if [[ $MODE == prereq ]]; then
   "$PY" scripts/e058/analyze.py "$S" --stage prereq > "$S/prereq-check.log"
 else
   [[ -e "$PRE/INSPECTED" ]]
+  # Amendment 3: same GPU and driver as the inspected prerequisite (its metadata.txt), before any timing.
+  want_uuid=$(awk -F': ' '/^ *GPU UUID/{print $2; exit}' "$PRE/metadata.txt")
+  want_drv=$(awk -F': ' '/^Driver Version/{split($2,a," "); print a[1]; exit}' "$PRE/metadata.txt")
+  read -r got_uuid got_drv < <(nvidia-smi --query-gpu=uuid,driver_version --format=csv,noheader | tr -d ',')
+  echo "prereq $want_uuid $want_drv / now $got_uuid $got_drv" > "$S/gpu-identity.txt"
+  [[ -n $want_uuid && $got_uuid == "$want_uuid" && $want_drv == 610.57.04 && $got_drv == "$want_drv" ]]
   (cd "$PRE" && sha256sum -c tc-lib.sha256) > "$S/prereq-binary-check.log"
   [[ $(sha256sum "$PRE/libe050_tc.so" | cut -d' ' -f1) == "$E050SHA" ]]
   cp "$PRE/binaries.sha256" "$S/prereq-binaries.sha256"

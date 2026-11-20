@@ -25,6 +25,12 @@ SEEDS = list(range(11,27))
 E050_TC_SHA = 'a24a78fad127230f04a867e4a78e7a2a0453a6d4f0db95ea35900c7adaa971fe'
 READ_GBPS = fc.BW_BYTES_PER_S/1e9   # E057 measured read-only bandwidth, c8 (job 344144)
 CONVERGENCE_TOL = 0.03              # predeclared |t8/t16 - 1| bound
+# Amendment 3 wording: a valid cell is converged and insensitive to the working set between 8 and 16 matrices.
+# At M64/M128 the 4-bit floor is the compute floor, so there validity rests on convergence alone; E049 still saw
+# 4-6% L2 re-reads at 2.8 x L2, so "valid" never means "pure DRAM".
+LABEL_VALID = 'converged, working-set-insensitive (8 vs 16)'
+NOTE_FLOOR_CALIBRATION = ('floor calibration: cuBLAS BELOW_MEASURED with a 268-537 MB working set (8-16 x L2); '
+                          'a calibration issue of the 427.2 GB/s floor, not caching')
 E050_SUMMARY = Path(__file__).resolve().parents[2]/'results/e050_20261118/summary.json'
 
 
@@ -57,8 +63,13 @@ def cell_valid(name,m,t8,t16):
     and |t8/t16-1| <= 3%."""
     conv = t8/t16 - 1
     v = dict(floor_us=floor_us(name,m),strict_floor_us=strict_floor_us(name,m),t8=t8,t16=t16,status_8=cell_status(name,m,t8,8),
-             status_16=cell_status(name,m,t16,16),t8_over_t16_minus_1=conv,converged=abs(conv) <= CONVERGENCE_TOL)
+             status_16=cell_status(name,m,t16,16),t8_over_t16_minus_1=conv,
+             converged=abs(t8-t16) <= CONVERGENCE_TOL*t16)  # |t8/t16-1| <= 3% without float-ratio rounding at 3.00%
     v['valid'] = v['status_8'] == fc.OK and v['status_16'] == fc.OK and v['converged']
+    # Predeclared (amendment 3): cuBLAS BELOW_MEASURED at 8/16 matrices is reported as floor calibration, not caching.
+    calib = kind(name) == 'fp16' and fc.BELOW_MEASURED in (v['status_8'],v['status_16']) and \
+        fc.BELOW_STRICT not in (v['status_8'],v['status_16'])
+    v['note'] = NOTE_FLOOR_CALIBRATION if calib else None
     return v
 
 
@@ -154,10 +165,18 @@ def order(count,m,series):  # mirror of bench.py
     return names if series == 1 else names[::-1]
 
 
+def check_series_order(rs,s):
+    """File order of a series: (count, M) blocks as predeclared (series 2 fully reversed), paths per order()."""
+    cs, ms = (COUNTS, MS) if s == 1 else (COUNTS[::-1], MS[::-1])
+    expect = [(c,m,x) for c in cs for m in ms for x in order(c,m,s)]
+    assert [(r['matrices'],r['M'],r['config']) for r in rs] == expect, f'series {s} file order'
+
+
 def cells(series_rows):
     out = {}
     for s,rs in series_rows.items():
         assert len(rs) == 48 and sum(len(r['samples_us']) for r in rs) == 4800
+        check_series_order(rs,s)
         assert sorted((r['matrices'],r['M'],r['config']) for r in rs) == sorted(
             (c,m,x) for c in COUNTS for m in MS for x in NAMES)
         for r in rs:
@@ -204,7 +223,7 @@ def summarize(med):
                 row[f'c{c}'].update({f'{x}_fraction_of_marlin_speed': mr/med[(c,m,x,s)] for x in NAMES if x != 'marlin'})
                 row[f'c{c}']['tc_ladder_over_tc'] = med[(c,m,'tc_ladder',s)]/med[(c,m,'tc',s)]
             row['valid'] = {x: val[(x,m,s)]['valid'] for x in NAMES}
-            # A ratio is reported as a DRAM-regime result only if both of its cells are valid.
+            # A ratio is reported as a result only if both of its cells are valid.
             row['c16_ratio_valid'] = {'tc_fraction': row['valid']['tc'] and row['valid']['marlin'],
                 'tc_ladder_fraction': row['valid']['tc_ladder'] and row['valid']['marlin'],
                 'cublas_fraction': row['valid']['cublas_dq'] and row['valid']['marlin'],
@@ -229,9 +248,14 @@ def text(summary):
     for key,v in summary['validity'].items():
         x,m,s = key.split()
         L.append(f"{x:<11} {m[1:]:<4} {s[1:]}  {v['floor_us']:6.2f}  {v['t4']:6.2f}  {v['t8']:6.2f}  {v['t16']:6.2f}  "
-                 f"{v['t8_over_t16_minus_1']:+7.3%}  {v['status_4']:<11}  {'VALID' if v['valid'] else 'CACHE-AFFECTED ('+v['status_8']+'/'+v['status_16']+')'}")
-    L += ['',f"Valid cells: {summary['valid_cells']}/{summary['cells']}",'',
-          'Ratios at 16 matrices (fraction = Marlin/path; * = not a DRAM-regime result, a cell failed validity)',
+                 f"{v['t8_over_t16_minus_1']:+7.3%}  {v['status_4']:<11}  {'VALID' if v['valid'] else 'CACHE-AFFECTED ('+v['status_8']+'/'+v['status_16']+')'}"
+                 + (f"  NOTE {v['note']}" if v['note'] else ''))
+    L += ['',f"Valid cells ({LABEL_VALID}): {summary['valid_cells']}/{summary['cells']}",
+          'VALID = ' + LABEL_VALID + '; at M64/M128 the 4-bit floor is the compute floor, so validity there rests on '
+          'the 8-vs-16 convergence; E049 saw 4-6% L2 re-reads at 2.8 x L2. The 3% bound is from E050 between-process '
+          'spread (1.36%) while 8 vs 16 is within one process, so a residual L2 benefit up to 3% can pass. '
+          'Counts run in time order (clock may change): read both series side by side.','',
+          'Ratios at 16 matrices (fraction = Marlin/path; * = a cell failed validity, not a result)',
           'M    s  tc frac   ladder frac  cuBLAS frac  ladder/tc']
     for r in summary['timing']:
         c, ok_ = r['c16'], r['c16_ratio_valid']

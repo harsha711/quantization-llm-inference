@@ -157,6 +157,163 @@ class KnownGood(unittest.TestCase):
         self.assertTrue(an.cell_valid('tc_ladder', 128, 110.0, 110.5)['valid'])
 
 
+class Amendment3(unittest.TestCase):
+    """Review gaps (amendment 3): each case kills a mutation that survived the amendment-2 suite."""
+
+    def test_only_t8_below_floor(self):
+        # M4: t8 20.0 < 20.403 measured floor (and > 19.31 strict) -> BELOW_MEASURED; t16 20.5 >= 20.403 -> OK;
+        # 20.0/20.5 - 1 = -2.44% (converged). Invalid because of the 8-matrix status alone.
+        v = an.cell_valid('tc', 4, 20.0, 20.5)
+        self.assertEqual(v['status_8'], an.fc.BELOW_MEASURED)
+        self.assertEqual(v['status_16'], an.fc.OK)
+        self.assertTrue(v['converged'])
+        self.assertFalse(v['valid'])
+
+    def test_only_t16_below_floor(self):
+        # mirror: t8 20.5 OK, t16 20.0 BELOW_MEASURED, +2.5% converged -> invalid
+        v = an.cell_valid('tc', 4, 20.5, 20.0)
+        self.assertEqual(v['status_8'], an.fc.OK)
+        self.assertEqual(v['status_16'], an.fc.BELOW_MEASURED)
+        self.assertFalse(v['valid'])
+
+    def test_exactly_three_percent_passes(self):
+        # t16 25.0, t8 25.75: difference 0.75 = 3.00% of 25.0 exactly -> converged (bound is <= 3%), valid
+        # (both >= 20.403). In floating point 25.75/25 - 1 = 0.030000000000000027, so the comparison must not
+        # be a raw ratio; the hand rule is |t8 - t16| <= 0.03 * t16.
+        v = an.cell_valid('tc', 4, 25.75, 25.0)
+        self.assertTrue(v['converged'])
+        self.assertTrue(v['valid'])
+
+    def test_t8_classified_with_eight_matrices(self):
+        # With a hypothetical 2.1 x L2 margin: 8 matrices = 69,206,016 B = 2.0625 x L2 < 2.1 -> WS_SMALL,
+        # 16 matrices = 4.125 x L2 -> OK. So the 8-matrix status must come from count 8, not 16.
+        old = an.fc.L2_MARGIN
+        try:
+            an.fc.L2_MARGIN = 2.1
+            v = an.cell_valid('tc', 4, 22.0, 22.0)
+            self.assertEqual(v['status_8'], an.fc.WS_SMALL)
+            self.assertEqual(v['status_16'], an.fc.OK)
+        finally:
+            an.fc.L2_MARGIN = old
+
+    def test_cublas_below_measured_is_floor_calibration(self):
+        # cuBLAS M4 77.0 us at 8 and 16: strict 74.90 < 77.0 < measured 78.70 -> BELOW_MEASURED; working set
+        # 8 x 33,554,432 = 268 MB (8 x L2): invalid, labelled a floor-calibration issue, not caching.
+        v = an.cell_valid('cublas_dq', 4, 77.0, 77.0)
+        self.assertFalse(v['valid'])
+        self.assertEqual(v['note'], an.NOTE_FLOOR_CALIBRATION)
+        # a 4-bit BELOW_MEASURED cell carries no such note
+        self.assertIsNone(an.cell_valid('tc', 4, 20.0, 20.0)['note'])
+        # cuBLAS BELOW_STRICT (70 < 74.90) is not a calibration question either
+        self.assertIsNone(an.cell_valid('cublas_dq', 4, 70.0, 70.0)['note'])
+
+    def test_series_order_from_file(self):
+        # series 1 file order: counts 4, 8, 16; within each M 4, 16, 64, 128; paths in order(c, m, 1).
+        # series 2: counts 16, 8, 4; M 128, 64, 16, 4; paths in order(c, m, 2) (= reversed).
+        def rows_for(s):
+            cs, ms = ([4, 8, 16], [4, 16, 64, 128]) if s == 1 else ([16, 8, 4], [128, 64, 16, 4])
+            return [dict(matrices=c, M=m, config=x) for c in cs for m in ms for x in an.order(c, m, s)]
+        an.check_series_order(rows_for(1), 1)
+        an.check_series_order(rows_for(2), 2)
+        with self.assertRaises(AssertionError):      # series 2 written in series-1 block order
+            an.check_series_order([dict(r) for r in rows_for(1)], 2)
+        bad = rows_for(2)
+        bad[0], bad[4] = bad[4], bad[0]              # first two (count, M) blocks interleaved
+        with self.assertRaises(AssertionError):
+            an.check_series_order(bad, 2)
+
+
+class CellsUsesFileOrder(unittest.TestCase):
+    """cells() (the full-stage loader) must enforce the file order, not only the per-row order field."""
+
+    @staticmethod
+    def series(s, cs, ms):
+        out = []
+        for c in cs:
+            for m in ms:
+                for i, x in enumerate(an.order(c, m, s)):
+                    v = [dict(num_bad=0, checked=m*4096, output_sha256=f'{j}-{m}-{c}') for j in range(c)]
+                    t = 30.0*c  # cycle median; per-GEMM 30 us
+                    out.append(dict(K=4096, N=4096, M=m, matrices=c, config=x, series=s, iters=100, warmup=10,
+                                    samples_us=[t]*100, median_us=t, order=i, seeds=an.SEEDS[:c], activation_seed=11,
+                                    validation=v, post_timing_validation=v, cublas_math_mode=16,
+                                    output_tail_untouched=True, workspace_guards=True, tc_sha256=an.E050_TC_SHA))
+        return out
+
+    def test_good_order_loads(self):
+        med = an.cells({1: self.series(1, [4, 8, 16], [4, 16, 64, 128]),
+                        2: self.series(2, [16, 8, 4], [128, 64, 16, 4])})
+        self.assertEqual(len(med), 96)                       # 48 rows x 2 series
+        self.assertAlmostEqual(med[(16, 4, 'tc', 2)], 30.0)  # 480 / 16
+
+    def test_series2_in_series1_block_order_rejected(self):
+        # series-2 rows (reversed path order per cell) written with counts 4,8,16 and M 4..128: every row's own
+        # order field is right, only the block order is wrong -> must be rejected
+        with self.assertRaises(AssertionError):
+            an.cells({1: self.series(1, [4, 8, 16], [4, 16, 64, 128]),
+                      2: self.series(2, [4, 8, 16], [4, 16, 64, 128])})
+
+
+class Summarize(unittest.TestCase):
+    """Hand-computed fractions and validity marks at 16 matrices."""
+
+    def setUp(self):
+        # Every (count, M, series): M4/M16 Marlin 24, tc 30, tc_ladder 30, cuBLAS 96;
+        # M64/M128 Marlin 100, tc 125, tc_ladder 110, cuBLAS 120. All above their floors
+        # (4-bit 20.40/20.86/41.43/82.85; cuBLAS 78.70/79.16/81.00/83.45) and converged (identical at 8/16).
+        # One defect: Marlin M4 series 2 at 16 matrices = 15.0 (< 19.31 strict) -> Marlin cell invalid there.
+        self.med = {}
+        for c in an.COUNTS:
+            for s in (1, 2):
+                for m in an.MS:
+                    v = dict(marlin=24.0, tc=30.0, tc_ladder=30.0, cublas_dq=96.0) if m < 64 else \
+                        dict(marlin=100.0, tc=125.0, tc_ladder=110.0, cublas_dq=120.0)
+                    for x in an.NAMES:
+                        self.med[(c, m, x, s)] = v[x]
+        self.med[(16, 4, 'marlin', 2)] = 15.0
+        self.sm = an.summarize(self.med)
+        self.row = {(r['M'], r['series']): r for r in self.sm['timing']}
+
+    def test_fractions(self):
+        r = self.row[(4, 1)]['c16']
+        self.assertAlmostEqual(r['tc_fraction_of_marlin_speed'], 0.8)         # 24/30
+        self.assertAlmostEqual(r['cublas_dq_fraction_of_marlin_speed'], 0.25)  # 24/96
+        self.assertAlmostEqual(r['tc_ladder_over_tc'], 1.0)                    # 30/30
+        r = self.row[(64, 2)]['c16']
+        self.assertAlmostEqual(r['tc_fraction_of_marlin_speed'], 0.8)              # 100/125
+        self.assertAlmostEqual(r['tc_ladder_fraction_of_marlin_speed'], 0.909091, places=5)  # 100/110
+        self.assertAlmostEqual(r['cublas_dq_fraction_of_marlin_speed'], 0.833333, places=5)  # 100/120
+        self.assertAlmostEqual(r['tc_ladder_over_tc'], 0.88)                       # 110/125
+        r = self.row[(4, 2)]['c16']
+        self.assertAlmostEqual(r['tc_fraction_of_marlin_speed'], 0.5)          # 15/30 (defect cell)
+
+    def test_validity_marks(self):
+        # 32 cells, only Marlin M4 s2 invalid -> 31 valid
+        self.assertEqual(self.sm['valid_cells'], 31)
+        ok = self.row[(4, 2)]['c16_ratio_valid']
+        self.assertFalse(ok['tc_fraction'])          # needs the Marlin cell
+        self.assertFalse(ok['tc_ladder_fraction'])
+        self.assertFalse(ok['cublas_fraction'])
+        self.assertTrue(ok['tc_ladder_over_tc'])     # tc and tc_ladder cells both valid
+        self.assertTrue(all(self.row[(4, 1)]['c16_ratio_valid'].values()))
+
+    def test_t4_is_the_four_matrix_median(self):
+        # change only the 4-matrix value; validity must report it as t4 and not mix it with t8
+        med = dict(self.med)
+        med[(4, 16, 'tc', 1)] = 12.5
+        v = an.validity(med)[('tc', 16, 1)]
+        self.assertEqual(v['t4'], 12.5)
+        self.assertEqual(v['t8'], 30.0)
+        self.assertEqual(v['status_4'], an.fc.BELOW_STRICT)  # 12.5 < 19.31
+
+    def test_wording(self):
+        # valid cells are labelled converged/working-set-insensitive, never "DRAM-regime"
+        t = an.text(self.sm)
+        self.assertIn(an.LABEL_VALID, t)
+        self.assertEqual(an.LABEL_VALID, 'converged, working-set-insensitive (8 vs 16)')
+        self.assertNotIn('DRAM-regime', t)
+
+
 class TableLevel(unittest.TestCase):
     def test_validity_counts(self):
         # 4 paths x 4 M x 2 series = 32 cells. All at 1.1 x floor_us(...) (hand: above floor, converged)
