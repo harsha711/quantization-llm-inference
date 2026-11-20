@@ -1,0 +1,42 @@
++ timeout 3600 /tmp/e005-r2-hpuvvad-20261106/bin/python -m unittest -v scripts/e061/test_e061.py
+test_end_to_end (scripts.e061.test_e061.Analyzer.test_end_to_end) ... ok
+test_end_to_end_rejects_bad_order (scripts.e061.test_e061.Analyzer.test_end_to_end_rejects_bad_order) ... ok
+test_bound_and_share (scripts.e061.test_e061.Arithmetic.test_bound_and_share) ... ok
+test_flop (scripts.e061.test_e061.Arithmetic.test_flop) ... ok
+test_intensity (scripts.e061.test_e061.Arithmetic.test_intensity) ... ok
+test_per_gemm (scripts.e061.test_e061.Arithmetic.test_per_gemm) ... ok
+test_tflops (scripts.e061.test_e061.Arithmetic.test_tflops) ... ok
+test_exit_0_all_valid (scripts.e061.test_e061.CommandLine.test_exit_0_all_valid) ... ok
+test_exit_1_invalid_cell (scripts.e061.test_e061.CommandLine.test_exit_1_invalid_cell) ... ok
+test_exit_nonzero_bad_order (scripts.e061.test_e061.CommandLine.test_exit_nonzero_bad_order) ... ok
+test_consistent (scripts.e061.test_e061.CrossCheck.test_consistent) ... ok
+test_e050_reference (scripts.e061.test_e061.CrossCheck.test_e050_reference) ... ok
+test_inconsistent (scripts.e061.test_e061.CrossCheck.test_inconsistent) ... ok
+test_near_boundary (scripts.e061.test_e061.CrossCheck.test_near_boundary) ... ok
+test_absent_series2 (scripts.e061.test_e061.MissingSeries.test_absent_series2) ... ok
+test_empty_series2 (scripts.e061.test_e061.MissingSeries.test_empty_series2) ... ok
+test_constants (scripts.e061.test_e061.Plan.test_constants) ... ok
+test_order (scripts.e061.test_e061.Plan.test_order) ... ok
+test_working_set (scripts.e061.test_e061.Plan.test_working_set) ... ok
+test_good (scripts.e061.test_e061.Rows.test_good) ... ok
+test_missing_row (scripts.e061.test_e061.Rows.test_missing_row) ... ok
+test_sample_count (scripts.e061.test_e061.Rows.test_sample_count) ... ok
+test_validation_missing (scripts.e061.test_e061.Rows.test_validation_missing) ... ok
+test_wrong_fields (scripts.e061.test_e061.Rows.test_wrong_fields) ... ok
+test_wrong_order (scripts.e061.test_e061.Rows.test_wrong_order) ... ok
+test_all_valid (scripts.e061.test_e061.Summary.test_all_valid) ... ok
+test_cross_check_flag (scripts.e061.test_e061.Summary.test_cross_check_flag) ... ok
+test_floor_fields (scripts.e061.test_e061.Summary.test_floor_fields) ... ok
+test_invalid_cell (scripts.e061.test_e061.Summary.test_invalid_cell) ... ok
+test_invalid_in_series_2_only (scripts.e061.test_e061.Summary.test_invalid_in_series_2_only) ... ok
+test_series_2_used (scripts.e061.test_e061.Summary.test_series_2_used) ... ok
+test_below_measured (scripts.e061.test_e061.Validity.test_below_measured) ... ok
+test_below_strict (scripts.e061.test_e061.Validity.test_below_strict) ... ok
+test_m128_between_floors (scripts.e061.test_e061.Validity.test_m128_between_floors) ... ok
+test_m512_floor (scripts.e061.test_e061.Validity.test_m512_floor) ... ok
+test_ok (scripts.e061.test_e061.Validity.test_ok) ... ok
+
+----------------------------------------------------------------------
+Ran 36 tests in 0.097s
+
+OK

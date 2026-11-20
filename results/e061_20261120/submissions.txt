@@ -1,0 +1,1 @@
+2026-11-20T18:46:02-05:00 E061 full job 344350 on c8, commit 844453c, bash scripts/e061/submit.sh | ssh arc-off-network sbatch --parsable --nodelist=c8 (user: go)
