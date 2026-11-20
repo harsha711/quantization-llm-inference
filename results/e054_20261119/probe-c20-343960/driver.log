@@ -1,0 +1,15 @@
+STEP metadata 2026-11-19T20:42:24-05:00
+/mnt/beegfs/hpuvvad/csc548-w4a16-e054-20261119/probe-c20-343960/diagnose.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e054-20261119/probe-c20-343960/validate.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e054-20261119/probe-c20-343960/run.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e054-20261119/probe-c20-343960/att.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e054-20261119/probe-c20-343960/gprofile.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e054-20261119/probe-c20-343960/t.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e054-20261119/probe-c20-343960/opcheck.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e054-20261119/probe-c20-343960/eqcheck.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e054-20261119/probe-c20-343960/analyze.py: OK
+/mnt/beegfs/hpuvvad/csc548-w4a16-e054-20261119/probe-c20-343960/torchcheck.py: OK
+STEP opcheck 2026-11-19T20:42:24-05:00
+STEP sanitizers 2026-11-19T20:42:50-05:00
+STEP gate 2026-11-19T20:46:50-05:00
+STAGE-OK

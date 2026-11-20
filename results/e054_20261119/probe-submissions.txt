@@ -39,3 +39,16 @@ c7 343952
 c8 343953
 c9 343954
 c10 343955
+# probes attempt 4, amendment 1 (commit ba50631); H100 343945 cancelled while pending and resubmitted
+c33 a100 343956
+c30 a6000 343957
+c48 rtx3060ti 343958
+c55 rtx4060ti16g 343959
+c20 rtx4060ti8g 343960
+c29 h100 343961
+# full (other GPU types, amendment 1), commit 345daa0
+c33 a100 343979
+c30 a6000 343980
+c48 rtx3060ti 343981
+c55 rtx4060ti16g 343982
+c20 rtx4060ti8g 343983
