@@ -1,0 +1,63 @@
+--- a/src/cuda/kernels.cuh
++++ b/src/cuda/kernels.cuh
+@@ -65,6 +65,19 @@
+ int w4a16_v2_splits(int M, int N, int K);  // K-splits v2 and v3 launch for this shape
+ void w4a16_v2_workspace(int M, int N, int splits, float** partials, unsigned** counters);
+ 
++// --- Harsha's kernels, copied verbatim from origin/kernel-ladder-e050 (HARSHA_COMMIT) for this comparison only.
++void launch_w4a16_inblock_vec(const __half* A, const uint32_t* qweight, const __half* scales,
++                              __half* C, int M, int N, int K, int group_size, cudaStream_t stream);
++void launch_w4a16_inblock_m4_vec(const __half* A, const uint32_t* qweight, const __half* scales,
++                                 __half* C, int M, int N, int K, int group_size, cudaStream_t stream);
++void launch_w4a16_tc(const __half* A, const uint32_t* qweight, const __half* scales, __half* C,
++                     int M, int N, int K, int group_size, cudaStream_t stream);
++void launch_w4a16_tc_cvt(const __half* A, const uint32_t* qweight, const __half* scales, __half* C,
++                         int M, int N, int K, int group_size, cudaStream_t stream);
++unsigned long long w4a16_tc_unpack_selftest();
++void launch_w4a16_tc_m32(const __half* A, const uint32_t* qweight, const __half* scales, __half* C,
++                         int M, int N, int K, int group_size, cudaStream_t stream);
++
+ void launch_dequant_w4a16(const uint32_t* qweight, const __half* scales, __half* W, int N, int K,
+                           int group_size, cudaStream_t stream);
+ 
+--- a/scripts/ours/marlin_bridge.cu
++++ b/scripts/ours/marlin_bridge.cu
+@@ -81,6 +81,10 @@
+       break;
+     }
+     case 4: launch_w4a16_inblock_specialized(a, q, s, c, m, n, k, 128, stream); break;
++    case 5: launch_w4a16_tc(a, q, s, c, m, n, k, 128, stream); break;  // Harsha E044
++    case 6:  // Harsha E050 tc_ladder: tc_m32 at M >= 64, tc below (as scripts/e050/tc_bridge.cu)
++      (m >= 64 ? launch_w4a16_tc_m32 : launch_w4a16_tc)(a, q, s, c, m, n, k, 128, stream);
++      break;
+     default: std::fprintf(stderr, "unknown ours_launch id %d\n", id); std::exit(1);
+   }
+   CUDA_CHECK(cudaGetLastError());
+--- a/scripts/ours/marlin_compare.py
++++ b/scripts/ours/marlin_compare.py
+@@ -27,7 +27,7 @@
+ import numpy as np
+ import torch
+ 
+-OURS_IDS = {"v1": 0, "v2": 1, "v3": 2, "cublas": 3, "inblock_specialized": 4}
++OURS_IDS = {"v1": 0, "v2": 1, "v3": 2, "cublas": 3, "inblock_specialized": 4, "tc": 5, "tc_ladder": 6}
+ 
+ 
+ def helpers(source):
+--- a/scripts/ours/marlin_compare.sh
++++ b/scripts/ours/marlin_compare.sh
+@@ -14,12 +14,13 @@
+ nvcc -O3 -DNDEBUG -std=c++17 -lineinfo -arch=sm_120 -shared -Xcompiler=-fPIC,-fopenmp \
+   -Iinclude -Isrc/cuda scripts/ours/marlin_bridge.cu src/quant.cpp src/reference.cpp src/synthetic.cpp \
+   src/cuda/ours_v1.cu src/cuda/ours_v2.cu src/cuda/ours_v3.cu src/cuda/w4a16_inblock_specialized.cu \
++  src/cuda/w4a16_inblock_rows.cu src/cuda/w4a16_inblock_vec.cu src/cuda/w4a16_tc.cu src/cuda/w4a16_tc_m32.cu \
+   src/cuda/flush_read.cu src/cuda/dequant.cu src/cuda/cublas_gemm.cu -lcublas -o build/libours_bridge.so
+ OUT="${OUT:-results/ours_marlin_$(date +%Y%m%d_%H%M%S)}"
+ mkdir -p "$OUT"
+ { date -Iseconds; hostname; nvidia-smi --query-gpu=name,driver_version,clocks.max.sm,clocks.max.memory --format=csv
+   "$PY" -c 'import torch;print("torch", torch.__version__, torch.version.cuda)'
+-  sha256sum external/vllm-lib/_C_stable_libtorch.abi3.so; } >"$OUT/meta.txt" 2>&1
++  sha256sum external/vllm-lib/_C_stable_libtorch.abi3.so; echo "ours $(cat OURS_COMMIT) harsha $(cat HARSHA_COMMIT)"; sha256sum src/cuda/w4a16_tc*.cu*; } >"$OUT/meta.txt" 2>&1
+ "$PY" scripts/ours/marlin_compare.py --source external/marlin-src \
+   --library external/vllm-lib/_C_stable_libtorch.abi3.so --bridge build/libours_bridge.so \
+   --out "$OUT/results.jsonl" "$@" 2>&1 | tee "$OUT/run.log"
