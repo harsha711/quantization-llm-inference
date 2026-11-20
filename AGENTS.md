@@ -275,6 +275,10 @@
 
 - E054 is complete (10 nodes, 6 GPU types, 1,200 cells; H100 unavailable): decode "comparable" replicated everywhere, never "faster than Marlin". Ours 3.2–3.9% below Marlin on five 5060 Ti nodes, 3.4–4.0% on both 4060 Ti, 3.0–4.4% A100, 0.1–4.4% A6000, −0.1–1.2% 3060 Ti; direction holds in 28/30 node/contexts (not A6000/3060 Ti at 512). Gap = GEMM-kernel device time on 5060 Ti/4060 Ti/A100 (within 25%), unexplained on A6000/3060 Ti. Prefill slower everywhere at long prompts, 47% (A100) and 88–96% (A6000) at 2048. Amendment 1 (scoped device-name guard) disclosed.
 
+## E055 kernel effect on perplexity (user request 2026-11-19)
+
+- Predeclared in EXPERIMENTS: E032's WikiText-2 perplexity protocol run through corrected Marlin (QM) and our `tc_ladder` (QT) next to E032's PyTorch FP16 reference R and original O, one RTX 5060 Ti job, original E050/E006 binaries via E052's t.py. Labels: negligible ≤ 1% vs R; "no quality difference between the kernels" only if QT vs QM ≤ 0.1% and top-1 agreement ≥ 99%. Quality only; perplexity covers the prefill (M = 2048) path, not decode.
+
 ## Rooflines, if requested
 
 - Recompute all ceilings, ridge points, arithmetic intensities, and performance coordinates from specifications/data. Keep the primary full-machine roof distinct from core-count, ISA, NUMA, and memory-domain sensitivity roofs.
