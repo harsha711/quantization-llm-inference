@@ -8,8 +8,15 @@ Rule: when a statement is about OUR CURRENT kernel or path, quote the "current" 
 
 | Topic | Stale (kernel, source) | Current (source) |
 |---|---|---|
-| Fraction of Marlin speed, cyclic, M >= 64 | `tc` 0.71–0.75 (E045, c7) | `tc_ladder` 0.83–0.87 on the rectangles, 0.83–0.94 incl. 4096² (E050, c8, fresh seeds 7–10) |
-| Fraction of Marlin speed, cyclic, M 4/16 | E045 `tc` 0.87–0.95 (c7) | E050 same job as above: 0.87–0.96 on rectangles (`tc_ladder` runs `tc` there); 4096² M4/16 unstable (Marlin moves 10–13% between series) |
+| Fraction of Marlin speed, cyclic, M >= 64 | `tc` 0.71–0.75 (E045, c7) | `tc_ladder` 0.83–0.87 on the two rectangles only (E050, c8, fresh seeds 7–10). Do NOT quote the 4096² cells (see "Invalid" below) |
+| Fraction of Marlin speed, cyclic, M 4/16 | E045 `tc` 0.87–0.95 (c7) | E050 same job as above: 0.87–0.96 on rectangles (`tc_ladder` runs `tc` there). 4096² cells invalid (see below) |
+
+## Invalid: E050 4096² cyclic cells (found 2026-11-20)
+
+Four 4096² matrices (4 × 8.65 MB = 34.6 MB) are about the 32 MiB L2, so E050's four-matrix cycle does not force DRAM reads at that shape. Check (calculation): DRAM floor at E057's measured 427 GB/s is 20.4 µs (M4) / 20.9 µs (M16); E050 measured Marlin 15.1–16.7 / 19.7–22.4 µs and `tc` 18.3–19.3 / 20.4–21.4 µs, i.e. BELOW the floor, so partly L2-served. M64/M128 lie above the floor only because they are compute-bound; the same partial caching cannot be excluded. Therefore every E050 4096² absolute time and fraction of Marlin (incl. "0.89–0.94", "1.10 at M16", the 10–13% Marlin swing) is not a DRAM-regime measurement; the swing is plausibly this (hypothesis, untested). E050's acceptance at 4096² (tc_ladder/tc) compared two of our kernels under the same partial caching: report it only with this caveat. Rectangles (4 × 23.2 MB ≈ 93 MB) are unaffected: every rectangle time is above its floor. A valid 4096² cyclic comparison needs ≥ 8 matrices (≈ 69 MB); not run. Finding first raised by a teammate's analysis. Old records stay unchanged.
+
+Rule: before quoting any timing, compare it with the DRAM floor (modelled bytes ÷ 427 GB/s) and check the rotating working set against the 32 MiB L2. A time below the floor is cache-served by definition.
+
 | Roofline coordinates and roofs | E045 `tc` points (66–75% of compute roof at M >= 64); spec-only roofs 448 GB/s / 47.4 TFLOP/s | Measured roofs E057 (c8, job 344144, same GPU UUID as E050): read-only 427.2 GB/s (95.4% of 448), D2D copy 385.9 GB/s (86.1%), `mma.sync` m16n8k16 FP32-acc 51.84 TFLOP/s (109% of nominal 47.4 = 512 FLOP/clk/SM at the observed 2812 MHz; E050 logged 2805 MHz). Coordinates are CALCULATIONS from E050 series-1 medians (4096×11008, cyclic, not an analyzer output): M64 `tc_ladder` 37.8 TFLOP/s = 80% of 47.4 / 73% of measured 51.8, Marlin 44.0 = 93% / 85%; M128 `tc_ladder` 40.3 = 85% / 78%, Marlin 46.1 = 97% / 89%, cuBLAS Ŵ 44.8 = 95% / 86%; M4 (modelled bytes 23.37 MB: 4-bit weights + FP16 scales + A + C) `tc_ladder` 363 GB/s = 81% of 448 / 85% of measured 427, Marlin 381 = 85% / 89%. Quote fractions of the MEASURED roofs; fractions of 47.4 overstate by ~9% on this node |
 | Warp instructions vs Marlin (cyclic profile) | `tc` 5.2× (E049) | `tc_ladder` 3.1× (E051 d) |
 | Single matrix vs cuBLAS Ŵ at M128 | `tc` 1.10–1.20× slower (E044) | `tc_ladder` 1.04–1.13× slower (E051 a) |
