@@ -1,0 +1,2 @@
+344181 prereq c8 submitted 2026-11-20T10:23:15-05:00 from commit 888be69; E050 library staged to ARC ~/csc548-w4a16-e058-20261120/libe050_tc.so by scp (sha256 a24a78fa...71fe verified on ARC)
+344181 prereq c8 finished 10:46 EST exit 0 (23 min), retrieved via ~/e058-prereq-c8-344181.tgz (sha256 fb5fb516...cd67 identical after scp), all.sha256 verified; inspected locally; v2 analyzer re-run offline -> prereq-check-local-v2.log PREREQ PASS. Full job NOT submitted (awaiting independent review).

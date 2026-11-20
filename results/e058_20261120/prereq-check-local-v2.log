@@ -1,0 +1,15 @@
+Smoke timing (prerequisite, series 1, inspection only, NOT a result): per-GEMM us at M=4 vs DRAM floor
+path        count  per-GEMM  floor   time/floor  floorcheck
+marlin          4     15.14   20.40   0.742  BELOW_STRICT
+marlin          8     24.26   20.40   1.189  OK
+marlin         16     24.07   20.40   1.180  OK
+tc              4     18.32   20.40   0.898  BELOW_STRICT
+tc              8     26.26   20.40   1.287  OK
+tc             16     25.99   20.40   1.274  OK
+tc_ladder       4     18.32   20.40   0.898  BELOW_STRICT
+tc_ladder       8     26.25   20.40   1.287  OK
+tc_ladder      16     25.99   20.40   1.274  OK
+cublas_dq       4     81.74   78.70   1.039  OK
+cublas_dq       8     81.48   78.70   1.035  OK
+cublas_dq      16     81.26   78.70   1.032  OK
+PREREQ PASS {"memory_after_prepare_16": {"allocated": 870077952, "reserved": 1356857344, "free": 15052898304, "total": 16660430848}, "tc_ladder_bitwise_cells": 12, "floors_us": {"tc": {"4": 20.403295880149813, "16": 20.863520599250936, "64": 41.425224691358025, "128": 82.85044938271605}, "cublas_dq": {"4": 78.69842696629215, "16": 79.15865168539327, "64": 80.99955056179776, "128": 83.45408239700375}}, "smoke": {"marlin c4": {"per_gemm_us": 15.13999979943037, "floor_us": 20.403295880149813, "ratio": 0.7420369673783902, "status": "BELOW_STRICT"}, "marlin c8": {"per_gemm_us": 24.264000356197357, "floor_us": 20.403295880149813, "ratio": 1.1892196485668567, "status": "OK"}, "marlin c16": {"per_gemm_us": 24.071000516414642, "floor_us": 20.403295880149813, "ratio": 1.1797604003690947, "status": "OK"}, "tc c4": {"per_gemm_us": 18.319999799132347, "floor_us": 20.403295880149813, "ratio": 0.8978941395912272, "status": "BELOW_STRICT"}, "tc c8": {"per_gemm_us": 26.259999722242355, "floor_us": 20.403295880149813, "ratio": 1.287046949497531, "status": "OK"}, "tc c16": {"per_gemm_us": 25.985000655055046, "floor_us": 20.403295880149813, "ratio": 1.2735687806368394, "status": "OK"}, "tc_ladder c4": {"per_gemm_us": 18.319999799132347, "floor_us": 20.403295880149813, "ratio": 0.8978941395912272, "status": "BELOW_STRICT"}, "tc_ladder c8": {"per_gemm_us": 26.25000011175871, "floor_us": 20.403295880149813, "ratio": 1.2865568516945884, "status": "OK"}, "tc_ladder c16": {"per_gemm_us": 25.986000895500183, "floor_us": 20.403295880149813, "ratio": 1.2736178041108415, "status": "OK"}, "cublas_dq c4": {"per_gemm_us": 81.7359983921051, "floor_us": 78.69842696629215, "ratio": 1.0385976129753394, "status": "OK"}, "cublas_dq c8": {"per_gemm_us": 81.4799964427948, "floor_us": 78.69842696629215, "ratio": 1.035344664229363, "status": "OK"}, "cublas_dq c16": {"per_gemm_us": 81.25600218772888, "floor_us": 78.69842696629215, "ratio": 1.0324984287491819, "status": "OK"}}}
