@@ -1,0 +1,775 @@
+EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEFEEEEFEEEEEFEEE
+======================================================================
+ERROR: test_check_addresses_good (scripts.e060.test_e060.Addresses)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 161, in test_check_addresses_good
+    lib.check_addresses({'control': 0x7f1000100500, 'patched': 0x7f2000100500}, MAPS, PATHS)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/e060lib.py", line 2, in _ni
+    def _ni(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_check_addresses_outside (scripts.e060.test_e060.Addresses)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 176, in test_check_addresses_outside
+    lib.check_addresses({'control': 0x7f3000000500, 'patched': 0x7f2000100500}, MAPS, PATHS)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/e060lib.py", line 2, in _ni
+    def _ni(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_check_addresses_same_library (scripts.e060.test_e060.Addresses)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 171, in test_check_addresses_same_library
+    lib.check_addresses({'control': 0x7f2000100400, 'patched': 0x7f2000100500}, MAPS, PATHS)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/e060lib.py", line 2, in _ni
+    def _ni(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_check_addresses_swapped (scripts.e060.test_e060.Addresses)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 166, in test_check_addresses_swapped
+    lib.check_addresses({'control': 0x7f2000100500, 'patched': 0x7f1000100500}, MAPS, PATHS)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/e060lib.py", line 2, in _ni
+    def _ni(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_in_own_library (scripts.e060.test_e060.Addresses)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 155, in test_in_own_library
+    self.assertTrue(lib.address_in(0x7f1000100500, lib.library_ranges(MAPS, PATHS['control'])))
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/e060lib.py", line 2, in _ni
+    def _ni(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_ranges (scripts.e060.test_e060.Addresses)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 150, in test_ranges
+    self.assertEqual(lib.library_ranges(MAPS, PATHS['control']),
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/e060lib.py", line 2, in _ni
+    def _ni(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_bits_recorded (scripts.e060.test_e060.Analyzer)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 486, in test_bits_recorded
+    self.assertEqual(an.bit_equal_cells(g[1]), (15, []))
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/analyze.py", line 2, in _ni
+    def _ni(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_good_passes_and_summarizes (scripts.e060.test_e060.Analyzer)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 467, in test_good_passes_and_summarizes
+    summ = an.summarize(an.check_full(self.good()))
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/analyze.py", line 2, in _ni
+    def _ni(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_invalid_cell_reported_not_a_result (scripts.e060.test_e060.Analyzer)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 564, in test_invalid_cell_reported_not_a_result
+    summ = an.summarize(an.check_full(g))
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/analyze.py", line 2, in _ni
+    def _ni(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_material_from_full_files (scripts.e060.test_e060.Analyzer)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 495, in test_material_from_full_files
+    o = an.summarize(an.check_full(g))['overall']
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/analyze.py", line 2, in _ni
+    def _ni(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_per_gemm_from_samples (scripts.e060.test_e060.Analyzer)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 477, in test_per_gemm_from_samples
+    med = an.check_full(self.good())
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/analyze.py", line 2, in _ni
+    def _ni(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_rejects_address_outside_own_library (scripts.e060.test_e060.Analyzer)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 538, in test_rejects_address_outside_own_library
+    self.bad(lambda rs: rs[0].__setitem__('kernel_address', ADDR['patched' if rs[0]['arm'] == 'control' else 'control']))
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 503, in bad
+    an.check_full(g)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/analyze.py", line 2, in _ni
+    def _ni(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_rejects_failed_check (scripts.e060.test_e060.Analyzer)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 527, in test_rejects_failed_check
+    self.bad(lambda rs: rs[3]['validation'][0].__setitem__('num_bad', 1))
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 503, in bad
+    an.check_full(g)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/analyze.py", line 2, in _ni
+    def _ni(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_rejects_missing_row (scripts.e060.test_e060.Analyzer)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 515, in test_rejects_missing_row
+    self.bad(lambda rs: rs.pop())
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 503, in bad
+    an.check_full(g)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/analyze.py", line 2, in _ni
+    def _ni(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_rejects_partial_check (scripts.e060.test_e060.Analyzer)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 531, in test_rejects_partial_check
+    self.bad(lambda rs: rs[3]['validation'][0].__setitem__('checked', 1))
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 503, in bad
+    an.check_full(g)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/analyze.py", line 2, in _ni
+    def _ni(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_rejects_post_timing_change (scripts.e060.test_e060.Analyzer)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 524, in test_rejects_post_timing_change
+    self.bad(lambda rs: rs[3]['post_timing_validation'][0].__setitem__('output_sha256', 'x'))
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 503, in bad
+    an.check_full(g)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/analyze.py", line 2, in _ni
+    def _ni(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_rejects_recorded_median_mismatch (scripts.e060.test_e060.Analyzer)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 550, in test_rejects_recorded_median_mismatch
+    self.bad(lambda rs: rs[5].__setitem__('median_us', rs[5]['median_us'] + 1.0))
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 503, in bad
+    an.check_full(g)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/analyze.py", line 2, in _ni
+    def _ni(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_rejects_same_address_both_arms (scripts.e060.test_e060.Analyzer)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 544, in test_rejects_same_address_both_arms
+    self.bad(edit)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 503, in bad
+    an.check_full(g)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/analyze.py", line 2, in _ni
+    def _ni(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_rejects_series2_not_reversed (scripts.e060.test_e060.Analyzer)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 512, in test_rejects_series2_not_reversed
+    an.check_full(g)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/analyze.py", line 2, in _ni
+    def _ni(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_rejects_short_samples (scripts.e060.test_e060.Analyzer)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 553, in test_rejects_short_samples
+    self.bad(lambda rs: rs[5].__setitem__('samples_us', rs[5]['samples_us'][:99]))
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 503, in bad
+    an.check_full(g)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/analyze.py", line 2, in _ni
+    def _ni(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_rejects_swapped_library (scripts.e060.test_e060.Analyzer)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 535, in test_rejects_swapped_library
+    self.bad(lambda rs: rs[0].__setitem__('library_sha256', PATCHED_SHA))
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 503, in bad
+    an.check_full(g)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/analyze.py", line 2, in _ni
+    def _ni(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_rejects_wrong_activation_seed (scripts.e060.test_e060.Analyzer)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 521, in test_rejects_wrong_activation_seed
+    self.bad(lambda rs: rs[0].__setitem__('activation_seed', 11))
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 503, in bad
+    an.check_full(g)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/analyze.py", line 2, in _ni
+    def _ni(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_rejects_wrong_order (scripts.e060.test_e060.Analyzer)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 506, in test_rejects_wrong_order
+    self.bad(lambda rs: rs.__setitem__(slice(0, 2), rs[0:2][::-1]))
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 503, in bad
+    an.check_full(g)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/analyze.py", line 2, in _ni
+    def _ni(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_rejects_wrong_seeds (scripts.e060.test_e060.Analyzer)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 518, in test_rejects_wrong_seeds
+    self.bad(lambda rs: rs[0].__setitem__('seeds', list(range(11, 27))))
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 503, in bad
+    an.check_full(g)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/analyze.py", line 2, in _ni
+    def _ni(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_rejects_wrong_series_field (scripts.e060.test_e060.Analyzer)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 547, in test_rejects_wrong_series_field
+    self.bad(lambda rs: rs[5].__setitem__('series', 2))
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 503, in bad
+    an.check_full(g)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/analyze.py", line 2, in _ni
+    def _ni(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_rejects_wrong_warmup (scripts.e060.test_e060.Analyzer)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 556, in test_rejects_wrong_warmup
+    self.bad(lambda rs: rs[5].__setitem__('warmup', 0))
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 503, in bad
+    an.check_full(g)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/analyze.py", line 2, in _ni
+    def _ni(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_cost_and_gain_is_mixed (scripts.e060.test_e060.CellLabel)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 335, in test_cost_and_gain_is_mixed
+    self.assertEqual(self.cell(times(60.0, 63.6, 60.0, 56.4))['label'], 'mixed (series disagree)')
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 307, in cell
+    return lib.cell(4096, 11008, 4, 4, t)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/e060lib.py", line 2, in _ni
+    def _ni(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_gain (scripts.e060.test_e060.CellLabel)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 331, in test_gain
+    self.assertEqual(self.cell(times(60.0, 57.0, 60.0, 56.0))['label'], 'material gain (patched faster)')
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 307, in cell
+    return lib.cell(4096, 11008, 4, 4, t)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/e060lib.py", line 2, in _ni
+    def _ni(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_material_cost_both_series (scripts.e060.test_e060.CellLabel)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 319, in test_material_cost_both_series
+    self.assertEqual(self.cell(times(60.0, 63.0, 60.0, 63.6))['label'], 'material cost')
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 307, in cell
+    return lib.cell(4096, 11008, 4, 4, t)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/e060lib.py", line 2, in _ni
+    def _ni(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_no_material (scripts.e060.test_e060.CellLabel)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 311, in test_no_material
+    c = self.cell(times(61.0, 61.3, 61.2, 61.0))
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 307, in cell
+    return lib.cell(4096, 11008, 4, 4, t)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/e060lib.py", line 2, in _ni
+    def _ni(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_not_a_result_control_below_floor (scripts.e060.test_e060.CellLabel)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 339, in test_not_a_result_control_below_floor
+    c = self.cell(times(61.0, 61.3, 50.0, 61.0))
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 307, in cell
+    return lib.cell(4096, 11008, 4, 4, t)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/e060lib.py", line 2, in _ni
+    def _ni(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_not_a_result_control_only (scripts.e060.test_e060.CellLabel)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 352, in test_not_a_result_control_only
+    c = self.cell(times(54.0, 61.0, 61.2, 61.0))
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 307, in cell
+    return lib.cell(4096, 11008, 4, 4, t)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/e060lib.py", line 2, in _ni
+    def _ni(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_not_a_result_patched_only (scripts.e060.test_e060.CellLabel)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 346, in test_not_a_result_patched_only
+    c = self.cell(times(61.0, 54.0, 61.2, 61.0))
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 307, in cell
+    return lib.cell(4096, 11008, 4, 4, t)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/e060lib.py", line 2, in _ni
+    def _ni(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_series_disagree_s1_material (scripts.e060.test_e060.CellLabel)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 323, in test_series_disagree_s1_material
+    self.assertEqual(self.cell(times(60.0, 63.6, 60.0, 60.6))['label'], 'mixed (series disagree)')
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 307, in cell
+    return lib.cell(4096, 11008, 4, 4, t)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/e060lib.py", line 2, in _ni
+    def _ni(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_series_disagree_s2_material (scripts.e060.test_e060.CellLabel)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 327, in test_series_disagree_s2_material
+    self.assertEqual(self.cell(times(60.0, 60.6, 60.0, 63.6))['label'], 'mixed (series disagree)')
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 307, in cell
+    return lib.cell(4096, 11008, 4, 4, t)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/e060lib.py", line 2, in _ni
+    def _ni(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_ws_small_cell (scripts.e060.test_e060.CellLabel)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 357, in test_ws_small_cell
+    c = lib.cell(4096, 4096, 4, 4, times(25.0, 25.1, 25.0, 25.1))
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/e060lib.py", line 2, in _ni
+    def _ni(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_boundary_exactly_5pct_is_material (scripts.e060.test_e060.Cost)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 294, in test_boundary_exactly_5pct_is_material
+    self.assertTrue(lib.material(105.0, 100.0))
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/e060lib.py", line 2, in _ni
+    def _ni(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_direction (scripts.e060.test_e060.Cost)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 289, in test_direction
+    self.assertAlmostEqual(lib.cost(105.0, 100.0), 0.05)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/e060lib.py", line 2, in _ni
+    def _ni(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_arm_to_path (scripts.e060.test_e060.Libraries)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 106, in test_arm_to_path
+    self.assertEqual(lib.library_path('control', root), root + '/control/libe005.so')
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/e060lib.py", line 2, in _ni
+    def _ni(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_check_hash_known_good (scripts.e060.test_e060.Libraries)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 114, in test_check_hash_known_good
+    self.assertEqual(lib.check_hash(f.name, 'ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad'),
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/e060lib.py", line 2, in _ni
+    def _ni(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_check_library_rejects_swapped_arm (scripts.e060.test_e060.Libraries)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 132, in test_check_library_rejects_swapped_arm
+    lib.check_library('patched', f.name)            # good
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/e060lib.py", line 2, in _ni
+    def _ni(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_expected_hashes (scripts.e060.test_e060.Libraries)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 101, in test_expected_hashes
+    self.assertEqual(lib.ARM_SHA256['control'], CONTROL_SHA)
+KeyError: 'control'
+
+======================================================================
+ERROR: test_balance (scripts.e060.test_e060.Order)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 194, in test_balance
+    firsts = [lib.arm_order(k, n, m, 1)[0] for (k, n) in lib.SHAPES for m in lib.MS]
+TypeError: 'NoneType' object is not iterable
+
+======================================================================
+ERROR: test_file_order_series1 (scripts.e060.test_e060.Order)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 199, in test_file_order_series1
+    o = lib.file_order(1)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/e060lib.py", line 2, in _ni
+    def _ni(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_file_order_series2 (scripts.e060.test_e060.Order)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 207, in test_file_order_series2
+    o = lib.file_order(2)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/e060lib.py", line 2, in _ni
+    def _ni(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_series1_cells (scripts.e060.test_e060.Order)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 183, in test_series1_cells
+    self.assertEqual(lib.arm_order(4096, 4096, 1, 1), ['control', 'patched'])     # 0+0
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/e060lib.py", line 2, in _ni
+    def _ni(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_series2_reversed (scripts.e060.test_e060.Order)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 189, in test_series2_reversed
+    self.assertEqual(lib.arm_order(4096, 4096, 1, 2), ['patched', 'control'])
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/e060lib.py", line 2, in _ni
+    def _ni(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_invalid_cell_excluded_and_counted (scripts.e060.test_e060.Overall)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 405, in test_invalid_cell_excluded_and_counted
+    cs = self.cells()
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 364, in cells
+    a = lib.cell(4096, 11008, 4, 4, times(61.0, 61.3, 61.2, 61.0))   # +0.4918% / -0.3268%
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/e060lib.py", line 2, in _ni
+    def _ni(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_no_material (scripts.e060.test_e060.Overall)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 369, in test_no_material
+    o = lib.overall(self.cells())
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 364, in cells
+    a = lib.cell(4096, 11008, 4, 4, times(61.0, 61.3, 61.2, 61.0))   # +0.4918% / -0.3268%
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/e060lib.py", line 2, in _ni
+    def _ni(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_no_valid_cells (scripts.e060.test_e060.Overall)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 413, in test_no_valid_cells
+    cs = {(11008, 4096, 1): lib.cell(11008, 4096, 1, 4, times(50.0, 60.0, 50.0, 60.0))}
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/e060lib.py", line 2, in _ni
+    def _ni(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_one_material_cell (scripts.e060.test_e060.Overall)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 389, in test_one_material_cell
+    cs = self.cells()
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 364, in cells
+    a = lib.cell(4096, 11008, 4, 4, times(61.0, 61.3, 61.2, 61.0))   # +0.4918% / -0.3268%
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/e060lib.py", line 2, in _ni
+    def _ni(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_one_series_material_is_listed (scripts.e060.test_e060.Overall)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 397, in test_one_series_material_is_listed
+    cs = self.cells()
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 364, in cells
+    a = lib.cell(4096, 11008, 4, 4, times(61.0, 61.3, 61.2, 61.0))   # +0.4918% / -0.3268%
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/e060lib.py", line 2, in _ni
+    def _ni(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_range_both_series (scripts.e060.test_e060.Overall)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 376, in test_range_both_series
+    o = lib.overall(self.cells())
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 364, in cells
+    a = lib.cell(4096, 11008, 4, 4, times(61.0, 61.3, 61.2, 61.0))   # +0.4918% / -0.3268%
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/e060lib.py", line 2, in _ni
+    def _ni(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_within_noise (scripts.e060.test_e060.Overall)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 382, in test_within_noise
+    self.assertTrue(lib.overall(self.cells())['within_noise'])
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 364, in cells
+    a = lib.cell(4096, 11008, 4, 4, times(61.0, 61.3, 61.2, 61.0))   # +0.4918% / -0.3268%
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/e060lib.py", line 2, in _ni
+    def _ni(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_divide_16 (scripts.e060.test_e060.PerGemm)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 223, in test_divide_16
+    self.assertAlmostEqual(lib.per_gemm_us(prow([390.0, 400.0, 410.0], 16)), 25.0)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/e060lib.py", line 2, in _ni
+    def _ni(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_divide_4 (scripts.e060.test_e060.PerGemm)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 227, in test_divide_4
+    self.assertAlmostEqual(lib.per_gemm_us(prow([240.0, 244.0, 250.0], 4)), 61.0)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/e060lib.py", line 2, in _ni
+    def _ni(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_median_not_mean (scripts.e060.test_e060.PerGemm)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 231, in test_median_not_mean
+    self.assertAlmostEqual(lib.per_gemm_us(prow([100.0, 100.0, 700.0], 4)), 25.0)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/e060lib.py", line 2, in _ni
+    def _ni(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_plan_passes_at_32mib (scripts.e060.test_e060.Plan)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 73, in test_plan_passes_at_32mib
+    p = lib.plan(L2)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/e060lib.py", line 2, in _ni
+    def _ni(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_plan_rejects_one_l2_margin (scripts.e060.test_e060.Plan)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 86, in test_plan_rejects_one_l2_margin
+    lib.plan(47_000_000)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/e060lib.py", line 2, in _ni
+    def _ni(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_plan_rejects_small_working_set (scripts.e060.test_e060.Plan)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 80, in test_plan_rejects_small_working_set
+    lib.plan(64 * 1024 * 1024)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/e060lib.py", line 2, in _ni
+    def _ni(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_seeds (scripts.e060.test_e060.Plan)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 90, in test_seeds
+    self.assertEqual(lib.seeds_for(4096, 4096), list(range(201, 217)))
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/e060lib.py", line 2, in _ni
+    def _ni(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_working_set_rect (scripts.e060.test_e060.Plan)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 67, in test_working_set_rect
+    self.assertEqual(lib.working_set_bytes(4096, 11008, 4), 92_995_584)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/e060lib.py", line 2, in _ni
+    def _ni(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_working_set_square (scripts.e060.test_e060.Plan)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 63, in test_working_set_square
+    self.assertEqual(lib.working_set_bytes(4096, 4096, 16), 138_412_032)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/e060lib.py", line 2, in _ni
+    def _ni(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_below_measured_invalid (scripts.e060.test_e060.Validity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 264, in test_below_measured_invalid
+    self.assertEqual(lib.status(4096, 4096, 4, 20.0, 16), fc.BELOW_MEASURED)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/e060lib.py", line 2, in _ni
+    def _ni(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_e058_real_four_matrix_cell_below_strict (scripts.e060.test_e060.Validity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 246, in test_e058_real_four_matrix_cell_below_strict
+    t = lib.per_gemm_us(hit[0])
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/e060lib.py", line 2, in _ni
+    def _ni(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_e058_real_sixteen_matrix_cell_ok (scripts.e060.test_e060.Validity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 257, in test_e058_real_sixteen_matrix_cell_ok
+    t = lib.per_gemm_us(hit[0])
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/e060lib.py", line 2, in _ni
+    def _ni(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_rect_compute_floor (scripts.e060.test_e060.Validity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 275, in test_rect_compute_floor
+    self.assertEqual(lib.status(4096, 11008, 128, 210.0, 4), fc.BELOW_MEASURED)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/e060lib.py", line 2, in _ni
+    def _ni(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_rect_m4_ok (scripts.e060.test_e060.Validity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 280, in test_rect_m4_ok
+    self.assertTrue(lib.valid(4096, 11008, 4, 61.26, 4))
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/e060lib.py", line 2, in _ni
+    def _ni(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+ERROR: test_ws_small_invalid (scripts.e060.test_e060.Validity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 269, in test_ws_small_invalid
+    self.assertEqual(lib.status(4096, 4096, 4, 25.0, 4), fc.WS_SMALL)
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/e060lib.py", line 2, in _ni
+    def _ni(*a, **k): raise NotImplementedError
+NotImplementedError
+
+======================================================================
+FAIL: test_counts (scripts.e060.test_e060.Plan)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 59, in test_counts
+    self.assertEqual(lib.COUNTS, {(4096, 4096): 16, (4096, 11008): 4, (11008, 4096): 4})
+AssertionError: {} != {(4096, 4096): 16, (4096, 11008): 4, (11008, 4096): 4}
+- {}
++ {(4096, 4096): 16, (4096, 11008): 4, (11008, 4096): 4}
+
+======================================================================
+FAIL: test_shapes_ms_arms (scripts.e060.test_e060.Plan)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 53, in test_shapes_ms_arms
+    self.assertEqual(lib.SHAPES, [(4096, 4096), (4096, 11008), (11008, 4096)])
+AssertionError: None != [(4096, 4096), (4096, 11008), (11008, 4096)]
+
+======================================================================
+FAIL: test_kind (scripts.e060.test_e060.Validity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/harsha/Documents/ncsu/sem 3/548/project/proj/scripts/e060/test_e060.py", line 236, in test_kind
+    self.assertEqual(lib.KIND, 'w4')
+AssertionError: None != 'w4'
+
+----------------------------------------------------------------------
+Ran 72 tests in 0.043s
+
+FAILED (failures=3, errors=69)
