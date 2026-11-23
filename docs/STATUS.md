@@ -1,3 +1,9 @@
+# Project complete, 2026-11-23
+
+- `main` now holds all accepted work: the kernel and model experiments, E053 (from `experiment/v3-rowreuse`) and the roofline series (from `samarth/bandwidth-roofline`). Presentation: `presentation/W4A16_presentation.pdf`.
+- E059 (c8, 344203): complete; `v3` at M = 1 runs at 1.00–1.05 of Marlin's speed on the five large shapes, 1.22 on 1536² (fixed-cost dominated); both predeclared readings "partly supported (shape-dependent)". E060 (c8, 344204): complete; barrier cost −0.35% to +0.39%, 15/15 cells valid, no material cost. E061 (c8, 344350): complete; cuBLAS M256/M512 at 47.4/48.9 TFLOP/s (91%/94% of the measured Tensor Core roof). These supersede the older E060 "not submitted" entry below.
+- Raw records of E013–E016, E019 and E017's `model-arc`, `final-arc` and `attempt-c7-*` copies, and the 2026-11-19 handoff, were removed from the tree only; they remain in git history at `423314742db086a057a6390c99ff3e03fa3bcb79`. Links to them in older documents resolve there.
+
 # Current state, 2026-11-20
 
 ## E053 complete, 2026-11-19 (merged from experiment/v3-rowreuse)

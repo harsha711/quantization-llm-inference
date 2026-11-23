@@ -1,151 +1,68 @@
-# W4A16 mixed-precision GEMM (CSC 548)
+# Mixed-precision quantized CUDA GEMM for LLM inference
 
-**Project synthesis complete:** [findings, contributions and completion gaps](docs/PROJECT_SYNTHESIS.md), [four reproducible figures](docs/figures/project_synthesis/), and [offline reproduction](scripts/reporting/README.md). The record supports a bounded course report. The next task is an ACM report draft, with explicit resolution of the course's serial-baseline/worker-scaling wording. This review adds no experiment. Corrected E006 A remains unchanged.
+CSC 548 Parallel Systems, NC State. Samarth Shah and Harsha Vardhan Puvvadi. **[Presentation (PDF)](presentation/W4A16_presentation.pdf)**
 
-**Current state (2026-11-15):** with corrected Marlin on all 196 block projections of Qwen2.5-1.5B, 63-step decode is 28.9%/29.0% faster than reconstructed FP16 at context 2048 and 3.6%/4.6% at context 128, with about 60% lower peak allocated GPU memory ([E020](docs/EXPERIMENTS.md#e020--descriptive-primary-timing-of-the-numerically-unaccepted-marlin-path)). The path is accepted only under a third, post hoc gate against an FP64-projection control ([E021](docs/EXPERIMENTS.md#e021--acceptance-of-the-marlin-path-against-the-fp64-projection-control)); the two gates against the FP16 reference (E017, [E019](docs/EXPERIMENTS.md#e019--corrected-marlin-end-to-end-with-a-control-calibrated-model-gate)) remain failed, and [E018](docs/EXPERIMENTS.md#e018--locate-the-e017-qr-logit-divergence-diagnostic) attributes that divergence to propagated FP16 rounding. Replaying the Marlin decode step as a CUDA graph ([E023](docs/EXPERIMENTS.md#e023--cuda-graph-replay-of-the-marlin-decode-step)) raises the gain to 45% at context 128 and 30% at context 2048 versus eager FP16 (44% and 30% versus graph-replayed FP16), bitwise equal to eager Marlin. A direct single-query decode attention ([E026](docs/EXPERIMENTS.md#e026--single-query-grouped-decode-attention-under-graph-replay)) then brings Marlin decode to 325–374 ms across contexts 128–2048, 47–58% below graph-replayed FP16 with stock attention and 42–45% below FP16 given the same attention; the gains against FP16 are reproduced across contexts, passages and a second GPU; the attention change alone is only about 5% at context 128. Eager Marlin decode was host-bound ([E022](docs/EXPERIMENTS.md#e022--decode-step-projection-time-breakdown-diagnostic), [bottleneck assessment](docs/BOTTLENECK_ASSESSMENT.md)). All these gains are on a 4-bit model whose WikiText-2 perplexity is 13.1% above the FP16 original's ([E032](docs/EXPERIMENTS.md#e032--output-quality-of-the-quantized-model-with-and-without-the-4-bit-head); the FP16 baselines ran the same reconstructed weights, so speed comparisons are like for like). See [STATUS](docs/STATUS.md).
+We built fused W4A16 GPU kernels (4-bit weights, FP16 activations) step by step, each step chosen from a profile, and measured them against Marlin, the kernel inside vLLM. Our final kernel, **W4A16-TC** (`tc_ladder` in the code), reaches 0.83–0.96 of Marlin's speed at M = 4–128 and decodes Qwen2.5-1.5B within 5% of Marlin's time.
 
-**Against production stacks (E027–E028), our path is slower at every context 128–16384.** On the same G128 codes/scales, our best path's decode takes 36.9–51.4% longer than vLLM v0.33.0's at contexts 128–2048 and up to 91.7% longer at 8192, with identical tokens ([E027](docs/EXPERIMENTS.md#e027--our-decode-path-versus-vllm-on-the-same-quantized-weights)); llama.cpp Q4_K_M and ONNX Runtime GenAI INT4, each with its own quantizer and a quantized embedding/output matrix, are faster still, and at 16384 even their FP16 paths beat our 4-bit path ([E028](docs/EXPERIMENTS.md#e028--our-decode-path-versus-llamacpp-and-onnx-runtime-genai), [E029](docs/EXPERIMENTS.md#e029--our-decode-paths-at-contexts-beyond-2048)). A profile locates the gap to vLLM on the device: merged projections and fused small kernels, with the FP16 output head the largest kernel in both ([E030](docs/EXPERIMENTS.md#e030--where-the-per-step-gap-to-vllm-lies-diagnostic)). Quantizing that head with the project's G128 format and running it through Marlin ([E031](docs/EXPERIMENTS.md#e031--4-bit-output-head-through-marlin-in-our-path-and-in-vllm)) lowers decode 14.7–17.1% in our path (runtime accepted under the E021 third, post hoc gate) and 23.1–24.4% in vLLM, a tie with ONNX Runtime INT4 in the same job, never a win ([E033](docs/EXPERIMENTS.md#e033--vllm-with-the-4-bit-head-same-job-comparison-with-onnx-runtime-and-batch-sizes-18)); this changes model outputs (logit relative L2 0.12–0.17, 47/64 tokens kept in one of four cases) and costs +8.6% perplexity over the FP16 head (E032), so the gain is conditional on accepting that cost. No uncalibrated 4-bit head variant gets under 5% (best +5.82%, [E034](docs/EXPERIMENTS.md#e034--can-a-better-head-quantizer-keep-the-4-bit-heads-speed-at-a-smaller-quality-cost)); an 8-bit head costs +0.04% and in vLLM keeps about 70% of the speedup (15.6–16.5% below stock vLLM, tokens unchanged; vLLM only, no gate, no arm in our operator; [E035](docs/EXPERIMENTS.md#e035--how-much-of-the-head-speedup-survives-with-an-8-bit-head-vllm)). With calibration ([E036](docs/EXPERIMENTS.md#e036--does-a-calibrated-quantizer-in-the-same-4-bit-format-remove-the-quality-cost)): a GPTQ-style calibrated quantizer in the identical 4-bit group-128 format brings the head's cost from +8.60% to about 1% (+1.03% on plain-rounded blocks, +0.89% on calibrated blocks: passes its 5% criterion) and the blocks' cost from +13.12% to +6.77% (still "substantial": fails its 5% criterion); whole model +7.72% against +22.84%. Quality only: the calibrated tensors were not timed or gated, equal speed is expected from the identical format, not measured; calibration used the train split of the same corpus (in-domain). Out-of-domain and timed ([E037](docs/EXPERIMENTS.md#e037--which-calibrated-quantizer-in-the-same-4-bit-format-costs-least-with-out-of-domain-calibration), [E038](docs/EXPERIMENTS.md#e038--do-the-calibrated-tensors-pass-the-gate-and-run-at-the-speed-of-the-plain-rounded-ones)): with calibration text from a different corpus (C4) and the variant chosen on the validation split, the best of ten calibrated quantizers in the same 4-bit format (GPTQ with activation ordering and staged projections) costs +5.62% in the blocks (still "substantial": fails its 5% criterion; plain rounding +13.12%, E036 in-domain +6.77%) and +1.57% in the head (passes; plain rounding +8.60%); whole model +7.28% against +22.84%. E038 then gated and timed that checkpoint on c10: the E021-style gate is accepted in all four cases, its decode medians are within 0.3% of the plain-rounded tensors' in all 32 paired comparisons (64 timed cells) (ours and vLLM, FP16 and 4-bit head, contexts 128/2048), and the head gain is reproduced on it (vLLM 23.1–24.2%, ours 14.7–17.1%). A signed-gradient rounding variant of my own did not help (+8.25%); that is not a measurement of the published AutoRound. Disclosures: three of the variants were added after a first test table had been seen (selection used validation only); the calibrated head still changes model outputs; no FP16 baseline was timed on the calibrated weights. Nothing is running. Plain-language account: [NARRATIVE](docs/NARRATIVE.md).
+## Problem
 
-**Earlier investigation:** [E017 corrected-Marlin model bridge](docs/INFERENCE_MARLIN_BRIDGE.md) stops at the full-model logit gate:591 of9,723,904 values fail despite exact64 tokens. Operator checks pass and setup tensor storage falls62.92%, but no timing is released. [Predeclaration](docs/EXPERIMENTS.md#e017--corrected-marlin-in-the-pinned-full-model), [tooling](scripts/e017/README.md) and [STATUS](docs/STATUS.md).
+`C = A·B` with `A` an M×K FP16 matrix and `B` a K×N matrix stored as packed INT4 with one FP16 scale per 128 weights. Weights are reconstructed as `FP16((q-8)*s)`, accumulated in FP32 and written as FP16. Every kernel is checked against an FP64 CPU reference: `|error| <= 1e-3*|ref| + 1e-3*rms(ref)`. See [CONTRACT](docs/CONTRACT.md).
 
-**Previous investigation:** [E016 complete-decode CUDA graph](docs/INFERENCE_FULL_DECODE_GRAPH.md) is complete. One graph covers all 63 decode steps and preserves every checked logit/token/cache state. Fresh matched decode gains versus per-token replay range from −0.197% to +0.048%, below 5% at both contexts. Graph setup rises from 42–55 ms to 2.46–3.31 s. Retain existing defaults. All 160 primary requests are preserved, with no held-out timing. [Tooling](scripts/e016/README.md), [final evidence](results/e016_20261109/final-arc/) and [STATUS](docs/STATUS.md).
+## Kernel steps
 
-[E015 per-token graph replay](docs/INFERENCE_DIRECT_GRAPH.md) remains complete with subthreshold 1.08–1.87% gains versus its fresh eager control. E016 uses new G denominators and does not change that historical result.
+Median µs, one 4096×4096 matrix, store-flushed, RTX 5060 Ti (E051, range over two series):
 
-[E014 compiled inference](docs/INFERENCE_OVERHEAD.md) remains stopped at its numerical gate, with no accepted timing. Its failed2048-token logit check and original evidence remain unchanged.
+| Kernel | Change | Experiment | M = 1 | M = 128 |
+|---|---|---|---:|---:|
+| `naive` | fused baseline | | 204.4–205.2 | 2,554–2,563 |
+| `inblock` | split K inside a block | E001 | 52.9 | 3,384–3,398 |
+| `inblock_m4` | four rows share each weight | E003 | 61.1–61.8 | 1,473–1,480 |
+| `inblock_m4_vec` | 16-byte loads, with row reuse | E043 | 53.2–53.6 | 885–889 |
+| `tc` | Tensor Cores | E044 | 32.4–33.1 | 135.5 |
+| **`tc_ladder`** | 32-row tile from M = 64, `tc` below | E050 | 32.4–33.1 | 126.7–129.3 |
+| cuBLAS, pre-reconstructed FP16 weights | comparator | | 94.2 | 114.7 |
+| dequantize + cuBLAS | unfused comparator | | 178.5 | 225.3 |
 
-[E013](docs/EXPERIMENTS.md#e013-final-results-and-decision) remains rejected: the smaller M128 tile regresses 7.6–8.7% across both rectangles/two reversed series. **Keep corrected Marlin A and its default tile.** Historical evidence and environments remain unchanged.
+The store flush inflates fast kernels' times, so these are not compared with Marlin. A parallel scalar series (`v0`–`v3`, [OURS](docs/OURS.md)) targets M = 1.
 
-The preceding [E012 diagnostic](docs/EXPERIMENTS.md#e012-final-findings-and-decision) remains inconclusive: ambiguous instruction callers and failed sampling-quality gates justify no kernel rewrite. Its original records remain unchanged.
+## Main results
 
-C = A·B with A an M×K FP16 activation matrix and B a K×N weight matrix stored as
-packed INT4 with group-wise FP16 scales. Fused kernels dequantize in registers,
-accumulate in FP32, and write FP16. This is a controlled implementation and measurement study. The retained scalar
-kernels and pinned external Marlin comparator have separate evidence and
-performance conclusions.
+| Question | Result | Experiment |
+|---|---|---|
+| Speed versus Marlin, cycled weights | 0.86–0.96 at M 4/16 and 0.83–0.87 at M 64/128 (4096×11008, 11008×4096); 0.90–0.96 at 4096² with 16 matrices | E050, E058 |
+| Scalar kernel at M = 1 | `v3` comparable with Marlin: 1.00–1.05 of its speed on five large shapes; far slower from M = 4 | E059 |
+| 32-row tile | 13–17% less time than `tc` at M 64/128 on rectangles; 12/12 cells pass | E050 |
+| Scalar row reuse | `v3_m2` 22–37% less time than `v3` at M 4/8; still slower than `tc_ladder` | E053 |
+| CPU baseline | 26.6/31.3/241 ms serial at M 1/4/128; 12.3–13.1× speedup on 16 threads | E041 |
+| Measured GPU roofs | 427 GB/s read, 51.8 TFLOP/s Tensor Core | E057 |
+| Marlin shared-memory race | one added barrier removes the reported hazard; timing cost −0.35% to +0.39% | E006, E060 |
+| Decode versus FP16 | `tc_ladder` 47% to 25% less time, context 128 to 16,384 | E052 |
+| Decode and prefill versus Marlin | decode 0.7–3.7% less time ("comparable"); prefill 7–12% longer to 4,096 tokens, comparable beyond | E052 |
+| Other GPUs | decode stays within 5% of Marlin on 10 nodes, 5 GPU models; 2,048-token prefill 47% longer on A100, 88–96% on A6000 | E054 |
+| Versus vLLM | our decode takes 32–46% longer; about 1,000 extra unfused launches per step explain most of it | E052, E056 |
+| Output quality | Marlin and `tc_ladder` give the same perplexity (9.735) | E055 |
+| Cost of 4-bit weights | +13.1% perplexity with plain rounding, +5.6% with calibrated GPTQ (missed the 5% target) | E032, E037 |
 
-## Numerical contract
+Limits: model results use one model, batch 1, 64 generated tokens and plain-rounded weights, and the FP16 baseline uses weights reconstructed from the same 4-bit codes. The model path passed only a third numerical gate (FP64 control, E021), after two earlier gates against FP16 (E017, E019) rejected it. The M = 64 threshold was chosen after profiling and re-tested on fresh weights. Kernel comparisons use synthetic weights, mainly on one RTX 5060 Ti.
 
-Reconstructed weight, identical on the CPU reference, the GPU dequant kernel,
-the fused kernel, and the pre-dequantized cuBLAS baseline:
+Tried and rejected: split-K on Tensor Cores (E047) and 32-row tiles at every M ≥ 32 (E048).
 
-```
-s     = round_to_fp16( max_{k in group} |W[k,n]| / 7 )
-z     = clamp( nearbyint(W/s), -7, +7 )     # 0 if s == 0
-q     = z + 8                               # stored code in {1,...,15}
-W_hat = round_to_fp16( (q - 8) * s )        # FP16 bits
-```
-
-Code 0 is unused. The range is symmetric about zero: the extreme codes 1 and 15
-decode to −7s and +7s. `(q-8)*s` is exact in FP32 but is rounded to FP16 before
-use; the kernel converts that FP16 back to FP32 for the FMA. The benchmark
-checks every W_hat element: GPU dequant bits must match the host bits.
-
-## Memory sizes (K = N = 4096, group = 128)
-
-| Buffer        | Formula                         | Size    |
-|---------------|---------------------------------|---------|
-| FP16 weights  | `2·K·N`                         | 32 MiB  |
-| packed INT4   | `K·N/2`                         | 8 MiB   |
-| FP16 scales   | `2·(K/group)·N`                 | 0.25 MiB|
-| L2 on c7      | `cudaDeviceProp.l2CacheSize`    | measured at runtime |
-
-On the RTX 5060 Ti (c7), `cudaDeviceProp.l2CacheSize` and Nsight
-`device__attribute_l2_cache_size` are both 32 MiB. `nvidia-smi -q` does not
-print L2. The 8.25 MiB packed working set for M=1 fits in that L2. The default
-experiment uses an **intended cold policy**: a store kernel writes `2·L2` bytes on
-the same stream immediately before the CUDA start event. Allocations, host
-quantization, and H2D copies are never inside the timed interval. The unfused
-path does **not** flush between dequant and GEMM, so W_hat can stay in cache.
-The store flush does not prove input eviction. Compare it with `--no-flush-l2`,
-and keep Nsight `--cache-control all` profiling separate from event timing.
-
-## Metrics
-
-- **median/min/max/p90 µs**: CUDA event elapsed time over `--iters` launches
-  after `--warmup` untimed launches.
-- **TFLOP/s**: `2·M·N·K / median_s / 1e12` for GEMM-like kernels; 0 for `dequant`.
-- **eff_GB/s**: `logical_bytes / median_s / 1e9`. This is **effective
-  bandwidth** from a traffic model, not measured DRAM. Formulas:
-  - `naive` / `inblock` / `inblock_specialized` / `inblock_m2` / `inblock_m4`: \|A\| + \|C\| + \|qweight\| + \|scales\|
-  - `cublas` / `cublas_dq`: \|A\| + \|C\| + \|W_fp16\|  (32 MiB weights)
-  - `dequant`: \|qweight\| + \|scales\| + \|W_hat\|     (W_hat is a write)
-  - `unfused`: \|A\| + \|C\| + \|qweight\| + \|scales\| + \|W_hat\|
-    (W_hat write+read counted once; ncu reports actual DRAM separately)
-- **pass**: every checked output satisfies `|got-ref| ≤ 1e-3·|ref| + 1e-3·rms(ref)`.
-  `got` is the FP16 output; `ref` is an FP64 CPU GEMM. Fused / `cublas_dq` /
-  `unfused` use reconstructed W_hat; `cublas` uses the original FP16 W.
-- **rel_l2**: `‖got-ref‖₂ / ‖ref‖₂` against that kernel's reference.
-- **rel_l2_vs_fp16**: same formula against the original-weight CPU GEMM
-  (quantization error of W_hat, not a kernel bug).
-
-## Baselines
-
-1. FP64 CPU GEMM on reconstructed W_hat (correctness only).
-2. `cublas`: cuBLAS FP16 GEMM, `CUBLAS_COMPUTE_32F`, original W.
-3. `cublas_dq`: same cuBLAS call on pre-dequantized W_hat already on device.
-4. `dequant` + `unfused`: GPU dequant latency, GEMM-on-W_hat latency, and
-   combined latency around both operations.
-5. `naive`: fused W4A16, one thread per output, no shared-memory reuse.
-6. `inblock`: fused W4A16, block=(32,8), eight disjoint packed-word K slices,
-   FP32 shared-memory reduction and one FP16 write per output.
-7. `inblock_specialized`: E002 version with compile-time aligned/tail variants.
-   The E001 `inblock` source and selector remain unchanged for comparison.
-8. `inblock_m2`: E003, two output rows per thread sharing each reconstructed weight.
-9. `inblock_m4`: E003, four output rows per thread sharing each reconstructed weight.
-   E002's one-row source remains unchanged. Both candidates pass the larger-M
-   criterion, while small-M and row-tail regressions remain documented in
-   [E003](docs/EXPERIMENTS.md#e003--reuse-reconstructed-weights-across-input-rows).
-
-All fused kernels and GPU dequantization handle arbitrary positive K and N,
-including partial final words and groups. Group size remains a multiple of eight.
-Packed/scales storage uses ceiling counts. Select the new version with
-`--kernels inblock_specialized` or compare with
-`--kernels inblock,inblock_specialized`. Dispatch uses K divisibility by eight,
-including aligned K with a partial final quantization group. Compare row reuse with
-`--kernels naive,inblock_specialized,inblock_m2,inblock_m4`. Row variants use
-block=(32,8), grid y=ceil(M/Rows), and 2048/4096 bytes of static shared partials.
-They guard incomplete row tiles and retain each row's arithmetic order. Untimed
-validation compares every candidate output bit against E002, including rows
-outside the sampled FP64 reference. No automatic row-count selection is added.
-
-E004 integrates pinned vLLM Marlin as a direct external comparator, with lossless
-repacking, isolated dependencies, strict all-row numerical checks, and a fresh
-performance map. See the [E004 record](docs/EXPERIMENTS.md#e004--maintained-marlin-integration-and-diagnostic-comparison)
-and [current status](docs/STATUS.md) for results, failed attempts, reproducible
-commands, and provenance. E005 implements the bounded A/B/C reservation/grid
-ablation in an isolated harness, then stops at a racecheck report reproduced in
-its unchanged control and the official wheel. Numerical checks, memcheck and
-synccheck pass, but E005 performance and held-out evaluation remain unmeasured.
-See the [E005 record](docs/EXPERIMENTS.md#e005--specialization-aware-reservation-and-one-versus-two-block-residency).
-Existing project kernels and the E004 wheel remain unchanged.
-
-E006 investigates the inherited report and adds one source-supported block barrier
-before shared-memory reuse. The corrected matched A/B/C body passes the recorded
-numerical and sanitizer matrix. The unpatched reproducer remains preserved and
-still reports hazards. Original output corruption was not demonstrated, and no
-performance measurements were resumed. See the [E006 record](docs/EXPERIMENTS.md#e006--bounded-inherited-marlin-racecheck-investigation)
-and [access analysis](results/e006_20261106/ACCESS_ANALYSIS.md). Any corrected-body
-E005 performance continuation is a separate next decision.
-
-Each new session starts with [AGENTS.md](AGENTS.md), [current status](docs/STATUS.md),
-the [numerical and measurement contract](docs/CONTRACT.md), and relevant
-[experiment and design decisions](docs/EXPERIMENTS.md). The
-[optimization map](docs/OPTIMIZATION_MAP.md) connects candidate approaches to
-evidence, and [references](docs/REFERENCES.md) records source applicability.
-Historical corrections, unsuccessful attempts, raw result paths, and revisit
-conditions live in the experiment log.
-
-## Build and run
+## Build and test
 
 ```bash
-bash scripts/build.sh       # host-only if nvcc is absent
+bash scripts/build.sh                                   # host only if nvcc is absent
 ctest --test-dir build --output-on-failure
-./build/w4a16_bench --M 16 --N 4096 --K 4096 --group 128 --csv results/run.csv
+bash scripts/check_inblock.sh                           # on a GPU, before measuring
+./build/w4a16_bench --M 128 --N 4096 --K 4096 --group 128 --kernels tc_ladder --csv run.csv
 ```
 
-On ARC, verify the current allocation, use `prun` inside it, and follow E001's
-[reproduction record](docs/EXPERIMENTS.md#e001--in-block-k-splitting). Run
-`bash scripts/check_inblock.sh` on the allocated GPU before measuring. Save new
-results in a distinct directory. Legacy `scripts/remote.sh` defaults to c7 and
-uses `rsync --delete`. Legacy baseline scripts overwrite historical records.
+## Repository
+
+- [src/](src/), [include/](include/), [tests/](tests/), [tools/](tools/): kernels, CPU baseline, tests and benchmarks
+- [scripts/](scripts/), [results/](results/): harness and raw records per experiment (`eNNN`)
+- [EXPERIMENTS](docs/EXPERIMENTS.md): full log, including failures; [LATEST_RESULTS](docs/LATEST_RESULTS.md): which numbers are current
+- [report/](report/): ACM report source (covers work through E050)
+
+Raw records of the rejected or stopped experiments E013–E016 and E019, and E017's bulk copies, are left out of this tree. They remain in [history](https://github.com/harsha711/quantization-llm-inference/tree/423314742db086a057a6390c99ff3e03fa3bcb79).
+
+Marlin (IST-DASLab) and vLLM are upstream work. GPTQ, llama.cpp and ONNX Runtime are external comparators or methods; see [REFERENCES](docs/REFERENCES.md).
