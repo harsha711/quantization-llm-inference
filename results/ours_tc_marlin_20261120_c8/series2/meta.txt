@@ -1,0 +1,10 @@
+2026-11-20T09:08:58-05:00
+c8
+name, driver_version, clocks.max.sm [MHz], clocks.max.memory [MHz]
+NVIDIA GeForce RTX 5060 Ti, 610.57.04, 3090 MHz, 14001 MHz
+torch 2.14.1+cu130 13.0
+e634b80e72078e964f8bd2ac541d66f2a900920773cf993544609612190bd9a9  external/vllm-lib/_C_stable_libtorch.abi3.so
+ours ab3ec63820487d0108f6d936df7aa16433ad0257 harsha 202bc6314be08a3ed7e736f23e9009611c196f41
+788a80bf467109d3b9dcd135a17816787cababef6d80bb770e8d15dce2a8a2d4  src/cuda/w4a16_tc_common.cuh
+b218b8cdec4345ceb904234080dad5c56ecb8b55ce12dc38b45f2fc29548496f  src/cuda/w4a16_tc.cu
+96f6e36fa5626db06efc7282ba0921b4a9c36d5d31cfb2df992edb58ae75216f  src/cuda/w4a16_tc_m32.cu

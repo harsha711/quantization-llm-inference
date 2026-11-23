@@ -221,6 +221,8 @@ Nsight Compute, M=1 (`ncu_v123.txt`, cold caches, base clocks):
 
 **Why:** Harsha's E004 timed Marlin either with the store flush (inflates fast kernels, see above) or with no flush, where the 8 MB of 4096² weights stay in the 32 MB L2. His no-flush Marlin time, 13.9 µs, is *below* the 20.3 µs DRAM floor, so it measures L2, not DRAM. Neither matches decode, where a real model's weights are far larger than L2.
 
+*Update 2026-11-20:* this describes E004 only. Harsha's later Marlin comparisons (E045–E050, branch `kernel-ladder-e050`) cycle four weight matrices, which keeps the rectangular shapes out of L2; see the next section for how the two harnesses agree.
+
 **Harness** (`scripts/ours/marlin_compare.{py,sh}`, `scripts/ours/marlin_bridge.cu`; E004's files unchanged): Marlin from the same pinned vLLM 0.33.0 wheel (hash-checked; only `_C_stable_libtorch.abi3.so` extracted), v1–v3 and cuBLAS FP16 through a new bridge. All run in one process on the same operands, with E004's CUDA-graph event timing and three cache policies. Repack verified to keep every code and scale bit. Every output passes the FP64 check before and after timing. 200 iterations, c8.
 
 **Harness check:** it reproduces E004's Marlin (store flush 29.9 vs 29.6 µs; no flush 13.8 vs 13.9) and our C++ bench (v3 25.5 vs 25.6, v1 32.7 vs 32.8, cuBLAS 83.4 vs 83.3), all within one timer step.
@@ -260,3 +262,32 @@ The gain remains bounded: M2 on K4096/N11008 ties, and M1 runs unchanged v3. You
 The M4 matched replay shows 39.2% fewer warp instructions and 50.3% fewer L2 bytes, while DRAM reads rise 10.5%. Registers 43→60 and lower observed occupancy do not erase the gain. These counters support reduced repeated work, without isolating one critical-path cause. Profile duration is separate from production timing. Secondary single-matrix sweeps also improve M4–M16, with smaller-M/subthreshold exceptions retained in the full table.
 
 [Complete design, failures, results and limits](EXPERIMENTS.md#e053--two-row-weight-reuse-in-v3-one-bounded-scalar-kernel-experiment), [tooling](../scripts/e053/README.md), [raw/derived evidence](../results/e053_20261119/). Defaults remain unchanged. No model-level run or further optimization follows automatically.
+
+### Harsha's Tensor Core kernel under the same harness (`results/ours_tc_marlin_20261120_c8/`)
+
+**Why:** by 2026-11-18 Harsha's branch `kernel-ladder-e050` (commit `202bc63`) had its own Tensor Core kernel, `tc` (E044), and `tc_ladder` (E050: E048's 32-row tile at M ≥ 64, `tc` below). Its best results are measured with four cycled matrices from M=4 up. Open question: at M=1, which is faster, v3 or `tc`? The two had only been profiled separately (Nsight: v3 78% DRAM busy, `tc` 75%).
+
+**Harness:** the Marlin harness above, with `w4a16_tc.cu`, `w4a16_tc_common.cuh`, `w4a16_tc_m32.cu` and `w4a16_inblock_vec.cu` copied verbatim from `202bc63` (hashes in `meta.txt`). `tc_ladder` uses E050's dispatch rule. The four-file change to our harness is in `harness.patch`; it is not on this branch, because the kernels aren't. Shapes: our four plus Harsha's 4096×11008 and 11008×4096. M = 1–128, three cache policies, 200 iterations, c8. Series 2 repeats M = 1–4 under the read flush with kernel and shape order reversed. Every output passed the FP64 check before and after timing. Tables: `series*/tables_*.txt` (`tc_tables.py`).
+
+**M=1, read flush, mean µs, series 1 / series 2:**
+
+| K×N | Marlin | `tc` | v3 | v3 vs `tc` |
+|---|---|---|---|---|
+| 4096×11008 | 61.7 / 62.1 | 64.0 / 65.8 | **59.7 / 59.6** | 7–9% faster |
+| 11008×4096 | **59.6 / 59.8** | 69.7 / 70.0 | 60.7 / 61.0 | 13% faster |
+| 4096² | 26.3 / 25.7 | 27.1 / 27.6 | **25.8 / 25.4** | 5–8% faster |
+| 1536×8960 | 22.5 / 22.5 | 22.5 / 22.5 | 22.5 / 22.4 | tie |
+| 8960×1536 | 22.7 / 22.5 | 24.6 / 24.6 | **22.5 / 22.5** | 9% faster |
+| 1536² | 9.5 / 8.6 | 8.1 / 8.1 | 8.2 / 8.2 | tie (fixed costs) |
+
+- **At M=1, v3 is the team's fastest kernel.** It beats `tc` by 5–13% (time saved) on four of six shapes and ties on the other two, in both series. Against Marlin it's within ±4% on the five large shapes, at 74–91% of the floor.
+- **At M=2, v3 and `tc` tie** (within ~1 µs, either way).
+- **From M=4, `tc` wins by ~2×, growing with M.** v3's cost grows linearly with M; `tc`'s barely moves until M=16. Harsha's kernels own M ≥ 4.
+- **`tc` loses most on the tall shapes** (11008×4096, 8960×1536: 9–13%). These are the shapes where its grid has the fewest blocks (one block per 32 columns: 128 and 48 blocks for 36 SMs). *Inference, not profiled:* this is the under-filled grid that v1's cross-block split fixes. Harsha's E047 tested split-K on `tc` only on 4096² and rejected it; the tall shapes are where it would be expected to pay. But 4096×11008 (344 blocks) also loses 7–10%, so grid size can't be the whole story.
+
+**Harness cross-check against E050's cyclic numbers (Harsha's series 1, c8):**
+- **Rectangles agree.** At 4096×11008 and M=4, our read flush gives `tc` 64.2 vs his 64.4 µs, and Marlin 61.6 vs 61.3. At 11008×4096 and M=4, `tc` 71.2 vs 67.5 and Marlin 60.5 vs 59.2. At M=128, `tc_ladder` and Marlin are 3–4% above his. Two different ways of keeping weights cold land within ~5% on the shapes where four matrices (4 × 22.5 MB) far exceed the 32 MB L2.
+- **4096² does not agree.** At M=4 his cycle gives Marlin 16.7 / 15.1 µs and `tc` 18.3 / 19.3 µs; the read flush gives 26.2 and 28.1. His values are **below the 20.4 µs DRAM floor**, so part of the data must come from L2. Four 4096² matrices are 4 × 8.4 MB = 33.6 MB, about the size of L2. This likely explains the 10–13% series-to-series swing in Marlin that E050 reports as unexplained at 4096², M ≤ 16. *Inference:* the swing itself was not tested; the below-floor values were measured.
+
+**Fraction of Marlin's speed, `tc_ladder`, read flush, series 1:** 0.92–0.98 at M=4–16 on 4096×11008 and 4096², 0.85–0.86 on 11008×4096. 0.71–0.89 at M=32, where `tc` still uses 16-row tiles. 0.81–1.03 at M=64–128 (1.03 is one cell: 8960×1536, M=64, one series). This agrees with E050's 0.83–0.94 at M ≥ 64.
+
