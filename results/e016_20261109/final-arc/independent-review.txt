@@ -1,2 +1,0 @@
-Read-only agent review of current E016 runner, validation, checks, analyzer, continuation and E014/E015 imports: no capture/state/numerical/timing/gate blocker. No edits or ARC/GPU work.
-Caveat: static_setup_s measures inherited E014 setup, excluding E016 extra persistent buffer allocations. H graph_setup_s includes warmups, snapshot/restore and checks. Neither is full-process startup.

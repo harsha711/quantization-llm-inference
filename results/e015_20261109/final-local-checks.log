@@ -1,5 +1,0 @@
-PASS report table recomputed from all160 saved samples, report links, measured tooling identity and117 unchanged E014 input hashes.
-PASS22 accepted tensor ZIP archives.
-PASS local full-primary analysis and seven corruption checks.
-PASS host-only build/CTest; fresh retained CUDA build/CTest/six small sanitizer checks recorded on c9.
-No whole-model sanitizer claim or held-out timing.

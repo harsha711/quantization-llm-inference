@@ -1,4 +1,0 @@
-+ prun timeout 1800 c++ -std=c++17 -O2 -fPIC -shared -Iinclude scripts/e017/quant_contract.cpp src/quant.cpp -o /tmp/e017-quant-contract.so
-[prun] Master compute host = c7
-[prun] Resource manager = slurm
-[prun] Launch cmd = mpirun timeout 1800 c++ -std=c++17 -O2 -fPIC -shared -Iinclude scripts/e017/quant_contract.cpp src/quant.cpp -o /tmp/e017-quant-contract.so (family=openmpi4)

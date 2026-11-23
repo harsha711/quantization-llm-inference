@@ -1,4 +1,0 @@
-TARGET      SOURCE       FSTYPE OPTIONS
-/mnt/beegfs beegfs_nodev beegfs rw,nosuid,relatime,cfgFile=/etc/beegfs/beegfs-client.conf
-Filesystem      Size  Used Avail Use% Mounted on
-beegfs_nodev    127T   98T   29T  78% /mnt/beegfs

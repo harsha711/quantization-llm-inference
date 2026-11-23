@@ -1,8 +1,0 @@
-{
-  "logit_comparisons": 0,
-  "gemm_comparisons": 33,
-  "full_request_outputs": 0,
-  "quantized_artifacts": 0,
-  "failed_numerical_gates": 0,
-  "status": "payload and numerical gates pass"
-}

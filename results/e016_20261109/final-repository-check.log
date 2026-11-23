@@ -1,7 +1,0 @@
-PASS all E016 Python ASTs
-PASS all E016 shell syntax
-PASS measured primary tooling unchanged
-PASS 68 local documentation links
-PASS all160 primary rows present, no held-out timing rows
-PASS E014/E015 source/results and retained kernels unchanged from734b2f2
-PASS independent read-only report review; whole-model sanitizers not claimed

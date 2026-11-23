@@ -1,8 +1,0 @@
-{
-  "logit_comparisons": 14,
-  "gemm_comparisons": 165,
-  "full_request_outputs": 9,
-  "quantized_artifacts": 196,
-  "failed_numerical_gates": 1,
-  "status": "payload/statistics audit complete; failed gates remain failures"
-}

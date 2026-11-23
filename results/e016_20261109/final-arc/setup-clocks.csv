@@ -1,2 +1,0 @@
-timestamp, name, uuid, driver_version, pstate, clocks.current.sm [MHz], clocks.current.memory [MHz], temperature.gpu, power.draw [W], memory.used [MiB]
-2026/11/09 15:09:29.142, NVIDIA GeForce RTX 5060 Ti, GPU-51745a0b-32d9-31c9-1ecd-359ac0ac89cc, 615.71.09, P0, 2617 MHz, 14001 MHz, 33, 21.74 W, 2 MiB

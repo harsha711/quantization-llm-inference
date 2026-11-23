@@ -1,1 +1,0 @@
-Fresh c9 full validation331864 inspected: four cases, twelve alternating/reset requests, all checked logits bitwise equal, all tokens/weights/pointers/cache lengths pass; actual 7/7 graph replay and kernel multisets agree at both contexts. Remote corruption checks and independent local analysis pass. All127 source snapshot files verify. Primary331865 may be released.

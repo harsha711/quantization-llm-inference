@@ -1,2 +1,0 @@
-PASS four full numerical/replay cases, twelve reset/alternating-prompt requests
-Kernel parity: [{'context': 128, 'same_kernel_multiset': True}, {'context': 2048, 'same_kernel_multiset': True}]

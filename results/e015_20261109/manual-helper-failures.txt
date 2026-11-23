@@ -1,3 +1,0 @@
-Manual SSH analysis first failed before execution because SLURM_JOB_ID was absent. Corrected to verified job331864/c9 and ran through prun successfully.
-Provenance first glob included directory include/w4a16. Preserved partial hash list, then archived exact files/build flags/runtime sources successfully.
-One progress SSH probe used the invalid option Identities=yes and was rejected locally before connecting. Corrected to IdentitiesOnly=yes. No model run or measurement changed.
