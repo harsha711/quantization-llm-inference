@@ -1,0 +1,1 @@
+Reused exact checked binaries and gates from /mnt/beegfs/hpuvvad/csc548-w4a16-e053-20261119/baseline-c8-343816; prior driver failure was Python import shadowing.

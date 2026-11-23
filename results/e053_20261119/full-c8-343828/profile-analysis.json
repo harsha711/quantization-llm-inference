@@ -1,0 +1,62 @@
+[
+  {
+    "gpu__time_duration.sum": 52256.0,
+    "launch__grid_size": 128.0,
+    "launch__registers_per_thread": 43.0,
+    "smsp__inst_executed.sum": 11565056.0,
+    "smsp__sass_inst_executed_op_global_ld.sum": 196608.0,
+    "dram__bytes_op_read.sum": 5969664.0,
+    "dram__throughput.avg.pct_of_peak_sustained_elapsed": 26.04,
+    "lts__t_bytes.sum": 36122848.0,
+    "lts__t_sector_hit_rate.pct": 83.85,
+    "smsp__issue_active.avg.pct_of_peak_sustained_active": 67.4,
+    "sm__warps_active.avg.pct_of_peak_sustained_active": 49.68,
+    "smsp__average_warps_issue_stalled_long_scoreboard_per_issue_active.ratio": 2.37,
+    "kernel": "<unnamed>::w4a16_v3_kernel(const __half *, const unsigned int *, const __half *, __half *, float *, unsigned int *, int, int, int, int, int)",
+    "name": "final-v3",
+    "units": {
+      "gpu__time_duration.sum": "ns",
+      "launch__grid_size": "",
+      "launch__registers_per_thread": "register/thread",
+      "smsp__inst_executed.sum": "inst",
+      "smsp__sass_inst_executed_op_global_ld.sum": "inst",
+      "dram__bytes_op_read.sum": "byte",
+      "dram__throughput.avg.pct_of_peak_sustained_elapsed": "%",
+      "lts__t_bytes.sum": "byte",
+      "lts__t_sector_hit_rate.pct": "%",
+      "smsp__issue_active.avg.pct_of_peak_sustained_active": "%",
+      "sm__warps_active.avg.pct_of_peak_sustained_active": "%",
+      "smsp__average_warps_issue_stalled_long_scoreboard_per_issue_active.ratio": "inst"
+    }
+  },
+  {
+    "gpu__time_duration.sum": 33696.0,
+    "launch__grid_size": 64.0,
+    "launch__registers_per_thread": 60.0,
+    "smsp__inst_executed.sum": 7032640.0,
+    "smsp__sass_inst_executed_op_global_ld.sum": 131072.0,
+    "dram__bytes_op_read.sum": 6595584.0,
+    "dram__throughput.avg.pct_of_peak_sustained_elapsed": 44.52,
+    "lts__t_bytes.sum": 17952960.0,
+    "lts__t_sector_hit_rate.pct": 61.51,
+    "smsp__issue_active.avg.pct_of_peak_sustained_active": 57.16,
+    "sm__warps_active.avg.pct_of_peak_sustained_active": 29.55,
+    "smsp__average_warps_issue_stalled_long_scoreboard_per_issue_active.ratio": 2.6,
+    "kernel": "void <unnamed>::w4a16_v3_m2_kernel<0>(const __half *, const unsigned int *, const __half *, __half *, float *, unsigned int *, int, int, int, int, int)",
+    "name": "final-v3-m2",
+    "units": {
+      "gpu__time_duration.sum": "ns",
+      "launch__grid_size": "",
+      "launch__registers_per_thread": "register/thread",
+      "smsp__inst_executed.sum": "inst",
+      "smsp__sass_inst_executed_op_global_ld.sum": "inst",
+      "dram__bytes_op_read.sum": "byte",
+      "dram__throughput.avg.pct_of_peak_sustained_elapsed": "%",
+      "lts__t_bytes.sum": "byte",
+      "lts__t_sector_hit_rate.pct": "%",
+      "smsp__issue_active.avg.pct_of_peak_sustained_active": "%",
+      "sm__warps_active.avg.pct_of_peak_sustained_active": "%",
+      "smsp__average_warps_issue_stalled_long_scoreboard_per_issue_active.ratio": "inst"
+    }
+  }
+]

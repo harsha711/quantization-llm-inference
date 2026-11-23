@@ -1,0 +1,382 @@
++ timeout 2100 /tmp/e005-r2-hpuvvad-20261106/bin/python scripts/e053/bench.py --source /home/hpuvvad/csc548-w4a16-e005-20261106/external/pinned --local /home/hpuvvad/csc548-w4a16-e006-20261106/results/e006_20261106/patched/libe005.so --wheel /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/vllm/_C_stable_libtorch.abi3.so --bridge /home/hpuvvad/csc548-w4a16-e004-20261106/results/e004_20261106/libe004.so --tc /mnt/beegfs/hpuvvad/csc548-w4a16-e053-20261119/validation-c8-343823/libe053.so --out /mnt/beegfs/hpuvvad/csc548-w4a16-e053-20261119/validation-c8-343823/validation.jsonl --trace --warmup 0 --iters 0
+ENV {"body_sha256": "e4eca5e30436c547358a9c8125d69526c6bb3318da034afd54ada6744181e2b7", "kernels_sha256": "c373c18e67142f53c438294f9cc936805afe89d49324e390fc3b808c6b849b4e", "torch": "2.14.0+cu130", "cuda": "13.0", "gpu": "NVIDIA GeForce RTX 5060 Ti", "stream": 94264927877360}
+OPERATOR_SCHEMA _C::marlin_gemm(Tensor a, Tensor? c_or_none, Tensor b_q_weight, Tensor? b_bias_or_none, Tensor b_scales, Tensor? a_scales, Tensor? global_scale, Tensor? b_zeros_or_none, Tensor workspace, int b_type_id, SymInt size_m, SymInt size_n, SymInt size_k, bool use_atomic_add, bool use_fp32_reduce, bool is_zp_float) -> Tensor
+OPERATOR_SCHEMA _C::marlin_gemm(Tensor a, Tensor? c_or_none, Tensor b_q_weight, Tensor? b_bias_or_none, Tensor b_scales, Tensor? a_scales, Tensor? global_scale, Tensor? b_zeros_or_none, Tensor workspace, int b_type_id, SymInt size_m, SymInt size_n, SymInt size_k, bool use_atomic_add, bool use_fp32_reduce, bool is_zp_float) -> Tensor
+OPERATOR_SCHEMA _C::marlin_gemm(Tensor a, Tensor? c_or_none, Tensor b_q_weight, Tensor? b_bias_or_none, Tensor b_scales, Tensor? a_scales, Tensor? global_scale, Tensor? b_zeros_or_none, Tensor workspace, int b_type_id, SymInt size_m, SymInt size_n, SymInt size_k, bool use_atomic_add, bool use_fp32_reduce, bool is_zp_float) -> Tensor
+OPERATOR_SCHEMA _C::marlin_gemm(Tensor a, Tensor? c_or_none, Tensor b_q_weight, Tensor? b_bias_or_none, Tensor b_scales, Tensor? a_scales, Tensor? global_scale, Tensor? b_zeros_or_none, Tensor workspace, int b_type_id, SymInt size_m, SymInt size_n, SymInt size_k, bool use_atomic_add, bool use_fp32_reduce, bool is_zp_float) -> Tensor
+USDT:2026-11-19 17:15:25 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:15:25 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL v3 1 4096 4096 ['(anonymous namespace)::w4a16_v3_kernel(__half const*, unsigned int const*, __half const*, __half*, float*, unsigned int*, int, int, int, int, int)']
+PASS 1 4096 4096 v3 None
+USDT:2026-11-19 17:15:25 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:15:25 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL v3_m2 1 4096 4096 ['(anonymous namespace)::w4a16_v3_kernel(__half const*, unsigned int const*, __half const*, __half*, float*, unsigned int*, int, int, int, int, int)']
+PASS 1 4096 4096 v3_m2 None
+USDT:2026-11-19 17:15:25 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:15:25 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL tc_ladder 1 4096 4096 ['void (anonymous namespace)::w4a16_tc_kernel<true, true>(__half const*, unsigned int const*, __half const*, __half*, int, int, int, int)']
+PASS 1 4096 4096 tc_ladder None
+USDT:2026-11-19 17:15:25 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:15:25 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL marlin 1 4096 4096 ['void e005_marlin::Marlin<1125899906910725l, 1125899907892224l, 1125899906910725l, 1125899906910725l, 256, 1, 8, 8, true, 4, 8, false>(int4 const*, int4 const*, int4*, int4*, int4 const*, float const*, int4 const*, float const*, int4 const*, int, int, int, int, int*, bool, bool, bool, int)']
+PASS 1 4096 4096 marlin None
+USDT:2026-11-19 17:15:25 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:15:25 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL cublas_dq 1 4096 4096 ['std::enable_if<!(false), void>::type internal::gemvx::kernel<int, int, __half, __half, __half, float, false, true, false, false, 8, false, cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float> >(cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float>)']
+PASS 1 4096 4096 cublas_dq None
+USDT:2026-11-19 17:15:25 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:15:25 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL v3_m2 2 4096 4096 ['void (anonymous namespace)::w4a16_v3_m2_kernel<false>(__half const*, unsigned int const*, __half const*, __half*, float*, unsigned int*, int, int, int, int, int)']
+PASS 2 4096 4096 v3_m2 None
+USDT:2026-11-19 17:15:25 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:15:25 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL tc_ladder 2 4096 4096 ['void (anonymous namespace)::w4a16_tc_kernel<true, true>(__half const*, unsigned int const*, __half const*, __half*, int, int, int, int)']
+PASS 2 4096 4096 tc_ladder None
+USDT:2026-11-19 17:15:25 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:15:25 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL marlin 2 4096 4096 ['void e005_marlin::Marlin<1125899906910725l, 1125899907892224l, 1125899906910725l, 1125899906910725l, 256, 1, 8, 8, true, 4, 8, false>(int4 const*, int4 const*, int4*, int4*, int4 const*, float const*, int4 const*, float const*, int4 const*, int, int, int, int, int*, bool, bool, bool, int)']
+PASS 2 4096 4096 marlin None
+USDT:2026-11-19 17:15:25 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:15:25 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL cublas_dq 2 4096 4096 ['void cutlass::Kernel2<cutlass_80_tensorop_f16_s16816gemm_f16_128x64_32x6_nn_align2>(cutlass_80_tensorop_f16_s16816gemm_f16_128x64_32x6_nn_align2::Params)']
+PASS 2 4096 4096 cublas_dq None
+USDT:2026-11-19 17:15:25 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:15:25 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL v3 2 4096 4096 ['(anonymous namespace)::w4a16_v3_kernel(__half const*, unsigned int const*, __half const*, __half*, float*, unsigned int*, int, int, int, int, int)']
+PASS 2 4096 4096 v3 None
+USDT:2026-11-19 17:15:25 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:15:25 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL tc_ladder 4 4096 4096 ['void (anonymous namespace)::w4a16_tc_kernel<true, true>(__half const*, unsigned int const*, __half const*, __half*, int, int, int, int)']
+PASS 4 4096 4096 tc_ladder None
+USDT:2026-11-19 17:15:25 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:15:25 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL marlin 4 4096 4096 ['void e005_marlin::Marlin<1125899906910725l, 1125899907892224l, 1125899906910725l, 1125899906910725l, 256, 1, 8, 8, true, 4, 8, false>(int4 const*, int4 const*, int4*, int4*, int4 const*, float const*, int4 const*, float const*, int4 const*, int, int, int, int, int*, bool, bool, bool, int)']
+PASS 4 4096 4096 marlin None
+USDT:2026-11-19 17:15:25 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:15:25 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL cublas_dq 4 4096 4096 ['void cutlass::Kernel2<cutlass_80_tensorop_f16_s16816gemm_f16_128x64_32x6_nn_align2>(cutlass_80_tensorop_f16_s16816gemm_f16_128x64_32x6_nn_align2::Params)']
+PASS 4 4096 4096 cublas_dq None
+USDT:2026-11-19 17:15:25 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:15:25 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL v3 4 4096 4096 ['(anonymous namespace)::w4a16_v3_kernel(__half const*, unsigned int const*, __half const*, __half*, float*, unsigned int*, int, int, int, int, int)']
+PASS 4 4096 4096 v3 None
+USDT:2026-11-19 17:15:25 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:15:25 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL v3_m2 4 4096 4096 ['void (anonymous namespace)::w4a16_v3_m2_kernel<false>(__half const*, unsigned int const*, __half const*, __half*, float*, unsigned int*, int, int, int, int, int)']
+PASS 4 4096 4096 v3_m2 None
+USDT:2026-11-19 17:15:25 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:15:25 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL marlin 8 4096 4096 ['void e005_marlin::Marlin<1125899906910725l, 1125899907892224l, 1125899906910725l, 1125899906910725l, 256, 1, 8, 8, true, 4, 8, false>(int4 const*, int4 const*, int4*, int4*, int4 const*, float const*, int4 const*, float const*, int4 const*, int, int, int, int, int*, bool, bool, bool, int)']
+PASS 8 4096 4096 marlin None
+USDT:2026-11-19 17:15:25 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:15:25 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL cublas_dq 8 4096 4096 ['void cutlass::Kernel2<cutlass_80_tensorop_f16_s16816gemm_f16_128x64_32x6_nn_align2>(cutlass_80_tensorop_f16_s16816gemm_f16_128x64_32x6_nn_align2::Params)']
+PASS 8 4096 4096 cublas_dq None
+USDT:2026-11-19 17:15:25 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:15:25 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL v3 8 4096 4096 ['(anonymous namespace)::w4a16_v3_kernel(__half const*, unsigned int const*, __half const*, __half*, float*, unsigned int*, int, int, int, int, int)']
+PASS 8 4096 4096 v3 None
+USDT:2026-11-19 17:15:25 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:15:25 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL v3_m2 8 4096 4096 ['void (anonymous namespace)::w4a16_v3_m2_kernel<false>(__half const*, unsigned int const*, __half const*, __half*, float*, unsigned int*, int, int, int, int, int)']
+PASS 8 4096 4096 v3_m2 None
+USDT:2026-11-19 17:15:25 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:15:25 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL tc_ladder 8 4096 4096 ['void (anonymous namespace)::w4a16_tc_kernel<true, true>(__half const*, unsigned int const*, __half const*, __half*, int, int, int, int)']
+PASS 8 4096 4096 tc_ladder None
+USDT:2026-11-19 17:15:25 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:15:25 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL cublas_dq 16 4096 4096 ['void cutlass::Kernel2<cutlass_80_tensorop_f16_s16816gemm_f16_128x64_32x6_nn_align2>(cutlass_80_tensorop_f16_s16816gemm_f16_128x64_32x6_nn_align2::Params)']
+PASS 16 4096 4096 cublas_dq None
+USDT:2026-11-19 17:15:25 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:15:25 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL v3 16 4096 4096 ['(anonymous namespace)::w4a16_v3_kernel(__half const*, unsigned int const*, __half const*, __half*, float*, unsigned int*, int, int, int, int, int)']
+PASS 16 4096 4096 v3 None
+USDT:2026-11-19 17:15:25 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:15:25 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL v3_m2 16 4096 4096 ['void (anonymous namespace)::w4a16_v3_m2_kernel<false>(__half const*, unsigned int const*, __half const*, __half*, float*, unsigned int*, int, int, int, int, int)']
+PASS 16 4096 4096 v3_m2 None
+USDT:2026-11-19 17:15:25 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:15:25 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL tc_ladder 16 4096 4096 ['void (anonymous namespace)::w4a16_tc_kernel<true, false>(__half const*, unsigned int const*, __half const*, __half*, int, int, int, int)']
+PASS 16 4096 4096 tc_ladder None
+USDT:2026-11-19 17:15:25 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:15:25 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL marlin 16 4096 4096 ['void e005_marlin::Marlin<1125899906910725l, 1125899907892224l, 1125899906910725l, 1125899906910725l, 256, 1, 8, 8, false, 4, 8, false>(int4 const*, int4 const*, int4*, int4*, int4 const*, float const*, int4 const*, float const*, int4 const*, int, int, int, int, int*, bool, bool, bool, int)']
+PASS 16 4096 4096 marlin None
+OPERATOR_SCHEMA _C::marlin_gemm(Tensor a, Tensor? c_or_none, Tensor b_q_weight, Tensor? b_bias_or_none, Tensor b_scales, Tensor? a_scales, Tensor? global_scale, Tensor? b_zeros_or_none, Tensor workspace, int b_type_id, SymInt size_m, SymInt size_n, SymInt size_k, bool use_atomic_add, bool use_fp32_reduce, bool is_zp_float) -> Tensor
+OPERATOR_SCHEMA _C::marlin_gemm(Tensor a, Tensor? c_or_none, Tensor b_q_weight, Tensor? b_bias_or_none, Tensor b_scales, Tensor? a_scales, Tensor? global_scale, Tensor? b_zeros_or_none, Tensor workspace, int b_type_id, SymInt size_m, SymInt size_n, SymInt size_k, bool use_atomic_add, bool use_fp32_reduce, bool is_zp_float) -> Tensor
+OPERATOR_SCHEMA _C::marlin_gemm(Tensor a, Tensor? c_or_none, Tensor b_q_weight, Tensor? b_bias_or_none, Tensor b_scales, Tensor? a_scales, Tensor? global_scale, Tensor? b_zeros_or_none, Tensor workspace, int b_type_id, SymInt size_m, SymInt size_n, SymInt size_k, bool use_atomic_add, bool use_fp32_reduce, bool is_zp_float) -> Tensor
+OPERATOR_SCHEMA _C::marlin_gemm(Tensor a, Tensor? c_or_none, Tensor b_q_weight, Tensor? b_bias_or_none, Tensor b_scales, Tensor? a_scales, Tensor? global_scale, Tensor? b_zeros_or_none, Tensor workspace, int b_type_id, SymInt size_m, SymInt size_n, SymInt size_k, bool use_atomic_add, bool use_fp32_reduce, bool is_zp_float) -> Tensor
+USDT:2026-11-19 17:15:58 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:15:58 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL v3_m2 1 4096 11008 ['(anonymous namespace)::w4a16_v3_kernel(__half const*, unsigned int const*, __half const*, __half*, float*, unsigned int*, int, int, int, int, int)']
+PASS 1 4096 11008 v3_m2 None
+USDT:2026-11-19 17:15:58 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:15:58 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL tc_ladder 1 4096 11008 ['void (anonymous namespace)::w4a16_tc_kernel<true, true>(__half const*, unsigned int const*, __half const*, __half*, int, int, int, int)']
+PASS 1 4096 11008 tc_ladder None
+USDT:2026-11-19 17:15:58 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:15:58 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL marlin 1 4096 11008 ['void e005_marlin::Marlin<1125899906910725l, 1125899907892224l, 1125899906910725l, 1125899906910725l, 256, 1, 8, 8, true, 4, 8, false>(int4 const*, int4 const*, int4*, int4*, int4 const*, float const*, int4 const*, float const*, int4 const*, int, int, int, int, int*, bool, bool, bool, int)']
+PASS 1 4096 11008 marlin None
+USDT:2026-11-19 17:15:58 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:15:58 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL cublas_dq 1 4096 11008 ['std::enable_if<!(false), void>::type internal::gemvx::kernel<int, int, __half, float, float, float, false, true, false, false, 7, false, cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<float const>, cublasGemvTensorStridedBatched<float>, float> >(cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<float const>, cublasGemvTensorStridedBatched<float>, float>)', 'void cublasLt::splitKreduce_kernel<32, 16, int, float, __half, float, __half, false, __half, __half, __half, true, false, false, false>(cublasLt::cublasSplitKParams<float>, float const*, __half const*, __half*, __half*, float const*, float const*, __half const*, float const*, __half*, void*, long, float*, int*, float*, float*, float const*, float const*, float const*, float const*, float const*)']
+PASS 1 4096 11008 cublas_dq None
+USDT:2026-11-19 17:15:58 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:15:58 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL v3 1 4096 11008 ['(anonymous namespace)::w4a16_v3_kernel(__half const*, unsigned int const*, __half const*, __half*, float*, unsigned int*, int, int, int, int, int)']
+PASS 1 4096 11008 v3 None
+USDT:2026-11-19 17:15:58 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:15:58 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL tc_ladder 2 4096 11008 ['void (anonymous namespace)::w4a16_tc_kernel<true, true>(__half const*, unsigned int const*, __half const*, __half*, int, int, int, int)']
+PASS 2 4096 11008 tc_ladder None
+USDT:2026-11-19 17:15:58 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:15:58 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL marlin 2 4096 11008 ['void e005_marlin::Marlin<1125899906910725l, 1125899907892224l, 1125899906910725l, 1125899906910725l, 256, 1, 8, 8, true, 4, 8, false>(int4 const*, int4 const*, int4*, int4*, int4 const*, float const*, int4 const*, float const*, int4 const*, int, int, int, int, int*, bool, bool, bool, int)']
+PASS 2 4096 11008 marlin None
+USDT:2026-11-19 17:15:58 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:15:58 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL cublas_dq 2 4096 11008 ['void cutlass::Kernel2<cutlass_80_wmma_tensorop_s161616gemm_f16_16x16_64x2_nn_align8>(cutlass_80_wmma_tensorop_s161616gemm_f16_16x16_64x2_nn_align8::Params)', 'void cublasLt::splitKreduce_kernel<32, 16, int, float, __half, float, __half, false, __half, __half, __half, true, false, false, false>(cublasLt::cublasSplitKParams<float>, float const*, __half const*, __half*, __half*, float const*, float const*, __half const*, float const*, __half*, void*, long, float*, int*, float*, float*, float const*, float const*, float const*, float const*, float const*)']
+PASS 2 4096 11008 cublas_dq None
+USDT:2026-11-19 17:15:58 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:15:58 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL v3 2 4096 11008 ['(anonymous namespace)::w4a16_v3_kernel(__half const*, unsigned int const*, __half const*, __half*, float*, unsigned int*, int, int, int, int, int)']
+PASS 2 4096 11008 v3 None
+USDT:2026-11-19 17:15:58 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:15:58 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL v3_m2 2 4096 11008 ['void (anonymous namespace)::w4a16_v3_m2_kernel<false>(__half const*, unsigned int const*, __half const*, __half*, float*, unsigned int*, int, int, int, int, int)']
+PASS 2 4096 11008 v3_m2 None
+USDT:2026-11-19 17:15:58 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:15:58 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL marlin 4 4096 11008 ['void e005_marlin::Marlin<1125899906910725l, 1125899907892224l, 1125899906910725l, 1125899906910725l, 256, 1, 8, 8, true, 4, 8, false>(int4 const*, int4 const*, int4*, int4*, int4 const*, float const*, int4 const*, float const*, int4 const*, int, int, int, int, int*, bool, bool, bool, int)']
+PASS 4 4096 11008 marlin None
+USDT:2026-11-19 17:15:58 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:15:58 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL cublas_dq 4 4096 11008 ['void cutlass::Kernel2<cutlass_80_wmma_tensorop_s161616gemm_f16_16x16_64x2_nn_align8>(cutlass_80_wmma_tensorop_s161616gemm_f16_16x16_64x2_nn_align8::Params)', 'void cublasLt::splitKreduce_kernel<32, 16, int, float, __half, float, __half, false, __half, __half, __half, true, false, false, false>(cublasLt::cublasSplitKParams<float>, float const*, __half const*, __half*, __half*, float const*, float const*, __half const*, float const*, __half*, void*, long, float*, int*, float*, float*, float const*, float const*, float const*, float const*, float const*)']
+PASS 4 4096 11008 cublas_dq None
+USDT:2026-11-19 17:15:58 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:15:58 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL v3 4 4096 11008 ['(anonymous namespace)::w4a16_v3_kernel(__half const*, unsigned int const*, __half const*, __half*, float*, unsigned int*, int, int, int, int, int)']
+PASS 4 4096 11008 v3 None
+USDT:2026-11-19 17:15:58 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:15:58 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL v3_m2 4 4096 11008 ['void (anonymous namespace)::w4a16_v3_m2_kernel<false>(__half const*, unsigned int const*, __half const*, __half*, float*, unsigned int*, int, int, int, int, int)']
+PASS 4 4096 11008 v3_m2 None
+USDT:2026-11-19 17:15:58 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:15:58 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL tc_ladder 4 4096 11008 ['void (anonymous namespace)::w4a16_tc_kernel<true, true>(__half const*, unsigned int const*, __half const*, __half*, int, int, int, int)']
+PASS 4 4096 11008 tc_ladder None
+USDT:2026-11-19 17:15:58 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:15:58 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL cublas_dq 8 4096 11008 ['void cutlass::Kernel2<cutlass_80_tensorop_s16816gemm_f16_64x64_32x6_nn_align8>(cutlass_80_tensorop_s16816gemm_f16_64x64_32x6_nn_align8::Params)', 'void cublasLt::splitKreduce_kernel<32, 16, int, float, __half, float, __half, false, __half, __half, __half, true, false, false, false>(cublasLt::cublasSplitKParams<float>, float const*, __half const*, __half*, __half*, float const*, float const*, __half const*, float const*, __half*, void*, long, float*, int*, float*, float*, float const*, float const*, float const*, float const*, float const*)']
+PASS 8 4096 11008 cublas_dq None
+USDT:2026-11-19 17:15:58 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:15:58 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL v3 8 4096 11008 ['(anonymous namespace)::w4a16_v3_kernel(__half const*, unsigned int const*, __half const*, __half*, float*, unsigned int*, int, int, int, int, int)']
+PASS 8 4096 11008 v3 None
+USDT:2026-11-19 17:15:58 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:15:58 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL v3_m2 8 4096 11008 ['void (anonymous namespace)::w4a16_v3_m2_kernel<false>(__half const*, unsigned int const*, __half const*, __half*, float*, unsigned int*, int, int, int, int, int)']
+PASS 8 4096 11008 v3_m2 None
+USDT:2026-11-19 17:15:58 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:15:58 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL tc_ladder 8 4096 11008 ['void (anonymous namespace)::w4a16_tc_kernel<true, true>(__half const*, unsigned int const*, __half const*, __half*, int, int, int, int)']
+PASS 8 4096 11008 tc_ladder None
+USDT:2026-11-19 17:15:58 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:15:58 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL marlin 8 4096 11008 ['void e005_marlin::Marlin<1125899906910725l, 1125899907892224l, 1125899906910725l, 1125899906910725l, 256, 1, 8, 8, true, 4, 8, false>(int4 const*, int4 const*, int4*, int4*, int4 const*, float const*, int4 const*, float const*, int4 const*, int, int, int, int, int*, bool, bool, bool, int)']
+PASS 8 4096 11008 marlin None
+USDT:2026-11-19 17:15:58 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:15:58 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL v3 16 4096 11008 ['(anonymous namespace)::w4a16_v3_kernel(__half const*, unsigned int const*, __half const*, __half*, float*, unsigned int*, int, int, int, int, int)']
+PASS 16 4096 11008 v3 None
+USDT:2026-11-19 17:15:58 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:15:58 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL v3_m2 16 4096 11008 ['void (anonymous namespace)::w4a16_v3_m2_kernel<false>(__half const*, unsigned int const*, __half const*, __half*, float*, unsigned int*, int, int, int, int, int)']
+PASS 16 4096 11008 v3_m2 None
+USDT:2026-11-19 17:15:58 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:15:58 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL tc_ladder 16 4096 11008 ['void (anonymous namespace)::w4a16_tc_kernel<true, false>(__half const*, unsigned int const*, __half const*, __half*, int, int, int, int)']
+PASS 16 4096 11008 tc_ladder None
+USDT:2026-11-19 17:15:58 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:15:58 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL marlin 16 4096 11008 ['void e005_marlin::Marlin<1125899906910725l, 1125899907892224l, 1125899906910725l, 1125899906910725l, 256, 1, 8, 8, false, 4, 8, false>(int4 const*, int4 const*, int4*, int4*, int4 const*, float const*, int4 const*, float const*, int4 const*, int, int, int, int, int*, bool, bool, bool, int)']
+PASS 16 4096 11008 marlin None
+USDT:2026-11-19 17:15:58 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:15:58 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL cublas_dq 16 4096 11008 ['void cutlass::Kernel2<cutlass_80_tensorop_s16816gemm_f16_64x64_32x6_nn_align8>(cutlass_80_tensorop_s16816gemm_f16_64x64_32x6_nn_align8::Params)', 'void cublasLt::splitKreduce_kernel<32, 16, int, float, __half, float, __half, false, __half, __half, __half, true, false, false, false>(cublasLt::cublasSplitKParams<float>, float const*, __half const*, __half*, __half*, float const*, float const*, __half const*, float const*, __half*, void*, long, float*, int*, float*, float*, float const*, float const*, float const*, float const*, float const*)']
+PASS 16 4096 11008 cublas_dq None
+OPERATOR_SCHEMA _C::marlin_gemm(Tensor a, Tensor? c_or_none, Tensor b_q_weight, Tensor? b_bias_or_none, Tensor b_scales, Tensor? a_scales, Tensor? global_scale, Tensor? b_zeros_or_none, Tensor workspace, int b_type_id, SymInt size_m, SymInt size_n, SymInt size_k, bool use_atomic_add, bool use_fp32_reduce, bool is_zp_float) -> Tensor
+OPERATOR_SCHEMA _C::marlin_gemm(Tensor a, Tensor? c_or_none, Tensor b_q_weight, Tensor? b_bias_or_none, Tensor b_scales, Tensor? a_scales, Tensor? global_scale, Tensor? b_zeros_or_none, Tensor workspace, int b_type_id, SymInt size_m, SymInt size_n, SymInt size_k, bool use_atomic_add, bool use_fp32_reduce, bool is_zp_float) -> Tensor
+OPERATOR_SCHEMA _C::marlin_gemm(Tensor a, Tensor? c_or_none, Tensor b_q_weight, Tensor? b_bias_or_none, Tensor b_scales, Tensor? a_scales, Tensor? global_scale, Tensor? b_zeros_or_none, Tensor workspace, int b_type_id, SymInt size_m, SymInt size_n, SymInt size_k, bool use_atomic_add, bool use_fp32_reduce, bool is_zp_float) -> Tensor
+OPERATOR_SCHEMA _C::marlin_gemm(Tensor a, Tensor? c_or_none, Tensor b_q_weight, Tensor? b_bias_or_none, Tensor b_scales, Tensor? a_scales, Tensor? global_scale, Tensor? b_zeros_or_none, Tensor workspace, int b_type_id, SymInt size_m, SymInt size_n, SymInt size_k, bool use_atomic_add, bool use_fp32_reduce, bool is_zp_float) -> Tensor
+USDT:2026-11-19 17:16:32 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:16:32 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL tc_ladder 1 11008 4096 ['void (anonymous namespace)::w4a16_tc_kernel<true, true>(__half const*, unsigned int const*, __half const*, __half*, int, int, int, int)']
+PASS 1 11008 4096 tc_ladder None
+USDT:2026-11-19 17:16:32 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:16:32 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL marlin 1 11008 4096 ['void e005_marlin::Marlin<1125899906910725l, 1125899907892224l, 1125899906910725l, 1125899906910725l, 256, 1, 8, 8, true, 4, 8, false>(int4 const*, int4 const*, int4*, int4*, int4 const*, float const*, int4 const*, float const*, int4 const*, int, int, int, int, int*, bool, bool, bool, int)']
+PASS 1 11008 4096 marlin None
+USDT:2026-11-19 17:16:32 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:16:32 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL cublas_dq 1 11008 4096 ['std::enable_if<!(false), void>::type internal::gemvx::kernel<int, int, __half, __half, __half, float, false, true, false, false, 8, false, cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float> >(cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float>)']
+PASS 1 11008 4096 cublas_dq None
+USDT:2026-11-19 17:16:32 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:16:32 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL v3 1 11008 4096 ['(anonymous namespace)::w4a16_v3_kernel(__half const*, unsigned int const*, __half const*, __half*, float*, unsigned int*, int, int, int, int, int)']
+PASS 1 11008 4096 v3 None
+USDT:2026-11-19 17:16:32 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:16:32 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL v3_m2 1 11008 4096 ['(anonymous namespace)::w4a16_v3_kernel(__half const*, unsigned int const*, __half const*, __half*, float*, unsigned int*, int, int, int, int, int)']
+PASS 1 11008 4096 v3_m2 None
+USDT:2026-11-19 17:16:32 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:16:32 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL marlin 2 11008 4096 ['void e005_marlin::Marlin<1125899906910725l, 1125899907892224l, 1125899906910725l, 1125899906910725l, 256, 1, 8, 8, true, 4, 8, false>(int4 const*, int4 const*, int4*, int4*, int4 const*, float const*, int4 const*, float const*, int4 const*, int, int, int, int, int*, bool, bool, bool, int)']
+PASS 2 11008 4096 marlin None
+USDT:2026-11-19 17:16:32 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:16:32 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL cublas_dq 2 11008 4096 ['void cutlass::Kernel2<cutlass_80_tensorop_f16_s16816gemm_f16_128x64_32x6_nn_align2>(cutlass_80_tensorop_f16_s16816gemm_f16_128x64_32x6_nn_align2::Params)']
+PASS 2 11008 4096 cublas_dq None
+USDT:2026-11-19 17:16:32 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:16:32 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL v3 2 11008 4096 ['(anonymous namespace)::w4a16_v3_kernel(__half const*, unsigned int const*, __half const*, __half*, float*, unsigned int*, int, int, int, int, int)']
+PASS 2 11008 4096 v3 None
+USDT:2026-11-19 17:16:32 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:16:32 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL v3_m2 2 11008 4096 ['void (anonymous namespace)::w4a16_v3_m2_kernel<false>(__half const*, unsigned int const*, __half const*, __half*, float*, unsigned int*, int, int, int, int, int)']
+PASS 2 11008 4096 v3_m2 None
+USDT:2026-11-19 17:16:32 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:16:32 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL tc_ladder 2 11008 4096 ['void (anonymous namespace)::w4a16_tc_kernel<true, true>(__half const*, unsigned int const*, __half const*, __half*, int, int, int, int)']
+PASS 2 11008 4096 tc_ladder None
+USDT:2026-11-19 17:16:32 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:16:32 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL cublas_dq 4 11008 4096 ['void cutlass::Kernel2<cutlass_80_tensorop_f16_s16816gemm_f16_128x64_32x6_nn_align2>(cutlass_80_tensorop_f16_s16816gemm_f16_128x64_32x6_nn_align2::Params)']
+PASS 4 11008 4096 cublas_dq None
+USDT:2026-11-19 17:16:32 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:16:32 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL v3 4 11008 4096 ['(anonymous namespace)::w4a16_v3_kernel(__half const*, unsigned int const*, __half const*, __half*, float*, unsigned int*, int, int, int, int, int)']
+PASS 4 11008 4096 v3 None
+USDT:2026-11-19 17:16:32 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:16:32 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL v3_m2 4 11008 4096 ['void (anonymous namespace)::w4a16_v3_m2_kernel<false>(__half const*, unsigned int const*, __half const*, __half*, float*, unsigned int*, int, int, int, int, int)']
+PASS 4 11008 4096 v3_m2 None
+USDT:2026-11-19 17:16:32 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:16:32 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL tc_ladder 4 11008 4096 ['void (anonymous namespace)::w4a16_tc_kernel<true, true>(__half const*, unsigned int const*, __half const*, __half*, int, int, int, int)']
+PASS 4 11008 4096 tc_ladder None
+USDT:2026-11-19 17:16:32 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:16:32 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL marlin 4 11008 4096 ['void e005_marlin::Marlin<1125899906910725l, 1125899907892224l, 1125899906910725l, 1125899906910725l, 256, 1, 8, 8, true, 4, 8, false>(int4 const*, int4 const*, int4*, int4*, int4 const*, float const*, int4 const*, float const*, int4 const*, int, int, int, int, int*, bool, bool, bool, int)']
+PASS 4 11008 4096 marlin None
+USDT:2026-11-19 17:16:32 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:16:32 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL v3 8 11008 4096 ['(anonymous namespace)::w4a16_v3_kernel(__half const*, unsigned int const*, __half const*, __half*, float*, unsigned int*, int, int, int, int, int)']
+PASS 8 11008 4096 v3 None
+USDT:2026-11-19 17:16:32 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:16:32 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL v3_m2 8 11008 4096 ['void (anonymous namespace)::w4a16_v3_m2_kernel<false>(__half const*, unsigned int const*, __half const*, __half*, float*, unsigned int*, int, int, int, int, int)']
+PASS 8 11008 4096 v3_m2 None
+USDT:2026-11-19 17:16:32 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:16:32 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL tc_ladder 8 11008 4096 ['void (anonymous namespace)::w4a16_tc_kernel<true, true>(__half const*, unsigned int const*, __half const*, __half*, int, int, int, int)']
+PASS 8 11008 4096 tc_ladder None
+USDT:2026-11-19 17:16:32 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:16:32 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL marlin 8 11008 4096 ['void e005_marlin::Marlin<1125899906910725l, 1125899907892224l, 1125899906910725l, 1125899906910725l, 256, 1, 8, 8, true, 4, 8, false>(int4 const*, int4 const*, int4*, int4*, int4 const*, float const*, int4 const*, float const*, int4 const*, int, int, int, int, int*, bool, bool, bool, int)']
+PASS 8 11008 4096 marlin None
+USDT:2026-11-19 17:16:32 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:16:32 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL cublas_dq 8 11008 4096 ['void cutlass::Kernel2<cutlass_80_tensorop_f16_s16816gemm_f16_128x64_32x6_nn_align2>(cutlass_80_tensorop_f16_s16816gemm_f16_128x64_32x6_nn_align2::Params)']
+PASS 8 11008 4096 cublas_dq None
+USDT:2026-11-19 17:16:32 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:16:32 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL v3_m2 16 11008 4096 ['void (anonymous namespace)::w4a16_v3_m2_kernel<false>(__half const*, unsigned int const*, __half const*, __half*, float*, unsigned int*, int, int, int, int, int)']
+PASS 16 11008 4096 v3_m2 None
+USDT:2026-11-19 17:16:32 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:16:32 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL tc_ladder 16 11008 4096 ['void (anonymous namespace)::w4a16_tc_kernel<true, false>(__half const*, unsigned int const*, __half const*, __half*, int, int, int, int)']
+PASS 16 11008 4096 tc_ladder None
+USDT:2026-11-19 17:16:32 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:16:32 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL marlin 16 11008 4096 ['void e005_marlin::Marlin<1125899906910725l, 1125899907892224l, 1125899906910725l, 1125899906910725l, 256, 1, 8, 8, false, 4, 8, false>(int4 const*, int4 const*, int4*, int4*, int4 const*, float const*, int4 const*, float const*, int4 const*, int, int, int, int, int*, bool, bool, bool, int)']
+PASS 16 11008 4096 marlin None
+USDT:2026-11-19 17:16:32 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:16:32 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL cublas_dq 16 11008 4096 ['void cutlass::Kernel2<cutlass_80_tensorop_f16_s16816gemm_f16_128x64_32x6_nn_align2>(cutlass_80_tensorop_f16_s16816gemm_f16_128x64_32x6_nn_align2::Params)']
+PASS 16 11008 4096 cublas_dq None
+USDT:2026-11-19 17:16:32 1766821:1766821 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-19 17:16:32 1766821:1766821 SyncActivityProfilerHandler.cpp:46] profiler_stop
+KERNEL v3 16 11008 4096 ['(anonymous namespace)::w4a16_v3_kernel(__half const*, unsigned int const*, __half const*, __half*, float*, unsigned int*, int, int, int, int, int)']
+PASS 16 11008 4096 v3 None
+MAPPED_LIBRARIES 7f4af7200000-7f4af739a000 r--p 00000000 103:03 6294378                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/vllm/_C_stable_libtorch.abi3.so
+7f4af739a000-7f4af7fb7000 r-xp 0019a000 103:03 6294378                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/vllm/_C_stable_libtorch.abi3.so
+7f4af7fb7000-7f4afbd9b000 r--p 00db7000 103:03 6294378                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/vllm/_C_stable_libtorch.abi3.so
+7f4afbd9b000-7f4afbda1000 r--p 04b9b000 103:03 6294378                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/vllm/_C_stable_libtorch.abi3.so
+7f4afbda1000-7f4afbda7000 rw-p 04ba1000 103:03 6294378                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/vllm/_C_stable_libtorch.abi3.so
+7f4b102d5000-7f4b107f7000 r-xp 00000000 00:33 30326173126                /home/hpuvvad/csc548-w4a16-e006-20261106/results/e006_20261106/patched/libe005.so
+7f4b107f7000-7f4b109f7000 ---p 00522000 00:33 30326173126                /home/hpuvvad/csc548-w4a16-e006-20261106/results/e006_20261106/patched/libe005.so
+7f4b109f7000-7f4b109fc000 r--p 00522000 00:33 30326173126                /home/hpuvvad/csc548-w4a16-e006-20261106/results/e006_20261106/patched/libe005.so
+7f4b109fc000-7f4b109fd000 rw-p 00527000 00:33 30326173126                /home/hpuvvad/csc548-w4a16-e006-20261106/results/e006_20261106/patched/libe005.so
+7f4b161c5000-7f4b163d6000 r-xp 00000000 00:31 15335877916127550539       /mnt/beegfs/hpuvvad/csc548-w4a16-e053-20261119/validation-c8-343823/libe053.so
+7f4b163d6000-7f4b165d6000 ---p 00211000 00:31 15335877916127550539       /mnt/beegfs/hpuvvad/csc548-w4a16-e053-20261119/validation-c8-343823/libe053.so
+7f4b165d6000-7f4b165db000 r--p 00211000 00:31 15335877916127550539       /mnt/beegfs/hpuvvad/csc548-w4a16-e053-20261119/validation-c8-343823/libe053.so
+7f4b165db000-7f4b165dc000 rw-p 00216000 00:31 15335877916127550539       /mnt/beegfs/hpuvvad/csc548-w4a16-e053-20261119/validation-c8-343823/libe053.so
+7f4d22cd2000-7f4d22df8000 r-xp 00000000 00:33 131285276635               /home/hpuvvad/csc548-w4a16-e004-20261106/results/e004_20261106/libe004.so
+7f4d22df8000-7f4d22ff8000 ---p 00126000 00:33 131285276635               /home/hpuvvad/csc548-w4a16-e004-20261106/results/e004_20261106/libe004.so
+7f4d22ff8000-7f4d22ffd000 r--p 00126000 00:33 131285276635               /home/hpuvvad/csc548-w4a16-e004-20261106/results/e004_20261106/libe004.so
+7f4d22ffd000-7f4d22ffe000 rw-p 0012b000 00:33 131285276635               /home/hpuvvad/csc548-w4a16-e004-20261106/results/e004_20261106/libe004.so
+7f4d2c200000-7f4d2c214000 r--p 00000000 103:03 6695426                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_nvshmem.so
+7f4d2c214000-7f4d2c23f000 r-xp 00014000 103:03 6695426                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_nvshmem.so
+7f4d2c23f000-7f4d2c5b7000 r--p 0003f000 103:03 6695426                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_nvshmem.so
+7f4d2c5b7000-7f4d2c5b9000 r--p 003b6000 103:03 6695426                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_nvshmem.so
+7f4d2c5b9000-7f4d2c5ba000 rw-p 003b8000 103:03 6695426                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_nvshmem.so
+7f4d2c5bd000-7f4d2c5c9000 rw-p 003d2000 103:03 6695426                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_nvshmem.so
+7f4d2c600000-7f4d2cc6d000 r--p 00000000 103:03 6695423                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_cuda.so
+7f4d2cc6d000-7f4d307f5000 r-xp 0066d000 103:03 6695423                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_cuda.so
+7f4d307f5000-7f4d456fd000 r--p 041f5000 103:03 6695423                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_cuda.so
+7f4d456fd000-7f4d4575b000 r--p 190fc000 103:03 6695423                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_cuda.so
+7f4d4575b000-7f4d4577c000 rw-p 1915a000 103:03 6695423                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_cuda.so
+7f4d46557000-7f4d469cf000 rw-p 1db15000 103:03 6695423                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_cuda.so
+7f4d46a00000-7f4d47978000 r--p 00000000 103:03 6695422                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_cpu.so
+7f4d47978000-7f4d589b8000 r-xp 00f78000 103:03 6695422                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_cpu.so
+7f4d589b8000-7f4d5b47f000 r--p 11fb8000 103:03 6695422                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_cpu.so
+7f4d5b47f000-7f4d5b72b000 r--p 14a7e000 103:03 6695422                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_cpu.so
+7f4d5b72b000-7f4d5b797000 rw-p 14d2a000 103:03 6695422                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_cpu.so
+7f4d5b8ab000-7f4d5be19000 rw-p 1a436000 103:03 6695422                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_cpu.so
+7f4d5c000000-7f4d5c1ac000 r--p 00000000 103:03 6695427                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_python.so
+7f4d5c1ac000-7f4d5d115000 r-xp 001ac000 103:03 6695427                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_python.so
+7f4d5d115000-7f4d5d60c000 r--p 01115000 103:03 6695427                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_python.so
+7f4d5d60c000-7f4d5d635000 r--p 0160c000 103:03 6695427                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_python.so
+7f4d5d635000-7f4d5d69f000 rw-p 01635000 103:03 6695427                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_python.so
+7f4d5d714000-7f4d5d7ad000 rw-p 0202b000 103:03 6695427                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_python.so
+7f4db6a00000-7f4db9d98000 r-xp 00000000 103:03 9175526                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcublas.so.13
+7f4db9d98000-7f4db9f98000 ---p 03398000 103:03 9175526                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcublas.so.13
+7f4db9f98000-7f4db9fa4000 r--p 03398000 103:03 9175526                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcublas.so.13
+7f4db9fa4000-7f4db9fab000 rw-p 033a4000 103:03 9175526                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcublas.so.13
+7f4dc0e00000-7f4dda2ea000 r-xp 00000000 103:03 9175527                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcublasLt.so.13
+7f4dda2ea000-7f4dda4ea000 ---p 194ea000 103:03 9175527                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcublasLt.so.13
+7f4dda4ea000-7f4dda7d7000 r--p 194ea000 103:03 9175527                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcublasLt.so.13
+7f4dda7d7000-7f4ddae2b000 rw-p 197d7000 103:03 9175527                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcublasLt.so.13
+7f4de0266000-7f4de0465000 ---p 1f466000 103:03 9175527                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcublasLt.so.13
+7f4de0465000-7f4de0eb9000 r--p 19e65000 103:03 9175527                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcublasLt.so.13
+7f4de0eb9000-7f4de10b8000 ---p 200b9000 103:03 9175527                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcublasLt.so.13
+7f4de10b8000-7f4de6c84000 rw-p 1a8b8000 103:03 9175527                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcublasLt.so.13
+7f4de7800000-7f4de78a6000 r-xp 00000000 103:03 9175427                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcudart.so.13
+7f4de78a6000-7f4de7aa6000 ---p 000a6000 103:03 9175427                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcudart.so.13
+7f4de7aa6000-7f4de7aab000 r--p 000a6000 103:03 9175427                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcudart.so.13
+7f4de7aab000-7f4de7aac000 rw-p 000ab000 103:03 9175427                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/nvidia/cu13/lib/libcudart.so.13
+7f4def8e0000-7f4def8e6000 r--p 00000000 103:03 6695421                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch.so
+7f4def8e6000-7f4def8f4000 r-xp 00006000 103:03 6695421                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch.so
+7f4def8f4000-7f4def8f8000 r--p 00014000 103:03 6695421                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch.so
+7f4def8f8000-7f4def8f9000 r--p 00018000 103:03 6695421                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch.so
+7f4def8f9000-7f4def8fa000 rw-p 00019000 103:03 6695421                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch.so
+7f4def8fa000-7f4def8fe000 rw-p 00020000 103:03 6695421                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch.so
+7f4df04f8000-7f4df04f9000 r--p 00000000 103:03 6695425                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_global_deps.so
+7f4df04f9000-7f4df04fa000 r-xp 00001000 103:03 6695425                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_global_deps.so
+7f4df04fa000-7f4df04fb000 r--p 00002000 103:03 6695425                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_global_deps.so
+7f4df04fb000-7f4df04fc000 r--p 00002000 103:03 6695425                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_global_deps.so
+7f4df04fc000-7f4df04fe000 rw-p 00003000 103:03 6695425                   /tmp/e005-r2-hpuvvad-20261106/lib/python3.11/site-packages/torch/lib/libtorch_global_deps.so

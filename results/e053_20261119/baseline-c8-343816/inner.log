@@ -1,0 +1,14 @@
+[prun] Master compute host = c8
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpirun bash /mnt/beegfs/hpuvvad/csc548-w4a16-e053-20261119/source-baseline-d7f02b0/scripts/e053/inner.sh baseline /mnt/beegfs/hpuvvad/csc548-w4a16-e053-20261119/source-baseline-d7f02b0 /mnt/beegfs/hpuvvad/csc548-w4a16-e053-20261119/baseline-c8-343816  (family=openmpi4)
+--------------------------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code. Per user-direction, the job has been aborted.
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+mpirun detected that one or more processes exited with non-zero status, thus causing
+the job to be terminated. The first process to do so was:
+
+  Process name: [[34943,1],0]
+  Exit code:    1
+--------------------------------------------------------------------------

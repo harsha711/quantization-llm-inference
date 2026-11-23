@@ -1,0 +1,11 @@
++ timeout 2100 ctest --test-dir build --output-on-failure
+Internal ctest changing into directory: /mnt/beegfs/hpuvvad/csc548-w4a16-e053-20261119/source-baseline-7eec31e/build
+Test project /mnt/beegfs/hpuvvad/csc548-w4a16-e053-20261119/source-baseline-7eec31e/build
+    Start 1: test_cpu
+1/2 Test #1: test_cpu .........................   Passed    0.01 sec
+    Start 2: cpu_bench_small
+2/2 Test #2: cpu_bench_small ..................   Passed    0.01 sec
+
+100% tests passed, 0 tests failed out of 2
+
+Total Test time (real) =   0.02 sec

@@ -65,11 +65,37 @@ unsigned long long w4a16_tc_splitk_unpack_selftest();
 // E048: tc with a 32-row M tile (two m16 tiles per warp share each unpacked weight) for M >= 32.
 void launch_w4a16_tc_m32(const __half* A, const uint32_t* qweight, const __half* scales, __half* C,
                          int M, int N, int K, int group_size, cudaStream_t stream);
+// Bandwidth-roofline series (docs/OURS.md). Same contract as launch_w4a16_naive.
+void launch_w4a16_v0(const __half* A, const uint32_t* qweight, const __half* scales, __half* C,
+                     int M, int N, int K, int group_size, cudaStream_t stream);
+void launch_w4a16_v1(const __half* A, const uint32_t* qweight, const __half* scales, __half* C,
+                     int M, int N, int K, int group_size, cudaStream_t stream);
+int w4a16_v1_splits(int M, int N, int K);  // K-splits v1 will launch for this shape
+// v1 ablation: contiguous = one contiguous word run per warp; specialize_tail = compile
+// out the partial-word check when K % 8 == 0. launch_w4a16_v1 = (true, true).
+void launch_w4a16_v1_variant(const __half* A, const uint32_t* qweight, const __half* scales,
+                             __half* C, int M, int N, int K, int group_size, cudaStream_t stream,
+                             bool contiguous, bool specialize_tail);
+// v2: 128-bit loads (4 columns per lane). v3: v2 + magic-number FP16 unpack.
+// Both need N % 4 == 0, K % 8 == 0 and aligned pointers; otherwise they run v1.
+void launch_w4a16_v2(const __half* A, const uint32_t* qweight, const __half* scales, __half* C,
+                     int M, int N, int K, int group_size, cudaStream_t stream);
+void launch_w4a16_v3(const __half* A, const uint32_t* qweight, const __half* scales, __half* C,
+                     int M, int N, int K, int group_size, cudaStream_t stream);
+// E053: two-row reuse, bitwise equal to v3 at the same split rule.
+void launch_w4a16_v3_m2(const __half* A, const uint32_t* qweight, const __half* scales,
+                        __half* C, int M, int N, int K, int group_size, cudaStream_t stream);
+bool w4a16_v2_fast_path(const __half* A, const uint32_t* qweight, const __half* scales,
+                        const __half* C, int N, int K);
+int w4a16_v2_splits(int M, int N, int K);  // K-splits v2 and v3 launch for this shape
+void w4a16_v2_workspace(int M, int N, int splits, float** partials, unsigned** counters);
 
 void launch_dequant_w4a16(const uint32_t* qweight, const __half* scales, __half* W, int N, int K,
                           int group_size, cudaStream_t stream);
 
 void launch_l2_flush(void* buf, size_t nbytes, cudaStream_t stream);
+// Read-only variant: evicts L2 without leaving dirty lines (flush_read.cu).
+void launch_l2_flush_read(const void* buf, size_t nbytes, uint32_t* sink, cudaStream_t stream);
 
 // C = A * W with FP16 inputs/outputs and FP32 accumulation.
 void launch_cublas_fp16(cublasHandle_t handle, const __half* A, const __half* W, __half* C, int M,

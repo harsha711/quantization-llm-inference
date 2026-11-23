@@ -1,0 +1,8 @@
+             JOBID                     NAME    STATE         TIME     NODELIST(REASON)
+JobID                          JobName      State ExitCode    Elapsed        NodeList 
+------------ ------------------------- ---------- -------- ---------- --------------- 
+343808             w4a16-e053-baseline     FAILED      1:0   00:03:49              c8 
+343816             w4a16-e053-baseline     FAILED      1:0   00:02:44              c8 
+343819             w4a16-e053-baseline  COMPLETED      0:0   00:04:52              c8 
+343823           w4a16-e053-validation  COMPLETED      0:0   00:05:40              c8 
+343828                 w4a16-e053-full  COMPLETED      0:0   00:09:22              c8 

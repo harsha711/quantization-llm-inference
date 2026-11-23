@@ -1,0 +1,1 @@
+VALIDATION PASS: complete all-row/parent-bitwise checks, sanitizers and retained-control SASS

@@ -1,0 +1,23 @@
++ timeout 2100 /mnt/beegfs/hpuvvad/csc548-w4a16-e053-20261119/validation-c8-343823/w4a16_bench --M 8 --N 1536 --K 1536 --group 128 --seed 1 --warmup 10 --iters 200 --check-rows 4096 --kernels tc_ladder,v3_m2,v3 --no-flush-l2 --csv /mnt/beegfs/hpuvvad/csc548-w4a16-e053-20261119/full-c8-343828/single-s2.csv
+device: NVIDIA GeForce RTX 5060 Ti (sm_120, 36 SMs, L2 32.00 MiB from cudaDeviceProp, 15.52 GiB)
+software: driver API 13030, runtime 13040
+shape: M=8 N=1536 K=1536 group=128 seed=1 flush_l2=0 warmup=10 iters=200 check_rows=4096
+footprint: FP16 weights 4.5000 MiB, packed INT4 1.1250 MiB, FP16 scales 0.0352 MiB
+launch: naive grid=((N+255)/256, M)=(6, 8) block=256; dequant grid=(6, 192) block=256
+launch: inblock/inblock_specialized grid=(48, 8) block=(32, 8), shared partials=1024 bytes
+launch: inblock_m2 grid=(48, 4), inblock_m4 grid=(48, 2), block=(32, 8), shared partials=2048/4096 bytes
+weight quant: rel_l2(W_hat, W)=1.1712e-01  uniform-step prediction sqrt(mean(s^2/12)/mean(w^2))=1.1754e-01
+  (prediction assumes independent Uniform[-s/2,s/2] error per weight using that group's s)
+cache: warm/reused inputs, no flush between launches
+W_hat GPU vs CPU: 0 / 2359296 FP16 bits differ (bit-exact)
+kernel                median_us     min_us     p90_us  TFLOP/s  eff_GB/s  pass    max_abs     rel_l2  rel_l2_fp16
+tc_ladder vs tc: 0 / 12288 FP16 outputs differ
+tc_ladder                  7.46       5.18       7.46    5.063     169.8   yes  9.749e-04  2.075e-04    1.171e-01
+launch: v3_m2 grid=(12, 4, 2) block=(32, 8), 4 columns per lane
+v3_m2 vs parent: 0 / 12288 FP16 outputs differ
+v3_m2                     13.54      11.81      13.95    2.789      93.5   yes  9.749e-04  2.075e-04    1.171e-01
+launch: v3 grid=(12, 8, 2) block=(32, 8), 4 columns per lane
+v3 vs parent: 0 / 12288 FP16 outputs differ
+v3                        17.86      17.25      18.05    2.114      70.9   yes  9.749e-04  2.075e-04    1.171e-01
+checked 8 of 8 rows against the FP64 CPU reference (reconstructed W_hat for naive/inblock/inblock_specialized/inblock_m2/inblock_m4/cublas_dq/unfused; original W for cublas)
+checked row indices: 0 1 2 3 4 5 6 7
